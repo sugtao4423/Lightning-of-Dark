@@ -7,3 +7,13 @@
 
 まだまだ製作・開発途中です。  
 自分がどのように変更したかなどがわかりやすいようにGitHubに上げました。
+
+# 使ってみたいとかいう頭のおかしい方へ
+/res/values/strings.xml  
+こいつに"CK"と"CS"というnameのStringちゃんを追加してConsumerKeyとConsumerSecretを入力してください  
+具体的にソースに追加するのは以下です
+
+    <string name="CK">ConsumerKey</string>
+    <string name="CS">ConsumerSecret</string>
+
+使ってみると動作がカクカクしてるのがすごいわかるゾ
