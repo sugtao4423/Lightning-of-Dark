@@ -28,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/name_screenName"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/name_screenName"
         android:text="本文"
         android:textSize="13sp" />
@@ -40,6 +41,23 @@
         android:layout_below="@+id/tweetText"
         android:layout_marginTop="2sp"
         android:text="date"
+        android:textColor="#9b9e98"
+        android:textSize="11sp" />
+
+    <com.loopj.android.image.SmartImageView
+        android:id="@+id/RetweetedUserIcon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_alignBottom="@+id/tweet_date"
+        android:layout_toRightOf="@+id/tweet_date" />
+
+    <TextView
+        android:id="@+id/RetweetedUserScreenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tweet_date"
+        android:layout_alignBottom="@+id/tweet_date"
+        android:layout_toRightOf="@+id/RetweetedUserIcon"
         android:textColor="#9b9e98"
         android:textSize="11sp" />
     

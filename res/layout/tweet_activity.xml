@@ -11,7 +11,7 @@
         android:id="@+id/tweetText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
+        android:layout_above="@+id/imageButton1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -22,43 +22,52 @@
         <requestFocus />
     </EditText>
 
-    <Button
-        android:id="@+id/button2"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:onClick="back"
-        android:text="戻る" />
-
     <TextView
         android:id="@+id/moji140"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/imageButton3"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/button2"
         android:text="140"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button
-        android:id="@+id/button1"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="80dp"
-        android:onClick="tweet"
-        android:text="ツイート" />
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignBottom="@+id/tweetText"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="11dp" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tweetText"
-        android:layout_toRightOf="@+id/button1"
-        android:onClick="image"
-        android:text="画像" />
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+		android:background="#00000000"
+        android:onClick="back"
+        style="@style/back_btn" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        style="@style/pic_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="30dp"
+        android:layout_toLeftOf="@+id/moji140"
+        android:background="#00000000"
+        android:onClick="image" />
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        style="@style/tweet_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/imageButton2"
+        android:background="#00000000"
+        android:onClick="tweet" />
 
 </RelativeLayout>

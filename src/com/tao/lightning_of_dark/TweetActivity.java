@@ -20,7 +20,10 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +63,12 @@ public class TweetActivity extends Activity {
 	}
 	
 	public void tweet(View v){
+		final ImageButton tweetbtn, back, img;
+		tweetbtn = (ImageButton)findViewById(R.id.imageButton1);
+		back = (ImageButton)findViewById(R.id.imageButton3);
+		img = (ImageButton)findViewById(R.id.imageButton2);
+		tweetbtn.setEnabled(false); back.setEnabled(false); img.setEnabled(false);
+		
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
@@ -82,6 +91,7 @@ public class TweetActivity extends Activity {
 					showToast("ツイートしました");
 					finish();
 				}else{
+					tweetbtn.setEnabled(true); back.setEnabled(true); img.setEnabled(true);
 					AlertDialog.Builder builder = new AlertDialog.Builder(TweetActivity.this);
 					builder.setTitle("ツイートできませんでした")
 					.setMessage("クリップボードにコピーしますか？")
@@ -125,6 +135,8 @@ public class TweetActivity extends Activity {
 	              Cursor c = cr.query(data.getData(), columns, null, null, null);
 	              c.moveToFirst();
 	              image = new File(c.getString(0));
+	              ImageView iv = (ImageView)findViewById(R.id.imageView1);
+	              iv.setImageURI(data.getData());
 	              showToast("画像を選択しました");
             } catch (Exception e) {
             	showToast("画像を選択できませんでした");
@@ -154,6 +166,12 @@ public class TweetActivity extends Activity {
 	
 	public void back(View v){
 		finish();
+	}
+	
+	public void onDestroy(){
+		super.onDestroy();
+		if(image != null)
+			image = null;
 	}
 	
 	public void background(View v){

@@ -15,6 +15,7 @@ import twitter4j.TwitterStreamFactory;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
 import twitter4j.UserStreamAdapter;
+import twitter4j.StreamController.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
@@ -107,25 +108,35 @@ public class MainActivity extends Activity {
 	            }
 	            final String[] items = (String[])list.toArray(new String[0]);
 	            
-	            String txt;
-	            if(item.getText().length() > 10)
-	            	txt = item.getText().substring(0, 10);
-	            else
+	            String title, txt;
+	            if(item.isRetweet()){
+	            	title = item.getRetweetedStatus().getUser().getScreenName();
+	            	txt = item.getRetweetedStatus().getText();
+	            }else{
+	            	title = item.getUser().getScreenName();
 	            	txt = item.getText();
+	            }
+	            
+	            if(item.getText().length() > 10)
+	            	txt = txt.substring(0, 10);
+	            
 				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-				builder.setTitle(item.getUser().getScreenName() + " : " + txt)
+				builder.setTitle(title + " : " + txt)
 				.setItems(items, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						switch(which){
 						case 0: //Reply
 							Intent reply = new Intent(MainActivity.this, TweetActivity.class);
-							if(item.isRetweet())
+							if(item.isRetweet()){
 								reply.putExtra("ReplyUserScreenName", item.getRetweetedStatus().getUser().getScreenName());
-							else
+								reply.putExtra("TweetReplyId", item.getRetweetedStatus().getId());
+								reply.putExtra("ReplyTweetText", item.getRetweetedStatus().getText());
+							}else{
 								reply.putExtra("ReplyUserScreenName", item.getUser().getScreenName());
-							reply.putExtra("TweetReplyId", item.getId());
-							reply.putExtra("ReplyTweetText", item.getText());
+								reply.putExtra("TweetReplyId", item.getId());
+								reply.putExtra("ReplyTweetText", item.getText());
+							}
 							startActivity(reply);
 							break;
 							
@@ -170,10 +181,6 @@ public class MainActivity extends Activity {
 								}
 							};
 							fav.execute();
-							
-						case 3: //UserPage
-//							Intent intent = new Intent(MainActivity.this, UserPage.class);
-//							startActivity(intent);
 							break;
 							
 						default:
@@ -181,6 +188,11 @@ public class MainActivity extends Activity {
 								Intent web = new Intent(Intent.ACTION_VIEW, Uri.parse(items[which]));
 								startActivity(web);
 							}
+							if(items[which].startsWith("@")){ //UserPage
+								Intent intent = new Intent(MainActivity.this, UserPage.class);
+								startActivity(intent);
+							}
+							break;
 						}
 					}
 				});
