@@ -26,7 +26,7 @@ public class UserPage extends Activity {
 			@Override
 			protected String doInBackground(Void... params) {
 				try {
-					return new MainActivity().twitter.verifyCredentials().getProfileImageURL();
+					return new MainActivity().twitter.verifyCredentials().getProfileBannerURL();
 				} catch (TwitterException e) {
 				}
 				return null;

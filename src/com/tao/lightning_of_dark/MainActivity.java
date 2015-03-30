@@ -7,13 +7,13 @@ import twitter4j.MediaEntity;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
-import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.URLEntity;
+import twitter4j.UserMentionEntity;
 import twitter4j.UserStreamAdapter;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
@@ -21,7 +21,6 @@ import twitter4j.conf.ConfigurationBuilder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -33,7 +32,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -84,10 +82,15 @@ public class MainActivity extends Activity {
 				final Status item = (Status)HomeList.getItemAtPosition(position);
 				
 				List<String> list = new ArrayList<String>();
-				list.add("返信"); list.add("リツイート"); list.add("@" + item.getUser().getScreenName());
-				if(item.isRetweet())
-					list.add("@" + item.getRetweetedStatus().getUser().getScreenName());
+				list.add("返信"); list.add("リツイート"); list.add("ふぁぼる"); list.add("@" + item.getUser().getScreenName());
 				
+				UserMentionEntity[] mentionEntitys = item.getUserMentionEntities();
+				if(mentionEntitys != null && mentionEntitys.length > 0){
+					for(int i = 0; i < mentionEntitys.length; i++){
+						UserMentionEntity umEntity = mentionEntitys[i];
+						list.add("@" + umEntity.getScreenName());
+					}
+				}
 				URLEntity[] uentitys = item.getURLEntities();
 	            if(uentitys != null && uentitys.length > 0){
 	                for(int i = 0; i < uentitys.length; i++){
@@ -103,44 +106,80 @@ public class MainActivity extends Activity {
 	                }
 	            }
 	            final String[] items = (String[])list.toArray(new String[0]);
-				
+	            
+	            String txt;
+	            if(item.getText().length() > 10)
+	            	txt = item.getText().substring(0, 10);
+	            else
+	            	txt = item.getText();
 				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-				builder.setTitle(item.getUser().getScreenName() + " : " + item.getText().substring(0, 10))
+				builder.setTitle(item.getUser().getScreenName() + " : " + txt)
 				.setItems(items, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						switch(which){
-						case 0:
-							reply(item);
+						case 0: //Reply
+							Intent reply = new Intent(MainActivity.this, TweetActivity.class);
+							if(item.isRetweet())
+								reply.putExtra("ReplyUserScreenName", item.getRetweetedStatus().getUser().getScreenName());
+							else
+								reply.putExtra("ReplyUserScreenName", item.getUser().getScreenName());
+							reply.putExtra("TweetReplyId", item.getId());
+							reply.putExtra("ReplyTweetText", item.getText());
+							startActivity(reply);
 							break;
+							
 						case 1: //ReTweet
-							AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
+							AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 								@Override
-								protected Void doInBackground(Void... params) {
+								protected Boolean doInBackground(Void... params) {
 									try {
 										twitter.retweetStatus(item.getId());
+										return true;
 									} catch (TwitterException e) {
-										showToast(e.toString());
+										return false;
 									}
-									return null;
+								}
+								protected void onPostExecute(Boolean result) {
+									if(result)
+										showToast("リツイートしました");
+									else
+										showToast("リツイートできませんでした");
 								}
 							};
-							if(item.getUser().getScreenName().equals(MyScreenName))
-								showToast("リツイートできないゾ");
-							else
-								task.execute();
-							
+							task.execute();
 							break;
 							
-						case 2: //UserPage
+						case 2: //ふぁぼ
+							AsyncTask<Void, Void, Boolean> fav = new AsyncTask<Void, Void, Boolean>(){
+
+								@Override
+								protected Boolean doInBackground(Void... params) {
+									try {
+										twitter.createFavorite(item.getId());
+										return true;
+									} catch (TwitterException e) {
+										return false;
+									}
+								}
+								protected void onPostExecute(Boolean result) {
+									if(result)
+										showToast("ふぁぼりました");
+									else
+										showToast("ふぁぼれませんでした");
+								}
+							};
+							fav.execute();
+							
+						case 3: //UserPage
 //							Intent intent = new Intent(MainActivity.this, UserPage.class);
 //							startActivity(intent);
 							break;
 							
 						default:
-							if(items[which].startsWith("http")){
-								Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(items[which]));
-								startActivity(intent);
+							if(items[which].startsWith("http") || items[which].startsWith("ftp")){
+								Intent web = new Intent(Intent.ACTION_VIEW, Uri.parse(items[which]));
+								startActivity(web);
 							}
 						}
 					}
@@ -153,7 +192,12 @@ public class MainActivity extends Activity {
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Status item = (Status)HomeList.getItemAtPosition(position);
-				TweetDialog(item.getText());
+				Intent pakuri = new Intent(MainActivity.this, TweetActivity.class);
+				if(item.isRetweet())
+					pakuri.putExtra("pakuri", item.getRetweetedStatus().getText());
+				else
+					pakuri.putExtra("pakuri", item.getText());
+				startActivity(pakuri);
 				return true;
 			}
 		});
@@ -172,7 +216,6 @@ public class MainActivity extends Activity {
 				try{
 					MyScreenName = twitter.getScreenName();
 				}catch(Exception e){
-					showToast("スクリーンネームの取得に失敗しました");
 					return false;
 				}
 				return true;
@@ -181,7 +224,8 @@ public class MainActivity extends Activity {
 				if(result){
 					getTimeLine();
 					connectStreaming();
-				}
+				}else
+					showToast("スクリーンネームの取得に失敗しました");
 			}
 		};
 		task.execute();
@@ -236,77 +280,9 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	public void tweet(String text, final long id) {
-        AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(String... params) {
-                try {
-                	if(id == -1)
-                		twitter.updateStatus(params[0]);
-                	else
-                		twitter.updateStatus(new StatusUpdate(params[0]).inReplyToStatusId(id));
-                    return true;
-                } catch (TwitterException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Boolean result) {
-                if(result)
-                	showToast("つぶやきました");
-                else
-                	showToast("なにかがおかしいよ");
-            }
-        };
-        task.execute(text);
-    }
-	
-	public void TweetDialog(String tweet){
-		final EditText tweetText = new EditText(this);
-		tweetText.setText(tweet);
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("New Tweet")
-		.setView(tweetText)
-		.setPositiveButton("Tweet!", new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				tweet(tweetText.getText().toString(), -1);
-			}
-		});
-		builder.setNegativeButton("キャンセル", new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		});
-		builder.create().show();
-	}
-	public void reply(final Status item){
-		final EditText tweetText = new EditText(this);
-		tweetText.setText("@" + item.getUser().getScreenName() + " ");
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		String txt = item.getText();
-		if(txt.length() > 15)
-			txt = txt.substring(0, 15);
-		builder.setTitle(item.getUser().getScreenName() + " : " + txt)
-		.setView(tweetText)
-		.setPositiveButton("Tweet!", new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				tweet(tweetText.getText().toString(), item.getId());
-			}
-		});
-		builder.setNegativeButton("キャンセル", new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		});
-		builder.create().show();
-	}
-	
 	public void new_tweet(View v){
-		TweetDialog(null);
+		Intent intent = new Intent(MainActivity.this, TweetActivity.class);
+		startActivity(intent);
 	}
 	
 	public void showToast(String toast){
@@ -341,7 +317,7 @@ public class MainActivity extends Activity {
 		case R.id.action_settings:
 			return true;
 		case R.id.Tweet:
-			TweetDialog(null);
+			startActivity(new Intent(this, TweetActivity.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

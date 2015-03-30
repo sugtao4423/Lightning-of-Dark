@@ -53,6 +53,8 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			convertView.setBackgroundColor(Color.parseColor("#c9d9f9"));
 		else if(item.getUser().getScreenName().equals(MainActivity.MyScreenName))
 			convertView.setBackgroundColor(Color.parseColor("#c9f999"));
+		else if(item.getText().matches(".*@" + MainActivity.MyScreenName + ".*"))
+			convertView.setBackgroundColor(Color.parseColor("#f9c9c9"));
 		else
 			if(position % 2 == 0)
 				convertView.setBackgroundColor(Color.parseColor("#f9f9f9"));
