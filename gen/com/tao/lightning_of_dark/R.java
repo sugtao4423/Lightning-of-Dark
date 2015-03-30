@@ -25,17 +25,22 @@ public final class R {
         public static final int back=0x7f020000;
         public static final int back_ena=0x7f020001;
         public static final int edit=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int pic=0x7f020004;
-        public static final int pic_ena=0x7f020005;
-        public static final int tweet=0x7f020006;
-        public static final int tweet_ena=0x7f020007;
+        public static final int header_none=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int pic=0x7f020005;
+        public static final int pic_ena=0x7f020006;
+        public static final int tweet=0x7f020007;
+        public static final int tweet_ena=0x7f020008;
     }
     public static final class id {
         public static final int RetweetedUserIcon=0x7f0a0006;
         public static final int RetweetedUserScreenName=0x7f0a0007;
-        public static final int Tweet=0x7f0a0017;
-        public static final int action_settings=0x7f0a0016;
+        public static final int Tweet=0x7f0a001c;
+        public static final int UserBio=0x7f0a000c;
+        public static final int UserIcon=0x7f0a0016;
+        public static final int UserName=0x7f0a0018;
+        public static final int UserScreenName=0x7f0a0017;
+        public static final int action_settings=0x7f0a001b;
         public static final int banner=0x7f0a0015;
         public static final int button1=0x7f0a0008;
         public static final int button2=0x7f0a0009;
@@ -47,13 +52,14 @@ public final class R {
         public static final int imageButton2=0x7f0a0014;
         public static final int imageButton3=0x7f0a0012;
         public static final int imageView1=0x7f0a0013;
+        public static final int link=0x7f0a0010;
         public static final int listView1=0x7f0a0000;
+        public static final int location=0x7f0a001a;
         public static final int moji140=0x7f0a0011;
         public static final int name_screenName=0x7f0a0003;
         public static final int textView1=0x7f0a000d;
-        public static final int textView2=0x7f0a000c;
+        public static final int textView2=0x7f0a0019;
         public static final int textView3=0x7f0a000e;
-        public static final int textView4=0x7f0a0010;
         public static final int tweetText=0x7f0a0004;
         public static final int tweet_date=0x7f0a0005;
     }

@@ -15,7 +15,6 @@ import twitter4j.TwitterStreamFactory;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
 import twitter4j.UserStreamAdapter;
-import twitter4j.StreamController.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
@@ -117,7 +116,7 @@ public class MainActivity extends Activity {
 	            	txt = item.getText();
 	            }
 	            
-	            if(item.getText().length() > 10)
+	            if(txt.length() > 10)
 	            	txt = txt.substring(0, 10);
 	            
 				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -190,6 +189,7 @@ public class MainActivity extends Activity {
 							}
 							if(items[which].startsWith("@")){ //UserPage
 								Intent intent = new Intent(MainActivity.this, UserPage.class);
+								intent.putExtra("userScreenName", items[which].substring(1));
 								startActivity(intent);
 							}
 							break;

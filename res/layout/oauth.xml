@@ -41,14 +41,14 @@
         android:id="@+id/editText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView2"
-        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignBaseline="@+id/UserBio"
+        android:layout_alignBottom="@+id/UserBio"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/textView2"
+        android:layout_toRightOf="@+id/UserBio"
         android:ems="10" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/UserBio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -76,7 +76,7 @@
         android:ems="10" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
