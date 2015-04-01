@@ -70,4 +70,14 @@
         android:background="#00000000"
         android:onClick="tweet" />
 
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="#00000000"
+        android:onClick="setting"
+        android:src="@android:drawable/ic_menu_preferences" />
+
 </RelativeLayout>

@@ -33,42 +33,55 @@ public final class R {
         public static final int tweet_ena=0x7f020008;
     }
     public static final class id {
-        public static final int RetweetedUserIcon=0x7f0a0006;
-        public static final int RetweetedUserScreenName=0x7f0a0007;
-        public static final int Tweet=0x7f0a001c;
-        public static final int UserBio=0x7f0a000c;
-        public static final int UserIcon=0x7f0a0016;
-        public static final int UserName=0x7f0a0018;
-        public static final int UserScreenName=0x7f0a0017;
-        public static final int action_settings=0x7f0a001b;
-        public static final int banner=0x7f0a0015;
-        public static final int button1=0x7f0a0008;
-        public static final int button2=0x7f0a0009;
-        public static final int editText1=0x7f0a000a;
-        public static final int editText2=0x7f0a000b;
-        public static final int editText3=0x7f0a000f;
-        public static final int icon=0x7f0a0002;
-        public static final int imageButton1=0x7f0a0001;
-        public static final int imageButton2=0x7f0a0014;
-        public static final int imageButton3=0x7f0a0012;
-        public static final int imageView1=0x7f0a0013;
-        public static final int link=0x7f0a0010;
-        public static final int listView1=0x7f0a0000;
-        public static final int location=0x7f0a001a;
-        public static final int moji140=0x7f0a0011;
-        public static final int name_screenName=0x7f0a0003;
-        public static final int textView1=0x7f0a000d;
-        public static final int textView2=0x7f0a0019;
-        public static final int textView3=0x7f0a000e;
-        public static final int tweetText=0x7f0a0004;
-        public static final int tweet_date=0x7f0a0005;
+        public static final int HomeLine=0x7f0a0001;
+        public static final int MentionLine=0x7f0a0003;
+        public static final int RetweetedUserIcon=0x7f0a0008;
+        public static final int RetweetedUserScreenName=0x7f0a0009;
+        public static final int UserBio=0x7f0a000e;
+        public static final int UserFavPull=0x7f0a001c;
+        public static final int UserIcon=0x7f0a001f;
+        public static final int UserName=0x7f0a0021;
+        public static final int UserScreenName=0x7f0a0020;
+        public static final int UserTweet=0x7f0a001b;
+        public static final int UserTweetPull=0x7f0a001a;
+        public static final int Userfav=0x7f0a001d;
+        public static final int Userpager=0x7f0a0022;
+        public static final int banner=0x7f0a001e;
+        public static final int button1=0x7f0a000a;
+        public static final int button2=0x7f0a000b;
+        public static final int editText1=0x7f0a000c;
+        public static final int editText2=0x7f0a000d;
+        public static final int editText3=0x7f0a0011;
+        public static final int icon=0x7f0a0004;
+        public static final int imageButton1=0x7f0a0002;
+        public static final int imageButton2=0x7f0a0016;
+        public static final int imageButton3=0x7f0a0014;
+        public static final int imageButton4=0x7f0a0017;
+        public static final int imageView1=0x7f0a0015;
+        public static final int link=0x7f0a0012;
+        public static final int location=0x7f0a0019;
+        public static final int moji140=0x7f0a0013;
+        public static final int name_screenName=0x7f0a0005;
+        public static final int pager=0x7f0a0000;
+        public static final int textView1=0x7f0a000f;
+        public static final int textView2=0x7f0a0018;
+        public static final int textView3=0x7f0a0010;
+        public static final int tweetText=0x7f0a0006;
+        public static final int tweet_date=0x7f0a0007;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-        public static final int list_item_tweet=0x7f030001;
-        public static final int oauth=0x7f030002;
-        public static final int tweet_activity=0x7f030003;
-        public static final int userpage=0x7f030004;
+        public static final int fragment_home=0x7f030001;
+        public static final int fragment_mention=0x7f030002;
+        public static final int list_item_tweet=0x7f030003;
+        public static final int oauth=0x7f030004;
+        public static final int tweet_activity=0x7f030005;
+        public static final int user_0=0x7f030006;
+        public static final int user_1=0x7f030007;
+        public static final int user_2=0x7f030008;
+        public static final int user_3=0x7f030009;
+        public static final int user_4=0x7f03000a;
+        public static final int userpage=0x7f03000b;
     }
     public static final class menu {
         public static final int main=0x7f090000;
@@ -117,6 +130,7 @@ public final class R {
     public static final class xml {
         public static final int backbtn=0x7f040000;
         public static final int picbtn=0x7f040001;
-        public static final int tweetbtn=0x7f040002;
+        public static final int preference=0x7f040002;
+        public static final int tweetbtn=0x7f040003;
     }
 }

@@ -3,14 +3,12 @@ package com.tao.lightning_of_dark;
 import java.text.SimpleDateFormat;
 
 import twitter4j.Status;
-import twitter4j.TwitterException;
 
 import com.loopj.android.image.SmartImageView;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +26,11 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 		TextView name, text, tweet_date, RetweetedUserScreenName;
 		SmartImageView icon, RetweetedUserIcon;
 	}
+	
 	public View getView(int position, View convertView, ViewGroup parent){
 		final ViewHolder holder;
+		Status item = getItem(position);
+		
 		if (convertView == null){
 			convertView = mInflater.inflate(R.layout.list_item_tweet, null);
 			TextView name = (TextView)convertView.findViewById(R.id.name_screenName);
@@ -51,15 +52,14 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 		}else{
 			holder = (ViewHolder)convertView.getTag();
 		}
-		Status item = getItem(position);
 		
-		if(item.isRetweeted() || item.isRetweetedByMe())
+		if(item.isRetweetedByMe())
 			convertView.setBackgroundColor(Color.parseColor("#c9f999"));
 		else if(item.isRetweet())
 			convertView.setBackgroundColor(Color.parseColor("#c9d9f9"));
 		else if(item.getUser().getScreenName().equals(MainActivity.MyScreenName))
 			convertView.setBackgroundColor(Color.parseColor("#c9f999"));
-		else if(item.getText().matches(".*@" + MainActivity.MyScreenName + ".*"))
+		else if(item.getText().matches(".*@" + MainActivity.MyScreenName + ".*") || item.getText().startsWith("@" + MainActivity.MyScreenName))
 			convertView.setBackgroundColor(Color.parseColor("#f9c9c9"));
 		else
 			if(position % 2 == 0)
@@ -67,15 +67,10 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			else
 				convertView.setBackgroundColor(Color.parseColor("#e9e9e9"));
 		
-		if(item.isRetweetedByMe()){
-			holder.name.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
-			holder.text.setText(item.getText());
-			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
-					+ "  Retweeted by Me");
-			holder.RetweetedUserIcon.setImageResource(R.raw.empty);
-			holder.RetweetedUserScreenName.setText("");
-			holder.icon.setImageUrl(item.getUser().getProfileImageURL());
-		}else if(item.isRetweet()){
+		if(item.isRetweet()){
+			holder.RetweetedUserIcon.setVisibility(View.VISIBLE);
+			holder.RetweetedUserScreenName.setVisibility(View.VISIBLE);
+			
 			holder.name.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
 			holder.text.setText(item.getRetweetedStatus().getText());
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getRetweetedStatus().getCreatedAt())
@@ -89,8 +84,8 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
 					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
 			holder.icon.setImageUrl(item.getUser().getProfileImageURL());
-			holder.RetweetedUserIcon.setImageResource(R.raw.empty);
-			holder.RetweetedUserScreenName.setText("");
+			holder.RetweetedUserIcon.setVisibility(View.GONE);
+			holder.RetweetedUserScreenName.setVisibility(View.GONE);
 		}
 		return convertView;
 	}

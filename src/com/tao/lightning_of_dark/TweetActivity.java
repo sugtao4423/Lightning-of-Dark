@@ -4,14 +4,9 @@ import java.io.File;
 
 import twitter4j.StatusUpdate;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,7 +15,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -69,10 +63,12 @@ public class TweetActivity extends Activity {
 		img = (ImageButton)findViewById(R.id.imageButton2);
 		tweetbtn.setEnabled(false); back.setEnabled(false); img.setEnabled(false);
 		
+		final String tweetText = TweetText.getText().toString();
+		
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
-				final StatusUpdate status = new StatusUpdate(TweetText.getText().toString());
+				final StatusUpdate status = new StatusUpdate(tweetText);
 				try{
 					if(image != null)
 						status.media(image);
@@ -87,37 +83,18 @@ public class TweetActivity extends Activity {
 			}
 			@Override
 			protected void onPostExecute(Boolean result) {
-				if(result){
+				if(result)
 					showToast("ツイートしました");
-					finish();
-				}else{
-					tweetbtn.setEnabled(true); back.setEnabled(true); img.setEnabled(true);
-					AlertDialog.Builder builder = new AlertDialog.Builder(TweetActivity.this);
-					builder.setTitle("ツイートできませんでした")
-					.setMessage("クリップボードにコピーしますか？")
-					.setPositiveButton("コピー", new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-							ClipData clipData = ClipData.newPlainText("Lightning_of_Dark", TweetText.getText().toString());
-							cm.setPrimaryClip(clipData);
-							showToast("クリップボードにコピーしました");
-							finish();
-						}
-					});
-					builder.setNegativeButton("キャンセル", new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							finish();
-						}
-					});
-					builder.create().show();
-				}
+				else
+					showToast("ツイートできませんでした");
 				if(image != null)
 					image = null;
+				finish();
 			}
 		};
 		task.execute();
+		Intent main = new Intent(this, MainActivity.class);
+		startActivity(main);
 	}
 	
 	public void image(View v){
@@ -158,6 +135,10 @@ public class TweetActivity extends Activity {
 			public void afterTextChanged(Editable s) {
 			}
 		});
+	}
+	
+	public void setting(View v){
+		startActivity(new Intent(this, MyPreferenceActivity.class));
 	}
 	
 	public void showToast(String text){
