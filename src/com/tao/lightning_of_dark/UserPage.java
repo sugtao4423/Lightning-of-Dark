@@ -10,10 +10,12 @@ import com.tao.lightning_of_dark.R;
 import UserPageFragment.UserPageFragmentPagerAdapter;
 import UserPageFragment._0_detail;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
@@ -33,6 +35,11 @@ public class UserPage extends FragmentActivity {
 		ViewPager viewPager = (ViewPager)findViewById(R.id.Userpager);
 		viewPager.setAdapter(new UserPageFragmentPagerAdapter(getSupportFragmentManager()));
 		viewPager.setOffscreenPageLimit(5);
+		
+		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.userPagerTabStrip);
+		strip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
+		strip.setDrawFullUnderline(true);
+		getActionBar().setDisplayShowHomeEnabled(false);
 		
 		twitter = MainActivity.twitter;
 		banner = (SmartImageView)findViewById(R.id.banner);

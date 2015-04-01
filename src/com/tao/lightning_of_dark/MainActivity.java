@@ -14,10 +14,12 @@ import twitter4j.conf.ConfigurationBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +42,8 @@ public class MainActivity extends FragmentActivity {
 	static AccessToken accessToken;
 	static Configuration jconf;
 	
+	ViewPager viewPager;
+	
 	static CustomAdapter HomeAdapter, MentionAdapter;
 	ResponseList<twitter4j.Status> home, mention;
 	int HOME = 1, MENTION = 1;
@@ -48,10 +52,15 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
+		getActionBar().hide();
+		viewPager = (ViewPager)findViewById(R.id.pager);
 		viewPager.setAdapter(new MyFragmentStatePagerAdapter(getSupportFragmentManager()));
 		viewPager.setCurrentItem(1);
-		getActionBar().hide();
+		
+		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.mainPagerTabStrip);
+		strip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
+		strip.setDrawFullUnderline(true);
+		getActionBar().setDisplayShowHomeEnabled(false);
 		
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		
@@ -216,7 +225,7 @@ public class MainActivity extends FragmentActivity {
 	
 	public void showToast(String toast, Context context){
 		if(context == null)
-			Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
 		else
 			Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
 	}
@@ -238,16 +247,9 @@ public class MainActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		//getMenuInflater().inflate(R.menu.main, menu);
-		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 	
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-	    super.onPrepareOptionsMenu(menu);
-	    return true;
-	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will

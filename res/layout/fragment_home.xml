@@ -5,15 +5,17 @@
     
     <ListView
         android:id="@+id/HomeLine"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:divider="#bbbbbb"
-		android:dividerHeight="1sp"
-		android:fadingEdge="horizontal"
-		android:fadingEdgeLength="10sp"
-		android:transcriptMode="disabled" />
+        android:dividerHeight="1sp"
+        android:fadingEdge="horizontal"
+        android:fadingEdgeLength="10sp"
+        android:transcriptMode="disabled" />
+
     <ImageButton
         android:id="@+id/imageButton1"
         android:layout_width="wrap_content"

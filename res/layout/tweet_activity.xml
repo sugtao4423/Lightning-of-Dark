@@ -78,6 +78,6 @@
         android:layout_alignParentLeft="true"
         android:background="#00000000"
         android:onClick="setting"
-        android:src="@android:drawable/ic_menu_preferences" />
+        android:src="@drawable/ic_action_settings" />
 
 </RelativeLayout>

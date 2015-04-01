@@ -33,6 +33,8 @@ public class TweetActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tweet_activity);
 		
+		getActionBar().setDisplayShowHomeEnabled(false);
+		
 		TweetText = (EditText)findViewById(R.id.tweetText);
 		moji140 = (TextView)findViewById(R.id.moji140);
 		
@@ -137,16 +139,16 @@ public class TweetActivity extends Activity {
 		});
 	}
 	
-	public void setting(View v){
-		startActivity(new Intent(this, MyPreferenceActivity.class));
-	}
-	
 	public void showToast(String text){
 		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 	}
 	
 	public void back(View v){
 		finish();
+	}
+	
+	public void setting(View v){
+		startActivity(new Intent(this, MyPreferenceActivity.class));
 	}
 	
 	public void onDestroy(){

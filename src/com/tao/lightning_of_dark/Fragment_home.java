@@ -12,14 +12,14 @@ public class Fragment_home extends Fragment {
 	static ListView home;
 	
 	@Override
-	  public View onCreateView(LayoutInflater inflater,
-	    ViewGroup container, Bundle savedInstanceState) {
+	  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_home, null);
 		home = (ListView)v.findViewById(R.id.HomeLine);
 		home.setOnItemClickListener(new ListViewListener());
 		home.setOnItemLongClickListener(new ListViewListener());
 	    return v;
 	  }
+	
 	public void setHome(CustomAdapter adapter){
 		home.setAdapter(adapter);
 	}
