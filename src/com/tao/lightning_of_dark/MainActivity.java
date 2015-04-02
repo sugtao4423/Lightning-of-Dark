@@ -46,7 +46,6 @@ public class MainActivity extends FragmentActivity {
 	
 	static CustomAdapter HomeAdapter, MentionAdapter;
 	ResponseList<twitter4j.Status> home, mention;
-	int HOME = 1, MENTION = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,37 +111,12 @@ public class MainActivity extends FragmentActivity {
 		HomeAdapter = new CustomAdapter(this);
 		MentionAdapter = new CustomAdapter(this);
 		
-		getHOME(); getMENTION();
-		
-		ListView foot = new ListView(this);
-		foot.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				getHOME();
-			}
-		});
-		Fragment_home.home.addFooterView(foot);
-		
-		ListView foot2 = new ListView(this);
-		foot2.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot2.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				getMENTION();
-			}
-		});
-		Fragment_mention.mention.addFooterView(foot2);
-	}
-	
-	public void getHOME(){
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try{
-					home = twitter.getHomeTimeline(new Paging(HOME, 50));
+					home = twitter.getHomeTimeline(new Paging(1, 50));
+					mention = twitter.getMentionsTimeline(new Paging(1, 50));
 					return true;
 				}catch(Exception e){
 					return false;
@@ -152,38 +126,92 @@ public class MainActivity extends FragmentActivity {
 				if(result){
 					for(twitter4j.Status status : home)
 						HomeAdapter.add(status);
-					if(HOME == 1)
-						new Fragment_home().setHome(HomeAdapter);
-					HOME++;
-				}else
-					showToast("タイムライン取得エラー", null);
-			}
-		};
-		task.execute();
-	}
-	public void getMENTION(){
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				try{
-					mention = twitter.getMentionsTimeline(new Paging(MENTION, 50));
-					return true;
-				}catch(Exception e){
-					return false;
-				}
-			}
-			protected void onPostExecute(Boolean result){
-				if(result){
 					for(twitter4j.Status status : mention)
 						MentionAdapter.add(status);
-					if(MENTION == 1)
-						new Fragment_mention().setMention(MentionAdapter);
-					MENTION++;
+					new Fragment_home().setHome(HomeAdapter);
+					new Fragment_mention().setMention(MentionAdapter);
 				}else
 					showToast("タイムライン取得エラー", null);
 			}
 		};
 		task.execute();
+		
+		MoreHome(); MoreMention();
+	}
+	
+	public void MoreHome(){
+		ListView foot = new ListView(this);
+		foot.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
+		foot.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Status s = (Status)Fragment_home.home.getItemAtPosition(Fragment_home.home.getAdapter().getCount() - 2);
+				final long tweetId = s.getId();
+				AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+					@Override
+					protected Boolean doInBackground(Void... params) {
+						try{
+							home = twitter.getHomeTimeline(new Paging(1, 50).maxId(tweetId));
+							return true;
+						}catch(Exception e){
+							return false;
+						}
+					}
+					protected void onPostExecute(Boolean result){
+						if(result){
+							boolean i = false;
+							for(twitter4j.Status status : home){
+								if(i)
+									HomeAdapter.add(status);
+								else
+									i = true;
+							}
+						}else
+							showToast("タイムライン取得エラー", null);
+					}
+				};
+				task.execute();
+			}
+		});
+		Fragment_home.home.addFooterView(foot);
+	}
+	public void MoreMention(){
+		ListView foot = new ListView(this);
+		foot.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
+		foot.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Status s = (Status)Fragment_mention.mention.getItemAtPosition(Fragment_mention.mention.getAdapter().getCount() - 2);
+				final long tweetId = s.getId();
+				AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+					@Override
+					protected Boolean doInBackground(Void... params) {
+						try{
+							mention = twitter.getMentionsTimeline(new Paging(1, 50).maxId(tweetId));
+							return true;
+						}catch(Exception e){
+							return false;
+						}
+					}
+					protected void onPostExecute(Boolean result){
+						if(result){
+							boolean i = false;
+							for(twitter4j.Status status : mention){
+								if(i)
+									MentionAdapter.add(status);
+								else
+									i = true;
+							}
+						}else
+							showToast("メンション取得エラー", null);
+					}
+				};
+				task.execute();
+			}
+		});
+		Fragment_mention.mention.addFooterView(foot);
 	}
 	
 	public void connectStreaming(){

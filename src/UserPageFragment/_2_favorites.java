@@ -2,6 +2,7 @@ package UserPageFragment;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;
+import twitter4j.Status;
 import twitter4j.TwitterException;
 
 import com.tao.lightning_of_dark.CustomAdapter;
@@ -28,8 +29,7 @@ public class _2_favorites extends Fragment {
 	static ListView UserFav;
 	SwipeRefreshLayout PulltoRefresh;
 	CustomAdapter adapter;
-	ResponseList<twitter4j.Status> timeline;
-	int num = 1;
+	ResponseList<twitter4j.Status> FavLine;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.user_2, null);
@@ -39,16 +39,8 @@ public class _2_favorites extends Fragment {
 		
 		adapter = new CustomAdapter(getActivity());
 		
-		ListView foot = new ListView(getActivity());
-		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				setFavList();
-			}
-		});
-		UserFav.addFooterView(foot);
+		//フッター生成
+		addFooter();
 		
 		setFavList();
 		
@@ -61,7 +53,6 @@ public class _2_favorites extends Fragment {
 			@Override
 			public void onRefresh() {
 				adapter.clear();
-				num = 1;
 				setFavList();
 			}
 		});
@@ -74,7 +65,7 @@ public class _2_favorites extends Fragment {
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try {
-					timeline = MainActivity.twitter.getFavorites(UserPage.target.getId(), new Paging(num, 50));
+					FavLine = MainActivity.twitter.getFavorites(UserPage.target.getId(), new Paging(1, 50));
 					return true;
 				} catch (TwitterException e) {
 					return false;
@@ -82,11 +73,9 @@ public class _2_favorites extends Fragment {
 			}
 			protected void onPostExecute(Boolean result){
 				if(result){
-					for(twitter4j.Status status : timeline)
+					for(twitter4j.Status status : FavLine)
 						adapter.add(status);
-					if(num == 1)
-						UserFav.setAdapter(adapter);
-					num++;
+					UserFav.setAdapter(adapter);
 				}else
 					new UserPage().showToast("お気に入りを取得できませんでした");
 				PulltoRefresh.setRefreshing(false);
@@ -94,5 +83,44 @@ public class _2_favorites extends Fragment {
 			}
 		};
 		task.execute();
+	}
+	
+	//フッター生成
+	public void addFooter(){
+		ListView foot = new ListView(getActivity());
+		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
+		foot.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Status s = (Status)UserFav.getItemAtPosition(UserFav.getAdapter().getCount() - 2);
+				final long tweetId = s.getId();
+				AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+					@Override
+					protected Boolean doInBackground(Void... params) {
+						try{
+							FavLine = MainActivity.twitter.getFavorites(UserPage.target.getId(), new Paging(1, 50).maxId(tweetId));
+							return true;
+						}catch(Exception e){
+							return false;
+						}
+					}
+					protected void onPostExecute(Boolean result){
+						if(result){
+							boolean i = false;
+							for(twitter4j.Status status : FavLine){
+								if(i)
+									adapter.add(status);
+								else
+									i = true;
+							}
+						}else
+							new MainActivity().showToast("ふぁぼ取得エラー", getActivity());
+					}
+				};
+				task.execute();
+			}
+		});
+		UserFav.addFooterView(foot);
 	}
 }

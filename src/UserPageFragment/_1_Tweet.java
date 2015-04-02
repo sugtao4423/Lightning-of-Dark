@@ -2,14 +2,8 @@ package UserPageFragment;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;
+import twitter4j.Status;
 import twitter4j.TwitterException;
-
-import com.tao.lightning_of_dark.CustomAdapter;
-import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.MainActivity;
-import com.tao.lightning_of_dark.R;
-import com.tao.lightning_of_dark.UserPage;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,13 +17,18 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.tao.lightning_of_dark.CustomAdapter;
+import com.tao.lightning_of_dark.ListViewListener;
+import com.tao.lightning_of_dark.MainActivity;
+import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.UserPage;
+
 public class _1_Tweet extends Fragment {
 	
 	static ListView userTweet;
 	SwipeRefreshLayout PulltoRefresh;
 	CustomAdapter adapter;
-	ResponseList<twitter4j.Status> timeline;;
-	int num = 1;
+	ResponseList<twitter4j.Status> timeline;
 	
 	@Override
 	  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,18 +39,8 @@ public class _1_Tweet extends Fragment {
 		userTweet.setOnItemLongClickListener(new ListViewListener());
 		//ここまで
 		adapter = new CustomAdapter(getActivity());
-		//フッター生成〜設定まで
-		ListView foot = new ListView(getActivity());
-		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				setTweetList();
-			}
-		});
-		userTweet.addFooterView(foot);
-		//ここまで
+		//フッター生成
+		addFooter();
 		
 		setTweetList();
 		
@@ -65,7 +54,6 @@ public class _1_Tweet extends Fragment {
 			@Override
 			public void onRefresh() {
 				adapter.clear();
-				num = 1;
 				setTweetList();
 			}
 		});
@@ -77,7 +65,7 @@ public class _1_Tweet extends Fragment {
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try {
-					timeline = MainActivity.twitter.getUserTimeline(UserPage.target.getId(), new Paging(num, 50));
+					timeline = MainActivity.twitter.getUserTimeline(UserPage.target.getId(), new Paging(1, 50));
 					return true;
 				} catch (TwitterException e) {
 					return false;
@@ -87,9 +75,7 @@ public class _1_Tweet extends Fragment {
 				if(result){
 					for(twitter4j.Status status : timeline)
 						adapter.add(status);
-					if(num == 1)
-						userTweet.setAdapter(adapter);
-					num++;
+					userTweet.setAdapter(adapter);
 				}else
 					new UserPage().showToast("タイムラインを取得できませんでした");
 				PulltoRefresh.setRefreshing(false);
@@ -97,5 +83,44 @@ public class _1_Tweet extends Fragment {
 			}
 		};
 		task.execute();
+	}
+	
+	//フッター生成
+	public void addFooter(){
+		ListView foot = new ListView(getActivity());
+		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
+		foot.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Status s = (Status)userTweet.getItemAtPosition(userTweet.getAdapter().getCount() - 2);
+				final long tweetId = s.getId();
+				AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+					@Override
+					protected Boolean doInBackground(Void... params) {
+						try{
+							timeline = MainActivity.twitter.getUserTimeline(UserPage.target.getId(), new Paging(1, 50).maxId(tweetId));
+							return true;
+						}catch(Exception e){
+							return false;
+						}
+					}
+					protected void onPostExecute(Boolean result){
+						if(result){
+							boolean i = false;
+							for(twitter4j.Status status : timeline){
+								if(i)
+									adapter.add(status);
+								else
+									i = true;
+							}
+						}else
+							new MainActivity().showToast("タイムライン取得エラー", getActivity());
+					}
+				};
+				task.execute();
+			}
+		});
+		userTweet.addFooterView(foot);
 	}
 }
