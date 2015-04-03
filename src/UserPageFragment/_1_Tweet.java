@@ -3,7 +3,6 @@ package UserPageFragment;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
-import twitter4j.TwitterException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,14 +24,17 @@ import com.tao.lightning_of_dark.UserPage;
 
 public class _1_Tweet extends Fragment {
 	
-	static ListView userTweet;
+	static ListView userTweet, foot;
 	SwipeRefreshLayout PulltoRefresh;
 	CustomAdapter adapter;
 	ResponseList<twitter4j.Status> timeline;
+	static boolean AlreadyLoad;
+	static long tweetId;
 	
 	@Override
-	  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.user_1, null);
+		AlreadyLoad = false;
 		//通常のListViewSet
 		userTweet = (ListView)v.findViewById(R.id.UserTweet);
 		userTweet.setOnItemClickListener(new ListViewListener());
@@ -41,8 +43,7 @@ public class _1_Tweet extends Fragment {
 		adapter = new CustomAdapter(getActivity());
 		//フッター生成
 		addFooter();
-		
-		setTweetList();
+		userTweet.setAdapter(adapter);
 		
 		//PulltoRefresh
 		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserTweetPull);
@@ -54,20 +55,43 @@ public class _1_Tweet extends Fragment {
 			@Override
 			public void onRefresh() {
 				adapter.clear();
-				setTweetList();
+				AlreadyLoad = false;
+				TimeLine();
 			}
 		});
-		
 		return v;
 	}
-	public void setTweetList(){
+	
+	//フッター生成
+	public void addFooter(){
+		foot = new ListView(getActivity());
+		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
+		foot.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				foot.setEnabled(false);
+				TimeLine();
+			}
+		});
+		userTweet.addFooterView(foot);
+	}
+	//なんか色々取得 //自分でもよくわからず組んだ is 屑
+	public void TimeLine(){
+		if(AlreadyLoad){
+			Status s = (Status)userTweet.getItemAtPosition(userTweet.getAdapter().getCount() - 2);
+			tweetId = s.getId();
+		}
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
-				try {
-					timeline = MainActivity.twitter.getUserTimeline(UserPage.target.getId(), new Paging(1, 50));
+				try{
+					if(AlreadyLoad)
+						timeline = MainActivity.twitter.getUserTimeline(UserPage.target.getId(), new Paging(1, 50).maxId(tweetId - 1));
+					else
+						timeline = MainActivity.twitter.getUserTimeline(UserPage.target.getId(), new Paging(1, 50));
 					return true;
-				} catch (TwitterException e) {
+				}catch(Exception e){
 					return false;
 				}
 			}
@@ -75,52 +99,15 @@ public class _1_Tweet extends Fragment {
 				if(result){
 					for(twitter4j.Status status : timeline)
 						adapter.add(status);
-					userTweet.setAdapter(adapter);
+					if(!AlreadyLoad)
+						AlreadyLoad = true;
+					PulltoRefresh.setRefreshing(false);
+					PulltoRefresh.setEnabled(true);
 				}else
 					new UserPage().showToast("タイムラインを取得できませんでした");
-				PulltoRefresh.setRefreshing(false);
-				PulltoRefresh.setEnabled(true);
+				foot.setEnabled(true);
 			}
 		};
 		task.execute();
-	}
-	
-	//フッター生成
-	public void addFooter(){
-		ListView foot = new ListView(getActivity());
-		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Status s = (Status)userTweet.getItemAtPosition(userTweet.getAdapter().getCount() - 2);
-				final long tweetId = s.getId();
-				AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
-					@Override
-					protected Boolean doInBackground(Void... params) {
-						try{
-							timeline = MainActivity.twitter.getUserTimeline(UserPage.target.getId(), new Paging(1, 50).maxId(tweetId));
-							return true;
-						}catch(Exception e){
-							return false;
-						}
-					}
-					protected void onPostExecute(Boolean result){
-						if(result){
-							boolean i = false;
-							for(twitter4j.Status status : timeline){
-								if(i)
-									adapter.add(status);
-								else
-									i = true;
-							}
-						}else
-							new MainActivity().showToast("タイムライン取得エラー", getActivity());
-					}
-				};
-				task.execute();
-			}
-		});
-		userTweet.addFooterView(foot);
 	}
 }

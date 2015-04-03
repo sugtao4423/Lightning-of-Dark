@@ -163,7 +163,7 @@ public class MainActivity extends FragmentActivity {
 					@Override
 					protected Boolean doInBackground(Void... params) {
 						try{
-							home = twitter.getHomeTimeline(new Paging(1, 50).maxId(tweetId));
+							home = twitter.getHomeTimeline(new Paging(1, 50).maxId(tweetId - 1));
 							return true;
 						}catch(Exception e){
 							return false;
@@ -171,13 +171,8 @@ public class MainActivity extends FragmentActivity {
 					}
 					protected void onPostExecute(Boolean result){
 						if(result){
-							boolean i = false;
-							for(twitter4j.Status status : home){
-								if(i)
+							for(twitter4j.Status status : home)
 									HomeAdapter.add(status);
-								else
-									i = true;
-							}
 						}else
 							showToast("タイムライン取得エラー", null);
 					}
@@ -200,7 +195,7 @@ public class MainActivity extends FragmentActivity {
 					@Override
 					protected Boolean doInBackground(Void... params) {
 						try{
-							mention = twitter.getMentionsTimeline(new Paging(1, 50).maxId(tweetId));
+							mention = twitter.getMentionsTimeline(new Paging(1, 50).maxId(tweetId - 1));
 							return true;
 						}catch(Exception e){
 							return false;
@@ -208,13 +203,8 @@ public class MainActivity extends FragmentActivity {
 					}
 					protected void onPostExecute(Boolean result){
 						if(result){
-							boolean i = false;
-							for(twitter4j.Status status : mention){
-								if(i)
+							for(twitter4j.Status status : mention)
 									MentionAdapter.add(status);
-								else
-									i = true;
-							}
 						}else
 							showToast("メンション取得エラー", null);
 					}
