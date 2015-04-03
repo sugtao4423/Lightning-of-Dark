@@ -18,7 +18,7 @@
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="3dp"
-        android:text="TextView"
+        android:text="Loading..."
         android:autoLink="web" />
 <TextView
         android:id="@+id/textView2"
@@ -36,7 +36,7 @@
         android:layout_alignLeft="@+id/textView2"
         android:layout_below="@+id/textView2"
         android:layout_marginTop="3dp"
-        android:text="TextView" />
+        android:text="Loading..." />
 <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -54,6 +54,6 @@
         android:layout_below="@+id/textView3"
         android:layout_marginTop="3dp"
         android:autoLink="web"
-        android:text="TextView" />
+        android:text="Loading..." />
 
 </RelativeLayout>

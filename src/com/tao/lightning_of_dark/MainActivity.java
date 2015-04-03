@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity {
 	ResponseList<twitter4j.Status> home, mention;
 	static Pattern mentionPattern;
 	
-	static boolean loadOptionPref, menu_reply, menu_retweet, menu_fav, menu_regex;
+	static boolean loadOptionPref, menu_reply, menu_retweet, menu_fav, menu_regex, menu_talk;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,7 @@ public class MainActivity extends FragmentActivity {
 		menu_retweet = pref.getBoolean("menu_retweet", true);
 		menu_fav = pref.getBoolean("menu_fav", true);
 		menu_regex = pref.getBoolean("menu_regex", false);
+		menu_talk = pref.getBoolean("menu_talk", true);
 		
 		if(pref.getString("AccessToken", "").equals("")){
 			startActivity(new Intent(this, startOAuth.class));

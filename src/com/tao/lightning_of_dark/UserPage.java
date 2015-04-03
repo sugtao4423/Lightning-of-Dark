@@ -27,7 +27,7 @@ public class UserPage extends FragmentActivity {
 	public static User target;
 	static SmartImageView banner, UserIcon;
 	static TextView Name, ScreenName;
-
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.userpage);

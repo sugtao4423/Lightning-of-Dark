@@ -3,6 +3,7 @@ package com.tao.lightning_of_dark;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.loopj.android.image.SmartImageView;
 
@@ -32,6 +33,8 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ListViewListener implements OnItemClickListener, OnItemLongClickListener {
 	
+	static twitter4j.Status reply;
+	
 	@Override
 	public void onItemClick(final AdapterView<?> parent, View view, int position, long id) {
 		final Status item = (Status)parent.getItemAtPosition(position);
@@ -46,6 +49,8 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			list.add("ふぁぼる");
 		if(MainActivity.menu_regex)
 			list.add("正規表現で抽出");
+		if(MainActivity.menu_talk && item.getInReplyToStatusId() > 0)
+			list.add("会話を表示");
 		
 		list.add("@" + item.getUser().getScreenName());
 		
@@ -53,7 +58,8 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		if(mentionEntitys != null && mentionEntitys.length > 0){
 			for(int i = 0; i < mentionEntitys.length; i++){
 				UserMentionEntity umEntity = mentionEntitys[i];
-				list.add("@" + umEntity.getScreenName());
+				if(!umEntity.getScreenName().equals(item.getUser().getScreenName()))
+					list.add("@" + umEntity.getScreenName());
 			}
 		}
 		URLEntity[] uentitys = item.getURLEntities();
@@ -168,12 +174,11 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 						public void onClick(DialogInterface dialog, int which) {
 							String editReg = reg.getText().toString();
 							pref.edit().putString("regularExpression", editReg).commit();
+							Pattern pattern = Pattern.compile(editReg, Pattern.DOTALL);
 							CustomAdapter content = new CustomAdapter(parent.getContext());
 							for(int i = 0; parent.getCount() - 1 > i; i++){
 								Status status = ((Status) parent.getAdapter().getItem(i));
-								if(status.getText()
-										.toString()
-										.matches(editReg))
+								if(pattern.matcher(status.getText()).find())
 									content.add(status);
 							}
 							AlertDialog.Builder b = new AlertDialog.Builder(parent.getContext());
@@ -206,11 +211,48 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 					intent.putExtra("userScreenName", items[which].substring(1));
 					parent.getContext().startActivity(intent);
 				}
+				if(items[which].equals("会話を表示")){
+					AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
+					ListView result = new ListView(parent.getContext());
+					result.setOnItemClickListener(new ListViewListener());
+					result.setOnItemLongClickListener(new ListViewListener());
+					final CustomAdapter resultAdapter = new CustomAdapter(parent.getContext());
+					result.setAdapter(resultAdapter);
+					builder.setView(result);
+					
+					reply = item;
+					final List<twitter4j.Status> StatusList = new ArrayList<twitter4j.Status>();
+					
+					AsyncTask<Void, Void, Boolean> getReply = new AsyncTask<Void, Void, Boolean>(){
+						@Override
+						protected Boolean doInBackground(Void... params) {
+							try {
+								for(; reply.getInReplyToStatusId() > 0;){
+									reply = MainActivity.twitter.showStatus(reply.getInReplyToStatusId());
+									StatusList.add(reply);
+								}
+								return true;
+							} catch (TwitterException e) {
+								return false;
+							}
+						}
+						protected void onPostExecute(Boolean result) {
+							if(result){
+								resultAdapter.add(item);
+								for(twitter4j.Status status : StatusList)
+									resultAdapter.add(status);
+							}else
+								new MainActivity().showToast("会話の取得完了", parent.getContext());
+						}
+					};
+					getReply.execute();
+					builder.create().show();
+				}
 			}
 		});
 		builder.create().show();
 	}
-
+	
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view,
 			int position, long id) {
