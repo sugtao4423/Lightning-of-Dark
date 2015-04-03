@@ -1,7 +1,6 @@
 package com.tao.lightning_of_dark;
 
 import java.text.SimpleDateFormat;
-
 import twitter4j.Status;
 
 import com.loopj.android.image.SmartImageView;
@@ -59,7 +58,7 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			convertView.setBackgroundColor(Color.parseColor("#c9d9f9"));
 		else if(item.getUser().getScreenName().equals(MainActivity.MyScreenName))
 			convertView.setBackgroundColor(Color.parseColor("#c9f999"));
-		else if(item.getText().matches(".*@" + MainActivity.MyScreenName + ".*") || item.getText().startsWith("@" + MainActivity.MyScreenName))
+		else if(MainActivity.mentionPattern.matcher(item.getText()).find())
 			convertView.setBackgroundColor(Color.parseColor("#f9c9c9"));
 		else
 			if(position % 2 == 0)

@@ -1,5 +1,7 @@
 package com.tao.lightning_of_dark;
 
+import java.util.regex.Pattern;
+
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
@@ -46,12 +48,15 @@ public class MainActivity extends FragmentActivity {
 	
 	static CustomAdapter HomeAdapter, MentionAdapter;
 	ResponseList<twitter4j.Status> home, mention;
+	static Pattern mentionPattern;
+	
+	static boolean loadOptionPref, menu_reply, menu_retweet, menu_fav, menu_regex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
 		getActionBar().hide();
+		setContentView(R.layout.activity_main);
 		viewPager = (ViewPager)findViewById(R.id.pager);
 		viewPager.setAdapter(new MyFragmentStatePagerAdapter(getSupportFragmentManager()));
 		viewPager.setCurrentItem(1);
@@ -62,6 +67,11 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setDisplayShowHomeEnabled(false);
 		
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		menu_reply = pref.getBoolean("menu_reply", true);
+		menu_retweet = pref.getBoolean("menu_retweet", true);
+		menu_fav = pref.getBoolean("menu_fav", true);
+		menu_regex = pref.getBoolean("menu_regex", false);
 		
 		if(pref.getString("AccessToken", "").equals("")){
 			startActivity(new Intent(this, startOAuth.class));
@@ -98,6 +108,7 @@ public class MainActivity extends FragmentActivity {
 			}
 			protected void onPostExecute(Boolean result) {
 				if(result){
+					mentionPattern = Pattern.compile(".*@" + MainActivity.MyScreenName + ".*", Pattern.DOTALL);
 					getTimeLine();
 					connectStreaming();
 				}else
@@ -219,6 +230,7 @@ public class MainActivity extends FragmentActivity {
 			
 			TwitterStreamFactory streamFactory = new TwitterStreamFactory(jconf);
 			twitterStream = streamFactory.getInstance(accessToken);
+			
 			//UserStreamAdapter
 			UserStreamAdapter streamAdapter = new UserStreamAdapter(){
 				public void onStatus(final Status status){
@@ -229,9 +241,8 @@ public class MainActivity extends FragmentActivity {
 						}
 						protected void onPostExecute(Boolean result){
 							HomeAdapter.insert(status, 0);
-							if(status.getText().matches(".*@" + MyScreenName + ".*") || status.getText().startsWith("@" + MyScreenName))
-								if(!status.isRetweet())
-									MentionAdapter.insert(status, 0);
+							if(mentionPattern.matcher(status.getText()).find() && !status.isRetweet())
+								MentionAdapter.insert(status, 0);
 						}
 					};
 					task.execute();

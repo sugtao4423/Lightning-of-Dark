@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
+
 public class ListViewListener implements OnItemClickListener, OnItemLongClickListener {
 	
 	@Override
@@ -37,14 +38,13 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		
 		List<String> list = new ArrayList<String>();
 		
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
-		if(pref.getBoolean("menu_reply", true))
+		if(MainActivity.menu_reply)
 			list.add("返信");
-		if(pref.getBoolean("menu_retweet", true))
+		if(MainActivity.menu_retweet)
 			list.add("リツイート");
-		if(pref.getBoolean("menu_fav", true))
+		if(MainActivity.menu_fav)
 			list.add("ふぁぼる");
-		if(pref.getBoolean("menu_regex", false))
+		if(MainActivity.menu_regex)
 			list.add("正規表現で抽出");
 		
 		list.add("@" + item.getUser().getScreenName());
@@ -159,6 +159,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 				if(items[which].equals("正規表現で抽出")){
 					AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
 					final EditText reg = new EditText(parent.getContext());
+					final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
 					reg.setText(pref.getString("regularExpression", ""));
 					builder.setTitle("正規表現を入力してください")
 					.setView(reg)
