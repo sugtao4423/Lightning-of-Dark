@@ -25,9 +25,48 @@
             </intent-filter>
         </activity>
         <activity android:name="startOAuth" android:configChanges="orientation|screenSize"></activity>
-        <activity android:name="TweetActivity" android:windowSoftInputMode="adjustResize" android:configChanges="orientation|screenSize"></activity>
         <activity android:name="UserPage" android:configChanges="orientation|screenSize"></activity>
         <activity android:name="MyPreferenceActivity"></activity>
+        <activity android:name="TweetActivity" android:windowSoftInputMode="adjustResize" android:configChanges="orientation|screenSize" />
+        <activity android:name="IntentActivity">
+            <intent-filter>
+	            <action android:name="android.intent.action.VIEW" />
+	            
+				<category android:name="android.intent.category.DEFAULT" />
+				
+				<category android:name="android.intent.category.BROWSABLE" />
+				
+				<data
+					android:scheme="http"
+					android:host="twitter.com"
+					android:pathPattern="/..*" >
+				</data>
+				
+				<data
+					android:scheme="https"
+					android:host="twitter.com"
+					android:pathPattern="/..*" >
+				</data>
+				
+				<data
+					android:scheme="http"
+					android:host="mobile.twitter.com"
+					android:pathPattern="/..*" >
+				</data>
+				
+				<data
+					android:scheme="https"
+					android:host="mobile.twitter.com"
+					android:pathPattern="/..*" >
+				</data>
+				
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.SEND" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:mimeType="text/plain" />
+			</intent-filter>
+        </activity>
     </application>
 
 </manifest>

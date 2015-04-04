@@ -45,6 +45,8 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			list.add("返信");
 		if(MainActivity.menu_retweet)
 			list.add("リツイート");
+		if(MainActivity.menu_InformalRetweet)
+			list.add("非公式RT");
 		if(MainActivity.menu_fav)
 			list.add("ふぁぼる");
 		if(MainActivity.menu_regex)
@@ -138,6 +140,13 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 						}
 					};
 					task.execute();
+				}
+				
+				if(items[which].equals("非公式RT")){
+					String RTtext = " RT @" + item.getUser().getScreenName() + ": " + item.getText();
+					Intent i = new Intent(parent.getContext(), TweetActivity.class);
+					i.putExtra("pakuri", RTtext).putExtra("do_setSelection", false);
+					parent.getContext().startActivity(i);
 				}
 				
 				if(items[which].equals("ふぁぼる")){

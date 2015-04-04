@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity {
 	ResponseList<twitter4j.Status> home, mention;
 	static Pattern mentionPattern;
 	
-	static boolean loadOptionPref, menu_reply, menu_retweet, menu_fav, menu_regex, menu_talk;
+	static boolean loadOptionPref, menu_reply, menu_retweet, menu_InformalRetweet, menu_fav, menu_regex, menu_talk;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +68,7 @@ public class MainActivity extends FragmentActivity {
 		
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		menu_reply = pref.getBoolean("menu_reply", true);
-		menu_retweet = pref.getBoolean("menu_retweet", true);
-		menu_fav = pref.getBoolean("menu_fav", true);
-		menu_regex = pref.getBoolean("menu_regex", false);
-		menu_talk = pref.getBoolean("menu_talk", true);
+		setOptionMenu();
 		
 		if(pref.getString("AccessToken", "").equals("")){
 			startActivity(new Intent(this, startOAuth.class));
@@ -88,6 +84,14 @@ public class MainActivity extends FragmentActivity {
 			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
 			LogIn();
 		}
+	}
+	public void setOptionMenu(){
+		menu_reply = pref.getBoolean("menu_reply", true);
+		menu_retweet = pref.getBoolean("menu_retweet", true);
+		menu_InformalRetweet = pref.getBoolean("menu_InformalRetweet", false);
+		menu_fav = pref.getBoolean("menu_fav", true);
+		menu_regex = pref.getBoolean("menu_regex", false);
+		menu_talk = pref.getBoolean("menu_talk", true);
 	}
 	
 	public void LogIn(){
@@ -251,6 +255,49 @@ public class MainActivity extends FragmentActivity {
 	public void new_tweet(View v){
 		Intent intent = new Intent(MainActivity.this, TweetActivity.class);
 		startActivity(intent);
+	}
+	
+	public void onlyLogin(Context context){
+		pref = PreferenceManager.getDefaultSharedPreferences(context);
+		
+		setOptionMenu();
+		
+		if(pref.getString("AccessToken", "").equals("")){
+			startActivity(new Intent(this, startOAuth.class));
+			finish();
+		}else{
+			if(pref.getString("CustomCK", "").equals("")){
+				CK = getString(R.string.CK);
+				CS = getString(R.string.CS);
+			}else{
+				CK = pref.getString("CustomCK", null);
+				CS = pref.getString("CustomCS", null);
+			}
+			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
+		}
+		
+		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				ConfigurationBuilder builder = new ConfigurationBuilder();
+				builder.setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS);
+				jconf = builder.build();
+				
+				twitterFactory = new TwitterFactory(jconf);
+				twitter = twitterFactory.getInstance(accessToken);
+				try{
+					MyScreenName = twitter.getScreenName();
+				}catch(Exception e){
+					return false;
+				}
+				return true;
+			}
+			protected void onPostExecute(Boolean result) {
+				if(!result)
+					showToast("スクリーンネームの取得に失敗しました", null);
+			}
+		};
+		task.execute();
 	}
 	
 	public void showToast(String toast, Context context){

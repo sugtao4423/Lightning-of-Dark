@@ -28,6 +28,7 @@ public class TweetActivity extends Activity {
 	static long TweetReplyId;
 	static String ReplyUserScreenName, ReplyTweetText, pakuri;
 	static File image;
+	static boolean do_back, do_setSelection;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,6 +43,8 @@ public class TweetActivity extends Activity {
 		ReplyUserScreenName = getIntent().getStringExtra("ReplyUserScreenName");
 		TweetReplyId = getIntent().getLongExtra("TweetReplyId", -1);
 		pakuri = getIntent().getStringExtra("pakuri");
+		do_back = getIntent().getBooleanExtra("do_back", true);
+		do_setSelection = getIntent().getBooleanExtra("do_setSelection", true);
 		
 		if(TweetReplyId == -1){
 			getActionBar().setTitle("New Tweet");
@@ -52,7 +55,8 @@ public class TweetActivity extends Activity {
 				ReplyTweetText = ReplyTweetText.substring(0, 10);
 			TweetText.setText("@" + ReplyUserScreenName + " ");
 		}
-		TweetText.setSelection(TweetText.getText().length());
+		if(do_setSelection)
+			TweetText.setSelection(TweetText.getText().length());
 		
 		moji140.setText(String.valueOf(140 - TweetText.getText().length()));
 		moji140count();
@@ -95,8 +99,10 @@ public class TweetActivity extends Activity {
 			}
 		};
 		task.execute();
-		Intent main = new Intent(this, MainActivity.class);
-		startActivity(main);
+		if(do_back){
+			Intent main = new Intent(this, MainActivity.class);
+			startActivity(main);
+		}
 	}
 	
 	public void image(View v){

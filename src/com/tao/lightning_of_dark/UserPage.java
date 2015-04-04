@@ -1,6 +1,5 @@
 package com.tao.lightning_of_dark;
 
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.User;
 
@@ -23,7 +22,6 @@ import android.widget.Toast;
 
 public class UserPage extends FragmentActivity {
 	
-	static Twitter twitter;
 	public static User target;
 	static SmartImageView banner, UserIcon;
 	static TextView Name, ScreenName;
@@ -41,7 +39,6 @@ public class UserPage extends FragmentActivity {
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 		
-		twitter = MainActivity.twitter;
 		banner = (SmartImageView)findViewById(R.id.banner);
 		UserIcon = (SmartImageView)findViewById(R.id.UserIcon);
 		Name = (TextView)findViewById(R.id.UserName);
@@ -53,7 +50,7 @@ public class UserPage extends FragmentActivity {
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try {
-					target = twitter.showUser(u);
+					target = MainActivity.twitter.showUser(u);
 					return true;
 				} catch (TwitterException e) {
 					return false;
