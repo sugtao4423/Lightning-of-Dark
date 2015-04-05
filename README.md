@@ -13,6 +13,9 @@
 まだまだ製作・開発途中です。  
 自分がどのように変更したかなどがわかりやすいようにGitHubに上げました。
 
+## マルチアカウント
+は？
+
 ## 使ってみたいとかいう頭のおかしい方へ
 /res/values/strings.xml  
 こいつに"CK"と"CS"というnameのStringちゃんを追加してConsumerKeyとConsumerSecretを入力してください  
