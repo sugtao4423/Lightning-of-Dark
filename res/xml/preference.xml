@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <PreferenceCategory android:title="メニュー項目（変更後要再起動）">
-        <CheckBoxPreference android:title="返信" android:key="menu_reply" android:defaultValue="true"/>
-        <CheckBoxPreference android:title="リツイート" android:key="menu_retweet" android:defaultValue="true"/>
-        <CheckBoxPreference android:key="menu_InformalRetweet" android:title="非公式RT" android:defaultValue="false"/>
-        <CheckBoxPreference android:title="ふぁぼ" android:key="menu_fav" android:defaultValue="true"/>
-        <CheckBoxPreference android:title="正規表現で抽出" android:key="menu_regex" android:defaultValue="false"/>
-        <CheckBoxPreference android:key="menu_talk" android:title="会話を表示" android:defaultValue="true"/>
-        
-    </PreferenceCategory>
-    
-
+    <Preference android:title="メニュー項目" android:summary="変更後要再起動" android:key="OptionMenu"/>
+    <Preference android:key="ListSetting" android:title="リスト設定"/>
 </PreferenceScreen>

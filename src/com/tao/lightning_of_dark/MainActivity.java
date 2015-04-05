@@ -37,7 +37,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends FragmentActivity {
 	
-	static SharedPreferences pref;
+	public static SharedPreferences pref;
 	public static String CK, CS, MyScreenName; //MyScreenNameには「＠」は含まれない
 	
 	public static Twitter twitter;
@@ -61,8 +61,9 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().hide();
 		setContentView(R.layout.activity_main);
 		viewPager = (ViewPager)findViewById(R.id.pager);
-		viewPager.setAdapter(new MyFragmentStatePagerAdapter(getSupportFragmentManager()));
+		viewPager.setAdapter(new MyFragmentStatePagerAdapter(getSupportFragmentManager(), this));
 		viewPager.setCurrentItem(1);
+		viewPager.setOffscreenPageLimit(2);
 		
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.mainPagerTabStrip);
 		strip.setTabIndicatorColor(Color.parseColor("#33b5e5"));

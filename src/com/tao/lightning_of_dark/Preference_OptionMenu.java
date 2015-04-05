@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
-public class MyPreferenceActivity extends PreferenceActivity {
+public class Preference_OptionMenu extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -17,7 +17,7 @@ public class MyPreferenceActivity extends PreferenceActivity {
 	public static class MyPreferencesFragment extends PreferenceFragment {
 		public void onCreate(Bundle savedInstanceState){
 			super.onCreate(savedInstanceState);
-			addPreferencesFromResource(R.xml.preference);
+			addPreferencesFromResource(R.xml.preference_optionmenu);
 		}
 	}
 }

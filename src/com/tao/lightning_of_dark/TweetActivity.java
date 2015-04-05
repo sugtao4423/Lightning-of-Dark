@@ -154,7 +154,7 @@ public class TweetActivity extends Activity {
 	}
 	
 	public void setting(View v){
-		startActivity(new Intent(this, MyPreferenceActivity.class));
+		startActivity(new Intent(this, Preference.class));
 	}
 	
 	public void onDestroy(){
