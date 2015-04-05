@@ -1,5 +1,8 @@
-package com.tao.lightning_of_dark;
+package MainFragment;
 
+import com.tao.lightning_of_dark.CustomAdapter;
+import com.tao.lightning_of_dark.ListViewListener;
+import com.tao.lightning_of_dark.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,7 +12,7 @@ import android.widget.ListView;
 
 public class Fragment_home extends Fragment {
 	
-	static ListView home;
+	public static ListView home;
 	
 	@Override
 	  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

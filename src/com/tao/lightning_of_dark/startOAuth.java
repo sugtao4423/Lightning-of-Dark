@@ -7,19 +7,26 @@ import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class startOAuth extends Activity {
 	
 	static EditText pin, CustomCK, CustomCS;
+	static Button ninsyobtn;
 	static String CK, CS;
 	static SharedPreferences pref;
 	
@@ -31,9 +38,14 @@ public class startOAuth extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.oauth);
 		
-		pin = (EditText)findViewById(R.id.editText1);
+		TextView description = (TextView)findViewById(R.id.OAuthDescription);
+		String descri = "Custom CK/CSを使う場合、CallbackURLを<br><font color=blue><u>https://twitter.com/lightning-of-dark</u></font><br>に設定してください。<br>（タップでコピー）";
+		description.setText(Html.fromHtml(descri));
+		
 		CustomCK = (EditText)findViewById(R.id.editText2);
 		CustomCS = (EditText)findViewById(R.id.editText3);
+		
+		ninsyobtn = (Button)findViewById(R.id.button1);
 		
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		
@@ -42,6 +54,7 @@ public class startOAuth extends Activity {
 	}
 	
 	public void ninsyo(View v){
+		ninsyobtn.setEnabled(false);
 		if(CustomCK.getText().toString().equals("")){
 			CK = getString(R.string.CK);
 			CS = getString(R.string.CS);
@@ -62,7 +75,7 @@ public class startOAuth extends Activity {
 				twitterFactory = new TwitterFactory(jconf);
 				twitter = twitterFactory.getInstance();
 				try{
-					rt = twitter.getOAuthRequestToken();
+					rt = twitter.getOAuthRequestToken("lightning-of-dark://twitter");
 					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rt.getAuthenticationURL())));
 				}catch(Exception e){
 					showToast("RequestTokenの取得に失敗しました");
@@ -73,24 +86,38 @@ public class startOAuth extends Activity {
 		task.execute();
 	}
 	
-	public void pin(View v){
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		if (intent == null
+                || intent.getData() == null
+                || !intent.getData().toString().startsWith("lightning-of-dark://twitter")) {
+            return;
+        }
+		final String verifier = intent.getData().getQueryParameter("oauth_verifier");
+		
 		AsyncTask<Void, Void, AccessToken> task = new AsyncTask<Void, Void, AccessToken>(){
 
 			@Override
 			protected AccessToken doInBackground(Void... params) {
 				try{
-					AccessToken accessToken = twitter.getOAuthAccessToken(rt, pin.getText().toString());
+					AccessToken accessToken = twitter.getOAuthAccessToken(rt, verifier);
 					return accessToken;
 				}catch(Exception e){
-					showToast(e.toString());
+					//失敗
 				}
 				return null;
 			}
 			protected void onPostExecute(AccessToken accessToken) {
-				pref.edit().putString("AccessToken", accessToken.getToken())
-				.putString("AccessTokenSecret", accessToken.getTokenSecret()).commit();
-				startActivity(new Intent(getApplicationContext(), MainActivity.class));
-				finish();
+				if(accessToken != null){
+					pref.edit().putString("AccessToken", accessToken.getToken())
+					.putString("AccessTokenSecret", accessToken.getTokenSecret()).commit();
+					startActivity(new Intent(getApplicationContext(), MainActivity.class));
+					finish();
+				}else{
+					showToast("失敗...");
+					finish();
+				}
 			}
 		};
 		task.execute();
@@ -98,5 +125,12 @@ public class startOAuth extends Activity {
 	
 	public void showToast(String toast){
 		Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
+	}
+	
+	public void Description(View v){
+		ClipboardManager clipboardManager = (ClipboardManager)this.getSystemService(Context.CLIPBOARD_SERVICE);
+		ClipData clipData = ClipData.newPlainText("Lightning of Dark", "https://twitter.com/lightning-of-dark");
+		clipboardManager.setPrimaryClip(clipData);
+		showToast("クリップボードにコピーしました");
 	}
 }

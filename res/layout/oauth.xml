@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:onClick="background"
-    tools:context=".OAuth" >
+    tools:context=".startOAuth" >
 
     <Button
         android:id="@+id/button1"
@@ -15,28 +14,6 @@
         android:onClick="ninsyo"
         android:text="OAuth認証" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editText1"
-        android:layout_alignBottom="@+id/editText1"
-        android:layout_toRightOf="@+id/editText1"
-        android:onClick="pin"
-        android:text="PIN決定" />
-
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/button1"
-        android:layout_below="@+id/button1"
-        android:ems="10"
-        android:inputType="phone" >
-
-        <requestFocus />
-    </EditText>
-
     <EditText
         android:id="@+id/editText2"
         android:layout_width="wrap_content"
@@ -45,7 +22,8 @@
         android:layout_alignBottom="@+id/UserBio"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/UserBio"
-        android:ems="10" />
+        android:ems="10"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/UserBio"
@@ -73,16 +51,19 @@
         android:layout_alignBottom="@+id/textView3"
         android:layout_alignLeft="@+id/editText2"
         android:layout_alignParentRight="true"
-        android:ems="10" />
+        android:ems="10" 
+        android:singleLine="true"/>
 
     <TextView
-        android:id="@+id/link"
+        android:id="@+id/OAuthDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/editText3"
         android:layout_marginTop="20dp"
-        android:text="Custom CK/CSを使う場合、CallbackURL有りだと使えません" />
+        android:clickable="true"
+        android:onClick="Description"
+        android:text="Description" />
 
     <TextView
         android:id="@+id/textView1"

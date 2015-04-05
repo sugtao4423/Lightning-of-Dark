@@ -94,15 +94,17 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         TextView tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
         TextView tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
         
-        tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
-					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
         if(item.isRetweet()){
         	tweetText.setText(item.getRetweetedStatus().getText());
         	name_screenName.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
+        	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
+					+ "  via " + item.getRetweetedStatus().getSource().replaceAll("<.+?>", ""));
         	icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
         }else{
         	tweetText.setText(item.getText());
         	name_screenName.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
+        	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
+					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
         	icon.setImageUrl(item.getUser().getProfileImageURL());
         }
         

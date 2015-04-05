@@ -24,7 +24,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="startOAuth" android:configChanges="orientation|screenSize"></activity>
+        <activity android:name="startOAuth" android:configChanges="orientation|screenSize" android:launchMode="singleTask">
+            <intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+		        <category android:name="android.intent.category.DEFAULT" />
+        		<category android:name="android.intent.category.BROWSABLE" />
+
+        		<data
+            		android:host="twitter"
+            		android:scheme="lightning-of-dark" >
+				</data>
+    		</intent-filter>
+        </activity>
         <activity android:name="UserPage" android:configChanges="orientation|screenSize"></activity>
         <activity android:name="MyPreferenceActivity"></activity>
         <activity android:name="TweetActivity" android:windowSoftInputMode="adjustResize" android:configChanges="orientation|screenSize" />
