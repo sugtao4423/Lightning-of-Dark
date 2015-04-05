@@ -51,9 +51,15 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			list.add("ふぁぼる");
 		if(MainActivity.menu_regex)
 			list.add("正規表現で抽出");
-		if(MainActivity.menu_talk && item.getInReplyToStatusId() > 0)
-			list.add("会話を表示");
-		
+		if(MainActivity.menu_talk)
+			if(item.isRetweet()){
+				if(item.getRetweetedStatus().getInReplyToStatusId() > 0)
+					list.add("会話を表示");
+			}else{
+				if(item.getInReplyToStatusId() > 0)
+					list.add("会話を表示");
+			}
+				
 		list.add("@" + item.getUser().getScreenName());
 		
 		UserMentionEntity[] mentionEntitys = item.getUserMentionEntities();
@@ -143,7 +149,11 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 				}
 				
 				if(items[which].equals("非公式RT")){
-					String RTtext = " RT @" + item.getUser().getScreenName() + ": " + item.getText();
+					String RTtext;
+					if(item.isRetweet())
+						RTtext = " RT @" + item.getRetweetedStatus().getUser().getScreenName() + ": " + item.getRetweetedStatus().getText();
+					else
+						RTtext = " RT @" + item.getUser().getScreenName() + ": " + item.getText();
 					Intent i = new Intent(parent.getContext(), TweetActivity.class);
 					i.putExtra("pakuri", RTtext).putExtra("do_setSelection", false);
 					parent.getContext().startActivity(i);
@@ -229,7 +239,10 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 					result.setAdapter(resultAdapter);
 					builder.setView(result);
 					
-					reply = item;
+					if(item.isRetweet())
+						reply = item.getRetweetedStatus();
+					else
+						reply = item;
 					final List<twitter4j.Status> StatusList = new ArrayList<twitter4j.Status>();
 					
 					AsyncTask<Void, Void, Boolean> getReply = new AsyncTask<Void, Void, Boolean>(){
@@ -247,7 +260,10 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 						}
 						protected void onPostExecute(Boolean result) {
 							if(result){
-								resultAdapter.add(item);
+								if(item.isRetweet())
+									resultAdapter.add(item.getRetweetedStatus());
+								else
+									resultAdapter.add(item);
 								for(twitter4j.Status status : StatusList)
 									resultAdapter.add(status);
 							}else
