@@ -7,7 +7,6 @@ import com.loopj.android.image.SmartImageView;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,18 +52,18 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 		}
 		
 		if(item.isRetweetedByMe())
-			convertView.setBackgroundColor(Color.parseColor("#c9f999"));
+			convertView.setBackgroundResource(R.drawable.retweeted_by_me);
 		else if(item.isRetweet())
-			convertView.setBackgroundColor(Color.parseColor("#c9d9f9"));
+			convertView.setBackgroundResource(R.drawable.retweet);
 		else if(item.getUser().getScreenName().equals(MainActivity.MyScreenName))
-			convertView.setBackgroundColor(Color.parseColor("#c9f999"));
+			convertView.setBackgroundResource(R.drawable.same_my_screenname);
 		else if(MainActivity.mentionPattern.matcher(item.getText()).find())
-			convertView.setBackgroundColor(Color.parseColor("#f9c9c9"));
+			convertView.setBackgroundResource(R.drawable.mention);
 		else
 			if(position % 2 == 0)
-				convertView.setBackgroundColor(Color.parseColor("#f9f9f9"));
+				convertView.setBackgroundResource(R.drawable.position0);
 			else
-				convertView.setBackgroundColor(Color.parseColor("#e9e9e9"));
+				convertView.setBackgroundResource(R.drawable.position1);
 		
 		if(item.isRetweet()){
 			holder.RetweetedUserIcon.setVisibility(View.VISIBLE);

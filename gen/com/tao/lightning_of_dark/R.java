@@ -10,6 +10,15 @@ package com.tao.lightning_of_dark;
 public final class R {
     public static final class attr {
     }
+    public static final class color {
+        public static final int Position0=0x7f070004;
+        public static final int Position1=0x7f070005;
+        public static final int Press=0x7f070006;
+        public static final int Retweet=0x7f070001;
+        public static final int RetweetedByMe=0x7f070000;
+        public static final int mention=0x7f070003;
+        public static final int sameMyScreenName=0x7f070002;
+    }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
 
@@ -18,8 +27,8 @@ public final class R {
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f070000;
-        public static final int activity_vertical_margin=0x7f070001;
+        public static final int activity_horizontal_margin=0x7f080000;
+        public static final int activity_vertical_margin=0x7f080001;
     }
     public static final class drawable {
         public static final int back=0x7f020000;
@@ -28,50 +37,56 @@ public final class R {
         public static final int header_none=0x7f020003;
         public static final int ic_action_settings=0x7f020004;
         public static final int ic_launcher=0x7f020005;
-        public static final int pic=0x7f020006;
-        public static final int pic_ena=0x7f020007;
-        public static final int tweet=0x7f020008;
-        public static final int tweet_ena=0x7f020009;
+        public static final int mention=0x7f020006;
+        public static final int pic=0x7f020007;
+        public static final int pic_ena=0x7f020008;
+        public static final int position0=0x7f020009;
+        public static final int position1=0x7f02000a;
+        public static final int retweet=0x7f02000b;
+        public static final int retweeted_by_me=0x7f02000c;
+        public static final int same_my_screenname=0x7f02000d;
+        public static final int tweet=0x7f02000e;
+        public static final int tweet_ena=0x7f02000f;
     }
     public static final class id {
-        public static final int HomeLine=0x7f0a0003;
-        public static final int ListLine=0x7f0a0005;
-        public static final int ListPull=0x7f0a0004;
-        public static final int MentionLine=0x7f0a0006;
-        public static final int OAuthDescription=0x7f0a0013;
-        public static final int RetweetedUserIcon=0x7f0a000b;
-        public static final int RetweetedUserScreenName=0x7f0a000c;
-        public static final int UserBio=0x7f0a000f;
-        public static final int UserFavPull=0x7f0a001e;
-        public static final int UserIcon=0x7f0a0021;
-        public static final int UserName=0x7f0a0023;
-        public static final int UserScreenName=0x7f0a0022;
-        public static final int UserTweet=0x7f0a001d;
-        public static final int UserTweetPull=0x7f0a001c;
-        public static final int Userfav=0x7f0a001f;
-        public static final int Userpager=0x7f0a0024;
-        public static final int banner=0x7f0a0020;
-        public static final int button1=0x7f0a000d;
-        public static final int editText2=0x7f0a000e;
-        public static final int editText3=0x7f0a0012;
-        public static final int icon=0x7f0a0007;
-        public static final int imageButton1=0x7f0a0002;
-        public static final int imageButton2=0x7f0a0017;
-        public static final int imageButton3=0x7f0a0015;
-        public static final int imageButton4=0x7f0a0018;
-        public static final int imageView1=0x7f0a0016;
-        public static final int link=0x7f0a001b;
-        public static final int location=0x7f0a001a;
-        public static final int mainPagerTabStrip=0x7f0a0001;
-        public static final int moji140=0x7f0a0014;
-        public static final int name_screenName=0x7f0a0008;
-        public static final int pager=0x7f0a0000;
-        public static final int textView1=0x7f0a0010;
-        public static final int textView2=0x7f0a0019;
-        public static final int textView3=0x7f0a0011;
-        public static final int tweetText=0x7f0a0009;
-        public static final int tweet_date=0x7f0a000a;
-        public static final int userPagerTabStrip=0x7f0a0025;
+        public static final int HomeLine=0x7f0b0003;
+        public static final int ListLine=0x7f0b0005;
+        public static final int ListPull=0x7f0b0004;
+        public static final int MentionLine=0x7f0b0006;
+        public static final int OAuthDescription=0x7f0b0013;
+        public static final int RetweetedUserIcon=0x7f0b000b;
+        public static final int RetweetedUserScreenName=0x7f0b000c;
+        public static final int UserBio=0x7f0b000f;
+        public static final int UserFavPull=0x7f0b001e;
+        public static final int UserIcon=0x7f0b0021;
+        public static final int UserName=0x7f0b0023;
+        public static final int UserScreenName=0x7f0b0022;
+        public static final int UserTweet=0x7f0b001d;
+        public static final int UserTweetPull=0x7f0b001c;
+        public static final int Userfav=0x7f0b001f;
+        public static final int Userpager=0x7f0b0024;
+        public static final int banner=0x7f0b0020;
+        public static final int button1=0x7f0b000d;
+        public static final int editText2=0x7f0b000e;
+        public static final int editText3=0x7f0b0012;
+        public static final int icon=0x7f0b0007;
+        public static final int imageButton1=0x7f0b0002;
+        public static final int imageButton2=0x7f0b0017;
+        public static final int imageButton3=0x7f0b0015;
+        public static final int imageButton4=0x7f0b0018;
+        public static final int imageView1=0x7f0b0016;
+        public static final int link=0x7f0b001b;
+        public static final int location=0x7f0b001a;
+        public static final int mainPagerTabStrip=0x7f0b0001;
+        public static final int moji140=0x7f0b0014;
+        public static final int name_screenName=0x7f0b0008;
+        public static final int pager=0x7f0b0000;
+        public static final int textView1=0x7f0b0010;
+        public static final int textView2=0x7f0b0019;
+        public static final int textView3=0x7f0b0011;
+        public static final int tweetText=0x7f0b0009;
+        public static final int tweet_date=0x7f0b000a;
+        public static final int userPagerTabStrip=0x7f0b0025;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -89,7 +104,7 @@ public final class R {
         public static final int userpage=0x7f03000c;
     }
     public static final class menu {
-        public static final int main=0x7f090000;
+        public static final int main=0x7f0a0000;
     }
     public static final class raw {
         public static final int empty=0x7f050000;
@@ -123,15 +138,15 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppBaseTheme=0x7f090000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f080001;
-        public static final int Theme_CustomActionBar=0x7f080005;
-        public static final int back_btn=0x7f080004;
-        public static final int pic_btn=0x7f080003;
-        public static final int tweet_btn=0x7f080002;
+        public static final int AppTheme=0x7f090001;
+        public static final int Theme_CustomActionBar=0x7f090005;
+        public static final int back_btn=0x7f090004;
+        public static final int pic_btn=0x7f090003;
+        public static final int tweet_btn=0x7f090002;
     }
     public static final class xml {
         public static final int backbtn=0x7f040000;
