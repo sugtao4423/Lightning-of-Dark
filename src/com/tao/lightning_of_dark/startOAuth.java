@@ -25,14 +25,14 @@ import android.widget.Toast;
 
 public class startOAuth extends Activity {
 	
-	static EditText pin, CustomCK, CustomCS;
-	static Button ninsyobtn;
-	static String CK, CS;
-	static SharedPreferences pref;
+	EditText pin, CustomCK, CustomCS;
+	Button ninsyobtn;
+	String CK, CS;
+	SharedPreferences pref;
 	
-	static Twitter twitter;
-	static TwitterFactory twitterFactory;
-	static RequestToken rt;
+	Twitter twitter;
+	TwitterFactory twitterFactory;
+	RequestToken rt;
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);

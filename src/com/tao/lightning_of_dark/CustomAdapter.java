@@ -20,7 +20,7 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 		mInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 	}
 
-	static class ViewHolder{
+	class ViewHolder{
 		TextView name, text, tweet_date, RetweetedUserScreenName;
 		SmartImageView icon, RetweetedUserIcon;
 	}

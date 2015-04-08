@@ -24,12 +24,12 @@ import com.tao.lightning_of_dark.UserPage;
 
 public class _1_Tweet extends Fragment {
 	
-	static ListView userTweet, foot;
-	SwipeRefreshLayout PulltoRefresh;
-	CustomAdapter adapter;
-	ResponseList<twitter4j.Status> timeline;
-	static boolean AlreadyLoad;
-	static long tweetId;
+	private ListView userTweet, foot;
+	private SwipeRefreshLayout PulltoRefresh;
+	private CustomAdapter adapter;
+	private ResponseList<twitter4j.Status> timeline;
+	private boolean AlreadyLoad;
+	private long tweetId;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

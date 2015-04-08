@@ -8,5 +8,6 @@
         <CheckBoxPreference android:title="正規表現で抽出" android:key="menu_regex" android:defaultValue="false"/>
         <CheckBoxPreference android:key="menu_talk" android:title="会話を表示" android:defaultValue="true"/>
         
+        
     </PreferenceCategory>
 </PreferenceScreen>

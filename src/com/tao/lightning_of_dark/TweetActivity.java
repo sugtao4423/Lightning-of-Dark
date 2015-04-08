@@ -23,12 +23,12 @@ import android.widget.Toast;
 
 public class TweetActivity extends Activity {
 	
-	static EditText TweetText;
-	static TextView moji140;
-	static long TweetReplyId;
-	static String ReplyUserScreenName, ReplyTweetText, pakuri;
-	static File image;
-	static boolean do_back, do_setSelection;
+	EditText TweetText;
+	TextView moji140;
+	long TweetReplyId;
+	String ReplyUserScreenName, ReplyTweetText, pakuri;
+	File image;
+	boolean do_back, do_setSelection;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

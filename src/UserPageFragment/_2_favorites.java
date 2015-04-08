@@ -24,12 +24,12 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class _2_favorites extends Fragment {
 	
-	static ListView UserFav, foot;
-	SwipeRefreshLayout PulltoRefresh;
-	CustomAdapter adapter;
-	ResponseList<twitter4j.Status> FavLine;
-	static boolean AlreadyLoad;
-	static long tweetId;
+	private ListView UserFav, foot;
+	private SwipeRefreshLayout PulltoRefresh;
+	private CustomAdapter adapter;
+	private ResponseList<twitter4j.Status> FavLine;
+	private boolean AlreadyLoad;
+	private long tweetId;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

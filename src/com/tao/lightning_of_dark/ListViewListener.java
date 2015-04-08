@@ -33,25 +33,25 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ListViewListener implements OnItemClickListener, OnItemLongClickListener {
 	
-	static twitter4j.Status reply;
+	twitter4j.Status reply;
 	
 	@Override
 	public void onItemClick(final AdapterView<?> parent, View view, int position, long id) {
 		final Status item = (Status)parent.getItemAtPosition(position);
 		
 		List<String> list = new ArrayList<String>();
-		
-		if(MainActivity.menu_reply)
+		boolean[] optionMenu = MainActivity.optionMenu;
+		if(optionMenu[0])
 			list.add("返信");
-		if(MainActivity.menu_retweet)
+		if(optionMenu[1])
 			list.add("リツイート");
-		if(MainActivity.menu_InformalRetweet)
+		if(optionMenu[2])
 			list.add("非公式RT");
-		if(MainActivity.menu_fav)
+		if(optionMenu[3])
 			list.add("ふぁぼる");
-		if(MainActivity.menu_regex)
+		if(optionMenu[4])
 			list.add("正規表現で抽出");
-		if(MainActivity.menu_talk)
+		if(optionMenu[5])
 			if(item.isRetweet()){
 				if(item.getRetweetedStatus().getInReplyToStatusId() > 0)
 					list.add("会話を表示");

@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 	
-	static SharedPreferences pref;
-	static boolean showList;
+	SharedPreferences pref;
+	boolean showList;
 
 	public MyFragmentStatePagerAdapter(FragmentManager fm, Context context) {
 		super(fm);

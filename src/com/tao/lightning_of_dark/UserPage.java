@@ -23,8 +23,8 @@ import android.widget.Toast;
 public class UserPage extends FragmentActivity {
 	
 	public static User target;
-	static SmartImageView banner, UserIcon;
-	static TextView Name, ScreenName;
+	SmartImageView banner, UserIcon;
+	TextView Name, ScreenName;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

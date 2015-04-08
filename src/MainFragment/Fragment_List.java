@@ -16,8 +16,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -31,16 +33,17 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class Fragment_List extends Fragment {
 	
-	static ListView ListLine, foot;
-	SwipeRefreshLayout PulltoRefresh;
-	CustomAdapter adapter;
-	ResponseList<Status> ListStatus;
-	static boolean AlreadyLoad;
-	static long tweetId;
+	private ListView ListLine, foot;
+	private SwipeRefreshLayout PulltoRefresh;
+	private CustomAdapter adapter;
+	private SharedPreferences pref;
+	private boolean AlreadyLoad;
+	private long tweetId;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_list, null);
+		pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		ListLine = (ListView)v.findViewById(R.id.ListLine);
 		ListLine.setOnItemClickListener(new ListViewListener());
 		ListLine.setOnItemLongClickListener(new ListViewListener());
@@ -65,7 +68,7 @@ public class Fragment_List extends Fragment {
 			}
 		});
 		
-		if(MainActivity.pref.getBoolean("startApp_showList", false))
+		if(pref.getBoolean("startApp_showList", false))
 			getList();
 		
 		return v;
@@ -86,29 +89,28 @@ public class Fragment_List extends Fragment {
 	}
 	
 	public void getList(){
-		if(MainActivity.pref.getBoolean("showList", false)){
-			final long ListId = MainActivity.pref.getLong("SelectListId", -1);
+		if(pref.getBoolean("showList", false)){
+			final long ListId = pref.getLong("SelectListId", -1);
 			if(ListId != -1){
 				if(AlreadyLoad){
 					Status s = (Status)ListLine.getItemAtPosition(ListLine.getAdapter().getCount() - 2);
 					tweetId = s.getId();
 				}
-				AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+				AsyncTask<Void, Void, ResponseList<twitter4j.Status>> task = new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
 					@Override
-					protected Boolean doInBackground(Void... params) {
+					protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 						try {
 							if(AlreadyLoad)
-								ListStatus = MainActivity.twitter.getUserListStatuses(ListId, new Paging(1, 50).maxId(tweetId - 1));
+								return MainActivity.twitter.getUserListStatuses(ListId, new Paging(1, 50).maxId(tweetId - 1));
 							else
-								ListStatus = MainActivity.twitter.getUserListStatuses(ListId, new Paging(1, 50));
-							return true;
+								return MainActivity.twitter.getUserListStatuses(ListId, new Paging(1, 50));
 							} catch (TwitterException e) {
-								return false;
+								return null;
 							}
 					}
-					protected void onPostExecute(Boolean result){
-						if(result){
-							for(twitter4j.Status status : ListStatus)
+					protected void onPostExecute(ResponseList<twitter4j.Status> result){
+						if(result != null){
+							for(twitter4j.Status status : result)
 								adapter.add(status);
 							if(!AlreadyLoad)
 								AlreadyLoad = true;

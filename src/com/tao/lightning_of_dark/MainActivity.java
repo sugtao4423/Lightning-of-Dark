@@ -13,8 +13,6 @@ import twitter4j.UserStreamAdapter;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
-import MainFragment.Fragment_home;
-import MainFragment.Fragment_mention;
 import MainFragment.MyFragmentStatePagerAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -29,37 +27,42 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class MainActivity extends FragmentActivity {
-	
-	public static SharedPreferences pref;
-	public static String CK, CS, MyScreenName; //MyScreenNameには「＠」は含まれない
+
+	//GLOBAL
+	static String CK, CS, MyScreenName; //MyScreenNameには「＠」は含まれない
 	
 	public static Twitter twitter;
-	static TwitterFactory twitterFactory;
-	static TwitterStream twitterStream;
+	static Pattern mentionPattern;
 	
-	static AccessToken accessToken;
-	static Configuration jconf;
+	static boolean[] optionMenu;
+	
+	//LOCAL
+	SharedPreferences pref;
+	
+	TwitterFactory twitterFactory;
+	TwitterStream twitterStream;
+	
+	AccessToken accessToken;
+	Configuration jconf;
 	
 	ViewPager viewPager;
 	
-	static CustomAdapter HomeAdapter, MentionAdapter;
+	CustomAdapter HomeAdapter, MentionAdapter;
 	ResponseList<twitter4j.Status> home, mention;
-	static Pattern mentionPattern;
-	
-	static boolean loadOptionPref, menu_reply, menu_retweet, menu_InformalRetweet, menu_fav, menu_regex, menu_talk;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		getActionBar().hide();
+		HomeAdapter = new CustomAdapter(this);
+		MentionAdapter = new CustomAdapter(this);
+		
 		setContentView(R.layout.activity_main);
+		
 		viewPager = (ViewPager)findViewById(R.id.pager);
 		viewPager.setAdapter(new MyFragmentStatePagerAdapter(getSupportFragmentManager(), this));
 		viewPager.setCurrentItem(1);
@@ -90,12 +93,14 @@ public class MainActivity extends FragmentActivity {
 		}
 	}
 	public void setOptionMenu(){
+		boolean menu_reply, menu_retweet, menu_InformalRetweet, menu_fav, menu_regex, menu_talk;
 		menu_reply = pref.getBoolean("menu_reply", true);
 		menu_retweet = pref.getBoolean("menu_retweet", true);
 		menu_InformalRetweet = pref.getBoolean("menu_InformalRetweet", false);
 		menu_fav = pref.getBoolean("menu_fav", true);
 		menu_regex = pref.getBoolean("menu_regex", false);
 		menu_talk = pref.getBoolean("menu_talk", true);
+		optionMenu = new boolean[]{menu_reply, menu_retweet, menu_InformalRetweet, menu_fav, menu_regex, menu_talk};
 	}
 	
 	public void LogIn(){
@@ -117,7 +122,7 @@ public class MainActivity extends FragmentActivity {
 			}
 			protected void onPostExecute(Boolean result) {
 				if(result){
-					mentionPattern = Pattern.compile(".*@" + MainActivity.MyScreenName + ".*", Pattern.DOTALL);
+					mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
 					getTimeLine();
 					connectStreaming();
 				}else
@@ -128,9 +133,6 @@ public class MainActivity extends FragmentActivity {
 	}
 	
 	public void getTimeLine(){
-		HomeAdapter = new CustomAdapter(this);
-		MentionAdapter = new CustomAdapter(this);
-		
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
@@ -148,80 +150,11 @@ public class MainActivity extends FragmentActivity {
 						HomeAdapter.add(status);
 					for(twitter4j.Status status : mention)
 						MentionAdapter.add(status);
-					new Fragment_home().setHome(HomeAdapter);
-					new Fragment_mention().setMention(MentionAdapter);
 				}else
 					showToast("タイムライン取得エラー", null);
 			}
 		};
 		task.execute();
-		
-		MoreHome(); MoreMention();
-	}
-	
-	public void MoreHome(){
-		ListView foot = new ListView(this);
-		foot.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Status s = (Status)Fragment_home.home.getItemAtPosition(Fragment_home.home.getAdapter().getCount() - 2);
-				final long tweetId = s.getId();
-				AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
-					@Override
-					protected Boolean doInBackground(Void... params) {
-						try{
-							home = twitter.getHomeTimeline(new Paging(1, 50).maxId(tweetId - 1));
-							return true;
-						}catch(Exception e){
-							return false;
-						}
-					}
-					protected void onPostExecute(Boolean result){
-						if(result){
-							for(twitter4j.Status status : home)
-									HomeAdapter.add(status);
-						}else
-							showToast("タイムライン取得エラー", null);
-					}
-				};
-				task.execute();
-			}
-		});
-		Fragment_home.home.addFooterView(foot);
-	}
-	public void MoreMention(){
-		ListView foot = new ListView(this);
-		foot.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Status s = (Status)Fragment_mention.mention.getItemAtPosition(Fragment_mention.mention.getAdapter().getCount() - 2);
-				final long tweetId = s.getId();
-				AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
-					@Override
-					protected Boolean doInBackground(Void... params) {
-						try{
-							mention = twitter.getMentionsTimeline(new Paging(1, 50).maxId(tweetId - 1));
-							return true;
-						}catch(Exception e){
-							return false;
-						}
-					}
-					protected void onPostExecute(Boolean result){
-						if(result){
-							for(twitter4j.Status status : mention)
-									MentionAdapter.add(status);
-						}else
-							showToast("メンション取得エラー", null);
-					}
-				};
-				task.execute();
-			}
-		});
-		Fragment_mention.mention.addFooterView(foot);
 	}
 	
 	public void connectStreaming(){
@@ -297,7 +230,9 @@ public class MainActivity extends FragmentActivity {
 				return true;
 			}
 			protected void onPostExecute(Boolean result) {
-				if(!result)
+				if(result)
+					mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
+				else
 					showToast("スクリーンネームの取得に失敗しました", null);
 			}
 		};
@@ -306,7 +241,7 @@ public class MainActivity extends FragmentActivity {
 	
 	public void showToast(String toast, Context context){
 		if(context == null)
-			Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
 		else
 			Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
 	}
@@ -322,6 +257,25 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 		task.execute();
+	}
+	
+	public CustomAdapter getHomeAdapter(){
+		return HomeAdapter;
+	}
+	public CustomAdapter getMentionAdapter(){
+		return MentionAdapter;
+	}
+	public Twitter getTwitter(){
+		return twitter;
+	}
+	public String getMyScreenName(){
+		return MyScreenName;
+	}
+	public boolean[] getOptionMenu(){
+		return optionMenu;
+	}
+	public Pattern getMentionPattern(){
+		return mentionPattern;
 	}
 	
 	@Override

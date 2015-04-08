@@ -34,10 +34,6 @@ public class Preference_List extends PreferenceActivity {
 		actionbar.setHomeButtonEnabled(true);
 	}
 	
-	static ListView ListNameList;
-	static ArrayAdapter<String> array;
-	static ResponseList<UserList> lists;
-	
 	public static class MyPreferencesFragment extends PreferenceFragment {
 		public void onCreate(Bundle savedInstanceState){
 			super.onCreate(savedInstanceState);
@@ -65,13 +61,15 @@ public class Preference_List extends PreferenceActivity {
 						select_List.setEnabled(true);
 						startApp_showList.setEnabled(true);
 					}
-					Dialog("再起動してください");
-					
 					return true;
 				}
 			});
 			
 			select_List.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+				
+				ListView ListNameList;
+				ArrayAdapter<String> array;
+				ResponseList<UserList> lists;
 				
 				@Override
 				public boolean onPreferenceClick(android.preference.Preference preference) {
