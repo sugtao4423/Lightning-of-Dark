@@ -1,15 +1,18 @@
 package com.tao.lightning_of_dark;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import com.loopj.android.image.SmartImageView;
 
+import dialog_onClick.Dialog_deletePost;
+import dialog_onClick.Dialog_favorite;
+import dialog_onClick.Dialog_reply;
+import dialog_onClick.Dialog_retweet;
+import dialog_onClick.Dialog_talk;
+import dialog_onClick.Dialog_unOfficialRT;
 import twitter4j.MediaEntity;
 import twitter4j.Status;
-import twitter4j.TwitterException;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
 import android.app.AlertDialog;
@@ -17,14 +20,16 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -33,32 +38,15 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ListViewListener implements OnItemClickListener, OnItemLongClickListener {
 	
-	twitter4j.Status reply;
+	public static AlertDialog dialog;
 	
 	@Override
-	public void onItemClick(final AdapterView<?> parent, View view, int position, long id) {
+	public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id) {
 		final Status item = (Status)parent.getItemAtPosition(position);
 		
-		List<String> list = new ArrayList<String>();
-		boolean[] optionMenu = MainActivity.optionMenu;
-		if(optionMenu[0])
-			list.add("返信");
-		if(optionMenu[1])
-			list.add("リツイート");
-		if(optionMenu[2])
-			list.add("非公式RT");
-		if(optionMenu[3])
-			list.add("ふぁぼる");
-		if(optionMenu[4])
+		ArrayAdapter<String> list = new ArrayAdapter<String>(parent.getContext(), android.R.layout.simple_list_item_1);
+		if(MainActivity.option_regex)
 			list.add("正規表現で抽出");
-		if(optionMenu[5])
-			if(item.isRetweet()){
-				if(item.getRetweetedStatus().getInReplyToStatusId() > 0)
-					list.add("会話を表示");
-			}else{
-				if(item.getInReplyToStatusId() > 0)
-					list.add("会話を表示");
-			}
 				
 		list.add("@" + item.getUser().getScreenName());
 		
@@ -84,106 +72,57 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
                 list.add(mentity.getMediaURL());
             }
         }
-        
-        final String[] items = (String[])list.toArray(new String[0]);
-        
-        LayoutInflater title_inf = LayoutInflater.from(parent.getContext());
-        View dialog_title = title_inf.inflate(R.layout.list_item_tweet, null);
+
+        //ダイアログタイトルinflate
+        View dialog_title = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_tweet, null);
         SmartImageView icon = (SmartImageView)dialog_title.findViewById(R.id.icon);
         TextView name_screenName = (TextView)dialog_title.findViewById(R.id.name_screenName);
         TextView tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
         TextView tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
+        ImageView protect = (ImageView)dialog_title.findViewById(R.id.UserProtected);
         
         if(item.isRetweet()){
+            if(!item.getRetweetedStatus().getUser().isProtected())
+        		protect.setVisibility(View.GONE);
+        	else
+        		protect.setVisibility(View.VISIBLE);
         	tweetText.setText(item.getRetweetedStatus().getText());
         	name_screenName.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
         	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
 					+ "  via " + item.getRetweetedStatus().getSource().replaceAll("<.+?>", ""));
         	icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
         }else{
+            if(!item.getUser().isProtected())
+        		protect.setVisibility(View.GONE);
+        	else
+        		protect.setVisibility(View.VISIBLE);
         	tweetText.setText(item.getText());
         	name_screenName.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
         	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
 					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
         	icon.setImageUrl(item.getUser().getProfileImageURL());
         }
+        //ここまで
         
-		AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-		builder.setCustomTitle(dialog_title)
-		.setItems(items, new DialogInterface.OnClickListener() {
+        //ダイアログ本文inflate
+        View content = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_dialog, null);
+        ListView dialog_list = (ListView)content.findViewById(R.id.dialog_List);
+        ImageButton dialog_reply = (ImageButton)content.findViewById(R.id.dialog_reply);
+        ImageButton dialog_retweet = (ImageButton)content.findViewById(R.id.dialog_retweet);
+        ImageButton dialog_unOfficialRT = (ImageButton)content.findViewById(R.id.dialog_unofficialRT);
+        ImageButton dialog_favorite = (ImageButton)content.findViewById(R.id.dialog_favorite);
+        ImageButton dialog_talk = (ImageButton)content.findViewById(R.id.dialog_talk);
+        ImageButton dialog_deletePost = (ImageButton)content.findViewById(R.id.dialog_delete);
+        
+        
+		dialog_list.setAdapter(list);
+        dialog_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
+			public void onItemClick(AdapterView<?> parent2, View view2,
+					int position2, long id2) {
+				String clickedText = (String)parent2.getItemAtPosition(position2);
 				
-				
-				if(items[which].equals("返信")){
-					Intent reply = new Intent(parent.getContext(), TweetActivity.class);
-					if(item.isRetweet()){
-						reply.putExtra("ReplyUserScreenName", item.getRetweetedStatus().getUser().getScreenName());
-						reply.putExtra("TweetReplyId", item.getRetweetedStatus().getId());
-						reply.putExtra("ReplyTweetText", item.getRetweetedStatus().getText());
-					}else{
-						reply.putExtra("ReplyUserScreenName", item.getUser().getScreenName());
-						reply.putExtra("TweetReplyId", item.getId());
-						reply.putExtra("ReplyTweetText", item.getText());
-					}
-					parent.getContext().startActivity(reply);
-				}
-				
-				if(items[which].equals("リツイート")){
-					AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
-						@Override
-						protected Boolean doInBackground(Void... params) {
-							try {
-								MainActivity.twitter.retweetStatus(item.getId());
-								return true;
-							} catch (TwitterException e) {
-								return false;
-							}
-						}
-						protected void onPostExecute(Boolean result) {
-							if(result)
-								new MainActivity().showToast("リツイートしました", parent.getContext());
-							else
-								new MainActivity().showToast("リツイートできませんでした", parent.getContext());
-						}
-					};
-					task.execute();
-				}
-				
-				if(items[which].equals("非公式RT")){
-					String RTtext;
-					if(item.isRetweet())
-						RTtext = " RT @" + item.getRetweetedStatus().getUser().getScreenName() + ": " + item.getRetweetedStatus().getText();
-					else
-						RTtext = " RT @" + item.getUser().getScreenName() + ": " + item.getText();
-					Intent i = new Intent(parent.getContext(), TweetActivity.class);
-					i.putExtra("pakuri", RTtext).putExtra("do_setSelection", false);
-					parent.getContext().startActivity(i);
-				}
-				
-				if(items[which].equals("ふぁぼる")){
-					AsyncTask<Void, Void, Boolean> fav = new AsyncTask<Void, Void, Boolean>(){
-
-						@Override
-						protected Boolean doInBackground(Void... params) {
-							try {
-								MainActivity.twitter.createFavorite(item.getId());
-								return true;
-							} catch (TwitterException e) {
-								return false;
-							}
-						}
-						protected void onPostExecute(Boolean result) {
-							if(result)
-								new MainActivity().showToast("ふぁぼりました", parent.getContext());
-							else
-								new MainActivity().showToast("ふぁぼれませんでした", parent.getContext());
-						}
-					};
-					fav.execute();
-				}
-				
-				if(items[which].equals("正規表現で抽出")){
+				if(clickedText.equals("正規表現で抽出")){
 					AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
 					final EditText reg = new EditText(parent.getContext());
 					final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
@@ -222,62 +161,51 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 					builder.create().show();
 				}
 				
-				if(items[which].startsWith("http") || items[which].startsWith("ftp")){
-					Intent web = new Intent(Intent.ACTION_VIEW, Uri.parse(items[which]));
+				if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
+					Intent web = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));
 					parent.getContext().startActivity(web);
 				}
 				
-				if(items[which].startsWith("@")){ //UserPage
+				if(clickedText.startsWith("@")){ //UserPage
 					Intent intent = new Intent(parent.getContext(), UserPage.class);
-					intent.putExtra("userScreenName", items[which].substring(1));
+					intent.putExtra("userScreenName", clickedText.substring(1));
 					parent.getContext().startActivity(intent);
-				}
-				if(items[which].equals("会話を表示")){
-					AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-					ListView result = new ListView(parent.getContext());
-					result.setOnItemClickListener(new ListViewListener());
-					result.setOnItemLongClickListener(new ListViewListener());
-					final CustomAdapter resultAdapter = new CustomAdapter(parent.getContext());
-					result.setAdapter(resultAdapter);
-					builder.setView(result);
-					
-					if(item.isRetweet())
-						reply = item.getRetweetedStatus();
-					else
-						reply = item;
-					final List<twitter4j.Status> StatusList = new ArrayList<twitter4j.Status>();
-					
-					AsyncTask<Void, Void, Boolean> getReply = new AsyncTask<Void, Void, Boolean>(){
-						@Override
-						protected Boolean doInBackground(Void... params) {
-							try {
-								for(; reply.getInReplyToStatusId() > 0;){
-									reply = MainActivity.twitter.showStatus(reply.getInReplyToStatusId());
-									StatusList.add(reply);
-								}
-								return true;
-							} catch (TwitterException e) {
-								return false;
-							}
-						}
-						protected void onPostExecute(Boolean result) {
-							if(result){
-								if(item.isRetweet())
-									resultAdapter.add(item.getRetweetedStatus());
-								else
-									resultAdapter.add(item);
-								for(twitter4j.Status status : StatusList)
-									resultAdapter.add(status);
-							}else
-								new MainActivity().showToast("会話の取得完了", parent.getContext());
-						}
-					};
-					getReply.execute();
-					builder.create().show();
 				}
 			}
 		});
-		builder.create().show();
+        
+        dialog_reply.setOnClickListener(new Dialog_reply(item, parent.getContext()));
+        dialog_retweet.setOnClickListener(new Dialog_retweet(item, parent.getContext()));
+        dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, parent.getContext()));
+        dialog_favorite.setOnClickListener(new Dialog_favorite(item, parent.getContext()));
+        dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext()));
+        dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, parent.getContext()));
+        
+        if(item.isRetweet()){
+        	if(!(item.getRetweetedStatus().getInReplyToStatusId() > 0)){
+        		dialog_talk.setEnabled(false);
+        		dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
+        	}
+        	if(! item.getRetweetedStatus().getUser().getScreenName().equals(MainActivity.MyScreenName)){
+        		dialog_deletePost.setEnabled(false);
+        		dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
+        	}
+        }else{
+        	if(!(item.getInReplyToStatusId() > 0)){
+        		dialog_talk.setEnabled(false);
+        		dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
+        	}
+        	if(! item.getUser().getScreenName().equals(MainActivity.MyScreenName)){
+        		dialog_deletePost.setEnabled(false);
+        		dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
+        	}
+        }
+        
+		AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
+		builder.setCustomTitle(dialog_title).setView(content);
+		
+		dialog = builder.create();
+		dialog.show();
 	}
 	
 	@Override

@@ -27,7 +27,6 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -37,7 +36,7 @@ public class MainActivity extends FragmentActivity {
 	public static Twitter twitter;
 	static Pattern mentionPattern;
 	
-	static boolean[] optionMenu;
+	static boolean option_regex;
 	
 	//LOCAL
 	SharedPreferences pref;
@@ -75,7 +74,7 @@ public class MainActivity extends FragmentActivity {
 		
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		setOptionMenu();
+		option_regex = pref.getBoolean("menu_regex", false);
 		
 		if(pref.getString("AccessToken", "").equals("")){
 			startActivity(new Intent(this, startOAuth.class));
@@ -91,16 +90,6 @@ public class MainActivity extends FragmentActivity {
 			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
 			LogIn();
 		}
-	}
-	public void setOptionMenu(){
-		boolean menu_reply, menu_retweet, menu_InformalRetweet, menu_fav, menu_regex, menu_talk;
-		menu_reply = pref.getBoolean("menu_reply", true);
-		menu_retweet = pref.getBoolean("menu_retweet", true);
-		menu_InformalRetweet = pref.getBoolean("menu_InformalRetweet", false);
-		menu_fav = pref.getBoolean("menu_fav", true);
-		menu_regex = pref.getBoolean("menu_regex", false);
-		menu_talk = pref.getBoolean("menu_talk", true);
-		optionMenu = new boolean[]{menu_reply, menu_retweet, menu_InformalRetweet, menu_fav, menu_regex, menu_talk};
 	}
 	
 	public void LogIn(){
@@ -126,7 +115,7 @@ public class MainActivity extends FragmentActivity {
 					getTimeLine();
 					connectStreaming();
 				}else
-					showToast("スクリーンネームの取得に失敗しました", null);
+					new ShowToast("スクリーンネームの取得に失敗しました", MainActivity.this);
 			}
 		};
 		task.execute();
@@ -151,7 +140,7 @@ public class MainActivity extends FragmentActivity {
 					for(twitter4j.Status status : mention)
 						MentionAdapter.add(status);
 				}else
-					showToast("タイムライン取得エラー", null);
+					new ShowToast("タイムライン取得エラー", MainActivity.this);
 			}
 		};
 		task.execute();
@@ -185,7 +174,7 @@ public class MainActivity extends FragmentActivity {
 			twitterStream.user();
 			
 		}catch(Exception e){
-			showToast("ストリーミング系のエラー\n" + e.toString(), null);
+			new ShowToast("ストリーミング系のエラー\n" + e.toString(), MainActivity.this);
 		}
 	}
 	
@@ -197,7 +186,7 @@ public class MainActivity extends FragmentActivity {
 	public void onlyLogin(Context context){
 		pref = PreferenceManager.getDefaultSharedPreferences(context);
 		
-		setOptionMenu();
+		option_regex = pref.getBoolean("menu_regex", false);
 		
 		if(pref.getString("AccessToken", "").equals("")){
 			startActivity(new Intent(this, startOAuth.class));
@@ -233,17 +222,10 @@ public class MainActivity extends FragmentActivity {
 				if(result)
 					mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
 				else
-					showToast("スクリーンネームの取得に失敗しました", null);
+					new ShowToast("スクリーンネームの取得に失敗しました", MainActivity.this);
 			}
 		};
 		task.execute();
-	}
-	
-	public void showToast(String toast, Context context){
-		if(context == null)
-			Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
-		else
-			Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
 	}
 	
 	public void onDestroy(){
@@ -270,9 +252,6 @@ public class MainActivity extends FragmentActivity {
 	}
 	public String getMyScreenName(){
 		return MyScreenName;
-	}
-	public boolean[] getOptionMenu(){
-		return optionMenu;
 	}
 	public Pattern getMentionPattern(){
 		return mentionPattern;

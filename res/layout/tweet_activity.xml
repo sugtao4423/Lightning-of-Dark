@@ -32,7 +32,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/UserProtected"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignBottom="@+id/tweetText"

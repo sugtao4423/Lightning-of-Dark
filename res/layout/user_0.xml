@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+<RelativeLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
@@ -11,7 +15,7 @@
         android:layout_marginLeft="10dp"
         android:text="bio"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-<TextView
+	<TextView
         android:id="@+id/UserBio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +23,7 @@
         android:layout_below="@+id/textView1"
         android:layout_marginTop="3dp"
         android:text="Loading..." />
-<TextView
+	<TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +32,7 @@
         android:layout_marginTop="15dp"
         android:text="場所"
         android:textAppearance="?android:attr/textAppearanceMedium" />
-<TextView
+	<TextView
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -36,7 +40,7 @@
         android:layout_below="@+id/textView2"
         android:layout_marginTop="3dp"
         android:text="Loading..." />
-<TextView
+	<TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,7 +50,7 @@
         android:text="リンク"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-<TextView
+	<TextView
     android:id="@+id/link"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -56,4 +60,73 @@
     android:autoLink="web"
     android:text="Loading..." />
 
+	<ImageView
+	    android:id="@+id/tweetState"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/link"
+	    android:layout_below="@+id/link"
+	    android:layout_marginTop="30dp"
+	    android:src="@drawable/user_tweet_count" />
+
+	<TextView
+	    android:id="@+id/User_tweet_count"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/tweetState"
+	    android:layout_toRightOf="@+id/tweetState"
+	    android:text="null" />
+
+	<ImageView
+	    android:id="@+id/imageView2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/tweetState"
+	    android:layout_below="@+id/tweetState"
+	    android:layout_marginTop="15dp"
+	    android:src="@drawable/user_favorite_count" />
+
+	<TextView
+	    android:id="@+id/User_favorite_count"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/imageView2"
+	    android:layout_toRightOf="@+id/imageView2"
+	    android:text="null" />
+
+	<ImageView
+	    android:id="@+id/imageView3"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/imageView2"
+	    android:layout_below="@+id/imageView2"
+	    android:layout_marginTop="15dp"
+	    android:src="@drawable/user_follow_count" />
+
+	<TextView
+	    android:id="@+id/User_follow_count"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/imageView3"
+	    android:layout_toRightOf="@+id/imageView3"
+	    android:text="null" />
+
+	<ImageView
+	    android:id="@+id/imageView4"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/imageView3"
+	    android:layout_below="@+id/imageView3"
+	    android:layout_marginTop="15dp"
+	    android:layout_marginBottom="20dp"
+	    android:src="@drawable/user_follower_count" />
+
+	<TextView
+	    android:id="@+id/User_follower_count"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/imageView4"
+	    android:layout_toRightOf="@+id/imageView4"
+	    android:text="null" />
 </RelativeLayout>
+</ScrollView>

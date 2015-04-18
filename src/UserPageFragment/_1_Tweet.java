@@ -20,6 +20,7 @@ import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.MainActivity;
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.ShowToast;
 import com.tao.lightning_of_dark.UserPage;
 
 public class _1_Tweet extends Fragment {
@@ -104,7 +105,7 @@ public class _1_Tweet extends Fragment {
 					PulltoRefresh.setRefreshing(false);
 					PulltoRefresh.setEnabled(true);
 				}else
-					new UserPage().showToast("タイムラインを取得できませんでした");
+					new ShowToast("タイムラインを取得できませんでした", getActivity());
 				foot.setEnabled(true);
 			}
 		};

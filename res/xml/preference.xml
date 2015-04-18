@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <Preference android:title="メニュー項目" android:summary="変更後要再起動" android:key="OptionMenu"/>
+    <CheckBoxPreference android:title="正規表現で抽出" android:key="menu_regex" android:defaultValue="false"/>
     <Preference android:key="ListSetting" android:title="リスト設定"/>
 </PreferenceScreen>

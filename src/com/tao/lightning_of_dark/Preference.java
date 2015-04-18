@@ -23,18 +23,8 @@ public class Preference extends PreferenceActivity {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preference);
 			
-			android.preference.Preference optionMenu = findPreference("OptionMenu");
 			android.preference.Preference ListSetting = findPreference("ListSetting");
 			
-			optionMenu.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(
-						android.preference.Preference preference) {
-					Intent intent = new Intent(getActivity(), Preference_OptionMenu.class);
-					startActivity(intent);
-					return false;
-				}
-			});
 			ListSetting.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(

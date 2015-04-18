@@ -1,5 +1,6 @@
 package UserPageFragment;
 
+import java.text.NumberFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +18,7 @@ import android.widget.TextView;
 
 public class _0_detail extends Fragment {
 	
-	static TextView UserBio, location, Link;
+	static TextView UserBio, location, Link, User_tweet_c, User_favorite_c, User_follow_c, User_follower_c;
 	
 	@Override
 	  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -25,6 +26,10 @@ public class _0_detail extends Fragment {
 		UserBio = (TextView)v.findViewById(R.id.UserBio);
 		location = (TextView)v.findViewById(R.id.location);
 		Link = (TextView)v.findViewById(R.id.link);
+		User_tweet_c = (TextView)v.findViewById(R.id.User_tweet_count);
+		User_favorite_c = (TextView)v.findViewById(R.id.User_favorite_count);
+		User_follow_c = (TextView)v.findViewById(R.id.User_follow_count);
+		User_follower_c = (TextView)v.findViewById(R.id.User_follower_count);
 		return v;
 	}
 	public void setText(){
@@ -50,6 +55,13 @@ public class _0_detail extends Fragment {
 			UserBio.setText(bio);
 		location.setText(UserPage.target.getLocation());
 		Link.setText(UserPage.target.getURL());
+		User_tweet_c.setText(numberFormat(UserPage.target.getStatusesCount()));
+		User_favorite_c.setText(numberFormat(UserPage.target.getFavouritesCount()));
+		User_follow_c.setText(numberFormat(UserPage.target.getFriendsCount()));
+		User_follower_c.setText(numberFormat(UserPage.target.getFollowersCount()));
+	}
+	public String numberFormat(int num){
+		return NumberFormat.getInstance().format(num);
 	}
 
 }

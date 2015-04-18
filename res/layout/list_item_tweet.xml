@@ -9,7 +9,7 @@
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_action_refresh" />
 
     <TextView
         android:id="@+id/name_screenName"
@@ -60,5 +60,16 @@
         android:layout_toRightOf="@+id/RetweetedUserIcon"
         android:textColor="#9b9e98"
         android:textSize="11sp" />
+
+    <ImageView
+        android:id="@+id/UserProtected"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_alignBottom="@+id/name_screenName"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/name_screenName"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_action_secure" />
     
 </RelativeLayout>

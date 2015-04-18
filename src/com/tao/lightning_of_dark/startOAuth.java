@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class startOAuth extends Activity {
 	
@@ -78,7 +77,7 @@ public class startOAuth extends Activity {
 					rt = twitter.getOAuthRequestToken("lightning-of-dark://twitter");
 					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rt.getAuthenticationURL())));
 				}catch(Exception e){
-					showToast("RequestTokenの取得に失敗しました");
+					new ShowToast("RequestTokenの取得に失敗しました", startOAuth.this);
 				}
 				return null;
 			}
@@ -115,7 +114,7 @@ public class startOAuth extends Activity {
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
 					finish();
 				}else{
-					showToast("失敗...");
+					new ShowToast("失敗...", startOAuth.this);
 					finish();
 				}
 			}
@@ -123,14 +122,10 @@ public class startOAuth extends Activity {
 		task.execute();
 	}
 	
-	public void showToast(String toast){
-		Toast.makeText(this, toast, Toast.LENGTH_SHORT).show();
-	}
-	
 	public void Description(View v){
 		ClipboardManager clipboardManager = (ClipboardManager)this.getSystemService(Context.CLIPBOARD_SERVICE);
 		ClipData clipData = ClipData.newPlainText("Lightning of Dark", "https://twitter.com/lightning-of-dark");
 		clipboardManager.setPrimaryClip(clipData);
-		showToast("クリップボードにコピーしました");
+		new ShowToast("クリップボードにコピーしました", this);
 	}
 }

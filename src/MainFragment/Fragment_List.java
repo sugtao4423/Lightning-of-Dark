@@ -10,7 +10,7 @@ import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.MainActivity;
 import com.tao.lightning_of_dark.Preference;
 import com.tao.lightning_of_dark.R;
-import com.tao.lightning_of_dark.UserPage;
+import com.tao.lightning_of_dark.ShowToast;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -117,7 +117,7 @@ public class Fragment_List extends Fragment {
 							PulltoRefresh.setRefreshing(false);
 							PulltoRefresh.setEnabled(true);
 						}else
-							new UserPage().showToast("リストを取得できませんでした");
+							new ShowToast("リストを取得できませんでした", getActivity());
 						foot.setEnabled(true);
 					}
 				};

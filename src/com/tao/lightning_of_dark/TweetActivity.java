@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class TweetActivity extends Activity {
 	
@@ -90,9 +89,9 @@ public class TweetActivity extends Activity {
 			@Override
 			protected void onPostExecute(Boolean result) {
 				if(result)
-					showToast("ツイートしました");
+					new ShowToast("ツイートしました", TweetActivity.this);
 				else
-					showToast("ツイートできませんでした");
+					new ShowToast("ツイートできませんでした", TweetActivity.this);
 				if(image != null)
 					image = null;
 				finish();
@@ -120,11 +119,11 @@ public class TweetActivity extends Activity {
 	              Cursor c = cr.query(data.getData(), columns, null, null, null);
 	              c.moveToFirst();
 	              image = new File(c.getString(0));
-	              ImageView iv = (ImageView)findViewById(R.id.imageView1);
+	              ImageView iv = (ImageView)findViewById(R.id.UserProtected);
 	              iv.setImageURI(data.getData());
-	              showToast("画像を選択しました");
+	              new ShowToast("画像を選択しました", TweetActivity.this);
             } catch (Exception e) {
-            	showToast("画像を選択できませんでした");
+            	new ShowToast("画像を選択できませんでした", TweetActivity.this);
             }
         }
     }
@@ -143,10 +142,6 @@ public class TweetActivity extends Activity {
 			public void afterTextChanged(Editable s) {
 			}
 		});
-	}
-	
-	public void showToast(String text){
-		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 	}
 	
 	public void back(View v){

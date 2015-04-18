@@ -17,14 +17,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class UserPage extends FragmentActivity {
 	
 	public static User target;
 	SmartImageView banner, UserIcon;
 	TextView Name, ScreenName;
+	ImageView protect;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,6 +44,8 @@ public class UserPage extends FragmentActivity {
 		UserIcon = (SmartImageView)findViewById(R.id.UserIcon);
 		Name = (TextView)findViewById(R.id.UserName);
 		ScreenName = (TextView)findViewById(R.id.UserScreenName);
+		protect = (ImageView)findViewById(R.id.UserPage_protected);
+		protect.setVisibility(View.GONE);
 		
 		final String u = getIntent().getStringExtra("userScreenName");
 		
@@ -60,7 +63,7 @@ public class UserPage extends FragmentActivity {
 				if(result)
 					functions();
 				else
-					showToast("ユーザー情報を取得できませんでした");
+					new ShowToast("ユーザー情報を取得できませんでした", UserPage.this);
 			}
 		};
 		task.execute();
@@ -68,6 +71,8 @@ public class UserPage extends FragmentActivity {
 	
 	public void functions(){
 		getActionBar().setTitle(target.getName());
+		if(target.isProtected())
+			protect.setVisibility(View.VISIBLE);
 		UserIcon.setImageUrl(target.getProfileImageURL());
 		banner.setImageUrl(target.getProfileBannerURL());
 		
@@ -83,9 +88,5 @@ public class UserPage extends FragmentActivity {
 	public void click_banner(View v){
 		if(target.getProfileBannerURL() != null)
 			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getProfileBannerURL())));
-	}
-	
-	public void showToast(String text){
-		Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 	}
 }

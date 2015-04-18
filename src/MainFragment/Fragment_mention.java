@@ -8,6 +8,7 @@ import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.MainActivity;
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.ShowToast;
 
 import android.database.DataSetObserver;
 import android.os.AsyncTask;
@@ -68,7 +69,7 @@ public class Fragment_mention extends Fragment {
 							for(twitter4j.Status status : result)
 								adapter.add(status);
 						}else
-							((MainActivity)getActivity()).showToast("メンション取得エラー", null);
+							new ShowToast("メンション取得エラー", getActivity());
 					}
 				};
 				task.execute();

@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:onClick="click_icon"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_action_refresh" />
 
     <TextView
         android:id="@+id/UserScreenName"
@@ -48,14 +48,14 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:background="#f0f0f0f0" />
-    
+
     <android.support.v4.view.ViewPager
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/Userpager"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:layout_alignParentLeft="true"
-	android:layout_below="@+id/banner">
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/Userpager"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_alignParentLeft="true"
+android:layout_below="@+id/banner">
   <android.support.v4.view.PagerTabStrip
     android:id="@+id/userPagerTabStrip"
     android:layout_width="match_parent"
@@ -64,5 +64,15 @@
     android:background="#ececec"
     android:textColor="#33b5e5"/>
 </android.support.v4.view.ViewPager>
+
+    <ImageView
+        android:id="@+id/UserPage_protected"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_above="@+id/UserScreenName"
+        android:layout_toRightOf="@+id/UserName"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_action_secure"
+        android:background="#f0f0f0f0" />
 
 </RelativeLayout>

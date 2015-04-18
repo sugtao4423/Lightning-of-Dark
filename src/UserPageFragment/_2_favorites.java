@@ -3,10 +3,12 @@ package UserPageFragment;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
+
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.MainActivity;
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.ShowToast;
 import com.tao.lightning_of_dark.UserPage;
 
 import android.os.AsyncTask;
@@ -104,7 +106,7 @@ public class _2_favorites extends Fragment {
 					PulltoRefresh.setRefreshing(false);
 					PulltoRefresh.setEnabled(true);
 				}else
-					new UserPage().showToast("ふぁぼ取得エラー");
+					new ShowToast("ふぁぼ取得エラー", getActivity());
 				foot.setEnabled(true);
 			}
 		};
