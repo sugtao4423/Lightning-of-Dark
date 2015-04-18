@@ -9,7 +9,7 @@
 ## 概要
 なんとなくTwitter関係に手を出してみたかった。  
 私自身、色とかデザインとかのセンスが皆無なのでStSとするやつγのスクショから色を抽出して使わせて頂いています。  
-[このCommit](https://github.com/sugtao4423/Lightning-of-Dark/commit/220aae4bfacf883f823890bdea8dd3aa98dd0396)からするやつγの画像データまで使ってしまっています。  
+[このCommit](https://github.com/sugtao4423/Lightning-of-Dark/commit/220aae4bfacf883f823890bdea8dd3aa98dd0396)からするやつγの画像データまで使ってしまっています。（少し色を変えたりもしています）  
 apkの公開などはしていませんが、Githubに上げてしまっているのでもし作者様がお気づきになり、使用しないで欲しいということや、お説教などありましたら[私のTwitterアカウント](https://twitter.com/sugtao4423)のほうにご連絡頂けると幸いです。
 
 まだまだ製作・開発途中です。  
