@@ -47,30 +47,32 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		ArrayAdapter<String> list = new ArrayAdapter<String>(parent.getContext(), android.R.layout.simple_list_item_1);
 		if(MainActivity.option_regex)
 			list.add("正規表現で抽出");
+		if(MainActivity.option_openBrowser)
+			list.add("ブラウザで開く");
 				
 		list.add("@" + item.getUser().getScreenName());
 		
 		UserMentionEntity[] mentionEntitys = item.getUserMentionEntities();
 		if(mentionEntitys != null && mentionEntitys.length > 0){
 			for(int i = 0; i < mentionEntitys.length; i++){
-				UserMentionEntity umEntity = mentionEntitys[i];
-				if(!umEntity.getScreenName().equals(item.getUser().getScreenName()))
-					list.add("@" + umEntity.getScreenName());
+				if(!mentionEntitys[i].getScreenName().equals(item.getUser().getScreenName()))
+					list.add("@" + mentionEntitys[i].getScreenName());
 			}
 		}
 		URLEntity[] uentitys = item.getURLEntities();
         if(uentitys != null && uentitys.length > 0){
-            for(int i = 0; i < uentitys.length; i++){
-                URLEntity uentity = uentitys[i];
-                list.add(uentity.getExpandedURL());
-            }
+            for(int i = 0; i < uentitys.length; i++)
+                list.add(uentitys[i].getExpandedURL());
         }
         MediaEntity[] mentitys = item.getMediaEntities();
         if(mentitys != null && mentitys.length > 0){
-            for(int i = 0; i < mentitys.length; i++){
-                MediaEntity mentity = mentitys[i];
-                list.add(mentity.getMediaURL());
-            }
+            for(int i = 0; i < mentitys.length; i++)
+                list.add(mentitys[i].getMediaURL());
+        }
+        MediaEntity[] ExtendedMediaEntities = item.getExtendedMediaEntities();
+        if(ExtendedMediaEntities != null && ExtendedMediaEntities.length >= 2){
+        	for(int i = 1; i < ExtendedMediaEntities.length; i++)
+        		list.add(ExtendedMediaEntities[i].getMediaURL());
         }
 
         //ダイアログタイトルinflate
@@ -90,7 +92,10 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         	name_screenName.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
         	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
 					+ "  via " + item.getRetweetedStatus().getSource().replaceAll("<.+?>", ""));
-        	icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
+        	if(MainActivity.getBigIcon)
+        		icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL());
+        	else
+        		icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
         }else{
             if(!item.getUser().isProtected())
         		protect.setVisibility(View.GONE);
@@ -100,7 +105,10 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         	name_screenName.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
         	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
 					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
-        	icon.setImageUrl(item.getUser().getProfileImageURL());
+        	if(MainActivity.getBigIcon)
+        		icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
+        	else
+        		icon.setImageUrl(item.getUser().getProfileImageURL());
         }
         //ここまで
         
@@ -120,6 +128,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			@Override
 			public void onItemClick(AdapterView<?> parent2, View view2,
 					int position2, long id2) {
+				dialog.dismiss();
 				String clickedText = (String)parent2.getItemAtPosition(position2);
 				
 				if(clickedText.equals("正規表現で抽出")){
@@ -162,15 +171,43 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 				}
 				
 				if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
-					Intent web = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));
+					Intent web;
+					if(clickedText.startsWith("http://pbs.twimg.com/media/")){
+						web = new Intent(parent.getContext(), Show_Image.class);
+						web.putExtra("URL", clickedText);
+					}else
+						web = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));
 					parent.getContext().startActivity(web);
 				}
-				
+				if(clickedText.equals("ブラウザで開く")){
+					String url, SN, Id;
+					if(item.isRetweet()){
+						SN = item.getRetweetedStatus().getUser().getScreenName();
+						Id = String.valueOf(item.getRetweetedStatus().getId());
+					}else{
+						SN = item.getUser().getScreenName();
+						Id = String.valueOf(item.getId());
+					}
+					url = "https://twitter.com/" + SN + "/status/" + Id;
+					parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+				}
 				if(clickedText.startsWith("@")){ //UserPage
 					Intent intent = new Intent(parent.getContext(), UserPage.class);
 					intent.putExtra("userScreenName", clickedText.substring(1));
 					parent.getContext().startActivity(intent);
 				}
+			}
+		});
+        dialog_list.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				String clickedText = (String)parent.getItemAtPosition(position);
+				if(clickedText.startsWith("http://pbs.twimg.com/media/")){
+					dialog.dismiss();
+					parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText)));
+				}
+				return true;
 			}
 		});
         

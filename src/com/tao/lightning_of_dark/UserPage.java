@@ -17,6 +17,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -67,26 +69,52 @@ public class UserPage extends FragmentActivity {
 			}
 		};
 		task.execute();
+		
+		UserIcon.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent image = new Intent(UserPage.this, Show_Image.class);
+				image.putExtra("URL", target.getOriginalProfileImageURL());
+				startActivity(image);
+			}
+		});
+		UserIcon.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getOriginalProfileImageURL())));
+				return true;
+			}
+		});
+		banner.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(target.getProfileBannerURL() != null){
+					Intent image = new Intent(UserPage.this, Show_Image.class);
+					image.putExtra("URL", target.getProfileBannerRetinaURL());
+					startActivity(image);
+				}
+			}
+		});
+		banner.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				if(target.getProfileBannerURL() != null)
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getProfileBannerRetinaURL())));
+				return true;
+			}
+		});
 	}
 	
 	public void functions(){
 		getActionBar().setTitle(target.getName());
 		if(target.isProtected())
 			protect.setVisibility(View.VISIBLE);
-		UserIcon.setImageUrl(target.getProfileImageURL());
+		UserIcon.setImageUrl(target.getBiggerProfileImageURL());
 		banner.setImageUrl(target.getProfileBannerURL());
 		
 		Name.setText(target.getName());
 		ScreenName.setText("@" + target.getScreenName());
 		
 		new _0_detail().setText();
-	}
-	
-	public void click_icon(View v){
-		startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getProfileImageURL())));
-	}
-	public void click_banner(View v){
-		if(target.getProfileBannerURL() != null)
-			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getProfileBannerURL())));
 	}
 }

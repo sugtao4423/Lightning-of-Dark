@@ -39,7 +39,9 @@
         <activity android:name="UserPage" android:configChanges="orientation|screenSize"></activity>
         
         <activity android:name="TweetActivity" android:windowSoftInputMode="adjustResize" android:configChanges="orientation|screenSize" />
-        <activity android:name="IntentActivity">
+        <activity
+            android:name="IntentActivity"
+            android:theme="@style/Theme.TranslucentBackground">
             <intent-filter>
 	            <action android:name="android.intent.action.VIEW" />
 	            
@@ -80,6 +82,10 @@
         </activity><activity android:name="Preference"></activity>
         <activity android:name="Preference_OptionMenu"></activity>
         <activity android:name="Preference_List"></activity>
+        <activity
+            android:name="Show_Image"
+            android:theme="@style/Theme.TranslucentBackground">
+        </activity>
     </application>
 
 </manifest>

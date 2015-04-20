@@ -39,8 +39,8 @@ public class Dialog_favorite implements OnClickListener {
 					new ShowToast("ふぁぼりました", context);
 				else
 					new ShowToast("ふぁぼれませんでした", context);
-				}
-			};
-			fav.execute();
+			}
+		};
+		fav.execute();
 	}
 }

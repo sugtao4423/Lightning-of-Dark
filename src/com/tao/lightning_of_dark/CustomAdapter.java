@@ -96,7 +96,10 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 					+ "  Retweeted by ");
 			holder.RetweetedUserIcon.setImageUrl(item.getUser().getProfileImageURL());
 			holder.RetweetedUserScreenName.setText("@" + item.getUser().getScreenName());
-			holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
+			if(MainActivity.getBigIcon)
+				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL());
+			else
+				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
 		}else{
 			holder.RetweetedUserIcon.setVisibility(View.GONE);
 			holder.RetweetedUserScreenName.setVisibility(View.GONE);
@@ -104,7 +107,10 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			holder.text.setText(item.getText());
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
 					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
-			holder.icon.setImageUrl(item.getUser().getProfileImageURL());
+			if(MainActivity.getBigIcon)
+				holder.icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
+			else
+				holder.icon.setImageUrl(item.getUser().getProfileImageURL());
 		}
 		holder.icon.setOnClickListener(new OnClickListener() {
 			@Override

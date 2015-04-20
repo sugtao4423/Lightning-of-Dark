@@ -34,5 +34,4 @@ public class Dialog_reply implements OnClickListener {
 		}
 		context.startActivity(reply);
 	}
-
 }

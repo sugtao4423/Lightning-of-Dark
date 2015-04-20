@@ -43,5 +43,4 @@ public class Dialog_retweet implements OnClickListener {
 		};
 		task.execute();
 	}
-
 }

@@ -36,7 +36,7 @@ public class MainActivity extends FragmentActivity {
 	public static Twitter twitter;
 	static Pattern mentionPattern;
 	
-	static boolean option_regex;
+	static boolean option_regex, option_openBrowser, getBigIcon;
 	
 	//LOCAL
 	SharedPreferences pref;
@@ -75,6 +75,8 @@ public class MainActivity extends FragmentActivity {
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		option_regex = pref.getBoolean("menu_regex", false);
+		option_openBrowser = pref.getBoolean("option_openBrowser", false);
+		getBigIcon = pref.getBoolean("getBigIcon", false);
 		
 		if(pref.getString("AccessToken", "").equals("")){
 			startActivity(new Intent(this, startOAuth.class));
@@ -187,6 +189,8 @@ public class MainActivity extends FragmentActivity {
 		pref = PreferenceManager.getDefaultSharedPreferences(context);
 		
 		option_regex = pref.getBoolean("menu_regex", false);
+		option_openBrowser = pref.getBoolean("option_openBrowser", false);
+		getBigIcon = pref.getBoolean("getBigIcon", false);
 		
 		if(pref.getString("AccessToken", "").equals("")){
 			startActivity(new Intent(this, startOAuth.class));

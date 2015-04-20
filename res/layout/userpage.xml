@@ -13,7 +13,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:onClick="click_banner"
         android:scaleType="fitStart"
         android:src="@raw/empty" />
 
@@ -24,7 +23,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:onClick="click_icon"
         android:src="@drawable/ic_action_refresh" />
 
     <TextView
