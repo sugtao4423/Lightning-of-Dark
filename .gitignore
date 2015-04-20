@@ -1,4 +1,4 @@
 
 res/values/CKCS.xml
 
-*.class
+bin/
