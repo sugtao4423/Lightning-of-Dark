@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!-- ボタンが押された時 -->
+    <item
+		android:state_pressed="true"
+		android:state_enabled="true" >
+		<color android:color="#70e8ff" />
+	</item>
+    <!-- ボタンにフォーカスがあたった時 -->
+	<item
+		android:state_focused="true"
+		android:state_enabled="true" >
+		<color android:color="#70e8ff" />
+	</item>
+	<!-- 上記以外の条件の時 -->
+	<item
+		android:state_enabled="true" >
+		<color android:color="#00000000" />
+	</item>
+
+</selector>

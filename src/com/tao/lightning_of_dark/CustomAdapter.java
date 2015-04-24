@@ -80,11 +80,12 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			convertView.setBackgroundResource(R.drawable.same_my_screenname);
 		else if(MainActivity.mentionPattern.matcher(item.getText()).find())
 			convertView.setBackgroundResource(R.drawable.mention);
-		else
+		else{
 			if(position % 2 == 0)
 				convertView.setBackgroundResource(R.drawable.position0);
 			else
 				convertView.setBackgroundResource(R.drawable.position1);
+		}
 		//アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
 		if(item.isRetweet()){
 			holder.RetweetedUserIcon.setVisibility(View.VISIBLE);

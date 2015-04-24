@@ -172,7 +172,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 				
 				if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
 					Intent web;
-					if(clickedText.startsWith("http://pbs.twimg.com/media/")){
+					if(clickedText.startsWith("http://pbs.twimg.com/media/") || clickedText.startsWith("https://pbs.twimg.com/media/")){
 						web = new Intent(parent.getContext(), Show_Image.class);
 						web.putExtra("URL", clickedText);
 					}else
@@ -203,7 +203,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				String clickedText = (String)parent.getItemAtPosition(position);
-				if(clickedText.startsWith("http://pbs.twimg.com/media/")){
+				if(clickedText.startsWith("http://pbs.twimg.com/media/") || clickedText.startsWith("https://pbs.twimg.com/media/")){
 					dialog.dismiss();
 					parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText)));
 				}

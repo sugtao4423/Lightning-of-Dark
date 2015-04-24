@@ -20,15 +20,13 @@ public final class R {
         public static final int sameMyScreenName=0x7f070002;
     }
     public static final class dimen {
-        /**  Default screen margins, per the Android Design guidelines. 
-
+        /** 
          Example customization of dimensions originally defined in res/values/dimens.xml
          (such as screen margins) for screens with more than 820dp of available width. This
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
         public static final int activity_horizontal_margin=0x7f080000;
-        public static final int activity_vertical_margin=0x7f080001;
     }
     public static final class drawable {
         public static final int back=0x7f020000;
@@ -42,26 +40,25 @@ public final class R {
         public static final int dialog_reply=0x7f020008;
         public static final int dialog_retweet=0x7f020009;
         public static final int edit=0x7f02000a;
-        public static final int header_none=0x7f02000b;
-        public static final int ic_action_refresh=0x7f02000c;
-        public static final int ic_action_secure=0x7f02000d;
-        public static final int ic_action_settings=0x7f02000e;
-        public static final int ic_launcher=0x7f02000f;
-        public static final int mention=0x7f020010;
-        public static final int pic=0x7f020011;
-        public static final int pic_ena=0x7f020012;
-        public static final int position0=0x7f020013;
-        public static final int position1=0x7f020014;
-        public static final int retweet=0x7f020015;
-        public static final int retweeted_by_me=0x7f020016;
-        public static final int same_my_screenname=0x7f020017;
-        public static final int transparameter=0x7f02001e;
-        public static final int tweet=0x7f020018;
-        public static final int tweet_ena=0x7f020019;
-        public static final int user_favorite_count=0x7f02001a;
-        public static final int user_follow_count=0x7f02001b;
-        public static final int user_follower_count=0x7f02001c;
-        public static final int user_tweet_count=0x7f02001d;
+        public static final int ic_action_refresh=0x7f02000b;
+        public static final int ic_action_secure=0x7f02000c;
+        public static final int ic_action_settings=0x7f02000d;
+        public static final int ic_launcher=0x7f02000e;
+        public static final int mention=0x7f02000f;
+        public static final int pic=0x7f020010;
+        public static final int pic_ena=0x7f020011;
+        public static final int position0=0x7f020012;
+        public static final int position1=0x7f020013;
+        public static final int retweet=0x7f020014;
+        public static final int retweeted_by_me=0x7f020015;
+        public static final int same_my_screenname=0x7f020016;
+        public static final int transparameter=0x7f02001d;
+        public static final int tweet=0x7f020017;
+        public static final int tweet_ena=0x7f020018;
+        public static final int user_favorite_count=0x7f020019;
+        public static final int user_follow_count=0x7f02001a;
+        public static final int user_follower_count=0x7f02001b;
+        public static final int user_tweet_count=0x7f02001c;
     }
     public static final class id {
         public static final int HomeLine=0x7f0b000a;
@@ -185,9 +182,10 @@ public final class R {
     }
     public static final class xml {
         public static final int backbtn=0x7f040000;
-        public static final int picbtn=0x7f040001;
-        public static final int preference=0x7f040002;
-        public static final int preference_list=0x7f040003;
-        public static final int tweetbtn=0x7f040004;
+        public static final int dialog_background=0x7f040001;
+        public static final int picbtn=0x7f040002;
+        public static final int preference=0x7f040003;
+        public static final int preference_list=0x7f040004;
+        public static final int tweetbtn=0x7f040005;
     }
 }

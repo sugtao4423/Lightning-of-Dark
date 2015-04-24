@@ -75,7 +75,7 @@ public class MainActivity extends FragmentActivity {
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		option_regex = pref.getBoolean("menu_regex", false);
-		option_openBrowser = pref.getBoolean("option_openBrowser", false);
+		option_openBrowser = pref.getBoolean("menu_openBrowser", false);
 		getBigIcon = pref.getBoolean("getBigIcon", false);
 		
 		if(pref.getString("AccessToken", "").equals("")){
@@ -189,7 +189,7 @@ public class MainActivity extends FragmentActivity {
 		pref = PreferenceManager.getDefaultSharedPreferences(context);
 		
 		option_regex = pref.getBoolean("menu_regex", false);
-		option_openBrowser = pref.getBoolean("option_openBrowser", false);
+		option_openBrowser = pref.getBoolean("menu_openBrowser", false);
 		getBigIcon = pref.getBoolean("getBigIcon", false);
 		
 		if(pref.getString("AccessToken", "").equals("")){

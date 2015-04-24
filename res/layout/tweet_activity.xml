@@ -49,17 +49,6 @@
         style="@style/back_btn" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
-        style="@style/pic_btn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="30dp"
-        android:layout_toLeftOf="@+id/moji140"
-        android:background="#00000000"
-        android:onClick="image" />
-
-    <ImageButton
         android:id="@+id/imageButton1"
         style="@style/tweet_btn"
         android:layout_width="50dp"
@@ -98,5 +87,16 @@
         android:background="#00000000"
         android:onClick="cursor_end"
         android:src="@drawable/cursor_end" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        style="@style/pic_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/moji140"
+        android:background="#00000000"
+        android:onClick="image" />
 
 </RelativeLayout>

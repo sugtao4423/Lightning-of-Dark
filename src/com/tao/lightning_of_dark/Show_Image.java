@@ -58,7 +58,8 @@ public class Show_Image extends Activity {
 				if(result != null){
 					dialog.dismiss();
 					image.setImageBitmap(result);
-				}
+				}else
+					new ShowToast("画像の取得に失敗しました", Show_Image.this);
 			}
 		};
 		task.execute(url);

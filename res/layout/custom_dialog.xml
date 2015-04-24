@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#00000000"
+            android:background="@xml/dialog_background"
             android:src="@drawable/dialog_reply" />
 
         <ImageButton
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#00000000"
+            android:background="@xml/dialog_background"
             android:src="@drawable/dialog_retweet" />
 
         <ImageButton
@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#00000000"
+            android:background="@xml/dialog_background"
             android:src="@drawable/dialog_quote" />
 
         <ImageButton
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#00000000"
+            android:background="@xml/dialog_background"
             android:src="@drawable/dialog_favorite" />
 
         <ImageButton
@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#00000000"
+            android:background="@xml/dialog_background"
             android:src="@drawable/dialog_conversation" />
 
         <ImageButton
@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#00000000"
+            android:background="@xml/dialog_background"
             android:src="@drawable/dialog_deletepost" />
     </LinearLayout>
 
