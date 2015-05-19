@@ -4,13 +4,11 @@ import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 
+import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.MainActivity;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
-import com.tao.lightning_of_dark.UserPage;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,10 +30,12 @@ public class _2_favorites extends Fragment {
 	private ResponseList<twitter4j.Status> FavLine;
 	private boolean AlreadyLoad;
 	private long tweetId;
+	private ApplicationClass appClass;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.user_2, null);
+		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		AlreadyLoad = false;
 		
 		UserFav = (ListView)v.findViewById(R.id.Userfav);
@@ -89,9 +89,9 @@ public class _2_favorites extends Fragment {
 			protected Boolean doInBackground(Void... params) {
 				try{
 					if(AlreadyLoad)
-						FavLine = MainActivity.twitter.getFavorites(UserPage.target.getId(), new Paging(1, 50).maxId(tweetId - 1));
+						FavLine = appClass.getTwitter().getFavorites(appClass.getTarget().getId(), new Paging(1, 50).maxId(tweetId - 1));
 					else
-						FavLine = MainActivity.twitter.getFavorites(UserPage.target.getId(), new Paging(1, 50));
+						FavLine = appClass.getTwitter().getFavorites(appClass.getTarget().getId(), new Paging(1, 50));
 					return true;
 				}catch(Exception e){
 					return false;
@@ -103,10 +103,10 @@ public class _2_favorites extends Fragment {
 						adapter.add(status);
 					if(!AlreadyLoad)
 						AlreadyLoad = true;
-					PulltoRefresh.setRefreshing(false);
-					PulltoRefresh.setEnabled(true);
 				}else
 					new ShowToast("ふぁぼ取得エラー", getActivity());
+				PulltoRefresh.setRefreshing(false);
+				PulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);
 			}
 		};

@@ -59,21 +59,10 @@
         android:onClick="tweet" />
 
     <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:background="#00000000"
-        android:onClick="setting"
-        android:src="@drawable/ic_action_settings" />
-
-    <ImageButton
         android:id="@+id/cursor_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/imageButton4"
         android:background="#00000000"
         android:onClick="cursor_start"
         android:src="@drawable/cursor_start" />
@@ -98,5 +87,14 @@
         android:layout_toLeftOf="@+id/moji140"
         android:background="#00000000"
         android:onClick="image" />
+
+    <TextView
+        android:id="@+id/tweetAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cursor_start"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="5dp"
+        android:text="TweetAccount" />
 
 </RelativeLayout>

@@ -6,15 +6,6 @@
 <RelativeLayout 
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
-        android:text="bio"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 	<TextView
         android:id="@+id/UserBio"
         android:layout_width="wrap_content"
@@ -128,5 +119,42 @@
 	    android:layout_alignBottom="@+id/imageView4"
 	    android:layout_toRightOf="@+id/imageView4"
 	    android:text="null" />
+
+	<com.loopj.android.image.SmartImageView
+	    android:id="@+id/UserPage_sourceIcon"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginTop="10dp"
+	    android:layout_width="40dp"
+	    android:layout_height="40dp"
+	    android:src="@drawable/ic_action_refresh" />
+
+	<TextView
+	    android:id="@+id/textView1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/UserPage_sourceIcon"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginTop="20dp"
+	    android:text="bio"
+	    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	<ImageView
+	    android:id="@+id/UserPage_isFollow"
+	    android:layout_width="40dp"
+	    android:layout_height="40dp"
+	    android:layout_alignTop="@+id/UserPage_sourceIcon"
+	    android:layout_marginLeft="5dp"
+	    android:layout_toRightOf="@+id/UserPage_sourceIcon"
+	    android:scaleType="center" />
+
+	<com.loopj.android.image.SmartImageView
+	    android:id="@+id/UserPage_targetIcon"
+	    android:layout_width="40dp"
+	    android:layout_height="40dp"
+	    android:layout_alignTop="@+id/UserPage_isFollow"
+	    android:layout_toRightOf="@+id/UserPage_isFollow"
+	    android:layout_marginLeft="5dp"
+	    android:src="@drawable/ic_action_refresh" />
+
 </RelativeLayout>
 </ScrollView>

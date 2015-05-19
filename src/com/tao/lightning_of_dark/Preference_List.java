@@ -3,16 +3,17 @@ package com.tao.lightning_of_dark;
 import twitter4j.ResponseList;
 import twitter4j.TwitterException;
 import twitter4j.UserList;
-
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -43,6 +44,10 @@ public class Preference_List extends PreferenceActivity {
 			final android.preference.Preference select_List = findPreference("select_List");
 			final CheckBoxPreference startApp_showList = (CheckBoxPreference)findPreference("startApp_showList");
 			
+			final SQLiteDatabase db = new SQLHelper(getActivity()).getWritableDatabase();
+			
+			final ApplicationClass appClass = (ApplicationClass)getActivity().getApplicationContext();;
+			
 			if(showList.isChecked()){
 				select_List.setEnabled(true);
 				startApp_showList.setEnabled(true);
@@ -57,9 +62,22 @@ public class Preference_List extends PreferenceActivity {
 					if(showList.isChecked()){
 						select_List.setEnabled(false);
 						startApp_showList.setEnabled(false);
+						db.execSQL("update accounts set showList='false' where screen_name = '" + appClass.getMyScreenName() + "'");
 					}else{
 						select_List.setEnabled(true);
 						startApp_showList.setEnabled(true);
+						db.execSQL("update accounts set showList='true' where screen_name = '" + appClass.getMyScreenName() + "'");
+					}
+					return true;
+				}
+			});
+			startApp_showList.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					if(startApp_showList.isChecked()){
+						db.execSQL("update accounts set startApp_showList='false' where screen_name = '" + appClass.getMyScreenName() + "'");
+					}else{
+						db.execSQL("update accounts set startApp_showList='true' where screen_name = '" + appClass.getMyScreenName() + "'");
 					}
 					return true;
 				}
@@ -80,7 +98,7 @@ public class Preference_List extends PreferenceActivity {
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							try {
-								lists = MainActivity.twitter.getUserLists(MainActivity.MyScreenName);
+								lists = appClass.getTwitter().getUserLists(appClass.getMyScreenName());
 								return true;
 							} catch (TwitterException e) {
 								return false;
@@ -107,6 +125,8 @@ public class Preference_List extends PreferenceActivity {
 							Editor edit = pref.edit()
 							.putLong("SelectListId", ListId)
 							.putString("SelectListName", ListName);
+							db.execSQL("update accounts set SelectListId='" + ListId + "' where screen_name = '" + appClass.getMyScreenName() + "'");
+							db.execSQL("update accounts set SelectListName='" + ListName + "' where screen_name = '" + appClass.getMyScreenName() + "'");
 							if(edit.commit()){
 								Dialog("リストを選択しました");
 							}else

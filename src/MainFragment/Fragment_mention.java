@@ -3,13 +3,6 @@ package MainFragment;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
-
-import com.tao.lightning_of_dark.CustomAdapter;
-import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.MainActivity;
-import com.tao.lightning_of_dark.R;
-import com.tao.lightning_of_dark.ShowToast;
-
 import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,14 +11,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.tao.lightning_of_dark.ApplicationClass;
+import com.tao.lightning_of_dark.CustomAdapter;
+import com.tao.lightning_of_dark.ListViewListener;
+import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.ShowToast;
 
 public class Fragment_mention extends Fragment {
 	
 	private ListView mention;
 	private CustomAdapter adapter;
+	private ApplicationClass appClass;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +33,8 @@ public class Fragment_mention extends Fragment {
 		mention = (ListView)v.findViewById(R.id.MentionLine);
 		mention.setOnItemClickListener(new ListViewListener());
 		mention.setOnItemLongClickListener(new ListViewListener());
-		adapter = ((MainActivity)getActivity()).getMentionAdapter();
+		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		adapter = appClass.getMentionAdapter();
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged(){
@@ -59,7 +60,7 @@ public class Fragment_mention extends Fragment {
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 						try{
-							return ((MainActivity)getActivity()).getTwitter().getMentionsTimeline(new Paging(1, 50).maxId(tweetId - 1));
+							return appClass.getTwitter().getMentionsTimeline(new Paging(1, 50).maxId(tweetId - 1));
 						}catch(Exception e){
 							return null;
 						}

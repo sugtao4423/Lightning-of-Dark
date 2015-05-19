@@ -25,5 +25,15 @@
 	        android:background="#00000000"
 	        android:onClick="new_tweet"
 	        android:src="@drawable/edit" />
+
+	<ImageButton
+	    android:id="@+id/imageButton2"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentBottom="true"
+	    android:background="#00000000"
+	    android:onClick="option"
+	    android:src="@drawable/option" />
 	
 </RelativeLayout>

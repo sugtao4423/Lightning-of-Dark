@@ -1,7 +1,6 @@
 package dialog_onClick;
 
-import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.MainActivity;
+import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.ShowToast;
 
 import twitter4j.Status;
@@ -15,8 +14,8 @@ import android.view.View.OnClickListener;
 
 public class Dialog_deletePost implements OnClickListener {
 	
-	Status status;
-	Context context;
+	private Status status;
+	private Context context;
 
 	public Dialog_deletePost(Status status, Context context) {
 		this.status = status;
@@ -25,7 +24,7 @@ public class Dialog_deletePost implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		ListViewListener.dialog.dismiss();
+		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context)
 		.setMessage("本当にツイ消ししますか？")
 		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -42,7 +41,7 @@ public class Dialog_deletePost implements OnClickListener {
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try {
-					MainActivity.twitter.destroyStatus(status.getId());
+					((ApplicationClass)context.getApplicationContext()).getTwitter().destroyStatus(status.getId());
 					return true;
 				} catch (TwitterException e) {
 					return false;

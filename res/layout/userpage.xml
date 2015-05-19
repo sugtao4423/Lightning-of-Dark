@@ -5,7 +5,7 @@
     android:background="#e9e9e9"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".UserPage">
-
+    
     <com.loopj.android.image.SmartImageView
         android:id="@+id/banner"
         android:layout_width="wrap_content"
@@ -72,5 +72,5 @@ android:layout_below="@+id/banner">
         android:scaleType="centerCrop"
         android:src="@drawable/ic_action_secure"
         android:background="#f0f0f0f0" />
-
+    
 </RelativeLayout>

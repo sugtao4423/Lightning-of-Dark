@@ -1,10 +1,9 @@
 package com.tao.lightning_of_dark;
 
 import java.text.SimpleDateFormat;
-import java.util.regex.Pattern;
-
 import com.loopj.android.image.SmartImageView;
 
+import dialog_onClick.Dialog_ListClick;
 import dialog_onClick.Dialog_deletePost;
 import dialog_onClick.Dialog_favorite;
 import dialog_onClick.Dialog_reply;
@@ -16,18 +15,13 @@ import twitter4j.Status;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -38,16 +32,17 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ListViewListener implements OnItemClickListener, OnItemLongClickListener {
 	
-	public static AlertDialog dialog;
-	
+	private AlertDialog dialog;
+		
 	@Override
 	public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id) {
 		final Status item = (Status)parent.getItemAtPosition(position);
+		ApplicationClass appClass = (ApplicationClass)parent.getContext().getApplicationContext();
 		
 		ArrayAdapter<String> list = new ArrayAdapter<String>(parent.getContext(), android.R.layout.simple_list_item_1);
-		if(MainActivity.option_regex)
+		if(appClass.getOption_regex())
 			list.add("正規表現で抽出");
-		if(MainActivity.option_openBrowser)
+		if(appClass.getOption_openBrowser())
 			list.add("ブラウザで開く");
 				
 		list.add("@" + item.getUser().getScreenName());
@@ -84,15 +79,15 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         ImageView protect = (ImageView)dialog_title.findViewById(R.id.UserProtected);
         
         if(item.isRetweet()){
-            if(!item.getRetweetedStatus().getUser().isProtected())
-        		protect.setVisibility(View.GONE);
-        	else
+            if(item.getRetweetedStatus().getUser().isProtected())
         		protect.setVisibility(View.VISIBLE);
+        	else
+        		protect.setVisibility(View.GONE);
         	tweetText.setText(item.getRetweetedStatus().getText());
         	name_screenName.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
         	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
 					+ "  via " + item.getRetweetedStatus().getSource().replaceAll("<.+?>", ""));
-        	if(MainActivity.getBigIcon)
+        	if(appClass.getGetBigIcon())
         		icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL());
         	else
         		icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
@@ -105,7 +100,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         	name_screenName.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
         	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
 					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
-        	if(MainActivity.getBigIcon)
+        	if(appClass.getGetBigIcon())
         		icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
         	else
         		icon.setImageUrl(item.getUser().getProfileImageURL());
@@ -124,80 +119,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         
         
 		dialog_list.setAdapter(list);
-        dialog_list.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent2, View view2,
-					int position2, long id2) {
-				dialog.dismiss();
-				String clickedText = (String)parent2.getItemAtPosition(position2);
-				
-				if(clickedText.equals("正規表現で抽出")){
-					AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-					final EditText reg = new EditText(parent.getContext());
-					final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
-					reg.setText(pref.getString("regularExpression", ""));
-					builder.setTitle("正規表現を入力してください")
-					.setView(reg)
-					.setPositiveButton("OK", new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							String editReg = reg.getText().toString();
-							pref.edit().putString("regularExpression", editReg).commit();
-							Pattern pattern = Pattern.compile(editReg, Pattern.DOTALL);
-							CustomAdapter content = new CustomAdapter(parent.getContext());
-							for(int i = 0; parent.getCount() - 1 > i; i++){
-								Status status = ((Status) parent.getAdapter().getItem(i));
-								if(pattern.matcher(status.getText()).find())
-									content.add(status);
-							}
-							AlertDialog.Builder b = new AlertDialog.Builder(parent.getContext());
-							ListView l = new ListView(parent.getContext());
-							if(content.isEmpty())
-								l.setAdapter(new ArrayAdapter<String>(parent.getContext(),android.R.layout.simple_list_item_1, new String[]{"なし"}));
-							else{
-								l.setAdapter(content);
-								l.setOnItemClickListener(new ListViewListener());
-								l.setOnItemLongClickListener(new ListViewListener());
-							}
-							b.setView(l).create().show();
-						}
-					});
-					builder.setNegativeButton("キャンセル", new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-						}
-					});
-					builder.create().show();
-				}
-				
-				if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
-					Intent web;
-					if(clickedText.startsWith("http://pbs.twimg.com/media/") || clickedText.startsWith("https://pbs.twimg.com/media/")){
-						web = new Intent(parent.getContext(), Show_Image.class);
-						web.putExtra("URL", clickedText);
-					}else
-						web = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));
-					parent.getContext().startActivity(web);
-				}
-				if(clickedText.equals("ブラウザで開く")){
-					String url, SN, Id;
-					if(item.isRetweet()){
-						SN = item.getRetweetedStatus().getUser().getScreenName();
-						Id = String.valueOf(item.getRetweetedStatus().getId());
-					}else{
-						SN = item.getUser().getScreenName();
-						Id = String.valueOf(item.getId());
-					}
-					url = "https://twitter.com/" + SN + "/status/" + Id;
-					parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-				}
-				if(clickedText.startsWith("@")){ //UserPage
-					Intent intent = new Intent(parent.getContext(), UserPage.class);
-					intent.putExtra("userScreenName", clickedText.substring(1));
-					parent.getContext().startActivity(intent);
-				}
-			}
-		});
+		dialog_list.setOnItemClickListener(new Dialog_ListClick(item, parent));
         dialog_list.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -223,7 +145,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         		dialog_talk.setEnabled(false);
         		dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
         	}
-        	if(! item.getRetweetedStatus().getUser().getScreenName().equals(MainActivity.MyScreenName)){
+        	if(! item.getRetweetedStatus().getUser().getScreenName().equals(((ApplicationClass)parent.getContext().getApplicationContext()).getMyScreenName())){
         		dialog_deletePost.setEnabled(false);
         		dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
         	}
@@ -232,7 +154,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         		dialog_talk.setEnabled(false);
         		dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
         	}
-        	if(! item.getUser().getScreenName().equals(MainActivity.MyScreenName)){
+        	if(! item.getUser().getScreenName().equals(((ApplicationClass)parent.getContext().getApplicationContext()).getMyScreenName())){
         		dialog_deletePost.setEnabled(false);
         		dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
         	}
@@ -242,6 +164,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		builder.setCustomTitle(dialog_title).setView(content);
 		
 		dialog = builder.create();
+		((ApplicationClass)parent.getContext().getApplicationContext()).setDialog(dialog);
 		dialog.show();
 	}
 	

@@ -24,10 +24,10 @@ import android.widget.TextView;
 
 public class UserPage extends FragmentActivity {
 	
-	public static User target;
-	SmartImageView banner, UserIcon;
-	TextView Name, ScreenName;
-	ImageView protect;
+	private User target;
+	private SmartImageView banner, UserIcon;
+	private TextView Name, ScreenName;
+	private ImageView protect;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,16 +55,17 @@ public class UserPage extends FragmentActivity {
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try {
-					target = MainActivity.twitter.showUser(u);
+					target = ((ApplicationClass)UserPage.this.getApplicationContext()).getTwitter().showUser(u);
 					return true;
 				} catch (TwitterException e) {
 					return false;
 				}
 			}
 			protected void onPostExecute(Boolean result) {
-				if(result)
+				if(result){
+					((ApplicationClass)UserPage.this.getApplicationContext()).setTarget(target);
 					functions();
-				else
+				}else
 					new ShowToast("ユーザー情報を取得できませんでした", UserPage.this);
 			}
 		};
@@ -115,6 +116,6 @@ public class UserPage extends FragmentActivity {
 		Name.setText(target.getName());
 		ScreenName.setText("@" + target.getScreenName());
 		
-		new _0_detail().setText();
+		new _0_detail().setText(UserPage.this);
 	}
 }

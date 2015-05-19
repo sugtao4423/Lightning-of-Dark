@@ -5,14 +5,15 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
+import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.MainActivity;
 import com.tao.lightning_of_dark.Preference;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -36,19 +37,17 @@ public class Fragment_List extends Fragment {
 	private ListView ListLine, foot;
 	private SwipeRefreshLayout PulltoRefresh;
 	private CustomAdapter adapter;
-	private SharedPreferences pref;
-	private boolean AlreadyLoad;
 	private long tweetId;
 	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_list, null);
-		pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		final ApplicationClass appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		ListLine = (ListView)v.findViewById(R.id.ListLine);
 		ListLine.setOnItemClickListener(new ListViewListener());
 		ListLine.setOnItemLongClickListener(new ListViewListener());
 		
-		adapter = new CustomAdapter(getActivity());
+		adapter = appClass.getListAdapter();
 		
 		addFooter();
 		
@@ -63,13 +62,10 @@ public class Fragment_List extends Fragment {
 			@Override
 			public void onRefresh() {
 				adapter.clear();
-				AlreadyLoad = false;
-				getList();
+				appClass.setList_AlreadyLoad(false);
+				getList(container.getContext());
 			}
 		});
-		
-		if(pref.getBoolean("startApp_showList", false))
-			getList();
 		
 		return v;
 	}
@@ -82,28 +78,29 @@ public class Fragment_List extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				foot.setEnabled(false);
-				getList();
+				getList(parent.getContext());
 			}
 		});
 		ListLine.addFooterView(foot);
 	}
 	
-	public void getList(){
+	public void getList(Context context){
+		final ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		if(pref.getBoolean("showList", false)){
 			final long ListId = pref.getLong("SelectListId", -1);
 			if(ListId != -1){
-				if(AlreadyLoad){
-					Status s = (Status)ListLine.getItemAtPosition(ListLine.getAdapter().getCount() - 2);
-					tweetId = s.getId();
+				if(appClass.getList_AlreadyLoad()){
+					tweetId = ((Status)ListLine.getItemAtPosition(ListLine.getAdapter().getCount() - 2)).getId();
 				}
 				AsyncTask<Void, Void, ResponseList<twitter4j.Status>> task = new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 						try {
-							if(AlreadyLoad)
-								return MainActivity.twitter.getUserListStatuses(ListId, new Paging(1, 50).maxId(tweetId - 1));
+							if(appClass.getList_AlreadyLoad())
+								return appClass.getTwitter().getUserListStatuses(ListId, new Paging(1, 50).maxId(tweetId - 1));
 							else
-								return MainActivity.twitter.getUserListStatuses(ListId, new Paging(1, 50));
+								return appClass.getTwitter().getUserListStatuses(ListId, new Paging(1, 50));
 							} catch (TwitterException e) {
 								return null;
 							}
@@ -112,12 +109,12 @@ public class Fragment_List extends Fragment {
 						if(result != null){
 							for(twitter4j.Status status : result)
 								adapter.add(status);
-							if(!AlreadyLoad)
-								AlreadyLoad = true;
-							PulltoRefresh.setRefreshing(false);
-							PulltoRefresh.setEnabled(true);
+							if(!appClass.getList_AlreadyLoad())
+								appClass.setList_AlreadyLoad(true);
 						}else
 							new ShowToast("リストを取得できませんでした", getActivity());
+						PulltoRefresh.setRefreshing(false);
+						PulltoRefresh.setEnabled(true);
 						foot.setEnabled(true);
 					}
 				};

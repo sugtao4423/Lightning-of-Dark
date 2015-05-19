@@ -2,9 +2,9 @@ package com.tao.lightning_of_dark;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import twitter4j.Status;
 import twitter4j.TwitterException;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -15,12 +15,18 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 public class IntentActivity extends Activity {
+	
+	private ApplicationClass appClass;
+	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		Intent i;
 		String uri;
-		if(MainActivity.twitter == null)
-			new MainActivity().onlyLogin(this);
+		
+		appClass = (ApplicationClass)this.getApplicationContext();
+		
+		if(appClass.getTwitter() == null)
+			new MainActivity().LogIn(true, getApplicationContext());
 
 		if(Intent.ACTION_VIEW.equals(getIntent().getAction())){
 			uri = getIntent().getData().toString();
@@ -48,11 +54,12 @@ public class IntentActivity extends Activity {
 			@Override
 			protected twitter4j.Status doInBackground(Long... params) {
 				try {
-					return MainActivity.twitter.showStatus(params[0]);
+					return appClass.getTwitter().showStatus(params[0]);
 				} catch (TwitterException e) {
 					return null;
 				}
 			}
+			@SuppressLint("NewApi")
 			@Override
 			protected void onPostExecute(twitter4j.Status status){
 				if(status != null){

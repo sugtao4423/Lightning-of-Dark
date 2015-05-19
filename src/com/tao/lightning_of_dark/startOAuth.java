@@ -12,6 +12,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,14 +25,15 @@ import android.widget.TextView;
 
 public class startOAuth extends Activity {
 	
-	EditText pin, CustomCK, CustomCS;
-	Button ninsyobtn;
-	String CK, CS;
-	SharedPreferences pref;
+	private EditText CustomCK, CustomCS;
+	private Button ninsyobtn;
+	private String CK, CS;
+	private SharedPreferences pref;
+	private SQLiteDatabase db;
 	
-	Twitter twitter;
-	TwitterFactory twitterFactory;
-	RequestToken rt;
+	private Twitter twitter;
+	private TwitterFactory twitterFactory;
+	private RequestToken rt;
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -50,6 +52,8 @@ public class startOAuth extends Activity {
 		
 		CustomCK.setText(pref.getString("CustomCK", ""));
 		CustomCS.setText(pref.getString("CustomCS", ""));
+		
+		db = new SQLHelper(this).getWritableDatabase();
 	}
 	
 	public void ninsyo(View v){
@@ -111,12 +115,21 @@ public class startOAuth extends Activity {
 				if(accessToken != null){
 					pref.edit().putString("AccessToken", accessToken.getToken())
 					.putString("AccessTokenSecret", accessToken.getTokenSecret()).commit();
+					
+					if(CK.equals(getString(R.string.CK)))
+						CK = "";
+					if(CS.equals(getString(R.string.CS)))
+						CS = "";
+					
+					db.execSQL("insert into accounts values('" + accessToken.getScreenName() + "', '"
+							+ CK + "', '" + CS + "', '" + accessToken.getToken() + "', '"
+									+ accessToken.getTokenSecret() + "', 'false', '-1', '', 'false')");
+					new ShowToast("アカウントを追加しました", startOAuth.this);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
-					finish();
 				}else{
 					new ShowToast("失敗...", startOAuth.this);
-					finish();
 				}
+				finish();
 			}
 		};
 		task.execute();

@@ -1,7 +1,6 @@
 package dialog_onClick;
 
-import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.MainActivity;
+import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.ShowToast;
 
 import twitter4j.Status;
@@ -13,8 +12,8 @@ import android.view.View.OnClickListener;
 
 public class Dialog_retweet implements OnClickListener {
 	
-	Status status;
-	Context context;
+	private Status status;
+	private Context context;
 
 	public Dialog_retweet(Status status, Context context) {
 		this.status = status;
@@ -23,12 +22,12 @@ public class Dialog_retweet implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		ListViewListener.dialog.dismiss();
+		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				try {
-					MainActivity.twitter.retweetStatus(status.getId());
+					((ApplicationClass)context.getApplicationContext()).getTwitter().retweetStatus(status.getId());
 					return true;
 				} catch (TwitterException e) {
 					return false;

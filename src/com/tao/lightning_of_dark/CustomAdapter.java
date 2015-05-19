@@ -28,6 +28,7 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 		TextView name, text, tweet_date, RetweetedUserScreenName;
 		SmartImageView icon, RetweetedUserIcon;
 		ImageView protect, state;
+		ApplicationClass appClass;
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent){
@@ -44,6 +45,7 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			TextView RetweetedUserScreenName = (TextView)convertView.findViewById(R.id.RetweetedUserScreenName);
 			ImageView protect = (ImageView)convertView.findViewById(R.id.UserProtected);
 			ImageView state = (ImageView)convertView.findViewById(R.id.tweetState);
+			ApplicationClass appClass = (ApplicationClass)parent.getContext().getApplicationContext();
 			
 			holder = new ViewHolder();
 			holder.name = name;
@@ -54,6 +56,7 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			holder.RetweetedUserScreenName = RetweetedUserScreenName;
 			holder.protect = protect;
 			holder.state = state;
+			holder.appClass = appClass;
 			
 			convertView.setTag(holder);
 		}else{
@@ -76,9 +79,9 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			convertView.setBackgroundResource(R.drawable.retweeted_by_me);
 		else if(item.isRetweet())
 			convertView.setBackgroundResource(R.drawable.retweet);
-		else if(item.getUser().getScreenName().equals(MainActivity.MyScreenName))
+		else if(item.getUser().getScreenName().equals(holder.appClass.getMyScreenName()))
 			convertView.setBackgroundResource(R.drawable.same_my_screenname);
-		else if(MainActivity.mentionPattern.matcher(item.getText()).find())
+		else if(holder.appClass.getMentionPattern().matcher(item.getText()).find())
 			convertView.setBackgroundResource(R.drawable.mention);
 		else{
 			if(position % 2 == 0)
@@ -97,7 +100,7 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 					+ "  Retweeted by ");
 			holder.RetweetedUserIcon.setImageUrl(item.getUser().getProfileImageURL());
 			holder.RetweetedUserScreenName.setText("@" + item.getUser().getScreenName());
-			if(MainActivity.getBigIcon)
+			if(holder.appClass.getGetBigIcon())
 				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL());
 			else
 				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
@@ -108,7 +111,7 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			holder.text.setText(item.getText());
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
 					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
-			if(MainActivity.getBigIcon)
+			if(holder.appClass.getGetBigIcon())
 				holder.icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
 			else
 				holder.icon.setImageUrl(item.getUser().getProfileImageURL());

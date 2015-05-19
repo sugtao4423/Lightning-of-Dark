@@ -1,6 +1,6 @@
 package dialog_onClick;
 
-import com.tao.lightning_of_dark.ListViewListener;
+import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.TweetActivity;
 
 import twitter4j.Status;
@@ -11,8 +11,8 @@ import android.view.View.OnClickListener;
 
 public class Dialog_reply implements OnClickListener {
 	
-	Status status;
-	Context context;
+	private Status status;
+	private Context context;
 
 	public Dialog_reply(Status status, Context context) {
 		this.status = status;
@@ -21,7 +21,7 @@ public class Dialog_reply implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		ListViewListener.dialog.dismiss();
+		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
 		Intent reply = new Intent(context, TweetActivity.class);
 		if(status.isRetweet()){
 			reply.putExtra("ReplyUserScreenName", status.getRetweetedStatus().getUser().getScreenName());

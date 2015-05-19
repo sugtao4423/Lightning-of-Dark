@@ -20,18 +20,23 @@ import android.widget.TextView;
 
 public class TweetActivity extends Activity {
 	
-	EditText TweetText;
-	TextView moji140;
-	long TweetReplyId;
-	String ReplyUserScreenName, ReplyTweetText, pakuri;
-	File image;
-	boolean do_back, do_setSelection;
+	private EditText TweetText;
+	private TextView moji140;
+	private long TweetReplyId;
+	private String ReplyUserScreenName, ReplyTweetText, pakuri;
+	private File image;
+	private boolean do_back, do_setSelection;
+	private ApplicationClass appClass;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tweet_activity);
 		
+		appClass = (ApplicationClass)this.getApplicationContext();
 		getActionBar().setDisplayShowHomeEnabled(false);
+		
+		TextView tweetAccount = (TextView)findViewById(R.id.tweetAccount);
+		tweetAccount.setText("@" + appClass.getMyScreenName());
 		
 		TweetText = (EditText)findViewById(R.id.tweetText);
 		moji140 = (TextView)findViewById(R.id.moji140);
@@ -76,9 +81,9 @@ public class TweetActivity extends Activity {
 					if(image != null)
 						status.media(image);
 					if(TweetReplyId == -1)
-						MainActivity.twitter.updateStatus(status);
+						appClass.getTwitter().updateStatus(status);
 					else
-						MainActivity.twitter.updateStatus(status.inReplyToStatusId(TweetReplyId));
+						appClass.getTwitter().updateStatus(status.inReplyToStatusId(TweetReplyId));
 					return true;
 				}catch(Exception e){
 					return false;
@@ -151,10 +156,6 @@ public class TweetActivity extends Activity {
 	
 	public void back(View v){
 		finish();
-	}
-	
-	public void setting(View v){
-		startActivity(new Intent(this, Preference.class));
 	}
 	
 	public void onDestroy(){

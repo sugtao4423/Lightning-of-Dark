@@ -4,9 +4,9 @@ import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 
+import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.MainActivity;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
 
@@ -26,6 +26,7 @@ public class Fragment_home extends Fragment {
 	
 	private ListView home;
 	private CustomAdapter adapter;
+	private ApplicationClass appClass;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +34,8 @@ public class Fragment_home extends Fragment {
 		home = (ListView)v.findViewById(R.id.HomeLine);
 		home.setOnItemClickListener(new ListViewListener());
 		home.setOnItemLongClickListener(new ListViewListener());
-		adapter = ((MainActivity)getActivity()).getHomeAdapter();
+		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		adapter = appClass.getHomeAdapter();
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override
 			public void onChanged(){
@@ -59,7 +61,7 @@ public class Fragment_home extends Fragment {
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 						try{
-							return ((MainActivity)getActivity()).getTwitter().getHomeTimeline(new Paging(1, 50).maxId(tweetId - 1));
+							return appClass.getTwitter().getHomeTimeline(new Paging(1, 50).maxId(tweetId - 1));
 						}catch(Exception e){
 							return null;
 						}

@@ -1,11 +1,14 @@
 package com.tao.lightning_of_dark;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
@@ -14,9 +17,14 @@ import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import MainFragment.MyFragmentStatePagerAdapter;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,30 +35,30 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 public class MainActivity extends FragmentActivity {
 
-	//GLOBAL
-	static String CK, CS, MyScreenName; //MyScreenNameには「＠」は含まれない
+	private String CK, CS, MyScreenName; //MyScreenNameには「＠」は含まれない
 	
-	public static Twitter twitter;
-	static Pattern mentionPattern;
+	private Twitter twitter;
+	private Pattern mentionPattern;
 	
-	static boolean option_regex, option_openBrowser, getBigIcon;
+	private ApplicationClass applicationClass;
 	
-	//LOCAL
-	SharedPreferences pref;
+	private SharedPreferences pref;
+	private boolean resetFlag;
 	
-	TwitterFactory twitterFactory;
-	TwitterStream twitterStream;
+	private TwitterFactory twitterFactory;
+	private TwitterStream twitterStream;
 	
-	AccessToken accessToken;
-	Configuration jconf;
+	private AccessToken accessToken;
+	private Configuration jconf;
 	
-	ViewPager viewPager;
+	private ViewPager viewPager;
 	
-	CustomAdapter HomeAdapter, MentionAdapter;
-	ResponseList<twitter4j.Status> home, mention;
+	private CustomAdapter HomeAdapter, MentionAdapter, ListAdapter;
+	private ResponseList<twitter4j.Status> home, mention;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +67,7 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().hide();
 		HomeAdapter = new CustomAdapter(this);
 		MentionAdapter = new CustomAdapter(this);
+		ListAdapter = new CustomAdapter(this);
 		
 		setContentView(R.layout.activity_main);
 		
@@ -72,29 +81,10 @@ public class MainActivity extends FragmentActivity {
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 		
-		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		
-		option_regex = pref.getBoolean("menu_regex", false);
-		option_openBrowser = pref.getBoolean("menu_openBrowser", false);
-		getBigIcon = pref.getBoolean("getBigIcon", false);
-		
-		if(pref.getString("AccessToken", "").equals("")){
-			startActivity(new Intent(this, startOAuth.class));
-			finish();
-		}else{
-			if(pref.getString("CustomCK", "").equals("")){
-				CK = getString(R.string.CK);
-				CS = getString(R.string.CS);
-			}else{
-				CK = pref.getString("CustomCK", null);
-				CS = pref.getString("CustomCS", null);
-			}
-			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-			LogIn();
-		}
+		LogIn(false, this);
 	}
 	
-	public void LogIn(){
+	public void LogIn(final boolean onlyLogin, final Context context){
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
@@ -113,14 +103,44 @@ public class MainActivity extends FragmentActivity {
 			}
 			protected void onPostExecute(Boolean result) {
 				if(result){
+					applicationClass.setMyScreenName(MyScreenName);
+					applicationClass.setTwitter(twitter);
 					mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
-					getTimeLine();
-					connectStreaming();
+					applicationClass.setMentionPattern(mentionPattern);
+					if(!onlyLogin){
+						getTimeLine();
+						connectStreaming();
+					}
 				}else
-					new ShowToast("スクリーンネームの取得に失敗しました", MainActivity.this);
+					new ShowToast("スクリーンネームの取得に失敗しました", context);
 			}
 		};
-		task.execute();
+		
+		pref = PreferenceManager.getDefaultSharedPreferences(context);
+		applicationClass = (ApplicationClass)context.getApplicationContext();
+		applicationClass.setHomeAdapter(HomeAdapter);
+		applicationClass.setMentionAdapter(MentionAdapter);
+		applicationClass.setListAdapter(ListAdapter);
+		applicationClass.setList_AlreadyLoad(false);
+		
+		applicationClass.setOption_regex(pref.getBoolean("menu_regex", false));
+		applicationClass.setOption_openBrowser(pref.getBoolean("menu_openBrowser", false));
+		applicationClass.setGetBigIcon(pref.getBoolean("getBigIcon", false));
+		
+		if(pref.getString("AccessToken", "").equals("")){
+			startActivity(new Intent(context, startOAuth.class));
+			finish();
+		}else{
+			if(pref.getString("CustomCK", "").equals("")){
+				CK = getString(R.string.CK);
+				CS = getString(R.string.CS);
+			}else{
+				CK = pref.getString("CustomCK", null);
+				CS = pref.getString("CustomCS", null);
+			}
+			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
+			task.execute();
+		}
 	}
 	
 	public void getTimeLine(){
@@ -146,22 +166,47 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 		task.execute();
+		if(pref.getBoolean("startApp_showList", false) && pref.getLong("SelectListId", -1) != -1L)
+			getList();
+	}
+	public void getList(){
+		AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
+			@Override
+			protected ResponseList<twitter4j.Status> doInBackground(
+					Void... params) {
+				try {
+					return twitter.getUserListStatuses(pref.getLong("SelectListId", -1), new Paging(1, 50));
+				} catch (TwitterException e) {
+					return null;
+				}
+			}
+			@Override
+			protected void onPostExecute(ResponseList<twitter4j.Status> result){
+				if(result != null){
+					for(twitter4j.Status status : result)
+						ListAdapter.add(status);
+					applicationClass.setList_AlreadyLoad(true);
+				}
+			}
+		};
+		task.execute();
 	}
 	
 	public void connectStreaming(){
 		try{
-			
 			TwitterStreamFactory streamFactory = new TwitterStreamFactory(jconf);
 			twitterStream = streamFactory.getInstance(accessToken);
 			
 			//UserStreamAdapter
 			UserStreamAdapter streamAdapter = new UserStreamAdapter(){
+				@Override
 				public void onStatus(final Status status){
 					AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 						@Override
 						protected Boolean doInBackground(Void... params) {
 							return true;
 						}
+						@Override
 						protected void onPostExecute(Boolean result){
 							HomeAdapter.insert(status, 0);
 							if(mentionPattern.matcher(status.getText()).find() && !status.isRetweet())
@@ -185,51 +230,97 @@ public class MainActivity extends FragmentActivity {
 		startActivity(intent);
 	}
 	
-	public void onlyLogin(Context context){
-		pref = PreferenceManager.getDefaultSharedPreferences(context);
-		
-		option_regex = pref.getBoolean("menu_regex", false);
-		option_openBrowser = pref.getBoolean("menu_openBrowser", false);
-		getBigIcon = pref.getBoolean("getBigIcon", false);
-		
-		if(pref.getString("AccessToken", "").equals("")){
-			startActivity(new Intent(this, startOAuth.class));
-			finish();
-		}else{
-			if(pref.getString("CustomCK", "").equals("")){
-				CK = getString(R.string.CK);
-				CS = getString(R.string.CS);
-			}else{
-				CK = pref.getString("CustomCK", null);
-				CS = pref.getString("CustomCS", null);
-			}
-			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-		}
-		
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+	public void option(View v){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setItems(new String[]{"設定", "ユーザー検索", "アカウント"}, new OnClickListener() {
 			@Override
-			protected Boolean doInBackground(Void... params) {
-				ConfigurationBuilder builder = new ConfigurationBuilder();
-				builder.setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS);
-				jconf = builder.build();
-				
-				twitterFactory = new TwitterFactory(jconf);
-				twitter = twitterFactory.getInstance(accessToken);
-				try{
-					MyScreenName = twitter.getScreenName();
-				}catch(Exception e){
-					return false;
+			public void onClick(DialogInterface dialog, int which) {
+				if(which == 0){
+					startActivity(new Intent(MainActivity.this, Preference.class));
 				}
-				return true;
+				if(which == 1){
+					AlertDialog.Builder userSearch = new AlertDialog.Builder(MainActivity.this);
+					final EditText userEdit = new EditText(MainActivity.this);
+					userSearch.setMessage("ユーザーのスクリーンネームを入力してください")
+					.setView(userEdit)
+					.setPositiveButton("OK", new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Intent userPage = new Intent(MainActivity.this, UserPage.class);
+							String user_screen = userEdit.getText().toString();
+							if(user_screen.isEmpty())
+								new ShowToast("なにも入力されていません", MainActivity.this);
+							else{
+								if(user_screen.startsWith("@"))
+									user_screen = user_screen.substring(1);
+								userPage.putExtra("userScreenName", user_screen);
+								startActivity(userPage);
+							}
+						}
+					});
+					userSearch.create().show();
+				}
+				if(which == 2){
+					SQLiteDatabase db = new SQLHelper(MainActivity.this).getWritableDatabase();
+					String[] columns = new String[]{"screen_name", "CK", "CS", "AT", "ATS", "showList", "SelectListId", "SelectListName", "startApp_showList"};
+					Cursor result = db.query("accounts", columns, null, null, null, null, null);
+					boolean mov = result.moveToFirst();
+					List<String> selectAccount_screenName = new ArrayList<String>();
+					final List<String> selectAccount_CK = new ArrayList<String>();
+					final List<String> selectAccount_CS = new ArrayList<String>();
+					final List<String> selectAccount_AT = new ArrayList<String>();
+					final List<String> selectAccount_ATS = new ArrayList<String>();
+					final List<Boolean> selectAccount_showList = new ArrayList<Boolean>();
+					final List<Long> selectAccount_SelectListId = new ArrayList<Long>();
+					final List<String> selectAccount_SelectListName = new ArrayList<String>();
+					final List<Boolean> selectAccount_startApp_showList = new ArrayList<Boolean>();
+					while(mov){
+						String screen = "@" + result.getString(0);
+						if(screen.equals("@" + MyScreenName))
+							screen = screen + " (now)";
+						selectAccount_screenName.add(screen);
+						selectAccount_CK.add(result.getString(1));
+						selectAccount_CS.add(result.getString(2));
+						selectAccount_AT.add(result.getString(3));
+						selectAccount_ATS.add(result.getString(4));
+						selectAccount_showList.add(Boolean.parseBoolean(result.getString(5)));
+						selectAccount_SelectListId.add(Long.parseLong(result.getString(6)));
+						selectAccount_SelectListName.add(result.getString(7));
+						selectAccount_startApp_showList.add(Boolean.parseBoolean(result.getString(8)));
+						
+						mov = result.moveToNext();
+					}
+					selectAccount_screenName.add("アカウントを追加");
+					AlertDialog.Builder screennameDialog = new AlertDialog.Builder(MainActivity.this);
+					final String[] nameDialog = (String[])selectAccount_screenName.toArray(new String[0]);
+					screennameDialog.setItems(nameDialog, new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if(nameDialog[which].equals("アカウントを追加")){
+								startActivity(new Intent(MainActivity.this, startOAuth.class));
+							}else if(!nameDialog[which].equals("@" + MyScreenName + " (now)")){
+								pref.edit()
+								.putString("CustomCK", selectAccount_CK.get(which))
+								.putString("CustomCS", selectAccount_CS.get(which))
+								.putString("AccessToken", selectAccount_AT.get(which))
+								.putString("AccessTokenSecret", selectAccount_ATS.get(which))
+								.putBoolean("showList", selectAccount_showList.get(which))
+								.putLong("SelectListId", selectAccount_SelectListId.get(which))
+								.putString("SelectListName", selectAccount_SelectListName.get(which))
+								.putBoolean("startApp_showList", selectAccount_startApp_showList.get(which)).commit();
+								restart();
+							}
+						}
+					});
+					screennameDialog.create().show();
+				}
 			}
-			protected void onPostExecute(Boolean result) {
-				if(result)
-					mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
-				else
-					new ShowToast("スクリーンネームの取得に失敗しました", MainActivity.this);
-			}
-		};
-		task.execute();
+		});
+		builder.create().show();
+	}
+	public void restart(){
+		resetFlag = true;
+		finish();
 	}
 	
 	public void onDestroy(){
@@ -243,22 +334,10 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 		task.execute();
-	}
-	
-	public CustomAdapter getHomeAdapter(){
-		return HomeAdapter;
-	}
-	public CustomAdapter getMentionAdapter(){
-		return MentionAdapter;
-	}
-	public Twitter getTwitter(){
-		return twitter;
-	}
-	public String getMyScreenName(){
-		return MyScreenName;
-	}
-	public Pattern getMentionPattern(){
-		return mentionPattern;
+		if(resetFlag){
+			resetFlag = false;
+			startActivity(new Intent(this, MainActivity.class));
+		}
 	}
 	
 	@Override

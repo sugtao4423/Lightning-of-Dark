@@ -16,12 +16,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.MainActivity;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
-import com.tao.lightning_of_dark.UserPage;
 
 public class _1_Tweet extends Fragment {
 	
@@ -31,10 +30,12 @@ public class _1_Tweet extends Fragment {
 	private ResponseList<twitter4j.Status> timeline;
 	private boolean AlreadyLoad;
 	private long tweetId;
+	private ApplicationClass appClass;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.user_1, null);
+		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		AlreadyLoad = false;
 		//通常のListViewSet
 		userTweet = (ListView)v.findViewById(R.id.UserTweet);
@@ -88,9 +89,9 @@ public class _1_Tweet extends Fragment {
 			protected Boolean doInBackground(Void... params) {
 				try{
 					if(AlreadyLoad)
-						timeline = MainActivity.twitter.getUserTimeline(UserPage.target.getId(), new Paging(1, 50).maxId(tweetId - 1));
+						timeline = appClass.getTwitter().getUserTimeline(appClass.getTarget().getId(), new Paging(1, 50).maxId(tweetId - 1));
 					else
-						timeline = MainActivity.twitter.getUserTimeline(UserPage.target.getId(), new Paging(1, 50));
+						timeline = appClass.getTwitter().getUserTimeline(appClass.getTarget().getId(), new Paging(1, 50));
 					return true;
 				}catch(Exception e){
 					return false;
@@ -102,10 +103,10 @@ public class _1_Tweet extends Fragment {
 						adapter.add(status);
 					if(!AlreadyLoad)
 						AlreadyLoad = true;
-					PulltoRefresh.setRefreshing(false);
-					PulltoRefresh.setEnabled(true);
 				}else
 					new ShowToast("タイムラインを取得できませんでした", getActivity());
+				PulltoRefresh.setRefreshing(false);
+				PulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);
 			}
 		};

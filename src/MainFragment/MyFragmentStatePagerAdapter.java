@@ -52,7 +52,7 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 			return "Home";
 			
 		case 2:
-			if(pref.getString("SelectListName", null) != null)
+			if(!pref.getString("SelectListName", "").equals(""))
 				return pref.getString("SelectListName", null);
 			else
 				return "List";

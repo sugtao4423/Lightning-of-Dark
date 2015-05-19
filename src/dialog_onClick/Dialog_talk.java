@@ -3,9 +3,9 @@ package dialog_onClick;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.MainActivity;
 import com.tao.lightning_of_dark.ShowToast;
 
 import twitter4j.Status;
@@ -19,9 +19,9 @@ import android.widget.ListView;
 
 public class Dialog_talk implements OnClickListener {
 	
-	Status status;
-	Context context;
-	twitter4j.Status reply;
+	private Status status;
+	private Context context;
+	private twitter4j.Status reply;
 
 	public Dialog_talk(Status status, Context context) {
 		this.status = status;
@@ -30,7 +30,7 @@ public class Dialog_talk implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		ListViewListener.dialog.dismiss();
+		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		ListView result = new ListView(context);
 		result.setOnItemClickListener(new ListViewListener());
@@ -51,7 +51,7 @@ public class Dialog_talk implements OnClickListener {
 			protected Boolean doInBackground(Void... params) {
 				try {
 					for(; reply.getInReplyToStatusId() > 0;){
-						reply = MainActivity.twitter.showStatus(reply.getInReplyToStatusId());
+						reply = ((ApplicationClass)context.getApplicationContext()).getTwitter().showStatus(reply.getInReplyToStatusId());
 						StatusList.add(reply);
 					}
 					return true;
