@@ -172,8 +172,7 @@ public class MainActivity extends FragmentActivity {
 	public void getList(){
 		AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
-			protected ResponseList<twitter4j.Status> doInBackground(
-					Void... params) {
+			protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 				try {
 					return twitter.getUserListStatuses(pref.getLong("SelectListId", -1), new Paging(1, 50));
 				} catch (TwitterException e) {
@@ -203,7 +202,7 @@ public class MainActivity extends FragmentActivity {
 				public void onStatus(final Status status){
 					AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 						@Override
-						protected Boolean doInBackground(Void... params) {
+						protected Boolean doInBackground(Void... params){
 							return true;
 						}
 						@Override

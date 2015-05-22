@@ -2,14 +2,11 @@ package com.tao.lightning_of_dark;
 
 import java.util.regex.Pattern;
 
-import com.loopj.android.image.SmartImageView;
-
 import twitter4j.Twitter;
 import twitter4j.User;
 import android.app.AlertDialog;
 import android.app.Application;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.View;
 
 public class ApplicationClass extends Application {
 	//MainActivity
@@ -21,11 +18,10 @@ public class ApplicationClass extends Application {
 	
 	//UserPage
 	private User target;
+	private String targetScreenName;
 	
 	//_0_detail
-	private TextView UserBio, location, Link, User_tweet_c, User_favorite_c, User_follow_c, User_follower_c;
-	private SmartImageView sourceIcon, targetIcon;
-	private ImageView isFollowIcon;
+	private View _0_detail_v;
 	
 	//ListViewListener
 	private AlertDialog dialog;
@@ -115,70 +111,22 @@ public class ApplicationClass extends Application {
 	public User getTarget(){
 		return target;
 	}
+	public void setTargetScreenName(String targetScreenName){
+		this.targetScreenName = targetScreenName;
+	}
+	public String getTargetScreenName(){
+		return targetScreenName;
+	}
 	
 /*	+-+-+-+-+-+-+-+-+-+
 	|_|0|_|d|e|t|a|i|l|
 	+-+-+-+-+-+-+-+-+-+
 */
-	public void setUserBio(TextView UserBio){
-		this.UserBio = UserBio;
+	public void set_0_detail_v(View v){
+		this._0_detail_v = v;
 	}
-	public TextView getUserBio(){
-		return UserBio;
-	}
-	public void setLocation(TextView location){
-		this.location = location;
-	}
-	public TextView getLocation(){
-		return location;
-	}
-	public void setLink(TextView Link){
-		this.Link = Link;
-	}
-	public TextView getLink(){
-		return Link;
-	}
-	public void setUser_tweet_c(TextView User_tweet_c){
-		this.User_tweet_c = User_tweet_c;
-	}
-	public TextView getUser_tweet_c(){
-		return User_tweet_c;
-	}
-	public void setUser_favorite_c(TextView User_favorite_c){
-		this.User_favorite_c = User_favorite_c;
-	}
-	public TextView getUser_favorite_c(){
-		return User_favorite_c;
-	}
-	public void setUser_follow_c(TextView User_follow_c){
-		this.User_follow_c = User_follow_c;
-	}
-	public TextView getUser_follow_c(){
-		return User_follow_c;
-	}
-	public void setUser_follower_c(TextView User_follower_c){
-		this.User_follower_c = User_follower_c;
-	}
-	public TextView getUser_follower_c(){
-		return User_follower_c;
-	}
-	public void setSourceIcon(SmartImageView sourceIcon){
-		this.sourceIcon = sourceIcon;
-	}
-	public SmartImageView getSourceIcon(){
-		return sourceIcon;
-	}
-	public void setTargetIcon(SmartImageView targetIcon){
-		this.targetIcon = targetIcon;
-	}
-	public SmartImageView getTargetIcon(){
-		return targetIcon;
-	}
-	public void setIsFollowIcon(ImageView isFollowIcon){
-		this.isFollowIcon = isFollowIcon;
-	}
-	public ImageView getIsFollowIcon(){
-		return isFollowIcon;
+	public View get_0_detail_v(){
+		return _0_detail_v;
 	}
 	
 /*	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

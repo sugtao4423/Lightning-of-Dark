@@ -1,8 +1,5 @@
 package dialog_onClick;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
@@ -22,6 +19,8 @@ public class Dialog_talk implements OnClickListener {
 	private Status status;
 	private Context context;
 	private twitter4j.Status reply;
+	
+	private CustomAdapter resultAdapter;
 
 	public Dialog_talk(Status status, Context context) {
 		this.status = status;
@@ -35,7 +34,7 @@ public class Dialog_talk implements OnClickListener {
 		ListView result = new ListView(context);
 		result.setOnItemClickListener(new ListViewListener());
 		result.setOnItemLongClickListener(new ListViewListener());
-		final CustomAdapter resultAdapter = new CustomAdapter(context);
+		resultAdapter = new CustomAdapter(context);
 		result.setAdapter(resultAdapter);
 		builder.setView(result);
 		builder.create().show();
@@ -44,33 +43,30 @@ public class Dialog_talk implements OnClickListener {
 			reply = status.getRetweetedStatus();
 		else
 			reply = status;
-		final List<twitter4j.Status> StatusList = new ArrayList<twitter4j.Status>();
+		resultAdapter.add(reply);
 		
-		AsyncTask<Void, Void, Boolean> getReply = new AsyncTask<Void, Void, Boolean>(){
-			@Override
-			protected Boolean doInBackground(Void... params) {
-				try {
-					for(; reply.getInReplyToStatusId() > 0;){
-						reply = ((ApplicationClass)context.getApplicationContext()).getTwitter().showStatus(reply.getInReplyToStatusId());
-						StatusList.add(reply);
-					}
-					return true;
-				} catch (TwitterException e) {
-					return false;
-				}
+		new LoadConversation().execute();
+	}
+	private class LoadConversation extends AsyncTask<Void, Void, Status> {
+		@Override
+		protected twitter4j.Status doInBackground(Void... params) {
+			try {
+				reply = ((ApplicationClass)context.getApplicationContext()).getTwitter().showStatus(reply.getInReplyToStatusId());
+				return reply;
+			} catch (TwitterException e) {
+				return null;
 			}
-			protected void onPostExecute(Boolean result) {
-				if(result){
-					if(status.isRetweet())
-						resultAdapter.add(status.getRetweetedStatus());
-					else
-						resultAdapter.add(status);
-					for(twitter4j.Status status : StatusList)
-						resultAdapter.add(status);
-				}else
-					new ShowToast("会話取得エラー", context);
-			}
-		};
-		getReply.execute();
+		}
+		@Override
+		public void onPostExecute(twitter4j.Status result){
+			if(result != null){
+				resultAdapter.add(result);
+				if(result.getInReplyToStatusId() > 0)
+					new LoadConversation().execute();
+				else
+					new ShowToast("会話取得完了", context);
+			}else
+				new ShowToast("会話取得エラー", context);
+		}
 	}
 }

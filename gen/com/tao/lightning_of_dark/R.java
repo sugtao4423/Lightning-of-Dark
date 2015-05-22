@@ -75,14 +75,18 @@ public final class R {
         public static final int RetweetedUserScreenName=0x7f0b0014;
         public static final int UserBio=0x7f0b0018;
         public static final int UserFavPull=0x7f0b0032;
-        public static final int UserIcon=0x7f0b0035;
-        public static final int UserName=0x7f0b0037;
+        public static final int UserFollow=0x7f0b0035;
+        public static final int UserFollowPull=0x7f0b0034;
+        public static final int UserFollower=0x7f0b0037;
+        public static final int UserFollowerPull=0x7f0b0036;
+        public static final int UserIcon=0x7f0b0039;
+        public static final int UserName=0x7f0b003b;
         public static final int UserPage_isFollow=0x7f0b002e;
-        public static final int UserPage_protected=0x7f0b003a;
+        public static final int UserPage_protected=0x7f0b003e;
         public static final int UserPage_sourceIcon=0x7f0b002d;
         public static final int UserPage_targetIcon=0x7f0b002f;
         public static final int UserProtected=0x7f0b0015;
-        public static final int UserScreenName=0x7f0b0036;
+        public static final int UserScreenName=0x7f0b003a;
         public static final int UserTweet=0x7f0b0031;
         public static final int UserTweetPull=0x7f0b0030;
         public static final int User_favorite_count=0x7f0b0028;
@@ -90,8 +94,8 @@ public final class R {
         public static final int User_follower_count=0x7f0b002c;
         public static final int User_tweet_count=0x7f0b0026;
         public static final int Userfav=0x7f0b0033;
-        public static final int Userpager=0x7f0b0038;
-        public static final int banner=0x7f0b0034;
+        public static final int Userpager=0x7f0b003c;
+        public static final int banner=0x7f0b0038;
         public static final int button1=0x7f0b0016;
         public static final int cursor_end=0x7f0b0020;
         public static final int cursor_start=0x7f0b001f;
@@ -108,6 +112,7 @@ public final class R {
         public static final int imageButton1=0x7f0b0002;
         public static final int imageButton2=0x7f0b0003;
         public static final int imageButton3=0x7f0b001e;
+        public static final int imageView1=0x7f0b0025;
         public static final int imageView2=0x7f0b0027;
         public static final int imageView3=0x7f0b0029;
         public static final int imageView4=0x7f0b002b;
@@ -121,10 +126,9 @@ public final class R {
         public static final int textView2=0x7f0b0022;
         public static final int textView3=0x7f0b001a;
         public static final int tweetAccount=0x7f0b0021;
-        public static final int tweetState=0x7f0b0025;
         public static final int tweetText=0x7f0b0011;
         public static final int tweet_date=0x7f0b0012;
-        public static final int userPagerTabStrip=0x7f0b0039;
+        public static final int userPagerTabStrip=0x7f0b003d;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;

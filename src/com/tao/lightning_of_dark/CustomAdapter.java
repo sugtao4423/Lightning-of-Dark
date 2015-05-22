@@ -27,10 +27,10 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 	class ViewHolder{
 		TextView name, text, tweet_date, RetweetedUserScreenName;
 		SmartImageView icon, RetweetedUserIcon;
-		ImageView protect, state;
+		ImageView protect;
 		ApplicationClass appClass;
 	}
-	
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
 		final ViewHolder holder;
 		final Status item = getItem(position);
@@ -44,7 +44,6 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			SmartImageView RetweetedUserIcon = (SmartImageView)convertView.findViewById(R.id.RetweetedUserIcon);
 			TextView RetweetedUserScreenName = (TextView)convertView.findViewById(R.id.RetweetedUserScreenName);
 			ImageView protect = (ImageView)convertView.findViewById(R.id.UserProtected);
-			ImageView state = (ImageView)convertView.findViewById(R.id.tweetState);
 			ApplicationClass appClass = (ApplicationClass)parent.getContext().getApplicationContext();
 			
 			holder = new ViewHolder();
@@ -55,7 +54,6 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			holder.RetweetedUserIcon = RetweetedUserIcon;
 			holder.RetweetedUserScreenName = RetweetedUserScreenName;
 			holder.protect = protect;
-			holder.state = state;
 			holder.appClass = appClass;
 			
 			convertView.setTag(holder);

@@ -50,6 +50,7 @@ public class UserPage extends FragmentActivity {
 		protect.setVisibility(View.GONE);
 		
 		final String u = getIntent().getStringExtra("userScreenName");
+		((ApplicationClass)UserPage.this.getApplicationContext()).setTargetScreenName(u);
 		
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
@@ -117,5 +118,9 @@ public class UserPage extends FragmentActivity {
 		ScreenName.setText("@" + target.getScreenName());
 		
 		new _0_detail().setText(UserPage.this);
+	}
+	
+	public void resetUser(){
+		((ApplicationClass)UserPage.this.getApplicationContext()).setTargetScreenName(ScreenName.getText().toString().substring(1));
 	}
 }

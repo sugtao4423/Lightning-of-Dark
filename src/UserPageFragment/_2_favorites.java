@@ -9,6 +9,8 @@ import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.UserPage;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,7 +29,6 @@ public class _2_favorites extends Fragment {
 	private ListView UserFav, foot;
 	private SwipeRefreshLayout PulltoRefresh;
 	private CustomAdapter adapter;
-	private ResponseList<twitter4j.Status> FavLine;
 	private boolean AlreadyLoad;
 	private long tweetId;
 	private ApplicationClass appClass;
@@ -60,7 +61,6 @@ public class _2_favorites extends Fragment {
 				MentionLine();
 			}
 		});
-		
 		return v;
 	}
 	
@@ -70,8 +70,7 @@ public class _2_favorites extends Fragment {
 		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
 		foot.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				foot.setEnabled(false);
 				MentionLine();
 			}
@@ -80,26 +79,23 @@ public class _2_favorites extends Fragment {
 	}
 	
 	public void MentionLine(){
-		if(AlreadyLoad){
-			Status s = (Status)UserFav.getItemAtPosition(UserFav.getAdapter().getCount() - 2);
-			tweetId = s.getId();
-		}
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+		if(AlreadyLoad)
+			tweetId = ((Status)UserFav.getItemAtPosition(UserFav.getAdapter().getCount() - 2)).getId();
+		AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
-			protected Boolean doInBackground(Void... params) {
+			protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 				try{
 					if(AlreadyLoad)
-						FavLine = appClass.getTwitter().getFavorites(appClass.getTarget().getId(), new Paging(1, 50).maxId(tweetId - 1));
+						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(), new Paging(1, 50).maxId(tweetId - 1));
 					else
-						FavLine = appClass.getTwitter().getFavorites(appClass.getTarget().getId(), new Paging(1, 50));
-					return true;
+						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(), new Paging(1, 50));
 				}catch(Exception e){
-					return false;
+					return null;
 				}
 			}
-			protected void onPostExecute(Boolean result){
-				if(result){
-					for(twitter4j.Status status : FavLine)
+			protected void onPostExecute(ResponseList<twitter4j.Status> result){
+				if(result != null){
+					for(twitter4j.Status status : result)
 						adapter.add(status);
 					if(!AlreadyLoad)
 						AlreadyLoad = true;
@@ -110,6 +106,7 @@ public class _2_favorites extends Fragment {
 				foot.setEnabled(true);
 			}
 		};
+		((UserPage)_2_favorites.this.getActivity()).resetUser();
 		task.execute();
 	}
 }

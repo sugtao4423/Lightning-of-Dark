@@ -37,32 +37,25 @@ public class _0_detail extends Fragment {
 	  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.user_0, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
-		appClass.setUserBio((TextView)v.findViewById(R.id.UserBio));
-		appClass.setLocation((TextView)v.findViewById(R.id.location));
-		appClass.setLink((TextView)v.findViewById(R.id.link));
-		appClass.setUser_tweet_c((TextView)v.findViewById(R.id.User_tweet_count));
-		appClass.setUser_favorite_c((TextView)v.findViewById(R.id.User_favorite_count));
-		appClass.setUser_follow_c((TextView)v.findViewById(R.id.User_follow_count));
-		appClass.setUser_follower_c((TextView)v.findViewById(R.id.User_follower_count));
-		
-		appClass.setSourceIcon((SmartImageView)v.findViewById(R.id.UserPage_sourceIcon));
-		appClass.setTargetIcon((SmartImageView)v.findViewById(R.id.UserPage_targetIcon));
-		appClass.setIsFollowIcon((ImageView)v.findViewById(R.id.UserPage_isFollow));
+		appClass.set_0_detail_v(v);
 
 		return v;
 	}
 	public void setText(Context context){
 		appClass = (ApplicationClass)context.getApplicationContext();
-		UserBio = appClass.getUserBio();
-		location = appClass.getLocation();
-		Link = appClass.getLink();
-		User_tweet_c = appClass.getUser_tweet_c();
-		User_favorite_c = appClass.getUser_favorite_c();
-		User_follow_c = appClass.getUser_follow_c();
-		User_follower_c = appClass.getUser_follower_c();
-		sourceIcon = appClass.getSourceIcon();
-		targetIcon = appClass.getTargetIcon();
-		isFollowIcon = appClass.getIsFollowIcon();
+		View v = appClass.get_0_detail_v();
+		
+		UserBio = (TextView)v.findViewById(R.id.UserBio);
+		location = (TextView)v.findViewById(R.id.location);
+		Link = (TextView)v.findViewById(R.id.link);
+		User_tweet_c = (TextView)v.findViewById(R.id.User_tweet_count);
+		User_favorite_c = (TextView)v.findViewById(R.id.User_favorite_count);
+		User_follow_c = (TextView)v.findViewById(R.id.User_follow_count);
+		User_follower_c = (TextView)v.findViewById(R.id.User_follower_count);
+		sourceIcon = (SmartImageView)v.findViewById(R.id.UserPage_sourceIcon);
+		targetIcon = (SmartImageView)v.findViewById(R.id.UserPage_targetIcon);
+		isFollowIcon = (ImageView)v.findViewById(R.id.UserPage_isFollow);
+		
 		target = appClass.getTarget();
 		
 		if(appClass.getMyScreenName().equals(target.getScreenName())){

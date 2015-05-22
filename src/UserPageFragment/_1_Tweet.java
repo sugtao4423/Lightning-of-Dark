@@ -21,13 +21,13 @@ import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.UserPage;
 
 public class _1_Tweet extends Fragment {
 	
 	private ListView userTweet, foot;
 	private SwipeRefreshLayout PulltoRefresh;
 	private CustomAdapter adapter;
-	private ResponseList<twitter4j.Status> timeline;
 	private boolean AlreadyLoad;
 	private long tweetId;
 	private ApplicationClass appClass;
@@ -70,8 +70,7 @@ public class _1_Tweet extends Fragment {
 		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
 		foot.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				foot.setEnabled(false);
 				TimeLine();
 			}
@@ -80,26 +79,23 @@ public class _1_Tweet extends Fragment {
 	}
 	//なんか色々取得 //自分でもよくわからず組んだ is 屑
 	public void TimeLine(){
-		if(AlreadyLoad){
-			Status s = (Status)userTweet.getItemAtPosition(userTweet.getAdapter().getCount() - 2);
-			tweetId = s.getId();
-		}
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+		if(AlreadyLoad)
+			tweetId = ((Status)userTweet.getItemAtPosition(userTweet.getAdapter().getCount() - 2)).getId();
+		AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
-			protected Boolean doInBackground(Void... params) {
+			protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 				try{
 					if(AlreadyLoad)
-						timeline = appClass.getTwitter().getUserTimeline(appClass.getTarget().getId(), new Paging(1, 50).maxId(tweetId - 1));
+						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(), new Paging(1, 50).maxId(tweetId - 1));
 					else
-						timeline = appClass.getTwitter().getUserTimeline(appClass.getTarget().getId(), new Paging(1, 50));
-					return true;
+						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(), new Paging(1, 50));
 				}catch(Exception e){
-					return false;
+					return null;
 				}
 			}
-			protected void onPostExecute(Boolean result){
-				if(result){
-					for(twitter4j.Status status : timeline)
+			protected void onPostExecute(ResponseList<twitter4j.Status> result){
+				if(result != null){
+					for(twitter4j.Status status : result)
 						adapter.add(status);
 					if(!AlreadyLoad)
 						AlreadyLoad = true;
@@ -110,6 +106,7 @@ public class _1_Tweet extends Fragment {
 				foot.setEnabled(true);
 			}
 		};
+		((UserPage)_1_Tweet.this.getActivity()).resetUser();
 		task.execute();
 	}
 }

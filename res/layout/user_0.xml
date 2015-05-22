@@ -52,7 +52,7 @@
     android:text="Loading..." />
 
 	<ImageView
-	    android:id="@+id/tweetState"
+	    android:id="@+id/imageView1"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignLeft="@+id/link"
@@ -64,16 +64,16 @@
 	    android:id="@+id/User_tweet_count"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignBottom="@+id/tweetState"
-	    android:layout_toRightOf="@+id/tweetState"
+	    android:layout_alignBottom="@+id/imageView1"
+	    android:layout_toRightOf="@+id/imageView1"
 	    android:text="null" />
 
 	<ImageView
 	    android:id="@+id/imageView2"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/tweetState"
-	    android:layout_below="@+id/tweetState"
+	    android:layout_alignLeft="@+id/imageView1"
+	    android:layout_below="@+id/imageView1"
 	    android:layout_marginTop="15dp"
 	    android:src="@drawable/user_favorite_count" />
 
