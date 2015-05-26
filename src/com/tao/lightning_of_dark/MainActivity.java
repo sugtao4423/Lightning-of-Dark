@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
@@ -36,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -44,7 +46,7 @@ public class MainActivity extends FragmentActivity {
 	private Twitter twitter;
 	private Pattern mentionPattern;
 	
-	private ApplicationClass applicationClass;
+	private ApplicationClass appClass;
 	
 	private SharedPreferences pref;
 	private boolean resetFlag;
@@ -101,12 +103,13 @@ public class MainActivity extends FragmentActivity {
 				}
 				return true;
 			}
+			@Override
 			protected void onPostExecute(Boolean result) {
 				if(result){
-					applicationClass.setMyScreenName(MyScreenName);
-					applicationClass.setTwitter(twitter);
+					appClass.setMyScreenName(MyScreenName);
+					appClass.setTwitter(twitter);
 					mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
-					applicationClass.setMentionPattern(mentionPattern);
+					appClass.setMentionPattern(mentionPattern);
 					if(!onlyLogin){
 						getTimeLine();
 						connectStreaming();
@@ -117,15 +120,15 @@ public class MainActivity extends FragmentActivity {
 		};
 		
 		pref = PreferenceManager.getDefaultSharedPreferences(context);
-		applicationClass = (ApplicationClass)context.getApplicationContext();
-		applicationClass.setHomeAdapter(HomeAdapter);
-		applicationClass.setMentionAdapter(MentionAdapter);
-		applicationClass.setListAdapter(ListAdapter);
-		applicationClass.setList_AlreadyLoad(false);
+		appClass = (ApplicationClass)context.getApplicationContext();
+		appClass.setHomeAdapter(HomeAdapter);
+		appClass.setMentionAdapter(MentionAdapter);
+		appClass.setListAdapter(ListAdapter);
+		appClass.setList_AlreadyLoad(false);
 		
-		applicationClass.setOption_regex(pref.getBoolean("menu_regex", false));
-		applicationClass.setOption_openBrowser(pref.getBoolean("menu_openBrowser", false));
-		applicationClass.setGetBigIcon(pref.getBoolean("getBigIcon", false));
+		appClass.setOption_regex(pref.getBoolean("menu_regex", false));
+		appClass.setOption_openBrowser(pref.getBoolean("menu_openBrowser", false));
+		appClass.setGetBigIcon(pref.getBoolean("getBigIcon", false));
 		
 		if(pref.getString("AccessToken", "").equals("")){
 			startActivity(new Intent(context, startOAuth.class));
@@ -155,6 +158,7 @@ public class MainActivity extends FragmentActivity {
 					return false;
 				}
 			}
+			@Override
 			protected void onPostExecute(Boolean result){
 				if(result){
 					for(twitter4j.Status status : home)
@@ -184,7 +188,7 @@ public class MainActivity extends FragmentActivity {
 				if(result != null){
 					for(twitter4j.Status status : result)
 						ListAdapter.add(status);
-					applicationClass.setList_AlreadyLoad(true);
+					appClass.setList_AlreadyLoad(true);
 				}
 			}
 		};
@@ -207,7 +211,14 @@ public class MainActivity extends FragmentActivity {
 						}
 						@Override
 						protected void onPostExecute(Boolean result){
+							int pos = appClass.getHomeList().getFirstVisiblePosition();
+							int top = appClass.getHomeList().getChildAt(0).getTop();
 							HomeAdapter.insert(status, 0);
+							if(pos == 0 && top == 0)
+								appClass.getHomeList().setSelectionFromTop(pos, 0);
+							else
+								appClass.getHomeList().setSelectionFromTop(pos + 1, top);
+							
 							if(mentionPattern.matcher(status.getText()).find() && !status.isRetweet())
 								MentionAdapter.insert(status, 0);
 						}
@@ -215,10 +226,31 @@ public class MainActivity extends FragmentActivity {
 					task.execute();
 				}
 			};
-			//ここまで
+			//ConnectionLifeCycleListener
+			ConnectionLifeCycleListener clcl = new ConnectionLifeCycleListener() {
+				@Override
+				public void onDisconnect(){
+					toast("接続が切れました");
+				}
+				@Override
+				public void onConnect(){
+					toast("接続しました");
+				}
+				@Override
+				public void onCleanUp(){
+				}
+				public void toast(final String text){
+					MainActivity.this.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(MainActivity.this, text,Toast.LENGTH_SHORT).show();
+						}
+					});
+				}
+			};
 			twitterStream.addListener(streamAdapter);
+			twitterStream.addConnectionLifeCycleListener(clcl);
 			twitterStream.user();
-			
 		}catch(Exception e){
 			new ShowToast("ストリーミング系のエラー\n" + e.toString(), MainActivity.this);
 		}

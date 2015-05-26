@@ -35,6 +35,7 @@ public class Fragment_home extends Fragment {
 		home.setOnItemClickListener(new ListViewListener());
 		home.setOnItemLongClickListener(new ListViewListener());
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		appClass.setHomeList(home);
 		adapter = appClass.getHomeAdapter();
 		adapter.registerDataSetObserver(new DataSetObserver() {
 			@Override

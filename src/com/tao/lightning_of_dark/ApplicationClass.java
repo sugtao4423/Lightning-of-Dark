@@ -7,6 +7,7 @@ import twitter4j.User;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.view.View;
+import android.widget.ListView;
 
 public class ApplicationClass extends Application {
 	//MainActivity
@@ -15,6 +16,9 @@ public class ApplicationClass extends Application {
 	private Pattern mentionPattern;
 	private CustomAdapter homeAdapter, mentionAdapter, listAdapter;
 	private boolean option_regex, option_openBrowser, getBigIcon, list_AlreadyLoad;
+	
+	//Fragment_home
+	private ListView homeList;
 	
 	//UserPage
 	private User target;
@@ -99,6 +103,17 @@ public class ApplicationClass extends Application {
 	}
 	public boolean getList_AlreadyLoad(){
 		return list_AlreadyLoad;
+	}
+	
+/*	+-+-+-+-+-+-+-+-+-+-+-+-+-+
+	|F|r|a|g|m|e|n|t|_|h|o|m|e|
+	+-+-+-+-+-+-+-+-+-+-+-+-+-+
+*/
+	public void setHomeList(ListView homeList){
+		this.homeList = homeList;
+	}
+	public ListView getHomeList(){
+		return homeList;
 	}
 	
 /*	+-+-+-+-+-+-+-+-+
