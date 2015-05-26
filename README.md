@@ -27,5 +27,3 @@ SQLiteで管理しています。
 
     <string name="CK">ConsumerKey</string>
     <string name="CS">ConsumerSecret</string>
-
-使ってみると動作がカクカクしてるのがすごいわかるゾ
