@@ -67,10 +67,9 @@ public class startOAuth extends Activity {
 			pref.edit().putString("CustomCK", CK).putString("CustomCS", CS).commit();
 		}
 		
-		AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
-
+		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
-			protected Void doInBackground(Void... params) {
+			protected Boolean doInBackground(Void... params) {
 				ConfigurationBuilder builder = new ConfigurationBuilder();
 				builder.setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS);
 				Configuration jconf = builder.build();
@@ -79,11 +78,17 @@ public class startOAuth extends Activity {
 				twitter = twitterFactory.getInstance();
 				try{
 					rt = twitter.getOAuthRequestToken("lightning-of-dark://twitter");
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rt.getAuthenticationURL())));
+					return true;
 				}catch(Exception e){
-					new ShowToast("RequestTokenの取得に失敗しました", startOAuth.this);
+					return false;
 				}
-				return null;
+			}
+			@Override
+			public void onPostExecute(Boolean result){
+				if(result)
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rt.getAuthenticationURL())));
+				else
+					new ShowToast("RequestTokenの取得に失敗しました", startOAuth.this);
 			}
 		};
 		task.execute();
@@ -100,17 +105,15 @@ public class startOAuth extends Activity {
 		final String verifier = intent.getData().getQueryParameter("oauth_verifier");
 		
 		AsyncTask<Void, Void, AccessToken> task = new AsyncTask<Void, Void, AccessToken>(){
-
 			@Override
 			protected AccessToken doInBackground(Void... params) {
 				try{
-					AccessToken accessToken = twitter.getOAuthAccessToken(rt, verifier);
-					return accessToken;
+					return twitter.getOAuthAccessToken(rt, verifier);
 				}catch(Exception e){
-					//失敗
+					return null;
 				}
-				return null;
 			}
+			@Override
 			protected void onPostExecute(AccessToken accessToken) {
 				if(accessToken != null){
 					pref.edit().putString("AccessToken", accessToken.getToken())
@@ -126,9 +129,8 @@ public class startOAuth extends Activity {
 									+ accessToken.getTokenSecret() + "', 'false', '-1', '', 'false')");
 					new ShowToast("アカウントを追加しました", startOAuth.this);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
-				}else{
+				}else
 					new ShowToast("失敗...", startOAuth.this);
-				}
 				finish();
 			}
 		};

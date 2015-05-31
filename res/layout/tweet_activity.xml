@@ -97,4 +97,17 @@
         android:layout_marginLeft="5dp"
         android:text="TweetAccount" />
 
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/tweetAccount"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/cursor_end"
+        android:background="#00000000"
+        android:onClick="mic"
+        android:src="@drawable/mic" />
+
 </RelativeLayout>
