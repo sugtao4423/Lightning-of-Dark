@@ -20,11 +20,14 @@ public class Dialog_talk implements OnClickListener {
 	private Context context;
 	private twitter4j.Status reply;
 	
+	private boolean tweet_do_back;
+	
 	private CustomAdapter resultAdapter;
 
-	public Dialog_talk(Status status, Context context) {
+	public Dialog_talk(Status status, Context context, boolean tweet_do_back){
 		this.status = status;
 		this.context = context;
+		this.tweet_do_back = tweet_do_back;
 	}
 
 	@Override
@@ -32,8 +35,8 @@ public class Dialog_talk implements OnClickListener {
 		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		ListView result = new ListView(context);
-		result.setOnItemClickListener(new ListViewListener());
-		result.setOnItemLongClickListener(new ListViewListener());
+		result.setOnItemClickListener(new ListViewListener(tweet_do_back));
+		result.setOnItemLongClickListener(new ListViewListener(tweet_do_back));
 		resultAdapter = new CustomAdapter(context);
 		result.setAdapter(resultAdapter);
 		builder.setView(result);

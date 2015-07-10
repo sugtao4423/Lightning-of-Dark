@@ -30,7 +30,7 @@ public class TweetActivity extends Activity {
 	private boolean do_back, do_setSelection;
 	private ApplicationClass appClass;
 	
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tweet_activity);
 		

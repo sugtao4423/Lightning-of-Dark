@@ -39,8 +39,8 @@ public class _1_Tweet extends Fragment {
 		AlreadyLoad = false;
 		//通常のListViewSet
 		userTweet = (ListView)v.findViewById(R.id.UserTweet);
-		userTweet.setOnItemClickListener(new ListViewListener());
-		userTweet.setOnItemLongClickListener(new ListViewListener());
+		userTweet.setOnItemClickListener(new ListViewListener(false));
+		userTweet.setOnItemLongClickListener(new ListViewListener(false));
 		//ここまで
 		adapter = new CustomAdapter(getActivity());
 		//フッター生成
@@ -93,6 +93,7 @@ public class _1_Tweet extends Fragment {
 					return null;
 				}
 			}
+			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null){
 					for(twitter4j.Status status : result)

@@ -40,8 +40,8 @@ public class _2_favorites extends Fragment {
 		AlreadyLoad = false;
 		
 		UserFav = (ListView)v.findViewById(R.id.Userfav);
-		UserFav.setOnItemClickListener(new ListViewListener());
-		UserFav.setOnItemLongClickListener(new ListViewListener());
+		UserFav.setOnItemClickListener(new ListViewListener(false));
+		UserFav.setOnItemLongClickListener(new ListViewListener(false));
 		
 		adapter = new CustomAdapter(getActivity());
 		//フッター生成

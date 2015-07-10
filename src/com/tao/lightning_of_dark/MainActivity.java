@@ -211,13 +211,16 @@ public class MainActivity extends FragmentActivity {
 						}
 						@Override
 						protected void onPostExecute(Boolean result){
-							int pos = appClass.getHomeList().getFirstVisiblePosition();
-							int top = appClass.getHomeList().getChildAt(0).getTop();
-							HomeAdapter.insert(status, 0);
-							if(pos == 0 && top == 0)
-								appClass.getHomeList().setSelectionFromTop(pos, 0);
-							else
-								appClass.getHomeList().setSelectionFromTop(pos + 1, top);
+							android.widget.ListView l = appClass.getHomeList();
+							if(l.getChildCount() != 0){
+								int pos = l.getFirstVisiblePosition();
+								int top = l.getChildAt(0).getTop();
+								HomeAdapter.insert(status, 0);
+								if(pos == 0 && top == 0)
+									l.setSelectionFromTop(pos, 0);
+								else
+									l.setSelectionFromTop(pos + 1, top);
+							}
 							
 							if(mentionPattern.matcher(status.getText()).find() && !status.isRetweet())
 								MentionAdapter.insert(status, 0);
@@ -263,13 +266,10 @@ public class MainActivity extends FragmentActivity {
 	
 	public void option(View v){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setItems(new String[]{"設定", "ユーザー検索", "アカウント"}, new OnClickListener() {
+		builder.setItems(new String[]{"ユーザー検索", "アカウント", "設定"}, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				if(which == 0){
-					startActivity(new Intent(MainActivity.this, Preference.class));
-				}
-				if(which == 1){
 					AlertDialog.Builder userSearch = new AlertDialog.Builder(MainActivity.this);
 					final EditText userEdit = new EditText(MainActivity.this);
 					userSearch.setMessage("ユーザーのスクリーンネームを入力してください")
@@ -282,16 +282,14 @@ public class MainActivity extends FragmentActivity {
 							if(user_screen.isEmpty())
 								new ShowToast("なにも入力されていません", MainActivity.this);
 							else{
-								if(user_screen.startsWith("@"))
-									user_screen = user_screen.substring(1);
-								userPage.putExtra("userScreenName", user_screen);
+								userPage.putExtra("userScreenName", user_screen.replace("@", ""));
 								startActivity(userPage);
 							}
 						}
 					});
 					userSearch.create().show();
 				}
-				if(which == 2){
+				if(which == 1){
 					SQLiteDatabase db = new SQLHelper(MainActivity.this).getWritableDatabase();
 					String[] columns = new String[]{"screen_name", "CK", "CS", "AT", "ATS", "showList", "SelectListId", "SelectListName", "startApp_showList"};
 					Cursor result = db.query("accounts", columns, null, null, null, null, null);
@@ -344,6 +342,9 @@ public class MainActivity extends FragmentActivity {
 						}
 					});
 					screennameDialog.create().show();
+				}
+				if(which == 2){
+					startActivity(new Intent(MainActivity.this, Preference.class));
 				}
 			}
 		});

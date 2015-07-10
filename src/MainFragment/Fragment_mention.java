@@ -31,8 +31,8 @@ public class Fragment_mention extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_mention, null);
 		mention = (ListView)v.findViewById(R.id.MentionLine);
-		mention.setOnItemClickListener(new ListViewListener());
-		mention.setOnItemLongClickListener(new ListViewListener());
+		mention.setOnItemClickListener(new ListViewListener(true));
+		mention.setOnItemLongClickListener(new ListViewListener(true));
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		adapter = appClass.getMentionAdapter();
 		adapter.registerDataSetObserver(new DataSetObserver() {

@@ -12,13 +12,17 @@ import com.loopj.android.image.SmartImageView;
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.UserPage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +38,7 @@ public class _0_detail extends Fragment {
 	private ApplicationClass appClass;
 	
 	@Override
-	  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.user_0, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		appClass.set_0_detail_v(v);
@@ -71,25 +75,27 @@ public class _0_detail extends Fragment {
 		}
 		
 		String bio = target.getDescription();
-		Matcher at_user = Pattern.compile("@\\w*", Pattern.DOTALL).matcher(bio);
-		Matcher url = Pattern.compile("(http://|https://){1}[\\w\\.\\-/:\\#\\?\\=\\&\\;\\%\\~\\+]+", Pattern.DOTALL).matcher(bio);
-		if(at_user.find() || url.find()){
-			at_user.reset();
-			url.reset();
-			if(at_user.find()){
-				at_user.reset();
-				while(at_user.find())
-					bio = bio.replace(at_user.group(), "<a href=\"https://twitter.com/" + at_user.group().substring(1) + "\">" + at_user.group() + "</a>");
-			}
-			if(url.find()){
-				url.reset();
-				while(url.find())
-					bio = bio.replace(url.group(), "<a href=\"" + url.group() + "\">" + url.group() + "</a>");
-			}
-			UserBio.setMovementMethod(LinkMovementMethod.getInstance());
-			UserBio.setText(Html.fromHtml(bio));
-		}else
-			UserBio.setText(bio);
+		SpannableString ss = new SpannableString(bio);
+		final Matcher m = Pattern.compile("@[0-9a-zA-Z_]+|(http://|https://){1}[\\w\\.\\-/:\\#\\?\\=\\&\\;\\%\\~\\+]+", Pattern.DOTALL).matcher(bio);
+		while(m.find()){
+		    String t = m.group();
+		    if(t.startsWith("@")){
+		        ss.setSpan(new URLSpan(t){
+		            @Override
+		            public void onClick(View widget){
+		            	Context cont = widget.getContext();
+		                Intent intent = new Intent(cont, UserPage.class);
+		                intent.putExtra("userScreenName", this.getURL().replace("@", ""));
+		                cont.startActivity(intent);
+		            }
+		        }, m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		    }else{
+		    	ss.setSpan(new URLSpan(t), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		    }
+		}
+		UserBio.setText(ss);
+		UserBio.setMovementMethod(LinkMovementMethod.getInstance());
+		
 		location.setText(target.getLocation());
 		Link.setText(target.getURL());
 		User_tweet_c.setText(numberFormat(target.getStatusesCount()));

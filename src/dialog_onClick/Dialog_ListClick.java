@@ -29,9 +29,12 @@ public class Dialog_ListClick implements OnItemClickListener {
 	private Status status;
 	private AdapterView<?> baseParent;
 	
-	public Dialog_ListClick(Status status, AdapterView<?> baseParent) {
+	private boolean tweet_do_back;
+	
+	public Dialog_ListClick(Status status, AdapterView<?> baseParent, boolean tweet_do_back) {
 		this.status = status;
 		this.baseParent = baseParent;
+		this.tweet_do_back = tweet_do_back;
 	}
 
 	@Override
@@ -65,8 +68,8 @@ public class Dialog_ListClick implements OnItemClickListener {
 						l.setAdapter(new ArrayAdapter<String>(baseParent.getContext(),android.R.layout.simple_list_item_1, new String[]{"なし"}));
 					else{
 						l.setAdapter(content);
-						l.setOnItemClickListener(new ListViewListener());
-						l.setOnItemLongClickListener(new ListViewListener());
+						l.setOnItemClickListener(new ListViewListener(tweet_do_back));
+						l.setOnItemLongClickListener(new ListViewListener(tweet_do_back));
 					}
 					b.setView(l).create().show();
 				}

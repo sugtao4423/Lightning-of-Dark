@@ -62,6 +62,7 @@ public class UserPage extends FragmentActivity {
 					return false;
 				}
 			}
+			@Override
 			protected void onPostExecute(Boolean result) {
 				if(result){
 					((ApplicationClass)UserPage.this.getApplicationContext()).setTarget(target);

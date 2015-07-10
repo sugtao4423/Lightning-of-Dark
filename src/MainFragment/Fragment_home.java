@@ -32,8 +32,8 @@ public class Fragment_home extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_home, null);
 		home = (ListView)v.findViewById(R.id.HomeLine);
-		home.setOnItemClickListener(new ListViewListener());
-		home.setOnItemLongClickListener(new ListViewListener());
+		home.setOnItemClickListener(new ListViewListener(true));
+		home.setOnItemLongClickListener(new ListViewListener(true));
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		appClass.setHomeList(home);
 		adapter = appClass.getHomeAdapter();

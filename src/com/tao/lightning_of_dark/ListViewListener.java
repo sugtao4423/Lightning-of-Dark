@@ -1,6 +1,7 @@
 package com.tao.lightning_of_dark;
 
 import java.text.SimpleDateFormat;
+
 import com.loopj.android.image.SmartImageView;
 
 import dialog_onClick.Dialog_ListClick;
@@ -33,7 +34,12 @@ import android.widget.AdapterView.OnItemLongClickListener;
 public class ListViewListener implements OnItemClickListener, OnItemLongClickListener {
 	
 	private AlertDialog dialog;
-		
+	private boolean tweet_do_back;
+	
+	public ListViewListener(boolean tweet_do_back){
+		this.tweet_do_back = tweet_do_back;
+	}
+	
 	@Override
 	public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id) {
 		final Status item = (Status)parent.getItemAtPosition(position);
@@ -119,11 +125,10 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         
         
 		dialog_list.setAdapter(list);
-		dialog_list.setOnItemClickListener(new Dialog_ListClick(item, parent));
+		dialog_list.setOnItemClickListener(new Dialog_ListClick(item, parent, tweet_do_back));
         dialog_list.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				String clickedText = (String)parent.getItemAtPosition(position);
 				if(clickedText.startsWith("http://pbs.twimg.com/media/") || clickedText.startsWith("https://pbs.twimg.com/media/")){
 					dialog.dismiss();
@@ -133,11 +138,11 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			}
 		});
         
-        dialog_reply.setOnClickListener(new Dialog_reply(item, parent.getContext()));
+        dialog_reply.setOnClickListener(new Dialog_reply(item, parent.getContext(), tweet_do_back));
         dialog_retweet.setOnClickListener(new Dialog_retweet(item, parent.getContext()));
-        dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, parent.getContext()));
+        dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, parent.getContext(), tweet_do_back));
         dialog_favorite.setOnClickListener(new Dialog_favorite(item, parent.getContext()));
-        dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext()));
+        dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext(), tweet_do_back));
         dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, parent.getContext()));
         
         if(item.isRetweet()){
@@ -169,8 +174,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 	}
 	
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view,
-			int position, long id) {
+	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 		Status item = (Status)parent.getItemAtPosition(position);
 		Intent pakuri = new Intent(parent.getContext(), TweetActivity.class);
 		if(item.isRetweet())

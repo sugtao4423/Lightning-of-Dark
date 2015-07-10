@@ -67,8 +67,8 @@ public class IntentActivity extends Activity {
 		        	adapter.add(status);
 		        	ListView l = new ListView(IntentActivity.this);
 			        l.setAdapter(adapter);
-			        l.setOnItemClickListener(new ListViewListener());
-			        l.setOnItemLongClickListener(new ListViewListener());
+			        l.setOnItemClickListener(new ListViewListener(false));
+			        l.setOnItemLongClickListener(new ListViewListener(false));
 		        	AlertDialog.Builder builder = new AlertDialog.Builder(IntentActivity.this);
 		        	builder.setView(l);
 		        	builder.setOnDismissListener(new OnDismissListener() {

@@ -13,10 +13,13 @@ public class Dialog_reply implements OnClickListener {
 	
 	private Status status;
 	private Context context;
+	
+	private boolean tweet_do_back;
 
-	public Dialog_reply(Status status, Context context) {
+	public Dialog_reply(Status status, Context context, boolean tweet_do_back) {
 		this.status = status;
 		this.context = context;
+		this.tweet_do_back = tweet_do_back;
 	}
 
 	@Override
@@ -32,6 +35,7 @@ public class Dialog_reply implements OnClickListener {
 			reply.putExtra("TweetReplyId", status.getId());
 			reply.putExtra("ReplyTweetText", status.getText());
 		}
+		reply.putExtra("do_back", tweet_do_back);
 		context.startActivity(reply);
 	}
 }

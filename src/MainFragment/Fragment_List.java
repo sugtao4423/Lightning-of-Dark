@@ -44,8 +44,8 @@ public class Fragment_List extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_list, null);
 		final ApplicationClass appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		ListLine = (ListView)v.findViewById(R.id.ListLine);
-		ListLine.setOnItemClickListener(new ListViewListener());
-		ListLine.setOnItemLongClickListener(new ListViewListener());
+		ListLine.setOnItemClickListener(new ListViewListener(true));
+		ListLine.setOnItemLongClickListener(new ListViewListener(true));
 		
 		adapter = appClass.getListAdapter();
 		
