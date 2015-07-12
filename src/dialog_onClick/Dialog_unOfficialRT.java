@@ -24,7 +24,7 @@ public class Dialog_unOfficialRT implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
+		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
 		String RTtext;
 		if(status.isRetweet())
 			RTtext = " RT @" + status.getRetweetedStatus().getUser().getScreenName() + ": " + status.getRetweetedStatus().getText();

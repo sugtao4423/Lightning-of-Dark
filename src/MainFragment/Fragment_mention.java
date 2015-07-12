@@ -70,7 +70,7 @@ public class Fragment_mention extends Fragment {
 							for(twitter4j.Status status : result)
 								adapter.add(status);
 						}else
-							new ShowToast("メンション取得エラー", getActivity());
+							new ShowToast("メンション取得エラー", getActivity(), 0);
 					}
 				};
 				task.execute();

@@ -32,7 +32,7 @@ public class Dialog_talk implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
+		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		ListView result = new ListView(context);
 		result.setOnItemClickListener(new ListViewListener(tweet_do_back));
@@ -67,9 +67,9 @@ public class Dialog_talk implements OnClickListener {
 				if(result.getInReplyToStatusId() > 0)
 					new LoadConversation().execute();
 				else
-					new ShowToast("会話取得完了", context);
+					new ShowToast("会話取得完了", context, 0);
 			}else
-				new ShowToast("会話取得エラー", context);
+				new ShowToast("会話取得エラー", context, 0);
 		}
 	}
 }

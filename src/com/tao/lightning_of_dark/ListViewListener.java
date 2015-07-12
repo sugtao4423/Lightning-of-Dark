@@ -169,7 +169,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		builder.setCustomTitle(dialog_title).setView(content);
 		
 		dialog = builder.create();
-		((ApplicationClass)parent.getContext().getApplicationContext()).setDialog(dialog);
+		((ApplicationClass)parent.getContext().getApplicationContext()).setListViewDialog(dialog);
 		dialog.show();
 	}
 	

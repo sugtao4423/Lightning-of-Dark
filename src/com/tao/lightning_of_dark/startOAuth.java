@@ -88,7 +88,7 @@ public class startOAuth extends Activity {
 				if(result)
 					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rt.getAuthenticationURL())));
 				else
-					new ShowToast("RequestTokenの取得に失敗しました", startOAuth.this);
+					new ShowToast("RequestTokenの取得に失敗しました", startOAuth.this, 0);
 			}
 		};
 		task.execute();
@@ -127,10 +127,10 @@ public class startOAuth extends Activity {
 					db.execSQL("insert into accounts values('" + accessToken.getScreenName() + "', '"
 							+ CK + "', '" + CS + "', '" + accessToken.getToken() + "', '"
 									+ accessToken.getTokenSecret() + "', 'false', '-1', '', 'false')");
-					new ShowToast("アカウントを追加しました", startOAuth.this);
+					new ShowToast("アカウントを追加しました", startOAuth.this, 0);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
 				}else
-					new ShowToast("失敗...", startOAuth.this);
+					new ShowToast("失敗...", startOAuth.this, 0);
 				finish();
 			}
 		};
@@ -141,6 +141,6 @@ public class startOAuth extends Activity {
 		ClipboardManager clipboardManager = (ClipboardManager)this.getSystemService(Context.CLIPBOARD_SERVICE);
 		ClipData clipData = ClipData.newPlainText("Lightning of Dark", "https://twitter.com/lightning-of-dark");
 		clipboardManager.setPrimaryClip(clipData);
-		new ShowToast("クリップボードにコピーしました", this);
+		new ShowToast("クリップボードにコピーしました", this, 0);
 	}
 }

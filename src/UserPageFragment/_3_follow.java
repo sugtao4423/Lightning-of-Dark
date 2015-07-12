@@ -99,7 +99,7 @@ public class _3_follow extends Fragment {
 						adapter.add(user);
 					cursor = result.getNextCursor();
 				}else
-					new ShowToast("フォローを取得できませんでした", getActivity());
+					new ShowToast("フォローを取得できませんでした", getActivity(), 0);
 				PulltoRefresh.setRefreshing(false);
 				PulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);

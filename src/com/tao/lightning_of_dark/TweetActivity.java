@@ -94,9 +94,9 @@ public class TweetActivity extends Activity {
 			@Override
 			protected void onPostExecute(Boolean result) {
 				if(result)
-					new ShowToast("ツイートしました", TweetActivity.this);
+					new ShowToast("ツイートしました", TweetActivity.this, 0);
 				else
-					new ShowToast("ツイートできませんでした", TweetActivity.this);
+					new ShowToast("ツイートできませんでした", TweetActivity.this, 0);
 				if(image != null)
 					image = null;
 				finish();
@@ -140,9 +140,9 @@ public class TweetActivity extends Activity {
 	              image = new File(c.getString(0));
 	              ImageView iv = (ImageView)findViewById(R.id.UserProtected);
 	              iv.setImageURI(data.getData());
-	              new ShowToast("画像を選択しました", TweetActivity.this);
+	              new ShowToast("画像を選択しました", TweetActivity.this, 0);
             }catch(Exception e){
-            	new ShowToast("画像を選択できませんでした", TweetActivity.this);
+            	new ShowToast("画像を選択できませんでした", TweetActivity.this, 0);
             }
         }
     }

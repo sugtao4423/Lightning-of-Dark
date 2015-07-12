@@ -72,7 +72,7 @@ public class Fragment_home extends Fragment {
 							for(twitter4j.Status status : result)
 								adapter.add(status);
 						}else
-							new ShowToast("タイムライン取得エラー", getActivity());
+							new ShowToast("タイムライン取得エラー", getActivity(), 0);
 					}
 				};
 				task.execute();

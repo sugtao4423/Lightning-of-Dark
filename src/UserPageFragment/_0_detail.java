@@ -159,7 +159,7 @@ public class _0_detail extends Fragment {
 					sourceIcon.setImageUrl(result[0]);
 					targetIcon.setImageUrl(result[1]);
 				}else
-					new ShowToast("ユーザーアイコンの取得に失敗しました", getActivity());
+					new ShowToast("ユーザーアイコンの取得に失敗しました", getActivity(), 0);
 			}
 		};
 		task.execute();

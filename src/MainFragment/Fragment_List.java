@@ -112,7 +112,7 @@ public class Fragment_List extends Fragment {
 							if(!appClass.getList_AlreadyLoad())
 								appClass.setList_AlreadyLoad(true);
 						}else
-							new ShowToast("リストを取得できませんでした", getActivity());
+							new ShowToast("リストを取得できませんでした", getActivity(), 0);
 						PulltoRefresh.setRefreshing(false);
 						PulltoRefresh.setEnabled(true);
 						foot.setEnabled(true);

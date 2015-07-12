@@ -99,7 +99,7 @@ public class _4_follower extends Fragment {
 						adapter.add(user);
 					cursor = result.getNextCursor();
 				}else
-					new ShowToast("フォロワーを取得できませんでした", getActivity());
+					new ShowToast("フォロワーを取得できませんでした", getActivity(), 0);
 				PulltoRefresh.setRefreshing(false);
 				PulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);

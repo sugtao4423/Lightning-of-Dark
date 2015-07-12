@@ -101,7 +101,7 @@ public class _1_Tweet extends Fragment {
 					if(!AlreadyLoad)
 						AlreadyLoad = true;
 				}else
-					new ShowToast("タイムラインを取得できませんでした", getActivity());
+					new ShowToast("タイムラインを取得できませんでした", getActivity(), 0);
 				PulltoRefresh.setRefreshing(false);
 				PulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);

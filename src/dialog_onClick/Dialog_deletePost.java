@@ -24,7 +24,7 @@ public class Dialog_deletePost implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
+		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context)
 		.setMessage("本当にツイ消ししますか？")
 		.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -49,9 +49,9 @@ public class Dialog_deletePost implements OnClickListener {
 			}
 			protected void onPostExecute(Boolean result) {
 				if(result)
-					new ShowToast("ツイ消ししました", context);
+					new ShowToast("ツイ消ししました", context, 0);
 				else
-					new ShowToast("ツイ消しできませんでした", context);
+					new ShowToast("ツイ消しできませんでした", context, 0);
 			}
 		};
 		task.execute();

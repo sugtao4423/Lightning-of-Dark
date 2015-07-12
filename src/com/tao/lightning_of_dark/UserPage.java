@@ -67,8 +67,10 @@ public class UserPage extends FragmentActivity {
 				if(result){
 					((ApplicationClass)UserPage.this.getApplicationContext()).setTarget(target);
 					functions();
-				}else
-					new ShowToast("ユーザー情報を取得できませんでした", UserPage.this);
+				}else{
+					new ShowToast("ユーザー情報を取得できませんでした", UserPage.this, 0);
+					finish();
+				}
 			}
 		};
 		task.execute();

@@ -100,7 +100,7 @@ public class _2_favorites extends Fragment {
 					if(!AlreadyLoad)
 						AlreadyLoad = true;
 				}else
-					new ShowToast("ふぁぼ取得エラー", getActivity());
+					new ShowToast("ふぁぼ取得エラー", getActivity(), 0);
 				PulltoRefresh.setRefreshing(false);
 				PulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);

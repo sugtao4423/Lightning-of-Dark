@@ -22,7 +22,7 @@ public class Dialog_favorite implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
+		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
 		AsyncTask<Void, Void, Boolean> fav = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
@@ -35,9 +35,9 @@ public class Dialog_favorite implements OnClickListener {
 			}
 			protected void onPostExecute(Boolean result) {
 				if(result)
-					new ShowToast("ふぁぼりました", context);
+					new ShowToast("ふぁぼりました", context, 0);
 				else
-					new ShowToast("ふぁぼれませんでした", context);
+					new ShowToast("ふぁぼれませんでした", context, 0);
 			}
 		};
 		fav.execute();

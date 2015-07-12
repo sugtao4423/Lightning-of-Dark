@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.loopj.android.image.SmartImageView;
+
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
@@ -33,11 +35,12 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
 
@@ -115,7 +118,7 @@ public class MainActivity extends FragmentActivity {
 						connectStreaming();
 					}
 				}else
-					new ShowToast("スクリーンネームの取得に失敗しました", context);
+					new ShowToast("スクリーンネームの取得に失敗しました", context, 0);
 			}
 		};
 		
@@ -142,6 +145,13 @@ public class MainActivity extends FragmentActivity {
 				CS = pref.getString("CustomCS", null);
 			}
 			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
+			
+			View customToast = LayoutInflater.from(context).inflate(R.layout.custom_toast, null);
+			appClass.setToastView(customToast);
+			appClass.setToast_Main_Message((TextView)customToast.findViewById(R.id.toast_main_message));
+			appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
+			appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
+			
 			task.execute();
 		}
 	}
@@ -166,7 +176,7 @@ public class MainActivity extends FragmentActivity {
 					for(twitter4j.Status status : mention)
 						MentionAdapter.add(status);
 				}else
-					new ShowToast("タイムライン取得エラー", MainActivity.this);
+					new ShowToast("タイムライン取得エラー", MainActivity.this, 0);
 			}
 		};
 		task.execute();
@@ -246,7 +256,7 @@ public class MainActivity extends FragmentActivity {
 					MainActivity.this.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							Toast.makeText(MainActivity.this, text,Toast.LENGTH_SHORT).show();
+							new ShowToast(text, MainActivity.this, 0);
 						}
 					});
 				}
@@ -255,7 +265,7 @@ public class MainActivity extends FragmentActivity {
 			twitterStream.addConnectionLifeCycleListener(clcl);
 			twitterStream.user();
 		}catch(Exception e){
-			new ShowToast("ストリーミング系のエラー\n" + e.toString(), MainActivity.this);
+			new ShowToast("ストリーミング系のエラー\n" + e.toString(), MainActivity.this, 0);
 		}
 	}
 	
@@ -280,7 +290,7 @@ public class MainActivity extends FragmentActivity {
 							Intent userPage = new Intent(MainActivity.this, UserPage.class);
 							String user_screen = userEdit.getText().toString();
 							if(user_screen.isEmpty())
-								new ShowToast("なにも入力されていません", MainActivity.this);
+								new ShowToast("なにも入力されていません", MainActivity.this, 0);
 							else{
 								userPage.putExtra("userScreenName", user_screen.replace("@", ""));
 								startActivity(userPage);

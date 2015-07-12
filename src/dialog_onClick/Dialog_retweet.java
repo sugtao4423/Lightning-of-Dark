@@ -22,7 +22,7 @@ public class Dialog_retweet implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
+		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
@@ -35,9 +35,9 @@ public class Dialog_retweet implements OnClickListener {
 			}
 			protected void onPostExecute(Boolean result) {
 				if(result)
-					new ShowToast("リツイートしました", context);
+					new ShowToast("リツイートしました", context, 0);
 				else
-					new ShowToast("リツイートできませんでした", context);
+					new ShowToast("リツイートできませんでした", context, 0);
 			}
 		};
 		task.execute();

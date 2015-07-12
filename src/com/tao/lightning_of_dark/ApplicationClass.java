@@ -2,12 +2,15 @@ package com.tao.lightning_of_dark;
 
 import java.util.regex.Pattern;
 
+import com.loopj.android.image.SmartImageView;
+
 import twitter4j.Twitter;
 import twitter4j.User;
 import android.app.AlertDialog;
 import android.app.Application;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class ApplicationClass extends Application {
 	//MainActivity
@@ -16,6 +19,10 @@ public class ApplicationClass extends Application {
 	private Pattern mentionPattern;
 	private CustomAdapter homeAdapter, mentionAdapter, listAdapter;
 	private boolean option_regex, option_openBrowser, getBigIcon, list_AlreadyLoad;
+	//MainActivity - CustomToast
+	private View customToast;
+	private TextView toast_main_message, toast_tweet;
+	private SmartImageView toast_icon;
 	
 	//Fragment_home
 	private ListView homeList;
@@ -104,6 +111,31 @@ public class ApplicationClass extends Application {
 	public boolean getList_AlreadyLoad(){
 		return list_AlreadyLoad;
 	}
+		//CustomToast
+	public void setToastView(View custom_toast){
+		this.customToast = custom_toast;
+	}
+	public View getToastView(){
+		return customToast;
+	}
+	public void setToast_Main_Message(TextView toast_main_message){
+		this.toast_main_message = toast_main_message;
+	}
+	public TextView getToast_Main_Message(){
+		return toast_main_message;
+	}
+	public void setToast_Tweet(TextView toast_tweet){
+		this.toast_tweet = toast_tweet;
+	}
+	public TextView getToast_Tweet(){
+		return toast_tweet;
+	}
+	public void setToast_Icon(SmartImageView toast_icon){
+		this.toast_icon = toast_icon;
+	}
+	public SmartImageView getToast_Icon(){
+		return toast_icon;
+	}
 	
 /*	+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	|F|r|a|g|m|e|n|t|_|h|o|m|e|
@@ -148,10 +180,10 @@ public class ApplicationClass extends Application {
 	|L|i|s|t|V|i|e|w|L|i|s|t|e|n|e|r|
 	+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 */
-	public void setDialog(AlertDialog dialog){
+	public void setListViewDialog(AlertDialog dialog){
 		this.dialog = dialog;
 	}
-	public AlertDialog getDialog(){
+	public AlertDialog getListViewDialog(){
 		return dialog;
 	}
 }

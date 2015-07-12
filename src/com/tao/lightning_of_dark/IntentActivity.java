@@ -79,7 +79,7 @@ public class IntentActivity extends Activity {
 					});
 		        	builder.create().show();
 				}else
-					new ShowToast("ツイートの取得に失敗しました", IntentActivity.this);
+					new ShowToast("ツイートの取得に失敗しました", IntentActivity.this, 0);
 			}
 		};
 		task.execute(tweetId);

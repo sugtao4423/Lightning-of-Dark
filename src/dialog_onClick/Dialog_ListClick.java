@@ -40,7 +40,7 @@ public class Dialog_ListClick implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		((ApplicationClass)baseParent.getContext().getApplicationContext()).getDialog().dismiss();
+		((ApplicationClass)baseParent.getContext().getApplicationContext()).getListViewDialog().dismiss();
 		String clickedText = (String)parent.getItemAtPosition(position);
 		
 		if(clickedText.equals("正規表現で抽出")){

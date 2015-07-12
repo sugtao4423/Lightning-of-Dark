@@ -24,7 +24,7 @@ public class Dialog_reply implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		((ApplicationClass)context.getApplicationContext()).getDialog().dismiss();
+		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
 		Intent reply = new Intent(context, TweetActivity.class);
 		if(status.isRetweet()){
 			reply.putExtra("ReplyUserScreenName", status.getRetweetedStatus().getUser().getScreenName());
