@@ -7,6 +7,7 @@ import twitter4j.Status;
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
+import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.Show_Image;
 import com.tao.lightning_of_dark.UserPage;
 
@@ -17,9 +18,11 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -44,16 +47,40 @@ public class Dialog_ListClick implements OnItemClickListener {
 		String clickedText = (String)parent.getItemAtPosition(position);
 		
 		if(clickedText.equals("正規表現で抽出")){
+			View regView = LayoutInflater.from(parent.getContext()).inflate(R.layout.reg_dialog, null);
+			final EditText regEdit = (EditText)regView.findViewById(R.id.regDialog_edit);
+			Button dot = (Button)regView.findViewById(R.id.regDialog_dot);
+			Button kome = (Button)regView.findViewById(R.id.regDialog_kome);
+			Button or = (Button)regView.findViewById(R.id.regDialog_or);
+			Button plus = (Button)regView.findViewById(R.id.regDialog_plus);
+			Button que = (Button)regView.findViewById(R.id.regDialog_q);
+			Button backslash = (Button)regView.findViewById(R.id.regDialog_backslash);
+			Button kakko1_0 = (Button)regView.findViewById(R.id.regDialog_kakko1_0);
+			Button kakko1_1 = (Button)regView.findViewById(R.id.regDialog_kakko1_1);
+			Button kakko2_0 = (Button)regView.findViewById(R.id.regDialog_kakko2_0);
+			Button kakko2_1 = (Button)regView.findViewById(R.id.regDialog_kakko2_1);
+			
+			dot.setOnClickListener(new Dialog_regButtonClick(regEdit, "."));
+			kome.setOnClickListener(new Dialog_regButtonClick(regEdit, "*"));
+			or.setOnClickListener(new Dialog_regButtonClick(regEdit, "|"));
+			plus.setOnClickListener(new Dialog_regButtonClick(regEdit, "+"));
+			que.setOnClickListener(new Dialog_regButtonClick(regEdit, "?"));
+			backslash.setOnClickListener(new Dialog_regButtonClick(regEdit, "\\"));
+			kakko1_0.setOnClickListener(new Dialog_regButtonClick(regEdit, "("));
+			kakko1_1.setOnClickListener(new Dialog_regButtonClick(regEdit, ")"));
+			kakko2_0.setOnClickListener(new Dialog_regButtonClick(regEdit, "{"));
+			kakko2_1.setOnClickListener(new Dialog_regButtonClick(regEdit, "}"));
+			
+			
 			AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-			final EditText reg = new EditText(parent.getContext());
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
-			reg.setText(pref.getString("regularExpression", ""));
+			regEdit.setText(pref.getString("regularExpression", ""));
 			builder.setTitle("正規表現を入力してください")
-			.setView(reg)
+			.setView(regView)
 			.setPositiveButton("OK", new OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					String editReg = reg.getText().toString();
+					String editReg = regEdit.getText().toString();
 					pref.edit().putString("regularExpression", editReg).commit();
 					Pattern pattern = Pattern.compile(editReg, Pattern.DOTALL);
 					CustomAdapter content = new CustomAdapter(baseParent.getContext());
@@ -108,5 +135,9 @@ public class Dialog_ListClick implements OnItemClickListener {
 			intent.putExtra("userScreenName", clickedText.substring(1));
 			parent.getContext().startActivity(intent);
 		}
+	}
+	
+	public void regEditPlus(EditText edit, String text){
+		edit.setText(edit.getText().toString() + text);
 	}
 }

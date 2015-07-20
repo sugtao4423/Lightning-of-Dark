@@ -276,10 +276,11 @@ public class MainActivity extends FragmentActivity {
 	
 	public void option(View v){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setItems(new String[]{"ユーザー検索", "アカウント", "設定"}, new OnClickListener() {
+		final String[] items = new String[]{"ツイート爆撃", "ユーザー検索", "アカウント", "設定"};
+		builder.setItems(items, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				if(which == 0){
+				if(items[which].equals("ユーザー検索")){
 					AlertDialog.Builder userSearch = new AlertDialog.Builder(MainActivity.this);
 					final EditText userEdit = new EditText(MainActivity.this);
 					userSearch.setMessage("ユーザーのスクリーンネームを入力してください")
@@ -299,7 +300,7 @@ public class MainActivity extends FragmentActivity {
 					});
 					userSearch.create().show();
 				}
-				if(which == 1){
+				if(items[which].equals("アカウント")){
 					SQLiteDatabase db = new SQLHelper(MainActivity.this).getWritableDatabase();
 					String[] columns = new String[]{"screen_name", "CK", "CS", "AT", "ATS", "showList", "SelectListId", "SelectListName", "startApp_showList"};
 					Cursor result = db.query("accounts", columns, null, null, null, null, null);
@@ -353,8 +354,42 @@ public class MainActivity extends FragmentActivity {
 					});
 					screennameDialog.create().show();
 				}
-				if(which == 2){
+				if(items[which].equals("設定")){
 					startActivity(new Intent(MainActivity.this, Preference.class));
+				}
+				if(items[which].equals("ツイート爆撃")){
+					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+					final View bombView = getLayoutInflater().inflate(R.layout.tweet_bomb, null);
+					builder.setView(bombView);
+					builder.setPositiveButton("OK", new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							EditText _staticText = (EditText)bombView.findViewById(R.id.bomb_staticText);
+							EditText _loopText = (EditText)bombView.findViewById(R.id.bomb_loopText);
+							EditText _loopCount = (EditText)bombView.findViewById(R.id.bomb_loopCount);
+							
+							final String staticText = _staticText.getText().toString();
+							final String loopText = _loopText.getText().toString();
+							int loopCount = Integer.parseInt(_loopCount.getText().toString());
+							
+							String loop = "";
+							for(int i = 0; i < loopCount; i++){
+								loop += loopText;
+								AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>(){
+									@Override
+									protected Void doInBackground(String... params) {
+										try {
+											twitter.updateStatus(staticText + params[0]);
+										} catch (TwitterException e) {}
+										return null;
+									}
+								};
+								task.execute(loop);
+							}
+						}
+					});
+					builder.setNegativeButton("キャンセル", null);
+					builder.create().show();
 				}
 			}
 		});
@@ -375,10 +410,11 @@ public class MainActivity extends FragmentActivity {
 				return null;
 			}
 		};
-		task.execute();
 		if(resetFlag){
 			resetFlag = false;
 			startActivity(new Intent(this, MainActivity.class));
+		}else{
+			task.execute();
 		}
 	}
 	

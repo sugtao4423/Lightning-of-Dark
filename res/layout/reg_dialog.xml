@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText
+        android:id="@+id/regDialog_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/regDialog_dot"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/regDialog_edit"
+        android:layout_marginTop="10dp"
+        android:text="." />
+
+    <Button
+        android:id="@+id/regDialog_kome"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/regDialog_dot"
+        android:layout_alignBottom="@+id/regDialog_dot"
+        android:layout_toRightOf="@+id/regDialog_dot"
+        android:text="*" />
+
+    <Button
+        android:id="@+id/regDialog_or"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/regDialog_kome"
+        android:layout_alignBottom="@+id/regDialog_kome"
+        android:layout_toRightOf="@+id/regDialog_kome"
+        android:text="|" />
+
+    <Button
+        android:id="@+id/regDialog_plus"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/regDialog_or"
+        android:layout_alignBottom="@+id/regDialog_or"
+        android:layout_toRightOf="@+id/regDialog_or"
+        android:text="+" />
+
+    <Button
+        android:id="@+id/regDialog_q"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/regDialog_plus"
+        android:layout_alignBottom="@+id/regDialog_plus"
+        android:layout_toRightOf="@+id/regDialog_plus"
+        android:text="\?" />
+
+    <Button
+        android:id="@+id/regDialog_backslash"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/regDialog_q"
+        android:layout_alignBottom="@+id/regDialog_q"
+        android:layout_toRightOf="@+id/regDialog_q"
+        android:text="\\" />
+
+    <Button
+        android:id="@+id/regDialog_kakko1_0"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/regDialog_dot"
+        android:text="(" />
+
+    <Button
+        android:id="@+id/regDialog_kakko1_1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/regDialog_kakko1_0"
+        android:layout_alignBottom="@+id/regDialog_kakko1_0"
+        android:layout_toRightOf="@+id/regDialog_dot"
+        android:text=")" />
+
+    <Button
+        android:id="@+id/regDialog_kakko2_0"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/regDialog_kakko1_1"
+        android:layout_alignBottom="@+id/regDialog_kakko1_1"
+        android:layout_toRightOf="@+id/regDialog_kome"
+        android:text="{" />
+
+    <Button
+        android:id="@+id/regDialog_kakko2_1"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/regDialog_kakko2_0"
+        android:layout_alignBottom="@+id/regDialog_kakko2_0"
+        android:layout_toRightOf="@+id/regDialog_or"
+        android:text="}" />
+
+</RelativeLayout>

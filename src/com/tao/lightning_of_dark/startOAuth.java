@@ -46,7 +46,7 @@ public class startOAuth extends Activity {
 		CustomCK = (EditText)findViewById(R.id.editText2);
 		CustomCS = (EditText)findViewById(R.id.editText3);
 		
-		ninsyobtn = (Button)findViewById(R.id.button1);
+		ninsyobtn = (Button)findViewById(R.id.ninsyo);
 		
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		
