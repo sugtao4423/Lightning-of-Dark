@@ -14,7 +14,7 @@ public class SQLHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		//create table in "Accounts"
 		db.execSQL("create table accounts(screen_name text, CK text, CS text, AT text, ATS text, "
-				+ "showList text, SelectListId text, SelectListName text, startApp_showList text)");
+				+ "showList text, SelectListCount text, SelectListIds text, SelectListNames text, startApp_showList text)");
 	}
 
 	@Override

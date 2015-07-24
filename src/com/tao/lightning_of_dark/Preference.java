@@ -10,6 +10,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
 public class Preference extends PreferenceActivity {
+	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -18,7 +19,7 @@ public class Preference extends PreferenceActivity {
 		actionbar.setHomeButtonEnabled(true);
 	}
 	
-	public static class MyPreferencesFragment extends PreferenceFragment {
+	public class MyPreferencesFragment extends PreferenceFragment {
 		public void onCreate(Bundle savedInstanceState){
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preference);
@@ -35,5 +36,11 @@ public class Preference extends PreferenceActivity {
 				}
 			});
 		}
+	}
+	@Override
+	public void onDestroy(){
+		super.onDestroy();
+		ApplicationClass app = (ApplicationClass)getApplicationContext();
+		app.loadOption(getApplicationContext());
 	}
 }

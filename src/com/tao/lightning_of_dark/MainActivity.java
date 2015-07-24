@@ -21,7 +21,6 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import MainFragment.MyFragmentStatePagerAdapter;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -47,6 +46,7 @@ public class MainActivity extends FragmentActivity {
 	private String CK, CS, MyScreenName; //MyScreenNameには「＠」は含まれない
 	
 	private Twitter twitter;
+	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 	
 	private ApplicationClass appClass;
@@ -54,15 +54,14 @@ public class MainActivity extends FragmentActivity {
 	private SharedPreferences pref;
 	private boolean resetFlag;
 	
-	private TwitterFactory twitterFactory;
-	private TwitterStream twitterStream;
 	
 	private AccessToken accessToken;
-	private Configuration jconf;
+	private Configuration conf;
 	
 	private ViewPager viewPager;
 	
-	private CustomAdapter HomeAdapter, MentionAdapter, ListAdapter;
+	private CustomAdapter HomeAdapter, MentionAdapter;
+	private CustomAdapter[] ListAdapters;
 	private ResponseList<twitter4j.Status> home, mention;
 
 	@Override
@@ -72,33 +71,34 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().hide();
 		HomeAdapter = new CustomAdapter(this);
 		MentionAdapter = new CustomAdapter(this);
-		ListAdapter = new CustomAdapter(this);
 		
 		setContentView(R.layout.activity_main);
 		
+		pref = PreferenceManager.getDefaultSharedPreferences(this);
 		viewPager = (ViewPager)findViewById(R.id.pager);
 		viewPager.setAdapter(new MyFragmentStatePagerAdapter(getSupportFragmentManager(), this));
 		viewPager.setCurrentItem(1);
-		viewPager.setOffscreenPageLimit(2);
+		viewPager.setOffscreenPageLimit(pref.getInt("SelectListCount", 0) + 1);
+		ListAdapters = new CustomAdapter[pref.getInt("SelectListCount", 0)];
+		for(int i = 0; i < pref.getInt("SelectListCount", 0); i++)
+			ListAdapters[i] = new CustomAdapter(this);
 		
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.mainPagerTabStrip);
 		strip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 		
-		LogIn(false, this);
+		LogIn();
 	}
 	
-	public void LogIn(final boolean onlyLogin, final Context context){
+	public void LogIn(){
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params) {
-				ConfigurationBuilder builder = new ConfigurationBuilder();
-				builder.setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS);
-				jconf = builder.build();
+				conf = new ConfigurationBuilder()
+				.setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS).build();
 				
-				twitterFactory = new TwitterFactory(jconf);
-				twitter = twitterFactory.getInstance(accessToken);
+				twitter = new TwitterFactory(conf).getInstance(accessToken);
 				try{
 					MyScreenName = twitter.getScreenName();
 				}catch(Exception e){
@@ -113,28 +113,27 @@ public class MainActivity extends FragmentActivity {
 					appClass.setTwitter(twitter);
 					mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
 					appClass.setMentionPattern(mentionPattern);
-					if(!onlyLogin){
-						getTimeLine();
-						connectStreaming();
-					}
+					getTimeLine();
+					connectStreaming();
 				}else
-					new ShowToast("スクリーンネームの取得に失敗しました", context, 0);
+					new ShowToast("スクリーンネームの取得に失敗しました", MainActivity.this, 0);
 			}
 		};
-		
-		pref = PreferenceManager.getDefaultSharedPreferences(context);
-		appClass = (ApplicationClass)context.getApplicationContext();
+		appClass = (ApplicationClass)getApplicationContext();
 		appClass.setHomeAdapter(HomeAdapter);
 		appClass.setMentionAdapter(MentionAdapter);
-		appClass.setListAdapter(ListAdapter);
+		appClass.setListAdapters(ListAdapters);
 		appClass.setList_AlreadyLoad(false);
+		appClass.loadOption(this);
 		
-		appClass.setOption_regex(pref.getBoolean("menu_regex", false));
-		appClass.setOption_openBrowser(pref.getBoolean("menu_openBrowser", false));
-		appClass.setGetBigIcon(pref.getBoolean("getBigIcon", false));
+		View customToast = LayoutInflater.from(this).inflate(R.layout.custom_toast, null);
+		appClass.setToastView(customToast);
+		appClass.setToast_Main_Message((TextView)customToast.findViewById(R.id.toast_main_message));
+		appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
+		appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
 		
 		if(pref.getString("AccessToken", "").equals("")){
-			startActivity(new Intent(context, startOAuth.class));
+			startActivity(new Intent(this, startOAuth.class));
 			finish();
 		}else{
 			if(pref.getString("CustomCK", "").equals("")){
@@ -145,13 +144,6 @@ public class MainActivity extends FragmentActivity {
 				CS = pref.getString("CustomCS", null);
 			}
 			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-			
-			View customToast = LayoutInflater.from(context).inflate(R.layout.custom_toast, null);
-			appClass.setToastView(customToast);
-			appClass.setToast_Main_Message((TextView)customToast.findViewById(R.id.toast_main_message));
-			appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
-			appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
-			
 			task.execute();
 		}
 	}
@@ -180,15 +172,22 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 		task.execute();
-		if(pref.getBoolean("startApp_showList", false) && pref.getLong("SelectListId", -1) != -1L)
-			getList();
+		if(pref.getBoolean("startApp_showList", false) && pref.getString("SelectListIds", null) != null){
+			String[] listIds_str = pref.getString("SelectListIds", "").split(",", 0);
+			long[] listIds = new long[listIds_str.length];
+			for(int i = 0; i < listIds_str.length; i++)
+				listIds[i] = Long.parseLong(listIds_str[i]);
+			
+			for(int i = 0; i < listIds.length; i++)
+				getList(listIds[i], i);
+		}
 	}
-	public void getList(){
+	public void getList(final long listId, final int index){
 		AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 				try {
-					return twitter.getUserListStatuses(pref.getLong("SelectListId", -1), new Paging(1, 50));
+					return twitter.getUserListStatuses(listId, new Paging(1, 50));
 				} catch (TwitterException e) {
 					return null;
 				}
@@ -197,7 +196,7 @@ public class MainActivity extends FragmentActivity {
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null){
 					for(twitter4j.Status status : result)
-						ListAdapter.add(status);
+						ListAdapters[index].add(status);
 					appClass.setList_AlreadyLoad(true);
 				}
 			}
@@ -207,8 +206,7 @@ public class MainActivity extends FragmentActivity {
 	
 	public void connectStreaming(){
 		try{
-			TwitterStreamFactory streamFactory = new TwitterStreamFactory(jconf);
-			twitterStream = streamFactory.getInstance(accessToken);
+			twitterStream = new TwitterStreamFactory(conf).getInstance(accessToken);
 			
 			//UserStreamAdapter
 			UserStreamAdapter streamAdapter = new UserStreamAdapter(){
@@ -302,7 +300,7 @@ public class MainActivity extends FragmentActivity {
 				}
 				if(items[which].equals("アカウント")){
 					SQLiteDatabase db = new SQLHelper(MainActivity.this).getWritableDatabase();
-					String[] columns = new String[]{"screen_name", "CK", "CS", "AT", "ATS", "showList", "SelectListId", "SelectListName", "startApp_showList"};
+					String[] columns = new String[]{"screen_name", "CK", "CS", "AT", "ATS", "showList", "SelectListCount", "SelectListIds", "SelectListNames", "startApp_showList"};
 					Cursor result = db.query("accounts", columns, null, null, null, null, null);
 					boolean mov = result.moveToFirst();
 					List<String> selectAccount_screenName = new ArrayList<String>();
@@ -311,8 +309,9 @@ public class MainActivity extends FragmentActivity {
 					final List<String> selectAccount_AT = new ArrayList<String>();
 					final List<String> selectAccount_ATS = new ArrayList<String>();
 					final List<Boolean> selectAccount_showList = new ArrayList<Boolean>();
-					final List<Long> selectAccount_SelectListId = new ArrayList<Long>();
-					final List<String> selectAccount_SelectListName = new ArrayList<String>();
+					final List<Integer> selectAccount_SelectListCount = new ArrayList<Integer>();
+					final List<String> selectAccount_SelectListIds = new ArrayList<String>();
+					final List<String> selectAccount_SelectListNames = new ArrayList<String>();
 					final List<Boolean> selectAccount_startApp_showList = new ArrayList<Boolean>();
 					while(mov){
 						String screen = "@" + result.getString(0);
@@ -324,9 +323,10 @@ public class MainActivity extends FragmentActivity {
 						selectAccount_AT.add(result.getString(3));
 						selectAccount_ATS.add(result.getString(4));
 						selectAccount_showList.add(Boolean.parseBoolean(result.getString(5)));
-						selectAccount_SelectListId.add(Long.parseLong(result.getString(6)));
-						selectAccount_SelectListName.add(result.getString(7));
-						selectAccount_startApp_showList.add(Boolean.parseBoolean(result.getString(8)));
+						selectAccount_SelectListCount.add(Integer.parseInt(result.getString(6)));
+						selectAccount_SelectListIds.add(result.getString(7));
+						selectAccount_SelectListNames.add(result.getString(8));
+						selectAccount_startApp_showList.add(Boolean.parseBoolean(result.getString(9)));
 						
 						mov = result.moveToNext();
 					}
@@ -345,8 +345,9 @@ public class MainActivity extends FragmentActivity {
 								.putString("AccessToken", selectAccount_AT.get(which))
 								.putString("AccessTokenSecret", selectAccount_ATS.get(which))
 								.putBoolean("showList", selectAccount_showList.get(which))
-								.putLong("SelectListId", selectAccount_SelectListId.get(which))
-								.putString("SelectListName", selectAccount_SelectListName.get(which))
+								.putInt("SelectListCount", selectAccount_SelectListCount.get(which))
+								.putString("SelectListIds", selectAccount_SelectListIds.get(which))
+								.putString("SelectListNames", selectAccount_SelectListNames.get(which))
 								.putBoolean("startApp_showList", selectAccount_startApp_showList.get(which)).commit();
 								restart();
 							}
@@ -386,6 +387,7 @@ public class MainActivity extends FragmentActivity {
 								};
 								task.execute(loop);
 							}
+							new ShowToast("ツイート完了", MainActivity.this, 0);
 						}
 					});
 					builder.setNegativeButton("キャンセル", null);

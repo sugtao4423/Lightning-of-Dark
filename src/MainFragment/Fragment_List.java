@@ -38,6 +38,11 @@ public class Fragment_List extends Fragment {
 	private SwipeRefreshLayout PulltoRefresh;
 	private CustomAdapter adapter;
 	private long tweetId;
+	private int ListIndex;
+	
+	public Fragment_List(int index) {
+		ListIndex = index;
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -47,7 +52,7 @@ public class Fragment_List extends Fragment {
 		ListLine.setOnItemClickListener(new ListViewListener(true));
 		ListLine.setOnItemLongClickListener(new ListViewListener(true));
 		
-		adapter = appClass.getListAdapter();
+		adapter = appClass.getListAdapters()[ListIndex];
 		
 		addFooter();
 		
@@ -88,8 +93,11 @@ public class Fragment_List extends Fragment {
 		final ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		if(pref.getBoolean("showList", false)){
-			final long ListId = pref.getLong("SelectListId", -1);
-			if(ListId != -1){
+			String[] ListId_str = pref.getString("SelectListIds", null).split(",", 0);
+			final long[] ListId = new long[ListId_str.length];
+			for(int i = 0; i < ListId_str.length; i++)
+				ListId[i] = Long.parseLong(ListId_str[i]);
+			if(ListId[ListIndex] != -1){
 				if(appClass.getList_AlreadyLoad()){
 					tweetId = ((Status)ListLine.getItemAtPosition(ListLine.getAdapter().getCount() - 2)).getId();
 				}
@@ -98,9 +106,9 @@ public class Fragment_List extends Fragment {
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 						try {
 							if(appClass.getList_AlreadyLoad())
-								return appClass.getTwitter().getUserListStatuses(ListId, new Paging(1, 50).maxId(tweetId - 1));
+								return appClass.getTwitter().getUserListStatuses(ListId[ListIndex], new Paging(1, 50).maxId(tweetId - 1));
 							else
-								return appClass.getTwitter().getUserListStatuses(ListId, new Paging(1, 50));
+								return appClass.getTwitter().getUserListStatuses(ListId[ListIndex], new Paging(1, 50));
 							} catch (TwitterException e) {
 								return null;
 							}

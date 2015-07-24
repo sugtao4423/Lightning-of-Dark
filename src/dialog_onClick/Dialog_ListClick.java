@@ -1,11 +1,12 @@
 package dialog_onClick;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import twitter4j.Status;
-
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
+import com.tao.lightning_of_dark.IntentActivity;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.Show_Image;
@@ -109,13 +110,21 @@ public class Dialog_ListClick implements OnItemClickListener {
 			builder.create().show();
 		}
 		
+		Matcher image = Pattern.compile("(http://|https://){1}pbs.twimg.com/media/").matcher(clickedText);
+		Matcher state = Pattern.compile("https://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(clickedText);
 		if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
 			Intent web;
-			if(clickedText.startsWith("http://pbs.twimg.com/media/") || clickedText.startsWith("https://pbs.twimg.com/media/")){
+			if(image.find()){
 				web = new Intent(parent.getContext(), Show_Image.class);
 				web.putExtra("URL", clickedText);
-			}else
+			}
+			else if(state.find()){
+				new IntentActivity().showStatus(Long.parseLong(state.group(1)), baseParent.getContext(), false);
+				return;
+			}
+			else{
 				web = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));
+			}
 			parent.getContext().startActivity(web);
 		}
 		if(clickedText.equals("ブラウザで開く")){

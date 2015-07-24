@@ -8,6 +8,9 @@ import twitter4j.Twitter;
 import twitter4j.User;
 import android.app.AlertDialog;
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,7 +20,8 @@ public class ApplicationClass extends Application {
 	private String MyScreenName;
 	private Twitter twitter;
 	private Pattern mentionPattern;
-	private CustomAdapter homeAdapter, mentionAdapter, listAdapter;
+	private CustomAdapter homeAdapter, mentionAdapter;
+	private CustomAdapter[] listAdapters;
 	private boolean option_regex, option_openBrowser, getBigIcon, list_AlreadyLoad;
 	//MainActivity - CustomToast
 	private View customToast;
@@ -77,11 +81,11 @@ public class ApplicationClass extends Application {
 		return mentionAdapter;
 	}
 	//listAdapter
-	public void setListAdapter(CustomAdapter listAdapter){
-		this.listAdapter = listAdapter;
+	public void setListAdapters(CustomAdapter[] listAdapters){
+		this.listAdapters = listAdapters;
 	}
-	public CustomAdapter getListAdapter(){
-		return listAdapter;
+	public CustomAdapter[] getListAdapters(){
+		return listAdapters;
 	}
 	//option_regex
 	public void setOption_regex(boolean option_regex){
@@ -103,6 +107,12 @@ public class ApplicationClass extends Application {
 	}
 	public boolean getGetBigIcon(){
 		return getBigIcon;
+	}
+	public void loadOption(Context context){
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		setOption_regex(pref.getBoolean("menu_regex", false));
+		setOption_openBrowser(pref.getBoolean("menu_openBrowser", false));
+		setGetBigIcon(pref.getBoolean("getBigIcon", false));
 	}
 	//list_AlreadyLoad
 	public void setList_AlreadyLoad(boolean AlreadyLoad){

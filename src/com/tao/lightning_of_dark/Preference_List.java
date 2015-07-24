@@ -1,11 +1,13 @@
 package com.tao.lightning_of_dark;
 
+import java.util.ArrayList;
 import twitter4j.ResponseList;
 import twitter4j.TwitterException;
 import twitter4j.UserList;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.content.SharedPreferences.Editor;
@@ -19,12 +21,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class Preference_List extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState){
@@ -35,7 +32,7 @@ public class Preference_List extends PreferenceActivity {
 		actionbar.setHomeButtonEnabled(true);
 	}
 	
-	public static class MyPreferencesFragment extends PreferenceFragment {
+	public class MyPreferencesFragment extends PreferenceFragment {
 		public void onCreate(Bundle savedInstanceState){
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preference_list);
@@ -85,15 +82,11 @@ public class Preference_List extends PreferenceActivity {
 			
 			select_List.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 				
-				ListView ListNameList;
-				ArrayAdapter<String> array;
+				ArrayList<String> array = new ArrayList<String>();
 				ResponseList<UserList> lists;
 				
 				@Override
 				public boolean onPreferenceClick(android.preference.Preference preference) {
-					ListNameList = new ListView(getActivity());
-					array = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1);
-					ListNameList.setAdapter(array);
 					AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 						@Override
 						protected Boolean doInBackground(Void... params) {
@@ -104,35 +97,60 @@ public class Preference_List extends PreferenceActivity {
 								return false;
 							}
 						}
+						@Override
 						protected void onPostExecute(Boolean result) {
 							if(result){
 								for(UserList userList : lists)
 									array.add(userList.getName());
+								
+								AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+								builder.setTitle("リストを選択してください");
+								String[] listItem = (String[])array.toArray(new String[0]);
+								boolean[] isCheck = new boolean[array.size()];
+								for(int i = 0; i < array.size(); i++)
+									isCheck[i] = false;
+								
+								final ArrayList<UserList> checkedList = new ArrayList<UserList>();
+								builder.setMultiChoiceItems(listItem, isCheck, new OnMultiChoiceClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+										if(isChecked)
+											checkedList.add(lists.get(which));
+										else
+											checkedList.remove(lists.get(which));
+									}
+								});
+								builder.setPositiveButton("OK", new OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										int checkedSize = checkedList.size();
+										String listNames = "";
+										String listIds = "";
+										for(int i = 0; i < checkedSize; i++){
+											listNames += checkedList.get(i).getName() + ",";
+											listIds += checkedList.get(i).getId() + ",";
+										}
+										
+										SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+										Editor edit = pref.edit()
+										.putInt("SelectListCount", checkedSize)
+										.putString("SelectListIds", listIds)
+										.putString("SelectListNames", listNames);
+										db.execSQL("update accounts set SelectListCount='" + checkedSize + "' where screen_name = '" + appClass.getMyScreenName() + "'");
+										db.execSQL("update accounts set SelectListIds='" + listIds + "' where screen_name = '" + appClass.getMyScreenName() + "'");
+										db.execSQL("update accounts set SelectListNames='" + listNames + "' where screen_name = '" + appClass.getMyScreenName() + "'");
+										if(edit.commit()){
+											Dialog("リストを選択しました");
+										}else{
+											Toast.makeText(getActivity(), "リストを選択できませんでした", Toast.LENGTH_SHORT).show();
+										}
+									}
+								});
+								builder.create().show();
 							}
 						}
 					};
 					task.execute();
-					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-					builder.setView(ListNameList).setTitle("リストを選択してください");
-					builder.create().show();
-					ListNameList.setOnItemClickListener(new OnItemClickListener() {
-						@Override
-						public void onItemClick(AdapterView<?> parent,
-								View view, int position, long id) {
-							long ListId = lists.get(position).getId();
-							String ListName = lists.get(position).getName();
-							SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-							Editor edit = pref.edit()
-							.putLong("SelectListId", ListId)
-							.putString("SelectListName", ListName);
-							db.execSQL("update accounts set SelectListId='" + ListId + "' where screen_name = '" + appClass.getMyScreenName() + "'");
-							db.execSQL("update accounts set SelectListName='" + ListName + "' where screen_name = '" + appClass.getMyScreenName() + "'");
-							if(edit.commit()){
-								Dialog("リストを選択しました");
-							}else
-								Toast.makeText(getActivity(), "リストを選択できませんでした", Toast.LENGTH_SHORT).show();
-						}
-					});
 					return false;
 				}
 			});
