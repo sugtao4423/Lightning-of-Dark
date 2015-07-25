@@ -1,7 +1,6 @@
 package com.tao.lightning_of_dark;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import com.loopj.android.image.SmartImageView;
@@ -21,12 +20,8 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import MainFragment.MyFragmentStatePagerAdapter;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,7 +33,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity {
@@ -60,8 +54,8 @@ public class MainActivity extends FragmentActivity {
 	
 	private ViewPager viewPager;
 	
-	private CustomAdapter HomeAdapter, MentionAdapter;
-	private CustomAdapter[] ListAdapters;
+	private CustomAdapter homeAdapter, mentionAdapter;
+	private CustomAdapter[] listAdapters;
 	private ResponseList<twitter4j.Status> home, mention;
 
 	@Override
@@ -69,8 +63,8 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		
 		getActionBar().hide();
-		HomeAdapter = new CustomAdapter(this);
-		MentionAdapter = new CustomAdapter(this);
+		homeAdapter = new CustomAdapter(this);
+		mentionAdapter = new CustomAdapter(this);
 		
 		setContentView(R.layout.activity_main);
 		
@@ -79,9 +73,9 @@ public class MainActivity extends FragmentActivity {
 		viewPager.setAdapter(new MyFragmentStatePagerAdapter(getSupportFragmentManager(), this));
 		viewPager.setCurrentItem(1);
 		viewPager.setOffscreenPageLimit(pref.getInt("SelectListCount", 0) + 1);
-		ListAdapters = new CustomAdapter[pref.getInt("SelectListCount", 0)];
+		listAdapters = new CustomAdapter[pref.getInt("SelectListCount", 0)];
 		for(int i = 0; i < pref.getInt("SelectListCount", 0); i++)
-			ListAdapters[i] = new CustomAdapter(this);
+			listAdapters[i] = new CustomAdapter(this);
 		
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.mainPagerTabStrip);
 		strip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
@@ -120,10 +114,13 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 		appClass = (ApplicationClass)getApplicationContext();
-		appClass.setHomeAdapter(HomeAdapter);
-		appClass.setMentionAdapter(MentionAdapter);
-		appClass.setListAdapters(ListAdapters);
-		appClass.setList_AlreadyLoad(false);
+		appClass.setHomeAdapter(homeAdapter);
+		appClass.setMentionAdapter(mentionAdapter);
+		appClass.setListAdapters(listAdapters);
+		boolean[] list_alreadyLoad = new boolean[listAdapters.length];
+		for(int i = 0; i < listAdapters.length; i++)
+			list_alreadyLoad[i] = false;
+		appClass.setList_AlreadyLoad(list_alreadyLoad);
 		appClass.loadOption(this);
 		
 		View customToast = LayoutInflater.from(this).inflate(R.layout.custom_toast, null);
@@ -164,22 +161,30 @@ public class MainActivity extends FragmentActivity {
 			protected void onPostExecute(Boolean result){
 				if(result){
 					for(twitter4j.Status status : home)
-						HomeAdapter.add(status);
+						homeAdapter.add(status);
 					for(twitter4j.Status status : mention)
-						MentionAdapter.add(status);
+						mentionAdapter.add(status);
 				}else
 					new ShowToast("タイムライン取得エラー", MainActivity.this, 0);
 			}
 		};
 		task.execute();
-		if(pref.getBoolean("startApp_showList", false) && pref.getString("SelectListIds", null) != null){
+		
+		if(!pref.getString("startApp_loadLists", "").equals("") && !pref.getString("SelectListIds", "").equals("")){
+			String[] listName_str = pref.getString("SelectListNames", "").split(",", 0);
 			String[] listIds_str = pref.getString("SelectListIds", "").split(",", 0);
+			String[] startApp_loadLists = pref.getString("startApp_loadLists", "").split(",", 0);
+			ArrayList<String> startApp_loadListsArray = new ArrayList<String>();
+			for(int i = 0; i < startApp_loadLists.length; i++)
+				startApp_loadListsArray.add(startApp_loadLists[i]);
 			long[] listIds = new long[listIds_str.length];
 			for(int i = 0; i < listIds_str.length; i++)
 				listIds[i] = Long.parseLong(listIds_str[i]);
 			
-			for(int i = 0; i < listIds.length; i++)
-				getList(listIds[i], i);
+			for(int i = 0; i < listIds.length; i++){
+				if(startApp_loadListsArray.indexOf(listName_str[i]) != -1)
+					getList(listIds[i], i);
+			}
 		}
 	}
 	public void getList(final long listId, final int index){
@@ -196,8 +201,10 @@ public class MainActivity extends FragmentActivity {
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null){
 					for(twitter4j.Status status : result)
-						ListAdapters[index].add(status);
-					appClass.setList_AlreadyLoad(true);
+						listAdapters[index].add(status);
+					boolean[] tmp = appClass.getList_AlreadyLoad();
+					tmp[index] = true;
+					appClass.setList_AlreadyLoad(tmp);
 				}
 			}
 		};
@@ -223,7 +230,7 @@ public class MainActivity extends FragmentActivity {
 							if(l.getChildCount() != 0){
 								int pos = l.getFirstVisiblePosition();
 								int top = l.getChildAt(0).getTop();
-								HomeAdapter.insert(status, 0);
+								homeAdapter.insert(status, 0);
 								if(pos == 0 && top == 0)
 									l.setSelectionFromTop(pos, 0);
 								else
@@ -231,7 +238,7 @@ public class MainActivity extends FragmentActivity {
 							}
 							
 							if(mentionPattern.matcher(status.getText()).find() && !status.isRetweet())
-								MentionAdapter.insert(status, 0);
+								mentionAdapter.insert(status, 0);
 						}
 					};
 					task.execute();
@@ -275,126 +282,7 @@ public class MainActivity extends FragmentActivity {
 	public void option(View v){
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		final String[] items = new String[]{"ツイート爆撃", "ユーザー検索", "アカウント", "設定"};
-		builder.setItems(items, new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if(items[which].equals("ユーザー検索")){
-					AlertDialog.Builder userSearch = new AlertDialog.Builder(MainActivity.this);
-					final EditText userEdit = new EditText(MainActivity.this);
-					userSearch.setMessage("ユーザーのスクリーンネームを入力してください")
-					.setView(userEdit)
-					.setPositiveButton("OK", new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							Intent userPage = new Intent(MainActivity.this, UserPage.class);
-							String user_screen = userEdit.getText().toString();
-							if(user_screen.isEmpty())
-								new ShowToast("なにも入力されていません", MainActivity.this, 0);
-							else{
-								userPage.putExtra("userScreenName", user_screen.replace("@", ""));
-								startActivity(userPage);
-							}
-						}
-					});
-					userSearch.create().show();
-				}
-				if(items[which].equals("アカウント")){
-					SQLiteDatabase db = new SQLHelper(MainActivity.this).getWritableDatabase();
-					String[] columns = new String[]{"screen_name", "CK", "CS", "AT", "ATS", "showList", "SelectListCount", "SelectListIds", "SelectListNames", "startApp_showList"};
-					Cursor result = db.query("accounts", columns, null, null, null, null, null);
-					boolean mov = result.moveToFirst();
-					List<String> selectAccount_screenName = new ArrayList<String>();
-					final List<String> selectAccount_CK = new ArrayList<String>();
-					final List<String> selectAccount_CS = new ArrayList<String>();
-					final List<String> selectAccount_AT = new ArrayList<String>();
-					final List<String> selectAccount_ATS = new ArrayList<String>();
-					final List<Boolean> selectAccount_showList = new ArrayList<Boolean>();
-					final List<Integer> selectAccount_SelectListCount = new ArrayList<Integer>();
-					final List<String> selectAccount_SelectListIds = new ArrayList<String>();
-					final List<String> selectAccount_SelectListNames = new ArrayList<String>();
-					final List<Boolean> selectAccount_startApp_showList = new ArrayList<Boolean>();
-					while(mov){
-						String screen = "@" + result.getString(0);
-						if(screen.equals("@" + MyScreenName))
-							screen = screen + " (now)";
-						selectAccount_screenName.add(screen);
-						selectAccount_CK.add(result.getString(1));
-						selectAccount_CS.add(result.getString(2));
-						selectAccount_AT.add(result.getString(3));
-						selectAccount_ATS.add(result.getString(4));
-						selectAccount_showList.add(Boolean.parseBoolean(result.getString(5)));
-						selectAccount_SelectListCount.add(Integer.parseInt(result.getString(6)));
-						selectAccount_SelectListIds.add(result.getString(7));
-						selectAccount_SelectListNames.add(result.getString(8));
-						selectAccount_startApp_showList.add(Boolean.parseBoolean(result.getString(9)));
-						
-						mov = result.moveToNext();
-					}
-					selectAccount_screenName.add("アカウントを追加");
-					AlertDialog.Builder screennameDialog = new AlertDialog.Builder(MainActivity.this);
-					final String[] nameDialog = (String[])selectAccount_screenName.toArray(new String[0]);
-					screennameDialog.setItems(nameDialog, new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							if(nameDialog[which].equals("アカウントを追加")){
-								startActivity(new Intent(MainActivity.this, startOAuth.class));
-							}else if(!nameDialog[which].equals("@" + MyScreenName + " (now)")){
-								pref.edit()
-								.putString("CustomCK", selectAccount_CK.get(which))
-								.putString("CustomCS", selectAccount_CS.get(which))
-								.putString("AccessToken", selectAccount_AT.get(which))
-								.putString("AccessTokenSecret", selectAccount_ATS.get(which))
-								.putBoolean("showList", selectAccount_showList.get(which))
-								.putInt("SelectListCount", selectAccount_SelectListCount.get(which))
-								.putString("SelectListIds", selectAccount_SelectListIds.get(which))
-								.putString("SelectListNames", selectAccount_SelectListNames.get(which))
-								.putBoolean("startApp_showList", selectAccount_startApp_showList.get(which)).commit();
-								restart();
-							}
-						}
-					});
-					screennameDialog.create().show();
-				}
-				if(items[which].equals("設定")){
-					startActivity(new Intent(MainActivity.this, Preference.class));
-				}
-				if(items[which].equals("ツイート爆撃")){
-					AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-					final View bombView = getLayoutInflater().inflate(R.layout.tweet_bomb, null);
-					builder.setView(bombView);
-					builder.setPositiveButton("OK", new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							EditText _staticText = (EditText)bombView.findViewById(R.id.bomb_staticText);
-							EditText _loopText = (EditText)bombView.findViewById(R.id.bomb_loopText);
-							EditText _loopCount = (EditText)bombView.findViewById(R.id.bomb_loopCount);
-							
-							final String staticText = _staticText.getText().toString();
-							final String loopText = _loopText.getText().toString();
-							int loopCount = Integer.parseInt(_loopCount.getText().toString());
-							
-							String loop = "";
-							for(int i = 0; i < loopCount; i++){
-								loop += loopText;
-								AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>(){
-									@Override
-									protected Void doInBackground(String... params) {
-										try {
-											twitter.updateStatus(staticText + params[0]);
-										} catch (TwitterException e) {}
-										return null;
-									}
-								};
-								task.execute(loop);
-							}
-							new ShowToast("ツイート完了", MainActivity.this, 0);
-						}
-					});
-					builder.setNegativeButton("キャンセル", null);
-					builder.create().show();
-				}
-			}
-		});
+		builder.setItems(items, new OptionClickListener(this, items, MyScreenName, pref, twitter));
 		builder.create().show();
 	}
 	public void restart(){
@@ -422,16 +310,11 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		return super.onOptionsItemSelected(item);
 	}
 }

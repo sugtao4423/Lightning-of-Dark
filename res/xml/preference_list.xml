@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <CheckBoxPreference android:key="showList" android:title="メインカラムの右側にリストを追加" android:defaultValue="false" android:summary="変更後要再起動"/>
-    <Preference android:key="select_List" android:title="リストを選択"/>
-    <CheckBoxPreference android:key="startApp_showList" android:title="起動時にリストを取得する" android:defaultValue="false"/>
+    <Preference android:key="select_List" android:title="リストを選択（チェック順）"/>
+    <Preference android:key="startApp_loadList" android:title="起動時に取得するリストを選択"/>
 
 </PreferenceScreen>

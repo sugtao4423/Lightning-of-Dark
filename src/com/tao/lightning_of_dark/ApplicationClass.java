@@ -22,7 +22,8 @@ public class ApplicationClass extends Application {
 	private Pattern mentionPattern;
 	private CustomAdapter homeAdapter, mentionAdapter;
 	private CustomAdapter[] listAdapters;
-	private boolean option_regex, option_openBrowser, getBigIcon, list_AlreadyLoad;
+	private boolean option_regex, option_openBrowser, getBigIcon;
+	private boolean[] list_AlreadyLoad;
 	//MainActivity - CustomToast
 	private View customToast;
 	private TextView toast_main_message, toast_tweet;
@@ -115,10 +116,10 @@ public class ApplicationClass extends Application {
 		setGetBigIcon(pref.getBoolean("getBigIcon", false));
 	}
 	//list_AlreadyLoad
-	public void setList_AlreadyLoad(boolean AlreadyLoad){
+	public void setList_AlreadyLoad(boolean[] AlreadyLoad){
 		this.list_AlreadyLoad = AlreadyLoad;
 	}
-	public boolean getList_AlreadyLoad(){
+	public boolean[] getList_AlreadyLoad(){
 		return list_AlreadyLoad;
 	}
 		//CustomToast

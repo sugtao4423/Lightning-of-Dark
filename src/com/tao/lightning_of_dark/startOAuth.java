@@ -126,7 +126,7 @@ public class startOAuth extends Activity {
 					
 					db.execSQL("insert into accounts values('" + accessToken.getScreenName() + "', '"
 							+ CK + "', '" + CS + "', '" + accessToken.getToken() + "', '"
-									+ accessToken.getTokenSecret() + "', 'false', '0', '-1', '', 'false')");
+									+ accessToken.getTokenSecret() + "', 'false', '0', '-1', '', '')");
 					new ShowToast("アカウントを追加しました", startOAuth.this, 0);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
 				}else

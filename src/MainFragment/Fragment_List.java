@@ -67,7 +67,9 @@ public class Fragment_List extends Fragment {
 			@Override
 			public void onRefresh() {
 				adapter.clear();
-				appClass.setList_AlreadyLoad(false);
+				boolean[] tmp = appClass.getList_AlreadyLoad();
+				tmp[ListIndex] = false;
+				appClass.setList_AlreadyLoad(tmp);
 				getList(container.getContext());
 			}
 		});
@@ -80,8 +82,7 @@ public class Fragment_List extends Fragment {
 		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
 		foot.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				foot.setEnabled(false);
 				getList(parent.getContext());
 			}
@@ -98,14 +99,14 @@ public class Fragment_List extends Fragment {
 			for(int i = 0; i < ListId_str.length; i++)
 				ListId[i] = Long.parseLong(ListId_str[i]);
 			if(ListId[ListIndex] != -1){
-				if(appClass.getList_AlreadyLoad()){
+				if(appClass.getList_AlreadyLoad()[ListIndex]){
 					tweetId = ((Status)ListLine.getItemAtPosition(ListLine.getAdapter().getCount() - 2)).getId();
 				}
 				AsyncTask<Void, Void, ResponseList<twitter4j.Status>> task = new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
 						try {
-							if(appClass.getList_AlreadyLoad())
+							if(appClass.getList_AlreadyLoad()[ListIndex])
 								return appClass.getTwitter().getUserListStatuses(ListId[ListIndex], new Paging(1, 50).maxId(tweetId - 1));
 							else
 								return appClass.getTwitter().getUserListStatuses(ListId[ListIndex], new Paging(1, 50));
@@ -117,8 +118,11 @@ public class Fragment_List extends Fragment {
 						if(result != null){
 							for(twitter4j.Status status : result)
 								adapter.add(status);
-							if(!appClass.getList_AlreadyLoad())
-								appClass.setList_AlreadyLoad(true);
+							if(!appClass.getList_AlreadyLoad()[ListIndex]){
+								boolean[] tmp = appClass.getList_AlreadyLoad();
+								tmp[ListIndex] = true;
+								appClass.setList_AlreadyLoad(tmp);
+							}
 						}else
 							new ShowToast("リストを取得できませんでした", getActivity(), 0);
 						PulltoRefresh.setRefreshing(false);
