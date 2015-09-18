@@ -1,11 +1,12 @@
 package com.tao.lightning_of_dark;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import twitter4j.Status;
 
 import com.loopj.android.image.SmartImageView;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,8 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 		ImageView protect;
 		ApplicationClass appClass;
 	}
+
+	@SuppressLint("InflateParams")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
 		final ViewHolder holder;
@@ -94,8 +97,8 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			
 			holder.name.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
 			holder.text.setText(item.getRetweetedStatus().getText());
-			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getRetweetedStatus().getCreatedAt())
-					+ "  Retweeted by ");
+			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(
+					item.getRetweetedStatus().getCreatedAt()) + "  Retweeted by ");
 			holder.RetweetedUserIcon.setImageUrl(item.getUser().getProfileImageURL());
 			holder.RetweetedUserScreenName.setText("@" + item.getUser().getScreenName());
 			if(holder.appClass.getGetBigIcon())
@@ -107,8 +110,8 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			holder.RetweetedUserScreenName.setVisibility(View.GONE);
 			holder.name.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
 			holder.text.setText(item.getText());
-			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
-					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
+			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(
+					item.getCreatedAt()) + "  via " + item.getSource().replaceAll("<.+?>", ""));
 			if(holder.appClass.getGetBigIcon())
 				holder.icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
 			else

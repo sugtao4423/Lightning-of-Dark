@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import twitter4j.ResponseList;
 import twitter4j.TwitterException;
 import twitter4j.UserList;
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
@@ -34,8 +33,7 @@ public class Preference_List extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		
 		getFragmentManager().beginTransaction().replace(android.R.id.content,  new MyPreferencesFragment()).commit();
-		ActionBar actionbar = getActionBar();
-		actionbar.setHomeButtonEnabled(true);
+		getActionBar().setTitle("リスト設定");
 	}
 	
 	public class MyPreferencesFragment extends PreferenceFragment {

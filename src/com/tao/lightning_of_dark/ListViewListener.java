@@ -1,6 +1,9 @@
 package com.tao.lightning_of_dark;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Locale;
 
 import com.loopj.android.image.SmartImageView;
 
@@ -11,10 +14,12 @@ import dialog_onClick.Dialog_reply;
 import dialog_onClick.Dialog_retweet;
 import dialog_onClick.Dialog_talk;
 import dialog_onClick.Dialog_unOfficialRT;
-import twitter4j.MediaEntity;
+import twitter4j.ExtendedMediaEntity;
+import twitter4j.ExtendedMediaEntity.Variant;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -40,6 +45,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		this.tweet_do_back = tweet_do_back;
 	}
 	
+	@SuppressLint("InflateParams")
 	@Override
 	public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id) {
 		final Status item = (Status)parent.getItemAtPosition(position);
@@ -62,18 +68,49 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		}
 		URLEntity[] uentitys = item.getURLEntities();
         if(uentitys != null && uentitys.length > 0){
-            for(int i = 0; i < uentitys.length; i++)
-                list.add(uentitys[i].getExpandedURL());
+            for(URLEntity u : uentitys)
+                list.add(u.getExpandedURL());
         }
-        MediaEntity[] mentitys = item.getMediaEntities();
-        if(mentitys != null && mentitys.length > 0){
-            for(int i = 0; i < mentitys.length; i++)
-                list.add(mentitys[i].getMediaURL());
-        }
-        MediaEntity[] ExtendedMediaEntities = item.getExtendedMediaEntities();
-        if(ExtendedMediaEntities != null && ExtendedMediaEntities.length >= 2){
-        	for(int i = 1; i < ExtendedMediaEntities.length; i++)
-        		list.add(ExtendedMediaEntities[i].getMediaURL());
+        ExtendedMediaEntity[] exMentitys = item.getExtendedMediaEntities();
+        if(exMentitys != null && exMentitys.length > 0){
+        	for(ExtendedMediaEntity ex : exMentitys){
+        		if(ex.getType().equals("video") || ex.getType().equals("animated_gif")){
+        			ArrayList<VideoURLs> urls = new ArrayList<VideoURLs>();
+        			for(Variant v : ex.getVideoVariants()){
+        				boolean find = false;
+        				if(appClass.getIsWebm() && v.getContentType().equals("video/webm"))
+							find = true;
+        				else if(!appClass.getIsWebm() && v.getContentType().equals("video/mp4"))
+        					find = true;
+        				
+        				if(find){
+        					VideoURLs video = new VideoURLs(v.getBitrate(), v.getUrl());
+							urls.add(video);
+        				}
+        			}
+        			if(urls.size() == 0){
+        				for(Variant v : ex.getVideoVariants()){
+            				boolean find = false;
+            				if(v.getContentType().equals("video/mp4"))
+    							find = true;
+            				else if(v.getContentType().equals("video/webm"))
+            					find = true;
+            				
+            				if(find){
+            					VideoURLs video = new VideoURLs(v.getBitrate(), v.getUrl());
+    							urls.add(video);
+            				}
+            			}
+        			}
+        			Collections.sort(urls);
+        			if(urls.size() == 0)
+        				list.add("ビデオの取得に失敗");
+        			else
+        				list.add(urls.get(urls.size() - 1).url);
+        		}else{
+        			list.add(ex.getMediaURL());
+        		}
+        	}
         }
 
         //ダイアログタイトルinflate
@@ -91,7 +128,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         		protect.setVisibility(View.GONE);
         	tweetText.setText(item.getRetweetedStatus().getText());
         	name_screenName.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
-        	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
+        	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(item.getCreatedAt())
 					+ "  via " + item.getRetweetedStatus().getSource().replaceAll("<.+?>", ""));
         	if(appClass.getGetBigIcon())
         		icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL());
@@ -104,7 +141,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         		protect.setVisibility(View.VISIBLE);
         	tweetText.setText(item.getText());
         	name_screenName.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
-        	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(item.getCreatedAt())
+        	tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(item.getCreatedAt())
 					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
         	if(appClass.getGetBigIcon())
         		icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
@@ -130,7 +167,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				String clickedText = (String)parent.getItemAtPosition(position);
-				if(clickedText.startsWith("http://pbs.twimg.com/media/") || clickedText.startsWith("https://pbs.twimg.com/media/")){
+				if(clickedText.startsWith("http")){
 					dialog.dismiss();
 					parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText)));
 				}
@@ -183,5 +220,21 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			pakuri.putExtra("pakuri", item.getText());
 		parent.getContext().startActivity(pakuri);
 		return true;
+	}
+}
+
+class VideoURLs implements Comparable<VideoURLs>{
+	
+	int bitrate;
+    String url;
+      
+	public VideoURLs(int bitrate,String url){
+    	this.bitrate = bitrate;
+    	this.url = url;
+    }
+
+	@Override
+	public int compareTo(VideoURLs another){
+		return this.bitrate-another.bitrate;
 	}
 }

@@ -6,9 +6,10 @@
 
     <uses-sdk
         android:minSdkVersion="15"
-        android:targetSdkVersion="19"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.tao.lightning_of_dark.ApplicationClass"
@@ -18,74 +19,90 @@
         android:theme="@style/Theme.CustomActionBar" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" android:launchMode="singleTask" android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="startOAuth" android:configChanges="orientation|screenSize" android:launchMode="singleTask">
+        <activity
+            android:name="startOAuth"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask" >
             <intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-		        <category android:name="android.intent.category.DEFAULT" />
-        		<category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW" />
 
-        		<data
-            		android:host="twitter"
-            		android:scheme="lightning-of-dark" >
-				</data>
-    		</intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="twitter"
+                    android:scheme="lightning-of-dark" >
+                </data>
+            </intent-filter>
         </activity>
-        <activity android:name="UserPage" android:configChanges="orientation|screenSize"></activity>
-        
-        <activity android:name="TweetActivity" android:windowSoftInputMode="adjustResize" android:configChanges="orientation|screenSize" />
+        <activity
+            android:name="UserPage"
+            android:configChanges="orientation|screenSize" >
+        </activity>
+        <activity
+            android:name="TweetActivity"
+            android:configChanges="orientation|screenSize"
+            android:windowSoftInputMode="adjustResize" >
+        </activity>
         <activity
             android:name="IntentActivity"
-            android:theme="@style/Theme.TranslucentBackground">
+            android:theme="@style/Theme.TranslucentBackground" >
             <intent-filter>
-	            <action android:name="android.intent.action.VIEW" />
-	            
-				<category android:name="android.intent.category.DEFAULT" />
-				
-				<category android:name="android.intent.category.BROWSABLE" />
-				
-				<data
-					android:scheme="http"
-					android:host="twitter.com"
-					android:pathPattern="/..*" >
-				</data>
-				
-				<data
-					android:scheme="https"
-					android:host="twitter.com"
-					android:pathPattern="/..*" >
-				</data>
-				
-				<data
-					android:scheme="http"
-					android:host="mobile.twitter.com"
-					android:pathPattern="/..*" >
-				</data>
-				
-				<data
-					android:scheme="https"
-					android:host="mobile.twitter.com"
-					android:pathPattern="/..*" >
-				</data>
-				
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.SEND" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:mimeType="text/plain" />
-			</intent-filter>
-        </activity><activity android:name="Preference"></activity>
-        <activity android:name="Preference_OptionMenu"></activity>
-        <activity android:name="Preference_List"></activity>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="twitter.com"
+                    android:pathPattern="/..*"
+                    android:scheme="http" >
+                </data>
+                <data
+                    android:host="twitter.com"
+                    android:pathPattern="/..*"
+                    android:scheme="https" >
+                </data>
+                <data
+                    android:host="mobile.twitter.com"
+                    android:pathPattern="/..*"
+                    android:scheme="http" >
+                </data>
+                <data
+                    android:host="mobile.twitter.com"
+                    android:pathPattern="/..*"
+                    android:scheme="https" >
+                </data>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+        <activity android:name="Preference" />
+        <activity android:name="Preference_OptionMenu" />
+        <activity android:name="Preference_List" />
         <activity
             android:name="Show_Image"
-            android:theme="@style/Theme.TranslucentBackground">
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.TranslucentBackground" >
+        </activity>
+        <activity
+            android:name="Show_Video"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.TranslucentBackground" >
         </activity>
     </application>
 

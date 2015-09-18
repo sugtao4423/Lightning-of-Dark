@@ -3,158 +3,162 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" >
 
-<RelativeLayout 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-	<TextView
-        android:id="@+id/UserBio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="3dp"
-        android:text="Loading..." />
-	<TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/UserBio"
-        android:layout_below="@+id/UserBio"
-        android:layout_marginTop="15dp"
-        android:text="場所"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-	<TextView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="3dp"
-        android:text="Loading..." />
-	<TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/location"
-        android:layout_below="@+id/location"
-        android:layout_marginTop="15dp"
-        android:text="リンク"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-	<TextView
-    android:id="@+id/link"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignLeft="@+id/textView3"
-    android:layout_below="@+id/textView3"
-    android:layout_marginTop="3dp"
-    android:autoLink="web"
-    android:text="Loading..." />
+        <TextView
+            android:id="@+id/UserBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="3dp"
+            android:text="Loading..." />
 
-	<ImageView
-	    android:id="@+id/imageView1"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/link"
-	    android:layout_below="@+id/link"
-	    android:layout_marginTop="30dp"
-	    android:src="@drawable/user_tweet_count" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/UserBio"
+            android:layout_below="@+id/UserBio"
+            android:layout_marginTop="15dp"
+            android:text="場所"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-	<TextView
-	    android:id="@+id/User_tweet_count"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignBottom="@+id/imageView1"
-	    android:layout_toRightOf="@+id/imageView1"
-	    android:text="null" />
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView2"
+            android:layout_below="@+id/textView2"
+            android:layout_marginTop="3dp"
+            android:text="Loading..." />
 
-	<ImageView
-	    android:id="@+id/imageView2"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/imageView1"
-	    android:layout_below="@+id/imageView1"
-	    android:layout_marginTop="15dp"
-	    android:src="@drawable/user_favorite_count" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/location"
+            android:layout_below="@+id/location"
+            android:layout_marginTop="15dp"
+            android:text="リンク"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-	<TextView
-	    android:id="@+id/User_favorite_count"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignBottom="@+id/imageView2"
-	    android:layout_toRightOf="@+id/imageView2"
-	    android:text="null" />
+        <TextView
+            android:id="@+id/link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView3"
+            android:layout_below="@+id/textView3"
+            android:layout_marginTop="3dp"
+            android:autoLink="web"
+            android:text="Loading..." />
 
-	<ImageView
-	    android:id="@+id/imageView3"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/imageView2"
-	    android:layout_below="@+id/imageView2"
-	    android:layout_marginTop="15dp"
-	    android:src="@drawable/user_follow_count" />
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/link"
+            android:layout_below="@+id/link"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/user_tweet_count" />
 
-	<TextView
-	    android:id="@+id/User_follow_count"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignBottom="@+id/imageView3"
-	    android:layout_toRightOf="@+id/imageView3"
-	    android:text="null" />
+        <TextView
+            android:id="@+id/User_tweet_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView1"
+            android:layout_toRightOf="@+id/imageView1"
+            android:text="null" />
 
-	<ImageView
-	    android:id="@+id/imageView4"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignLeft="@+id/imageView3"
-	    android:layout_below="@+id/imageView3"
-	    android:layout_marginTop="15dp"
-	    android:layout_marginBottom="20dp"
-	    android:src="@drawable/user_follower_count" />
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageView1"
+            android:layout_below="@+id/imageView1"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/user_favorite_count" />
 
-	<TextView
-	    android:id="@+id/User_follower_count"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_alignBottom="@+id/imageView4"
-	    android:layout_toRightOf="@+id/imageView4"
-	    android:text="null" />
+        <TextView
+            android:id="@+id/User_favorite_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_toRightOf="@+id/imageView2"
+            android:text="null" />
 
-	<com.loopj.android.image.SmartImageView
-	    android:id="@+id/UserPage_sourceIcon"
-	    android:layout_marginLeft="10dp"
-	    android:layout_marginTop="10dp"
-	    android:layout_width="40dp"
-	    android:layout_height="40dp"
-	    android:src="@drawable/ic_action_refresh" />
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageView2"
+            android:layout_below="@+id/imageView2"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/user_follow_count" />
 
-	<TextView
-	    android:id="@+id/textView1"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/UserPage_sourceIcon"
-	    android:layout_marginLeft="10dp"
-	    android:layout_marginTop="20dp"
-	    android:text="bio"
-	    android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TextView
+            android:id="@+id/User_follow_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView3"
+            android:layout_toRightOf="@+id/imageView3"
+            android:text="null" />
 
-	<ImageView
-	    android:id="@+id/UserPage_isFollow"
-	    android:layout_width="40dp"
-	    android:layout_height="40dp"
-	    android:layout_alignTop="@+id/UserPage_sourceIcon"
-	    android:layout_marginLeft="5dp"
-	    android:layout_toRightOf="@+id/UserPage_sourceIcon"
-	    android:scaleType="center" />
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageView3"
+            android:layout_below="@+id/imageView3"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/user_follower_count" />
 
-	<com.loopj.android.image.SmartImageView
-	    android:id="@+id/UserPage_targetIcon"
-	    android:layout_width="40dp"
-	    android:layout_height="40dp"
-	    android:layout_alignTop="@+id/UserPage_isFollow"
-	    android:layout_toRightOf="@+id/UserPage_isFollow"
-	    android:layout_marginLeft="5dp"
-	    android:src="@drawable/ic_action_refresh" />
+        <TextView
+            android:id="@+id/User_follower_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView4"
+            android:layout_toRightOf="@+id/imageView4"
+            android:text="null" />
 
-</RelativeLayout>
+        <com.loopj.android.image.SmartImageView
+            android:id="@+id/UserPage_sourceIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_action_refresh" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/UserPage_sourceIcon"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:text="bio"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:id="@+id/UserPage_isFollow"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/UserPage_sourceIcon"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/UserPage_sourceIcon"
+            android:scaleType="center" />
+
+        <com.loopj.android.image.SmartImageView
+            android:id="@+id/UserPage_targetIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/UserPage_isFollow"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/UserPage_isFollow"
+            android:src="@drawable/ic_action_refresh" />
+    </RelativeLayout>
+
 </ScrollView>

@@ -22,7 +22,7 @@ public class ApplicationClass extends Application {
 	private Pattern mentionPattern;
 	private CustomAdapter homeAdapter, mentionAdapter;
 	private CustomAdapter[] listAdapters;
-	private boolean option_regex, option_openBrowser, getBigIcon;
+	private boolean option_regex, option_openBrowser, getBigIcon, isWebm, isVideoLoop;
 	private boolean[] list_AlreadyLoad;
 	//MainActivity - CustomToast
 	private View customToast;
@@ -109,11 +109,27 @@ public class ApplicationClass extends Application {
 	public boolean getGetBigIcon(){
 		return getBigIcon;
 	}
+	//isWebm
+	public void setIsWebm(boolean isWebm){
+		this.isWebm = isWebm;
+	}
+	public boolean getIsWebm(){
+		return isWebm;
+	}
+	//isVideoLoop
+	public void setIsVideoLoop(boolean isVideoLoop){
+		this.isVideoLoop = isVideoLoop;
+	}
+	public boolean getIsVideoLoop(){
+		return isVideoLoop;
+	}
 	public void loadOption(Context context){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		setOption_regex(pref.getBoolean("menu_regex", false));
 		setOption_openBrowser(pref.getBoolean("menu_openBrowser", false));
 		setGetBigIcon(pref.getBoolean("getBigIcon", false));
+		setIsWebm(pref.getBoolean("isWebm", false));
+		setIsVideoLoop(pref.getBoolean("isVideoLoop", true));
 	}
 	//list_AlreadyLoad
 	public void setList_AlreadyLoad(boolean[] AlreadyLoad){

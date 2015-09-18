@@ -2,7 +2,6 @@ package com.tao.lightning_of_dark;
 
 import com.tao.lightning_of_dark.R;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -15,8 +14,7 @@ public class Preference extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		
 		getFragmentManager().beginTransaction().replace(android.R.id.content,  new MyPreferencesFragment()).commit();
-		ActionBar actionbar = getActionBar();
-		actionbar.setHomeButtonEnabled(true);
+		getActionBar().setTitle("設定");
 	}
 	
 	public class MyPreferencesFragment extends PreferenceFragment {

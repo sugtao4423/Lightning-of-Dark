@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-    
-	<com.loopj.android.image.SmartImageView
+
+    <com.loopj.android.image.SmartImageView
         android:id="@+id/icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -71,5 +71,5 @@
         android:layout_toRightOf="@+id/name_screenName"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_action_secure" />
-    
+
 </RelativeLayout>

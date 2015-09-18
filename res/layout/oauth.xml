@@ -51,8 +51,8 @@
         android:layout_alignBottom="@+id/textView3"
         android:layout_alignLeft="@+id/editText2"
         android:layout_alignParentRight="true"
-        android:ems="10" 
-        android:singleLine="true"/>
+        android:ems="10"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/OAuthDescription"

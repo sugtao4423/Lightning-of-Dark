@@ -7,14 +7,15 @@ import java.net.URL;
 
 import jp.ogwork.gesturetransformableview.view.GestureTransformableImageView;
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.ProgressBar;
 
 public class Show_Image extends Activity {
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -28,16 +29,16 @@ public class Show_Image extends Activity {
 		setContentView(image);
 		
 		AsyncTask<String, Void, Bitmap> task = new AsyncTask<String, Void, Bitmap>(){
-			AlertDialog dialog;
+			private ProgressDialog progDailog;
 			@Override
-			protected void onPreExecute(){
-				ProgressBar bar = new ProgressBar(Show_Image.this);
-				bar.setIndeterminate(true);
-				AlertDialog.Builder builder = new AlertDialog.Builder(Show_Image.this);
-				builder.setView(bar);
-				dialog = builder.create();
-				dialog.show();
-			}
+	        protected void onPreExecute() {
+	            progDailog = new ProgressDialog(Show_Image.this);
+	            progDailog.setMessage("Loading...");
+	            progDailog.setIndeterminate(false);
+	            progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+	            progDailog.setCancelable(true);
+	            progDailog.show();
+	        }
 			@Override
 			protected Bitmap doInBackground(String... params) {
 				try {
@@ -56,7 +57,7 @@ public class Show_Image extends Activity {
 			@Override
 			protected void onPostExecute(Bitmap result){
 				if(result != null){
-					dialog.dismiss();
+					progDailog.dismiss();
 					image.setImageBitmap(result);
 				}else{
 					new ShowToast("画像の取得に失敗しました", Show_Image.this, 0);

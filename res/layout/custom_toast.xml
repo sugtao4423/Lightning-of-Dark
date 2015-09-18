@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toast_fav_layout_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/toast_bg"
-	xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/toast_main_message"
@@ -15,21 +14,22 @@
         android:textColor="#ffcceeff" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" >
+
         <com.loopj.android.image.SmartImageView
             android:id="@+id/toast_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:scaleType="fitCenter" />
-        
+
         <TextView
             android:id="@+id/toast_tweet"
-            android:textColor="#ffffffff"
-            android:paddingLeft="10dp"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:textColor="#ffffffff" />
     </LinearLayout>
+
 </LinearLayout>

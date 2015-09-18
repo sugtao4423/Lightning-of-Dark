@@ -10,8 +10,9 @@ import com.tao.lightning_of_dark.IntentActivity;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.Show_Image;
+import com.tao.lightning_of_dark.Show_Video;
 import com.tao.lightning_of_dark.UserPage;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,6 +42,7 @@ public class Dialog_ListClick implements OnItemClickListener {
 		this.tweet_do_back = tweet_do_back;
 	}
 
+	@SuppressLint("InflateParams")
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
@@ -111,18 +113,24 @@ public class Dialog_ListClick implements OnItemClickListener {
 		}
 		
 		Matcher image = Pattern.compile("(http://|https://){1}pbs.twimg.com/media/").matcher(clickedText);
-		Matcher state = Pattern.compile("https://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(clickedText);
+		Matcher video = Pattern.compile("(http://|https://){1}video.twimg.com/ext_tw_video/[0-9]+/pu/vid/.+/.+(.mp4|.webm)").matcher(clickedText);
+		Matcher gif	=	Pattern.compile("(http://|https://){1}pbs.twimg.com/tweet_video/").matcher(clickedText); 
+		Matcher state = Pattern.compile("(http://|https://){1}twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(clickedText);
 		if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
 			Intent web;
 			if(image.find()){
 				web = new Intent(parent.getContext(), Show_Image.class);
 				web.putExtra("URL", clickedText);
-			}
-			else if(state.find()){
+			}else if(video.find()){
+				web = new Intent(parent.getContext(), Show_Video.class);
+				web.putExtra("URL", clickedText);
+			}else if(gif.find()){
+				web = new Intent(parent.getContext(), Show_Video.class);
+				web.putExtra("URL", clickedText);
+			}else if(state.find()){
 				new IntentActivity().showStatus(Long.parseLong(state.group(1)), baseParent.getContext(), false);
 				return;
-			}
-			else{
+			}else{
 				web = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));
 			}
 			parent.getContext().startActivity(web);
