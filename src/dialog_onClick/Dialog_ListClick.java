@@ -112,10 +112,10 @@ public class Dialog_ListClick implements OnItemClickListener {
 			builder.create().show();
 		}
 		
-		Matcher image = Pattern.compile("(http://|https://){1}pbs.twimg.com/media/").matcher(clickedText);
-		Matcher video = Pattern.compile("(http://|https://){1}video.twimg.com/ext_tw_video/[0-9]+/pu/vid/.+/.+(.mp4|.webm)").matcher(clickedText);
-		Matcher gif	=	Pattern.compile("(http://|https://){1}pbs.twimg.com/tweet_video/").matcher(clickedText); 
-		Matcher state = Pattern.compile("(http://|https://){1}twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(clickedText);
+		Matcher image = Pattern.compile("http(s)?://pbs.twimg.com/media/").matcher(clickedText);
+		Matcher video = Pattern.compile("http(s)?://video.twimg.com/ext_tw_video/[0-9]+/pu/vid/.+/.+(.mp4|.webm)").matcher(clickedText);
+		Matcher gif	=	Pattern.compile("http(s)?://pbs.twimg.com/tweet_video/").matcher(clickedText); 
+		Matcher state = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(clickedText);
 		if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
 			Intent web;
 			if(image.find()){
@@ -128,7 +128,7 @@ public class Dialog_ListClick implements OnItemClickListener {
 				web = new Intent(parent.getContext(), Show_Video.class);
 				web.putExtra("URL", clickedText);
 			}else if(state.find()){
-				new IntentActivity().showStatus(Long.parseLong(state.group(1)), baseParent.getContext(), false);
+				new IntentActivity().showStatus(Long.parseLong(state.group(2)), baseParent.getContext(), false);
 				return;
 			}else{
 				web = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));

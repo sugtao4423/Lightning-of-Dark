@@ -43,6 +43,7 @@ public class IntentActivity extends Activity {
 	
 	private SharedPreferences pref;
 	
+	@SuppressLint("InflateParams")
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -109,7 +110,7 @@ public class IntentActivity extends Activity {
 		if(Intent.ACTION_VIEW.equals(getIntent().getAction())){
 			uri = getIntent().getData().toString();
 			Matcher user = Pattern.compile("http(s)?://twitter.com/([0-9a-zA-Z_]+)").matcher(uri);
-			Matcher status = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/(\\d+)").matcher(uri);
+			Matcher status = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(uri);
 			if(status.find()){
 				showStatus(Long.parseLong(status.group(2)), IntentActivity.this, true);
 			}else if(user.find()){
