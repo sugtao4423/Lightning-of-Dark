@@ -9,7 +9,7 @@ import com.tao.lightning_of_dark.CustomAdapter_User;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
 import com.tao.lightning_of_dark.UserPage;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,13 +32,14 @@ public class _3_follow extends Fragment {
 	private long cursor;
 	private ApplicationClass appClass;
 	
+	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.user_3, null);
+		View v = inflater.inflate(R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		cursor = -1L;
 		
-		userFollow = (ListView)v.findViewById(R.id.UserFollow);
+		userFollow = (ListView)v.findViewById(R.id.UserPageList);
 		adapter = new CustomAdapter_User(getActivity());
 		
 		addFooter();
@@ -54,7 +55,7 @@ public class _3_follow extends Fragment {
 		});
 		
 		//PulltoRefresh
-		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserFollowPull);
+		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, 
 	            android.R.color.holo_green_light, 
 	            android.R.color.holo_orange_light, 

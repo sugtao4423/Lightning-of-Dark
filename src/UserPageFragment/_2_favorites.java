@@ -10,7 +10,7 @@ import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
 import com.tao.lightning_of_dark.UserPage;
-
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,13 +33,14 @@ public class _2_favorites extends Fragment {
 	private long tweetId;
 	private ApplicationClass appClass;
 	
+	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.user_2, null);
+		View v = inflater.inflate(R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		AlreadyLoad = false;
 		
-		UserFav = (ListView)v.findViewById(R.id.Userfav);
+		UserFav = (ListView)v.findViewById(R.id.UserPageList);
 		UserFav.setOnItemClickListener(new ListViewListener(false));
 		UserFav.setOnItemLongClickListener(new ListViewListener(false));
 		
@@ -48,7 +49,7 @@ public class _2_favorites extends Fragment {
 		addFooter();
 		UserFav.setAdapter(adapter);
 		
-		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserFavPull);
+		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, 
 	            android.R.color.holo_green_light, 
 	            android.R.color.holo_orange_light, 

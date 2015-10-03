@@ -3,6 +3,7 @@ package UserPageFragment;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,13 +33,14 @@ public class _1_Tweet extends Fragment {
 	private long tweetId;
 	private ApplicationClass appClass;
 	
+	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		AlreadyLoad = false;
 		//通常のListViewSet
-		userTweet = (ListView)v.findViewById(R.id.UserTweet);
+		userTweet = (ListView)v.findViewById(R.id.UserPageList);
 		userTweet.setOnItemClickListener(new ListViewListener(false));
 		userTweet.setOnItemLongClickListener(new ListViewListener(false));
 		//ここまで
@@ -48,7 +50,7 @@ public class _1_Tweet extends Fragment {
 		userTweet.setAdapter(adapter);
 		
 		//PulltoRefresh
-		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserTweetPull);
+		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, 
 	            android.R.color.holo_green_light, 
 	            android.R.color.holo_orange_light, 
