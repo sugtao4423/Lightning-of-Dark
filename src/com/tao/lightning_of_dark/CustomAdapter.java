@@ -18,8 +18,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CustomAdapter extends ArrayAdapter<Status> {
+public class CustomAdapter extends ArrayAdapter<Status>{
 	private LayoutInflater mInflater;
+
 	public CustomAdapter(Context context){
 		super(context, android.R.layout.simple_list_item_1);
 		mInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -37,8 +38,8 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 	public View getView(int position, View convertView, ViewGroup parent){
 		final ViewHolder holder;
 		final Status item = getItem(position);
-		
-		if (convertView == null){
+
+		if(convertView == null) {
 			convertView = mInflater.inflate(R.layout.list_item_tweet, null);
 			TextView name = (TextView)convertView.findViewById(R.id.name_screenName);
 			TextView text = (TextView)convertView.findViewById(R.id.tweetText);
@@ -48,7 +49,7 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			TextView RetweetedUserScreenName = (TextView)convertView.findViewById(R.id.RetweetedUserScreenName);
 			ImageView protect = (ImageView)convertView.findViewById(R.id.UserProtected);
 			ApplicationClass appClass = (ApplicationClass)parent.getContext().getApplicationContext();
-			
+
 			holder = new ViewHolder();
 			holder.name = name;
 			holder.text = text;
@@ -58,13 +59,13 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			holder.RetweetedUserScreenName = RetweetedUserScreenName;
 			holder.protect = protect;
 			holder.appClass = appClass;
-			
+
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder)convertView.getTag();
 		}
-		//鍵
-		if(item.isRetweet()){
+		// 鍵
+		if(item.isRetweet()) {
 			if(!item.getRetweetedStatus().getUser().isProtected())
 				holder.protect.setVisibility(View.GONE);
 			else
@@ -75,7 +76,7 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			else
 				holder.protect.setVisibility(View.VISIBLE);
 		}
-		//リスト背景
+		// リスト背景
 		if(item.isRetweetedByMe())
 			convertView.setBackgroundResource(R.drawable.retweeted_by_me);
 		else if(item.isRetweet())
@@ -90,11 +91,11 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			else
 				convertView.setBackgroundResource(R.drawable.position1);
 		}
-		//アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
-		if(item.isRetweet()){
+		// アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
+		if(item.isRetweet()) {
 			holder.RetweetedUserIcon.setVisibility(View.VISIBLE);
 			holder.RetweetedUserScreenName.setVisibility(View.VISIBLE);
-			
+
 			holder.name.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
 			holder.text.setText(item.getRetweetedStatus().getText());
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(
@@ -110,16 +111,16 @@ public class CustomAdapter extends ArrayAdapter<Status> {
 			holder.RetweetedUserScreenName.setVisibility(View.GONE);
 			holder.name.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
 			holder.text.setText(item.getText());
-			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(
-					item.getCreatedAt()) + "  via " + item.getSource().replaceAll("<.+?>", ""));
+			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(item.getCreatedAt())
+					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
 			if(holder.appClass.getGetBigIcon())
 				holder.icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
 			else
 				holder.icon.setImageUrl(item.getUser().getProfileImageURL());
 		}
-		holder.icon.setOnClickListener(new OnClickListener() {
+		holder.icon.setOnClickListener(new OnClickListener(){
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v){
 				Intent intent = new Intent(getContext(), UserPage.class);
 				if(item.isRetweet())
 					intent.putExtra("userScreenName", item.getRetweetedStatus().getUser().getScreenName());

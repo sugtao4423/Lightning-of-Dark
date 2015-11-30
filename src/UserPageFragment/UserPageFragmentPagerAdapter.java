@@ -4,16 +4,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class UserPageFragmentPagerAdapter extends FragmentStatePagerAdapter {
+public class UserPageFragmentPagerAdapter extends FragmentStatePagerAdapter{
 
-	public UserPageFragmentPagerAdapter(FragmentManager fm) {
+	public UserPageFragmentPagerAdapter(FragmentManager fm){
 		super(fm);
 	}
 
 	@Override
-	public Fragment getItem(int i) {
+	public Fragment getItem(int i){
 		switch(i){
-		case 0: default:
+		case 0:
+		default:
 			return new _0_detail();
 		case 1:
 			return new _1_Tweet();
@@ -27,14 +28,15 @@ public class UserPageFragmentPagerAdapter extends FragmentStatePagerAdapter {
 	}
 
 	@Override
-	public int getCount() {
+	public int getCount(){
 		return 5;
 	}
-	
+
 	@Override
 	public CharSequence getPageTitle(int position){
 		switch(position){
-		case 0: default:
+		case 0:
+		default:
 			return "Detail";
 		case 1:
 			return "Tweet";

@@ -24,78 +24,77 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class _4_follower extends Fragment {
-	
+public class _4_follower extends Fragment{
+
 	private ListView userFollower, foot;
 	private SwipeRefreshLayout PulltoRefresh;
 	private CustomAdapter_User adapter;
 	private long cursor;
 	private ApplicationClass appClass;
-	
+
 	@SuppressLint("InflateParams")
 	@Override
-	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		cursor = -1L;
-		
+
 		userFollower = (ListView)v.findViewById(R.id.UserPageList);
 		adapter = new CustomAdapter_User(getActivity());
-		
+
 		addFooter();
 		userFollower.setAdapter(adapter);
-		userFollower.setOnItemClickListener(new OnItemClickListener() {
+		userFollower.setOnItemClickListener(new OnItemClickListener(){
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 				String screen = ((User)userFollower.getItemAtPosition(position)).getScreenName();
 				Intent user = new Intent(container.getContext(), UserPage.class);
 				user.putExtra("userScreenName", screen);
 				startActivity(user);
 			}
 		});
-		
-		//PulltoRefresh
+
+		// PulltoRefresh
 		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
-		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, 
-	            android.R.color.holo_green_light, 
-	            android.R.color.holo_orange_light, 
-	            android.R.color.holo_red_light);
-		PulltoRefresh.setOnRefreshListener(new OnRefreshListener() {
+		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
+				android.R.color.holo_orange_light, android.R.color.holo_red_light);
+		PulltoRefresh.setOnRefreshListener(new OnRefreshListener(){
 			@Override
-			public void onRefresh() {
+			public void onRefresh(){
 				adapter.clear();
 				FollowerLine();
 			}
 		});
 		return v;
 	}
-	
+
 	public void addFooter(){
 		foot = new ListView(getActivity());
 		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener() {
+		foot.setOnItemClickListener(new OnItemClickListener(){
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 				foot.setEnabled(false);
 				FollowerLine();
 			}
 		});
 		userFollower.addFooterView(foot);
 	}
-	
+
 	public void FollowerLine(){
 		AsyncTask<Void, Void, PagableResponseList<User>> task = new AsyncTask<Void, Void, PagableResponseList<User>>(){
 			@Override
-			protected PagableResponseList<User> doInBackground(Void... params) {
-				try {
+			protected PagableResponseList<User> doInBackground(Void... params){
+				try{
 					return appClass.getTwitter().getFollowersList(appClass.getTargetScreenName(), cursor);
-				} catch (TwitterException e) {
+				}catch(TwitterException e){
 					return null;
 				}
 			}
+
 			@Override
 			public void onPostExecute(PagableResponseList<User> result){
-				if(result != null){
+				if(result != null) {
 					for(User user : result)
 						adapter.add(user);
 					cursor = result.getNextCursor();

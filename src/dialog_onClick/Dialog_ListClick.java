@@ -29,14 +29,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class Dialog_ListClick implements OnItemClickListener {
+public class Dialog_ListClick implements OnItemClickListener{
 
 	private Status status;
 	private AdapterView<?> baseParent;
-	
+
 	private boolean tweet_do_back;
-	
-	public Dialog_ListClick(Status status, AdapterView<?> baseParent, boolean tweet_do_back) {
+
+	public Dialog_ListClick(Status status, AdapterView<?> baseParent, boolean tweet_do_back){
 		this.status = status;
 		this.baseParent = baseParent;
 		this.tweet_do_back = tweet_do_back;
@@ -44,12 +44,11 @@ public class Dialog_ListClick implements OnItemClickListener {
 
 	@SuppressLint("InflateParams")
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 		((ApplicationClass)baseParent.getContext().getApplicationContext()).getListViewDialog().dismiss();
 		String clickedText = (String)parent.getItemAtPosition(position);
-		
-		if(clickedText.equals("正規表現で抽出")){
+
+		if(clickedText.equals("正規表現で抽出")) {
 			View regView = LayoutInflater.from(parent.getContext()).inflate(R.layout.reg_dialog, null);
 			final EditText regEdit = (EditText)regView.findViewById(R.id.regDialog_edit);
 			Button dot = (Button)regView.findViewById(R.id.regDialog_dot);
@@ -62,7 +61,7 @@ public class Dialog_ListClick implements OnItemClickListener {
 			Button kakko1_1 = (Button)regView.findViewById(R.id.regDialog_kakko1_1);
 			Button kakko2_0 = (Button)regView.findViewById(R.id.regDialog_kakko2_0);
 			Button kakko2_1 = (Button)regView.findViewById(R.id.regDialog_kakko2_1);
-			
+
 			dot.setOnClickListener(new Dialog_regButtonClick(regEdit, "."));
 			kome.setOnClickListener(new Dialog_regButtonClick(regEdit, "*"));
 			or.setOnClickListener(new Dialog_regButtonClick(regEdit, "|"));
@@ -73,30 +72,30 @@ public class Dialog_ListClick implements OnItemClickListener {
 			kakko1_1.setOnClickListener(new Dialog_regButtonClick(regEdit, ")"));
 			kakko2_0.setOnClickListener(new Dialog_regButtonClick(regEdit, "{"));
 			kakko2_1.setOnClickListener(new Dialog_regButtonClick(regEdit, "}"));
-			
-			
+
 			AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
 			regEdit.setText(pref.getString("regularExpression", ""));
 			builder.setTitle("正規表現を入力してください")
 			.setView(regView)
-			.setPositiveButton("OK", new OnClickListener() {
+			.setPositiveButton("OK", new OnClickListener(){
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
+				public void onClick(DialogInterface dialog, int which){
 					String editReg = regEdit.getText().toString();
 					pref.edit().putString("regularExpression", editReg).commit();
 					Pattern pattern = Pattern.compile(editReg, Pattern.DOTALL);
 					CustomAdapter content = new CustomAdapter(baseParent.getContext());
 					for(int i = 0; baseParent.getCount() - 1 > i; i++){
-						Status status = ((Status) baseParent.getAdapter().getItem(i));
+						Status status = ((Status)baseParent.getAdapter().getItem(i));
 						if(pattern.matcher(status.getText()).find())
 							content.add(status);
 					}
 					AlertDialog.Builder b = new AlertDialog.Builder(baseParent.getContext());
 					ListView l = new ListView(baseParent.getContext());
-					if(content.isEmpty())
-						l.setAdapter(new ArrayAdapter<String>(baseParent.getContext(),android.R.layout.simple_list_item_1, new String[]{"なし"}));
-					else{
+					if(content.isEmpty()){
+						l.setAdapter(new ArrayAdapter<String>(baseParent.getContext(), android.R.layout.simple_list_item_1,
+								new String[]{"なし"}));
+					}else{
 						l.setAdapter(content);
 						l.setOnItemClickListener(new ListViewListener(tweet_do_back));
 						l.setOnItemLongClickListener(new ListViewListener(tweet_do_back));
@@ -104,30 +103,25 @@ public class Dialog_ListClick implements OnItemClickListener {
 					b.setView(l).create().show();
 				}
 			});
-			builder.setNegativeButton("キャンセル", new OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-				}
-			});
-			builder.create().show();
+			builder.setNegativeButton("キャンセル", null).create().show();
 		}
-		
+
 		Matcher image = Pattern.compile("http(s)?://pbs.twimg.com/media/").matcher(clickedText);
 		Matcher video = Pattern.compile("http(s)?://video.twimg.com/ext_tw_video/[0-9]+/pu/vid/.+/.+(.mp4|.webm)").matcher(clickedText);
-		Matcher gif	=	Pattern.compile("http(s)?://pbs.twimg.com/tweet_video/").matcher(clickedText); 
+		Matcher gif = Pattern.compile("http(s)?://pbs.twimg.com/tweet_video/").matcher(clickedText);
 		Matcher state = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(clickedText);
-		if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
+		if(clickedText.startsWith("http") || clickedText.startsWith("ftp")) {
 			Intent web;
-			if(image.find()){
+			if(image.find()) {
 				web = new Intent(parent.getContext(), Show_Image.class);
 				web.putExtra("URL", clickedText);
-			}else if(video.find()){
+			}else if(video.find()) {
 				web = new Intent(parent.getContext(), Show_Video.class);
 				web.putExtra("URL", clickedText);
-			}else if(gif.find()){
+			}else if(gif.find()) {
 				web = new Intent(parent.getContext(), Show_Video.class);
 				web.putExtra("URL", clickedText);
-			}else if(state.find()){
+			}else if(state.find()) {
 				new IntentActivity().showStatus(Long.parseLong(state.group(2)), baseParent.getContext(), false);
 				return;
 			}else{
@@ -135,9 +129,9 @@ public class Dialog_ListClick implements OnItemClickListener {
 			}
 			parent.getContext().startActivity(web);
 		}
-		if(clickedText.equals("ブラウザで開く")){
+		if(clickedText.equals("ブラウザで開く")) {
 			String url, SN, Id;
-			if(status.isRetweet()){
+			if(status.isRetweet()) {
 				SN = status.getRetweetedStatus().getUser().getScreenName();
 				Id = String.valueOf(status.getRetweetedStatus().getId());
 			}else{
@@ -147,13 +141,13 @@ public class Dialog_ListClick implements OnItemClickListener {
 			url = "https://twitter.com/" + SN + "/status/" + Id;
 			parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 		}
-		if(clickedText.startsWith("@")){ //UserPage
+		if(clickedText.startsWith("@")) { // UserPage
 			Intent intent = new Intent(parent.getContext(), UserPage.class);
 			intent.putExtra("userScreenName", clickedText.substring(1));
 			parent.getContext().startActivity(intent);
 		}
 	}
-	
+
 	public void regEditPlus(EditText edit, String text){
 		edit.setText(edit.getText().toString() + text);
 	}

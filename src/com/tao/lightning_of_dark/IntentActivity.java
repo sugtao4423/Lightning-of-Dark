@@ -28,34 +28,33 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class IntentActivity extends Activity {
-	
+public class IntentActivity extends Activity{
+
 	private ApplicationClass appClass;
-	
+
 	private Intent i;
 	private String uri;
-	
+
 	private String CK, CS;
 	private AccessToken accessToken;
 	private Twitter twitter;
 	private String MyScreenName;
 	private Pattern mentionPattern;
-	
+
 	private SharedPreferences pref;
-	
+
 	@SuppressLint("InflateParams")
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
+
 		appClass = (ApplicationClass)getApplicationContext();
-		
-		if(appClass.getTwitter() == null){
+
+		if(appClass.getTwitter() == null) {
 			AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 				@Override
-				protected Boolean doInBackground(Void... params) {
-					Configuration conf = new ConfigurationBuilder()
-					.setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS).build();
-					
+				protected Boolean doInBackground(Void... params){
+					Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS).build();
+
 					twitter = new TwitterFactory(conf).getInstance(accessToken);
 					try{
 						MyScreenName = twitter.getScreenName();
@@ -64,15 +63,16 @@ public class IntentActivity extends Activity {
 					}
 					return true;
 				}
+
 				@Override
-				protected void onPostExecute(Boolean result) {
-					if(result){
+				protected void onPostExecute(Boolean result){
+					if(result) {
 						appClass.setMyScreenName(MyScreenName);
 						appClass.setTwitter(twitter);
 						mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
 						appClass.setMentionPattern(mentionPattern);
-						
-						jump();						
+
+						jump();
 					}else
 						new ShowToast("スクリーンネームの取得に失敗しました", IntentActivity.this, 0);
 				}
@@ -80,18 +80,18 @@ public class IntentActivity extends Activity {
 			pref = PreferenceManager.getDefaultSharedPreferences(this);
 			appClass = (ApplicationClass)this.getApplicationContext();
 			appClass.loadOption(this);
-			
+
 			View customToast = LayoutInflater.from(this).inflate(R.layout.custom_toast, null);
 			appClass.setToastView(customToast);
 			appClass.setToast_Main_Message((TextView)customToast.findViewById(R.id.toast_main_message));
 			appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
 			appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
-			
-			if(pref.getString("AccessToken", "").equals("")){
+
+			if(pref.getString("AccessToken", "").equals("")) {
 				startActivity(new Intent(this, startOAuth.class));
 				finish();
 			}else{
-				if(pref.getString("CustomCK", "").equals("")){
+				if(pref.getString("CustomCK", "").equals("")) {
 					CK = getString(R.string.CK);
 					CS = getString(R.string.CS);
 				}else{
@@ -105,21 +105,21 @@ public class IntentActivity extends Activity {
 			jump();
 		}
 	}
-	
+
 	public void jump(){
-		if(Intent.ACTION_VIEW.equals(getIntent().getAction())){
+		if(Intent.ACTION_VIEW.equals(getIntent().getAction())) {
 			uri = getIntent().getData().toString();
 			Matcher user = Pattern.compile("http(s)?://twitter.com/([0-9a-zA-Z_]+)").matcher(uri);
 			Matcher status = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(uri);
-			if(status.find()){
+			if(status.find()) {
 				showStatus(Long.parseLong(status.group(2)), IntentActivity.this, true);
-			}else if(user.find()){
+			}else if(user.find()) {
 				i = new Intent(IntentActivity.this, UserPage.class);
 				i.putExtra("userScreenName", user.group(2));
 				startActivity(i);
 				finish();
 			}
-		}else if(Intent.ACTION_SEND.equals(getIntent().getAction())){
+		}else if(Intent.ACTION_SEND.equals(getIntent().getAction())) {
 			uri = getIntent().getExtras().getCharSequence(Intent.EXTRA_TEXT).toString();
 			i = new Intent(IntentActivity.this, TweetActivity.class);
 			i.putExtra("pakuri", uri);
@@ -128,39 +128,40 @@ public class IntentActivity extends Activity {
 			finish();
 		}
 	}
-	
+
 	public void showStatus(long tweetId, final Context context, final boolean isClose){
 		appClass = (ApplicationClass)context.getApplicationContext();
 		AsyncTask<Long, Void, Status> task = new AsyncTask<Long, Void, Status>(){
 			@Override
-			protected twitter4j.Status doInBackground(Long... params) {
-				try {
+			protected twitter4j.Status doInBackground(Long... params){
+				try{
 					return appClass.getTwitter().showStatus(params[0]);
-				} catch (TwitterException e) {
+				}catch(TwitterException e){
 					return null;
 				}
 			}
+
 			@SuppressLint("NewApi")
 			@Override
 			protected void onPostExecute(twitter4j.Status status){
-				if(status != null){
-		        	CustomAdapter adapter = new CustomAdapter(context);
-		        	adapter.add(status);
-		        	ListView l = new ListView(context);
-			        l.setAdapter(adapter);
-			        l.setOnItemClickListener(new ListViewListener(false));
-			        l.setOnItemLongClickListener(new ListViewListener(false));
-		        	AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		        	builder.setView(l);
-		        	if(isClose){
-			        	builder.setOnDismissListener(new OnDismissListener() {
+				if(status != null) {
+					CustomAdapter adapter = new CustomAdapter(context);
+					adapter.add(status);
+					ListView l = new ListView(context);
+					l.setAdapter(adapter);
+					l.setOnItemClickListener(new ListViewListener(false));
+					l.setOnItemLongClickListener(new ListViewListener(false));
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					builder.setView(l);
+					if(isClose) {
+						builder.setOnDismissListener(new OnDismissListener(){
 							@Override
-							public void onDismiss(DialogInterface dialog) {
+							public void onDismiss(DialogInterface dialog){
 								((Activity)context).finish();
 							}
 						});
-		        	}
-		        	builder.create().show();
+					}
+					builder.create().show();
 				}else
 					new ShowToast("ツイートの取得に失敗しました", IntentActivity.this, 0);
 			}

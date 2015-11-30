@@ -10,30 +10,32 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class Dialog_retweet implements OnClickListener {
-	
+public class Dialog_retweet implements OnClickListener{
+
 	private Status status;
 	private Context context;
 
-	public Dialog_retweet(Status status, Context context) {
+	public Dialog_retweet(Status status, Context context){
 		this.status = status;
 		this.context = context;
 	}
 
 	@Override
-	public void onClick(View v) {
+	public void onClick(View v){
 		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
-			protected Boolean doInBackground(Void... params) {
-				try {
+			protected Boolean doInBackground(Void... params){
+				try{
 					((ApplicationClass)context.getApplicationContext()).getTwitter().retweetStatus(status.getId());
 					return true;
-				} catch (TwitterException e) {
+				}catch(TwitterException e){
 					return false;
 				}
 			}
-			protected void onPostExecute(Boolean result) {
+
+			@Override
+			protected void onPostExecute(Boolean result){
 				if(result)
 					new ShowToast("リツイートしました", context, 0);
 				else

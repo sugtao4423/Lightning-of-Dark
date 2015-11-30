@@ -33,32 +33,33 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class _0_detail extends Fragment {
-	
+public class _0_detail extends Fragment{
+
 	private TextView UserBio, location, Link, User_tweet_c, User_favorite_c, User_follow_c, User_follower_c;
 	private SmartImageView sourceIcon, targetIcon;
 	private ImageView isFollowIcon;
 	private User target;
 	private ApplicationClass appClass;
-	
+
 	private SmartImageView banner, UserIcon;
 	private TextView Name, ScreenName;
 	private ImageView protect;
-	
+
 	@SuppressLint("InflateParams")
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.user_0, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		appClass.set_0_detail_v(v);
 
 		return v;
 	}
+
 	public void setText(Context context){
 		appClass = (ApplicationClass)context.getApplicationContext();
 		View v = appClass.get_0_detail_v();
 		target = appClass.getTarget();
-		
+
 		banner = (SmartImageView)v.findViewById(R.id.banner);
 		UserIcon = (SmartImageView)v.findViewById(R.id.UserIcon);
 		Name = (TextView)v.findViewById(R.id.UserName);
@@ -66,7 +67,7 @@ public class _0_detail extends Fragment {
 		protect = (ImageView)v.findViewById(R.id.UserPage_protected);
 		protect.setVisibility(View.GONE);
 		setClick(context);
-		
+
 		UserBio = (TextView)v.findViewById(R.id.UserBio);
 		location = (TextView)v.findViewById(R.id.location);
 		Link = (TextView)v.findViewById(R.id.link);
@@ -77,15 +78,15 @@ public class _0_detail extends Fragment {
 		sourceIcon = (SmartImageView)v.findViewById(R.id.UserPage_sourceIcon);
 		targetIcon = (SmartImageView)v.findViewById(R.id.UserPage_targetIcon);
 		isFollowIcon = (ImageView)v.findViewById(R.id.UserPage_isFollow);
-		
+
 		if(target.isProtected())
 			protect.setVisibility(View.VISIBLE);
 		UserIcon.setImageUrl(target.getBiggerProfileImageURL());
 		banner.setImageUrl(target.getProfileBannerURL());
 		Name.setText(target.getName());
 		ScreenName.setText("@" + target.getScreenName());
-		
-		if(appClass.getMyScreenName().equals(target.getScreenName())){
+
+		if(appClass.getMyScreenName().equals(target.getScreenName())) {
 			sourceIcon.setVisibility(View.GONE);
 			targetIcon.setVisibility(View.GONE);
 			isFollowIcon.setVisibility(View.GONE);
@@ -96,29 +97,31 @@ public class _0_detail extends Fragment {
 			followCheck();
 			set_souce_and_targetIcon();
 		}
-		
+
 		String bio = target.getDescription();
 		SpannableString ss = new SpannableString(bio);
-		final Matcher m = Pattern.compile("@[0-9a-zA-Z_]+|(http://|https://){1}[\\w\\.\\-/:\\#\\?\\=\\&\\;\\%\\~\\+]+", Pattern.DOTALL).matcher(bio);
+		final Matcher m =
+				Pattern.compile("@[0-9a-zA-Z_]+|(http://|https://){1}[\\w\\.\\-/:\\#\\?\\=\\&\\;\\%\\~\\+]+", Pattern.DOTALL)
+						.matcher(bio);
 		while(m.find()){
-		    String t = m.group();
-		    if(t.startsWith("@")){
-		        ss.setSpan(new URLSpan(t){
-		            @Override
-		            public void onClick(View widget){
-		            	Context cont = widget.getContext();
-		                Intent intent = new Intent(cont, UserPage.class);
-		                intent.putExtra("userScreenName", this.getURL().replace("@", ""));
-		                cont.startActivity(intent);
-		            }
-		        }, m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-		    }else{
-		    	ss.setSpan(new URLSpan(t), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-		    }
+			String t = m.group();
+			if(t.startsWith("@")) {
+				ss.setSpan(new URLSpan(t){
+					@Override
+					public void onClick(View widget){
+						Context cont = widget.getContext();
+						Intent intent = new Intent(cont, UserPage.class);
+						intent.putExtra("userScreenName", this.getURL().replace("@", ""));
+						cont.startActivity(intent);
+					}
+				}, m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			}else{
+				ss.setSpan(new URLSpan(t), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			}
 		}
 		UserBio.setText(ss);
 		UserBio.setMovementMethod(LinkMovementMethod.getInstance());
-		
+
 		location.setText(target.getLocation());
 		Link.setText(target.getURL());
 		User_tweet_c.setText(numberFormat(target.getStatusesCount()));
@@ -126,6 +129,7 @@ public class _0_detail extends Fragment {
 		User_follow_c.setText(numberFormat(target.getFriendsCount()));
 		User_follower_c.setText(numberFormat(target.getFollowersCount()));
 	}
+
 	public String numberFormat(int num){
 		return NumberFormat.getInstance().format(num);
 	}
@@ -133,16 +137,17 @@ public class _0_detail extends Fragment {
 	public void followCheck(){
 		AsyncTask<Void, Void, Relationship> task = new AsyncTask<Void, Void, Relationship>(){
 			@Override
-			protected Relationship doInBackground(Void... params) {
-				try {
+			protected Relationship doInBackground(Void... params){
+				try{
 					return appClass.getTwitter().showFriendship(appClass.getMyScreenName(), target.getScreenName());
-				} catch (TwitterException e) {
+				}catch(TwitterException e){
 					return null;
 				}
 			}
+
 			@Override
 			protected void onPostExecute(Relationship ship){
-				if(ship != null){
+				if(ship != null) {
 					if(ship.isSourceFollowingTarget() && ship.isSourceFollowedByTarget())
 						isFollowIcon.setImageResource(R.drawable.follow_each);
 					else if(ship.isSourceFollowingTarget())
@@ -160,26 +165,23 @@ public class _0_detail extends Fragment {
 	public void set_souce_and_targetIcon(){
 		AsyncTask<Void, Void, String[]> task = new AsyncTask<Void, Void, String[]>(){
 			@Override
-			protected String[] doInBackground(Void... params) {
-				try {
-					if(appClass.getGetBigIcon()){
-						return new String[]{
-								appClass.getTwitter().verifyCredentials().getBiggerProfileImageURL() ,
-								target.getBiggerProfileImageURL()
-						};
+			protected String[] doInBackground(Void... params){
+				try{
+					if(appClass.getGetBigIcon()) {
+						return new String[]{appClass.getTwitter().verifyCredentials().getBiggerProfileImageURL(),
+								target.getBiggerProfileImageURL()};
 					}else{
-						return new String[]{
-						appClass.getTwitter().verifyCredentials().getProfileImageURL() ,
-						target.getProfileImageURL()
-						};
+						return new String[]{appClass.getTwitter().verifyCredentials().getProfileImageURL(),
+								target.getProfileImageURL()};
 					}
-				} catch (TwitterException e) {
+				}catch(TwitterException e){
 					return null;
 				}
 			}
+
 			@Override
 			protected void onPostExecute(String[] result){
-				if(result[0] != null){
+				if(result[0] != null) {
 					sourceIcon.setImageUrl(result[0]);
 					targetIcon.setImageUrl(result[1]);
 				}else
@@ -188,7 +190,7 @@ public class _0_detail extends Fragment {
 		};
 		task.execute();
 	}
-	
+
 	public void setClick(final Context context){
 		UserIcon.setOnClickListener(new OnClickListener(){
 			@Override

@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-        
+
         <com.loopj.android.image.SmartImageView
             android:id="@+id/banner"
             android:layout_width="match_parent"
@@ -194,25 +194,25 @@
             android:layout_toRightOf="@+id/UserPage_isFollow"
             android:src="@drawable/ic_action_refresh" />
 
+        <com.loopj.android.image.SmartImageView
+            android:id="@+id/UserPage_sourceIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/banner"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_action_refresh" />
+
         <ImageView
             android:id="@+id/UserPage_protected"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_alignBottom="@+id/UserName"
+            android:layout_alignTop="@+id/UserName"
             android:layout_toRightOf="@+id/UserName"
             android:background="#f0f0f0f0"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_action_secure" />
-
-        <com.loopj.android.image.SmartImageView
-            android:id="@+id/UserPage_sourceIcon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_below="@+id/banner"
-            android:src="@drawable/ic_action_refresh" />
-
     </RelativeLayout>
 
 </ScrollView>

@@ -24,40 +24,38 @@ import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
 import com.tao.lightning_of_dark.UserPage;
 
-public class _1_Tweet extends Fragment {
-	
+public class _1_Tweet extends Fragment{
+
 	private ListView userTweet, foot;
 	private SwipeRefreshLayout PulltoRefresh;
 	private CustomAdapter adapter;
 	private boolean AlreadyLoad;
 	private long tweetId;
 	private ApplicationClass appClass;
-	
+
 	@SuppressLint("InflateParams")
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		AlreadyLoad = false;
-		//通常のListViewSet
+		// 通常のListViewSet
 		userTweet = (ListView)v.findViewById(R.id.UserPageList);
 		userTweet.setOnItemClickListener(new ListViewListener(false));
 		userTweet.setOnItemLongClickListener(new ListViewListener(false));
-		//ここまで
+		// ここまで
 		adapter = new CustomAdapter(getActivity());
-		//フッター生成
+		// フッター生成
 		addFooter();
 		userTweet.setAdapter(adapter);
-		
-		//PulltoRefresh
+
+		// PulltoRefresh
 		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
-		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, 
-	            android.R.color.holo_green_light, 
-	            android.R.color.holo_orange_light, 
-	            android.R.color.holo_red_light);
-		PulltoRefresh.setOnRefreshListener(new OnRefreshListener() {
+		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
+				android.R.color.holo_orange_light, android.R.color.holo_red_light);
+		PulltoRefresh.setOnRefreshListener(new OnRefreshListener(){
 			@Override
-			public void onRefresh() {
+			public void onRefresh(){
 				adapter.clear();
 				AlreadyLoad = false;
 				TimeLine();
@@ -65,39 +63,42 @@ public class _1_Tweet extends Fragment {
 		});
 		return v;
 	}
-	
-	//フッター生成
+
+	// フッター生成
 	public void addFooter(){
 		foot = new ListView(getActivity());
 		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener() {
+		foot.setOnItemClickListener(new OnItemClickListener(){
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 				foot.setEnabled(false);
 				TimeLine();
 			}
 		});
 		userTweet.addFooterView(foot);
 	}
-	//なんか色々取得 //自分でもよくわからず組んだ is 屑
+
+	// なんか色々取得 //自分でもよくわからず組んだ is 屑
 	public void TimeLine(){
 		if(AlreadyLoad)
 			tweetId = ((Status)userTweet.getItemAtPosition(userTweet.getAdapter().getCount() - 2)).getId();
 		AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
-			protected ResponseList<twitter4j.Status> doInBackground(Void... params) {
+			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
 					if(AlreadyLoad)
-						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(), new Paging(1, 50).maxId(tweetId - 1));
+						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(),
+								new Paging(1, 50).maxId(tweetId - 1));
 					else
 						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(), new Paging(1, 50));
 				}catch(Exception e){
 					return null;
 				}
 			}
+
 			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
-				if(result != null){
+				if(result != null) {
 					for(twitter4j.Status status : result)
 						adapter.add(status);
 					if(!AlreadyLoad)

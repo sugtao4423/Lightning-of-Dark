@@ -14,14 +14,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 
-public class Dialog_talk implements OnClickListener {
-	
+public class Dialog_talk implements OnClickListener{
+
 	private Status status;
 	private Context context;
 	private twitter4j.Status reply;
-	
+
 	private boolean tweet_do_back;
-	
+
 	private CustomAdapter resultAdapter;
 
 	public Dialog_talk(Status status, Context context, boolean tweet_do_back){
@@ -31,7 +31,7 @@ public class Dialog_talk implements OnClickListener {
 	}
 
 	@Override
-	public void onClick(View v) {
+	public void onClick(View v){
 		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		ListView result = new ListView(context);
@@ -41,28 +41,30 @@ public class Dialog_talk implements OnClickListener {
 		result.setAdapter(resultAdapter);
 		builder.setView(result);
 		builder.create().show();
-		
+
 		if(status.isRetweet())
 			reply = status.getRetweetedStatus();
 		else
 			reply = status;
 		resultAdapter.add(reply);
-		
+
 		new LoadConversation().execute();
 	}
-	private class LoadConversation extends AsyncTask<Void, Void, Status> {
+
+	private class LoadConversation extends AsyncTask<Void, Void, Status>{
 		@Override
-		protected twitter4j.Status doInBackground(Void... params) {
-			try {
+		protected twitter4j.Status doInBackground(Void... params){
+			try{
 				reply = ((ApplicationClass)context.getApplicationContext()).getTwitter().showStatus(reply.getInReplyToStatusId());
 				return reply;
-			} catch (TwitterException e) {
+			}catch(TwitterException e){
 				return null;
 			}
 		}
+
 		@Override
 		public void onPostExecute(twitter4j.Status result){
-			if(result != null){
+			if(result != null) {
 				resultAdapter.add(result);
 				if(result.getInReplyToStatusId() > 0)
 					new LoadConversation().execute();
