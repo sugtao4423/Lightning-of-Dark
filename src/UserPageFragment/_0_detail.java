@@ -12,10 +12,12 @@ import com.loopj.android.image.SmartImageView;
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.Show_Image;
 import com.tao.lightning_of_dark.UserPage;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +27,8 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +41,11 @@ public class _0_detail extends Fragment {
 	private User target;
 	private ApplicationClass appClass;
 	
+	private SmartImageView banner, UserIcon;
+	private TextView Name, ScreenName;
+	private ImageView protect;
+	
+	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.user_0, null);
@@ -48,6 +57,15 @@ public class _0_detail extends Fragment {
 	public void setText(Context context){
 		appClass = (ApplicationClass)context.getApplicationContext();
 		View v = appClass.get_0_detail_v();
+		target = appClass.getTarget();
+		
+		banner = (SmartImageView)v.findViewById(R.id.banner);
+		UserIcon = (SmartImageView)v.findViewById(R.id.UserIcon);
+		Name = (TextView)v.findViewById(R.id.UserName);
+		ScreenName = (TextView)v.findViewById(R.id.UserScreenName);
+		protect = (ImageView)v.findViewById(R.id.UserPage_protected);
+		protect.setVisibility(View.GONE);
+		setClick(context);
 		
 		UserBio = (TextView)v.findViewById(R.id.UserBio);
 		location = (TextView)v.findViewById(R.id.location);
@@ -60,7 +78,12 @@ public class _0_detail extends Fragment {
 		targetIcon = (SmartImageView)v.findViewById(R.id.UserPage_targetIcon);
 		isFollowIcon = (ImageView)v.findViewById(R.id.UserPage_isFollow);
 		
-		target = appClass.getTarget();
+		if(target.isProtected())
+			protect.setVisibility(View.VISIBLE);
+		UserIcon.setImageUrl(target.getBiggerProfileImageURL());
+		banner.setImageUrl(target.getProfileBannerURL());
+		Name.setText(target.getName());
+		ScreenName.setText("@" + target.getScreenName());
 		
 		if(appClass.getMyScreenName().equals(target.getScreenName())){
 			sourceIcon.setVisibility(View.GONE);
@@ -133,6 +156,7 @@ public class _0_detail extends Fragment {
 		};
 		task.execute();
 	}
+
 	public void set_souce_and_targetIcon(){
 		AsyncTask<Void, Void, String[]> task = new AsyncTask<Void, Void, String[]>(){
 			@Override
@@ -163,5 +187,41 @@ public class _0_detail extends Fragment {
 			}
 		};
 		task.execute();
+	}
+	
+	public void setClick(final Context context){
+		UserIcon.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				Intent image = new Intent(context, Show_Image.class);
+				image.putExtra("URL", target.getOriginalProfileImageURL());
+				context.startActivity(image);
+			}
+		});
+		UserIcon.setOnLongClickListener(new OnLongClickListener(){
+			@Override
+			public boolean onLongClick(View v){
+				context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getOriginalProfileImageURL())));
+				return true;
+			}
+		});
+		banner.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v){
+				if(target.getProfileBannerURL() != null) {
+					Intent image = new Intent(context, Show_Image.class);
+					image.putExtra("URL", target.getProfileBannerRetinaURL());
+					context.startActivity(image);
+				}
+			}
+		});
+		banner.setOnLongClickListener(new OnLongClickListener(){
+			@Override
+			public boolean onLongClick(View v){
+				if(target.getProfileBannerURL() != null)
+					context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getProfileBannerRetinaURL())));
+				return true;
+			}
+		});
 	}
 }
