@@ -1,28 +1,44 @@
 package com.tao.lightning_of_dark;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import jp.ogwork.gesturetransformableview.view.GestureTransformableImageView;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.view.View;
+import android.widget.Toast;
 
 public class Show_Image extends Activity{
+
+	private byte[] byteImage;
+
+	private GestureTransformableImageView image;
+	private String url;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-
-		final String url = getIntent().getStringExtra("URL");
-
-		final GestureTransformableImageView image = new GestureTransformableImageView(this);
-		setContentView(image);
+		setContentView(R.layout.show_image);
+		image = (GestureTransformableImageView)findViewById(R.id.show_image_image);
+		url = getIntent().getStringExtra("URL");
 
 		AsyncTask<String, Void, Bitmap> task = new AsyncTask<String, Void, Bitmap>(){
 			private ProgressDialog progDailog;
@@ -45,7 +61,16 @@ public class Show_Image extends Activity{
 					connection.setDoInput(true);
 					connection.connect();
 					InputStream input = connection.getInputStream();
-					Bitmap myBitmap = BitmapFactory.decodeStream(input);
+					ByteArrayOutputStream bout = new ByteArrayOutputStream();
+					byte[] buffer = new byte[1024];
+					while(true){
+						int len = input.read(buffer);
+						if(len < 0)
+							break;
+						bout.write(buffer, 0, len);
+					}
+					byteImage = bout.toByteArray();
+					Bitmap myBitmap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
 					input.close();
 					return myBitmap;
 				}catch(IOException e){
@@ -65,5 +90,61 @@ public class Show_Image extends Activity{
 			}
 		};
 		task.execute(url);
+	}
+	
+	public void image_option_click(View v){
+		AlertDialog.Builder select = new AlertDialog.Builder(this);
+		select.setItems(new String[]{"ブラウザで開く", "保存する"}, new OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+				if(which == 0)
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+				if(which == 1)
+					saveImage();
+			}
+		});
+		select.create().show();
+	}
+
+	public void saveImage(){
+		Matcher m = Pattern.compile(".+/(.+)(\\..+)$").matcher(url);
+		if(!m.find()) {
+			Toast.makeText(this, "URLがパターンにマッチしません", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		final String fileName = m.group(1);
+		final String type = m.group(2);
+
+		final String saveDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DOWNLOADS;
+		final String imgPath = saveDir + "/" + fileName + type;
+
+		if(new File(imgPath).exists()) {
+			AlertDialog.Builder exists = new AlertDialog.Builder(this);
+			exists.setTitle(fileName + type + "という名前のファイルが既に存在しています")
+			.setItems(new String[]{"上書き", "_2をつけて保存", "キャンセル"}, new OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which){
+					if(which == 0)
+						save(imgPath);
+					if(which == 1)
+						save(saveDir + "/" + fileName + "_2" + type);
+				}
+			});
+			exists.create().show();
+		}else{
+			save(imgPath);
+		}
+	}
+
+	public void save(String imgPath){
+		FileOutputStream fos;
+		try{
+			fos = new FileOutputStream(imgPath, true);
+			fos.write(byteImage);
+			fos.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		Toast.makeText(this, "保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
 	}
 }
