@@ -119,15 +119,30 @@ public class Show_Image extends Activity{
 		final String imgPath = saveDir + "/" + fileName + type;
 
 		if(new File(imgPath).exists()) {
+			final String newPath;
+			String title;
+			int i = 2;
+			while(true){
+				if(new File(saveDir + "/" + fileName +  "_" + i + type).exists()){
+					i++;
+				}else{
+					newPath = saveDir + "/" + fileName + "_" + i + type;
+					if(i == 2)
+						title = fileName + type + "という名前のファイルが既に存在しています";
+					else
+						title = fileName + "_" + (i - 1) + type + "という名前のファイルが既に存在しています";
+					break;
+				}
+			}
 			AlertDialog.Builder exists = new AlertDialog.Builder(this);
-			exists.setTitle(fileName + type + "という名前のファイルが既に存在しています")
-			.setItems(new String[]{"上書き", "_2をつけて保存", "キャンセル"}, new OnClickListener(){
+			exists.setTitle(title)
+			.setItems(new String[]{"上書き", "_" + i + "をつけて保存", "キャンセル"}, new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					if(which == 0)
 						save(imgPath);
 					if(which == 1)
-						save(saveDir + "/" + fileName + "_2" + type);
+						save(newPath);
 				}
 			});
 			exists.create().show();
