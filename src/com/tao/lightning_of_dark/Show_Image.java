@@ -21,10 +21,7 @@ public class Show_Image extends Activity{
 
 		final String url = getIntent().getStringExtra("URL");
 
-		final GestureTransformableImageView image = new GestureTransformableImageView(this,
-				GestureTransformableImageView.GESTURE_DRAGGABLE | GestureTransformableImageView.GESTURE_SCALABLE);
-		image.setLimitScaleMin(1F);
-		image.setLimitScaleMax(3.5F);
+		final GestureTransformableImageView image = new GestureTransformableImageView(this);
 		setContentView(image);
 
 		AsyncTask<String, Void, Bitmap> task = new AsyncTask<String, Void, Bitmap>(){
