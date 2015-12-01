@@ -158,7 +158,8 @@ public class Show_Image extends Activity{
 			fos.write(byteImage);
 			fos.close();
 		}catch(IOException e){
-			e.printStackTrace();
+			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+			return;
 		}
 		Toast.makeText(this, "保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
 	}
