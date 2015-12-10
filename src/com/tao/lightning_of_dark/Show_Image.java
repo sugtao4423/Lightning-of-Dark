@@ -28,16 +28,15 @@ import android.widget.Toast;
 
 public class Show_Image extends Activity{
 
-	private byte[] byteImage;
+	private byte[] non_orig_image;
 
-	private GestureTransformableImageView image;
 	private String url;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_image);
-		image = (GestureTransformableImageView)findViewById(R.id.show_image_image);
+		final GestureTransformableImageView image = (GestureTransformableImageView)findViewById(R.id.show_image_image);
 		url = getIntent().getStringExtra("URL");
 
 		AsyncTask<String, Void, Bitmap> task = new AsyncTask<String, Void, Bitmap>(){
@@ -69,8 +68,8 @@ public class Show_Image extends Activity{
 							break;
 						bout.write(buffer, 0, len);
 					}
-					byteImage = bout.toByteArray();
-					Bitmap myBitmap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+					non_orig_image = bout.toByteArray();
+					Bitmap myBitmap = BitmapFactory.decodeByteArray(non_orig_image, 0, non_orig_image.length);
 					input.close();
 					return myBitmap;
 				}catch(IOException e){
@@ -107,14 +106,68 @@ public class Show_Image extends Activity{
 	}
 
 	public void saveImage(){
-		Matcher m = Pattern.compile(".+/(.+)(\\..+)$").matcher(url);
-		if(!m.find()) {
-			Toast.makeText(this, "URLがパターンにマッチしません", Toast.LENGTH_SHORT).show();
+		final Matcher original = Pattern.compile("http(s)?://pbs.twimg.com/media/(.+)(\\..+):orig$").matcher(url + ":orig");
+		if(!original.find()) {
+			Matcher mm = Pattern.compile(".+/(.+)(\\..+)$").matcher(url);
+			if(!mm.find()){
+				Toast.makeText(this, "URLがパターンにマッチしません", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			save(mm.group(1), mm.group(2), non_orig_image, false);
 			return;
 		}
-		final String fileName = m.group(1);
-		final String type = m.group(2);
 
+		AsyncTask<String, Void, byte[]> task = new AsyncTask<String, Void, byte[]>(){
+			private ProgressDialog progDailog;
+
+			@Override
+			protected void onPreExecute(){
+				progDailog = new ProgressDialog(Show_Image.this);
+				progDailog.setMessage("Loading...");
+				progDailog.setIndeterminate(false);
+				progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progDailog.setCancelable(true);
+				progDailog.show();
+			}
+
+			@Override
+			protected byte[] doInBackground(String... params){
+				try{
+					URL url = new URL(params[0]);
+					HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+					connection.setDoInput(true);
+					connection.connect();
+					InputStream input = connection.getInputStream();
+					ByteArrayOutputStream bout = new ByteArrayOutputStream();
+					byte[] buffer = new byte[1024];
+					while(true){
+						int len = input.read(buffer);
+						if(len < 0)
+							break;
+						bout.write(buffer, 0, len);
+					}
+					input.close();
+					return bout.toByteArray();
+				}catch(IOException e){
+					return null;
+				}
+			}
+
+			@Override
+			protected void onPostExecute(final byte[] result){
+				if(result != null) {
+					progDailog.dismiss();
+					save(original.group(2), original.group(3), result, true);
+				}else{
+					new ShowToast("オリジナル画像の取得に失敗しました", Show_Image.this, 0);
+					finish();
+				}
+			}
+		};
+		task.execute(url + ":orig");
+	}
+	
+	public void save(String fileName, String type, final byte[] byteImage, final boolean isOriginal){
 		final String saveDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DOWNLOADS;
 		final String imgPath = saveDir + "/" + fileName + type;
 
@@ -134,24 +187,24 @@ public class Show_Image extends Activity{
 					break;
 				}
 			}
-			AlertDialog.Builder exists = new AlertDialog.Builder(this);
+			AlertDialog.Builder exists = new AlertDialog.Builder(Show_Image.this);
 			exists.setTitle(title)
 			.setItems(new String[]{"上書き", "_" + i + "をつけて保存", "キャンセル"}, new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					if(which == 0)
-						save(imgPath);
+						output(imgPath, byteImage, isOriginal);
 					if(which == 1)
-						save(newPath);
+						output(newPath, byteImage, isOriginal);
 				}
 			});
 			exists.create().show();
 		}else{
-			save(imgPath);
+			output(imgPath, byteImage, isOriginal);
 		}
 	}
 
-	public void save(String imgPath){
+	public void output(String imgPath, byte[] byteImage, boolean isOriginal){
 		FileOutputStream fos;
 		try{
 			fos = new FileOutputStream(imgPath, true);
@@ -161,6 +214,9 @@ public class Show_Image extends Activity{
 			Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
 			return;
 		}
-		Toast.makeText(this, "保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
+		if(isOriginal)
+			Toast.makeText(this, "オリジナルを保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
+		else
+			Toast.makeText(this, "保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
 	}
 }
