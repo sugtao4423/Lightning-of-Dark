@@ -112,6 +112,12 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			}
 		}
 
+		Status status;
+		if(item.isRetweet())
+			status = item.getRetweetedStatus();
+		else
+			status = item;
+
 		// ダイアログタイトルinflate
 		View dialog_title = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_tweet, null);
 		SmartImageView icon = (SmartImageView)dialog_title.findViewById(R.id.icon);
@@ -120,33 +126,18 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		TextView tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
 		ImageView protect = (ImageView)dialog_title.findViewById(R.id.UserProtected);
 
-		if(item.isRetweet()) {
-			if(item.getRetweetedStatus().getUser().isProtected())
-				protect.setVisibility(View.VISIBLE);
-			else
-				protect.setVisibility(View.GONE);
-			tweetText.setText(item.getRetweetedStatus().getText());
-			name_screenName.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
-			tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(item.getCreatedAt()) + "  via "
-					+ item.getRetweetedStatus().getSource().replaceAll("<.+?>", ""));
-			if(appClass.getGetBigIcon())
-				icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL());
-			else
-				icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
-		}else{
-			if(!item.getUser().isProtected())
-				protect.setVisibility(View.GONE);
-			else
-				protect.setVisibility(View.VISIBLE);
-			tweetText.setText(item.getText());
-			name_screenName.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
-			tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(item.getCreatedAt()) + "  via "
-					+ item.getSource().replaceAll("<.+?>", ""));
-			if(appClass.getGetBigIcon())
-				icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
-			else
-				icon.setImageUrl(item.getUser().getProfileImageURL());
-		}
+		if(!status.getUser().isProtected())
+			protect.setVisibility(View.GONE);
+		else
+			protect.setVisibility(View.VISIBLE);
+		tweetText.setText(status.getText());
+		name_screenName.setText(status.getUser().getName() + " - @" + status.getUser().getScreenName());
+		tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(status.getCreatedAt()) + "  via "
+				+ status.getSource().replaceAll("<.+?>", ""));
+		if(appClass.getGetBigIcon())
+			icon.setImageUrl(status.getUser().getBiggerProfileImageURL());
+		else
+			icon.setImageUrl(status.getUser().getProfileImageURL());
 		// ここまで
 
 		// ダイアログ本文inflate
@@ -180,26 +171,13 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext(), tweet_do_back));
 		dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, parent.getContext()));
 
-		if(item.isRetweet()) {
-			if(!(item.getRetweetedStatus().getInReplyToStatusId() > 0)) {
-				dialog_talk.setEnabled(false);
-				dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
-			}
-			if(!item.getRetweetedStatus().getUser().getScreenName()
-					.equals(((ApplicationClass)parent.getContext().getApplicationContext()).getMyScreenName())) {
-				dialog_deletePost.setEnabled(false);
-				dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
-			}
-		}else{
-			if(!(item.getInReplyToStatusId() > 0)) {
-				dialog_talk.setEnabled(false);
-				dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
-			}
-			if(!item.getUser().getScreenName()
-					.equals(((ApplicationClass)parent.getContext().getApplicationContext()).getMyScreenName())) {
-				dialog_deletePost.setEnabled(false);
-				dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
-			}
+		if(!(status.getInReplyToStatusId() > 0)) {
+			dialog_talk.setEnabled(false);
+			dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
+		}
+		if(!status.getUser().getScreenName().equals(((ApplicationClass)parent.getContext().getApplicationContext()).getMyScreenName())) {
+			dialog_deletePost.setEnabled(false);
+			dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
 		}
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
