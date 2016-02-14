@@ -48,5 +48,4 @@ public class UserPageFragmentPagerAdapter extends FragmentStatePagerAdapter{
 			return "follower";
 		}
 	}
-
 }

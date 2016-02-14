@@ -18,6 +18,8 @@ import twitter4j.UserStreamAdapter;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
+import MainFragment.Fragment_home;
+import MainFragment.Fragment_mention;
 import MainFragment.MyFragmentStatePagerAdapter;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -31,14 +33,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity{
 
-	private String CK, CS, MyScreenName; // MyScreenNameには「＠」は含まれない
+	private String myScreenName; // MyScreenNameには「＠」は含まれない
 
 	private Twitter twitter;
 	private TwitterStream twitterStream;
@@ -52,25 +52,23 @@ public class MainActivity extends FragmentActivity{
 	private AccessToken accessToken;
 	private Configuration conf;
 
-	private ViewPager viewPager;
-
-	private CustomAdapter homeAdapter, mentionAdapter;
 	private CustomAdapter[] listAdapters;
-	private ResponseList<twitter4j.Status> home, mention;
+	
+	private Fragment_mention fragmentMention;
+	private Fragment_home fragmentHome;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-
 		getActionBar().hide();
-		homeAdapter = new CustomAdapter(this);
-		mentionAdapter = new CustomAdapter(this);
-
 		setContentView(R.layout.activity_main);
 
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		viewPager = (ViewPager)findViewById(R.id.pager);
-		viewPager.setAdapter(new MyFragmentStatePagerAdapter(getSupportFragmentManager(), this));
+		
+		MyFragmentStatePagerAdapter pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), this);
+		
+		ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
+		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(1);
 		viewPager.setOffscreenPageLimit(pref.getInt("SelectListCount", 0) + 1);
 		listAdapters = new CustomAdapter[pref.getInt("SelectListCount", 0)];
@@ -82,19 +80,21 @@ public class MainActivity extends FragmentActivity{
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 
-		LogIn();
+		fragmentHome = pagerAdapter.getFragmentHome();
+		fragmentMention = pagerAdapter.getFragmentMention();
+		logIn();
 	}
 
 	@SuppressLint("InflateParams")
-	public void LogIn(){
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+	public void logIn(){
+		AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>(){
 			@Override
-			protected Boolean doInBackground(Void... params){
-				conf = new ConfigurationBuilder().setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS).build();
+			protected Boolean doInBackground(String... params){
+				conf = new ConfigurationBuilder().setOAuthConsumerKey(params[0]).setOAuthConsumerSecret(params[1]).build();
 
 				twitter = new TwitterFactory(conf).getInstance(accessToken);
 				try{
-					MyScreenName = twitter.getScreenName();
+					myScreenName = twitter.getScreenName();
 				}catch(Exception e){
 					return false;
 				}
@@ -104,9 +104,9 @@ public class MainActivity extends FragmentActivity{
 			@Override
 			protected void onPostExecute(Boolean result){
 				if(result) {
-					appClass.setMyScreenName(MyScreenName);
+					appClass.setMyScreenName(myScreenName);
 					appClass.setTwitter(twitter);
-					mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
+					mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
 					appClass.setMentionPattern(mentionPattern);
 					getTimeLine();
 					connectStreaming();
@@ -115,8 +115,6 @@ public class MainActivity extends FragmentActivity{
 			}
 		};
 		appClass = (ApplicationClass)getApplicationContext();
-		appClass.setHomeAdapter(homeAdapter);
-		appClass.setMentionAdapter(mentionAdapter);
 		appClass.setListAdapters(listAdapters);
 		boolean[] list_alreadyLoad = new boolean[listAdapters.length];
 		for(int i = 0; i < listAdapters.length; i++)
@@ -134,20 +132,25 @@ public class MainActivity extends FragmentActivity{
 			startActivity(new Intent(this, startOAuth.class));
 			finish();
 		}else{
+			String ck, cs;
 			if(pref.getString("CustomCK", "").equals("")) {
-				CK = getString(R.string.CK);
-				CS = getString(R.string.CS);
+				ck = getString(R.string.CK);
+				cs = getString(R.string.CS);
 			}else{
-				CK = pref.getString("CustomCK", null);
-				CS = pref.getString("CustomCS", null);
+				ck = pref.getString("CustomCK", null);
+				cs = pref.getString("CustomCS", null);
 			}
 			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-			task.execute();
+			task.execute(ck, cs);
 		}
 	}
 
 	public void getTimeLine(){
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+		new AsyncTask<Void, Void, Boolean>(){
+			
+			private ResponseList<twitter4j.Status> home;
+			private ResponseList<twitter4j.Status> mention;
+			
 			@Override
 			protected Boolean doInBackground(Void... params){
 				try{
@@ -163,14 +166,14 @@ public class MainActivity extends FragmentActivity{
 			protected void onPostExecute(Boolean result){
 				if(result) {
 					for(twitter4j.Status status : home)
-						homeAdapter.add(status);
+						fragmentHome.add(status);
 					for(twitter4j.Status status : mention)
-						mentionAdapter.add(status);
-				}else
+						fragmentMention.add(status);
+				}else{
 					new ShowToast("タイムライン取得エラー", MainActivity.this, 0);
+				}
 			}
-		};
-		task.execute();
+		}.execute();
 
 		if(!pref.getString("startApp_loadLists", "").equals("") && !pref.getString("SelectListIds", "").equals("")) {
 			String[] listName_str = pref.getString("SelectListNames", "").split(",", 0);
@@ -191,7 +194,7 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void getList(final long listId, final int index){
-		AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
+		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
@@ -211,8 +214,7 @@ public class MainActivity extends FragmentActivity{
 					appClass.setList_AlreadyLoad(tmp);
 				}
 			}
-		};
-		task.execute();
+		}.execute();
 	}
 
 	public void connectStreaming(){
@@ -223,30 +225,9 @@ public class MainActivity extends FragmentActivity{
 			UserStreamAdapter streamAdapter = new UserStreamAdapter(){
 				@Override
 				public void onStatus(final Status status){
-					AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
-						@Override
-						protected Boolean doInBackground(Void... params){
-							return true;
-						}
-
-						@Override
-						protected void onPostExecute(Boolean result){
-							android.widget.ListView l = appClass.getHomeList();
-							if(l.getChildCount() != 0) {
-								int pos = l.getFirstVisiblePosition();
-								int top = l.getChildAt(0).getTop();
-								homeAdapter.insert(status, 0);
-								if(pos == 0 && top == 0)
-									l.setSelectionFromTop(pos, 0);
-								else
-									l.setSelectionFromTop(pos + 1, top);
-							}
-
-							if(mentionPattern.matcher(status.getText()).find() && !status.isRetweet())
-								mentionAdapter.insert(status, 0);
-						}
-					};
-					task.execute();
+					fragmentHome.insert(status);
+					if(mentionPattern.matcher(status.getText()).find() && !status.isRetweet())
+						fragmentMention.insert(status);
 				}
 			};
 			// ConnectionLifeCycleListener
@@ -288,10 +269,10 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void option(View v){
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		final String[] items = new String[]{"ツイート爆撃", "ユーザー検索", "アカウント", "設定"};
-		builder.setItems(items, new OptionClickListener(this, items, MyScreenName, pref, twitter));
-		builder.create().show();
+		new AlertDialog.Builder(this)
+		.setItems(items, new OptionClickListener(this, items, myScreenName, pref, twitter))
+		.create().show();
 	}
 
 	public void restart(){
@@ -302,29 +283,18 @@ public class MainActivity extends FragmentActivity{
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
-			@Override
-			protected Void doInBackground(Void... params){
-				if(twitterStream != null)
-					twitterStream.shutdown();
-				return null;
-			}
-		};
 		if(resetFlag) {
 			resetFlag = false;
 			startActivity(new Intent(this, MainActivity.class));
 		}else{
-			task.execute();
+			new AsyncTask<Void, Void, Void>(){
+				@Override
+				protected Void doInBackground(Void... params){
+					if(twitterStream != null)
+						twitterStream.shutdown();
+					return null;
+				}
+			}.execute();
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu){
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		return super.onOptionsItemSelected(item);
 	}
 }

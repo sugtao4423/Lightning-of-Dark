@@ -25,9 +25,9 @@ import android.widget.TextView;
 
 public class startOAuth extends Activity{
 
-	private EditText CustomCK, CustomCS;
+	private EditText customCK, customCS;
 	private Button ninsyobtn;
-	private String CK, CS;
+	private String ck, cs;
 	private SharedPreferences pref;
 	private SQLiteDatabase db;
 
@@ -43,35 +43,35 @@ public class startOAuth extends Activity{
 		String descri = "Custom CK/CSを使う場合、CallbackURLを<br><font color=blue><u>https://twitter.com/lightning-of-dark</u></font><br>に設定してください。<br>（タップでコピー）";
 		description.setText(Html.fromHtml(descri));
 
-		CustomCK = (EditText)findViewById(R.id.editText2);
-		CustomCS = (EditText)findViewById(R.id.editText3);
+		customCK = (EditText)findViewById(R.id.editText2);
+		customCS = (EditText)findViewById(R.id.editText3);
 
 		ninsyobtn = (Button)findViewById(R.id.ninsyo);
 
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		CustomCK.setText(pref.getString("CustomCK", ""));
-		CustomCS.setText(pref.getString("CustomCS", ""));
+		customCK.setText(pref.getString("CustomCK", ""));
+		customCS.setText(pref.getString("CustomCS", ""));
 
 		db = new SQLHelper(this).getWritableDatabase();
 	}
 
 	public void ninsyo(View v){
 		ninsyobtn.setEnabled(false);
-		if(CustomCK.getText().toString().equals("")) {
-			CK = getString(R.string.CK);
-			CS = getString(R.string.CS);
+		if(customCK.getText().toString().equals("")) {
+			ck = getString(R.string.CK);
+			cs = getString(R.string.CS);
 		}else{
-			CK = CustomCK.getText().toString();
-			CS = CustomCS.getText().toString();
-			pref.edit().putString("CustomCK", CK).putString("CustomCS", CS).commit();
+			ck = customCK.getText().toString();
+			cs = customCS.getText().toString();
+			pref.edit().putString("CustomCK", ck).putString("CustomCS", cs).commit();
 		}
 
 		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params){
 				ConfigurationBuilder builder = new ConfigurationBuilder();
-				builder.setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS);
+				builder.setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs);
 				Configuration jconf = builder.build();
 
 				twitterFactory = new TwitterFactory(jconf);
@@ -103,7 +103,7 @@ public class startOAuth extends Activity{
 		}
 		final String verifier = intent.getData().getQueryParameter("oauth_verifier");
 
-		AsyncTask<Void, Void, AccessToken> task = new AsyncTask<Void, Void, AccessToken>(){
+		new AsyncTask<Void, Void, AccessToken>(){
 			@Override
 			protected AccessToken doInBackground(Void... params){
 				try{
@@ -119,21 +119,21 @@ public class startOAuth extends Activity{
 					pref.edit().putString("AccessToken", accessToken.getToken())
 							.putString("AccessTokenSecret", accessToken.getTokenSecret()).commit();
 
-					if(CK.equals(getString(R.string.CK)))
-						CK = "";
-					if(CS.equals(getString(R.string.CS)))
-						CS = "";
+					if(ck.equals(getString(R.string.CK)))
+						ck = "";
+					if(cs.equals(getString(R.string.CS)))
+						cs = "";
 
-					db.execSQL("insert into accounts values('" + accessToken.getScreenName() + "', '" + CK + "', '" + CS + "', '"
+					db.execSQL("insert into accounts values('" + accessToken.getScreenName() + "', '" + ck + "', '" + cs + "', '"
 							+ accessToken.getToken() + "', '" + accessToken.getTokenSecret() + "', 'false', '0', '-1', '', '')");
 					new ShowToast("アカウントを追加しました", startOAuth.this, 0);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
-				}else
+				}else{
 					new ShowToast("失敗...", startOAuth.this, 0);
+				}
 				finish();
 			}
-		};
-		task.execute();
+		}.execute();
 	}
 
 	public void Description(View v){

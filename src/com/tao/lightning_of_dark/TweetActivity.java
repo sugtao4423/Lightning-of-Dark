@@ -22,10 +22,10 @@ import android.widget.TextView;
 
 public class TweetActivity extends Activity{
 
-	private EditText TweetText;
+	private EditText tweetText;
 	private TextView moji140;
-	private long TweetReplyId;
-	private String ReplyUserScreenName, ReplyTweetText, pakuri;
+	private long tweetReplyId;
+	private String replyUserScreenName, replyTweetText, pakuri;
 	private File image;
 	private boolean do_back, do_setSelection;
 	private ApplicationClass appClass;
@@ -40,29 +40,29 @@ public class TweetActivity extends Activity{
 		TextView tweetAccount = (TextView)findViewById(R.id.tweetAccount);
 		tweetAccount.setText("@" + appClass.getMyScreenName());
 
-		TweetText = (EditText)findViewById(R.id.tweetText);
+		tweetText = (EditText)findViewById(R.id.tweetText);
 		moji140 = (TextView)findViewById(R.id.moji140);
 
-		ReplyTweetText = getIntent().getStringExtra("ReplyTweetText");
-		ReplyUserScreenName = getIntent().getStringExtra("ReplyUserScreenName");
-		TweetReplyId = getIntent().getLongExtra("TweetReplyId", -1);
+		replyTweetText = getIntent().getStringExtra("ReplyTweetText");
+		replyUserScreenName = getIntent().getStringExtra("ReplyUserScreenName");
+		tweetReplyId = getIntent().getLongExtra("TweetReplyId", -1);
 		pakuri = getIntent().getStringExtra("pakuri");
 		do_back = getIntent().getBooleanExtra("do_back", true);
 		do_setSelection = getIntent().getBooleanExtra("do_setSelection", true);
 
-		if(TweetReplyId == -1) {
+		if(tweetReplyId == -1) {
 			getActionBar().setTitle("New Tweet");
-			TweetText.setText(pakuri);
+			tweetText.setText(pakuri);
 		}else{
-			getActionBar().setTitle(ReplyUserScreenName + " : " + ReplyTweetText);
-			if(ReplyTweetText.length() > 10)
-				ReplyTweetText = ReplyTweetText.substring(0, 10);
-			TweetText.setText("@" + ReplyUserScreenName + " ");
+			getActionBar().setTitle(replyUserScreenName + " : " + replyTweetText);
+			if(replyTweetText.length() > 10)
+				replyTweetText = replyTweetText.substring(0, 10);
+			tweetText.setText("@" + replyUserScreenName + " ");
 		}
 		if(do_setSelection)
-			TweetText.setSelection(TweetText.getText().length());
+			tweetText.setSelection(tweetText.getText().length());
 
-		moji140.setText(String.valueOf(140 - TweetText.getText().length()));
+		moji140.setText(String.valueOf(140 - tweetText.getText().length()));
 		moji140count();
 	}
 
@@ -75,19 +75,19 @@ public class TweetActivity extends Activity{
 		back.setEnabled(false);
 		img.setEnabled(false);
 
-		final String tweetText = TweetText.getText().toString();
+		final String text = tweetText.getText().toString();
 
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+		new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params){
-				final StatusUpdate status = new StatusUpdate(tweetText);
+				final StatusUpdate status = new StatusUpdate(text);
 				try{
 					if(image != null)
 						status.media(image);
-					if(TweetReplyId == -1)
+					if(tweetReplyId == -1)
 						appClass.getTwitter().updateStatus(status);
 					else
-						appClass.getTwitter().updateStatus(status.inReplyToStatusId(TweetReplyId));
+						appClass.getTwitter().updateStatus(status.inReplyToStatusId(tweetReplyId));
 					return true;
 				}catch(Exception e){
 					return false;
@@ -104,8 +104,7 @@ public class TweetActivity extends Activity{
 					image = null;
 				finish();
 			}
-		};
-		task.execute();
+		}.execute();
 		if(do_back) {
 			Intent main = new Intent(this, MainActivity.class);
 			startActivity(main);
@@ -131,7 +130,7 @@ public class TweetActivity extends Activity{
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == 114514 && resultCode == RESULT_OK) { // 音声入力
 			ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			TweetText.setText(TweetText.getText().toString() + results.get(0));
+			tweetText.setText(tweetText.getText().toString() + results.get(0));
 			cursor_end(null);
 		}
 		if(requestCode == 810 && resultCode == RESULT_OK) { // 画像選択
@@ -151,7 +150,7 @@ public class TweetActivity extends Activity{
 	}
 
 	public void moji140count(){
-		TweetText.addTextChangedListener(new TextWatcher(){
+		tweetText.addTextChangedListener(new TextWatcher(){
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count){
 				moji140.setText(String.valueOf(140 - s.length()));
@@ -168,11 +167,11 @@ public class TweetActivity extends Activity{
 	}
 
 	public void cursor_start(View v){
-		TweetText.setSelection(0);
+		tweetText.setSelection(0);
 	}
 
 	public void cursor_end(View v){
-		TweetText.setSelection(TweetText.getText().length());
+		tweetText.setSelection(tweetText.getText().length());
 	}
 
 	public void back(View v){

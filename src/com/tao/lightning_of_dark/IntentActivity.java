@@ -35,10 +35,9 @@ public class IntentActivity extends Activity{
 	private Intent i;
 	private String uri;
 
-	private String CK, CS;
 	private AccessToken accessToken;
 	private Twitter twitter;
-	private String MyScreenName;
+	private String myScreenName;
 	private Pattern mentionPattern;
 
 	private SharedPreferences pref;
@@ -50,14 +49,14 @@ public class IntentActivity extends Activity{
 		appClass = (ApplicationClass)getApplicationContext();
 
 		if(appClass.getTwitter() == null) {
-			AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+			AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>(){
 				@Override
-				protected Boolean doInBackground(Void... params){
-					Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(CK).setOAuthConsumerSecret(CS).build();
+				protected Boolean doInBackground(String... params){
+					Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(params[0]).setOAuthConsumerSecret(params[1]).build();
 
 					twitter = new TwitterFactory(conf).getInstance(accessToken);
 					try{
-						MyScreenName = twitter.getScreenName();
+						myScreenName = twitter.getScreenName();
 					}catch(Exception e){
 						return false;
 					}
@@ -67,14 +66,15 @@ public class IntentActivity extends Activity{
 				@Override
 				protected void onPostExecute(Boolean result){
 					if(result) {
-						appClass.setMyScreenName(MyScreenName);
+						appClass.setMyScreenName(myScreenName);
 						appClass.setTwitter(twitter);
-						mentionPattern = Pattern.compile(".*@" + MyScreenName + ".*", Pattern.DOTALL);
+						mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
 						appClass.setMentionPattern(mentionPattern);
 
 						jump();
-					}else
+					}else{
 						new ShowToast("スクリーンネームの取得に失敗しました", IntentActivity.this, 0);
+					}
 				}
 			};
 			pref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -91,15 +91,16 @@ public class IntentActivity extends Activity{
 				startActivity(new Intent(this, startOAuth.class));
 				finish();
 			}else{
+				String ck, cs;
 				if(pref.getString("CustomCK", "").equals("")) {
-					CK = getString(R.string.CK);
-					CS = getString(R.string.CS);
+					ck = getString(R.string.CK);
+					cs = getString(R.string.CS);
 				}else{
-					CK = pref.getString("CustomCK", null);
-					CS = pref.getString("CustomCS", null);
+					ck = pref.getString("CustomCK", null);
+					cs = pref.getString("CustomCS", null);
 				}
 				accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-				task.execute();
+				task.execute(ck, cs);
 			}
 		}else{
 			jump();
@@ -162,8 +163,9 @@ public class IntentActivity extends Activity{
 						});
 					}
 					builder.create().show();
-				}else
+				}else{
 					new ShowToast("ツイートの取得に失敗しました", IntentActivity.this, 0);
+				}
 			}
 		};
 		task.execute(tweetId);

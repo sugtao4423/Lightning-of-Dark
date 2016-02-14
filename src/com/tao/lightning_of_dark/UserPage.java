@@ -35,30 +35,29 @@ public class UserPage extends FragmentActivity{
 		final String u = getIntent().getStringExtra("userScreenName");
 		((ApplicationClass)UserPage.this.getApplicationContext()).setTargetScreenName(u);
 
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+		new AsyncTask<Void, Void, User>(){
 			@Override
-			protected Boolean doInBackground(Void... params){
+			protected User doInBackground(Void... params){
 				try{
 					target = ((ApplicationClass)UserPage.this.getApplicationContext()).getTwitter().showUser(u);
-					return true;
+					return target;
 				}catch(TwitterException e){
-					return false;
+					return null;
 				}
 			}
 
 			@Override
-			protected void onPostExecute(Boolean result){
-				if(result) {
-					((ApplicationClass)UserPage.this.getApplicationContext()).setTarget(target);
-					getActionBar().setTitle(target.getName());
+			protected void onPostExecute(User result){
+				if(result != null) {
+					((ApplicationClass)UserPage.this.getApplicationContext()).setTarget(result);
+					getActionBar().setTitle(result.getName());
 					new _0_detail().setText(UserPage.this);
 				}else{
 					new ShowToast("ユーザー情報を取得できませんでした", UserPage.this, 0);
 					finish();
 				}
 			}
-		};
-		task.execute();
+		}.execute();
 	}
 
 	public void resetUser(){

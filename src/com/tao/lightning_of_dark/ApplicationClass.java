@@ -12,15 +12,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class ApplicationClass extends Application{
 	// MainActivity
-	private String MyScreenName;
+	private String myScreenName;
 	private Twitter twitter;
 	private Pattern mentionPattern;
-	private CustomAdapter homeAdapter, mentionAdapter;
 	private CustomAdapter[] listAdapters;
 	private boolean option_regex, option_openBrowser, getBigIcon, isWebm, isVideoLoop;
 	private boolean[] list_AlreadyLoad;
@@ -28,9 +26,6 @@ public class ApplicationClass extends Application{
 	private View customToast;
 	private TextView toast_main_message, toast_tweet;
 	private SmartImageView toast_icon;
-
-	// Fragment_home
-	private ListView homeList;
 
 	// UserPage
 	private User target;
@@ -48,12 +43,12 @@ public class ApplicationClass extends Application{
 	 * +-+-+-+-+-+-+-+-+-+-+-+-+
 	 */
 	// MyScreenName
-	public void setMyScreenName(String MyScreenName){
-		this.MyScreenName = MyScreenName;
+	public void setMyScreenName(String myScreenName){
+		this.myScreenName = myScreenName;
 	}
 
 	public String getMyScreenName(){
-		return MyScreenName;
+		return myScreenName;
 	}
 
 	// Twitter
@@ -72,24 +67,6 @@ public class ApplicationClass extends Application{
 
 	public Pattern getMentionPattern(){
 		return mentionPattern;
-	}
-
-	// homeAdapter
-	public void setHomeAdapter(CustomAdapter homeAdapter){
-		this.homeAdapter = homeAdapter;
-	}
-
-	public CustomAdapter getHomeAdapter(){
-		return homeAdapter;
-	}
-
-	// mentionAdapter
-	public void setMentionAdapter(CustomAdapter mentionAdapter){
-		this.mentionAdapter = mentionAdapter;
-	}
-
-	public CustomAdapter getMentionAdapter(){
-		return mentionAdapter;
 	}
 
 	// listAdapter
@@ -195,19 +172,6 @@ public class ApplicationClass extends Application{
 
 	public SmartImageView getToast_Icon(){
 		return toast_icon;
-	}
-
-	/*
-	 * +-+-+-+-+-+-+-+-+-+-+-+-+-+
-	 * |F|r|a|g|m|e|n|t|_|h|o|m|e|
-	 * +-+-+-+-+-+-+-+-+-+-+-+-+-+
-	 */
-	public void setHomeList(ListView homeList){
-		this.homeList = homeList;
-	}
-
-	public ListView getHomeList(){
-		return homeList;
 	}
 
 	/*

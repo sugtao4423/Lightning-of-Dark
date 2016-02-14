@@ -38,9 +38,9 @@ public class OptionClickListener implements OnClickListener{
 	@Override
 	public void onClick(DialogInterface dialog, int which){
 		if(items[which].equals("ユーザー検索")) {
-			AlertDialog.Builder userSearch = new AlertDialog.Builder(((MainActivity)context));
 			final EditText userEdit = new EditText(((MainActivity)context));
-			userSearch.setMessage("ユーザーのスクリーンネームを入力してください")
+			new AlertDialog.Builder(((MainActivity)context))
+			.setMessage("ユーザーのスクリーンネームを入力してください")
 			.setView(userEdit)
 			.setPositiveButton("OK", new OnClickListener(){
 				@Override
@@ -54,8 +54,7 @@ public class OptionClickListener implements OnClickListener{
 						((MainActivity)context).startActivity(userPage);
 					}
 				}
-			});
-			userSearch.create().show();
+			}).create().show();
 		}
 		if(items[which].equals("アカウント")) {
 			SQLiteDatabase db = new SQLHelper(((MainActivity)context)).getWritableDatabase();
@@ -91,9 +90,9 @@ public class OptionClickListener implements OnClickListener{
 				mov = result.moveToNext();
 			}
 			selectAccount_screenName.add("アカウントを追加");
-			AlertDialog.Builder screennameDialog = new AlertDialog.Builder(((MainActivity)context));
 			final String[] nameDialog = (String[])selectAccount_screenName.toArray(new String[0]);
-			screennameDialog.setItems(nameDialog, new OnClickListener(){
+			new AlertDialog.Builder(((MainActivity)context))
+			.setItems(nameDialog, new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					if(nameDialog[which].equals("アカウントを追加")) {
@@ -111,16 +110,15 @@ public class OptionClickListener implements OnClickListener{
 						((MainActivity)context).restart();
 					}
 				}
-			});
-			screennameDialog.create().show();
+			}).create().show();
 		}
 		if(items[which].equals("設定")) {
 			((MainActivity)context).startActivity(new Intent(((MainActivity)context), Preference.class));
 		}
 		if(items[which].equals("ツイート爆撃")) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(((MainActivity)context));
 			final View bombView = ((MainActivity)context).getLayoutInflater().inflate(R.layout.tweet_bomb, null);
-			builder.setView(bombView)
+			new AlertDialog.Builder(((MainActivity)context))
+			.setView(bombView)
 			.setPositiveButton("OK", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
@@ -149,9 +147,9 @@ public class OptionClickListener implements OnClickListener{
 					}
 					new ShowToast("ツイート完了", ((MainActivity)context), 0);
 				}
-			});
-			builder.setNegativeButton("キャンセル", null);
-			builder.create().show();
+			})
+			.setNegativeButton("キャンセル", null)
+			.create().show();
 		}
 	}
 }

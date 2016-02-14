@@ -66,13 +66,11 @@ public class Preference_List extends PreferenceActivity{
 					if(showList.isChecked()) {
 						select_List.setEnabled(false);
 						startApp_loadList.setEnabled(false);
-						db.execSQL(
-								"update accounts set showList='false' where screen_name = '" + appClass.getMyScreenName() + "'");
+						db.execSQL("update accounts set showList='false' where screen_name = '" + appClass.getMyScreenName() + "'");
 					}else{
 						select_List.setEnabled(true);
 						startApp_loadList.setEnabled(true);
-						db.execSQL(
-								"update accounts set showList='true' where screen_name = '" + appClass.getMyScreenName() + "'");
+						db.execSQL("update accounts set showList='true' where screen_name = '" + appClass.getMyScreenName() + "'");
 					}
 					return true;
 				}
@@ -92,8 +90,8 @@ public class Preference_List extends PreferenceActivity{
 					for(int i = 0; i < selectedListNames.length; i++)
 						selectedLoadList[i] = false;
 					final ArrayList<String> selectLoadList = new ArrayList<String>();
-					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-					builder.setTitle("起動時に読み込むリストを選択してください")
+					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+					.setTitle("起動時に読み込むリストを選択してください")
 					.setMultiChoiceItems(selectedListNames, selectedLoadList, new OnMultiChoiceClickListener(){
 						@Override
 						public void onClick(DialogInterface dialog, int which, boolean isChecked){
@@ -102,7 +100,8 @@ public class Preference_List extends PreferenceActivity{
 							else
 								selectLoadList.remove(selectedListNames[which]);
 						}
-					}).setPositiveButton("OK", new OnClickListener(){
+					})
+					.setPositiveButton("OK", new OnClickListener(){
 						@Override
 						public void onClick(DialogInterface dialog, int which){
 							String startApp_loadLists = "";
@@ -114,7 +113,8 @@ public class Preference_List extends PreferenceActivity{
 									+ appClass.getMyScreenName() + "'");
 							setSummary();
 						}
-					}).setNegativeButton("キャンセル", null);
+					})
+					.setNegativeButton("キャンセル", null);
 					if(!selectedListNames[0].equals(""))
 						builder.create().show();
 					else
@@ -126,25 +126,23 @@ public class Preference_List extends PreferenceActivity{
 			select_List.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
 				ArrayList<String> array = new ArrayList<String>();
-				ResponseList<UserList> lists;
 
 				@Override
 				public boolean onPreferenceClick(android.preference.Preference preference){
-					AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+					new AsyncTask<Void, Void, ResponseList<UserList>>(){
 						@Override
-						protected Boolean doInBackground(Void... params){
+						protected ResponseList<UserList> doInBackground(Void... params){
 							try{
-								lists = appClass.getTwitter().getUserLists(appClass.getMyScreenName());
-								return true;
+								return appClass.getTwitter().getUserLists(appClass.getMyScreenName());
 							}catch(TwitterException e){
-								return false;
+								return null;
 							}
 						}
 
 						@Override
-						protected void onPostExecute(Boolean result){
-							if(result) {
-								for(UserList userList : lists)
+						protected void onPostExecute(final ResponseList<UserList> result){
+							if(result != null) {
+								for(UserList userList : result)
 									array.add(userList.getName());
 
 								AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -160,9 +158,9 @@ public class Preference_List extends PreferenceActivity{
 									@Override
 									public void onClick(DialogInterface dialog, int which, boolean isChecked){
 										if(isChecked)
-											checkedList.add(lists.get(which));
+											checkedList.add(result.get(which));
 										else
-											checkedList.remove(lists.get(which));
+											checkedList.remove(result.get(which));
 									}
 								});
 								builder.setPositiveButton("OK", new OnClickListener(){
@@ -192,30 +190,28 @@ public class Preference_List extends PreferenceActivity{
 								builder.create().show();
 							}
 						}
-					};
-					task.execute();
+					}.execute();
 					return false;
 				}
 			});
 		}
 
 		public void Dialog(String title){
-			AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-			dialog.setTitle(title)
+			new AlertDialog.Builder(getActivity())
+			.setTitle(title)
 			.setMessage("アプリを再起動してください。")
 			.setPositiveButton("再起動", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					android.os.Process.killProcess(android.os.Process.myPid());
 				}
-			});
-			dialog.setNegativeButton("キャンセル", new OnClickListener(){
+			})
+			.setNegativeButton("キャンセル", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					Toast.makeText(getActivity(), "大人しく再起動しような？", Toast.LENGTH_SHORT).show();
 				}
-			});
-			dialog.create().show();
+			}).create().show();
 		}
 
 		public void setSummary(){

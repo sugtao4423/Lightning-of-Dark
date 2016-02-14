@@ -9,25 +9,31 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 
-	SharedPreferences pref;
-	boolean showList;
-	int listCount;
+	private SharedPreferences pref;
+	private boolean showList;
+	private int listCount;
+
+	private Fragment_mention fragmentMention;
+	private Fragment_home fragmentHome;
 
 	public MyFragmentStatePagerAdapter(FragmentManager fm, Context context){
 		super(fm);
 		pref = PreferenceManager.getDefaultSharedPreferences(context);
 		showList = pref.getBoolean("showList", false);
 		listCount = pref.getInt("SelectListCount", 0);
+
+		fragmentMention = new Fragment_mention();
+		fragmentHome = new Fragment_home();
 	}
 
 	@Override
 	public Fragment getItem(int i){
 		switch(i){
 		case 0:
-			return new Fragment_mention();
+			return fragmentMention;
 
 		case 1:
-			return new Fragment_home();
+			return fragmentHome;
 
 		}
 		if(showList && i > 1) {
@@ -64,5 +70,13 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 			return "Home";
 
 		}
+	}
+
+	public Fragment_mention getFragmentMention(){
+		return fragmentMention;
+	}
+
+	public Fragment_home getFragmentHome(){
+		return fragmentHome;
 	}
 }
