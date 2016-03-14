@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class startOAuth extends Activity{
+public class StartOAuth extends Activity{
 
 	private EditText customCK, customCS;
 	private Button ninsyobtn;
@@ -89,7 +89,7 @@ public class startOAuth extends Activity{
 				if(result)
 					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rt.getAuthenticationURL())));
 				else
-					new ShowToast("RequestTokenの取得に失敗しました", startOAuth.this, 0);
+					new ShowToast("RequestTokenの取得に失敗しました", StartOAuth.this, 0);
 			}
 		};
 		task.execute();
@@ -126,10 +126,10 @@ public class startOAuth extends Activity{
 
 					db.execSQL("insert into accounts values('" + accessToken.getScreenName() + "', '" + ck + "', '" + cs + "', '"
 							+ accessToken.getToken() + "', '" + accessToken.getTokenSecret() + "', 'false', '0', '-1', '', '')");
-					new ShowToast("アカウントを追加しました", startOAuth.this, 0);
+					new ShowToast("アカウントを追加しました", StartOAuth.this, 0);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
 				}else{
-					new ShowToast("失敗...", startOAuth.this, 0);
+					new ShowToast("失敗...", StartOAuth.this, 0);
 				}
 				finish();
 			}

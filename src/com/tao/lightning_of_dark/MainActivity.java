@@ -129,7 +129,7 @@ public class MainActivity extends FragmentActivity{
 		appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
 
 		if(pref.getString("AccessToken", "").equals("")) {
-			startActivity(new Intent(this, startOAuth.class));
+			startActivity(new Intent(this, StartOAuth.class));
 			finish();
 		}else{
 			String ck, cs;

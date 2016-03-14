@@ -96,7 +96,7 @@ public class OptionClickListener implements OnClickListener{
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					if(nameDialog[which].equals("アカウントを追加")) {
-						((MainActivity)context).startActivity(new Intent(((MainActivity)context), startOAuth.class));
+						((MainActivity)context).startActivity(new Intent(((MainActivity)context), StartOAuth.class));
 					}else if(!nameDialog[which].equals("@" + myScreenName + " (now)")) {
 						pref.edit().putString("CustomCK", selectAccount_CK.get(which))
 								.putString("CustomCS", selectAccount_CS.get(which))
