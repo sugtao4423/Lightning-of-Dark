@@ -56,4 +56,17 @@ public class DBUtil{
 						account.getSelectListNames() + "', '" +
 						account.getStartAppLoadLists() + "')");
 	}
+
+	public void deleteAccount(Account account){
+		db.execSQL("delete from accounts where screen_name='" + account.getScreenName() + "' and CK='" +
+						account.getCK() + "' and CS='" +
+						account.getCS() + "' and AT='" +
+						account.getAT() + "' and ATS='" +
+						account.getATS() + "' and showList='" +
+						String.valueOf(account.getShowList()) + "' and SelectListCount='" +
+						String.valueOf(account.getSelectListCount()) + "' and SelectListIds='" +
+						account.getSelectListIds() + "' and SelectListNames='" +
+						account.getSelectListNames() + "' and startApp_loadLists='" +
+						account.getStartAppLoadLists() + "'");
+	}
 }

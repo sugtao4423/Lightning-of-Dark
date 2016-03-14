@@ -57,7 +57,8 @@ public class OptionClickListener implements OnClickListener{
 			}).create().show();
 		}
 		if(items[which].equals("アカウント")) {
-			final Account[] accounts = new DBUtil(context).getAccounts();
+			final DBUtil dbUtil = new DBUtil(context);
+			final Account[] accounts = dbUtil.getAccounts();
 			ArrayList<String> screen_names = new ArrayList<String>();
 			for(Account acc : accounts){
 				if(acc.getScreenName().equals(myScreenName))
@@ -70,20 +71,38 @@ public class OptionClickListener implements OnClickListener{
 			new AlertDialog.Builder(context)
 			.setItems(nameDialog, new OnClickListener(){
 				@Override
-				public void onClick(DialogInterface dialog, int which){
+				public void onClick(DialogInterface dialog, final int which){
 					if(nameDialog[which].equals("アカウントを追加")) {
 						context.startActivity(new Intent(context, StartOAuth.class));
 					}else if(!nameDialog[which].equals("@" + myScreenName + " (now)")) {
-						pref.edit().putString("CustomCK", accounts[which].getCK())
-						.putString("CustomCS", accounts[which].getCS())
-						.putString("AccessToken", accounts[which].getAT())
-						.putString("AccessTokenSecret", accounts[which].getATS())
-						.putBoolean("showList", accounts[which].getShowList())
-						.putInt("SelectListCount", accounts[which].getSelectListCount())
-						.putString("SelectListIds", accounts[which].getSelectListIds())
-						.putString("SelectListNames", accounts[which].getSelectListNames())
-						.putString("startApp_loadLists", accounts[which].getStartAppLoadLists()).commit();
-						((MainActivity)context).restart();
+						new AlertDialog.Builder(context)
+						.setTitle(nameDialog[which])
+						.setPositiveButton("切り替え", new OnClickListener(){
+
+							@Override
+							public void onClick(DialogInterface dialog, int w){
+								pref.edit().putString("CustomCK", accounts[which].getCK())
+								.putString("CustomCS", accounts[which].getCS())
+								.putString("AccessToken", accounts[which].getAT())
+								.putString("AccessTokenSecret", accounts[which].getATS())
+								.putBoolean("showList", accounts[which].getShowList())
+								.putInt("SelectListCount", accounts[which].getSelectListCount())
+								.putString("SelectListIds", accounts[which].getSelectListIds())
+								.putString("SelectListNames", accounts[which].getSelectListNames())
+								.putString("startApp_loadLists", accounts[which].getStartAppLoadLists()).commit();
+								((MainActivity)context).restart();
+							}
+						})
+						.setNegativeButton("削除", new OnClickListener(){
+
+							@Override
+							public void onClick(DialogInterface dialog, int w){
+								dbUtil.deleteAccount(accounts[which]);
+								new ShowToast("@" + accounts[which].getScreenName() + "を削除しました", context, 0);
+							}
+						})
+						.setNeutralButton("キャンセル", null)
+						.create().show();
 					}
 				}
 			}).create().show();
