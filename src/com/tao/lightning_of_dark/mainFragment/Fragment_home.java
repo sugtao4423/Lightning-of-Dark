@@ -4,10 +4,14 @@ import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.UiHandler;
 
 import android.database.DataSetObserver;
 import android.graphics.Color;
@@ -18,16 +22,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class Fragment_home extends Fragment{
+public class Fragment_home extends Fragment implements OnScrollListener{
 
 	private ListView list;
 	private CustomAdapter adapter;
 	private ApplicationClass appClass;
+
+	private boolean stopInsertByKey;
+	private Queue<Status> mStatusQueue;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -36,6 +45,7 @@ public class Fragment_home extends Fragment{
 		list.setDividerHeight(3);
 		list.setOnItemClickListener(new ListViewListener(true));
 		list.setOnItemLongClickListener(new ListViewListener(true));
+		list.setOnScrollListener(this);
 
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		adapter = new CustomAdapter(container.getContext());
@@ -48,6 +58,9 @@ public class Fragment_home extends Fragment{
 			}
 		});
 		list.setAdapter(adapter);
+		
+		stopInsertByKey = false;
+		mStatusQueue = new LinkedList<>();
 		return list;
 	}
 
@@ -82,29 +95,52 @@ public class Fragment_home extends Fragment{
 		list.addFooterView(foot);
 	}
 
-	public void insert(final Status status){
-		new AsyncTask<Void, Void, Boolean>(){
-			@Override
-			protected Boolean doInBackground(Void... params){
-				return true;
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result){
-				if(list.getChildCount() != 0) {
-					int pos = list.getFirstVisiblePosition();
-					int top = list.getChildAt(0).getTop();
-					adapter.insert(status, 0);
-					if(pos == 0 && top == 0)
-						list.setSelectionFromTop(pos, 0);
-					else
-						list.setSelectionFromTop(pos + 1, top);
-				}
-			}
-		}.execute();
-	}
-
 	public void add(Status status){
 		adapter.add(status);
+	}
+	
+	public void insert(final Status status){
+		if(stopInsertByKey) {
+			// キューに貯める
+			mStatusQueue.offer(status);
+		}else{
+			new UiHandler(){
+
+				@Override
+				public void run(){
+					if(list != null && list.getChildAt(1) != null && list.getCount() > 1) {
+						int pos = list.getFirstVisiblePosition();
+						int top = list.getChildAt(0).getTop();
+						adapter.insert(status, 0);
+						if(pos == 0 && top == 0)
+							list.setSelectionFromTop(pos, 0);
+						else
+							list.setSelectionFromTop(pos + 1, top);
+					}
+				}
+			}.post();
+		};
+	}
+
+	public void releaseQueue(){
+		// キューを開放する
+		if(mStatusQueue.size() > 0) {
+			stopInsertByKey = false;
+			while(mStatusQueue.peek() != null){
+				insert(mStatusQueue.poll());
+			}
+		}
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState){
+		if(scrollState == SCROLL_STATE_IDLE && view.getFirstVisiblePosition() <= 0)
+			releaseQueue();
+		else
+			stopInsertByKey = true;
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount){
 	}
 }
