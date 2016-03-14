@@ -8,6 +8,8 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.dataclass.Account;
+import com.tao.lightning_of_dark.utils.DBUtil;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -15,7 +17,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,7 +33,6 @@ public class StartOAuth extends Activity{
 	private Button ninsyobtn;
 	private String ck, cs;
 	private SharedPreferences pref;
-	private SQLiteDatabase db;
 
 	private Twitter twitter;
 	private TwitterFactory twitterFactory;
@@ -55,8 +55,6 @@ public class StartOAuth extends Activity{
 
 		customCK.setText(pref.getString("CustomCK", ""));
 		customCS.setText(pref.getString("CustomCS", ""));
-
-		db = new SQLHelper(this).getWritableDatabase();
 	}
 
 	public void ninsyo(View v){
@@ -127,8 +125,10 @@ public class StartOAuth extends Activity{
 					if(cs.equals(getString(R.string.CS)))
 						cs = "";
 
-					db.execSQL("insert into accounts values('" + accessToken.getScreenName() + "', '" + ck + "', '" + cs + "', '"
-							+ accessToken.getToken() + "', '" + accessToken.getTokenSecret() + "', 'false', '0', '-1', '', '')");
+					Account account = new Account(accessToken.getScreenName(), ck, cs,
+							accessToken.getToken(), accessToken.getTokenSecret(), false, 0, "-1", "", "");
+					new DBUtil(StartOAuth.this).addAcount(account);
+
 					new ShowToast("アカウントを追加しました", StartOAuth.this, 0);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
 				}else{

@@ -1,9 +1,9 @@
 package com.tao.lightning_of_dark;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.dataclass.Account;
+import com.tao.lightning_of_dark.utils.DBUtil;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -14,8 +14,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.EditText;
@@ -40,86 +38,62 @@ public class OptionClickListener implements OnClickListener{
 	@Override
 	public void onClick(DialogInterface dialog, int which){
 		if(items[which].equals("ユーザー検索")) {
-			final EditText userEdit = new EditText(((MainActivity)context));
-			new AlertDialog.Builder(((MainActivity)context))
+			final EditText userEdit = new EditText(context);
+			new AlertDialog.Builder(context)
 			.setMessage("ユーザーのスクリーンネームを入力してください")
 			.setView(userEdit)
 			.setPositiveButton("OK", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
-					Intent userPage = new Intent(((MainActivity)context), UserPage.class);
+					Intent userPage = new Intent(context, UserPage.class);
 					String user_screen = userEdit.getText().toString();
 					if(user_screen.isEmpty())
-						new ShowToast("なにも入力されていません", ((MainActivity)context), 0);
+						new ShowToast("なにも入力されていません", context, 0);
 					else{
 						userPage.putExtra("userScreenName", user_screen.replace("@", ""));
-						((MainActivity)context).startActivity(userPage);
+						context.startActivity(userPage);
 					}
 				}
 			}).create().show();
 		}
 		if(items[which].equals("アカウント")) {
-			SQLiteDatabase db = new SQLHelper(((MainActivity)context)).getWritableDatabase();
-			String[] columns = new String[]{"screen_name", "CK", "CS", "AT", "ATS", "showList", "SelectListCount",
-					"SelectListIds", "SelectListNames", "startApp_loadLists"};
-			Cursor result = db.query("accounts", columns, null, null, null, null, null);
-			boolean mov = result.moveToFirst();
-			List<String> selectAccount_screenName = new ArrayList<String>();
-			final List<String> selectAccount_CK = new ArrayList<String>();
-			final List<String> selectAccount_CS = new ArrayList<String>();
-			final List<String> selectAccount_AT = new ArrayList<String>();
-			final List<String> selectAccount_ATS = new ArrayList<String>();
-			final List<Boolean> selectAccount_showList = new ArrayList<Boolean>();
-			final List<Integer> selectAccount_SelectListCount = new ArrayList<Integer>();
-			final List<String> selectAccount_SelectListIds = new ArrayList<String>();
-			final List<String> selectAccount_SelectListNames = new ArrayList<String>();
-			final List<String> selectAccount_startApp_loadLists = new ArrayList<String>();
-			while(mov){
-				String screen = "@" + result.getString(0);
-				if(screen.equals("@" + myScreenName))
-					screen = screen + " (now)";
-				selectAccount_screenName.add(screen);
-				selectAccount_CK.add(result.getString(1));
-				selectAccount_CS.add(result.getString(2));
-				selectAccount_AT.add(result.getString(3));
-				selectAccount_ATS.add(result.getString(4));
-				selectAccount_showList.add(Boolean.parseBoolean(result.getString(5)));
-				selectAccount_SelectListCount.add(Integer.parseInt(result.getString(6)));
-				selectAccount_SelectListIds.add(result.getString(7));
-				selectAccount_SelectListNames.add(result.getString(8));
-				selectAccount_startApp_loadLists.add(result.getString(9));
-
-				mov = result.moveToNext();
+			final Account[] accounts = new DBUtil(context).getAccounts();
+			ArrayList<String> screen_names = new ArrayList<String>();
+			for(Account acc : accounts){
+				if(acc.getScreenName().equals(myScreenName))
+					screen_names.add("@" + acc.getScreenName() + " (now)");
+				else
+					screen_names.add("@" + acc.getScreenName());
 			}
-			selectAccount_screenName.add("アカウントを追加");
-			final String[] nameDialog = (String[])selectAccount_screenName.toArray(new String[0]);
-			new AlertDialog.Builder(((MainActivity)context))
+			screen_names.add("アカウントを追加");
+			final String[] nameDialog = (String[])screen_names.toArray(new String[0]);
+			new AlertDialog.Builder(context)
 			.setItems(nameDialog, new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					if(nameDialog[which].equals("アカウントを追加")) {
-						((MainActivity)context).startActivity(new Intent(((MainActivity)context), StartOAuth.class));
+						context.startActivity(new Intent(context, StartOAuth.class));
 					}else if(!nameDialog[which].equals("@" + myScreenName + " (now)")) {
-						pref.edit().putString("CustomCK", selectAccount_CK.get(which))
-								.putString("CustomCS", selectAccount_CS.get(which))
-								.putString("AccessToken", selectAccount_AT.get(which))
-								.putString("AccessTokenSecret", selectAccount_ATS.get(which))
-								.putBoolean("showList", selectAccount_showList.get(which))
-								.putInt("SelectListCount", selectAccount_SelectListCount.get(which))
-								.putString("SelectListIds", selectAccount_SelectListIds.get(which))
-								.putString("SelectListNames", selectAccount_SelectListNames.get(which))
-								.putString("startApp_loadLists", selectAccount_startApp_loadLists.get(which)).commit();
+						pref.edit().putString("CustomCK", accounts[which].getCK())
+						.putString("CustomCS", accounts[which].getCS())
+						.putString("AccessToken", accounts[which].getAT())
+						.putString("AccessTokenSecret", accounts[which].getATS())
+						.putBoolean("showList", accounts[which].getShowList())
+						.putInt("SelectListCount", accounts[which].getSelectListCount())
+						.putString("SelectListIds", accounts[which].getSelectListIds())
+						.putString("SelectListNames", accounts[which].getSelectListNames())
+						.putString("startApp_loadLists", accounts[which].getStartAppLoadLists()).commit();
 						((MainActivity)context).restart();
 					}
 				}
 			}).create().show();
 		}
 		if(items[which].equals("設定")) {
-			((MainActivity)context).startActivity(new Intent(((MainActivity)context), Preference.class));
+			context.startActivity(new Intent(context, Preference.class));
 		}
 		if(items[which].equals("ツイート爆撃")) {
 			final View bombView = ((MainActivity)context).getLayoutInflater().inflate(R.layout.tweet_bomb, null);
-			new AlertDialog.Builder(((MainActivity)context))
+			new AlertDialog.Builder(context)
 			.setView(bombView)
 			.setPositiveButton("OK", new OnClickListener(){
 				@Override
@@ -147,7 +121,7 @@ public class OptionClickListener implements OnClickListener{
 						};
 						task.execute(loop);
 					}
-					new ShowToast("ツイート完了", ((MainActivity)context), 0);
+					new ShowToast("ツイート完了", context, 0);
 				}
 			})
 			.setNegativeButton("キャンセル", null)
