@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.tao.lightning_of_dark.R;
+
 import jp.ogwork.gesturetransformableview.view.GestureTransformableImageView;
 import android.app.Activity;
 import android.app.AlertDialog;

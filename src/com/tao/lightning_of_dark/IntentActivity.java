@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.loopj.android.image.SmartImageView;
+import com.tao.lightning_of_dark.R;
 
 import twitter4j.Status;
 import twitter4j.Twitter;

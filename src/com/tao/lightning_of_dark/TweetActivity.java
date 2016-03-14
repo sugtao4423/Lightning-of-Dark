@@ -3,6 +3,8 @@ package com.tao.lightning_of_dark;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.tao.lightning_of_dark.R;
+
 import twitter4j.StatusUpdate;
 import android.app.Activity;
 import android.content.ContentResolver;

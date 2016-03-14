@@ -1,9 +1,10 @@
-package dialog_onClick;
+package com.tao.lightning_of_dark.dialog_onClick;
+
+import twitter4j.Status;
 
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.TweetActivity;
 
-import twitter4j.Status;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;

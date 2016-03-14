@@ -3,6 +3,8 @@ package com.tao.lightning_of_dark;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tao.lightning_of_dark.R;
+
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import android.annotation.SuppressLint;

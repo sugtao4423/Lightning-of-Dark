@@ -3,6 +3,7 @@ package com.tao.lightning_of_dark;
 import java.text.NumberFormat;
 
 import com.loopj.android.image.SmartImageView;
+import com.tao.lightning_of_dark.R;
 
 import twitter4j.User;
 import android.annotation.SuppressLint;

@@ -2,6 +2,8 @@ package com.tao.lightning_of_dark;
 
 import java.util.ArrayList;
 
+import com.tao.lightning_of_dark.R;
+
 import twitter4j.ResponseList;
 import twitter4j.TwitterException;
 import twitter4j.UserList;

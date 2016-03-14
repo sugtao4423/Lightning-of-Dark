@@ -1,4 +1,4 @@
-package UserPageFragment;
+package com.tao.lightning_of_dark.userPageFragment;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;

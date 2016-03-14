@@ -6,6 +6,8 @@ import java.util.Locale;
 import twitter4j.Status;
 
 import com.loopj.android.image.SmartImageView;
+import com.tao.lightning_of_dark.R;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;

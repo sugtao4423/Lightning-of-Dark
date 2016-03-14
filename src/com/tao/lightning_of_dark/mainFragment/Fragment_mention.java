@@ -1,4 +1,4 @@
-package MainFragment;
+package com.tao.lightning_of_dark.mainFragment;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;
@@ -8,6 +8,7 @@ import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.ShowToast;
+
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,11 +19,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
-public class Fragment_home extends Fragment{
+public class Fragment_mention extends Fragment{
 
 	private ListView list;
 	private CustomAdapter adapter;
@@ -42,7 +43,7 @@ public class Fragment_home extends Fragment{
 			@Override
 			public void onChanged(){
 				super.onChanged();
-				moreHome();
+				moreMention();
 				adapter.unregisterDataSetObserver(this);
 			}
 		});
@@ -50,7 +51,7 @@ public class Fragment_home extends Fragment{
 		return list;
 	}
 
-	public void moreHome(){
+	public void moreMention(){
 		ListView foot = new ListView(getActivity());
 		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
 		foot.setOnItemClickListener(new OnItemClickListener(){
@@ -62,7 +63,7 @@ public class Fragment_home extends Fragment{
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 						try{
-							return appClass.getTwitter().getHomeTimeline(new Paging(1, 50).maxId(tweetId - 1));
+							return appClass.getTwitter().getMentionsTimeline(new Paging(1, 50).maxId(tweetId - 1));
 						}catch(Exception e){
 							return null;
 						}
@@ -73,7 +74,7 @@ public class Fragment_home extends Fragment{
 						if(result != null)
 							adapter.addAll(result);
 						else
-							new ShowToast("タイムライン取得エラー", getActivity(), 0);
+							new ShowToast("メンション取得エラー", getActivity(), 0);
 					}
 				}.execute();
 			}

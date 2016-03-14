@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import com.loopj.android.image.SmartImageView;
+import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.mainFragment.Fragment_home;
+import com.tao.lightning_of_dark.mainFragment.Fragment_mention;
+import com.tao.lightning_of_dark.mainFragment.MyFragmentStatePagerAdapter;
 
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.Paging;
@@ -18,9 +22,6 @@ import twitter4j.UserStreamAdapter;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
-import MainFragment.Fragment_home;
-import MainFragment.Fragment_mention;
-import MainFragment.MyFragmentStatePagerAdapter;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;

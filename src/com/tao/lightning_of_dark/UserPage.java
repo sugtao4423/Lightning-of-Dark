@@ -4,9 +4,9 @@ import twitter4j.TwitterException;
 import twitter4j.User;
 
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.userPageFragment.UserPageFragmentPagerAdapter;
+import com.tao.lightning_of_dark.userPageFragment._0_detail;
 
-import UserPageFragment.UserPageFragmentPagerAdapter;
-import UserPageFragment._0_detail;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;

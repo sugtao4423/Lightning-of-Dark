@@ -1,4 +1,4 @@
-package MainFragment;
+package com.tao.lightning_of_dark.mainFragment;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;
@@ -11,6 +11,7 @@ import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.Preference;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;

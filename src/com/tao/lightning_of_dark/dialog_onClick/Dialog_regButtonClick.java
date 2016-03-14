@@ -1,4 +1,4 @@
-package dialog_onClick;
+package com.tao.lightning_of_dark.dialog_onClick;
 
 import android.text.Editable;
 import android.view.View;

@@ -1,12 +1,13 @@
-package dialog_onClick;
+package com.tao.lightning_of_dark.dialog_onClick;
+
+import twitter4j.Status;
+import twitter4j.TwitterException;
 
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.ShowToast;
 
-import twitter4j.Status;
-import twitter4j.TwitterException;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;

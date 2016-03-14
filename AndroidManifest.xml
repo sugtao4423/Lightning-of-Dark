@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.CustomActionBar" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.tao.lightning_of_dark.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask" >

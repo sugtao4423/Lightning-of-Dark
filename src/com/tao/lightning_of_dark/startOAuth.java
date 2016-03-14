@@ -6,6 +6,9 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
+
+import com.tao.lightning_of_dark.R;
+
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;

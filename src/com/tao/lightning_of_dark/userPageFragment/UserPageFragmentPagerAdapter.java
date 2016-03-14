@@ -1,4 +1,4 @@
-package UserPageFragment;
+package com.tao.lightning_of_dark.userPageFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

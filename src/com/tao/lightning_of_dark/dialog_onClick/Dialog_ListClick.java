@@ -1,9 +1,10 @@
-package dialog_onClick;
+package com.tao.lightning_of_dark.dialog_onClick;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import twitter4j.Status;
+
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.IntentActivity;
@@ -12,6 +13,7 @@ import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.Show_Image;
 import com.tao.lightning_of_dark.Show_Video;
 import com.tao.lightning_of_dark.UserPage;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

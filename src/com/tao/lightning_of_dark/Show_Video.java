@@ -1,5 +1,7 @@
 package com.tao.lightning_of_dark;
 
+import com.tao.lightning_of_dark.R;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.media.MediaPlayer;
