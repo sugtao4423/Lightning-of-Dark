@@ -12,7 +12,7 @@ import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.ShowToast;
 import com.tao.lightning_of_dark.UiHandler;
-
+import android.annotation.SuppressLint;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,7 +20,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -29,7 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class Fragment_home extends Fragment implements OnScrollListener{
+public class Fragment_home extends Fragment implements OnScrollListener, OnTouchListener{
 
 	private ListView list;
 	private CustomAdapter adapter;
@@ -37,6 +39,7 @@ public class Fragment_home extends Fragment implements OnScrollListener{
 
 	private boolean stopInsertByKey;
 	private Queue<Status> mStatusQueue;
+	private boolean smoothScrollToTop;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -46,6 +49,7 @@ public class Fragment_home extends Fragment implements OnScrollListener{
 		list.setOnItemClickListener(new ListViewListener(true));
 		list.setOnItemLongClickListener(new ListViewListener(true));
 		list.setOnScrollListener(this);
+		list.setOnTouchListener(this);
 
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		adapter = new CustomAdapter(container.getContext());
@@ -58,7 +62,7 @@ public class Fragment_home extends Fragment implements OnScrollListener{
 			}
 		});
 		list.setAdapter(adapter);
-		
+
 		stopInsertByKey = false;
 		mStatusQueue = new LinkedList<>();
 		return list;
@@ -98,49 +102,63 @@ public class Fragment_home extends Fragment implements OnScrollListener{
 	public void add(Status status){
 		adapter.add(status);
 	}
-	
-	public void insert(final Status status){
-		if(stopInsertByKey) {
-			// キューに貯める
-			mStatusQueue.offer(status);
-		}else{
-			new UiHandler(){
 
-				@Override
-				public void run(){
+	public void insert(final Status status){
+		new UiHandler(){
+
+			@Override
+			public void run(){
+				if(stopInsertByKey) {
+					// キューに貯める
+					mStatusQueue.offer(status);
+				}else{
+					adapter.insert(status, 0);
+
 					if(list != null && list.getChildAt(1) != null && list.getCount() > 1) {
-						int pos = list.getFirstVisiblePosition();
-						int top = list.getChildAt(0).getTop();
-						adapter.insert(status, 0);
-						if(pos == 0 && top == 0)
-							list.setSelectionFromTop(pos, 0);
-						else
-							list.setSelectionFromTop(pos + 1, top);
+						if(list.getFirstVisiblePosition() == 0)
+							smoothScrollToTop = true;
+
+						list.setSelectionFromTop(list.getFirstVisiblePosition() + 1, list.getChildAt(0).getTop());
+
+						if(smoothScrollToTop)
+							list.smoothScrollToPosition(0);
 					}
 				}
-			}.post();
-		};
+			}
+		}.post();
 	}
 
 	public void releaseQueue(){
 		// キューを開放する
+		stopInsertByKey = false;
 		if(mStatusQueue.size() > 0) {
-			stopInsertByKey = false;
-			while(mStatusQueue.peek() != null){
+			while(mStatusQueue.peek() != null)
 				insert(mStatusQueue.poll());
-			}
 		}
 	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState){
-		if(scrollState == SCROLL_STATE_IDLE && view.getFirstVisiblePosition() <= 0)
-			releaseQueue();
-		else
-			stopInsertByKey = true;
+		if(scrollState == SCROLL_STATE_IDLE) {
+			if(view.getFirstVisiblePosition() == 0)
+				releaseQueue();
+			else
+				stopInsertByKey = true;
+		}
 	}
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount){
+	}
+
+	@SuppressLint("ClickableViewAccessibility")
+	@Override
+	public boolean onTouch(View v, MotionEvent event){
+		switch(event.getAction()){
+		case MotionEvent.ACTION_MOVE:
+			smoothScrollToTop = false;
+			break;
+		}
+		return false;
 	}
 }
