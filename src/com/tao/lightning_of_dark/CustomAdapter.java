@@ -21,18 +21,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CustomAdapter extends ArrayAdapter<Status>{
+
 	private LayoutInflater mInflater;
+	private ApplicationClass appClass;
 
 	public CustomAdapter(Context context){
 		super(context, android.R.layout.simple_list_item_1);
 		mInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		appClass = (ApplicationClass)context.getApplicationContext();
 	}
 
 	class ViewHolder{
 		TextView name, text, tweet_date, RetweetedUserScreenName;
 		SmartImageView icon, RetweetedUserIcon;
 		ImageView protect;
-		ApplicationClass appClass;
 	}
 
 	@SuppressLint("InflateParams")
@@ -50,7 +52,6 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			SmartImageView RetweetedUserIcon = (SmartImageView)convertView.findViewById(R.id.RetweetedUserIcon);
 			TextView RetweetedUserScreenName = (TextView)convertView.findViewById(R.id.RetweetedUserScreenName);
 			ImageView protect = (ImageView)convertView.findViewById(R.id.UserProtected);
-			ApplicationClass appClass = (ApplicationClass)parent.getContext().getApplicationContext();
 
 			holder = new ViewHolder();
 			holder.name = name;
@@ -60,7 +61,6 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			holder.RetweetedUserIcon = RetweetedUserIcon;
 			holder.RetweetedUserScreenName = RetweetedUserScreenName;
 			holder.protect = protect;
-			holder.appClass = appClass;
 
 			convertView.setTag(holder);
 		}else{
@@ -83,9 +83,9 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			convertView.setBackgroundResource(R.drawable.retweeted_by_me);
 		else if(item.isRetweet())
 			convertView.setBackgroundResource(R.drawable.retweet);
-		else if(item.getUser().getScreenName().equals(holder.appClass.getMyScreenName()))
+		else if(item.getUser().getScreenName().equals(appClass.getMyScreenName()))
 			convertView.setBackgroundResource(R.drawable.same_my_screenname);
-		else if(holder.appClass.getMentionPattern().matcher(item.getText()).find())
+		else if(appClass.getMentionPattern().matcher(item.getText()).find())
 			convertView.setBackgroundResource(R.drawable.mention);
 		else{
 			if(position % 2 == 0)
@@ -104,7 +104,7 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 					item.getRetweetedStatus().getCreatedAt()) + "  Retweeted by ");
 			holder.RetweetedUserIcon.setImageUrl(item.getUser().getProfileImageURL());
 			holder.RetweetedUserScreenName.setText("@" + item.getUser().getScreenName());
-			if(holder.appClass.getGetBigIcon())
+			if(appClass.getGetBigIcon())
 				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL());
 			else
 				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
@@ -115,7 +115,7 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			holder.text.setText(item.getText());
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(item.getCreatedAt())
 					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
-			if(holder.appClass.getGetBigIcon())
+			if(appClass.getGetBigIcon())
 				holder.icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
 			else
 				holder.icon.setImageUrl(item.getUser().getProfileImageURL());

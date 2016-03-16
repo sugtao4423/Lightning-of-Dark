@@ -17,18 +17,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CustomAdapter_User extends ArrayAdapter<User>{
+
 	private LayoutInflater mInflater;
+	private ApplicationClass appClass;
 
 	public CustomAdapter_User(Context context){
 		super(context, android.R.layout.simple_list_item_1);
 		mInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+		appClass = (ApplicationClass)context.getApplicationContext();
 	}
 
 	class ViewHolder{
 		TextView name, text, tweet_date, RetweetedUserScreenName;
 		SmartImageView icon, RetweetedUserIcon;
 		ImageView protect;
-		ApplicationClass appClass;
 	}
 
 	@SuppressLint("InflateParams")
@@ -46,7 +48,6 @@ public class CustomAdapter_User extends ArrayAdapter<User>{
 			SmartImageView RetweetedUserIcon = (SmartImageView)convertView.findViewById(R.id.RetweetedUserIcon);
 			TextView RetweetedUserScreenName = (TextView)convertView.findViewById(R.id.RetweetedUserScreenName);
 			ImageView protect = (ImageView)convertView.findViewById(R.id.UserProtected);
-			ApplicationClass appClass = (ApplicationClass)parent.getContext().getApplicationContext();
 
 			holder = new ViewHolder();
 			holder.name = name;
@@ -56,7 +57,6 @@ public class CustomAdapter_User extends ArrayAdapter<User>{
 			holder.RetweetedUserIcon = RetweetedUserIcon;
 			holder.RetweetedUserScreenName = RetweetedUserScreenName;
 			holder.protect = protect;
-			holder.appClass = appClass;
 
 			convertView.setTag(holder);
 		}else{
@@ -75,7 +75,7 @@ public class CustomAdapter_User extends ArrayAdapter<User>{
 		else
 			convertView.setBackgroundResource(R.drawable.position1);
 
-		if(holder.appClass.getGetBigIcon())
+		if(appClass.getGetBigIcon())
 			holder.icon.setImageUrl(item.getBiggerProfileImageURL());
 		else
 			holder.icon.setImageUrl(item.getProfileImageURL());
