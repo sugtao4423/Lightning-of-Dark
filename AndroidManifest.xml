@@ -95,7 +95,7 @@
         <activity android:name="Preference_OptionMenu" />
         <activity android:name="Preference_List" />
         <activity
-            android:name="Show_Image"
+            android:name=".swipeImageViewer.ImageFragmentActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.TranslucentBackground" >
         </activity>

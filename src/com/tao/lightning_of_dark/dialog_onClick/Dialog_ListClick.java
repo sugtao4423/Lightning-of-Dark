@@ -1,8 +1,10 @@
 package com.tao.lightning_of_dark.dialog_onClick;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import twitter4j.ExtendedMediaEntity;
 import twitter4j.Status;
 
 import com.tao.lightning_of_dark.ApplicationClass;
@@ -10,9 +12,9 @@ import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.IntentActivity;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
-import com.tao.lightning_of_dark.Show_Image;
 import com.tao.lightning_of_dark.Show_Video;
 import com.tao.lightning_of_dark.UserPage;
+import com.tao.lightning_of_dark.swipeImageViewer.ImageFragmentActivity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -115,8 +117,19 @@ public class Dialog_ListClick implements OnItemClickListener{
 		if(clickedText.startsWith("http") || clickedText.startsWith("ftp")) {
 			Intent web;
 			if(image.find()) {
-				web = new Intent(parent.getContext(), Show_Image.class);
-				web.putExtra("URL", clickedText);
+				ArrayList<String> urls = new ArrayList<String>();
+				ExtendedMediaEntity[] exMentitys = status.getExtendedMediaEntities();
+				if(exMentitys != null && exMentitys.length > 0) {
+					for(ExtendedMediaEntity ex : exMentitys){
+						if(!ex.getType().equals("video") || !ex.getType().equals("animated_gif"))
+							urls.add(ex.getMediaURL());
+					}
+				}
+				int pos = urls.indexOf(clickedText);
+				String[] arr = (String[])urls.toArray(new String[0]);
+				web = new Intent(parent.getContext(), ImageFragmentActivity.class);
+				web.putExtra("urls", arr);
+				web.putExtra("position", pos);
 			}else if(video.find()) {
 				web = new Intent(parent.getContext(), Show_Video.class);
 				web.putExtra("URL", clickedText);

@@ -12,8 +12,8 @@ import com.loopj.android.image.SmartImageView;
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
-import com.tao.lightning_of_dark.Show_Image;
 import com.tao.lightning_of_dark.UserPage;
+import com.tao.lightning_of_dark.swipeImageViewer.ImageFragmentActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -196,8 +196,8 @@ public class _0_detail extends Fragment{
 		UserIcon.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				Intent image = new Intent(context, Show_Image.class);
-				image.putExtra("URL", target.getOriginalProfileImageURL());
+				Intent image = new Intent(context, ImageFragmentActivity.class);
+				image.putExtra("urls", new String[]{target.getOriginalProfileImageURL()});
 				context.startActivity(image);
 			}
 		});
@@ -212,8 +212,8 @@ public class _0_detail extends Fragment{
 			@Override
 			public void onClick(View v){
 				if(target.getProfileBannerURL() != null) {
-					Intent image = new Intent(context, Show_Image.class);
-					image.putExtra("URL", target.getProfileBannerRetinaURL());
+					Intent image = new Intent(context, ImageFragmentActivity.class);
+					image.putExtra("urls", new String[]{target.getProfileBannerRetinaURL()});
 					context.startActivity(image);
 				}
 			}
