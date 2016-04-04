@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -33,7 +32,7 @@ import android.widget.Toast;
 
 public class ImageFragmentActivity extends FragmentActivity{
 
-	private ViewPager pager;
+	private ImageViewPager pager;
 	private String[] urls;
 	private String currentUrl;
 	private byte[] non_orig_image;
@@ -48,7 +47,8 @@ public class ImageFragmentActivity extends FragmentActivity{
 		int pos = intent.getIntExtra("position", 0);
 		ImagePagerAdapter adapter = new ImagePagerAdapter(getSupportFragmentManager(), urls);
 
-		pager = (ViewPager)findViewById(R.id.show_image_pager);
+		pager = (ImageViewPager)findViewById(R.id.show_image_pager);
+		pager.setPageSize(urls.length);
 		pager.setAdapter(adapter);
 		pager.setOffscreenPageLimit(urls.length - 1);
 		pager.setCurrentItem(pos);
