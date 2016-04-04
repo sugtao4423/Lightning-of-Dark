@@ -35,56 +35,54 @@ import android.widget.TextView;
 
 public class _0_detail extends Fragment{
 
-	private TextView UserBio, location, Link, User_tweet_c, User_favorite_c, User_follow_c, User_follower_c;
+	private TextView userBio, userLocation, userLink, userTweetC, userFavoriteC, userFollowC, userFollowerC;
 	private SmartImageView sourceIcon, targetIcon;
 	private ImageView isFollowIcon;
 	private User target;
 	private ApplicationClass appClass;
 
-	private SmartImageView banner, UserIcon;
-	private TextView Name, ScreenName;
+	private SmartImageView userBanner, userIcon;
+	private TextView userName, userScreenName;
 	private ImageView protect;
 
 	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.user_0, null);
-		appClass = (ApplicationClass)container.getContext().getApplicationContext();
-		appClass.set_0_detail_v(v);
 
-		return v;
-	}
+		appClass = (ApplicationClass)getActivity().getApplicationContext();
 
-	public void setText(Context context){
-		appClass = (ApplicationClass)context.getApplicationContext();
-		View v = appClass.get_0_detail_v();
-		target = appClass.getTarget();
-
-		banner = (SmartImageView)v.findViewById(R.id.banner);
-		UserIcon = (SmartImageView)v.findViewById(R.id.UserIcon);
-		Name = (TextView)v.findViewById(R.id.UserName);
-		ScreenName = (TextView)v.findViewById(R.id.UserScreenName);
+		userBanner = (SmartImageView)v.findViewById(R.id.banner);
+		userIcon = (SmartImageView)v.findViewById(R.id.UserIcon);
+		userName = (TextView)v.findViewById(R.id.UserName);
+		userScreenName = (TextView)v.findViewById(R.id.UserScreenName);
 		protect = (ImageView)v.findViewById(R.id.UserPage_protected);
-		protect.setVisibility(View.GONE);
-		setClick(context);
 
-		UserBio = (TextView)v.findViewById(R.id.UserBio);
-		location = (TextView)v.findViewById(R.id.location);
-		Link = (TextView)v.findViewById(R.id.link);
-		User_tweet_c = (TextView)v.findViewById(R.id.User_tweet_count);
-		User_favorite_c = (TextView)v.findViewById(R.id.User_favorite_count);
-		User_follow_c = (TextView)v.findViewById(R.id.User_follow_count);
-		User_follower_c = (TextView)v.findViewById(R.id.User_follower_count);
+		userBio = (TextView)v.findViewById(R.id.UserBio);
+		userLocation = (TextView)v.findViewById(R.id.location);
+		userLink = (TextView)v.findViewById(R.id.link);
+		userTweetC = (TextView)v.findViewById(R.id.User_tweet_count);
+		userFavoriteC = (TextView)v.findViewById(R.id.User_favorite_count);
+		userFollowC = (TextView)v.findViewById(R.id.User_follow_count);
+		userFollowerC = (TextView)v.findViewById(R.id.User_follower_count);
 		sourceIcon = (SmartImageView)v.findViewById(R.id.UserPage_sourceIcon);
 		targetIcon = (SmartImageView)v.findViewById(R.id.UserPage_targetIcon);
 		isFollowIcon = (ImageView)v.findViewById(R.id.UserPage_isFollow);
 
+		protect.setVisibility(View.GONE);
+		setClick(getActivity());
+		return v;
+	}
+
+	public void setText(Context context){
+		target = appClass.getTarget();
+
 		if(target.isProtected())
 			protect.setVisibility(View.VISIBLE);
-		UserIcon.setImageUrl(target.getBiggerProfileImageURL());
-		banner.setImageUrl(target.getProfileBannerURL());
-		Name.setText(target.getName());
-		ScreenName.setText("@" + target.getScreenName());
+		userIcon.setImageUrl(target.getBiggerProfileImageURL());
+		userBanner.setImageUrl(target.getProfileBannerURL());
+		userName.setText(target.getName());
+		userScreenName.setText("@" + target.getScreenName());
 
 		if(appClass.getMyScreenName().equals(target.getScreenName())) {
 			sourceIcon.setVisibility(View.GONE);
@@ -119,15 +117,15 @@ public class _0_detail extends Fragment{
 				ss.setSpan(new URLSpan(t), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}
-		UserBio.setText(ss);
-		UserBio.setMovementMethod(LinkMovementMethod.getInstance());
+		userBio.setText(ss);
+		userBio.setMovementMethod(LinkMovementMethod.getInstance());
 
-		location.setText(target.getLocation());
-		Link.setText(target.getURL());
-		User_tweet_c.setText(numberFormat(target.getStatusesCount()));
-		User_favorite_c.setText(numberFormat(target.getFavouritesCount()));
-		User_follow_c.setText(numberFormat(target.getFriendsCount()));
-		User_follower_c.setText(numberFormat(target.getFollowersCount()));
+		userLocation.setText(target.getLocation());
+		userLink.setText(target.getURL());
+		userTweetC.setText(numberFormat(target.getStatusesCount()));
+		userFavoriteC.setText(numberFormat(target.getFavouritesCount()));
+		userFollowC.setText(numberFormat(target.getFriendsCount()));
+		userFollowerC.setText(numberFormat(target.getFollowersCount()));
 	}
 
 	public String numberFormat(int num){
@@ -180,7 +178,7 @@ public class _0_detail extends Fragment{
 
 			@Override
 			protected void onPostExecute(String[] result){
-				if(result[0] != null) {
+				if(result != null) {
 					sourceIcon.setImageUrl(result[0]);
 					targetIcon.setImageUrl(result[1]);
 				}else
@@ -190,7 +188,7 @@ public class _0_detail extends Fragment{
 	}
 
 	public void setClick(final Context context){
-		UserIcon.setOnClickListener(new OnClickListener(){
+		userIcon.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
 				Intent image = new Intent(context, ImageFragmentActivity.class);
@@ -199,14 +197,14 @@ public class _0_detail extends Fragment{
 				context.startActivity(image);
 			}
 		});
-		UserIcon.setOnLongClickListener(new OnLongClickListener(){
+		userIcon.setOnLongClickListener(new OnLongClickListener(){
 			@Override
 			public boolean onLongClick(View v){
 				context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getOriginalProfileImageURL())));
 				return true;
 			}
 		});
-		banner.setOnClickListener(new OnClickListener(){
+		userBanner.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
 				if(target.getProfileBannerURL() != null) {
@@ -217,7 +215,7 @@ public class _0_detail extends Fragment{
 				}
 			}
 		});
-		banner.setOnLongClickListener(new OnLongClickListener(){
+		userBanner.setOnLongClickListener(new OnLongClickListener(){
 			@Override
 			public boolean onLongClick(View v){
 				if(target.getProfileBannerURL() != null)

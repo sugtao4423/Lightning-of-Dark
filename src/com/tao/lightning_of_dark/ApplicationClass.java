@@ -29,10 +29,6 @@ public class ApplicationClass extends Application{
 
 	// UserPage
 	private User target;
-	private String targetScreenName;
-
-	// _0_detail
-	private View _0_detail_v;
 
 	// ListViewListener
 	private AlertDialog dialog;
@@ -185,27 +181,6 @@ public class ApplicationClass extends Application{
 
 	public User getTarget(){
 		return target;
-	}
-
-	public void setTargetScreenName(String targetScreenName){
-		this.targetScreenName = targetScreenName;
-	}
-
-	public String getTargetScreenName(){
-		return targetScreenName;
-	}
-
-	/*
-	 * +-+-+-+-+-+-+-+-+-+
-	 * |_|0|_|d|e|t|a|i|l|
-	 * +-+-+-+-+-+-+-+-+-+
-	 */
-	public void set_0_detail_v(View v){
-		this._0_detail_v = v;
-	}
-
-	public View get_0_detail_v(){
-		return _0_detail_v;
 	}
 
 	/*

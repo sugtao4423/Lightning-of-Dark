@@ -81,15 +81,16 @@ public class _1_Tweet extends Fragment{
 	public void TimeLine(){
 		if(AlreadyLoad)
 			tweetId = ((Status)userTweet.getItemAtPosition(userTweet.getAdapter().getCount() - 2)).getId();
-		AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
+		((UserPage)_1_Tweet.this.getActivity()).resetUser();
+		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
 					if(AlreadyLoad)
-						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(),
+						return appClass.getTwitter().getUserTimeline(appClass.getTarget().getScreenName(),
 								new Paging(1, 50).maxId(tweetId - 1));
 					else
-						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(), new Paging(1, 50));
+						return appClass.getTwitter().getUserTimeline(appClass.getTarget().getScreenName(), new Paging(1, 50));
 				}catch(Exception e){
 					return null;
 				}
@@ -108,8 +109,6 @@ public class _1_Tweet extends Fragment{
 				PulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);
 			}
-		};
-		((UserPage)_1_Tweet.this.getActivity()).resetUser();
-		task.execute();
+		}.execute();
 	}
 }

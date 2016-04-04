@@ -26,10 +26,10 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class _2_favorites extends Fragment{
 
-	private ListView UserFav, foot;
-	private SwipeRefreshLayout PulltoRefresh;
+	private ListView userFavorite, foot;
+	private SwipeRefreshLayout pulltoRefresh;
 	private CustomAdapter adapter;
-	private boolean AlreadyLoad;
+	private boolean alreadyLoad;
 	private long tweetId;
 	private ApplicationClass appClass;
 
@@ -38,25 +38,25 @@ public class _2_favorites extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
-		AlreadyLoad = false;
+		alreadyLoad = false;
 
-		UserFav = (ListView)v.findViewById(R.id.UserPageList);
-		UserFav.setOnItemClickListener(new ListViewListener(false));
-		UserFav.setOnItemLongClickListener(new ListViewListener(false));
+		userFavorite = (ListView)v.findViewById(R.id.UserPageList);
+		userFavorite.setOnItemClickListener(new ListViewListener(false));
+		userFavorite.setOnItemLongClickListener(new ListViewListener(false));
 
 		adapter = new CustomAdapter(getActivity());
 		// フッター生成
 		addFooter();
-		UserFav.setAdapter(adapter);
+		userFavorite.setAdapter(adapter);
 
-		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
-		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
+		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
+		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
 				android.R.color.holo_orange_light, android.R.color.holo_red_light);
-		PulltoRefresh.setOnRefreshListener(new OnRefreshListener(){
+		pulltoRefresh.setOnRefreshListener(new OnRefreshListener(){
 			@Override
 			public void onRefresh(){
 				adapter.clear();
-				AlreadyLoad = false;
+				alreadyLoad = false;
 				MentionLine();
 			}
 		});
@@ -74,21 +74,22 @@ public class _2_favorites extends Fragment{
 				MentionLine();
 			}
 		});
-		UserFav.addFooterView(foot);
+		userFavorite.addFooterView(foot);
 	}
 
 	public void MentionLine(){
-		if(AlreadyLoad)
-			tweetId = ((Status)UserFav.getItemAtPosition(UserFav.getAdapter().getCount() - 2)).getId();
-		AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
+		if(alreadyLoad)
+			tweetId = ((Status)userFavorite.getItemAtPosition(userFavorite.getAdapter().getCount() - 2)).getId();
+		((UserPage)_2_favorites.this.getActivity()).resetUser();
+		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
-					if(AlreadyLoad)
-						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(),
+					if(alreadyLoad)
+						return appClass.getTwitter().getFavorites(appClass.getTarget().getScreenName(),
 								new Paging(1, 50).maxId(tweetId - 1));
 					else
-						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(), new Paging(1, 50));
+						return appClass.getTwitter().getFavorites(appClass.getTarget().getScreenName(), new Paging(1, 50));
 				}catch(Exception e){
 					return null;
 				}
@@ -98,16 +99,14 @@ public class _2_favorites extends Fragment{
 				if(result != null) {
 					for(twitter4j.Status status : result)
 						adapter.add(status);
-					if(!AlreadyLoad)
-						AlreadyLoad = true;
+					if(!alreadyLoad)
+						alreadyLoad = true;
 				}else
 					new ShowToast("ふぁぼ取得エラー", getActivity(), 0);
-				PulltoRefresh.setRefreshing(false);
-				PulltoRefresh.setEnabled(true);
+				pulltoRefresh.setRefreshing(false);
+				pulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);
 			}
-		};
-		((UserPage)_2_favorites.this.getActivity()).resetUser();
-		task.execute();
+		}.execute();
 	}
 }

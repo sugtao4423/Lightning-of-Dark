@@ -68,7 +68,7 @@ public class StartOAuth extends Activity{
 			pref.edit().putString("CustomCK", ck).putString("CustomCS", cs).commit();
 		}
 
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+		new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params){
 				ConfigurationBuilder builder = new ConfigurationBuilder();
@@ -92,8 +92,7 @@ public class StartOAuth extends Activity{
 				else
 					new ShowToast("RequestTokenの取得に失敗しました", StartOAuth.this, 0);
 			}
-		};
-		task.execute();
+		}.execute();
 	}
 
 	@Override

@@ -23,8 +23,9 @@ public class UserPage extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.userpage);
 
+		final UserPageFragmentPagerAdapter adapter = new UserPageFragmentPagerAdapter(getSupportFragmentManager());
 		ViewPager viewPager = (ViewPager)findViewById(R.id.Userpager);
-		viewPager.setAdapter(new UserPageFragmentPagerAdapter(getSupportFragmentManager()));
+		viewPager.setAdapter(adapter);
 		viewPager.setOffscreenPageLimit(5);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.userPagerTabStrip);
@@ -33,7 +34,6 @@ public class UserPage extends FragmentActivity{
 		getActionBar().setDisplayShowHomeEnabled(false);
 
 		final String u = getIntent().getStringExtra("userScreenName");
-		((ApplicationClass)UserPage.this.getApplicationContext()).setTargetScreenName(u);
 
 		new AsyncTask<Void, Void, User>(){
 			@Override
@@ -51,7 +51,7 @@ public class UserPage extends FragmentActivity{
 				if(result != null) {
 					((ApplicationClass)UserPage.this.getApplicationContext()).setTarget(result);
 					getActionBar().setTitle(result.getName());
-					new _0_detail().setText(UserPage.this);
+					((_0_detail)(adapter.getItem(0))).setText(UserPage.this);
 				}else{
 					new ShowToast("ユーザー情報を取得できませんでした", UserPage.this, 0);
 					finish();
@@ -61,6 +61,6 @@ public class UserPage extends FragmentActivity{
 	}
 
 	public void resetUser(){
-		((ApplicationClass)UserPage.this.getApplicationContext()).setTargetScreenName(target.getScreenName());
+		((ApplicationClass)UserPage.this.getApplicationContext()).setTarget(target);
 	}
 }

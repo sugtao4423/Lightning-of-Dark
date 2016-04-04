@@ -33,8 +33,8 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 	}
 
 	class ViewHolder{
-		TextView name, text, tweet_date, RetweetedUserScreenName;
-		SmartImageView icon, RetweetedUserIcon;
+		TextView name, text, tweet_date, retweetedUserScreenName;
+		SmartImageView icon, retweetedUserIcon;
 		ImageView protect;
 	}
 
@@ -50,8 +50,8 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			TextView text = (TextView)convertView.findViewById(R.id.tweetText);
 			TextView tweet_date = (TextView)convertView.findViewById(R.id.tweet_date);
 			SmartImageView icon = (SmartImageView)convertView.findViewById(R.id.icon);
-			SmartImageView RetweetedUserIcon = (SmartImageView)convertView.findViewById(R.id.RetweetedUserIcon);
-			TextView RetweetedUserScreenName = (TextView)convertView.findViewById(R.id.RetweetedUserScreenName);
+			SmartImageView retweetedUserIcon = (SmartImageView)convertView.findViewById(R.id.RetweetedUserIcon);
+			TextView retweetedUserScreenName = (TextView)convertView.findViewById(R.id.RetweetedUserScreenName);
 			ImageView protect = (ImageView)convertView.findViewById(R.id.UserProtected);
 
 			holder = new ViewHolder();
@@ -59,8 +59,8 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			holder.text = text;
 			holder.tweet_date = tweet_date;
 			holder.icon = icon;
-			holder.RetweetedUserIcon = RetweetedUserIcon;
-			holder.RetweetedUserScreenName = RetweetedUserScreenName;
+			holder.retweetedUserIcon = retweetedUserIcon;
+			holder.retweetedUserScreenName = retweetedUserScreenName;
 			holder.protect = protect;
 
 			convertView.setTag(holder);
@@ -96,22 +96,22 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 		}
 		// アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
 		if(item.isRetweet()) {
-			holder.RetweetedUserIcon.setVisibility(View.VISIBLE);
-			holder.RetweetedUserScreenName.setVisibility(View.VISIBLE);
+			holder.retweetedUserIcon.setVisibility(View.VISIBLE);
+			holder.retweetedUserScreenName.setVisibility(View.VISIBLE);
 
 			holder.name.setText(item.getRetweetedStatus().getUser().getName() + " - @" + item.getRetweetedStatus().getUser().getScreenName());
 			holder.text.setText(item.getRetweetedStatus().getText());
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(
 					item.getRetweetedStatus().getCreatedAt()) + "  Retweeted by ");
-			holder.RetweetedUserIcon.setImageUrl(item.getUser().getProfileImageURL());
-			holder.RetweetedUserScreenName.setText("@" + item.getUser().getScreenName());
+			holder.retweetedUserIcon.setImageUrl(item.getUser().getProfileImageURL());
+			holder.retweetedUserScreenName.setText("@" + item.getUser().getScreenName());
 			if(appClass.getGetBigIcon())
 				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL());
 			else
 				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
 		}else{
-			holder.RetweetedUserIcon.setVisibility(View.GONE);
-			holder.RetweetedUserScreenName.setVisibility(View.GONE);
+			holder.retweetedUserIcon.setVisibility(View.GONE);
+			holder.retweetedUserScreenName.setVisibility(View.GONE);
 			holder.name.setText(item.getUser().getName() + " - @" + item.getUser().getScreenName());
 			holder.text.setText(item.getText());
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(item.getCreatedAt())

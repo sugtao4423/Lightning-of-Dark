@@ -28,8 +28,8 @@ public class CustomAdapter_User extends ArrayAdapter<User>{
 	}
 
 	class ViewHolder{
-		TextView name, text, tweet_date, RetweetedUserScreenName;
-		SmartImageView icon, RetweetedUserIcon;
+		TextView name, text, tweet_date, retweetedUserScreenName;
+		SmartImageView icon, retweetedUserIcon;
 		ImageView protect;
 	}
 
@@ -45,8 +45,8 @@ public class CustomAdapter_User extends ArrayAdapter<User>{
 			TextView text = (TextView)convertView.findViewById(R.id.tweetText);
 			TextView tweet_date = (TextView)convertView.findViewById(R.id.tweet_date);
 			SmartImageView icon = (SmartImageView)convertView.findViewById(R.id.icon);
-			SmartImageView RetweetedUserIcon = (SmartImageView)convertView.findViewById(R.id.RetweetedUserIcon);
-			TextView RetweetedUserScreenName = (TextView)convertView.findViewById(R.id.RetweetedUserScreenName);
+			SmartImageView retweetedUserIcon = (SmartImageView)convertView.findViewById(R.id.RetweetedUserIcon);
+			TextView retweetedUserScreenName = (TextView)convertView.findViewById(R.id.RetweetedUserScreenName);
 			ImageView protect = (ImageView)convertView.findViewById(R.id.UserProtected);
 
 			holder = new ViewHolder();
@@ -54,16 +54,16 @@ public class CustomAdapter_User extends ArrayAdapter<User>{
 			holder.text = text;
 			holder.tweet_date = tweet_date;
 			holder.icon = icon;
-			holder.RetweetedUserIcon = RetweetedUserIcon;
-			holder.RetweetedUserScreenName = RetweetedUserScreenName;
+			holder.retweetedUserIcon = retweetedUserIcon;
+			holder.retweetedUserScreenName = retweetedUserScreenName;
 			holder.protect = protect;
 
 			convertView.setTag(holder);
 		}else{
 			holder = (ViewHolder)convertView.getTag();
 		}
-		holder.RetweetedUserIcon.setVisibility(View.GONE);
-		holder.RetweetedUserScreenName.setVisibility(View.GONE);
+		holder.retweetedUserIcon.setVisibility(View.GONE);
+		holder.retweetedUserScreenName.setVisibility(View.GONE);
 
 		if(item.isProtected())
 			holder.protect.setVisibility(View.VISIBLE);

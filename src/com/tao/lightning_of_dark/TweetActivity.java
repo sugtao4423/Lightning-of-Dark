@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.tao.lightning_of_dark.R;
 
 import twitter4j.StatusUpdate;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -36,8 +37,10 @@ public class TweetActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tweet_activity);
 
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayShowHomeEnabled(false);
+
 		appClass = (ApplicationClass)this.getApplicationContext();
-		getActionBar().setDisplayShowHomeEnabled(false);
 
 		TextView tweetAccount = (TextView)findViewById(R.id.tweetAccount);
 		tweetAccount.setText("@" + appClass.getMyScreenName());
@@ -45,18 +48,19 @@ public class TweetActivity extends Activity{
 		tweetText = (EditText)findViewById(R.id.tweetText);
 		moji140 = (TextView)findViewById(R.id.moji140);
 
-		replyTweetText = getIntent().getStringExtra("ReplyTweetText");
-		replyUserScreenName = getIntent().getStringExtra("ReplyUserScreenName");
-		tweetReplyId = getIntent().getLongExtra("TweetReplyId", -1);
-		pakuri = getIntent().getStringExtra("pakuri");
-		do_back = getIntent().getBooleanExtra("do_back", true);
-		do_setSelection = getIntent().getBooleanExtra("do_setSelection", true);
+		Intent intent = getIntent();
+		replyTweetText = intent.getStringExtra("ReplyTweetText");
+		replyUserScreenName = intent.getStringExtra("ReplyUserScreenName");
+		tweetReplyId = intent.getLongExtra("TweetReplyId", -1);
+		pakuri = intent.getStringExtra("pakuri");
+		do_back = intent.getBooleanExtra("do_back", true);
+		do_setSelection = intent.getBooleanExtra("do_setSelection", true);
 
 		if(tweetReplyId == -1) {
-			getActionBar().setTitle("New Tweet");
+			actionBar.setTitle("New Tweet");
 			tweetText.setText(pakuri);
 		}else{
-			getActionBar().setTitle(replyUserScreenName + " : " + replyTweetText);
+			actionBar.setTitle(replyUserScreenName + " : " + replyTweetText);
 			if(replyTweetText.length() > 10)
 				replyTweetText = replyTweetText.substring(0, 10);
 			tweetText.setText("@" + replyUserScreenName + " ");

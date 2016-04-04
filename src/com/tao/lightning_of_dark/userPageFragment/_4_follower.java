@@ -27,7 +27,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class _4_follower extends Fragment{
 
 	private ListView userFollower, foot;
-	private SwipeRefreshLayout PulltoRefresh;
+	private SwipeRefreshLayout pulltoRefresh;
 	private CustomAdapter_User adapter;
 	private long cursor;
 	private ApplicationClass appClass;
@@ -55,10 +55,10 @@ public class _4_follower extends Fragment{
 		});
 
 		// PulltoRefresh
-		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
-		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
+		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
+		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
 				android.R.color.holo_orange_light, android.R.color.holo_red_light);
-		PulltoRefresh.setOnRefreshListener(new OnRefreshListener(){
+		pulltoRefresh.setOnRefreshListener(new OnRefreshListener(){
 			@Override
 			public void onRefresh(){
 				adapter.clear();
@@ -82,11 +82,12 @@ public class _4_follower extends Fragment{
 	}
 
 	public void FollowerLine(){
-		AsyncTask<Void, Void, PagableResponseList<User>> task = new AsyncTask<Void, Void, PagableResponseList<User>>(){
+		((UserPage)_4_follower.this.getActivity()).resetUser();
+		new AsyncTask<Void, Void, PagableResponseList<User>>(){
 			@Override
 			protected PagableResponseList<User> doInBackground(Void... params){
 				try{
-					return appClass.getTwitter().getFollowersList(appClass.getTargetScreenName(), cursor);
+					return appClass.getTwitter().getFollowersList(appClass.getTarget().getScreenName(), cursor);
 				}catch(TwitterException e){
 					return null;
 				}
@@ -100,12 +101,10 @@ public class _4_follower extends Fragment{
 					cursor = result.getNextCursor();
 				}else
 					new ShowToast("フォロワーを取得できませんでした", getActivity(), 0);
-				PulltoRefresh.setRefreshing(false);
-				PulltoRefresh.setEnabled(true);
+				pulltoRefresh.setRefreshing(false);
+				pulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);
 			}
-		};
-		((UserPage)_4_follower.this.getActivity()).resetUser();
-		task.execute();
+		}.execute();
 	}
 }
