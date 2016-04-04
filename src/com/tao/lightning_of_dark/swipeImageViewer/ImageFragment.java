@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -85,5 +86,9 @@ public class ImageFragment extends Fragment{
 		}.execute(url);
 
 		return image;
+	}
+
+	public byte[] getNonOrigImage(){
+		return non_orig_image;
 	}
 }

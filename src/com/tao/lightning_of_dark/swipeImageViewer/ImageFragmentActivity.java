@@ -32,10 +32,12 @@ import android.widget.Toast;
 
 public class ImageFragmentActivity extends FragmentActivity{
 
+	private ImagePagerAdapter adapter;
 	private ImageViewPager pager;
 	private String[] urls;
+	private boolean isBanner;
+	private boolean isIcon;
 	private String currentUrl;
-	private byte[] non_orig_image;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -44,8 +46,10 @@ public class ImageFragmentActivity extends FragmentActivity{
 		setContentView(R.layout.show_image_pager);
 		Intent intent = getIntent();
 		urls = intent.getStringArrayExtra("urls");
+		isBanner = intent.getBooleanExtra("isBanner", false);
+		isIcon = intent.getBooleanExtra("isIcon", false);
 		int pos = intent.getIntExtra("position", 0);
-		ImagePagerAdapter adapter = new ImagePagerAdapter(getSupportFragmentManager(), urls);
+		adapter = new ImagePagerAdapter(getSupportFragmentManager(), urls);
 
 		pager = (ImageViewPager)findViewById(R.id.show_image_pager);
 		pager.setPageSize(urls.length);
@@ -73,14 +77,24 @@ public class ImageFragmentActivity extends FragmentActivity{
 	}
 
 	public void saveImage(){
-		final Matcher original = Pattern.compile("http(s)?://pbs.twimg.com/media/(.+)(\\..+):orig$").matcher(currentUrl + ":orig");
-		if(!original.find()) {
-			Matcher mm = Pattern.compile(".+/(.+)(\\..+)$").matcher(currentUrl);
-			if(!mm.find()) {
-				new ShowToast("URLがパターンにマッチしません", this, 0);
+		if(isBanner) {
+			Matcher banner = Pattern.compile("^http(s)?://pbs.twimg.com/profile_banners/[0-9]+/([0-9]+)/web_retina$").matcher(currentUrl);
+			if(!banner.find()) {
+				new ShowToast("URLがパターンにマッチしません\n保存できませんでした", this, 0);
 				return;
 			}
-			save(mm.group(1), mm.group(2), non_orig_image, false);
+			byte[] non_orig_image = ((ImageFragment)adapter.getItem(pager.getCurrentItem())).getNonOrigImage();
+			save(banner.group(2), ".jpg", non_orig_image, false);
+			return;
+		}
+
+		String orig = "";
+		if(!isIcon)
+			orig = ":orig";
+
+		final Matcher pattern = Pattern.compile("^http(s)?://pbs.twimg.com/.+/+(.+)(\\..+)" + orig + "$").matcher(currentUrl + orig);
+		if(!pattern.find()) {
+			new ShowToast("URLがパターンにマッチしません\n保存できませんでした", this, 0);
 			return;
 		}
 
@@ -124,12 +138,15 @@ public class ImageFragmentActivity extends FragmentActivity{
 			protected void onPostExecute(final byte[] result){
 				if(result != null) {
 					progDailog.dismiss();
-					save(original.group(2), original.group(3), result, true);
+					if(isIcon)
+						save(pattern.group(2), pattern.group(3), result, false);
+					else
+						save(pattern.group(2), pattern.group(3), result, true);
 				}else{
 					new ShowToast("オリジナル画像の取得に失敗しました", ImageFragmentActivity.this, 0);
 				}
 			}
-		}.execute(currentUrl + ":orig");
+		}.execute(currentUrl + orig);
 	}
 
 	public void save(final String fileName, final String type, final byte[] byteImage, final boolean isOriginal){

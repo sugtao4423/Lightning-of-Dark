@@ -135,7 +135,7 @@ public class _0_detail extends Fragment{
 	}
 
 	public void followCheck(){
-		AsyncTask<Void, Void, Relationship> task = new AsyncTask<Void, Void, Relationship>(){
+		new AsyncTask<Void, Void, Relationship>(){
 			@Override
 			protected Relationship doInBackground(Void... params){
 				try{
@@ -158,12 +158,11 @@ public class _0_detail extends Fragment{
 						isFollowIcon.setImageResource(R.drawable.follow_block);
 				}
 			}
-		};
-		task.execute();
+		}.execute();
 	}
 
 	public void set_souce_and_targetIcon(){
-		AsyncTask<Void, Void, String[]> task = new AsyncTask<Void, Void, String[]>(){
+		new AsyncTask<Void, Void, String[]>(){
 			@Override
 			protected String[] doInBackground(Void... params){
 				try{
@@ -187,8 +186,7 @@ public class _0_detail extends Fragment{
 				}else
 					new ShowToast("ユーザーアイコンの取得に失敗しました", getActivity(), 0);
 			}
-		};
-		task.execute();
+		}.execute();
 	}
 
 	public void setClick(final Context context){
@@ -197,6 +195,7 @@ public class _0_detail extends Fragment{
 			public void onClick(View v){
 				Intent image = new Intent(context, ImageFragmentActivity.class);
 				image.putExtra("urls", new String[]{target.getOriginalProfileImageURL()});
+				image.putExtra("isIcon", true);
 				context.startActivity(image);
 			}
 		});
@@ -213,6 +212,7 @@ public class _0_detail extends Fragment{
 				if(target.getProfileBannerURL() != null) {
 					Intent image = new Intent(context, ImageFragmentActivity.class);
 					image.putExtra("urls", new String[]{target.getProfileBannerRetinaURL()});
+					image.putExtra("isBanner", true);
 					context.startActivity(image);
 				}
 			}
