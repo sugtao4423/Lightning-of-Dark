@@ -9,7 +9,6 @@ import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
-import com.tao.lightning_of_dark.UserPage;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;

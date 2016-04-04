@@ -3,6 +3,7 @@ package com.tao.lightning_of_dark;
 import java.util.ArrayList;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.dataclass.Account;
+import com.tao.lightning_of_dark.userPageFragment.UserPage;
 import com.tao.lightning_of_dark.utils.DBUtil;
 
 import twitter4j.Twitter;

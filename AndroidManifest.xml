@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="UserPage"
+            android:name=".userPageFragment.UserPage"
             android:configChanges="orientation|screenSize" >
         </activity>
         <activity

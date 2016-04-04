@@ -13,8 +13,8 @@ import com.tao.lightning_of_dark.IntentActivity;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.Show_Video;
-import com.tao.lightning_of_dark.UserPage;
 import com.tao.lightning_of_dark.swipeImageViewer.ImageFragmentActivity;
+import com.tao.lightning_of_dark.userPageFragment.UserPage;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

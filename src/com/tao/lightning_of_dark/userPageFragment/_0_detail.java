@@ -12,7 +12,6 @@ import com.loopj.android.image.SmartImageView;
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
-import com.tao.lightning_of_dark.UserPage;
 import com.tao.lightning_of_dark.swipeImageViewer.ImageFragmentActivity;
 
 import android.annotation.SuppressLint;

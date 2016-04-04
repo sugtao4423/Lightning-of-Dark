@@ -8,7 +8,6 @@ import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter_User;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
-import com.tao.lightning_of_dark.UserPage;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;

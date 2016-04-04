@@ -1,11 +1,11 @@
-package com.tao.lightning_of_dark;
+package com.tao.lightning_of_dark.userPageFragment;
 
 import twitter4j.TwitterException;
 import twitter4j.User;
 
+import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.R;
-import com.tao.lightning_of_dark.userPageFragment.UserPageFragmentPagerAdapter;
-import com.tao.lightning_of_dark.userPageFragment._0_detail;
+import com.tao.lightning_of_dark.ShowToast;
 
 import android.graphics.Color;
 import android.os.AsyncTask;

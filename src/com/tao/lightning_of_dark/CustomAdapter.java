@@ -7,6 +7,7 @@ import twitter4j.Status;
 
 import com.loopj.android.image.SmartImageView;
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.userPageFragment.UserPage;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
