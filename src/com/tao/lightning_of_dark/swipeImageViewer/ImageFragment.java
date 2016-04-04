@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import com.tao.lightning_of_dark.R;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -30,13 +29,12 @@ public class ImageFragment extends Fragment{
 		super.onCreate(savedInstanceState);
 		Bundle bundle = getArguments();
 		url = bundle.getString("url");
+		image = new ZoomableImageView(getActivity());
 	}
 
 	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View v = inflater.inflate(R.layout.show_image, null);
-		image = (ZoomableImageView)v.findViewById(R.id.show_image_image);
 		new AsyncTask<String, Void, Bitmap>(){
 			private ProgressDialog progDailog;
 
@@ -86,6 +84,6 @@ public class ImageFragment extends Fragment{
 			}
 		}.execute(url);
 
-		return v;
+		return image;
 	}
 }

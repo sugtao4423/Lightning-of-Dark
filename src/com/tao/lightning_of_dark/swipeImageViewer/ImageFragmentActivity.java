@@ -60,8 +60,8 @@ public class ImageFragmentActivity extends FragmentActivity{
 
 	public void image_option_click(View v){
 		currentUrl = urls[pager.getCurrentItem()];
-		AlertDialog.Builder select = new AlertDialog.Builder(this);
-		select.setItems(new String[]{"ブラウザで開く", "保存する"}, new OnClickListener(){
+		new AlertDialog.Builder(this)
+		.setItems(new String[]{"ブラウザで開く", "保存する"}, new OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which){
 				if(which == 0)
@@ -69,8 +69,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 				if(which == 1)
 					saveImage();
 			}
-		});
-		select.create().show();
+		}).show();
 	}
 
 	public void saveImage(){
