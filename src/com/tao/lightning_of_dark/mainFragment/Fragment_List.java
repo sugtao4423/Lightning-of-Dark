@@ -102,56 +102,54 @@ public class Fragment_List extends Fragment{
 				if(appClass.getList_AlreadyLoad()[ListIndex]) {
 					tweetId = ((Status)ListLine.getItemAtPosition(ListLine.getAdapter().getCount() - 2)).getId();
 				}
-				AsyncTask<Void, Void, ResponseList<twitter4j.Status>> task =
-						new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
-							@Override
-							protected ResponseList<twitter4j.Status> doInBackground(Void... params){
-								try{
-									if(appClass.getList_AlreadyLoad()[ListIndex])
-										return appClass.getTwitter().getUserListStatuses(ListId[ListIndex],
-												new Paging(1, 50).maxId(tweetId - 1));
-									else
-										return appClass.getTwitter().getUserListStatuses(ListId[ListIndex], new Paging(1, 50));
-								}catch(TwitterException e){
-									return null;
-								}
-							}
+				new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
+					@Override
+					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
+						try{
+							if(appClass.getList_AlreadyLoad()[ListIndex])
+								return appClass.getTwitter().getUserListStatuses(ListId[ListIndex],
+										new Paging(1, 50).maxId(tweetId - 1));
+							else
+								return appClass.getTwitter().getUserListStatuses(ListId[ListIndex], new Paging(1, 50));
+						}catch(TwitterException e){
+							return null;
+						}
+					}
 
-							@Override
-							protected void onPostExecute(ResponseList<twitter4j.Status> result){
-								if(result != null) {
-									for(twitter4j.Status status : result)
-										adapter.add(status);
-									if(!appClass.getList_AlreadyLoad()[ListIndex]) {
-										boolean[] tmp = appClass.getList_AlreadyLoad();
-										tmp[ListIndex] = true;
-										appClass.setList_AlreadyLoad(tmp);
-									}
-								}else
-									new ShowToast("リストを取得できませんでした", getActivity(), 0);
-								PulltoRefresh.setRefreshing(false);
-								PulltoRefresh.setEnabled(true);
-								foot.setEnabled(true);
+					@Override
+					protected void onPostExecute(ResponseList<twitter4j.Status> result){
+						if(result != null) {
+							for(twitter4j.Status status : result)
+								adapter.add(status);
+							if(!appClass.getList_AlreadyLoad()[ListIndex]) {
+								boolean[] tmp = appClass.getList_AlreadyLoad();
+								tmp[ListIndex] = true;
+								appClass.setList_AlreadyLoad(tmp);
 							}
-						};
-				task.execute();
+						}else
+							new ShowToast("リストを取得できませんでした", getActivity(), 0);
+						PulltoRefresh.setRefreshing(false);
+						PulltoRefresh.setEnabled(true);
+						foot.setEnabled(true);
+					}
+				}.execute();
 			}else{
 				PulltoRefresh.setRefreshing(false);
 				PulltoRefresh.setEnabled(true);
-				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setTitle("リストを選択してください").setMessage("リストが未選択です。\n設定ページを開きますか？").setPositiveButton("開く",
-						new OnClickListener(){
-							@Override
-							public void onClick(DialogInterface dialog, int which){
-								startActivity(new Intent(getActivity(), Preference.class));
-							}
-						});
-				builder.setNegativeButton("キャンセル", new OnClickListener(){
+				new AlertDialog.Builder(getActivity())
+				.setTitle("リストを選択してください")
+				.setMessage("リストが未選択です。\n設定ページを開きますか？")
+				.setPositiveButton("開く", new OnClickListener(){
+					@Override
+					public void onClick(DialogInterface dialog, int which){
+						startActivity(new Intent(getActivity(), Preference.class));
+					}
+				})
+				.setNegativeButton("キャンセル", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which){
 					}
-				});
-				builder.create().show();
+				}).show();
 			}
 		}
 	}

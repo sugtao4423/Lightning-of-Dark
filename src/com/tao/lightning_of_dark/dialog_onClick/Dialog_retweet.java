@@ -24,7 +24,7 @@ public class Dialog_retweet implements OnClickListener{
 	@Override
 	public void onClick(View v){
 		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
-		AsyncTask<Void, Void, Boolean> task = new AsyncTask<Void, Void, Boolean>(){
+		new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params){
 				try{
@@ -42,7 +42,6 @@ public class Dialog_retweet implements OnClickListener{
 				else
 					new ShowToast("リツイートできませんでした", context, 0);
 			}
-		};
-		task.execute();
+		}.execute();
 	}
 }

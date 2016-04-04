@@ -273,7 +273,7 @@ public class MainActivity extends FragmentActivity{
 		final String[] items = new String[]{"ツイート爆撃", "ユーザー検索", "アカウント", "設定"};
 		new AlertDialog.Builder(this)
 		.setItems(items, new OptionClickListener(this, items, myScreenName, pref, twitter))
-		.create().show();
+		.show();
 	}
 
 	public void restart(){

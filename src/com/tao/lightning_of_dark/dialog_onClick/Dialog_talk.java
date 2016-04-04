@@ -34,14 +34,12 @@ public class Dialog_talk implements OnClickListener{
 	@Override
 	public void onClick(View v){
 		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		ListView result = new ListView(context);
 		result.setOnItemClickListener(new ListViewListener(tweet_do_back));
 		result.setOnItemLongClickListener(new ListViewListener(tweet_do_back));
 		resultAdapter = new CustomAdapter(context);
 		result.setAdapter(resultAdapter);
-		builder.setView(result);
-		builder.create().show();
+		new AlertDialog.Builder(context).setView(result).show();
 
 		if(status.isRetweet())
 			reply = status.getRetweetedStatus();

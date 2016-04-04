@@ -118,7 +118,7 @@ public class Preference_List extends PreferenceActivity{
 					})
 					.setNegativeButton("キャンセル", null);
 					if(!selectedListNames[0].equals(""))
-						builder.create().show();
+						builder.show();
 					else
 						new ShowToast("リストが選択されていません", getActivity(), 0);
 					return false;
@@ -147,8 +147,6 @@ public class Preference_List extends PreferenceActivity{
 								for(UserList userList : result)
 									array.add(userList.getName());
 
-								AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-								builder.setTitle("リストを選択してください");
 								String[] listItem = (String[])array.toArray(new String[0]);
 								boolean[] isCheck = new boolean[array.size()];
 								for(int i = 0; i < array.size(); i++){
@@ -156,7 +154,10 @@ public class Preference_List extends PreferenceActivity{
 								}
 
 								final ArrayList<UserList> checkedList = new ArrayList<UserList>();
-								builder.setMultiChoiceItems(listItem, isCheck, new OnMultiChoiceClickListener(){
+
+								new AlertDialog.Builder(getActivity())
+								.setTitle("リストを選択してください")
+								.setMultiChoiceItems(listItem, isCheck, new OnMultiChoiceClickListener(){
 									@Override
 									public void onClick(DialogInterface dialog, int which, boolean isChecked){
 										if(isChecked)
@@ -164,8 +165,8 @@ public class Preference_List extends PreferenceActivity{
 										else
 											checkedList.remove(result.get(which));
 									}
-								});
-								builder.setPositiveButton("OK", new OnClickListener(){
+								})
+								.setPositiveButton("OK", new OnClickListener(){
 									@Override
 									public void onClick(DialogInterface dialog, int which){
 										int checkedSize = checkedList.size();
@@ -188,8 +189,7 @@ public class Preference_List extends PreferenceActivity{
 										Dialog("リストを選択しました");
 										setSummary();
 									}
-								});
-								builder.create().show();
+								}).show();
 							}
 						}
 					}.execute();
@@ -213,7 +213,7 @@ public class Preference_List extends PreferenceActivity{
 				public void onClick(DialogInterface dialog, int which){
 					Toast.makeText(getActivity(), "大人しく再起動しような？", Toast.LENGTH_SHORT).show();
 				}
-			}).create().show();
+			}).show();
 		}
 
 		public void setSummary(){

@@ -77,11 +77,12 @@ public class Dialog_ListClick implements OnItemClickListener{
 			kakko2_0.setOnClickListener(new Dialog_regButtonClick(regEdit, "{"));
 			kakko2_1.setOnClickListener(new Dialog_regButtonClick(regEdit, "}"));
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
 			regEdit.setText(pref.getString("regularExpression", ""));
-			builder.setTitle("正規表現を入力してください")
+			new AlertDialog.Builder(parent.getContext())
+			.setTitle("正規表現を入力してください")
 			.setView(regView)
+			.setNegativeButton("キャンセル", null)
 			.setPositiveButton("OK", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
@@ -94,7 +95,6 @@ public class Dialog_ListClick implements OnItemClickListener{
 						if(pattern.matcher(status.getText()).find())
 							content.add(status);
 					}
-					AlertDialog.Builder b = new AlertDialog.Builder(baseParent.getContext());
 					ListView l = new ListView(baseParent.getContext());
 					if(content.isEmpty()){
 						l.setAdapter(new ArrayAdapter<String>(baseParent.getContext(), android.R.layout.simple_list_item_1,
@@ -104,10 +104,9 @@ public class Dialog_ListClick implements OnItemClickListener{
 						l.setOnItemClickListener(new ListViewListener(tweet_do_back));
 						l.setOnItemLongClickListener(new ListViewListener(tweet_do_back));
 					}
-					b.setView(l).create().show();
+					new AlertDialog.Builder(baseParent.getContext()).setView(l).show();
 				}
-			});
-			builder.setNegativeButton("キャンセル", null).create().show();
+			}).show();
 		}
 
 		Matcher image = Pattern.compile("http(s)?://pbs.twimg.com/media/").matcher(clickedText);

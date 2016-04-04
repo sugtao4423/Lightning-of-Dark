@@ -54,7 +54,7 @@ public class OptionClickListener implements OnClickListener{
 						context.startActivity(userPage);
 					}
 				}
-			}).create().show();
+			}).show();
 		}
 		if(items[which].equals("アカウント")) {
 			final DBUtil dbUtil = new DBUtil(context);
@@ -102,10 +102,10 @@ public class OptionClickListener implements OnClickListener{
 							}
 						})
 						.setNeutralButton("キャンセル", null)
-						.create().show();
+						.show();
 					}
 				}
-			}).create().show();
+			}).show();
 		}
 		if(items[which].equals("設定")) {
 			context.startActivity(new Intent(context, Preference.class));
@@ -128,7 +128,7 @@ public class OptionClickListener implements OnClickListener{
 					String loop = "";
 					for(int i = 0; i < loopCount; i++){
 						loop += loopText;
-						AsyncTask<String, Void, Void> task = new AsyncTask<String, Void, Void>(){
+						new AsyncTask<String, Void, Void>(){
 							@Override
 							protected Void doInBackground(String... params){
 								try{
@@ -137,14 +137,13 @@ public class OptionClickListener implements OnClickListener{
 								}
 								return null;
 							}
-						};
-						task.execute(loop);
+						}.execute(loop);
 					}
 					new ShowToast("ツイート完了", context, 0);
 				}
 			})
 			.setNegativeButton("キャンセル", null)
-			.create().show();
+			.show();
 		}
 	}
 }

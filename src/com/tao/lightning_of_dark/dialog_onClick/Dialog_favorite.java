@@ -24,7 +24,7 @@ public class Dialog_favorite implements OnClickListener{
 	@Override
 	public void onClick(View v){
 		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
-		AsyncTask<Void, Void, Boolean> fav = new AsyncTask<Void, Void, Boolean>(){
+		new AsyncTask<Void, Void, Boolean>(){
 			@Override
 			protected Boolean doInBackground(Void... params){
 				try{
@@ -42,7 +42,6 @@ public class Dialog_favorite implements OnClickListener{
 				else
 					new ShowToast("ふぁぼれませんでした", context, 0);
 			}
-		};
-		fav.execute();
+		}.execute();
 	}
 }

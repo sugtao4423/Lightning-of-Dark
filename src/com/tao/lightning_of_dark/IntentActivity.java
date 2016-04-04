@@ -133,7 +133,7 @@ public class IntentActivity extends Activity{
 
 	public void showStatus(long tweetId, final Context context, final boolean isClose){
 		appClass = (ApplicationClass)context.getApplicationContext();
-		AsyncTask<Long, Void, Status> task = new AsyncTask<Long, Void, Status>(){
+		new AsyncTask<Long, Void, Status>(){
 			@Override
 			protected twitter4j.Status doInBackground(Long... params){
 				try{
@@ -163,12 +163,11 @@ public class IntentActivity extends Activity{
 							}
 						});
 					}
-					builder.create().show();
+					builder.show();
 				}else{
 					new ShowToast("ツイートの取得に失敗しました", IntentActivity.this, 0);
 				}
 			}
-		};
-		task.execute(tweetId);
+		}.execute(tweetId);
 	}
 }
