@@ -28,7 +28,6 @@ public class TweetActivity extends Activity{
 	private EditText tweetText;
 	private TextView moji140;
 	private long tweetReplyId;
-	private String replyUserScreenName, replyTweetText, pakuri;
 	private File image;
 	private boolean do_back, do_setSelection;
 	private ApplicationClass appClass;
@@ -40,7 +39,7 @@ public class TweetActivity extends Activity{
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowHomeEnabled(false);
 
-		appClass = (ApplicationClass)this.getApplicationContext();
+		appClass = (ApplicationClass)getApplicationContext();
 
 		TextView tweetAccount = (TextView)findViewById(R.id.tweetAccount);
 		tweetAccount.setText("@" + appClass.getMyScreenName());
@@ -49,10 +48,10 @@ public class TweetActivity extends Activity{
 		moji140 = (TextView)findViewById(R.id.moji140);
 
 		Intent intent = getIntent();
-		replyTweetText = intent.getStringExtra("ReplyTweetText");
-		replyUserScreenName = intent.getStringExtra("ReplyUserScreenName");
+		String replyTweetText = intent.getStringExtra("ReplyTweetText");
+		String replyUserScreenName = intent.getStringExtra("ReplyUserScreenName");
 		tweetReplyId = intent.getLongExtra("TweetReplyId", -1);
-		pakuri = intent.getStringExtra("pakuri");
+		String pakuri = intent.getStringExtra("pakuri");
 		do_back = intent.getBooleanExtra("do_back", true);
 		do_setSelection = intent.getBooleanExtra("do_setSelection", true);
 
@@ -60,9 +59,8 @@ public class TweetActivity extends Activity{
 			actionBar.setTitle("New Tweet");
 			tweetText.setText(pakuri);
 		}else{
-			actionBar.setTitle(replyUserScreenName + " : " + replyTweetText);
-			if(replyTweetText.length() > 10)
-				replyTweetText = replyTweetText.substring(0, 10);
+			actionBar.setTitle("Reply");
+			actionBar.setSubtitle(replyTweetText);
 			tweetText.setText("@" + replyUserScreenName + " ");
 		}
 		if(do_setSelection)
