@@ -10,6 +10,7 @@ import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_ListClick;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_deletePost;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_favorite;
+import com.tao.lightning_of_dark.dialog_onClick.Dialog_quoteRT;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_reply;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_retweet;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_talk;
@@ -167,6 +168,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 
 		dialog_reply.setOnClickListener(new Dialog_reply(item, parent.getContext(), tweet_do_back));
 		dialog_retweet.setOnClickListener(new Dialog_retweet(item, parent.getContext()));
+		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(item, parent.getContext(), tweet_do_back));
 		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, parent.getContext(), tweet_do_back));
 		dialog_favorite.setOnClickListener(new Dialog_favorite(item, parent.getContext()));
 		dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext(), tweet_do_back));
