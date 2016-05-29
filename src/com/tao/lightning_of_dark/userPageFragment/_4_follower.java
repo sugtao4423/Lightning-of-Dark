@@ -62,7 +62,7 @@ public class _4_follower extends Fragment{
 			@Override
 			public void onRefresh(){
 				adapter.clear();
-				FollowerLine();
+				loadFollowerLine();
 			}
 		});
 		return v;
@@ -75,19 +75,19 @@ public class _4_follower extends Fragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 				foot.setEnabled(false);
-				FollowerLine();
+				loadFollowerLine();
 			}
 		});
 		userFollower.addFooterView(foot);
 	}
 
-	public void FollowerLine(){
+	public void loadFollowerLine(){
 		((UserPage)_4_follower.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, PagableResponseList<User>>(){
 			@Override
 			protected PagableResponseList<User> doInBackground(Void... params){
 				try{
-					return appClass.getTwitter().getFollowersList(appClass.getTarget().getScreenName(), cursor);
+					return appClass.getTwitter().getFollowersList(appClass.getTargetScreenName(), cursor);
 				}catch(TwitterException e){
 					return null;
 				}

@@ -29,6 +29,7 @@ public class ApplicationClass extends Application{
 
 	// UserPage
 	private User target;
+	private String targetScreenName;
 
 	// ListViewListener
 	private AlertDialog dialog;
@@ -181,6 +182,14 @@ public class ApplicationClass extends Application{
 
 	public User getTarget(){
 		return target;
+	}
+
+	public void setTargetScreenName(String targetScreenName){
+		this.targetScreenName = targetScreenName;
+	}
+
+	public String getTargetScreenName(){
+		return targetScreenName;
 	}
 
 	/*

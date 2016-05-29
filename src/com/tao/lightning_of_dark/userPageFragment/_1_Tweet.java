@@ -26,9 +26,9 @@ import com.tao.lightning_of_dark.ShowToast;
 public class _1_Tweet extends Fragment{
 
 	private ListView userTweet, foot;
-	private SwipeRefreshLayout PulltoRefresh;
+	private SwipeRefreshLayout pulltoRefresh;
 	private CustomAdapter adapter;
-	private boolean AlreadyLoad;
+	private boolean alreadyLoad;
 	private long tweetId;
 	private ApplicationClass appClass;
 
@@ -37,7 +37,7 @@ public class _1_Tweet extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
-		AlreadyLoad = false;
+		alreadyLoad = false;
 		// 通常のListViewSet
 		userTweet = (ListView)v.findViewById(R.id.UserPageList);
 		userTweet.setOnItemClickListener(new ListViewListener(false));
@@ -49,15 +49,15 @@ public class _1_Tweet extends Fragment{
 		userTweet.setAdapter(adapter);
 
 		// PulltoRefresh
-		PulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
-		PulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
+		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
+		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
 				android.R.color.holo_orange_light, android.R.color.holo_red_light);
-		PulltoRefresh.setOnRefreshListener(new OnRefreshListener(){
+		pulltoRefresh.setOnRefreshListener(new OnRefreshListener(){
 			@Override
 			public void onRefresh(){
 				adapter.clear();
-				AlreadyLoad = false;
-				TimeLine();
+				alreadyLoad = false;
+				loadTimeLine();
 			}
 		});
 		return v;
@@ -71,26 +71,26 @@ public class _1_Tweet extends Fragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 				foot.setEnabled(false);
-				TimeLine();
+				loadTimeLine();
 			}
 		});
 		userTweet.addFooterView(foot);
 	}
 
 	// なんか色々取得 //自分でもよくわからず組んだ is 屑
-	public void TimeLine(){
-		if(AlreadyLoad)
+	public void loadTimeLine(){
+		if(alreadyLoad)
 			tweetId = ((Status)userTweet.getItemAtPosition(userTweet.getAdapter().getCount() - 2)).getId();
 		((UserPage)_1_Tweet.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
-					if(AlreadyLoad)
-						return appClass.getTwitter().getUserTimeline(appClass.getTarget().getScreenName(),
+					if(alreadyLoad)
+						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(),
 								new Paging(1, 50).maxId(tweetId - 1));
 					else
-						return appClass.getTwitter().getUserTimeline(appClass.getTarget().getScreenName(), new Paging(1, 50));
+						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(), new Paging(1, 50));
 				}catch(Exception e){
 					return null;
 				}
@@ -101,12 +101,12 @@ public class _1_Tweet extends Fragment{
 				if(result != null) {
 					for(twitter4j.Status status : result)
 						adapter.add(status);
-					if(!AlreadyLoad)
-						AlreadyLoad = true;
+					if(!alreadyLoad)
+						alreadyLoad = true;
 				}else
 					new ShowToast("タイムラインを取得できませんでした", getActivity(), 0);
-				PulltoRefresh.setRefreshing(false);
-				PulltoRefresh.setEnabled(true);
+				pulltoRefresh.setRefreshing(false);
+				pulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);
 			}
 		}.execute();

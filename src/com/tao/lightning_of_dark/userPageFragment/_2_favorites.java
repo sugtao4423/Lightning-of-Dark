@@ -57,7 +57,7 @@ public class _2_favorites extends Fragment{
 			public void onRefresh(){
 				adapter.clear();
 				alreadyLoad = false;
-				MentionLine();
+				loadMentionLine();
 			}
 		});
 		return v;
@@ -71,13 +71,13 @@ public class _2_favorites extends Fragment{
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 				foot.setEnabled(false);
-				MentionLine();
+				loadMentionLine();
 			}
 		});
 		userFavorite.addFooterView(foot);
 	}
 
-	public void MentionLine(){
+	public void loadMentionLine(){
 		if(alreadyLoad)
 			tweetId = ((Status)userFavorite.getItemAtPosition(userFavorite.getAdapter().getCount() - 2)).getId();
 		((UserPage)_2_favorites.this.getActivity()).resetUser();
@@ -86,10 +86,10 @@ public class _2_favorites extends Fragment{
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
 					if(alreadyLoad)
-						return appClass.getTwitter().getFavorites(appClass.getTarget().getScreenName(),
+						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(),
 								new Paging(1, 50).maxId(tweetId - 1));
 					else
-						return appClass.getTwitter().getFavorites(appClass.getTarget().getScreenName(), new Paging(1, 50));
+						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(), new Paging(1, 50));
 				}catch(Exception e){
 					return null;
 				}
