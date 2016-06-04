@@ -51,34 +51,6 @@ public class IntentActivity extends Activity{
 		appClass = (ApplicationClass)getApplicationContext();
 
 		if(appClass.getTwitter() == null) {
-			AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>(){
-				@Override
-				protected Boolean doInBackground(String... params){
-					Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(params[0]).setOAuthConsumerSecret(params[1]).build();
-
-					twitter = new TwitterFactory(conf).getInstance(accessToken);
-					try{
-						myScreenName = twitter.getScreenName();
-					}catch(Exception e){
-						return false;
-					}
-					return true;
-				}
-
-				@Override
-				protected void onPostExecute(Boolean result){
-					if(result) {
-						appClass.setMyScreenName(myScreenName);
-						appClass.setTwitter(twitter);
-						mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
-						appClass.setMentionPattern(mentionPattern);
-
-						jump();
-					}else{
-						new ShowToast("スクリーンネームの取得に失敗しました", IntentActivity.this, 0);
-					}
-				}
-			};
 			pref = PreferenceManager.getDefaultSharedPreferences(this);
 			appClass = (ApplicationClass)this.getApplicationContext();
 			appClass.loadOption(this);
@@ -102,7 +74,16 @@ public class IntentActivity extends Activity{
 					cs = pref.getString("CustomCS", null);
 				}
 				accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-				task.execute(ck, cs);
+
+				Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).build();
+				twitter = new TwitterFactory(conf).getInstance(accessToken);
+				myScreenName = pref.getString("ScreenName", "");
+				appClass.setMyScreenName(myScreenName);
+				appClass.setTwitter(twitter);
+				mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
+				appClass.setMentionPattern(mentionPattern);
+
+				jump();
 			}
 		}else{
 			jump();

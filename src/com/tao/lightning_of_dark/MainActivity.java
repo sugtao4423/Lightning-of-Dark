@@ -88,33 +88,6 @@ public class MainActivity extends FragmentActivity{
 
 	@SuppressLint("InflateParams")
 	public void logIn(){
-		AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>(){
-			@Override
-			protected Boolean doInBackground(String... params){
-				conf = new ConfigurationBuilder().setOAuthConsumerKey(params[0]).setOAuthConsumerSecret(params[1]).build();
-
-				twitter = new TwitterFactory(conf).getInstance(accessToken);
-				try{
-					myScreenName = twitter.getScreenName();
-				}catch(Exception e){
-					return false;
-				}
-				return true;
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result){
-				if(result) {
-					appClass.setMyScreenName(myScreenName);
-					appClass.setTwitter(twitter);
-					mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
-					appClass.setMentionPattern(mentionPattern);
-					getTimeLine();
-					connectStreaming();
-				}else
-					new ShowToast("スクリーンネームの取得に失敗しました", MainActivity.this, 0);
-			}
-		};
 		appClass = (ApplicationClass)getApplicationContext();
 		appClass.setListAdapters(listAdapters);
 		boolean[] list_alreadyLoad = new boolean[listAdapters.length];
@@ -142,7 +115,16 @@ public class MainActivity extends FragmentActivity{
 				cs = pref.getString("CustomCS", null);
 			}
 			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-			task.execute(ck, cs);
+			
+			conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).build();
+			twitter = new TwitterFactory(conf).getInstance(accessToken);
+			myScreenName = pref.getString("ScreenName", "");
+			appClass.setMyScreenName(myScreenName);
+			appClass.setTwitter(twitter);
+			mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
+			appClass.setMentionPattern(mentionPattern);
+			getTimeLine();
+			connectStreaming();
 		}
 	}
 

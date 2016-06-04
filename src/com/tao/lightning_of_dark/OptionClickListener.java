@@ -82,7 +82,9 @@ public class OptionClickListener implements OnClickListener{
 
 							@Override
 							public void onClick(DialogInterface dialog, int w){
-								pref.edit().putString("CustomCK", accounts[which].getCK())
+								pref.edit()
+								.putString("ScreenName", accounts[which].getScreenName())
+								.putString("CustomCK", accounts[which].getCK())
 								.putString("CustomCS", accounts[which].getCS())
 								.putString("AccessToken", accounts[which].getAT())
 								.putString("AccessTokenSecret", accounts[which].getATS())
