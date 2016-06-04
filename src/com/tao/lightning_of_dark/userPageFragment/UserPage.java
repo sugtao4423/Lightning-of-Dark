@@ -17,6 +17,7 @@ import android.support.v4.view.ViewPager;
 public class UserPage extends FragmentActivity{
 
 	private User target;
+	private String userScreenName;
 	private ApplicationClass appClass;
 
 	@Override
@@ -34,16 +35,16 @@ public class UserPage extends FragmentActivity{
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 
-		final String u = getIntent().getStringExtra("userScreenName");
+		userScreenName = getIntent().getStringExtra("userScreenName");
 
 		appClass = (ApplicationClass)UserPage.this.getApplicationContext();
-		appClass.setTargetScreenName(u);
+		appClass.setTargetScreenName(userScreenName);
 
 		new AsyncTask<Void, Void, User>(){
 			@Override
 			protected User doInBackground(Void... params){
 				try{
-					target = appClass.getTwitter().showUser(u);
+					target = appClass.getTwitter().showUser(userScreenName);
 					return target;
 				}catch(TwitterException e){
 					return null;
@@ -66,5 +67,6 @@ public class UserPage extends FragmentActivity{
 
 	public void resetUser(){
 		appClass.setTarget(target);
+		appClass.setTargetScreenName(userScreenName);
 	}
 }
