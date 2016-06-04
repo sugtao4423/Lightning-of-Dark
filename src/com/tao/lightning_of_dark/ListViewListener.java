@@ -58,14 +58,16 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		if(appClass.getOption_openBrowser())
 			list.add("ブラウザで開く");
 
-		list.add("@" + item.getUser().getScreenName());
+		ArrayList<String> users = new ArrayList<String>();
+		users.add("@" + item.getUser().getScreenName());
 
 		UserMentionEntity[] mentionEntitys = item.getUserMentionEntities();
 		if(mentionEntitys != null && mentionEntitys.length > 0) {
-			for(int i = 0; i < mentionEntitys.length; i++){
-				if(!mentionEntitys[i].getScreenName().equals(item.getUser().getScreenName()))
-					list.add("@" + mentionEntitys[i].getScreenName());
+			for(UserMentionEntity menty : mentionEntitys){
+				if(users.indexOf("@" + menty.getScreenName()) == -1)
+					users.add("@" + menty.getScreenName());
 			}
+			list.addAll(users);
 		}
 		URLEntity[] uentitys = item.getURLEntities();
 		if(uentitys != null && uentitys.length > 0) {
