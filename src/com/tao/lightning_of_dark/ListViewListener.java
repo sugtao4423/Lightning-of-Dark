@@ -67,8 +67,9 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 				if(users.indexOf("@" + menty.getScreenName()) == -1)
 					users.add("@" + menty.getScreenName());
 			}
-			list.addAll(users);
 		}
+		list.addAll(users);
+
 		URLEntity[] uentitys = item.getURLEntities();
 		if(uentitys != null && uentitys.length > 0) {
 			for(URLEntity u : uentitys)
