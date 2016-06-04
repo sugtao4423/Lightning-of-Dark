@@ -32,26 +32,14 @@ import android.widget.TextView;
 
 public class IntentActivity extends Activity{
 
-	private ApplicationClass appClass;
-
-	private Intent i;
-	private String uri;
-
-	private AccessToken accessToken;
-	private Twitter twitter;
-	private String myScreenName;
-	private Pattern mentionPattern;
-
-	private SharedPreferences pref;
-
 	@SuppressLint("InflateParams")
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
-		appClass = (ApplicationClass)getApplicationContext();
+		ApplicationClass appClass = (ApplicationClass)getApplicationContext();
 
 		if(appClass.getTwitter() == null) {
-			pref = PreferenceManager.getDefaultSharedPreferences(this);
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 			appClass = (ApplicationClass)this.getApplicationContext();
 			appClass.loadOption(this);
 
@@ -73,14 +61,14 @@ public class IntentActivity extends Activity{
 					ck = pref.getString("CustomCK", null);
 					cs = pref.getString("CustomCS", null);
 				}
-				accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
+				AccessToken accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
 
 				Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).build();
-				twitter = new TwitterFactory(conf).getInstance(accessToken);
-				myScreenName = pref.getString("ScreenName", "");
+				Twitter twitter = new TwitterFactory(conf).getInstance(accessToken);
+				String myScreenName = pref.getString("ScreenName", "");
 				appClass.setMyScreenName(myScreenName);
 				appClass.setTwitter(twitter);
-				mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
+				Pattern mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
 				appClass.setMentionPattern(mentionPattern);
 
 				jump();
@@ -91,6 +79,8 @@ public class IntentActivity extends Activity{
 	}
 
 	public void jump(){
+		String uri;
+		Intent i;
 		if(Intent.ACTION_VIEW.equals(getIntent().getAction())) {
 			uri = getIntent().getData().toString();
 			Matcher user = Pattern.compile("http(s)?://twitter.com/([0-9a-zA-Z_]+)").matcher(uri);
@@ -114,7 +104,7 @@ public class IntentActivity extends Activity{
 	}
 
 	public void showStatus(long tweetId, final Context context, final boolean isClose){
-		appClass = (ApplicationClass)context.getApplicationContext();
+		final ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
 		new AsyncTask<Long, Void, Status>(){
 			@Override
 			protected twitter4j.Status doInBackground(Long... params){

@@ -35,7 +35,6 @@ public class StartOAuth extends Activity{
 	private SharedPreferences pref;
 
 	private Twitter twitter;
-	private TwitterFactory twitterFactory;
 	private RequestToken rt;
 
 	protected void onCreate(Bundle savedInstanceState){
@@ -75,8 +74,7 @@ public class StartOAuth extends Activity{
 				builder.setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs);
 				Configuration jconf = builder.build();
 
-				twitterFactory = new TwitterFactory(jconf);
-				twitter = twitterFactory.getInstance();
+				twitter = new TwitterFactory(jconf).getInstance();
 				try{
 					rt = twitter.getOAuthRequestToken("lightning-of-dark://twitter");
 					return true;

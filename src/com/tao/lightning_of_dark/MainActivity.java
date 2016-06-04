@@ -39,8 +39,6 @@ import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity{
 
-	private String myScreenName; // MyScreenNameには「＠」は含まれない
-
 	private Twitter twitter;
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
@@ -50,11 +48,8 @@ public class MainActivity extends FragmentActivity{
 	private SharedPreferences pref;
 	private boolean resetFlag;
 
-	private AccessToken accessToken;
-	private Configuration conf;
-
 	private CustomAdapter[] listAdapters;
-	
+
 	private Fragment_mention fragmentMention;
 	private Fragment_home fragmentHome;
 
@@ -65,9 +60,9 @@ public class MainActivity extends FragmentActivity{
 		setContentView(R.layout.activity_main);
 
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
-		
+
 		MyFragmentStatePagerAdapter pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), this);
-		
+
 		ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(1);
@@ -114,26 +109,26 @@ public class MainActivity extends FragmentActivity{
 				ck = pref.getString("CustomCK", null);
 				cs = pref.getString("CustomCS", null);
 			}
-			accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-			
-			conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).build();
+			AccessToken accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
+
+			Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).build();
 			twitter = new TwitterFactory(conf).getInstance(accessToken);
-			myScreenName = pref.getString("ScreenName", "");
+			String myScreenName = pref.getString("ScreenName", "");
 			appClass.setMyScreenName(myScreenName);
 			appClass.setTwitter(twitter);
 			mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
 			appClass.setMentionPattern(mentionPattern);
 			getTimeLine();
-			connectStreaming();
+			connectStreaming(conf, accessToken);
 		}
 	}
 
 	public void getTimeLine(){
 		new AsyncTask<Void, Void, Boolean>(){
-			
+
 			private ResponseList<twitter4j.Status> home;
 			private ResponseList<twitter4j.Status> mention;
-			
+
 			@Override
 			protected Boolean doInBackground(Void... params){
 				try{
@@ -200,7 +195,7 @@ public class MainActivity extends FragmentActivity{
 		}.execute();
 	}
 
-	public void connectStreaming(){
+	public void connectStreaming(Configuration conf, AccessToken accessToken){
 		try{
 			twitterStream = new TwitterStreamFactory(conf).getInstance(accessToken);
 
@@ -254,7 +249,7 @@ public class MainActivity extends FragmentActivity{
 	public void option(View v){
 		final String[] items = new String[]{"ツイート爆撃", "ユーザー検索", "アカウント", "設定"};
 		new AlertDialog.Builder(this)
-		.setItems(items, new OptionClickListener(this, items, myScreenName, pref, twitter))
+		.setItems(items, new OptionClickListener(this, items, pref, twitter))
 		.show();
 	}
 

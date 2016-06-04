@@ -23,14 +23,12 @@ public class OptionClickListener implements OnClickListener{
 
 	private Context context;
 	private String[] items;
-	private String myScreenName;
 	private SharedPreferences pref;
 	private Twitter twitter;
 
-	public OptionClickListener(Context context, String[] items, String myScreenName, SharedPreferences pref, Twitter twitter){
+	public OptionClickListener(Context context, String[] items, SharedPreferences pref, Twitter twitter){
 		this.context = context;
 		this.items = items;
-		this.myScreenName = myScreenName;
 		this.pref = pref;
 		this.twitter = twitter;
 	}
@@ -58,6 +56,7 @@ public class OptionClickListener implements OnClickListener{
 			}).show();
 		}
 		if(items[which].equals("アカウント")) {
+			final String myScreenName = pref.getString("ScreenName", "");
 			final DBUtil dbUtil = new DBUtil(context);
 			final Account[] accounts = dbUtil.getAccounts();
 			ArrayList<String> screen_names = new ArrayList<String>();
