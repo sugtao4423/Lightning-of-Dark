@@ -17,15 +17,17 @@ public class Dialog_deletePost implements OnClickListener{
 
 	private Status status;
 	private Context context;
+	private AlertDialog dialog;
 
-	public Dialog_deletePost(Status status, Context context){
+	public Dialog_deletePost(Status status, Context context, AlertDialog dialog){
 		this.status = status;
 		this.context = context;
+		this.dialog = dialog;
 	}
 
 	@Override
 	public void onClick(View v){
-		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
+		dialog.dismiss();
 		new AlertDialog.Builder(context)
 		.setMessage("本当にツイ消ししますか？")
 		.setNegativeButton("No", null)

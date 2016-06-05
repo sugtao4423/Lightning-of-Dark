@@ -39,7 +39,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ListViewListener implements OnItemClickListener, OnItemLongClickListener{
 
-	private AlertDialog dialog;
 	private boolean tweet_do_back;
 
 	public ListViewListener(boolean tweet_do_back){
@@ -155,8 +154,12 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		ImageButton dialog_talk = (ImageButton)content.findViewById(R.id.dialog_talk);
 		ImageButton dialog_deletePost = (ImageButton)content.findViewById(R.id.dialog_delete);
 
+		final AlertDialog dialog = new AlertDialog.Builder(parent.getContext())
+				.setCustomTitle(dialog_title)
+				.setView(content).show();
+
 		dialog_list.setAdapter(list);
-		dialog_list.setOnItemClickListener(new Dialog_ListClick(item, parent, tweet_do_back));
+		dialog_list.setOnItemClickListener(new Dialog_ListClick(item, parent, tweet_do_back, dialog));
 		dialog_list.setOnItemLongClickListener(new OnItemLongClickListener(){
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
@@ -169,13 +172,13 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			}
 		});
 
-		dialog_reply.setOnClickListener(new Dialog_reply(item, parent.getContext(), tweet_do_back));
-		dialog_retweet.setOnClickListener(new Dialog_retweet(item, parent.getContext()));
-		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(item, parent.getContext(), tweet_do_back));
-		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, parent.getContext(), tweet_do_back));
-		dialog_favorite.setOnClickListener(new Dialog_favorite(item, parent.getContext()));
-		dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext(), tweet_do_back));
-		dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, parent.getContext()));
+		dialog_reply.setOnClickListener(new Dialog_reply(item, parent.getContext(), tweet_do_back, dialog));
+		dialog_retweet.setOnClickListener(new Dialog_retweet(item, parent.getContext(), dialog));
+		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(item, parent.getContext(), tweet_do_back, dialog));
+		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, parent.getContext(), tweet_do_back, dialog));
+		dialog_favorite.setOnClickListener(new Dialog_favorite(item, parent.getContext(), dialog));
+		dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext(), tweet_do_back, dialog));
+		dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, parent.getContext(), dialog));
 
 		if(!(status.getInReplyToStatusId() > 0)) {
 			dialog_talk.setEnabled(false);
@@ -185,13 +188,6 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			dialog_deletePost.setEnabled(false);
 			dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
 		}
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(parent.getContext());
-		builder.setCustomTitle(dialog_title).setView(content);
-
-		dialog = builder.create();
-		((ApplicationClass)parent.getContext().getApplicationContext()).setListViewDialog(dialog);
-		dialog.show();
 	}
 
 	@Override

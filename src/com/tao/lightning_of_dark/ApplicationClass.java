@@ -6,7 +6,6 @@ import com.loopj.android.image.SmartImageView;
 
 import twitter4j.Twitter;
 import twitter4j.User;
-import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,9 +29,6 @@ public class ApplicationClass extends Application{
 	// UserPage
 	private User target;
 	private String targetScreenName;
-
-	// ListViewListener
-	private AlertDialog dialog;
 
 	/*
 	 * +-+-+-+-+-+-+-+-+-+-+-+-+
@@ -180,18 +176,5 @@ public class ApplicationClass extends Application{
 
 	public String getTargetScreenName(){
 		return targetScreenName;
-	}
-
-	/*
-	 * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	 * |L|i|s|t|V|i|e|w|L|i|s|t|e|n|e|r|
-	 * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	 */
-	public void setListViewDialog(AlertDialog dialog){
-		this.dialog = dialog;
-	}
-
-	public AlertDialog getListViewDialog(){
-		return dialog;
 	}
 }

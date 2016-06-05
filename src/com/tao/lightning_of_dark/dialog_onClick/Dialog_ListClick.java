@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 import twitter4j.ExtendedMediaEntity;
 import twitter4j.Status;
 
-import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.IntentActivity;
 import com.tao.lightning_of_dark.ListViewListener;
@@ -39,17 +38,19 @@ public class Dialog_ListClick implements OnItemClickListener{
 	private AdapterView<?> baseParent;
 
 	private boolean tweet_do_back;
+	private AlertDialog dialog;
 
-	public Dialog_ListClick(Status status, AdapterView<?> baseParent, boolean tweet_do_back){
+	public Dialog_ListClick(Status status, AdapterView<?> baseParent, boolean tweet_do_back, AlertDialog dialog){
 		this.status = status;
 		this.baseParent = baseParent;
 		this.tweet_do_back = tweet_do_back;
+		this.dialog = dialog;
 	}
 
 	@SuppressLint("InflateParams")
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-		((ApplicationClass)baseParent.getContext().getApplicationContext()).getListViewDialog().dismiss();
+		dialog.dismiss();
 		String clickedText = (String)parent.getItemAtPosition(position);
 
 		if(clickedText.equals("正規表現で抽出")) {

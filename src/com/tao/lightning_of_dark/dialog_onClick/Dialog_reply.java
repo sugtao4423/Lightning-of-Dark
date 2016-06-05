@@ -21,17 +21,18 @@ public class Dialog_reply implements OnClickListener{
 	private Context context;
 
 	private boolean tweet_do_back;
+	private AlertDialog dialog;
 
-	public Dialog_reply(Status status, Context context, boolean tweet_do_back){
+	public Dialog_reply(Status status, Context context, boolean tweet_do_back, AlertDialog dialog){
 		this.status = status;
 		this.context = context;
 		this.tweet_do_back = tweet_do_back;
+		this.dialog = dialog;
 	}
 
 	@Override
 	public void onClick(View v){
-		ApplicationClass app = ((ApplicationClass)context.getApplicationContext());
-		app.getListViewDialog().dismiss();
+		dialog.dismiss();
 
 		Status item;
 		if(status.isRetweet())
@@ -40,7 +41,7 @@ public class Dialog_reply implements OnClickListener{
 			item = status;
 
 		if(item.getUserMentionEntities().length > 1)
-			selectReplyDialog(item, app.getMyScreenName());
+			selectReplyDialog(item, ((ApplicationClass)context.getApplicationContext()).getMyScreenName());
 		else
 			reply(item);
 	}

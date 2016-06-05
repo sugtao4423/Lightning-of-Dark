@@ -24,16 +24,18 @@ public class Dialog_talk implements OnClickListener{
 	private boolean tweet_do_back;
 
 	private CustomAdapter resultAdapter;
+	private AlertDialog dialog;
 
-	public Dialog_talk(Status status, Context context, boolean tweet_do_back){
+	public Dialog_talk(Status status, Context context, boolean tweet_do_back, AlertDialog dialog){
 		this.status = status;
 		this.context = context;
 		this.tweet_do_back = tweet_do_back;
+		this.dialog = dialog;
 	}
 
 	@Override
 	public void onClick(View v){
-		((ApplicationClass)context.getApplicationContext()).getListViewDialog().dismiss();
+		dialog.dismiss();
 		ListView result = new ListView(context);
 		result.setOnItemClickListener(new ListViewListener(tweet_do_back));
 		result.setOnItemLongClickListener(new ListViewListener(tweet_do_back));
