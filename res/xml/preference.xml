@@ -22,10 +22,6 @@
             android:summaryOff="mp4"
             android:summaryOn="webm"
             android:title="動画をwebmで取得する" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="isVideoLoop"
-            android:title="動画のループ再生" />
 
         <Preference
             android:key="ListSetting"

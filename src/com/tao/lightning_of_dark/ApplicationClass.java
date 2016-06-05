@@ -20,7 +20,7 @@ public class ApplicationClass extends Application{
 	private Twitter twitter;
 	private Pattern mentionPattern;
 	private CustomAdapter[] listAdapters;
-	private boolean option_regex, option_openBrowser, getBigIcon, isWebm, isVideoLoop;
+	private boolean option_regex, option_openBrowser, getBigIcon, isWebm;
 	private boolean[] list_AlreadyLoad;
 	// MainActivity - CustomToast
 	private View customToast;
@@ -111,22 +111,12 @@ public class ApplicationClass extends Application{
 		return isWebm;
 	}
 
-	// isVideoLoop
-	public void setIsVideoLoop(boolean isVideoLoop){
-		this.isVideoLoop = isVideoLoop;
-	}
-
-	public boolean getIsVideoLoop(){
-		return isVideoLoop;
-	}
-
 	public void loadOption(Context context){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		setOption_regex(pref.getBoolean("menu_regex", false));
 		setOption_openBrowser(pref.getBoolean("menu_openBrowser", false));
 		setGetBigIcon(pref.getBoolean("getBigIcon", false));
 		setIsWebm(pref.getBoolean("isWebm", false));
-		setIsVideoLoop(pref.getBoolean("isVideoLoop", true));
 	}
 
 	// list_AlreadyLoad

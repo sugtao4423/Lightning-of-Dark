@@ -132,9 +132,11 @@ public class Dialog_ListClick implements OnItemClickListener{
 			}else if(video.find()) {
 				web = new Intent(parent.getContext(), Show_Video.class);
 				web.putExtra("URL", clickedText);
+				web.putExtra("type", 0);
 			}else if(gif.find()) {
 				web = new Intent(parent.getContext(), Show_Video.class);
 				web.putExtra("URL", clickedText);
+				web.putExtra("type", 1);
 			}else if(state.find()) {
 				new IntentActivity().showStatus(Long.parseLong(state.group(2)), baseParent.getContext(), false);
 				return;

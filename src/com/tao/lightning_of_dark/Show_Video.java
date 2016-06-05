@@ -4,6 +4,7 @@ import com.tao.lightning_of_dark.R;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
@@ -19,8 +20,11 @@ public class Show_Video extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_video);
 
-		String url = getIntent().getStringExtra("URL");
-		final ApplicationClass appClass = (ApplicationClass)getApplicationContext();
+		Intent intent = getIntent();
+		String url = intent.getStringExtra("URL");
+		final int type = intent.getIntExtra("type", -1);
+		if(type == -1)
+			finish();
 
 		final VideoView vv = (VideoView)findViewById(R.id.tw_video);
 		vv.setMediaController(new MediaController(this));
@@ -46,7 +50,7 @@ public class Show_Video extends Activity{
 
 			@Override
 			public void onCompletion(MediaPlayer mp){
-				if(appClass.getIsVideoLoop()) {
+				if(type == 1){
 					vv.seekTo(0);
 					vv.start();
 				}else{
