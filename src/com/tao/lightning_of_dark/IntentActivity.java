@@ -96,7 +96,8 @@ public class IntentActivity extends Activity{
 		}else if(Intent.ACTION_SEND.equals(getIntent().getAction())) {
 			uri = getIntent().getExtras().getCharSequence(Intent.EXTRA_TEXT).toString();
 			i = new Intent(IntentActivity.this, TweetActivity.class);
-			i.putExtra("pakuri", uri);
+			i.putExtra("type", TweetActivity.TYPE_EXTERNALTEXT);
+			i.putExtra("text", uri);
 			i.putExtra("do_back", false);
 			startActivity(i);
 			finish();

@@ -4,8 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.dialog_onClick.StatusItem;
 
+import twitter4j.Status;
 import twitter4j.StatusUpdate;
+import twitter4j.UserMentionEntity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -25,13 +28,23 @@ import android.widget.TextView;
 
 public class TweetActivity extends Activity{
 
+	public static final int TYPE_NEWTWEET = 0;
+	public static final int TYPE_REPLY = 1;
+	public static final int TYPE_REPLYALL = 2;
+	public static final int TYPE_QUOTERT = 3;
+	public static final int TYPE_UNOFFICIALRT = 4;
+	public static final int TYPE_PAKUTSUI = 5;
+	public static final int TYPE_EXTERNALTEXT = 6;
+
 	private EditText tweetText;
 	private TextView moji140;
-	private long tweetReplyId;
+	private Status status;
+	private int type;
 	private File image;
 	private boolean do_back, do_setSelection;
 	private ApplicationClass appClass;
 
+	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tweet_activity);
@@ -48,21 +61,67 @@ public class TweetActivity extends Activity{
 		moji140 = (TextView)findViewById(R.id.moji140);
 
 		Intent intent = getIntent();
-		String replyTweetText = intent.getStringExtra("ReplyTweetText");
-		String replyUserScreenName = intent.getStringExtra("ReplyUserScreenName");
-		tweetReplyId = intent.getLongExtra("TweetReplyId", -1);
-		String pakuri = intent.getStringExtra("pakuri");
-		do_back = intent.getBooleanExtra("do_back", true);
-		do_setSelection = intent.getBooleanExtra("do_setSelection", true);
-
-		if(tweetReplyId == -1) {
-			actionBar.setTitle("New Tweet");
-			tweetText.setText(pakuri);
-		}else{
-			actionBar.setTitle("Reply");
-			actionBar.setSubtitle(replyTweetText);
-			tweetText.setText("@" + replyUserScreenName + " ");
+		if(intent.getSerializableExtra("status") != null){
+			status = ((StatusItem)intent.getSerializableExtra("status")).getStatus();
+			status = status.isRetweet() ? status.getRetweetedStatus() : status;
 		}
+
+		type = intent.getIntExtra("type", 0);
+
+		do_back = intent.getBooleanExtra("do_back", true);
+
+		switch(type){
+		case TYPE_NEWTWEET:
+			actionBar.setTitle("New Tweet");
+			break;
+		case TYPE_REPLY:
+			actionBar.setTitle("Reply");
+			actionBar.setSubtitle(status.getText());
+			tweetText.setText("@" + status.getUser().getScreenName() + " ");
+			do_setSelection = true;
+			break;
+		case TYPE_REPLYALL:
+			actionBar.setTitle("ReplyAll");
+			actionBar.setSubtitle(status.getText());
+			ArrayList<String> mentionUsers = new ArrayList<String>();
+			UserMentionEntity[] mentionEntitys = status.getUserMentionEntities();
+			if(mentionEntitys != null && mentionEntitys.length > 0) {
+				for(UserMentionEntity mention : mentionEntitys){
+					if(!mention.getScreenName().equals(appClass.getMyScreenName()))
+						mentionUsers.add(mention.getScreenName());
+				}
+			}
+			String replyUserScreenNames = "@" + status.getUser().getScreenName();
+			for(String user : mentionUsers)
+				replyUserScreenNames += " @" + user;
+			tweetText.setText(replyUserScreenNames + " ");
+			do_setSelection = true;
+			break;
+		case TYPE_QUOTERT:
+			actionBar.setTitle("QuoteRT");
+			actionBar.setSubtitle(status.getText());
+			String quote = " https://twitter.com/" + status.getUser().getScreenName() + "/status/" + String.valueOf(status.getId());
+			tweetText.setText(quote);
+			do_setSelection = false;
+			break;
+		case TYPE_UNOFFICIALRT:
+			actionBar.setTitle("UnOfficialRT");
+			String unOfficial = " RT @" + status.getUser().getScreenName() + ": " + status.getText();
+			tweetText.setText(unOfficial);
+			do_setSelection = false;
+			break;
+		case TYPE_PAKUTSUI:
+			actionBar.setTitle("New Tweet");
+			tweetText.setText(status.getText());
+			do_setSelection = true;
+			break;
+		case TYPE_EXTERNALTEXT:
+			actionBar.setTitle("New Tweet");
+			tweetText.setText(intent.getStringExtra("text"));
+			do_setSelection = true;
+			break;
+		}
+
 		if(do_setSelection)
 			tweetText.setSelection(tweetText.getText().length());
 
@@ -88,10 +147,10 @@ public class TweetActivity extends Activity{
 				try{
 					if(image != null)
 						status.media(image);
-					if(tweetReplyId == -1)
-						appClass.getTwitter().updateStatus(status);
+					if(type == TYPE_REPLY || type == TYPE_REPLYALL)
+						appClass.getTwitter().updateStatus(status.inReplyToStatusId(TweetActivity.this.status.getId()));
 					else
-						appClass.getTwitter().updateStatus(status.inReplyToStatusId(tweetReplyId));
+						appClass.getTwitter().updateStatus(status);
 					return true;
 				}catch(Exception e){
 					return false;

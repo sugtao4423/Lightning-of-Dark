@@ -15,6 +15,7 @@ import com.tao.lightning_of_dark.dialog_onClick.Dialog_reply;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_retweet;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_talk;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_unOfficialRT;
+import com.tao.lightning_of_dark.dialog_onClick.StatusItem;
 
 import twitter4j.ExtendedMediaEntity;
 import twitter4j.ExtendedMediaEntity.Variant;
@@ -193,12 +194,10 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 	@Override
 	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 		Status item = (Status)parent.getItemAtPosition(position);
-		Intent pakuri = new Intent(parent.getContext(), TweetActivity.class);
-		if(item.isRetweet())
-			pakuri.putExtra("pakuri", item.getRetweetedStatus().getText());
-		else
-			pakuri.putExtra("pakuri", item.getText());
-		parent.getContext().startActivity(pakuri);
+		Intent i = new Intent(parent.getContext(), TweetActivity.class);
+		i.putExtra("type", TweetActivity.TYPE_PAKUTSUI);
+		i.putExtra("status", new StatusItem(item));
+		parent.getContext().startActivity(i);
 		return true;
 	}
 }

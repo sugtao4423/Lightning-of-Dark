@@ -19,10 +19,7 @@ public class Dialog_unOfficialRT implements OnClickListener{
 	private AlertDialog dialog;
 
 	public Dialog_unOfficialRT(Status status, Context context, boolean tweet_do_back, AlertDialog dialog){
-		if(status.isRetweet())
-			this.status = status.getRetweetedStatus();
-		else
-			this.status = status;
+		this.status = status;
 		this.context = context;
 		this.tweet_do_back = tweet_do_back;
 		this.dialog = dialog;
@@ -31,9 +28,10 @@ public class Dialog_unOfficialRT implements OnClickListener{
 	@Override
 	public void onClick(View v){
 		dialog.dismiss();
-		String text = " RT @" + status.getUser().getScreenName() + ": " + status.getText();
 		Intent i = new Intent(context, TweetActivity.class);
-		i.putExtra("pakuri", text).putExtra("do_setSelection", false).putExtra("do_back", tweet_do_back);
+		i.putExtra("type", TweetActivity.TYPE_UNOFFICIALRT);
+		i.putExtra("status", new StatusItem(status));
+		i.putExtra("do_back", tweet_do_back);
 		context.startActivity(i);
 	}
 }
