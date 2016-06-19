@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class TweetActivity extends Activity{
@@ -70,19 +71,33 @@ public class TweetActivity extends Activity{
 
 		do_back = intent.getBooleanExtra("do_back", true);
 
+		ListView originStatus = (ListView)findViewById(R.id.originStatus);
+		switch(type){
+		case TYPE_REPLY:
+		case TYPE_REPLYALL:
+		case TYPE_QUOTERT:
+			actionBar.hide();
+			originStatus.setVisibility(View.VISIBLE);
+			originStatus.setFocusable(false);
+			CustomAdapter adapter = new CustomAdapter(this);
+			adapter.add(status);
+			originStatus.setAdapter(adapter);
+			originStatus.setOnItemClickListener(new ListViewListener(do_back));
+			break;
+		default:
+			originStatus.setVisibility(View.GONE);
+			break;
+		}
+
 		switch(type){
 		case TYPE_NEWTWEET:
 			actionBar.setTitle("New Tweet");
 			break;
 		case TYPE_REPLY:
-			actionBar.setTitle("Reply");
-			actionBar.setSubtitle(status.getText());
 			tweetText.setText("@" + status.getUser().getScreenName() + " ");
 			do_setSelection = true;
 			break;
 		case TYPE_REPLYALL:
-			actionBar.setTitle("ReplyAll");
-			actionBar.setSubtitle(status.getText());
 			ArrayList<String> mentionUsers = new ArrayList<String>();
 			UserMentionEntity[] mentionEntitys = status.getUserMentionEntities();
 			if(mentionEntitys != null && mentionEntitys.length > 0) {
@@ -98,8 +113,6 @@ public class TweetActivity extends Activity{
 			do_setSelection = true;
 			break;
 		case TYPE_QUOTERT:
-			actionBar.setTitle("QuoteRT");
-			actionBar.setSubtitle(status.getText());
 			String quote = " https://twitter.com/" + status.getUser().getScreenName() + "/status/" + String.valueOf(status.getId());
 			tweetText.setText(quote);
 			do_setSelection = false;

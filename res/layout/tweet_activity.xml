@@ -13,7 +13,7 @@
         android:layout_above="@+id/imageButton1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/scrollViewForOriginStatus"
         android:ems="10"
         android:gravity="top|left"
         android:inputType="textMultiLine" >
@@ -109,5 +109,25 @@
         android:background="#00000000"
         android:onClick="mic"
         android:src="@drawable/mic" />
+
+    <ScrollView
+        android:id="@+id/scrollViewForOriginStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/originStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
