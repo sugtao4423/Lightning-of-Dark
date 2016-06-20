@@ -99,17 +99,17 @@ public class TweetActivity extends Activity{
 			break;
 		case TYPE_REPLYALL:
 			ArrayList<String> mentionUsers = new ArrayList<String>();
+			mentionUsers.add(status.getUser().getScreenName());
 			UserMentionEntity[] mentionEntitys = status.getUserMentionEntities();
-			if(mentionEntitys != null && mentionEntitys.length > 0) {
-				for(UserMentionEntity mention : mentionEntitys){
-					if(!mention.getScreenName().equals(appClass.getMyScreenName()))
-						mentionUsers.add(mention.getScreenName());
-				}
+			for(UserMentionEntity mention : mentionEntitys){
+				if(mention.getScreenName().equals(appClass.getMyScreenName()) || mentionUsers.indexOf(mention.getScreenName()) != -1)
+					continue;
+				mentionUsers.add(mention.getScreenName());
 			}
-			String replyUserScreenNames = "@" + status.getUser().getScreenName();
+			String replyUserScreenNames = "";
 			for(String user : mentionUsers)
-				replyUserScreenNames += " @" + user;
-			tweetText.setText(replyUserScreenNames + " ");
+				replyUserScreenNames += "@" + user + " ";
+			tweetText.setText(replyUserScreenNames);
 			do_setSelection = true;
 			break;
 		case TYPE_QUOTERT:
