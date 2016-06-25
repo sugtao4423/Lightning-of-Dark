@@ -172,7 +172,10 @@ public class ImageFragmentActivity extends FragmentActivity{
 							@Override
 							public void onClick(DialogInterface dialog, int which){
 								String newPath = saveDir + "/" + edit.getText().toString() + type;
-								output(newPath, byteImage, isOriginal);
+								if(new File(newPath).exists())
+									save(fileName, type, byteImage, isOriginal);
+								else
+									output(newPath, byteImage, isOriginal);
 							}
 						}).show();
 					}
