@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.tenthbit.view.ZoomImageView;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -20,8 +22,7 @@ import android.widget.Toast;
 
 public class ImageFragment extends Fragment{
 
-	private ZoomableImageView image;
-
+	private ZoomImageView image;
 	private String url;
 	private byte[] non_orig_image;
 
@@ -30,7 +31,7 @@ public class ImageFragment extends Fragment{
 		super.onCreate(savedInstanceState);
 		Bundle bundle = getArguments();
 		url = bundle.getString("url");
-		image = new ZoomableImageView(getActivity());
+		image = new ZoomImageView(getActivity());
 	}
 
 	@SuppressLint("InflateParams")

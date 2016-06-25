@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.tao.lightning_of_dark.swipeImageViewer.ImageViewPager
+    <com.tenthbit.view.ZoomViewPager
         android:id="@+id/show_image_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -16,7 +16,7 @@
             android:background="#ececec"
             android:paddingTop="2dp"
             android:textColor="#33b5e5" />
-    </com.tao.lightning_of_dark.swipeImageViewer.ImageViewPager>
+    </com.tenthbit.view.ZoomViewPager>
 
     <ImageButton
         android:layout_width="wrap_content"

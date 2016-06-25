@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tenthbit.view.ZoomViewPager;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -33,7 +34,7 @@ import android.widget.Toast;
 public class ImageFragmentActivity extends FragmentActivity{
 
 	private ImagePagerAdapter adapter;
-	private ImageViewPager pager;
+	private ZoomViewPager pager;
 	private String[] urls;
 	private boolean isBanner;
 	private boolean isIcon;
@@ -51,8 +52,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 		int pos = intent.getIntExtra("position", 0);
 		adapter = new ImagePagerAdapter(getSupportFragmentManager(), urls);
 
-		pager = (ImageViewPager)findViewById(R.id.show_image_pager);
-		pager.setPageSize(urls.length);
+		pager = (ZoomViewPager)findViewById(R.id.show_image_pager);
 		pager.setAdapter(adapter);
 		pager.setOffscreenPageLimit(urls.length - 1);
 		pager.setCurrentItem(pos);
