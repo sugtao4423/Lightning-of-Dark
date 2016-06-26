@@ -15,6 +15,9 @@ import android.widget.VideoView;
 
 public class Show_Video extends Activity{
 
+	public static final int TYPE_VIDEO = 0;
+	public static final int TYPE_GIF = 1;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -50,7 +53,7 @@ public class Show_Video extends Activity{
 
 			@Override
 			public void onCompletion(MediaPlayer mp){
-				if(type == 1){
+				if(type == TYPE_GIF){
 					vv.seekTo(0);
 					vv.start();
 				}else{

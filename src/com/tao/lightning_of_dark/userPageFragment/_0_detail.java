@@ -193,7 +193,7 @@ public class _0_detail extends Fragment{
 			public void onClick(View v){
 				Intent image = new Intent(context, ImageFragmentActivity.class);
 				image.putExtra("urls", new String[]{target.getOriginalProfileImageURL()});
-				image.putExtra("isIcon", true);
+				image.putExtra("type", ImageFragmentActivity.TYPE_ICON);
 				context.startActivity(image);
 			}
 		});
@@ -210,7 +210,7 @@ public class _0_detail extends Fragment{
 				if(target.getProfileBannerURL() != null) {
 					Intent image = new Intent(context, ImageFragmentActivity.class);
 					image.putExtra("urls", new String[]{target.getProfileBannerRetinaURL()});
-					image.putExtra("isBanner", true);
+					image.putExtra("type", ImageFragmentActivity.TYPE_BANNER);
 					context.startActivity(image);
 				}
 			}

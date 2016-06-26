@@ -42,7 +42,7 @@ public class TweetActivity extends Activity{
 	private Status status;
 	private int type;
 	private File image;
-	private boolean do_back, do_setSelection;
+	private boolean do_back;
 	private ApplicationClass appClass;
 
 	@Override
@@ -70,6 +70,7 @@ public class TweetActivity extends Activity{
 		type = intent.getIntExtra("type", 0);
 
 		do_back = intent.getBooleanExtra("do_back", true);
+		boolean setSelectionEnd = false;
 
 		ListView originStatus = (ListView)findViewById(R.id.originStatus);
 		switch(type){
@@ -95,7 +96,7 @@ public class TweetActivity extends Activity{
 			break;
 		case TYPE_REPLY:
 			tweetText.setText("@" + status.getUser().getScreenName() + " ");
-			do_setSelection = true;
+			setSelectionEnd = true;
 			break;
 		case TYPE_REPLYALL:
 			ArrayList<String> mentionUsers = new ArrayList<String>();
@@ -110,32 +111,30 @@ public class TweetActivity extends Activity{
 			for(String user : mentionUsers)
 				replyUserScreenNames += "@" + user + " ";
 			tweetText.setText(replyUserScreenNames);
-			do_setSelection = true;
+			setSelectionEnd = true;
 			break;
 		case TYPE_QUOTERT:
 			String quote = " https://twitter.com/" + status.getUser().getScreenName() + "/status/" + String.valueOf(status.getId());
 			tweetText.setText(quote);
-			do_setSelection = false;
 			break;
 		case TYPE_UNOFFICIALRT:
 			actionBar.setTitle("UnOfficialRT");
 			String unOfficial = " RT @" + status.getUser().getScreenName() + ": " + status.getText();
 			tweetText.setText(unOfficial);
-			do_setSelection = false;
 			break;
 		case TYPE_PAKUTSUI:
 			actionBar.setTitle("New Tweet");
 			tweetText.setText(status.getText());
-			do_setSelection = true;
+			setSelectionEnd = true;
 			break;
 		case TYPE_EXTERNALTEXT:
 			actionBar.setTitle("New Tweet");
 			tweetText.setText(intent.getStringExtra("text"));
-			do_setSelection = true;
+			setSelectionEnd = true;
 			break;
 		}
 
-		if(do_setSelection)
+		if(setSelectionEnd)
 			tweetText.setSelection(tweetText.getText().length());
 
 		moji140.setText(String.valueOf(140 - tweetText.getText().length()));

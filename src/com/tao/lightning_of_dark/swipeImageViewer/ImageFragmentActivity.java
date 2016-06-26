@@ -33,11 +33,13 @@ import android.widget.Toast;
 
 public class ImageFragmentActivity extends FragmentActivity{
 
+	public static final int TYPE_ICON = 0;
+	public static final int TYPE_BANNER = 1;
+
 	private ImagePagerAdapter adapter;
 	private ZoomViewPager pager;
 	private String[] urls;
-	private boolean isBanner;
-	private boolean isIcon;
+	private int type;
 	private String currentUrl;
 
 	@Override
@@ -47,8 +49,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 		setContentView(R.layout.show_image_pager);
 		Intent intent = getIntent();
 		urls = intent.getStringArrayExtra("urls");
-		isBanner = intent.getBooleanExtra("isBanner", false);
-		isIcon = intent.getBooleanExtra("isIcon", false);
+		type = intent.getIntExtra("type", -1);
 		int pos = intent.getIntExtra("position", 0);
 		adapter = new ImagePagerAdapter(getSupportFragmentManager(), urls);
 
@@ -77,7 +78,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 	}
 
 	public void saveImage(){
-		if(isBanner) {
+		if(type == TYPE_BANNER) {
 			Matcher banner = Pattern.compile("^http(s)?://pbs.twimg.com/profile_banners/[0-9]+/([0-9]+)/web_retina$").matcher(currentUrl);
 			if(!banner.find()) {
 				new ShowToast("URLがパターンにマッチしません\n保存できませんでした", this, 0);
@@ -89,7 +90,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 		}
 
 		String orig = "";
-		if(!isIcon)
+		if(type != TYPE_ICON)
 			orig = ":orig";
 
 		final Matcher pattern = Pattern.compile("^http(s)?://pbs.twimg.com/.+/+(.+)(\\..+)" + orig + "$").matcher(currentUrl + orig);
@@ -138,7 +139,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 			protected void onPostExecute(final byte[] result){
 				if(result != null) {
 					progDailog.dismiss();
-					if(isIcon)
+					if(type == TYPE_ICON)
 						save(pattern.group(2), pattern.group(3), result, false);
 					else
 						save(pattern.group(2), pattern.group(3), result, true);
