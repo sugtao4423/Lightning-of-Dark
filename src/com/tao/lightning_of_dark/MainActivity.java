@@ -15,13 +15,8 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
-import twitter4j.TwitterStreamFactory;
 import twitter4j.UserStreamAdapter;
-import twitter4j.auth.AccessToken;
-import twitter4j.conf.Configuration;
-import twitter4j.conf.ConfigurationBuilder;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -101,25 +96,12 @@ public class MainActivity extends FragmentActivity{
 			startActivity(new Intent(this, StartOAuth.class));
 			finish();
 		}else{
-			String ck, cs;
-			if(pref.getString("CustomCK", "").equals("")) {
-				ck = getString(R.string.CK);
-				cs = getString(R.string.CS);
-			}else{
-				ck = pref.getString("CustomCK", null);
-				cs = pref.getString("CustomCS", null);
-			}
-			AccessToken accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-
-			Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).build();
-			twitter = new TwitterFactory(conf).getInstance(accessToken);
-			String myScreenName = pref.getString("ScreenName", "");
-			appClass.setMyScreenName(myScreenName);
-			appClass.setTwitter(twitter);
-			mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
-			appClass.setMentionPattern(mentionPattern);
+			appClass.twitterLogin(this);
+			twitter = appClass.getTwitter();
+			twitterStream = appClass.getTwitterStream();
+			mentionPattern = appClass.getMentionPattern();
 			getTimeLine();
-			connectStreaming(conf, accessToken);
+			connectStreaming();
 		}
 	}
 
@@ -195,10 +177,8 @@ public class MainActivity extends FragmentActivity{
 		}.execute();
 	}
 
-	public void connectStreaming(Configuration conf, AccessToken accessToken){
+	public void connectStreaming(){
 		try{
-			twitterStream = new TwitterStreamFactory(conf).getInstance(accessToken);
-
 			// UserStreamAdapter
 			UserStreamAdapter streamAdapter = new UserStreamAdapter(){
 				@Override

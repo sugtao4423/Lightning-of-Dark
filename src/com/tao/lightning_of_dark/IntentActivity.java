@@ -8,12 +8,7 @@ import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.userPageFragment.UserPage;
 
 import twitter4j.Status;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
-import twitter4j.conf.Configuration;
-import twitter4j.conf.ConfigurationBuilder;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -53,24 +48,7 @@ public class IntentActivity extends Activity{
 				startActivity(new Intent(this, StartOAuth.class));
 				finish();
 			}else{
-				String ck, cs;
-				if(pref.getString("CustomCK", "").equals("")) {
-					ck = getString(R.string.CK);
-					cs = getString(R.string.CS);
-				}else{
-					ck = pref.getString("CustomCK", null);
-					cs = pref.getString("CustomCS", null);
-				}
-				AccessToken accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
-
-				Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).build();
-				Twitter twitter = new TwitterFactory(conf).getInstance(accessToken);
-				String myScreenName = pref.getString("ScreenName", "");
-				appClass.setMyScreenName(myScreenName);
-				appClass.setTwitter(twitter);
-				Pattern mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
-				appClass.setMentionPattern(mentionPattern);
-
+				appClass.twitterLogin(this);
 				jump();
 			}
 		}else{

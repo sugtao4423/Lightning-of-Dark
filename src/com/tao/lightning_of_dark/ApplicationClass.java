@@ -5,7 +5,13 @@ import java.util.regex.Pattern;
 import com.loopj.android.image.SmartImageView;
 
 import twitter4j.Twitter;
+import twitter4j.TwitterFactory;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 import twitter4j.User;
+import twitter4j.auth.AccessToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,9 +20,11 @@ import android.view.View;
 import android.widget.TextView;
 
 public class ApplicationClass extends Application{
+
 	// MainActivity
 	private String myScreenName;
 	private Twitter twitter;
+	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 	private CustomAdapter[] listAdapters;
 	private boolean option_regex, option_openBrowser, getBigIcon, isWebm;
@@ -30,34 +38,47 @@ public class ApplicationClass extends Application{
 	private User target;
 	private String targetScreenName;
 
+	public void twitterLogin(Context context){
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		String ck, cs;
+		if(pref.getString("CustomCK", "").equals("")) {
+			ck = getString(R.string.CK);
+			cs = getString(R.string.CS);
+		}else{
+			ck = pref.getString("CustomCK", null);
+			cs = pref.getString("CustomCS", null);
+		}
+		AccessToken accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
+
+		Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).build();
+		Twitter twitter = new TwitterFactory(conf).getInstance(accessToken);
+		this.myScreenName = pref.getString("ScreenName", "");
+		this.twitter = twitter;
+		this.twitterStream = new TwitterStreamFactory(conf).getInstance(accessToken);
+		this.mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
+	}
+
 	/*
 	 * +-+-+-+-+-+-+-+-+-+-+-+-+
 	 * |M|a|i|n|A|c|t|i|v|i|t|y|
 	 * +-+-+-+-+-+-+-+-+-+-+-+-+
 	 */
 	// MyScreenName
-	public void setMyScreenName(String myScreenName){
-		this.myScreenName = myScreenName;
-	}
-
 	public String getMyScreenName(){
 		return myScreenName;
 	}
 
 	// Twitter
-	public void setTwitter(Twitter twitter){
-		this.twitter = twitter;
-	}
-
 	public Twitter getTwitter(){
 		return twitter;
 	}
 
-	// mentionPattern
-	public void setMentionPattern(Pattern mentionPattern){
-		this.mentionPattern = mentionPattern;
+	// TwitterStream
+	public TwitterStream getTwitterStream(){
+		return twitterStream;
 	}
 
+	// mentionPattern
 	public Pattern getMentionPattern(){
 		return mentionPattern;
 	}
