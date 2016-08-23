@@ -114,8 +114,11 @@ public class StartOAuth extends Activity{
 			@Override
 			protected void onPostExecute(AccessToken accessToken){
 				if(accessToken != null) {
-					pref.edit().putString("AccessToken", accessToken.getToken())
-							.putString("AccessTokenSecret", accessToken.getTokenSecret()).commit();
+					pref.edit()
+					.putString("ScreenName", accessToken.getScreenName())
+					.putString("AccessToken", accessToken.getToken())
+					.putString("AccessTokenSecret", accessToken.getTokenSecret())
+					.commit();
 
 					if(ck.equals(getString(R.string.CK)))
 						ck = "";
