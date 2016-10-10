@@ -110,7 +110,7 @@ public class OptionClickListener implements OnClickListener{
 			}).show();
 		}
 		if(items[which].equals("設定")) {
-			context.startActivity(new Intent(context, Preference.class));
+			context.startActivity(new Intent(context, Settings.class));
 		}
 		if(items[which].equals("ツイート爆撃")) {
 			final View bombView = ((MainActivity)context).getLayoutInflater().inflate(R.layout.tweet_bomb, null);

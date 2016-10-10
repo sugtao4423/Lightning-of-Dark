@@ -8,7 +8,7 @@ import twitter4j.TwitterException;
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.Preference;
+import com.tao.lightning_of_dark.Settings;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
 
@@ -142,7 +142,7 @@ public class Fragment_List extends Fragment{
 				.setPositiveButton("開く", new OnClickListener(){
 					@Override
 					public void onClick(DialogInterface dialog, int which){
-						startActivity(new Intent(getActivity(), Preference.class));
+						startActivity(new Intent(getActivity(), Settings.class));
 					}
 				})
 				.setNegativeButton("キャンセル", new OnClickListener(){

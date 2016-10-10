@@ -25,7 +25,7 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.widget.Toast;
 
-public class Preference_List extends PreferenceActivity{
+public class Settings_List extends PreferenceActivity{
 
 	private Preference select_List, startApp_loadList;
 	private SQLiteDatabase db;
@@ -64,7 +64,7 @@ public class Preference_List extends PreferenceActivity{
 
 			showList.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
 				@Override
-				public boolean onPreferenceChange(android.preference.Preference preference, Object newValue){
+				public boolean onPreferenceChange(Preference preference, Object newValue){
 					if(showList.isChecked()) {
 						select_List.setEnabled(false);
 						startApp_loadList.setEnabled(false);
@@ -130,7 +130,7 @@ public class Preference_List extends PreferenceActivity{
 				ArrayList<String> array = new ArrayList<String>();
 
 				@Override
-				public boolean onPreferenceClick(android.preference.Preference preference){
+				public boolean onPreferenceClick(Preference preference){
 					new AsyncTask<Void, Void, ResponseList<UserList>>(){
 						@Override
 						protected ResponseList<UserList> doInBackground(Void... params){

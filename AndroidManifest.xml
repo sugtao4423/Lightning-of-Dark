@@ -91,9 +91,8 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name="Preference" />
-        <activity android:name="Preference_OptionMenu" />
-        <activity android:name="Preference_List" />
+        <activity android:name="Settings" />
+        <activity android:name="Settings_List" />
         <activity
             android:name=".swipeImageViewer.ImageFragmentActivity"
             android:configChanges="orientation|screenSize"
