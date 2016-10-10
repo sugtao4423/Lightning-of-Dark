@@ -26,6 +26,9 @@
         <Preference
             android:key="ListSetting"
             android:title="リスト設定" />
+        <Preference
+            android:key="clearCache"
+            android:title="アイコンキャッシュクリア" />
     </PreferenceCategory>
 
 </PreferenceScreen>
