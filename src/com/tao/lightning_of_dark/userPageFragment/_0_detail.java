@@ -80,7 +80,7 @@ public class _0_detail extends Fragment{
 		if(target.isProtected())
 			protect.setVisibility(View.VISIBLE);
 		userIcon.setImageUrl(target.getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
-		userBanner.setImageUrl(target.getProfileBannerURL(), null, R.drawable.ic_action_refresh);
+		userBanner.setImageUrl(target.getProfileBannerURL());
 		userName.setText(target.getName());
 		userScreenName.setText("@" + target.getScreenName());
 
