@@ -79,8 +79,8 @@ public class _0_detail extends Fragment{
 
 		if(target.isProtected())
 			protect.setVisibility(View.VISIBLE);
-		userIcon.setImageUrl(target.getBiggerProfileImageURL());
-		userBanner.setImageUrl(target.getProfileBannerURL());
+		userIcon.setImageUrl(target.getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
+		userBanner.setImageUrl(target.getProfileBannerURL(), null, R.drawable.ic_action_refresh);
 		userName.setText(target.getName());
 		userScreenName.setText("@" + target.getScreenName());
 
@@ -179,8 +179,8 @@ public class _0_detail extends Fragment{
 			@Override
 			protected void onPostExecute(String[] result){
 				if(result != null) {
-					sourceIcon.setImageUrl(result[0]);
-					targetIcon.setImageUrl(result[1]);
+					sourceIcon.setImageUrl(result[0], null, R.drawable.ic_action_refresh);
+					targetIcon.setImageUrl(result[1], null, R.drawable.ic_action_refresh);
 				}else
 					new ShowToast("ユーザーアイコンの取得に失敗しました", getActivity(), 0);
 			}

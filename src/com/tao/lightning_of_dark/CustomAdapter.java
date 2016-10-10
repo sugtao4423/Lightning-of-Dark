@@ -103,12 +103,12 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			holder.text.setText(item.getRetweetedStatus().getText());
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(
 					item.getRetweetedStatus().getCreatedAt()) + "  Retweeted by ");
-			holder.retweetedUserIcon.setImageUrl(item.getUser().getProfileImageURL());
+			holder.retweetedUserIcon.setImageUrl(item.getUser().getProfileImageURL(), null, R.drawable.ic_action_refresh);
 			holder.retweetedUserScreenName.setText("@" + item.getUser().getScreenName());
 			if(appClass.getGetBigIcon())
-				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL());
+				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
 			else
-				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL());
+				holder.icon.setImageUrl(item.getRetweetedStatus().getUser().getProfileImageURL(), null, R.drawable.ic_action_refresh);
 		}else{
 			holder.retweetedUserIcon.setVisibility(View.GONE);
 			holder.retweetedUserScreenName.setVisibility(View.GONE);
@@ -117,9 +117,9 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			holder.tweet_date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(item.getCreatedAt())
 					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
 			if(appClass.getGetBigIcon())
-				holder.icon.setImageUrl(item.getUser().getBiggerProfileImageURL());
+				holder.icon.setImageUrl(item.getUser().getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
 			else
-				holder.icon.setImageUrl(item.getUser().getProfileImageURL());
+				holder.icon.setImageUrl(item.getUser().getProfileImageURL(), null, R.drawable.ic_action_refresh);
 		}
 		holder.icon.setOnClickListener(new OnClickListener(){
 			@Override

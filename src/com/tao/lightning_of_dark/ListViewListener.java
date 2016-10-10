@@ -140,9 +140,9 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(status.getCreatedAt()) + "  via "
 				+ status.getSource().replaceAll("<.+?>", ""));
 		if(appClass.getGetBigIcon())
-			icon.setImageUrl(status.getUser().getBiggerProfileImageURL());
+			icon.setImageUrl(status.getUser().getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
 		else
-			icon.setImageUrl(status.getUser().getProfileImageURL());
+			icon.setImageUrl(status.getUser().getProfileImageURL(), null, R.drawable.ic_action_refresh);
 		// ここまで
 
 		// ダイアログ本文inflate

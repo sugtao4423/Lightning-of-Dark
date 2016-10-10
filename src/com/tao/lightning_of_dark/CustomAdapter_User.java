@@ -76,9 +76,9 @@ public class CustomAdapter_User extends ArrayAdapter<User>{
 			convertView.setBackgroundResource(R.drawable.position1);
 
 		if(appClass.getGetBigIcon())
-			holder.icon.setImageUrl(item.getBiggerProfileImageURL());
+			holder.icon.setImageUrl(item.getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
 		else
-			holder.icon.setImageUrl(item.getProfileImageURL());
+			holder.icon.setImageUrl(item.getProfileImageURL(), null, R.drawable.ic_action_refresh);
 
 		holder.name.setText(item.getName() + " - @" + item.getScreenName());
 		holder.text.setText(item.getDescription());
