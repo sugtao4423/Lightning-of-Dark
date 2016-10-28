@@ -32,19 +32,19 @@ public class Show_Video extends Activity{
 		final VideoView vv = (VideoView)findViewById(R.id.tw_video);
 		vv.setMediaController(new MediaController(this));
 
-		final ProgressDialog progDailog = new ProgressDialog(Show_Video.this);
-		progDailog.setMessage("Loading...");
-		progDailog.setIndeterminate(false);
-		progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		progDailog.setCancelable(true);
-		progDailog.show();
+		final ProgressDialog progDialog = new ProgressDialog(Show_Video.this);
+		progDialog.setMessage("Loading...");
+		progDialog.setIndeterminate(false);
+		progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progDialog.setCancelable(true);
+		progDialog.show();
 
 		vv.setVideoURI(Uri.parse(url));
 		vv.setOnPreparedListener(new OnPreparedListener(){
 
 			@Override
 			public void onPrepared(MediaPlayer mp){
-				progDailog.dismiss();
+				progDialog.dismiss();
 				vv.start();
 			}
 		});

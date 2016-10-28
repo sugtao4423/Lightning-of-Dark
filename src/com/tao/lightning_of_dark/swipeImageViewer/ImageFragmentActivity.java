@@ -100,16 +100,16 @@ public class ImageFragmentActivity extends FragmentActivity{
 		}
 
 		new AsyncTask<String, Void, byte[]>(){
-			private ProgressDialog progDailog;
+			private ProgressDialog progDialog;
 
 			@Override
 			protected void onPreExecute(){
-				progDailog = new ProgressDialog(ImageFragmentActivity.this);
-				progDailog.setMessage("Loading...");
-				progDailog.setIndeterminate(false);
-				progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				progDailog.setCancelable(true);
-				progDailog.show();
+				progDialog = new ProgressDialog(ImageFragmentActivity.this);
+				progDialog.setMessage("Loading...");
+				progDialog.setIndeterminate(false);
+				progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progDialog.setCancelable(true);
+				progDialog.show();
 			}
 
 			@Override
@@ -138,7 +138,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 			@Override
 			protected void onPostExecute(final byte[] result){
 				if(result != null) {
-					progDailog.dismiss();
+					progDialog.dismiss();
 					if(type == TYPE_ICON)
 						save(pattern.group(2), pattern.group(3), result, false);
 					else

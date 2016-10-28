@@ -38,16 +38,16 @@ public class ImageFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		new AsyncTask<String, Void, Bitmap>(){
-			private ProgressDialog progDailog;
+			private ProgressDialog progDialog;
 
 			@Override
 			protected void onPreExecute(){
-				progDailog = new ProgressDialog(getActivity());
-				progDailog.setMessage("Loading...");
-				progDailog.setIndeterminate(false);
-				progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				progDailog.setCancelable(true);
-				progDailog.show();
+				progDialog = new ProgressDialog(getActivity());
+				progDialog.setMessage("Loading...");
+				progDialog.setIndeterminate(false);
+				progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progDialog.setCancelable(true);
+				progDialog.show();
 			}
 
 			@Override
@@ -78,7 +78,7 @@ public class ImageFragment extends Fragment{
 			@Override
 			protected void onPostExecute(Bitmap result){
 				if(result != null) {
-					progDailog.dismiss();
+					progDialog.dismiss();
 					image.setImageBitmap(result);
 				}else{
 					Toast.makeText(getActivity(), "画像の取得失敗", Toast.LENGTH_LONG).show();
