@@ -25,7 +25,7 @@ import com.tao.lightning_of_dark.ShowToast;
 
 public class _1_Tweet extends Fragment{
 
-	private ListView userTweet, foot;
+	private ListView foot;
 	private SwipeRefreshLayout pulltoRefresh;
 	private CustomAdapter adapter;
 	private boolean alreadyLoad;
@@ -39,13 +39,13 @@ public class _1_Tweet extends Fragment{
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		alreadyLoad = false;
 		// 通常のListViewSet
-		userTweet = (ListView)v.findViewById(R.id.UserPageList);
+		ListView userTweet = (ListView)v.findViewById(R.id.UserPageList);
 		userTweet.setOnItemClickListener(new ListViewListener(false));
 		userTweet.setOnItemLongClickListener(new ListViewListener(false));
 		// ここまで
 		adapter = new CustomAdapter(getActivity());
 		// フッター生成
-		addFooter();
+		addFooter(userTweet);
 		userTweet.setAdapter(adapter);
 
 		// PulltoRefresh
@@ -64,7 +64,7 @@ public class _1_Tweet extends Fragment{
 	}
 
 	// フッター生成
-	public void addFooter(){
+	public void addFooter(ListView list){
 		foot = new ListView(getActivity());
 		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
 		foot.setOnItemClickListener(new OnItemClickListener(){
@@ -74,13 +74,13 @@ public class _1_Tweet extends Fragment{
 				loadTimeLine();
 			}
 		});
-		userTweet.addFooterView(foot);
+		list.addFooterView(foot);
 	}
 
 	// なんか色々取得 //自分でもよくわからず組んだ is 屑
 	public void loadTimeLine(){
 		if(alreadyLoad)
-			tweetId = ((Status)userTweet.getItemAtPosition(userTweet.getAdapter().getCount() - 2)).getId();
+			tweetId = adapter.getItem(adapter.getCount() - 1).getId();
 		((UserPage)_1_Tweet.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
@@ -99,12 +99,11 @@ public class _1_Tweet extends Fragment{
 			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null) {
-					for(twitter4j.Status status : result)
-						adapter.add(status);
-					if(!alreadyLoad)
-						alreadyLoad = true;
-				}else
+					adapter.addAll(result);
+					alreadyLoad = true;
+				}else{
 					new ShowToast("タイムラインを取得できませんでした", getActivity(), 0);
+				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);

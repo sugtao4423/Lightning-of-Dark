@@ -26,7 +26,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class _3_follow extends Fragment{
 
-	private ListView userFollow, foot;
+	private ListView foot;
 	private SwipeRefreshLayout pulltoRefresh;
 	private CustomAdapter_User adapter;
 	private long cursor;
@@ -39,15 +39,15 @@ public class _3_follow extends Fragment{
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		cursor = -1L;
 
-		userFollow = (ListView)v.findViewById(R.id.UserPageList);
+		ListView userFollow = (ListView)v.findViewById(R.id.UserPageList);
 		adapter = new CustomAdapter_User(getActivity());
 
-		addFooter();
+		addFooter(userFollow);
 		userFollow.setAdapter(adapter);
 		userFollow.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-				String screen = ((User)userFollow.getItemAtPosition(position)).getScreenName();
+				String screen = adapter.getItem(position).getScreenName();
 				Intent user = new Intent(container.getContext(), UserPage.class);
 				user.putExtra("userScreenName", screen);
 				startActivity(user);
@@ -62,13 +62,14 @@ public class _3_follow extends Fragment{
 			@Override
 			public void onRefresh(){
 				adapter.clear();
+				cursor = -1L;
 				loadFollowLine();
 			}
 		});
 		return v;
 	}
 
-	public void addFooter(){
+	public void addFooter(ListView list){
 		foot = new ListView(getActivity());
 		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
 		foot.setOnItemClickListener(new OnItemClickListener(){
@@ -78,7 +79,7 @@ public class _3_follow extends Fragment{
 				loadFollowLine();
 			}
 		});
-		userFollow.addFooterView(foot);
+		list.addFooterView(foot);
 	}
 
 	public void loadFollowLine(){
@@ -96,11 +97,11 @@ public class _3_follow extends Fragment{
 			@Override
 			public void onPostExecute(PagableResponseList<User> result){
 				if(result != null) {
-					for(User user : result)
-						adapter.add(user);
+					adapter.addAll(result);
 					cursor = result.getNextCursor();
-				}else
+				}else{
 					new ShowToast("フォローを取得できませんでした", getActivity(), 0);
+				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);

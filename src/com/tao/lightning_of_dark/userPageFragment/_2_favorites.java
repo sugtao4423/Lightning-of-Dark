@@ -26,7 +26,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class _2_favorites extends Fragment{
 
-	private ListView userFavorite, foot;
+	private ListView foot;
 	private SwipeRefreshLayout pulltoRefresh;
 	private CustomAdapter adapter;
 	private boolean alreadyLoad;
@@ -40,13 +40,13 @@ public class _2_favorites extends Fragment{
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		alreadyLoad = false;
 
-		userFavorite = (ListView)v.findViewById(R.id.UserPageList);
+		ListView userFavorite = (ListView)v.findViewById(R.id.UserPageList);
 		userFavorite.setOnItemClickListener(new ListViewListener(false));
 		userFavorite.setOnItemLongClickListener(new ListViewListener(false));
 
 		adapter = new CustomAdapter(getActivity());
 		// フッター生成
-		addFooter();
+		addFooter(userFavorite);
 		userFavorite.setAdapter(adapter);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
@@ -64,7 +64,7 @@ public class _2_favorites extends Fragment{
 	}
 
 	// フッター生成
-	public void addFooter(){
+	public void addFooter(ListView list){
 		foot = new ListView(getActivity());
 		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
 		foot.setOnItemClickListener(new OnItemClickListener(){
@@ -74,12 +74,12 @@ public class _2_favorites extends Fragment{
 				loadMentionLine();
 			}
 		});
-		userFavorite.addFooterView(foot);
+		list.addFooterView(foot);
 	}
 
 	public void loadMentionLine(){
 		if(alreadyLoad)
-			tweetId = ((Status)userFavorite.getItemAtPosition(userFavorite.getAdapter().getCount() - 2)).getId();
+			tweetId = adapter.getItem(adapter.getCount() - 1).getId();
 		((UserPage)_2_favorites.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
@@ -97,12 +97,11 @@ public class _2_favorites extends Fragment{
 
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null) {
-					for(twitter4j.Status status : result)
-						adapter.add(status);
-					if(!alreadyLoad)
-						alreadyLoad = true;
-				}else
+					adapter.addAll(result);
+					alreadyLoad = true;
+				}else{
 					new ShowToast("ふぁぼ取得エラー", getActivity(), 0);
+				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);
 				foot.setEnabled(true);
