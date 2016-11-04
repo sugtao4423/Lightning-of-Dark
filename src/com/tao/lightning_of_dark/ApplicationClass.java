@@ -41,7 +41,7 @@ public class ApplicationClass extends Application{
 	public void twitterLogin(Context context){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		String ck, cs;
-		if(pref.getString("CustomCK", "").equals("")) {
+		if(pref.getString("CustomCK", "").equals("")){
 			ck = getString(R.string.CK);
 			cs = getString(R.string.CS);
 		}else{

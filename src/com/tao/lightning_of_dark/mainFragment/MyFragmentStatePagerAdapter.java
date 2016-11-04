@@ -36,7 +36,7 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 			return fragmentHome;
 
 		}
-		if(showList && i > 1) {
+		if(showList && i > 1){
 			return new Fragment_List(i - 2);
 		}
 		return null;
@@ -52,8 +52,8 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 
 	@Override
 	public CharSequence getPageTitle(int position){
-		if(position > 1) {
-			if(!pref.getString("SelectListNames", "").equals("")) {
+		if(position > 1){
+			if(!pref.getString("SelectListNames", "").equals("")){
 				String[] names = pref.getString("SelectListNames", null).split(",", 0);
 
 				return names[position - 2];

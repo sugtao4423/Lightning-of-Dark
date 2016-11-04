@@ -36,7 +36,7 @@ public class OptionClickListener implements OnClickListener{
 	@SuppressLint("InflateParams")
 	@Override
 	public void onClick(DialogInterface dialog, int which){
-		if(items[which].equals("ユーザー検索")) {
+		if(items[which].equals("ユーザー検索")){
 			final EditText userEdit = new EditText(context);
 			new AlertDialog.Builder(context)
 			.setMessage("ユーザーのスクリーンネームを入力してください")
@@ -46,16 +46,16 @@ public class OptionClickListener implements OnClickListener{
 				public void onClick(DialogInterface dialog, int which){
 					Intent userPage = new Intent(context, UserPage.class);
 					String user_screen = userEdit.getText().toString();
-					if(user_screen.isEmpty())
+					if(user_screen.isEmpty()){
 						new ShowToast("なにも入力されていません", context, 0);
-					else{
+					}else{
 						userPage.putExtra("userScreenName", user_screen.replace("@", ""));
 						context.startActivity(userPage);
 					}
 				}
 			}).show();
 		}
-		if(items[which].equals("アカウント")) {
+		if(items[which].equals("アカウント")){
 			final String myScreenName = pref.getString("ScreenName", "");
 			final DBUtil dbUtil = new DBUtil(context);
 			final Account[] accounts = dbUtil.getAccounts();
@@ -72,47 +72,44 @@ public class OptionClickListener implements OnClickListener{
 			.setItems(nameDialog, new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, final int which){
-					if(nameDialog[which].equals("アカウントを追加")) {
+					if(nameDialog[which].equals("アカウントを追加")){
 						context.startActivity(new Intent(context, StartOAuth.class));
-					}else if(!nameDialog[which].equals("@" + myScreenName + " (now)")) {
+					}else if(!nameDialog[which].equals("@" + myScreenName + " (now)")){
 						new AlertDialog.Builder(context)
 						.setTitle(nameDialog[which])
 						.setPositiveButton("切り替え", new OnClickListener(){
 
 							@Override
 							public void onClick(DialogInterface dialog, int w){
-								pref.edit()
-								.putString("ScreenName", accounts[which].getScreenName())
-								.putString("CustomCK", accounts[which].getCK())
-								.putString("CustomCS", accounts[which].getCS())
-								.putString("AccessToken", accounts[which].getAT())
-								.putString("AccessTokenSecret", accounts[which].getATS())
-								.putBoolean("showList", accounts[which].getShowList())
-								.putInt("SelectListCount", accounts[which].getSelectListCount())
-								.putString("SelectListIds", accounts[which].getSelectListIds())
-								.putString("SelectListNames", accounts[which].getSelectListNames())
-								.putString("startApp_loadLists", accounts[which].getStartAppLoadLists()).commit();
+								pref.edit().putString("ScreenName", accounts[which].getScreenName())
+									.putString("CustomCK", accounts[which].getCK())
+									.putString("CustomCS", accounts[which].getCS())
+									.putString("AccessToken", accounts[which].getAT())
+									.putString("AccessTokenSecret", accounts[which].getATS())
+									.putBoolean("showList", accounts[which].getShowList())
+									.putInt("SelectListCount", accounts[which].getSelectListCount())
+									.putString("SelectListIds", accounts[which].getSelectListIds())
+									.putString("SelectListNames", accounts[which].getSelectListNames())
+									.putString("startApp_loadLists", accounts[which].getStartAppLoadLists())
+								.commit();
 								((MainActivity)context).restart();
 							}
-						})
-						.setNegativeButton("削除", new OnClickListener(){
+						}).setNegativeButton("削除", new OnClickListener(){
 
 							@Override
 							public void onClick(DialogInterface dialog, int w){
 								dbUtil.deleteAccount(accounts[which]);
 								new ShowToast("@" + accounts[which].getScreenName() + "を削除しました", context, 0);
 							}
-						})
-						.setNeutralButton("キャンセル", null)
-						.show();
+						}).setNeutralButton("キャンセル", null).show();
 					}
 				}
 			}).show();
 		}
-		if(items[which].equals("設定")) {
+		if(items[which].equals("設定")){
 			context.startActivity(new Intent(context, Settings.class));
 		}
-		if(items[which].equals("ツイート爆撃")) {
+		if(items[which].equals("ツイート爆撃")){
 			final View bombView = ((MainActivity)context).getLayoutInflater().inflate(R.layout.tweet_bomb, null);
 			new AlertDialog.Builder(context)
 			.setView(bombView)
@@ -143,9 +140,7 @@ public class OptionClickListener implements OnClickListener{
 					}
 					new ShowToast("ツイート完了", context, 0);
 				}
-			})
-			.setNegativeButton("キャンセル", null)
-			.show();
+			}).setNegativeButton("キャンセル", null).show();
 		}
 	}
 }

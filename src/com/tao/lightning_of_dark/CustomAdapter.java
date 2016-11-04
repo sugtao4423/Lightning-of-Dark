@@ -44,7 +44,7 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 		final ViewHolder holder;
 		final Status item = getItem(position);
 
-		if(convertView == null) {
+		if(convertView == null){
 			convertView = mInflater.inflate(R.layout.list_item_tweet, null);
 			TextView name = (TextView)convertView.findViewById(R.id.name_screenName);
 			TextView text = (TextView)convertView.findViewById(R.id.tweetText);
@@ -68,7 +68,7 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			holder = (ViewHolder)convertView.getTag();
 		}
 		// 鍵
-		if(item.isRetweet()) {
+		if(item.isRetweet()){
 			if(!item.getRetweetedStatus().getUser().isProtected())
 				holder.protect.setVisibility(View.GONE);
 			else
@@ -95,7 +95,7 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 				convertView.setBackgroundResource(R.drawable.position1);
 		}
 		// アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
-		if(item.isRetweet()) {
+		if(item.isRetweet()){
 			holder.retweetedUserIcon.setVisibility(View.VISIBLE);
 			holder.retweetedUserScreenName.setVisibility(View.VISIBLE);
 

@@ -92,7 +92,7 @@ public class MainActivity extends FragmentActivity{
 		appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
 		appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
 
-		if(pref.getString("AccessToken", "").equals("")) {
+		if(pref.getString("AccessToken", "").equals("")){
 			startActivity(new Intent(this, StartOAuth.class));
 			finish();
 		}else{
@@ -124,7 +124,7 @@ public class MainActivity extends FragmentActivity{
 
 			@Override
 			protected void onPostExecute(Boolean result){
-				if(result) {
+				if(result){
 					for(twitter4j.Status status : home)
 						fragmentHome.add(status);
 					for(twitter4j.Status status : mention)
@@ -135,7 +135,7 @@ public class MainActivity extends FragmentActivity{
 			}
 		}.execute();
 
-		if(!pref.getString("startApp_loadLists", "").equals("") && !pref.getString("SelectListIds", "").equals("")) {
+		if(!pref.getString("startApp_loadLists", "").equals("") && !pref.getString("SelectListIds", "").equals("")){
 			String[] listName_str = pref.getString("SelectListNames", "").split(",", 0);
 			String[] listIds_str = pref.getString("SelectListIds", "").split(",", 0);
 			String[] startApp_loadLists = pref.getString("startApp_loadLists", "").split(",", 0);
@@ -166,7 +166,7 @@ public class MainActivity extends FragmentActivity{
 
 			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
-				if(result != null) {
+				if(result != null){
 					for(twitter4j.Status status : result)
 						listAdapters[index].add(status);
 					boolean[] tmp = appClass.getList_AlreadyLoad();
@@ -241,7 +241,7 @@ public class MainActivity extends FragmentActivity{
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		if(resetFlag) {
+		if(resetFlag){
 			resetFlag = false;
 			startActivity(new Intent(this, MainActivity.class));
 		}else{

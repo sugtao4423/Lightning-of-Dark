@@ -39,7 +39,7 @@ public class CustomAdapter_User extends ArrayAdapter<User>{
 		ViewHolder holder;
 		User item = getItem(position);
 
-		if(convertView == null) {
+		if(convertView == null){
 			convertView = mInflater.inflate(R.layout.list_item_tweet, null);
 			TextView name = (TextView)convertView.findViewById(R.id.name_screenName);
 			TextView text = (TextView)convertView.findViewById(R.id.tweetText);

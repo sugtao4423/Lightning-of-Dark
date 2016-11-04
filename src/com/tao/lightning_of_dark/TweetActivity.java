@@ -180,7 +180,7 @@ public class TweetActivity extends Activity{
 				finish();
 			}
 		}.execute();
-		if(do_back) {
+		if(do_back){
 			Intent main = new Intent(this, MainActivity.class);
 			startActivity(main);
 		}
@@ -203,12 +203,12 @@ public class TweetActivity extends Activity{
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == 114514 && resultCode == RESULT_OK) { // 音声入力
+		if(requestCode == 114514 && resultCode == RESULT_OK){ // 音声入力
 			ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 			tweetText.setText(tweetText.getText().toString() + results.get(0));
 			cursor_end(null);
 		}
-		if(requestCode == 810 && resultCode == RESULT_OK) { // 画像選択
+		if(requestCode == 810 && resultCode == RESULT_OK){ // 画像選択
 			try{
 				ContentResolver cr = getContentResolver();
 				String[] columns = {MediaStore.Images.Media.DATA};

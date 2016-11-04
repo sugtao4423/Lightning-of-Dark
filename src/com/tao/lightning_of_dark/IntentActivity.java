@@ -33,7 +33,7 @@ public class IntentActivity extends Activity{
 
 		ApplicationClass appClass = (ApplicationClass)getApplicationContext();
 
-		if(appClass.getTwitter() == null) {
+		if(appClass.getTwitter() == null){
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 			appClass = (ApplicationClass)this.getApplicationContext();
 			appClass.loadOption(this);
@@ -44,7 +44,7 @@ public class IntentActivity extends Activity{
 			appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
 			appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
 
-			if(pref.getString("AccessToken", "").equals("")) {
+			if(pref.getString("AccessToken", "").equals("")){
 				startActivity(new Intent(this, StartOAuth.class));
 				finish();
 			}else{
@@ -59,19 +59,19 @@ public class IntentActivity extends Activity{
 	public void jump(){
 		String uri;
 		Intent i;
-		if(Intent.ACTION_VIEW.equals(getIntent().getAction())) {
+		if(Intent.ACTION_VIEW.equals(getIntent().getAction())){
 			uri = getIntent().getData().toString();
 			Matcher user = Pattern.compile("http(s)?://twitter.com/([0-9a-zA-Z_]+)").matcher(uri);
 			Matcher status = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(uri);
-			if(status.find()) {
+			if(status.find()){
 				showStatus(Long.parseLong(status.group(2)), IntentActivity.this, true);
-			}else if(user.find()) {
+			}else if(user.find()){
 				i = new Intent(IntentActivity.this, UserPage.class);
 				i.putExtra("userScreenName", user.group(2));
 				startActivity(i);
 				finish();
 			}
-		}else if(Intent.ACTION_SEND.equals(getIntent().getAction())) {
+		}else if(Intent.ACTION_SEND.equals(getIntent().getAction())){
 			uri = getIntent().getExtras().getCharSequence(Intent.EXTRA_TEXT).toString();
 			i = new Intent(IntentActivity.this, TweetActivity.class);
 			i.putExtra("type", TweetActivity.TYPE_EXTERNALTEXT);
@@ -97,7 +97,7 @@ public class IntentActivity extends Activity{
 			@SuppressLint("NewApi")
 			@Override
 			protected void onPostExecute(twitter4j.Status status){
-				if(status != null) {
+				if(status != null){
 					CustomAdapter adapter = new CustomAdapter(context);
 					adapter.add(status);
 					ListView l = new ListView(context);
@@ -106,7 +106,7 @@ public class IntentActivity extends Activity{
 					l.setOnItemLongClickListener(new ListViewListener(false));
 					AlertDialog.Builder builder = new AlertDialog.Builder(context);
 					builder.setView(l);
-					if(isClose) {
+					if(isClose){
 						builder.setOnDismissListener(new OnDismissListener(){
 							@Override
 							public void onDismiss(DialogInterface dialog){

@@ -54,7 +54,7 @@ public class Settings_List extends PreferenceActivity{
 
 			setSummary();
 
-			if(showList.isChecked()) {
+			if(showList.isChecked()){
 				select_List.setEnabled(true);
 				startApp_loadList.setEnabled(true);
 			}else{
@@ -65,7 +65,7 @@ public class Settings_List extends PreferenceActivity{
 			showList.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
 				@Override
 				public boolean onPreferenceChange(Preference preference, Object newValue){
-					if(showList.isChecked()) {
+					if(showList.isChecked()){
 						select_List.setEnabled(false);
 						startApp_loadList.setEnabled(false);
 						db.execSQL("update accounts set showList='false' where screen_name = '" + appClass.getMyScreenName() + "'");
@@ -93,30 +93,28 @@ public class Settings_List extends PreferenceActivity{
 						selectedLoadList[i] = false;
 					final ArrayList<String> selectLoadList = new ArrayList<String>();
 					AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-					.setTitle("起動時に読み込むリストを選択してください")
-					.setMultiChoiceItems(selectedListNames, selectedLoadList, new OnMultiChoiceClickListener(){
-						@Override
-						public void onClick(DialogInterface dialog, int which, boolean isChecked){
-							if(isChecked)
-								selectLoadList.add(selectedListNames[which]);
-							else
-								selectLoadList.remove(selectedListNames[which]);
-						}
-					})
-					.setPositiveButton("OK", new OnClickListener(){
-						@Override
-						public void onClick(DialogInterface dialog, int which){
-							String startApp_loadLists = "";
-							for(int i = 0; i < selectLoadList.size(); i++)
-								startApp_loadLists += selectLoadList.get(i) + ",";
-							SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-							pref.edit().putString("startApp_loadLists", startApp_loadLists).commit();
-							db.execSQL("update accounts set startApp_loadLists='" + startApp_loadLists + "' where screen_name='"
-									+ appClass.getMyScreenName() + "'");
-							setSummary();
-						}
-					})
-					.setNegativeButton("キャンセル", null);
+							.setTitle("起動時に読み込むリストを選択してください")
+							.setMultiChoiceItems(selectedListNames, selectedLoadList, new OnMultiChoiceClickListener(){
+								@Override
+								public void onClick(DialogInterface dialog, int which, boolean isChecked){
+									if(isChecked)
+										selectLoadList.add(selectedListNames[which]);
+									else
+										selectLoadList.remove(selectedListNames[which]);
+								}
+							}).setPositiveButton("OK", new OnClickListener(){
+								@Override
+								public void onClick(DialogInterface dialog, int which){
+									String startApp_loadLists = "";
+									for(int i = 0; i < selectLoadList.size(); i++)
+										startApp_loadLists += selectLoadList.get(i) + ",";
+									SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+									pref.edit().putString("startApp_loadLists", startApp_loadLists).commit();
+									db.execSQL("update accounts set startApp_loadLists='" + startApp_loadLists
+											+ "' where screen_name='" + appClass.getMyScreenName() + "'");
+									setSummary();
+								}
+							}).setNegativeButton("キャンセル", null);
 					if(!selectedListNames[0].equals(""))
 						builder.show();
 					else
@@ -143,7 +141,7 @@ public class Settings_List extends PreferenceActivity{
 
 						@Override
 						protected void onPostExecute(final ResponseList<UserList> result){
-							if(result != null) {
+							if(result != null){
 								for(UserList userList : result)
 									array.add(userList.getName());
 
@@ -165,8 +163,7 @@ public class Settings_List extends PreferenceActivity{
 										else
 											checkedList.remove(result.get(which));
 									}
-								})
-								.setPositiveButton("OK", new OnClickListener(){
+								}).setPositiveButton("OK", new OnClickListener(){
 									@Override
 									public void onClick(DialogInterface dialog, int which){
 										int checkedSize = checkedList.size();
@@ -178,14 +175,17 @@ public class Settings_List extends PreferenceActivity{
 										}
 
 										SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-										pref.edit().putInt("SelectListCount", checkedSize).putString("SelectListIds", listIds)
-												.putString("SelectListNames", listNames).commit();
+										pref.edit()
+											.putInt("SelectListCount", checkedSize)
+											.putString("SelectListIds", listIds)
+											.putString("SelectListNames", listNames)
+										.commit();
 										db.execSQL("update accounts set SelectListCount='" + checkedSize
 												+ "' where screen_name = '" + appClass.getMyScreenName() + "'");
-										db.execSQL("update accounts set SelectListIds='" + listIds + "' where screen_name = '"
-												+ appClass.getMyScreenName() + "'");
-										db.execSQL("update accounts set SelectListNames='" + listNames + "' where screen_name = '"
-												+ appClass.getMyScreenName() + "'");
+										db.execSQL("update accounts set SelectListIds='" + listIds
+												+ "' where screen_name = '" + appClass.getMyScreenName() + "'");
+										db.execSQL("update accounts set SelectListNames='" + listNames
+												+ "' where screen_name = '" + appClass.getMyScreenName() + "'");
 										Dialog("リストを選択しました");
 										setSummary();
 									}
@@ -207,8 +207,7 @@ public class Settings_List extends PreferenceActivity{
 				public void onClick(DialogInterface dialog, int which){
 					android.os.Process.killProcess(android.os.Process.myPid());
 				}
-			})
-			.setNegativeButton("キャンセル", new OnClickListener(){
+			}).setNegativeButton("キャンセル", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					Toast.makeText(getActivity(), "大人しく再起動しような？", Toast.LENGTH_SHORT).show();

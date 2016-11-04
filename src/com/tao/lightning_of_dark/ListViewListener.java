@@ -62,7 +62,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		users.add("@" + item.getUser().getScreenName());
 
 		UserMentionEntity[] mentionEntitys = item.getUserMentionEntities();
-		if(mentionEntitys != null && mentionEntitys.length > 0) {
+		if(mentionEntitys != null && mentionEntitys.length > 0){
 			for(UserMentionEntity menty : mentionEntitys){
 				if(users.indexOf("@" + menty.getScreenName()) == -1)
 					users.add("@" + menty.getScreenName());
@@ -71,14 +71,14 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		list.addAll(users);
 
 		URLEntity[] uentitys = item.getURLEntities();
-		if(uentitys != null && uentitys.length > 0) {
+		if(uentitys != null && uentitys.length > 0){
 			for(URLEntity u : uentitys)
 				list.add(u.getExpandedURL());
 		}
 		ExtendedMediaEntity[] exMentitys = item.getExtendedMediaEntities();
-		if(exMentitys != null && exMentitys.length > 0) {
+		if(exMentitys != null && exMentitys.length > 0){
 			for(ExtendedMediaEntity ex : exMentitys){
-				if(ex.getType().equals("video") || ex.getType().equals("animated_gif")) {
+				if(ex.getType().equals("video") || ex.getType().equals("animated_gif")){
 					ArrayList<VideoURLs> urls = new ArrayList<VideoURLs>();
 					for(Variant v : ex.getVideoVariants()){
 						boolean find = false;
@@ -87,12 +87,12 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 						else if(!appClass.getIsWebm() && v.getContentType().equals("video/mp4"))
 							find = true;
 
-						if(find) {
+						if(find){
 							VideoURLs video = new VideoURLs(v.getBitrate(), v.getUrl());
 							urls.add(video);
 						}
 					}
-					if(urls.size() == 0) {
+					if(urls.size() == 0){
 						for(Variant v : ex.getVideoVariants()){
 							boolean find = false;
 							if(v.getContentType().equals("video/mp4"))
@@ -100,7 +100,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 							else if(v.getContentType().equals("video/webm"))
 								find = true;
 
-							if(find) {
+							if(find){
 								VideoURLs video = new VideoURLs(v.getBitrate(), v.getUrl());
 								urls.add(video);
 							}
@@ -117,11 +117,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			}
 		}
 
-		Status status;
-		if(item.isRetweet())
-			status = item.getRetweetedStatus();
-		else
-			status = item;
+		Status status = item.isRetweet() ? item.getRetweetedStatus() : item;
 
 		// ダイアログタイトルinflate
 		View dialog_title = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_tweet, null);
@@ -165,7 +161,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 				String clickedText = (String)parent.getItemAtPosition(position);
-				if(clickedText.startsWith("http")) {
+				if(clickedText.startsWith("http")){
 					dialog.dismiss();
 					parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText)));
 				}
@@ -181,11 +177,11 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext(), tweet_do_back, dialog));
 		dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, parent.getContext(), dialog));
 
-		if(!(status.getInReplyToStatusId() > 0)) {
+		if(!(status.getInReplyToStatusId() > 0)){
 			dialog_talk.setEnabled(false);
 			dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
 		}
-		if(!status.getUser().getScreenName().equals(((ApplicationClass)parent.getContext().getApplicationContext()).getMyScreenName())) {
+		if(!status.getUser().getScreenName().equals(((ApplicationClass)parent.getContext().getApplicationContext()).getMyScreenName())){
 			dialog_deletePost.setEnabled(false);
 			dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
 		}

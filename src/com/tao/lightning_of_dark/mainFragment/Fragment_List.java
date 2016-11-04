@@ -2,7 +2,6 @@ package com.tao.lightning_of_dark.mainFragment;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;
-import twitter4j.Status;
 import twitter4j.TwitterException;
 
 import com.tao.lightning_of_dark.ApplicationClass;
@@ -38,7 +37,6 @@ public class Fragment_List extends Fragment{
 	private ListView listLine, foot;
 	private SwipeRefreshLayout pulltoRefresh;
 	private CustomAdapter adapter;
-	private long tweetId;
 	private int listIndex;
 
 	public Fragment_List(int index){
@@ -93,24 +91,23 @@ public class Fragment_List extends Fragment{
 	public void getList(Context context){
 		final ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		if(pref.getBoolean("showList", false)) {
+		if(pref.getBoolean("showList", false)){
 			String[] ListId_str = pref.getString("SelectListIds", null).split(",", 0);
 			final long[] ListId = new long[ListId_str.length];
 			for(int i = 0; i < ListId_str.length; i++)
 				ListId[i] = Long.parseLong(ListId_str[i]);
-			if(ListId[listIndex] != -1) {
-				if(appClass.getList_AlreadyLoad()[listIndex]) {
-					tweetId = ((Status)listLine.getItemAtPosition(listLine.getAdapter().getCount() - 2)).getId();
-				}
+			if(ListId[listIndex] != -1){
 				new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 						try{
-							if(appClass.getList_AlreadyLoad()[listIndex])
+							if(appClass.getList_AlreadyLoad()[listIndex]){
+								long tweetId = adapter.getItem(adapter.getCount() - 1).getId();
 								return appClass.getTwitter().getUserListStatuses(ListId[listIndex],
 										new Paging(1, 50).maxId(tweetId - 1));
-							else
+							}else{
 								return appClass.getTwitter().getUserListStatuses(ListId[listIndex], new Paging(1, 50));
+							}
 						}catch(TwitterException e){
 							return null;
 						}
@@ -118,16 +115,16 @@ public class Fragment_List extends Fragment{
 
 					@Override
 					protected void onPostExecute(ResponseList<twitter4j.Status> result){
-						if(result != null) {
-							for(twitter4j.Status status : result)
-								adapter.add(status);
-							if(!appClass.getList_AlreadyLoad()[listIndex]) {
+						if(result != null){
+							adapter.addAll(result);
+							if(!appClass.getList_AlreadyLoad()[listIndex]){
 								boolean[] tmp = appClass.getList_AlreadyLoad();
 								tmp[listIndex] = true;
 								appClass.setList_AlreadyLoad(tmp);
 							}
-						}else
+						}else{
 							new ShowToast("リストを取得できませんでした", getActivity(), 0);
+						}
 						pulltoRefresh.setRefreshing(false);
 						pulltoRefresh.setEnabled(true);
 						foot.setEnabled(true);
@@ -144,12 +141,7 @@ public class Fragment_List extends Fragment{
 					public void onClick(DialogInterface dialog, int which){
 						startActivity(new Intent(getActivity(), Settings.class));
 					}
-				})
-				.setNegativeButton("キャンセル", new OnClickListener(){
-					@Override
-					public void onClick(DialogInterface dialog, int which){
-					}
-				}).show();
+				}).setNegativeButton("キャンセル", null).show();
 			}
 		}
 	}

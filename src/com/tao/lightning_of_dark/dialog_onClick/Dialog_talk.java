@@ -65,14 +65,15 @@ public class Dialog_talk implements OnClickListener{
 
 		@Override
 		public void onPostExecute(twitter4j.Status result){
-			if(result != null) {
+			if(result != null){
 				resultAdapter.add(result);
 				if(result.getInReplyToStatusId() > 0)
 					new LoadConversation().execute();
 				else
 					new ShowToast("会話取得完了", context, 0);
-			}else
+			}else{
 				new ShowToast("会話取得エラー", context, 0);
+			}
 		}
 	}
 }

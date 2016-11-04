@@ -57,8 +57,7 @@ public class Fragment_mention extends Fragment{
 		foot.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-				Status s = (Status)list.getItemAtPosition(list.getAdapter().getCount() - 2);
-				final long tweetId = s.getId();
+				final long tweetId = adapter.getItem(adapter.getCount() - 1).getId();
 				new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
@@ -91,7 +90,7 @@ public class Fragment_mention extends Fragment{
 
 			@Override
 			protected void onPostExecute(Boolean result){
-				if(list.getChildCount() != 0) {
+				if(list.getChildCount() != 0){
 					int pos = list.getFirstVisiblePosition();
 					int top = list.getChildAt(0).getTop();
 					adapter.insert(status, 0);

@@ -74,8 +74,7 @@ public class Fragment_home extends Fragment implements OnScrollListener, OnTouch
 		foot.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-				Status s = (Status)list.getItemAtPosition(list.getAdapter().getCount() - 2);
-				final long tweetId = s.getId();
+				final long tweetId = adapter.getItem(adapter.getCount() - 1).getId();
 				new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
@@ -108,13 +107,13 @@ public class Fragment_home extends Fragment implements OnScrollListener, OnTouch
 
 			@Override
 			public void run(){
-				if(stopInsertByKey) {
+				if(stopInsertByKey){
 					// キューに貯める
 					mStatusQueue.offer(status);
 				}else{
 					adapter.insert(status, 0);
 
-					if(list != null && list.getChildAt(1) != null && list.getCount() > 1) {
+					if(list != null && list.getChildAt(1) != null && list.getCount() > 1){
 						if(list.getFirstVisiblePosition() == 0)
 							smoothScrollToTop = true;
 
@@ -131,7 +130,7 @@ public class Fragment_home extends Fragment implements OnScrollListener, OnTouch
 	public void releaseQueue(){
 		// キューを開放する
 		stopInsertByKey = false;
-		if(mStatusQueue.size() > 0) {
+		if(mStatusQueue.size() > 0){
 			while(mStatusQueue.peek() != null)
 				insert(mStatusQueue.poll());
 		}
@@ -139,7 +138,7 @@ public class Fragment_home extends Fragment implements OnScrollListener, OnTouch
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState){
-		if(scrollState == SCROLL_STATE_IDLE) {
+		if(scrollState == SCROLL_STATE_IDLE){
 			if(view.getFirstVisiblePosition() == 0)
 				releaseQueue();
 			else

@@ -58,7 +58,7 @@ public class StartOAuth extends Activity{
 
 	public void ninsyo(View v){
 		ninsyobtn.setEnabled(false);
-		if(customCK.getText().toString().equals("")) {
+		if(customCK.getText().toString().equals("")){
 			ck = getString(R.string.CK);
 			cs = getString(R.string.CS);
 		}else{
@@ -96,9 +96,9 @@ public class StartOAuth extends Activity{
 	@Override
 	protected void onNewIntent(Intent intent){
 		super.onNewIntent(intent);
-		if(intent == null || intent.getData() == null || !intent.getData().toString().startsWith("lightning-of-dark://twitter")) {
+		if(intent == null || intent.getData() == null || !intent.getData().toString().startsWith("lightning-of-dark://twitter"))
 			return;
-		}
+
 		final String verifier = intent.getData().getQueryParameter("oauth_verifier");
 
 		new AsyncTask<Void, Void, AccessToken>(){
@@ -113,11 +113,11 @@ public class StartOAuth extends Activity{
 
 			@Override
 			protected void onPostExecute(AccessToken accessToken){
-				if(accessToken != null) {
+				if(accessToken != null){
 					pref.edit()
-					.putString("ScreenName", accessToken.getScreenName())
-					.putString("AccessToken", accessToken.getToken())
-					.putString("AccessTokenSecret", accessToken.getTokenSecret())
+						.putString("ScreenName", accessToken.getScreenName())
+						.putString("AccessToken", accessToken.getToken())
+						.putString("AccessTokenSecret", accessToken.getTokenSecret())
 					.commit();
 
 					if(ck.equals(getString(R.string.CK)))
