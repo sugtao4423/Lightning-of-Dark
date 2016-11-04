@@ -14,7 +14,6 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
@@ -152,38 +151,15 @@ public class TweetActivity extends Activity{
 
 		final String text = tweetText.getText().toString();
 
-		new AsyncTask<Void, Void, Boolean>(){
-			@Override
-			protected Boolean doInBackground(Void... params){
-				final StatusUpdate status = new StatusUpdate(text);
-				try{
-					if(image != null)
-						status.media(image);
-					if(type == TYPE_REPLY || type == TYPE_REPLYALL)
-						appClass.getTwitter().updateStatus(status.inReplyToStatusId(TweetActivity.this.status.getId()));
-					else
-						appClass.getTwitter().updateStatus(status);
-					return true;
-				}catch(Exception e){
-					return false;
-				}
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result){
-				if(result)
-					new ShowToast("ツイートしました", TweetActivity.this, 0);
-				else
-					new ShowToast("ツイートできませんでした", TweetActivity.this, 0);
-				if(image != null)
-					image = null;
-				finish();
-			}
-		}.execute();
-		if(do_back){
-			Intent main = new Intent(this, MainActivity.class);
-			startActivity(main);
-		}
+		StatusUpdate statusUpdate = new StatusUpdate(text);
+		if(image != null)
+			statusUpdate.media(image);
+		if(type == TYPE_REPLY || type == TYPE_REPLYALL)
+			appClass.updateStatus(getApplicationContext(), statusUpdate.inReplyToStatusId(TweetActivity.this.status.getId()));
+		else
+			appClass.updateStatus(getApplicationContext(), statusUpdate);
+		
+		finish();
 	}
 
 	public void image(View v){

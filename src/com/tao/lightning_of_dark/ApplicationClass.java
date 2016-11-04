@@ -4,7 +4,10 @@ import java.util.regex.Pattern;
 
 import com.loopj.android.image.SmartImageView;
 
+import twitter4j.Status;
+import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
@@ -15,6 +18,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
@@ -56,6 +60,28 @@ public class ApplicationClass extends Application{
 		this.twitter = twitter;
 		this.twitterStream = new TwitterStreamFactory(conf).getInstance(accessToken);
 		this.mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
+	}
+
+	public void updateStatus(final Context context, final StatusUpdate status){
+		new AsyncTask<Void, Void, Status>(){
+
+			@Override
+			protected twitter4j.Status doInBackground(Void... params){
+				try{
+					return twitter.updateStatus(status);
+				}catch(TwitterException e){
+					return null;
+				}
+			}
+
+			@Override
+			protected void onPostExecute(twitter4j.Status result){
+				if(result != null)
+					new ShowToast("ツイートしました", context, 0);
+				else
+					new ShowToast("ツイートできませんでした", context, 0);
+			}
+		}.execute();
 	}
 
 	/*
