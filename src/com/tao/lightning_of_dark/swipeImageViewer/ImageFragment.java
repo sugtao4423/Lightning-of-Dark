@@ -57,18 +57,17 @@ public class ImageFragment extends Fragment{
 					HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 					connection.setDoInput(true);
 					connection.connect();
-					InputStream input = connection.getInputStream();
+					InputStream is = connection.getInputStream();
 					ByteArrayOutputStream bout = new ByteArrayOutputStream();
 					byte[] buffer = new byte[1024];
-					while(true){
-						int len = input.read(buffer);
-						if(len < 0)
-							break;
+					int len;
+					while((len = is.read(buffer)) > 0)
 						bout.write(buffer, 0, len);
-					}
 					non_orig_image = bout.toByteArray();
 					Bitmap myBitmap = BitmapFactory.decodeByteArray(non_orig_image, 0, non_orig_image.length);
-					input.close();
+					is.close();
+					bout.close();
+					connection.disconnect();
 					return myBitmap;
 				}catch(IOException e){
 					return null;

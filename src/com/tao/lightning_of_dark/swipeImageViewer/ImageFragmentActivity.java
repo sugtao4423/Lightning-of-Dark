@@ -119,17 +119,17 @@ public class ImageFragmentActivity extends FragmentActivity{
 					HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 					connection.setDoInput(true);
 					connection.connect();
-					InputStream input = connection.getInputStream();
+					InputStream is = connection.getInputStream();
 					ByteArrayOutputStream bout = new ByteArrayOutputStream();
 					byte[] buffer = new byte[1024];
-					while(true){
-						int len = input.read(buffer);
-						if(len < 0)
-							break;
+					int len;
+					while((len = is.read(buffer)) > 0)
 						bout.write(buffer, 0, len);
-					}
-					input.close();
-					return bout.toByteArray();
+					byte[] result = bout.toByteArray();
+					is.close();
+					bout.close();
+					connection.disconnect();
+					return result;
 				}catch(IOException e){
 					return null;
 				}
