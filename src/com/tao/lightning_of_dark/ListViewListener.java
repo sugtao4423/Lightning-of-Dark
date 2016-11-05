@@ -40,12 +40,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class ListViewListener implements OnItemClickListener, OnItemLongClickListener{
 
-	private boolean tweet_do_back;
-
-	public ListViewListener(boolean tweet_do_back){
-		this.tweet_do_back = tweet_do_back;
-	}
-
 	@SuppressLint("InflateParams")
 	@Override
 	public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id){
@@ -156,7 +150,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 				.setView(content).show();
 
 		dialog_list.setAdapter(list);
-		dialog_list.setOnItemClickListener(new Dialog_ListClick(item, parent, tweet_do_back, dialog));
+		dialog_list.setOnItemClickListener(new Dialog_ListClick(item, parent, dialog));
 		dialog_list.setOnItemLongClickListener(new OnItemLongClickListener(){
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
@@ -169,12 +163,12 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			}
 		});
 
-		dialog_reply.setOnClickListener(new Dialog_reply(item, parent.getContext(), tweet_do_back, dialog));
+		dialog_reply.setOnClickListener(new Dialog_reply(item, parent.getContext(), dialog));
 		dialog_retweet.setOnClickListener(new Dialog_retweet(item, parent.getContext(), dialog));
-		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(item, parent.getContext(), tweet_do_back, dialog));
-		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, parent.getContext(), tweet_do_back, dialog));
+		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(item, parent.getContext(), dialog));
+		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, parent.getContext(), dialog));
 		dialog_favorite.setOnClickListener(new Dialog_favorite(item, parent.getContext(), dialog));
-		dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext(), tweet_do_back, dialog));
+		dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext(), dialog));
 		dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, parent.getContext(), dialog));
 
 		if(!(status.getInReplyToStatusId() > 0)){

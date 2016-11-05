@@ -46,8 +46,8 @@ public class Fragment_home extends Fragment implements OnScrollListener, OnTouch
 		list = new ListView(container.getContext());
 		list.setDivider(new ColorDrawable(Color.parseColor("#bbbbbb")));
 		list.setDividerHeight(3);
-		list.setOnItemClickListener(new ListViewListener(true));
-		list.setOnItemLongClickListener(new ListViewListener(true));
+		list.setOnItemClickListener(new ListViewListener());
+		list.setOnItemLongClickListener(new ListViewListener());
 		list.setOnScrollListener(this);
 		list.setOnTouchListener(this);
 

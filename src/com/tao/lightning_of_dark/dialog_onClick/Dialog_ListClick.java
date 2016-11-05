@@ -37,13 +37,11 @@ public class Dialog_ListClick implements OnItemClickListener{
 	private Status status;
 	private AdapterView<?> baseParent;
 
-	private boolean tweet_do_back;
 	private AlertDialog dialog;
 
-	public Dialog_ListClick(Status status, AdapterView<?> baseParent, boolean tweet_do_back, AlertDialog dialog){
+	public Dialog_ListClick(Status status, AdapterView<?> baseParent, AlertDialog dialog){
 		this.status = status;
 		this.baseParent = baseParent;
-		this.tweet_do_back = tweet_do_back;
 		this.dialog = dialog;
 	}
 
@@ -102,8 +100,8 @@ public class Dialog_ListClick implements OnItemClickListener{
 								new String[]{"なし"}));
 					}else{
 						l.setAdapter(content);
-						l.setOnItemClickListener(new ListViewListener(tweet_do_back));
-						l.setOnItemLongClickListener(new ListViewListener(tweet_do_back));
+						l.setOnItemClickListener(new ListViewListener());
+						l.setOnItemLongClickListener(new ListViewListener());
 					}
 					new AlertDialog.Builder(baseParent.getContext()).setView(l).show();
 				}

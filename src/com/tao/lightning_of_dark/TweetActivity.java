@@ -41,7 +41,6 @@ public class TweetActivity extends Activity{
 	private Status status;
 	private int type;
 	private File image;
-	private boolean do_back;
 	private ApplicationClass appClass;
 
 	@Override
@@ -68,7 +67,6 @@ public class TweetActivity extends Activity{
 
 		type = intent.getIntExtra("type", 0);
 
-		do_back = intent.getBooleanExtra("do_back", true);
 		boolean setSelectionEnd = false;
 
 		ListView originStatus = (ListView)findViewById(R.id.originStatus);
@@ -82,7 +80,7 @@ public class TweetActivity extends Activity{
 			CustomAdapter adapter = new CustomAdapter(this);
 			adapter.add(status);
 			originStatus.setAdapter(adapter);
-			originStatus.setOnItemClickListener(new ListViewListener(do_back));
+			originStatus.setOnItemClickListener(new ListViewListener());
 			break;
 		default:
 			originStatus.setVisibility(View.GONE);

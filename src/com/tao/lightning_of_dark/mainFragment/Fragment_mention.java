@@ -34,8 +34,8 @@ public class Fragment_mention extends Fragment{
 		list = new ListView(container.getContext());
 		list.setDivider(new ColorDrawable(Color.parseColor("#bbbbbb")));
 		list.setDividerHeight(3);
-		list.setOnItemClickListener(new ListViewListener(true));
-		list.setOnItemLongClickListener(new ListViewListener(true));
+		list.setOnItemClickListener(new ListViewListener());
+		list.setOnItemLongClickListener(new ListViewListener());
 
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		adapter = new CustomAdapter(container.getContext());

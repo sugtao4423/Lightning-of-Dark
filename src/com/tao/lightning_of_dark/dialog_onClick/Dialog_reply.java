@@ -15,13 +15,11 @@ public class Dialog_reply implements OnClickListener{
 	private Status status;
 	private Context context;
 
-	private boolean tweet_do_back;
 	private AlertDialog dialog;
 
-	public Dialog_reply(Status status, Context context, boolean tweet_do_back, AlertDialog dialog){
+	public Dialog_reply(Status status, Context context, AlertDialog dialog){
 		this.status = status;
 		this.context = context;
-		this.tweet_do_back = tweet_do_back;
 		this.dialog = dialog;
 	}
 
@@ -59,7 +57,6 @@ public class Dialog_reply implements OnClickListener{
 		Intent reply = new Intent(context, TweetActivity.class);
 		reply.putExtra("type", TweetActivity.TYPE_REPLY);
 		reply.putExtra("status", new StatusItem(status));
-		reply.putExtra("do_back", tweet_do_back);
 		context.startActivity(reply);
 	}
 
@@ -67,7 +64,6 @@ public class Dialog_reply implements OnClickListener{
 		Intent reply = new Intent(context, TweetActivity.class);
 		reply.putExtra("type", TweetActivity.TYPE_REPLYALL);
 		reply.putExtra("status", new StatusItem(status));
-		reply.putExtra("do_back", tweet_do_back);
 		context.startActivity(reply);
 	}
 }

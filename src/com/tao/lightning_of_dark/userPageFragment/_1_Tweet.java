@@ -40,8 +40,8 @@ public class _1_Tweet extends Fragment{
 		alreadyLoad = false;
 		// 通常のListViewSet
 		ListView userTweet = (ListView)v.findViewById(R.id.UserPageList);
-		userTweet.setOnItemClickListener(new ListViewListener(false));
-		userTweet.setOnItemLongClickListener(new ListViewListener(false));
+		userTweet.setOnItemClickListener(new ListViewListener());
+		userTweet.setOnItemLongClickListener(new ListViewListener());
 		// ここまで
 		adapter = new CustomAdapter(getActivity());
 		// フッター生成

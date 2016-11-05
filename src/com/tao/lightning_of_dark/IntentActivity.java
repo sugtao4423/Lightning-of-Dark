@@ -76,7 +76,6 @@ public class IntentActivity extends Activity{
 			i = new Intent(IntentActivity.this, TweetActivity.class);
 			i.putExtra("type", TweetActivity.TYPE_EXTERNALTEXT);
 			i.putExtra("text", uri);
-			i.putExtra("do_back", false);
 			startActivity(i);
 			finish();
 		}
@@ -102,8 +101,8 @@ public class IntentActivity extends Activity{
 					adapter.add(status);
 					ListView l = new ListView(context);
 					l.setAdapter(adapter);
-					l.setOnItemClickListener(new ListViewListener(false));
-					l.setOnItemLongClickListener(new ListViewListener(false));
+					l.setOnItemClickListener(new ListViewListener());
+					l.setOnItemLongClickListener(new ListViewListener());
 					AlertDialog.Builder builder = new AlertDialog.Builder(context);
 					builder.setView(l);
 					if(isClose){
