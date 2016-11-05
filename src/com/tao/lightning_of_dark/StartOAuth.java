@@ -45,8 +45,8 @@ public class StartOAuth extends Activity{
 		String descri = "Custom CK/CSを使う場合、CallbackURLを<br><font color=blue><u>https://twitter.com/lightning-of-dark</u></font><br>に設定してください。<br>（タップでコピー）";
 		description.setText(Html.fromHtml(descri));
 
-		customCK = (EditText)findViewById(R.id.editText2);
-		customCS = (EditText)findViewById(R.id.editText3);
+		customCK = (EditText)findViewById(R.id.edit_ck);
+		customCS = (EditText)findViewById(R.id.edit_cs);
 
 		ninsyobtn = (Button)findViewById(R.id.ninsyo);
 

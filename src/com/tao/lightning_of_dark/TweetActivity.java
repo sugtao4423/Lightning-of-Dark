@@ -139,15 +139,11 @@ public class TweetActivity extends Activity{
 	}
 
 	public void tweet(View v){
-		final ImageButton tweetbtn, back, img;
-		tweetbtn = (ImageButton)findViewById(R.id.imageButton1);
-		back = (ImageButton)findViewById(R.id.imageButton3);
-		img = (ImageButton)findViewById(R.id.imageButton2);
-		tweetbtn.setEnabled(false);
-		back.setEnabled(false);
-		img.setEnabled(false);
+		((ImageButton)findViewById(R.id.tweetButton)).setEnabled(false);
+		((ImageButton)findViewById(R.id.tweetClose)).setEnabled(false);
+		((ImageButton)findViewById(R.id.imageSelect)).setEnabled(false);
 
-		final String text = tweetText.getText().toString();
+		String text = tweetText.getText().toString();
 
 		StatusUpdate statusUpdate = new StatusUpdate(text);
 		if(image != null)
@@ -156,7 +152,7 @@ public class TweetActivity extends Activity{
 			appClass.updateStatus(getApplicationContext(), statusUpdate.inReplyToStatusId(TweetActivity.this.status.getId()));
 		else
 			appClass.updateStatus(getApplicationContext(), statusUpdate);
-		
+
 		finish();
 	}
 
@@ -189,7 +185,7 @@ public class TweetActivity extends Activity{
 				Cursor c = cr.query(data.getData(), columns, null, null, null);
 				c.moveToFirst();
 				image = new File(c.getString(0));
-				ImageView iv = (ImageView)findViewById(R.id.UserProtected);
+				ImageView iv = (ImageView)findViewById(R.id.selectedImage);
 				iv.setImageURI(data.getData());
 				new ShowToast("画像を選択しました", TweetActivity.this, 0);
 			}catch(Exception e){

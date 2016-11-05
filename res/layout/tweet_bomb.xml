@@ -9,14 +9,14 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/text_static"
         android:ems="10" >
 
         <requestFocus />
     </EditText>
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/text_static"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/bomb_staticText"
@@ -30,11 +30,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/bomb_staticText"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/text_static"
         android:ems="10" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/text_loop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/bomb_loopText"
@@ -48,12 +48,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/bomb_loopText"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/text_static"
         android:ems="10"
         android:inputType="phone" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/text_loopcount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/bomb_loopCount"

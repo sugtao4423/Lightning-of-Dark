@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".startOAuth" >
+    tools:context=".StartOAuth" >
 
     <Button
         android:id="@+id/ninsyo"
@@ -15,42 +15,42 @@
         android:text="OAuth認証" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/edit_ck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/UserBio"
-        android:layout_alignBottom="@+id/UserBio"
+        android:layout_alignBaseline="@+id/text_ck"
+        android:layout_alignBottom="@+id/text_ck"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/UserBio"
+        android:layout_toRightOf="@+id/text_ck"
         android:ems="10"
         android:singleLine="true" />
 
     <TextView
-        android:id="@+id/UserBio"
+        android:id="@+id/text_ck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/description"
         android:layout_marginTop="20dp"
         android:text="CK" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/text_cs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText2"
+        android:layout_below="@+id/text_ck"
         android:layout_marginTop="20dp"
         android:text="CS" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/edit_cs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textView3"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_alignLeft="@+id/editText2"
+        android:layout_alignBaseline="@+id/text_cs"
+        android:layout_alignBottom="@+id/text_cs"
         android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/text_cs"
         android:ems="10"
         android:singleLine="true" />
 
@@ -59,14 +59,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText3"
+        android:layout_below="@+id/edit_cs"
         android:layout_marginTop="20dp"
         android:clickable="true"
         android:onClick="Description"
         android:text="Description" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

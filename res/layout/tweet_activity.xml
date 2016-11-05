@@ -10,7 +10,7 @@
         android:id="@+id/tweetText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/imageButton1"
+        android:layout_above="@+id/tweetButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/scrollViewForOriginStatus"
@@ -26,12 +26,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/imageButton3"
+        android:layout_toLeftOf="@+id/tweetClose"
         android:text="140"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
-        android:id="@+id/UserProtected"
+        android:id="@+id/selectedImage"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignBottom="@+id/tweetText"
@@ -39,7 +39,7 @@
         android:layout_marginBottom="11dp" />
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/tweetClose"
         style="@style/back_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -49,12 +49,12 @@
         android:onClick="back" />
 
     <ImageButton
-        android:id="@+id/imageButton1"
+        android:id="@+id/tweetButton"
         style="@style/tweet_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/imageButton2"
+        android:layout_toLeftOf="@+id/imageSelect"
         android:background="#00000000"
         android:onClick="tweet" />
 
@@ -78,7 +78,7 @@
         android:src="@drawable/cursor_end" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/imageSelect"
         style="@style/pic_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -98,7 +98,7 @@
         android:text="TweetAccount" />
 
     <ImageButton
-        android:id="@+id/imageButton4"
+        android:id="@+id/tweetMic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
