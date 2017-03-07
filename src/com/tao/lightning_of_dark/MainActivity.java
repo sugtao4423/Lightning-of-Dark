@@ -106,31 +106,24 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void getTimeLine(){
-		new AsyncTask<Void, Void, Boolean>(){
-
-			private ResponseList<twitter4j.Status> home;
-			private ResponseList<twitter4j.Status> mention;
+		new AsyncTask<Void, Void, ResponseList<Status>>(){
 
 			@Override
-			protected Boolean doInBackground(Void... params){
+			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
-					home = twitter.getHomeTimeline(new Paging(1, 50));
-					mention = twitter.getMentionsTimeline(new Paging(1, 50));
-					return true;
-				}catch(Exception e){
-					return false;
+					return twitter.getHomeTimeline(new Paging(1, 50));
+				}catch(TwitterException e){
+					return null;
 				}
 			}
 
 			@Override
-			protected void onPostExecute(Boolean result){
-				if(result){
-					for(twitter4j.Status status : home)
-						fragmentHome.add(status);
-					for(twitter4j.Status status : mention)
-						fragmentMention.add(status);
-				}else{
+			protected void onPostExecute(ResponseList<twitter4j.Status> result){
+				if(result == null){
 					new ShowToast("タイムライン取得エラー", MainActivity.this, 0);
+				}else{
+					for(twitter4j.Status status : result)
+						fragmentHome.add(status);
 				}
 			}
 		}.execute();
