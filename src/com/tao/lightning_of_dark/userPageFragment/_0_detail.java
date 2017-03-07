@@ -1,6 +1,8 @@
 package com.tao.lightning_of_dark.userPageFragment;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +37,7 @@ import android.widget.TextView;
 
 public class _0_detail extends Fragment{
 
-	private TextView userBio, userLocation, userLink, userTweetC, userFavoriteC, userFollowC, userFollowerC;
+	private TextView userBio, userLocation, userLink, userTweetC, userFavoriteC, userFollowC, userFollowerC, userCreate;
 	private SmartImageView sourceIcon, targetIcon;
 	private ImageView isFollowIcon;
 	private User target;
@@ -65,6 +67,7 @@ public class _0_detail extends Fragment{
 		userFavoriteC = (TextView)v.findViewById(R.id.User_favorite_count);
 		userFollowC = (TextView)v.findViewById(R.id.User_follow_count);
 		userFollowerC = (TextView)v.findViewById(R.id.User_follower_count);
+		userCreate = (TextView)v.findViewById(R.id.User_create_date);
 		sourceIcon = (SmartImageView)v.findViewById(R.id.UserPage_sourceIcon);
 		targetIcon = (SmartImageView)v.findViewById(R.id.UserPage_targetIcon);
 		isFollowIcon = (ImageView)v.findViewById(R.id.UserPage_isFollow);
@@ -126,6 +129,7 @@ public class _0_detail extends Fragment{
 		userFavoriteC.setText(numberFormat(target.getFavouritesCount()));
 		userFollowC.setText(numberFormat(target.getFriendsCount()));
 		userFollowerC.setText(numberFormat(target.getFollowersCount()));
+		userCreate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(target.getCreatedAt()));
 	}
 
 	public String numberFormat(int num){

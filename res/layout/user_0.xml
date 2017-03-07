@@ -111,6 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/img_tweet_count"
+            android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/img_tweet_count"
             android:text="null" />
 
@@ -128,6 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/img_favorite_count"
+            android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/img_favorite_count"
             android:text="null" />
 
@@ -145,6 +147,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/img_follow_count"
+            android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/img_follow_count"
             android:text="null" />
 
@@ -154,7 +157,6 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/img_follow_count"
             android:layout_below="@+id/img_follow_count"
-            android:layout_marginBottom="20dp"
             android:layout_marginTop="15dp"
             android:src="@drawable/user_follower_count" />
 
@@ -163,7 +165,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/img_follower_count"
+            android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/img_follower_count"
+            android:text="null" />
+        
+        <ImageView
+            android:id="@+id/img_create_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/img_follower_count"
+            android:layout_below="@+id/img_follower_count"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/user_create_date" />
+
+        <TextView
+            android:id="@+id/User_create_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img_create_date"
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@+id/img_create_date"
             android:text="null" />
 
         <TextView
