@@ -57,25 +57,25 @@ public class IntentActivity extends Activity{
 	}
 
 	public void jump(){
-		String uri;
-		Intent i;
 		if(Intent.ACTION_VIEW.equals(getIntent().getAction())){
-			uri = getIntent().getData().toString();
+			String uri = getIntent().getData().toString();
 			Matcher user = Pattern.compile("http(s)?://twitter.com/([0-9a-zA-Z_]+)").matcher(uri);
 			Matcher status = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(uri);
 			if(status.find()){
 				showStatus(Long.parseLong(status.group(2)), IntentActivity.this, true);
 			}else if(user.find()){
-				i = new Intent(IntentActivity.this, UserPage.class);
+				Intent i = new Intent(IntentActivity.this, UserPage.class);
 				i.putExtra("userScreenName", user.group(2));
 				startActivity(i);
 				finish();
 			}
 		}else if(Intent.ACTION_SEND.equals(getIntent().getAction())){
-			uri = getIntent().getExtras().getCharSequence(Intent.EXTRA_TEXT).toString();
-			i = new Intent(IntentActivity.this, TweetActivity.class);
+			String subject = getIntent().getExtras().getString(Intent.EXTRA_SUBJECT);
+			String text = getIntent().getExtras().getString(Intent.EXTRA_TEXT);
+			text = subject.isEmpty() ? text : (subject + " " + text);
+			Intent i = new Intent(IntentActivity.this, TweetActivity.class);
 			i.putExtra("type", TweetActivity.TYPE_EXTERNALTEXT);
-			i.putExtra("text", uri);
+			i.putExtra("text", text);
 			startActivity(i);
 			finish();
 		}
