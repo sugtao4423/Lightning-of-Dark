@@ -2,7 +2,6 @@ package com.tao.lightning_of_dark;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Locale;
 
 import com.loopj.android.image.SmartImageView;
@@ -16,9 +15,9 @@ import com.tao.lightning_of_dark.dialog_onClick.Dialog_retweet;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_talk;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_unOfficialRT;
 import com.tao.lightning_of_dark.dialog_onClick.StatusItem;
+import com.tao.lightning_of_dark.utils.Utils;
 
 import twitter4j.ExtendedMediaEntity;
-import twitter4j.ExtendedMediaEntity.Variant;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
@@ -31,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -72,39 +72,12 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		ExtendedMediaEntity[] exMentitys = item.getExtendedMediaEntities();
 		if(exMentitys != null && exMentitys.length > 0){
 			for(ExtendedMediaEntity ex : exMentitys){
-				if(ex.getType().equals("video") || ex.getType().equals("animated_gif")){
-					ArrayList<VideoURLs> urls = new ArrayList<VideoURLs>();
-					for(Variant v : ex.getVideoVariants()){
-						boolean find = false;
-						if(appClass.getIsWebm() && v.getContentType().equals("video/webm"))
-							find = true;
-						else if(!appClass.getIsWebm() && v.getContentType().equals("video/mp4"))
-							find = true;
-
-						if(find){
-							VideoURLs video = new VideoURLs(v.getBitrate(), v.getUrl());
-							urls.add(video);
-						}
-					}
-					if(urls.size() == 0){
-						for(Variant v : ex.getVideoVariants()){
-							boolean find = false;
-							if(v.getContentType().equals("video/mp4"))
-								find = true;
-							else if(v.getContentType().equals("video/webm"))
-								find = true;
-
-							if(find){
-								VideoURLs video = new VideoURLs(v.getBitrate(), v.getUrl());
-								urls.add(video);
-							}
-						}
-					}
-					Collections.sort(urls);
-					if(urls.size() == 0)
+				if(Utils.isVideoOrGif(ex)){
+					String[] videoUrls = Utils.getVideoURLsSortByBitrate(appClass, exMentitys);
+					if(videoUrls.length == 0)
 						list.add("ビデオの取得に失敗");
 					else
-						list.add(urls.get(urls.size() - 1).url);
+						list.add(videoUrls[videoUrls.length - 1]);
 				}else{
 					list.add(ex.getMediaURL());
 				}
@@ -120,6 +93,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		TextView tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
 		TextView tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
 		ImageView protect = (ImageView)dialog_title.findViewById(R.id.UserProtected);
+		((HorizontalScrollView)dialog_title.findViewById(R.id.tweet_images_scroll)).setVisibility(View.GONE);
 
 		if(!status.getUser().isProtected())
 			protect.setVisibility(View.GONE);
@@ -189,21 +163,5 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		i.putExtra("status", new StatusItem(item));
 		parent.getContext().startActivity(i);
 		return true;
-	}
-}
-
-class VideoURLs implements Comparable<VideoURLs>{
-
-	int bitrate;
-	String url;
-
-	public VideoURLs(int bitrate, String url){
-		this.bitrate = bitrate;
-		this.url = url;
-	}
-
-	@Override
-	public int compareTo(VideoURLs another){
-		return this.bitrate - another.bitrate;
 	}
 }
