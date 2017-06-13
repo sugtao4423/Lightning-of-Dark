@@ -19,12 +19,10 @@ import android.widget.TextView;
 public class CustomAdapter_User extends ArrayAdapter<User>{
 
 	private LayoutInflater mInflater;
-	private ApplicationClass appClass;
 
 	public CustomAdapter_User(Context context){
 		super(context, android.R.layout.simple_list_item_1);
 		mInflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-		appClass = (ApplicationClass)context.getApplicationContext();
 	}
 
 	class ViewHolder{
@@ -75,11 +73,7 @@ public class CustomAdapter_User extends ArrayAdapter<User>{
 		else
 			convertView.setBackgroundResource(R.drawable.position1);
 
-		if(appClass.getGetBigIcon())
-			holder.icon.setImageUrl(item.getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
-		else
-			holder.icon.setImageUrl(item.getProfileImageURL(), null, R.drawable.ic_action_refresh);
-
+		holder.icon.setImageUrl(item.getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
 		holder.name.setText(item.getName() + " - @" + item.getScreenName());
 		holder.text.setText(item.getDescription());
 		holder.tweet_date.setText("Tweet: " + numberFormat(item.getStatusesCount()) + "  Fav: "

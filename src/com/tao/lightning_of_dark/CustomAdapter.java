@@ -118,11 +118,7 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 
 		holder.name.setText(origStatus.getUser().getName() + " - @" + origStatus.getUser().getScreenName());
 		holder.text.setText(origStatus.getText());
-
-		if(appClass.getGetBigIcon())
-			holder.icon.setImageUrl(origStatus.getUser().getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
-		else
-			holder.icon.setImageUrl(origStatus.getUser().getProfileImageURL(), null, R.drawable.ic_action_refresh);
+		holder.icon.setImageUrl(origStatus.getUser().getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
 
 		holder.icon.setOnClickListener(new OnClickListener(){
 			@Override

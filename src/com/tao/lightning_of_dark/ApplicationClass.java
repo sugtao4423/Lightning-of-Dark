@@ -31,7 +31,7 @@ public class ApplicationClass extends Application{
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 	private CustomAdapter[] listAdapters;
-	private boolean option_regex, option_openBrowser, getBigIcon, isWebm;
+	private boolean option_regex, option_openBrowser, isWebm;
 	private boolean[] list_AlreadyLoad;
 	// MainActivity - CustomToast
 	private View customToast;
@@ -136,15 +136,6 @@ public class ApplicationClass extends Application{
 		return option_openBrowser;
 	}
 
-	// getBigIcon
-	public void setGetBigIcon(boolean getBigIcon){
-		this.getBigIcon = getBigIcon;
-	}
-
-	public boolean getGetBigIcon(){
-		return getBigIcon;
-	}
-
 	// isWebm
 	public void setIsWebm(boolean isWebm){
 		this.isWebm = isWebm;
@@ -158,7 +149,6 @@ public class ApplicationClass extends Application{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		setOption_regex(pref.getBoolean("menu_regex", false));
 		setOption_openBrowser(pref.getBoolean("menu_openBrowser", false));
-		setGetBigIcon(pref.getBoolean("getBigIcon", false));
 		setIsWebm(pref.getBoolean("isWebm", false));
 	}
 

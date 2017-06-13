@@ -168,13 +168,8 @@ public class _0_detail extends Fragment{
 			@Override
 			protected String[] doInBackground(Void... params){
 				try{
-					if(appClass.getGetBigIcon()) {
-						return new String[]{appClass.getTwitter().verifyCredentials().getBiggerProfileImageURL(),
-								target.getBiggerProfileImageURL()};
-					}else{
-						return new String[]{appClass.getTwitter().verifyCredentials().getProfileImageURL(),
-								target.getProfileImageURL()};
-					}
+					return new String[]{appClass.getTwitter().verifyCredentials().getBiggerProfileImageURL(),
+							target.getBiggerProfileImageURL()};
 				}catch(TwitterException e){
 					return null;
 				}

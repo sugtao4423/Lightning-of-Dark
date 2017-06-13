@@ -13,16 +13,10 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="その他" >
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="getBigIcon"
-            android:summary="通信量が増えます"
-            android:title="高解像度のアイコンを取得" />
-        <CheckBoxPreference
             android:key="isWebm"
             android:summaryOff="mp4"
             android:summaryOn="webm"
             android:title="動画をwebmで取得する" />
-
         <Preference
             android:key="ListSetting"
             android:title="リスト設定" />
