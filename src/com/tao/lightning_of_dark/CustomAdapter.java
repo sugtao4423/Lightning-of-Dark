@@ -129,7 +129,7 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			}
 		});
 
-		ExtendedMediaEntity[] exMentitys = item.getExtendedMediaEntities();
+		ExtendedMediaEntity[] exMentitys = origStatus.getExtendedMediaEntities();
 		if(exMentitys != null && exMentitys.length > 0){
 			holder.tweetImagesScroll.setVisibility(View.VISIBLE);
 			holder.tweetImagesLayout.removeAllViews();
