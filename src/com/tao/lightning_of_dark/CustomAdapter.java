@@ -27,6 +27,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class CustomAdapter extends ArrayAdapter<Status>{
@@ -50,7 +51,7 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 
 	@SuppressLint("InflateParams")
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent){
+	public View getView(final int position, View convertView, final ViewGroup parent){
 		final Context context = parent.getContext();
 		final ViewHolder holder;
 		Status item = getItem(position);
@@ -177,10 +178,26 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 						}
 					});
 				}
+				final View cView = convertView;
 				holder.tweetImagesScroll.setOnTouchListener(new OnTouchListener(){
+					boolean actionMove = false;
 					@SuppressLint("ClickableViewAccessibility")
 					@Override
 					public boolean onTouch(View v, MotionEvent event){
+						switch(event.getAction()){
+						case MotionEvent.ACTION_MOVE:
+							actionMove = true;
+							break;
+						case MotionEvent.ACTION_UP:
+							if(actionMove)
+								break;
+							ListView l = (ListView)parent;
+							l.performItemClick(cView, position, cView.getId());
+							break;
+						default:
+							actionMove = false;
+							break;
+						}
 						HorizontalScrollView sv = (HorizontalScrollView)v;
 						if(sv.getChildAt(0).getWidth() > sv.getWidth())
 							return v.onTouchEvent(event);
