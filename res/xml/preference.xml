@@ -22,7 +22,7 @@
             android:title="リスト設定" />
         <Preference
             android:key="clearCache"
-            android:title="アイコンキャッシュクリア" />
+            android:title="キャッシュクリア" />
     </PreferenceCategory>
 
 </PreferenceScreen>
