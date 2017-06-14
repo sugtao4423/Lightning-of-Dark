@@ -17,8 +17,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
@@ -175,6 +177,16 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 						}
 					});
 				}
+				holder.tweetImagesScroll.setOnTouchListener(new OnTouchListener(){
+					@SuppressLint("ClickableViewAccessibility")
+					@Override
+					public boolean onTouch(View v, MotionEvent event){
+						HorizontalScrollView sv = (HorizontalScrollView)v;
+						if(sv.getChildAt(0).getWidth() > sv.getWidth())
+							return v.onTouchEvent(event);
+						return true;
+					}
+				});
 			}
 		}else{
 			holder.tweetImagesScroll.setVisibility(View.GONE);
