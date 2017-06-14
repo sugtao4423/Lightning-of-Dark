@@ -160,7 +160,7 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 						}
 					});
 				}else{
-					child.setImageUrl(exMentitys[i].getMediaURL(), null, R.drawable.ic_action_refresh);
+					child.setImageUrl(exMentitys[i].getMediaURL() + ":small", null, R.drawable.ic_action_refresh);
 					final int pos = i;
 					final String[] urls = new String[exMentitys.length];
 					for(int j = 0; j < urls.length; j++)
