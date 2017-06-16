@@ -54,7 +54,7 @@ public class ApplicationClass extends Application{
 		}
 		AccessToken accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
 
-		Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).build();
+		Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).setTweetModeExtended(true).build();
 		Twitter twitter = new TwitterFactory(conf).getInstance(accessToken);
 		this.myScreenName = pref.getString("ScreenName", "");
 		this.twitter = twitter;

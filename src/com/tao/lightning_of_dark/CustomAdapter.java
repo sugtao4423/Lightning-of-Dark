@@ -3,7 +3,7 @@ package com.tao.lightning_of_dark;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import twitter4j.ExtendedMediaEntity;
+import twitter4j.MediaEntity;
 import twitter4j.Status;
 
 import com.loopj.android.image.SmartImageView;
@@ -132,11 +132,11 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 			}
 		});
 
-		ExtendedMediaEntity[] exMentitys = origStatus.getExtendedMediaEntities();
-		if(exMentitys != null && exMentitys.length > 0){
+		MediaEntity[] mentitys = origStatus.getMediaEntities();
+		if(mentitys != null && mentitys.length > 0){
 			holder.tweetImagesScroll.setVisibility(View.VISIBLE);
 			holder.tweetImagesLayout.removeAllViews();
-			for(int i = 0; i < exMentitys.length; i++){
+			for(int i = 0; i < mentitys.length; i++){
 				LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				if(holder.tweetImagesLayout.getChildCount() != 0)
 					params.setMargins(8, 0, 0, 0);
@@ -146,9 +146,9 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 				child.setAdjustViewBounds(true);
 				holder.tweetImagesLayout.addView(child);
 
-				if(Utils.isVideoOrGif(exMentitys[i])){
-					final boolean isGif = Utils.isGif(exMentitys[i]);
-					final String[] videoUrl = Utils.getVideoURLsSortByBitrate(appClass, exMentitys);
+				if(Utils.isVideoOrGif(mentitys[i])){
+					final boolean isGif = Utils.isGif(mentitys[i]);
+					final String[] videoUrl = Utils.getVideoURLsSortByBitrate(appClass, mentitys);
 					child.setImageResource(R.drawable.video_play);
 					child.setOnClickListener(new OnClickListener(){
 						@Override
@@ -163,11 +163,11 @@ public class CustomAdapter extends ArrayAdapter<Status>{
 						}
 					});
 				}else{
-					child.setImageUrl(exMentitys[i].getMediaURL() + ":small", null, R.drawable.ic_action_refresh);
+					child.setImageUrl(mentitys[i].getMediaURL() + ":small", null, R.drawable.ic_action_refresh);
 					final int pos = i;
-					final String[] urls = new String[exMentitys.length];
+					final String[] urls = new String[mentitys.length];
 					for(int j = 0; j < urls.length; j++)
-						urls[j] = exMentitys[j].getMediaURL();
+						urls[j] = mentitys[j].getMediaURL();
 					child.setOnClickListener(new OnClickListener(){
 						@Override
 						public void onClick(View v){

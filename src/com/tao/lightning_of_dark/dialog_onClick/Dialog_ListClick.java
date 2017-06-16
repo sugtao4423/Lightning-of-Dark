@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import twitter4j.ExtendedMediaEntity;
+import twitter4j.MediaEntity;
 import twitter4j.Status;
 
 import com.tao.lightning_of_dark.CustomAdapter;
@@ -116,11 +116,11 @@ public class Dialog_ListClick implements OnItemClickListener{
 			Intent web;
 			if(image.find()) {
 				ArrayList<String> urls = new ArrayList<String>();
-				ExtendedMediaEntity[] exMentitys = status.getExtendedMediaEntities();
-				if(exMentitys != null && exMentitys.length > 0) {
-					for(ExtendedMediaEntity ex : exMentitys){
-						if(!ex.getType().equals("video") || !ex.getType().equals("animated_gif"))
-							urls.add(ex.getMediaURL());
+				MediaEntity[] mentitys = status.getMediaEntities();
+				if(mentitys != null && mentitys.length > 0) {
+					for(MediaEntity media : mentitys){
+						if(!media.getType().equals("video") || !media.getType().equals("animated_gif"))
+							urls.add(media.getMediaURL());
 					}
 				}
 				int pos = urls.indexOf(clickedText);

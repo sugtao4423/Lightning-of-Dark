@@ -17,7 +17,7 @@ import com.tao.lightning_of_dark.dialog_onClick.Dialog_unOfficialRT;
 import com.tao.lightning_of_dark.dialog_onClick.StatusItem;
 import com.tao.lightning_of_dark.utils.Utils;
 
-import twitter4j.ExtendedMediaEntity;
+import twitter4j.MediaEntity;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
@@ -69,17 +69,17 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			for(URLEntity u : uentitys)
 				list.add(u.getExpandedURL());
 		}
-		ExtendedMediaEntity[] exMentitys = item.getExtendedMediaEntities();
-		if(exMentitys != null && exMentitys.length > 0){
-			for(ExtendedMediaEntity ex : exMentitys){
-				if(Utils.isVideoOrGif(ex)){
-					String[] videoUrls = Utils.getVideoURLsSortByBitrate(appClass, exMentitys);
+		MediaEntity[] mentitys = item.getMediaEntities();
+		if(mentitys != null && mentitys.length > 0){
+			for(MediaEntity media : mentitys){
+				if(Utils.isVideoOrGif(media)){
+					String[] videoUrls = Utils.getVideoURLsSortByBitrate(appClass, mentitys);
 					if(videoUrls.length == 0)
 						list.add("ビデオの取得に失敗");
 					else
 						list.add(videoUrls[videoUrls.length - 1]);
 				}else{
-					list.add(ex.getMediaURL());
+					list.add(media.getMediaURL());
 				}
 			}
 		}

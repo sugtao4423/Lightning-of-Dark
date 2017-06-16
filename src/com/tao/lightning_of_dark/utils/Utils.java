@@ -5,18 +5,18 @@ import java.util.Collections;
 
 import com.tao.lightning_of_dark.ApplicationClass;
 
-import twitter4j.ExtendedMediaEntity;
-import twitter4j.ExtendedMediaEntity.Variant;
+import twitter4j.MediaEntity;
+import twitter4j.MediaEntity.Variant;
 
 public class Utils{
 
-	public static String[] getVideoURLsSortByBitrate(ApplicationClass appClass, ExtendedMediaEntity[] exMentitys){
+	public static String[] getVideoURLsSortByBitrate(ApplicationClass appClass, MediaEntity[] mentitys){
 		String[] urls = new String[0];
-		if(exMentitys != null && exMentitys.length > 0){
-			for(ExtendedMediaEntity ex : exMentitys){
-				if(isVideoOrGif(ex)){
+		if(mentitys != null && mentitys.length > 0){
+			for(MediaEntity media : mentitys){
+				if(isVideoOrGif(media)){
 					ArrayList<VideoURLs> videos = new ArrayList<VideoURLs>();
-					for(Variant v : ex.getVideoVariants()){
+					for(Variant v : media.getVideoVariants()){
 						boolean find = false;
 						if(appClass.getIsWebm() && v.getContentType().equals("video/webm"))
 							find = true;
@@ -27,7 +27,7 @@ public class Utils{
 							videos.add(new VideoURLs(v.getBitrate(), v.getUrl()));
 					}
 					if(videos.size() == 0){
-						for(Variant v : ex.getVideoVariants()){
+						for(Variant v : media.getVideoVariants()){
 							boolean find = false;
 							if(v.getContentType().equals("video/mp4"))
 								find = true;
@@ -64,15 +64,15 @@ public class Utils{
 		}
 	}
 
-	public static boolean isVideoOrGif(ExtendedMediaEntity ex){
+	public static boolean isVideoOrGif(MediaEntity ex){
 		return (isVideo(ex) || isGif(ex));
 	}
 
-	public static boolean isVideo(ExtendedMediaEntity ex){
+	public static boolean isVideo(MediaEntity ex){
 		return ex.getType().equals("video");
 	}
 
-	public static boolean isGif(ExtendedMediaEntity ex){
+	public static boolean isGif(MediaEntity ex){
 		return ex.getType().equals("animated_gif");
 	}
 }
