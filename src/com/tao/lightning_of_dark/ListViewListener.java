@@ -23,13 +23,11 @@ import twitter4j.MediaEntity;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,9 +37,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListViewListener implements OnItemClickListener, OnItemLongClickListener{//OnItemClickListener, OnItemLongClickListener{
+public class ListViewListener implements OnItemClickListener, OnItemLongClickListener{
 
-	@SuppressLint("InflateParams")
 	@Override
 	public void onItemClicked(final Context context, ArrayList<Status> data, int position){
 		Status item = data.get(position);
@@ -88,7 +85,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		Status status = item.isRetweet() ? item.getRetweetedStatus() : item;
 
 		// ダイアログタイトルinflate
-		View dialog_title = LayoutInflater.from(context).inflate(R.layout.list_item_tweet, null);
+		View dialog_title = View.inflate(context, R.layout.list_item_tweet, null);
 		SmartImageView icon = (SmartImageView)dialog_title.findViewById(R.id.icon);
 		TextView name_screenName = (TextView)dialog_title.findViewById(R.id.name_screenName);
 		TextView tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
@@ -108,7 +105,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		// ここまで
 
 		// ダイアログ本文inflate
-		View content = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
+		View content = View.inflate(context, R.layout.custom_dialog, null);
 		ListView dialog_list = (ListView)content.findViewById(R.id.dialog_List);
 		ImageButton dialog_reply = (ImageButton)content.findViewById(R.id.dialog_reply);
 		ImageButton dialog_retweet = (ImageButton)content.findViewById(R.id.dialog_retweet);
