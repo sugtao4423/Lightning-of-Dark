@@ -230,8 +230,9 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 	}
 
 	public void clear(){
+		int size = data.size();
 		data.clear();
-		notifyDataSetChanged();
+		notifyItemRangeRemoved(0, size);
 	}
 
 	public boolean isEmpty(){
