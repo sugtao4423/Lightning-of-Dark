@@ -5,7 +5,6 @@ import twitter4j.TwitterException;
 
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.ListViewListener;
-import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
 import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
 import com.tao.lightning_of_dark.tweetlistview.TweetListView;
@@ -34,10 +33,10 @@ public class Dialog_talk implements OnClickListener{
 	@Override
 	public void onClick(View v){
 		dialog.dismiss();
-		TweetListView result = (TweetListView)View.inflate(context, R.layout.fragment_list, null).findViewById(R.id.listLine);
+		TweetListView result = new TweetListView(context);
+		resultAdapter = new TweetListAdapter(context);
 		resultAdapter.setOnItemClickListener(new ListViewListener());
 		resultAdapter.setOnItemLongClickListener(new ListViewListener());
-		resultAdapter = new TweetListAdapter(context);
 		result.setAdapter(resultAdapter);
 		new AlertDialog.Builder(context).setView(result).show();
 

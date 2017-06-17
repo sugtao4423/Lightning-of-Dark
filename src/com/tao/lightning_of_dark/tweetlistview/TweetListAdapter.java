@@ -213,7 +213,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 
 	public void add(Status status){
 		data.add(status);
-		notifyItemInserted(0);
+		notifyItemInserted(data.size() - 1);
 	}
 
 	public void addAll(ResponseList<Status> status){
