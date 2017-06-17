@@ -8,6 +8,7 @@ import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.mainFragment.Fragment_home;
 import com.tao.lightning_of_dark.mainFragment.Fragment_mention;
 import com.tao.lightning_of_dark.mainFragment.MyFragmentStatePagerAdapter;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
 
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.Paging;
@@ -43,7 +44,7 @@ public class MainActivity extends FragmentActivity{
 	private SharedPreferences pref;
 	private boolean resetFlag;
 
-	private CustomAdapter[] listAdapters;
+	private TweetListAdapter[] listAdapters;
 
 	private Fragment_mention fragmentMention;
 	private Fragment_home fragmentHome;
@@ -62,9 +63,9 @@ public class MainActivity extends FragmentActivity{
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(1);
 		viewPager.setOffscreenPageLimit(pref.getInt("SelectListCount", 0) + 1);
-		listAdapters = new CustomAdapter[pref.getInt("SelectListCount", 0)];
+		listAdapters = new TweetListAdapter[pref.getInt("SelectListCount", 0)];
 		for(int i = 0; i < pref.getInt("SelectListCount", 0); i++)
-			listAdapters[i] = new CustomAdapter(this);
+			listAdapters[i] = new TweetListAdapter(this);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.mainPagerTabStrip);
 		strip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
@@ -122,8 +123,7 @@ public class MainActivity extends FragmentActivity{
 				if(result == null){
 					new ShowToast("タイムライン取得エラー", MainActivity.this, 0);
 				}else{
-					for(twitter4j.Status status : result)
-						fragmentHome.add(status);
+					fragmentHome.addAll(result);
 				}
 			}
 		}.execute();
@@ -160,8 +160,7 @@ public class MainActivity extends FragmentActivity{
 			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null){
-					for(twitter4j.Status status : result)
-						listAdapters[index].add(status);
+					listAdapters[index].addAll(result);
 					boolean[] tmp = appClass.getList_AlreadyLoad();
 					tmp[index] = true;
 					appClass.setList_AlreadyLoad(tmp);

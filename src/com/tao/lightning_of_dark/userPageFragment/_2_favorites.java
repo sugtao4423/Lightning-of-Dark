@@ -5,12 +5,12 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 
 import com.tao.lightning_of_dark.ApplicationClass;
-import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
+import com.tao.lightning_of_dark.tweetlistview.TweetListView;
 
-import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,34 +19,25 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class _2_favorites extends Fragment{
 
-	private ListView foot;
 	private SwipeRefreshLayout pulltoRefresh;
-	private CustomAdapter adapter;
+	private TweetListAdapter adapter;
 	private boolean alreadyLoad;
 	private long tweetId;
 	private ApplicationClass appClass;
 
-	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View v = inflater.inflate(R.layout.user_1, null);
+		View v = View.inflate(container.getContext(), R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		alreadyLoad = false;
 
-		ListView userFavorite = (ListView)v.findViewById(R.id.UserPageList);
-		userFavorite.setOnItemClickListener(new ListViewListener());
-		userFavorite.setOnItemLongClickListener(new ListViewListener());
-
-		adapter = new CustomAdapter(getActivity());
-		// フッター生成
-		addFooter(userFavorite);
+		TweetListView userFavorite = (TweetListView)v.findViewById(R.id.UserPageList);
+		adapter = new TweetListAdapter(container.getContext());
+		adapter.setOnItemClickListener(new ListViewListener());
+		adapter.setOnItemLongClickListener(new ListViewListener());
 		userFavorite.setAdapter(adapter);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
@@ -63,23 +54,9 @@ public class _2_favorites extends Fragment{
 		return v;
 	}
 
-	// フッター生成
-	public void addFooter(ListView list){
-		foot = new ListView(getActivity());
-		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener(){
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-				foot.setEnabled(false);
-				loadMentionLine();
-			}
-		});
-		list.addFooterView(foot);
-	}
-
 	public void loadMentionLine(){
 		if(alreadyLoad)
-			tweetId = adapter.getItem(adapter.getCount() - 1).getId();
+			tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
 		((UserPage)_2_favorites.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
@@ -104,7 +81,6 @@ public class _2_favorites extends Fragment{
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);
-				foot.setEnabled(true);
 			}
 		}.execute();
 	}

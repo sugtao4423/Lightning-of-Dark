@@ -5,6 +5,8 @@ import java.util.regex.Pattern;
 
 import com.loopj.android.image.SmartImageView;
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
+import com.tao.lightning_of_dark.tweetlistview.TweetListView;
 import com.tao.lightning_of_dark.userPageFragment.UserPage;
 
 import twitter4j.Status;
@@ -20,14 +22,11 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class IntentActivity extends Activity{
 
-	@SuppressLint("InflateParams")
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
@@ -38,7 +37,7 @@ public class IntentActivity extends Activity{
 			appClass = (ApplicationClass)this.getApplicationContext();
 			appClass.loadOption(this);
 
-			View customToast = LayoutInflater.from(this).inflate(R.layout.custom_toast, null);
+			View customToast = View.inflate(this, R.layout.custom_toast, null);
 			appClass.setToastView(customToast);
 			appClass.setToast_Main_Message((TextView)customToast.findViewById(R.id.toast_main_message));
 			appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
@@ -97,12 +96,12 @@ public class IntentActivity extends Activity{
 			@Override
 			protected void onPostExecute(twitter4j.Status status){
 				if(status != null){
-					CustomAdapter adapter = new CustomAdapter(context);
+					TweetListView l = new TweetListView(context);
+					TweetListAdapter adapter = new TweetListAdapter(context);
 					adapter.add(status);
-					ListView l = new ListView(context);
 					l.setAdapter(adapter);
-					l.setOnItemClickListener(new ListViewListener());
-					l.setOnItemLongClickListener(new ListViewListener());
+					adapter.setOnItemClickListener(new ListViewListener());
+					adapter.setOnItemLongClickListener(new ListViewListener());
 					AlertDialog.Builder builder = new AlertDialog.Builder(context);
 					builder.setView(l);
 					if(isClose){

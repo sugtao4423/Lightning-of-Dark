@@ -5,13 +5,14 @@ import twitter4j.ResponseList;
 import twitter4j.TwitterException;
 
 import com.tao.lightning_of_dark.ApplicationClass;
-import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.Settings;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.tweetlistview.EndlessScrollListener;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
+import com.tao.lightning_of_dark.tweetlistview.TweetListView;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -27,36 +28,34 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class Fragment_List extends Fragment{
 
-	private ListView listLine, foot;
+	private TweetListView list;
+	private TweetListAdapter adapter;
 	private SwipeRefreshLayout pulltoRefresh;
-	private CustomAdapter adapter;
 	private int listIndex;
 
 	public Fragment_List(int index){
 		listIndex = index;
 	}
 
-	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
-		View v = inflater.inflate(R.layout.fragment_list, null);
+		View v = View.inflate(container.getContext(), R.layout.fragment_list, null);
 		final ApplicationClass appClass = (ApplicationClass)container.getContext().getApplicationContext();
-		listLine = (ListView)v.findViewById(R.id.ListLine);
-		listLine.setOnItemClickListener(new ListViewListener());
-		listLine.setOnItemLongClickListener(new ListViewListener());
-
+		list = (TweetListView)v.findViewById(R.id.listLine);
 		adapter = appClass.getListAdapters()[listIndex];
-
-		addFooter();
-
-		listLine.setAdapter(adapter);
+		list.setAdapter(adapter);
+		list.addOnScrollListener(new EndlessScrollListener(list.getLinearLayoutManager()){
+			@Override
+			public void onLoadMore(int current_page){
+				if(adapter.getItemCount() > 30)
+					getList(container.getContext());
+			}
+		});
+		adapter.setOnItemClickListener(new ListViewListener());
+		adapter.setOnItemLongClickListener(new ListViewListener());
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.ListPull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -71,42 +70,28 @@ public class Fragment_List extends Fragment{
 				getList(container.getContext());
 			}
 		});
-
 		return v;
-	}
-
-	public void addFooter(){
-		foot = new ListView(getActivity());
-		foot.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"ReadMore"}));
-		foot.setOnItemClickListener(new OnItemClickListener(){
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-				foot.setEnabled(false);
-				getList(parent.getContext());
-			}
-		});
-		listLine.addFooterView(foot);
 	}
 
 	public void getList(Context context){
 		final ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		if(pref.getBoolean("showList", false)){
-			String[] ListId_str = pref.getString("SelectListIds", null).split(",", 0);
-			final long[] ListId = new long[ListId_str.length];
-			for(int i = 0; i < ListId_str.length; i++)
-				ListId[i] = Long.parseLong(ListId_str[i]);
-			if(ListId[listIndex] != -1){
+			String[] listId_str = pref.getString("SelectListIds", null).split(",", 0);
+			final long[] listId = new long[listId_str.length];
+			for(int i = 0; i < listId_str.length; i++)
+				listId[i] = Long.parseLong(listId_str[i]);
+			if(listId[listIndex] != -1){
 				new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 						try{
 							if(appClass.getList_AlreadyLoad()[listIndex]){
-								long tweetId = adapter.getItem(adapter.getCount() - 1).getId();
-								return appClass.getTwitter().getUserListStatuses(ListId[listIndex],
+								long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
+								return appClass.getTwitter().getUserListStatuses(listId[listIndex],
 										new Paging(1, 50).maxId(tweetId - 1));
 							}else{
-								return appClass.getTwitter().getUserListStatuses(ListId[listIndex], new Paging(1, 50));
+								return appClass.getTwitter().getUserListStatuses(listId[listIndex], new Paging(1, 50));
 							}
 						}catch(TwitterException e){
 							return null;
@@ -127,7 +112,6 @@ public class Fragment_List extends Fragment{
 						}
 						pulltoRefresh.setRefreshing(false);
 						pulltoRefresh.setEnabled(true);
-						foot.setEnabled(true);
 					}
 				}.execute();
 			}else{

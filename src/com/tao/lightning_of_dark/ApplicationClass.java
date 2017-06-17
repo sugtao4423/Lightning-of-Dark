@@ -3,6 +3,7 @@ package com.tao.lightning_of_dark;
 import java.util.regex.Pattern;
 
 import com.loopj.android.image.SmartImageView;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
 
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
@@ -30,7 +31,7 @@ public class ApplicationClass extends Application{
 	private Twitter twitter;
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
-	private CustomAdapter[] listAdapters;
+	private TweetListAdapter[] listAdapters;
 	private boolean option_regex, option_openBrowser, isWebm;
 	private boolean[] list_AlreadyLoad;
 	// MainActivity - CustomToast
@@ -110,11 +111,11 @@ public class ApplicationClass extends Application{
 	}
 
 	// listAdapter
-	public void setListAdapters(CustomAdapter[] listAdapters){
+	public void setListAdapters(TweetListAdapter[] listAdapters){
 		this.listAdapters = listAdapters;
 	}
 
-	public CustomAdapter[] getListAdapters(){
+	public TweetListAdapter[] getListAdapters(){
 		return listAdapters;
 	}
 

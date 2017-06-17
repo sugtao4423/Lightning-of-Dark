@@ -4,16 +4,17 @@ import twitter4j.Status;
 import twitter4j.TwitterException;
 
 import com.tao.lightning_of_dark.ApplicationClass;
-import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.ListViewListener;
+import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
+import com.tao.lightning_of_dark.tweetlistview.TweetListView;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ListView;
 
 public class Dialog_talk implements OnClickListener{
 
@@ -21,7 +22,7 @@ public class Dialog_talk implements OnClickListener{
 	private Context context;
 	private twitter4j.Status reply;
 
-	private CustomAdapter resultAdapter;
+	private TweetListAdapter resultAdapter;
 	private AlertDialog dialog;
 
 	public Dialog_talk(Status status, Context context, AlertDialog dialog){
@@ -33,10 +34,10 @@ public class Dialog_talk implements OnClickListener{
 	@Override
 	public void onClick(View v){
 		dialog.dismiss();
-		ListView result = new ListView(context);
-		result.setOnItemClickListener(new ListViewListener());
-		result.setOnItemLongClickListener(new ListViewListener());
-		resultAdapter = new CustomAdapter(context);
+		TweetListView result = (TweetListView)View.inflate(context, R.layout.fragment_list, null).findViewById(R.id.listLine);
+		resultAdapter.setOnItemClickListener(new ListViewListener());
+		resultAdapter.setOnItemLongClickListener(new ListViewListener());
+		resultAdapter = new TweetListAdapter(context);
 		result.setAdapter(resultAdapter);
 		new AlertDialog.Builder(context).setView(result).show();
 

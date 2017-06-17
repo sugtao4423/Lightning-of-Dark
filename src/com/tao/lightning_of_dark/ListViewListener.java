@@ -15,6 +15,8 @@ import com.tao.lightning_of_dark.dialog_onClick.Dialog_retweet;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_talk;
 import com.tao.lightning_of_dark.dialog_onClick.Dialog_unOfficialRT;
 import com.tao.lightning_of_dark.dialog_onClick.StatusItem;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter.OnItemClickListener;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter.OnItemLongClickListener;
 import com.tao.lightning_of_dark.utils.Utils;
 
 import twitter4j.MediaEntity;
@@ -23,6 +25,7 @@ import twitter4j.URLEntity;
 import twitter4j.UserMentionEntity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -35,18 +38,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 
-public class ListViewListener implements OnItemClickListener, OnItemLongClickListener{
+public class ListViewListener implements OnItemClickListener, OnItemLongClickListener{//OnItemClickListener, OnItemLongClickListener{
 
 	@SuppressLint("InflateParams")
 	@Override
-	public void onItemClick(final AdapterView<?> parent, final View view, final int position, long id){
-		final Status item = (Status)parent.getItemAtPosition(position);
-		ApplicationClass appClass = (ApplicationClass)parent.getContext().getApplicationContext();
+	public void onItemClicked(final Context context, ArrayList<Status> data, int position){
+		Status item = data.get(position);
+		ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
 
-		ArrayAdapter<String> list = new ArrayAdapter<String>(parent.getContext(), android.R.layout.simple_list_item_1);
+		ArrayAdapter<String> list = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
 		if(appClass.getOption_regex())
 			list.add("正規表現で抽出");
 		if(appClass.getOption_openBrowser())
@@ -87,7 +88,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		Status status = item.isRetweet() ? item.getRetweetedStatus() : item;
 
 		// ダイアログタイトルinflate
-		View dialog_title = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_tweet, null);
+		View dialog_title = LayoutInflater.from(context).inflate(R.layout.list_item_tweet, null);
 		SmartImageView icon = (SmartImageView)dialog_title.findViewById(R.id.icon);
 		TextView name_screenName = (TextView)dialog_title.findViewById(R.id.name_screenName);
 		TextView tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
@@ -107,7 +108,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		// ここまで
 
 		// ダイアログ本文inflate
-		View content = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_dialog, null);
+		View content = LayoutInflater.from(context).inflate(R.layout.custom_dialog, null);
 		ListView dialog_list = (ListView)content.findViewById(R.id.dialog_List);
 		ImageButton dialog_reply = (ImageButton)content.findViewById(R.id.dialog_reply);
 		ImageButton dialog_retweet = (ImageButton)content.findViewById(R.id.dialog_retweet);
@@ -116,49 +117,48 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		ImageButton dialog_talk = (ImageButton)content.findViewById(R.id.dialog_talk);
 		ImageButton dialog_deletePost = (ImageButton)content.findViewById(R.id.dialog_delete);
 
-		final AlertDialog dialog = new AlertDialog.Builder(parent.getContext())
+		final AlertDialog dialog = new AlertDialog.Builder(context)
 				.setCustomTitle(dialog_title)
 				.setView(content).show();
 
 		dialog_list.setAdapter(list);
-		dialog_list.setOnItemClickListener(new Dialog_ListClick(item, parent, dialog));
-		dialog_list.setOnItemLongClickListener(new OnItemLongClickListener(){
+		dialog_list.setOnItemClickListener(new Dialog_ListClick(context, item, data, dialog));
+		dialog_list.setOnItemLongClickListener(new android.widget.AdapterView.OnItemLongClickListener(){
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
 				String clickedText = (String)parent.getItemAtPosition(position);
 				if(clickedText.startsWith("http")){
 					dialog.dismiss();
-					parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText)));
+					context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText)));
 				}
 				return true;
 			}
 		});
 
-		dialog_reply.setOnClickListener(new Dialog_reply(item, parent.getContext(), dialog));
-		dialog_retweet.setOnClickListener(new Dialog_retweet(item, parent.getContext(), dialog));
-		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(item, parent.getContext(), dialog));
-		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, parent.getContext(), dialog));
-		dialog_favorite.setOnClickListener(new Dialog_favorite(item, parent.getContext(), dialog));
-		dialog_talk.setOnClickListener(new Dialog_talk(item, parent.getContext(), dialog));
-		dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, parent.getContext(), dialog));
+		dialog_reply.setOnClickListener(new Dialog_reply(item, context, dialog));
+		dialog_retweet.setOnClickListener(new Dialog_retweet(item, context, dialog));
+		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(item, context, dialog));
+		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, context, dialog));
+		dialog_favorite.setOnClickListener(new Dialog_favorite(item, context, dialog));
+		dialog_talk.setOnClickListener(new Dialog_talk(item, context, dialog));
+		dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, context, dialog));
 
 		if(!(status.getInReplyToStatusId() > 0)){
 			dialog_talk.setEnabled(false);
 			dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
 		}
-		if(!status.getUser().getScreenName().equals(((ApplicationClass)parent.getContext().getApplicationContext()).getMyScreenName())){
+		if(!status.getUser().getScreenName().equals(((ApplicationClass)context.getApplicationContext()).getMyScreenName())){
 			dialog_deletePost.setEnabled(false);
 			dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
 		}
 	}
 
 	@Override
-	public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
-		Status item = (Status)parent.getItemAtPosition(position);
-		Intent i = new Intent(parent.getContext(), TweetActivity.class);
+	public boolean onItemLongClicked(Context context, ArrayList<Status> data, int position){
+		Intent i = new Intent(context, TweetActivity.class);
 		i.putExtra("type", TweetActivity.TYPE_PAKUTSUI);
-		i.putExtra("status", new StatusItem(item));
-		parent.getContext().startActivity(i);
+		i.putExtra("status", new StatusItem(data.get(position)));
+		context.startActivity(i);
 		return true;
 	}
 }

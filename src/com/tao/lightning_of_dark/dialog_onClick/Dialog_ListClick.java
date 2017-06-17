@@ -7,52 +7,51 @@ import java.util.regex.Pattern;
 import twitter4j.MediaEntity;
 import twitter4j.Status;
 
-import com.tao.lightning_of_dark.CustomAdapter;
 import com.tao.lightning_of_dark.IntentActivity;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.Show_Video;
 import com.tao.lightning_of_dark.swipeImageViewer.ImageFragmentActivity;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
+import com.tao.lightning_of_dark.tweetlistview.TweetListView;
 import com.tao.lightning_of_dark.userPageFragment.UserPage;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class Dialog_ListClick implements OnItemClickListener{
 
+	private Context context;
 	private Status status;
-	private AdapterView<?> baseParent;
-
+	private ArrayList<Status> listData;
 	private AlertDialog dialog;
 
-	public Dialog_ListClick(Status status, AdapterView<?> baseParent, AlertDialog dialog){
+	public Dialog_ListClick(Context context, Status status, ArrayList<Status> listData, AlertDialog dialog){
+		this.context = context;
 		this.status = status;
-		this.baseParent = baseParent;
+		this.listData = listData;
 		this.dialog = dialog;
 	}
 
-	@SuppressLint("InflateParams")
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id){
 		dialog.dismiss();
 		String clickedText = (String)parent.getItemAtPosition(position);
 
 		if(clickedText.equals("正規表現で抽出")) {
-			View regView = LayoutInflater.from(parent.getContext()).inflate(R.layout.reg_dialog, null);
+			View regView = View.inflate(context, R.layout.reg_dialog, null);
 			final EditText regEdit = (EditText)regView.findViewById(R.id.regDialog_edit);
 			Button dot = (Button)regView.findViewById(R.id.regDialog_dot);
 			Button kome = (Button)regView.findViewById(R.id.regDialog_kome);
@@ -88,22 +87,21 @@ public class Dialog_ListClick implements OnItemClickListener{
 					String editReg = regEdit.getText().toString();
 					pref.edit().putString("regularExpression", editReg).commit();
 					Pattern pattern = Pattern.compile(editReg, Pattern.DOTALL);
-					CustomAdapter content = new CustomAdapter(baseParent.getContext());
-					for(int i = 0; baseParent.getCount() - 1 > i; i++){
-						Status status = ((Status)baseParent.getAdapter().getItem(i));
+					TweetListAdapter adapter = new TweetListAdapter(context);
+					for(int i = 0; listData.size() - 1 > i; i++){
+						Status status = (listData.get(i));
 						if(pattern.matcher(status.getText()).find())
-							content.add(status);
+							adapter.add(status);
 					}
-					ListView l = new ListView(baseParent.getContext());
-					if(content.isEmpty()){
-						l.setAdapter(new ArrayAdapter<String>(baseParent.getContext(), android.R.layout.simple_list_item_1,
-								new String[]{"なし"}));
+					if(adapter.isEmpty()){
+						Toast.makeText(context, "ありませんでした", Toast.LENGTH_SHORT).show();
 					}else{
-						l.setAdapter(content);
-						l.setOnItemClickListener(new ListViewListener());
-						l.setOnItemLongClickListener(new ListViewListener());
+						TweetListView l = (TweetListView)View.inflate(context, R.layout.list_item_tweet, null).findViewById(R.id.listLine);
+						l.setAdapter(adapter);
+						adapter.setOnItemClickListener(new ListViewListener());
+						adapter.setOnItemLongClickListener(new ListViewListener());
+						new AlertDialog.Builder(context).setView(l).show();
 					}
-					new AlertDialog.Builder(baseParent.getContext()).setView(l).show();
 				}
 			}).show();
 		}
@@ -137,7 +135,7 @@ public class Dialog_ListClick implements OnItemClickListener{
 				web.putExtra("URL", clickedText);
 				web.putExtra("type", Show_Video.TYPE_GIF);
 			}else if(state.find()) {
-				new IntentActivity().showStatus(Long.parseLong(state.group(2)), baseParent.getContext(), false);
+				new IntentActivity().showStatus(Long.parseLong(state.group(2)), context, false);
 				return;
 			}else{
 				web = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));

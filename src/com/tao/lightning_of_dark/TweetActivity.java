@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.dialog_onClick.StatusItem;
+import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
+import com.tao.lightning_of_dark.tweetlistview.TweetListView;
 
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
@@ -23,7 +25,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class TweetActivity extends Activity{
@@ -69,7 +70,7 @@ public class TweetActivity extends Activity{
 
 		boolean setSelectionEnd = false;
 
-		ListView originStatus = (ListView)findViewById(R.id.originStatus);
+		TweetListView originStatus = (TweetListView)findViewById(R.id.originStatus);
 		switch(type){
 		case TYPE_REPLY:
 		case TYPE_REPLYALL:
@@ -77,10 +78,10 @@ public class TweetActivity extends Activity{
 			actionBar.hide();
 			originStatus.setVisibility(View.VISIBLE);
 			originStatus.setFocusable(false);
-			CustomAdapter adapter = new CustomAdapter(this);
+			TweetListAdapter adapter = new TweetListAdapter(this);
+			adapter.setOnItemClickListener(new ListViewListener());
 			adapter.add(status);
 			originStatus.setAdapter(adapter);
-			originStatus.setOnItemClickListener(new ListViewListener());
 			break;
 		default:
 			originStatus.setVisibility(View.GONE);
