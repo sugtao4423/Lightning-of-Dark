@@ -128,7 +128,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 			holder.tweetImagesScroll.setVisibility(View.VISIBLE);
 			holder.tweetImagesLayout.removeAllViews();
 			for(int i = 0; i < mentitys.length; i++){
-				LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, 200);
 				if(holder.tweetImagesLayout.getChildCount() != 0)
 					params.setMargins(8, 0, 0, 0);
 				SmartImageView child = new SmartImageView(context);
