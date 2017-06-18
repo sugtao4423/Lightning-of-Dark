@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.loopj.android.image.SmartImageView;
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.UiHandler;
 import com.tao.lightning_of_dark.userPageFragment.UserPage;
 
 import android.content.Context;
@@ -89,15 +90,28 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 			return 0;
 	}
 
-	public void addAll(PagableResponseList<User> users){
-		int pos = data.size();
-		data.addAll(users);
-		notifyItemRangeInserted(pos, users.size());
+	public void addAll(final PagableResponseList<User> users){
+		new UiHandler(){
+			
+			@Override
+			public void run(){
+				int pos = data.size();
+				data.addAll(users);
+				notifyItemRangeInserted(pos, users.size());
+			}
+		}.post();
 	}
 
 	public void clear(){
-		data.clear();
-		notifyDataSetChanged();
+		new UiHandler(){
+
+			@Override
+			public void run(){
+				int size = data.size();
+				data.clear();
+				notifyItemRangeRemoved(0, size);
+			}
+		}.post();
 	}
 
 	class ViewHolder extends RecyclerView.ViewHolder{
