@@ -117,7 +117,7 @@ public class Fragment_mention extends Fragment implements OnRefreshListener{
 
 			@Override
 			public void run(){
-				if(llm.findFirstVisibleItemPosition() == 0)
+				if(llm.findFirstVisibleItemPosition() <= 1)
 					list.smoothScrollToPosition(0);
 			}
 		}.post();

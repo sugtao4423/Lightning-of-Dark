@@ -52,7 +52,7 @@ public class Fragment_home extends Fragment{
 
 			@Override
 			public void run(){
-				if(llm.findFirstVisibleItemPosition() == 0)
+				if(llm.findFirstVisibleItemPosition() <= 1)
 					list.smoothScrollToPosition(0);
 			}
 		}.post();
