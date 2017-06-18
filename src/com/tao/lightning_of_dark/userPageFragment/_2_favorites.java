@@ -8,6 +8,7 @@ import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.tweetlistview.EndlessScrollListener;
 import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
 import com.tao.lightning_of_dark.tweetlistview.TweetListView;
 
@@ -16,12 +17,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class _2_favorites extends Fragment{
 
+	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
 	private boolean alreadyLoad;
@@ -35,10 +38,12 @@ public class _2_favorites extends Fragment{
 		alreadyLoad = false;
 
 		TweetListView userFavorite = (TweetListView)v.findViewById(R.id.UserPageList);
+		llm = userFavorite.getLinearLayoutManager();
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		userFavorite.setAdapter(adapter);
+		userFavorite.addOnScrollListener(getLoadMoreListener());
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -52,6 +57,16 @@ public class _2_favorites extends Fragment{
 			}
 		});
 		return v;
+	}
+
+	public EndlessScrollListener getLoadMoreListener(){
+		return new EndlessScrollListener(llm){
+
+			@Override
+			public void onLoadMore(int current_page){
+				loadMentionLine();
+			}
+		};
 	}
 
 	public void loadMentionLine(){

@@ -7,6 +7,7 @@ import twitter4j.User;
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.tweetlistview.EndlessScrollListener;
 import com.tao.lightning_of_dark.tweetlistview.TweetListUserAdapter;
 import com.tao.lightning_of_dark.tweetlistview.TweetListView;
 
@@ -15,12 +16,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class _4_follower extends Fragment{
 
+	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListUserAdapter adapter;
 	private long cursor;
@@ -33,8 +36,10 @@ public class _4_follower extends Fragment{
 		cursor = -1L;
 
 		TweetListView userFollower = (TweetListView)v.findViewById(R.id.UserPageList);
+		llm = userFollower.getLinearLayoutManager();
 		adapter = new TweetListUserAdapter(container.getContext());
 		userFollower.setAdapter(adapter);
+		userFollower.addOnScrollListener(getLoadMoreListener());
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -48,6 +53,16 @@ public class _4_follower extends Fragment{
 			}
 		});
 		return v;
+	}
+
+	public EndlessScrollListener getLoadMoreListener(){
+		return new EndlessScrollListener(llm){
+
+			@Override
+			public void onLoadMore(int current_page){
+				loadFollowerLine();
+			}
+		};
 	}
 
 	public void loadFollowerLine(){

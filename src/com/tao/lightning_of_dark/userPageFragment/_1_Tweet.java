@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.tweetlistview.EndlessScrollListener;
 import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
 import com.tao.lightning_of_dark.tweetlistview.TweetListView;
 
 public class _1_Tweet extends Fragment{
 
+	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
 	private boolean alreadyLoad;
@@ -32,10 +35,12 @@ public class _1_Tweet extends Fragment{
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		alreadyLoad = false;
 		TweetListView userTweet = (TweetListView)v.findViewById(R.id.UserPageList);
+		llm = userTweet.getLinearLayoutManager();
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		userTweet.setAdapter(adapter);
+		userTweet.addOnScrollListener(getLoadMoreListener());
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -49,6 +54,16 @@ public class _1_Tweet extends Fragment{
 			}
 		});
 		return v;
+	}
+
+	public EndlessScrollListener getLoadMoreListener(){
+		return new EndlessScrollListener(llm){
+
+			@Override
+			public void onLoadMore(int current_page){
+				loadTimeLine();
+			}
+		};
 	}
 
 	// なんか色々取得 //自分でもよくわからず組んだ is 屑
