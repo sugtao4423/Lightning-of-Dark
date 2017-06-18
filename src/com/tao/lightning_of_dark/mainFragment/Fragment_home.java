@@ -47,7 +47,7 @@ public class Fragment_home extends Fragment{
 
 	public void insert(Status status){
 		adapter.insertTop(status);
-		if(llm.findFirstVisibleItemPosition() == 0)
+		if(llm.findFirstVisibleItemPosition() <= 1)
 			list.smoothScrollToPosition(0);
 	}
 
