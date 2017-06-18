@@ -8,6 +8,7 @@ import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.UiHandler;
 import com.tao.lightning_of_dark.tweetlistview.EndlessScrollListener;
 import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
 import com.tao.lightning_of_dark.tweetlistview.TweetListView;
@@ -47,8 +48,14 @@ public class Fragment_home extends Fragment{
 
 	public void insert(Status status){
 		adapter.insertTop(status);
-		if(llm.findFirstVisibleItemPosition() <= 1)
-			list.smoothScrollToPosition(0);
+		new UiHandler(){
+
+			@Override
+			public void run(){
+				if(llm.findFirstVisibleItemPosition() == 0)
+					list.smoothScrollToPosition(0);
+			}
+		}.post();
 	}
 
 	public EndlessScrollListener getLoadMoreListener(){

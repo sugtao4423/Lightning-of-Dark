@@ -8,6 +8,7 @@ import com.loopj.android.image.SmartImageView;
 import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.Show_Video;
+import com.tao.lightning_of_dark.UiHandler;
 import com.tao.lightning_of_dark.swipeImageViewer.ImageFragmentActivity;
 import com.tao.lightning_of_dark.userPageFragment.UserPage;
 import com.tao.lightning_of_dark.utils.Utils;
@@ -211,28 +212,52 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		return data.get(position);
 	}
 
-	public void add(Status status){
-		data.add(status);
-		notifyItemInserted(data.size() - 1);
+	public void add(final Status status){
+		new UiHandler(){
+
+			@Override
+			public void run(){
+				data.add(status);
+				notifyItemInserted(data.size() - 1);
+			}
+		}.post();
 	}
 
-	public void addAll(ResponseList<Status> status){
-		int pos = data.size();
-		data.addAll(status);
-		notifyItemRangeInserted(pos, status.size());
+	public void addAll(final ResponseList<Status> status){
+		new UiHandler(){
+
+			@Override
+			public void run(){
+				int pos = data.size();
+				data.addAll(status);
+				notifyItemRangeInserted(pos, status.size());
+			}
+		}.post();
 	}
 
-	public void insertTop(Status item){
-		data.add(0, item);
-		notifyItemInserted(0);
-		if(data.size() - 1 != 0)
-			notifyItemRangeChanged(1, data.size());
+	public void insertTop(final Status item){
+		new UiHandler(){
+
+			@Override
+			public void run(){
+				data.add(0, item);
+				notifyItemInserted(0);
+				if(data.size() - 1 != 0)
+					notifyItemRangeChanged(1, data.size());
+			}
+		}.post();
 	}
 
 	public void clear(){
-		int size = data.size();
-		data.clear();
-		notifyItemRangeRemoved(0, size);
+		new UiHandler(){
+
+			@Override
+			public void run(){
+				int size = data.size();
+				data.clear();
+				notifyItemRangeRemoved(0, size);
+			}
+		}.post();
 	}
 
 	public boolean isEmpty(){
