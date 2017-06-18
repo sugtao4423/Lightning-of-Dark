@@ -260,10 +260,6 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		}.post();
 	}
 
-	public boolean isEmpty(){
-		return data.size() == 0;
-	}
-
 	public interface OnItemClickListener{
 		public void onItemClicked(Context context, ArrayList<Status> data, int position);
 	}

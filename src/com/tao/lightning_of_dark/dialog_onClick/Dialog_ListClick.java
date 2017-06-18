@@ -10,6 +10,7 @@ import twitter4j.Status;
 import com.tao.lightning_of_dark.IntentActivity;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
+import com.tao.lightning_of_dark.ShowToast;
 import com.tao.lightning_of_dark.Show_Video;
 import com.tao.lightning_of_dark.swipeImageViewer.ImageFragmentActivity;
 import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
@@ -28,7 +29,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class Dialog_ListClick implements OnItemClickListener{
@@ -88,15 +88,17 @@ public class Dialog_ListClick implements OnItemClickListener{
 					pref.edit().putString("regularExpression", editReg).commit();
 					Pattern pattern = Pattern.compile(editReg, Pattern.DOTALL);
 					TweetListAdapter adapter = new TweetListAdapter(context);
-					for(int i = 0; listData.size() - 1 > i; i++){
-						Status status = (listData.get(i));
-						if(pattern.matcher(status.getText()).find())
-							adapter.add(status);
+					boolean exists = false;
+					for(Status s : listData){
+						if(pattern.matcher(s.getText()).find()){
+							adapter.add(s);
+							exists = true;
+						}
 					}
-					if(adapter.isEmpty()){
-						Toast.makeText(context, "ありませんでした", Toast.LENGTH_SHORT).show();
+					if(!exists){
+						new ShowToast("ありませんでした", context, 0);
 					}else{
-						TweetListView l = (TweetListView)View.inflate(context, R.layout.list_item_tweet, null).findViewById(R.id.listLine);
+						TweetListView l = new TweetListView(context);
 						l.setAdapter(adapter);
 						adapter.setOnItemClickListener(new ListViewListener());
 						adapter.setOnItemLongClickListener(new ListViewListener());
