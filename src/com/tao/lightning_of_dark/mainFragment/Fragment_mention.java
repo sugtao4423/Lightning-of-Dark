@@ -9,6 +9,7 @@ import com.tao.lightning_of_dark.ApplicationClass;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
+import com.tao.lightning_of_dark.UiHandler;
 import com.tao.lightning_of_dark.tweetlistview.EndlessScrollListener;
 import com.tao.lightning_of_dark.tweetlistview.TweetListAdapter;
 import com.tao.lightning_of_dark.tweetlistview.TweetListView;
@@ -19,6 +20,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import android.view.ViewGroup;
 public class Fragment_mention extends Fragment implements OnRefreshListener{
 
 	private TweetListView list;
+	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
 	private ApplicationClass appClass;
@@ -38,6 +41,7 @@ public class Fragment_mention extends Fragment implements OnRefreshListener{
 		appClass = (ApplicationClass)context.getApplicationContext();
 
 		list = (TweetListView)v.findViewById(R.id.listLine);
+		llm = list.getLinearLayoutManager();
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
@@ -109,6 +113,14 @@ public class Fragment_mention extends Fragment implements OnRefreshListener{
 
 	public void insert(Status status){
 		adapter.insertTop(status);
+		new UiHandler(){
+
+			@Override
+			public void run(){
+				if(llm.findFirstVisibleItemPosition() == 0)
+					list.smoothScrollToPosition(0);
+			}
+		}.post();
 	}
 
 	public void addAll(ResponseList<Status> status){
