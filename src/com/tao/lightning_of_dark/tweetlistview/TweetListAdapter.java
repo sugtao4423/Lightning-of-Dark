@@ -226,7 +226,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		data.add(0, item);
 		notifyItemInserted(0);
 		if(data.size() - 1 != 0)
-			notifyItemRangeChanged(0, data.size());
+			notifyItemRangeChanged(1, data.size());
 	}
 
 	public void clear(){
