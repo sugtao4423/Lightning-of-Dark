@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import com.loopj.android.image.SmartImageView;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -170,31 +169,18 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 						}
 					});
 				}
-				holder.tweetImagesScroll.setOnTouchListener(new OnTouchListener(){
-					boolean actionMove = false;
-					@SuppressLint("ClickableViewAccessibility")
-					@Override
-					public boolean onTouch(View v, MotionEvent event){
-						switch(event.getAction()){
-						case MotionEvent.ACTION_MOVE:
-							actionMove = true;
-							break;
-						case MotionEvent.ACTION_UP:
-							if(actionMove)
-								break;
-							holder.v.performClick();
-							break;
-						default:
-							actionMove = false;
-							break;
-						}
-						HorizontalScrollView sv = (HorizontalScrollView)v;
-						if(sv.getChildAt(0).getWidth() > sv.getWidth())
-							return v.onTouchEvent(event);
-						return true;
-					}
-				});
 			}
+			holder.tweetImagesScroll.setOnTouchListener(new OnTouchListener(){
+				@Override
+				public boolean onTouch(View v, MotionEvent event){
+					HorizontalScrollView sv = (HorizontalScrollView)v;
+					if(sv.getChildAt(0).getWidth() > sv.getWidth())
+						return v.onTouchEvent(event);
+					else if(event.getAction() == MotionEvent.ACTION_UP)
+						holder.v.performClick();
+					return true;
+				}
+			});
 		}else{
 			holder.tweetImagesScroll.setVisibility(View.GONE);
 		}
