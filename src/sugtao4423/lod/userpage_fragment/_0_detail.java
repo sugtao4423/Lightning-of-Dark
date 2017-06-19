@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 
 import twitter4j.Relationship;
 import twitter4j.TwitterException;
+import twitter4j.URLEntity;
 import twitter4j.User;
 
 import com.loopj.android.image.SmartImageView;
@@ -100,14 +101,25 @@ public class _0_detail extends Fragment{
 			set_souce_and_targetIcon();
 		}
 
-		setLinkTouch(context, userBio, target.getDescription());
+		
+		setLinkTouch(context, userBio, replaceUrlEntity2ExUrl(target.getDescription(), target.getDescriptionURLEntities()));
 		setLinkTouch(context, userLocation, target.getLocation());
-		setLinkTouch(context, userLink, target.getURL());
+		setLinkTouch(context, userLink, replaceUrlEntity2ExUrl(target.getURL(), target.getURLEntity()));
 		userTweetC.setText(numberFormat(target.getStatusesCount()));
 		userFavoriteC.setText(numberFormat(target.getFavouritesCount()));
 		userFollowC.setText(numberFormat(target.getFriendsCount()));
 		userFollowerC.setText(numberFormat(target.getFollowersCount()));
 		userCreate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(target.getCreatedAt()));
+	}
+
+	public String replaceUrlEntity2ExUrl(String target, URLEntity entity){
+		return target.replace(entity.getURL(), entity.getExpandedURL());
+	}
+
+	public String replaceUrlEntity2ExUrl(String target, URLEntity[] entity){
+		for(URLEntity e : entity)
+			target = replaceUrlEntity2ExUrl(target, e);
+		return target;
 	}
 
 	public void setLinkTouch(final Context context, TextView view, String setStr){
