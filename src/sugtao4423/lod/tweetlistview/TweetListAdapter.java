@@ -176,9 +176,8 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 					HorizontalScrollView sv = (HorizontalScrollView)v;
 					if(sv.getChildAt(0).getWidth() > sv.getWidth())
 						return v.onTouchEvent(event);
-					else if(event.getAction() == MotionEvent.ACTION_UP)
-						holder.v.performClick();
-					return true;
+					else
+						return holder.v.onTouchEvent(event);
 				}
 			});
 		}else{
