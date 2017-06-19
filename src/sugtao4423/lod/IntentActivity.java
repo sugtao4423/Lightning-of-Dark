@@ -1,7 +1,6 @@
 package sugtao4423.lod;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.loopj.android.image.SmartImageView;
 
@@ -23,6 +22,7 @@ import android.widget.TextView;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 import sugtao4423.lod.userpage_fragment.UserPage;
+import sugtao4423.lod.utils.Regex;
 
 public class IntentActivity extends Activity{
 
@@ -57,8 +57,8 @@ public class IntentActivity extends Activity{
 	public void jump(){
 		if(Intent.ACTION_VIEW.equals(getIntent().getAction())){
 			String uri = getIntent().getData().toString();
-			Matcher user = Pattern.compile("http(s)?://twitter.com/([0-9a-zA-Z_]+)").matcher(uri);
-			Matcher status = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(uri);
+			Matcher user = Regex.userUrl.matcher(uri);
+			Matcher status = Regex.statusUrl.matcher(uri);
 			if(status.find()){
 				showStatus(Long.parseLong(status.group(2)), IntentActivity.this, true);
 			}else if(user.find()){

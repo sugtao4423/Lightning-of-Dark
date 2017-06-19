@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.tenthbit.view.ZoomViewPager;
 
@@ -31,6 +30,7 @@ import android.widget.Toast;
 import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
+import sugtao4423.lod.utils.Regex;
 
 public class ImageFragmentActivity extends FragmentActivity{
 
@@ -80,7 +80,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 
 	public void saveImage(){
 		if(type == TYPE_BANNER) {
-			Matcher banner = Pattern.compile("^http(s)?://pbs.twimg.com/profile_banners/[0-9]+/([0-9]+)/web_retina$").matcher(currentUrl);
+			Matcher banner = Regex.userBannerUrl.matcher(currentUrl);
 			if(!banner.find()) {
 				new ShowToast("URLがパターンにマッチしません\n保存できませんでした", this, 0);
 				return;
@@ -94,7 +94,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 		if(type != TYPE_ICON)
 			orig = ":orig";
 
-		final Matcher pattern = Pattern.compile("^http(s)?://pbs.twimg.com/.+/+(.+)(\\..+)" + orig + "$").matcher(currentUrl + orig);
+		final Matcher pattern = Regex.userIconUrl.matcher(currentUrl);
 		if(!pattern.find()) {
 			new ShowToast("URLがパターンにマッチしません\n保存できませんでした", this, 0);
 			return;

@@ -4,7 +4,6 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import twitter4j.Relationship;
 import twitter4j.TwitterException;
@@ -35,6 +34,7 @@ import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity;
+import sugtao4423.lod.utils.Regex;
 
 public class _0_detail extends Fragment{
 
@@ -116,8 +116,7 @@ public class _0_detail extends Fragment{
 			return;
 		}
 		SpannableString ss = new SpannableString(setStr);
-		final Matcher m =
-				Pattern.compile("@[0-9a-zA-Z_]+|(http://|https://){1}[\\w\\.\\-/:\\#\\?\\=\\&\\;\\%\\~\\+]+", Pattern.DOTALL).matcher(setStr);
+		Matcher m = Regex.userAndAnyUrl.matcher(setStr);
 		while(m.find()){
 			final String t = m.group();
 			if(t.startsWith("@") || t.startsWith("http")){

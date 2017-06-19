@@ -30,6 +30,7 @@ import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 import sugtao4423.lod.userpage_fragment.UserPage;
+import sugtao4423.lod.utils.Regex;
 
 public class Dialog_ListClick implements OnItemClickListener{
 
@@ -107,10 +108,10 @@ public class Dialog_ListClick implements OnItemClickListener{
 				}
 			}).show();
 		}else if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
-			Matcher image = Pattern.compile("http(s)?://pbs.twimg.com/media/").matcher(clickedText);
-			Matcher video = Pattern.compile("http(s)?://video.twimg.com/ext_tw_video/[0-9]+/(pu|pr)/vid/.+/.+(.mp4|.webm)").matcher(clickedText);
-			Matcher gif = Pattern.compile("http(s)?://pbs.twimg.com/tweet_video/").matcher(clickedText);
-			Matcher state = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(clickedText);
+			Matcher image = Regex.media_image.matcher(clickedText);
+			Matcher video = Regex.media_video.matcher(clickedText);
+			Matcher gif = Regex.media_gif.matcher(clickedText);
+			Matcher state = Regex.statusUrl.matcher(clickedText);
 			Intent intent;
 			if(image.find()){
 				ArrayList<String> urls = new ArrayList<String>();
