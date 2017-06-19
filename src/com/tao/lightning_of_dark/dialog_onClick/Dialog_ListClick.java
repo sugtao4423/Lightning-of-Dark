@@ -50,7 +50,7 @@ public class Dialog_ListClick implements OnItemClickListener{
 		dialog.dismiss();
 		String clickedText = (String)parent.getItemAtPosition(position);
 
-		if(clickedText.equals("正規表現で抽出")) {
+		if(clickedText.equals("正規表現で抽出")){
 			View regView = View.inflate(context, R.layout.reg_dialog, null);
 			final EditText regEdit = (EditText)regView.findViewById(R.id.regDialog_edit);
 			Button dot = (Button)regView.findViewById(R.id.regDialog_dot);
@@ -75,9 +75,9 @@ public class Dialog_ListClick implements OnItemClickListener{
 			kakko2_0.setOnClickListener(new Dialog_regButtonClick(regEdit, "{"));
 			kakko2_1.setOnClickListener(new Dialog_regButtonClick(regEdit, "}"));
 
-			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(parent.getContext());
+			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 			regEdit.setText(pref.getString("regularExpression", ""));
-			new AlertDialog.Builder(parent.getContext())
+			new AlertDialog.Builder(context)
 			.setTitle("正規表現を入力してください")
 			.setView(regView)
 			.setNegativeButton("キャンセル", null)
@@ -106,18 +106,16 @@ public class Dialog_ListClick implements OnItemClickListener{
 					}
 				}
 			}).show();
-		}
-
-		if(clickedText.startsWith("http") || clickedText.startsWith("ftp")) {
+		}else if(clickedText.startsWith("http") || clickedText.startsWith("ftp")){
 			Matcher image = Pattern.compile("http(s)?://pbs.twimg.com/media/").matcher(clickedText);
 			Matcher video = Pattern.compile("http(s)?://video.twimg.com/ext_tw_video/[0-9]+/(pu|pr)/vid/.+/.+(.mp4|.webm)").matcher(clickedText);
 			Matcher gif = Pattern.compile("http(s)?://pbs.twimg.com/tweet_video/").matcher(clickedText);
 			Matcher state = Pattern.compile("http(s)?://twitter.com/[0-9a-zA-Z_]+/status/([0-9]+)").matcher(clickedText);
-			Intent web;
-			if(image.find()) {
+			Intent intent;
+			if(image.find()){
 				ArrayList<String> urls = new ArrayList<String>();
 				MediaEntity[] mentitys = status.getMediaEntities();
-				if(mentitys != null && mentitys.length > 0) {
+				if(mentitys != null && mentitys.length > 0){
 					for(MediaEntity media : mentitys){
 						if(!media.getType().equals("video") || !media.getType().equals("animated_gif"))
 							urls.add(media.getMediaURL());
@@ -125,41 +123,34 @@ public class Dialog_ListClick implements OnItemClickListener{
 				}
 				int pos = urls.indexOf(clickedText);
 				String[] arr = (String[])urls.toArray(new String[0]);
-				web = new Intent(parent.getContext(), ImageFragmentActivity.class);
-				web.putExtra("urls", arr);
-				web.putExtra("position", pos);
-			}else if(video.find()) {
-				web = new Intent(parent.getContext(), Show_Video.class);
-				web.putExtra("URL", clickedText);
-				web.putExtra("type", Show_Video.TYPE_VIDEO);
-			}else if(gif.find()) {
-				web = new Intent(parent.getContext(), Show_Video.class);
-				web.putExtra("URL", clickedText);
-				web.putExtra("type", Show_Video.TYPE_GIF);
-			}else if(state.find()) {
+				intent = new Intent(context, ImageFragmentActivity.class);
+				intent.putExtra("urls", arr);
+				intent.putExtra("position", pos);
+			}else if(video.find()){
+				intent = new Intent(context, Show_Video.class);
+				intent.putExtra("URL", clickedText);
+				intent.putExtra("type", Show_Video.TYPE_VIDEO);
+			}else if(gif.find()){
+				intent = new Intent(context, Show_Video.class);
+				intent.putExtra("URL", clickedText);
+				intent.putExtra("type", Show_Video.TYPE_GIF);
+			}else if(state.find()){
 				new IntentActivity().showStatus(Long.parseLong(state.group(2)), context, false);
 				return;
 			}else{
-				web = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));
+				intent = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));
 			}
-			parent.getContext().startActivity(web);
-		}
-		if(clickedText.equals("ブラウザで開く")) {
-			String url, SN, Id;
-			if(status.isRetweet()) {
-				SN = status.getRetweetedStatus().getUser().getScreenName();
-				Id = String.valueOf(status.getRetweetedStatus().getId());
-			}else{
-				SN = status.getUser().getScreenName();
-				Id = String.valueOf(status.getId());
-			}
-			url = "https://twitter.com/" + SN + "/status/" + Id;
-			parent.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-		}
-		if(clickedText.startsWith("@")) { // UserPage
-			Intent intent = new Intent(parent.getContext(), UserPage.class);
+			context.startActivity(intent);
+		}else if(clickedText.equals("ブラウザで開く")){
+			Status orig = status.isRetweet() ? status.getRetweetedStatus() : status;
+			String tweet_sn = orig.getUser().getScreenName();
+			String tweet_id = String.valueOf(orig.getId());
+			String url = "https://twitter.com/" + tweet_sn + "/status/" + tweet_id;
+			context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+		}else if(clickedText.startsWith("@")){ // UserPage
+			Intent intent = new Intent(context, UserPage.class);
 			intent.putExtra("userScreenName", clickedText.substring(1));
-			parent.getContext().startActivity(intent);
+			context.startActivity(intent);
 		}
 	}
 
