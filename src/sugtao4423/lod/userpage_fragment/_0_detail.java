@@ -113,10 +113,14 @@ public class _0_detail extends Fragment{
 	}
 
 	public String replaceUrlEntity2ExUrl(String target, URLEntity entity){
+		if(target == null || target.isEmpty())
+			return "";
 		return target.replace(entity.getURL(), entity.getExpandedURL());
 	}
 
 	public String replaceUrlEntity2ExUrl(String target, URLEntity[] entity){
+		if(target == null || target.isEmpty())
+			return "";
 		for(URLEntity e : entity)
 			target = replaceUrlEntity2ExUrl(target, e);
 		return target;
