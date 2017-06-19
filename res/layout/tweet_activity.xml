@@ -123,7 +123,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <com.tao.lightning_of_dark.tweetlistview.TweetListView
+            <sugtao4423.lod.tweetlistview.TweetListView
                 android:id="@+id/originStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
