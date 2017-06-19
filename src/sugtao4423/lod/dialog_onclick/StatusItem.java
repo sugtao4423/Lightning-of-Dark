@@ -1,4 +1,4 @@
-package sugtao4423.lod.dialog_onClick;
+package sugtao4423.lod.dialog_onclick;
 
 import java.io.Serializable;
 

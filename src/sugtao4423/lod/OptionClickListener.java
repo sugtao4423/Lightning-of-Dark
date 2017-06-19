@@ -15,7 +15,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.EditText;
 import sugtao4423.lod.dataclass.Account;
-import sugtao4423.lod.userPageFragment.UserPage;
+import sugtao4423.lod.userpage_fragment.UserPage;
 import sugtao4423.lod.utils.DBUtil;
 
 public class OptionClickListener implements OnClickListener{

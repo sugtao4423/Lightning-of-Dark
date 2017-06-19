@@ -1,33 +1,32 @@
-package sugtao4423.lod.dialog_onClick;
+package sugtao4423.lod.dialog_onclick;
 
+import twitter4j.Status;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.view.View.OnLongClickListener;
+import android.view.View.OnClickListener;
 import sugtao4423.lod.TweetActivity;
-import twitter4j.Status;
 
-public class Dialog_quoteRT implements OnLongClickListener{
+public class Dialog_unOfficialRT implements OnClickListener{
 
 	private Status status;
 	private Context context;
 
 	private AlertDialog dialog;
 
-	public Dialog_quoteRT(Status status, Context context, AlertDialog dialog){
+	public Dialog_unOfficialRT(Status status, Context context, AlertDialog dialog){
 		this.status = status;
 		this.context = context;
 		this.dialog = dialog;
 	}
 
 	@Override
-	public boolean onLongClick(View v){
+	public void onClick(View v){
 		dialog.dismiss();
 		Intent i = new Intent(context, TweetActivity.class);
-		i.putExtra("type", TweetActivity.TYPE_QUOTERT);
+		i.putExtra("type", TweetActivity.TYPE_UNOFFICIALRT);
 		i.putExtra("status", new StatusItem(status));
 		context.startActivity(i);
-		return true;
 	}
 }

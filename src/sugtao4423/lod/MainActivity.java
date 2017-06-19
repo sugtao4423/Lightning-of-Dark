@@ -27,9 +27,9 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import sugtao4423.lod.mainFragment.Fragment_home;
-import sugtao4423.lod.mainFragment.Fragment_mention;
-import sugtao4423.lod.mainFragment.MyFragmentStatePagerAdapter;
+import sugtao4423.lod.main_fragment.Fragment_home;
+import sugtao4423.lod.main_fragment.Fragment_mention;
+import sugtao4423.lod.main_fragment.MyFragmentStatePagerAdapter;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 
 public class MainActivity extends FragmentActivity{

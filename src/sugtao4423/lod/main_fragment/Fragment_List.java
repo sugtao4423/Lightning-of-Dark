@@ -1,4 +1,4 @@
-package sugtao4423.lod.mainFragment;
+package sugtao4423.lod.main_fragment;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;

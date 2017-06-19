@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import sugtao4423.lod.R;
 import sugtao4423.lod.UiHandler;
-import sugtao4423.lod.userPageFragment.UserPage;
+import sugtao4423.lod.userpage_fragment.UserPage;
 import twitter4j.PagableResponseList;
 import twitter4j.User;
 

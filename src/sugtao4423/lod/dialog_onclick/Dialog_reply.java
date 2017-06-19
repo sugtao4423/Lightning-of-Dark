@@ -1,4 +1,4 @@
-package sugtao4423.lod.dialog_onClick;
+package sugtao4423.lod.dialog_onclick;
 
 import twitter4j.Status;
 import android.app.AlertDialog;

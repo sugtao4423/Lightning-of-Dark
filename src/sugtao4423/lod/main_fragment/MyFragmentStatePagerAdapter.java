@@ -1,4 +1,4 @@
-package sugtao4423.lod.mainFragment;
+package sugtao4423.lod.main_fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;

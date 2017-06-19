@@ -1,4 +1,4 @@
-package sugtao4423.lod.swipeImageViewer;
+package sugtao4423.lod.swipe_image_viewer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

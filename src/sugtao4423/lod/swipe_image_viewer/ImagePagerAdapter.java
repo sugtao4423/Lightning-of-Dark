@@ -1,4 +1,4 @@
-package sugtao4423.lod.swipeImageViewer;
+package sugtao4423.lod.swipe_image_viewer;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -1,4 +1,4 @@
-package sugtao4423.lod.userPageFragment;
+package sugtao4423.lod.userpage_fragment;
 
 import twitter4j.TwitterException;
 import twitter4j.User;

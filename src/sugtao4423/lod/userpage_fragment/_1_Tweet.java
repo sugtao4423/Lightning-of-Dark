@@ -1,9 +1,8 @@
-package sugtao4423.lod.userPageFragment;
+package sugtao4423.lod.userpage_fragment;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,7 +20,7 @@ import sugtao4423.lod.tweetlistview.EndlessScrollListener;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 
-public class _2_favorites extends Fragment{
+public class _1_Tweet extends Fragment{
 
 	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
@@ -35,14 +34,13 @@ public class _2_favorites extends Fragment{
 		View v = View.inflate(container.getContext(), R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		alreadyLoad = false;
-
-		TweetListView userFavorite = (TweetListView)v.findViewById(R.id.UserPageList);
-		llm = userFavorite.getLinearLayoutManager();
+		TweetListView userTweet = (TweetListView)v.findViewById(R.id.UserPageList);
+		llm = userTweet.getLinearLayoutManager();
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
-		userFavorite.setAdapter(adapter);
-		userFavorite.addOnScrollListener(getLoadMoreListener());
+		userTweet.setAdapter(adapter);
+		userTweet.addOnScrollListener(getLoadMoreListener());
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -52,7 +50,7 @@ public class _2_favorites extends Fragment{
 			public void onRefresh(){
 				adapter.clear();
 				alreadyLoad = false;
-				loadMentionLine();
+				loadTimeLine();
 			}
 		});
 		return v;
@@ -63,35 +61,37 @@ public class _2_favorites extends Fragment{
 
 			@Override
 			public void onLoadMore(int current_page){
-				loadMentionLine();
+				loadTimeLine();
 			}
 		};
 	}
 
-	public void loadMentionLine(){
+	// なんか色々取得 //自分でもよくわからず組んだ is 屑
+	public void loadTimeLine(){
 		if(alreadyLoad)
 			tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
-		((UserPage)_2_favorites.this.getActivity()).resetUser();
+		((UserPage)_1_Tweet.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
 					if(alreadyLoad)
-						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(),
+						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(),
 								new Paging(1, 50).maxId(tweetId - 1));
 					else
-						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(), new Paging(1, 50));
+						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(), new Paging(1, 50));
 				}catch(Exception e){
 					return null;
 				}
 			}
 
+			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null) {
 					adapter.addAll(result);
 					alreadyLoad = true;
 				}else{
-					new ShowToast("ふぁぼ取得エラー", getActivity(), 0);
+					new ShowToast("タイムラインを取得できませんでした", getActivity(), 0);
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);

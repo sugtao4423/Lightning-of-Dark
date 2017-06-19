@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.TextView;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
-import sugtao4423.lod.userPageFragment.UserPage;
+import sugtao4423.lod.userpage_fragment.UserPage;
 
 public class IntentActivity extends Activity{
 

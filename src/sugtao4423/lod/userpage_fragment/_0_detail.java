@@ -1,4 +1,4 @@
-package sugtao4423.lod.userPageFragment;
+package sugtao4423.lod.userpage_fragment;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -34,7 +34,7 @@ import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
-import sugtao4423.lod.swipeImageViewer.ImageFragmentActivity;
+import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity;
 
 public class _0_detail extends Fragment{
 

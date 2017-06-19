@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="sugtao4423.lod.userPageFragment.UserPage"
+            android:name="sugtao4423.lod.userpage_fragment.UserPage"
             android:configChanges="orientation|screenSize" >
         </activity>
         <activity
@@ -93,7 +93,7 @@
         <activity android:name="Settings" />
         <activity android:name="Settings_List" />
         <activity
-            android:name="sugtao4423.lod.swipeImageViewer.ImageFragmentActivity"
+            android:name="sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.TranslucentBackground" >
         </activity>

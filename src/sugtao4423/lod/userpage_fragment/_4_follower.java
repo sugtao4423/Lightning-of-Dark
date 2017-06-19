@@ -1,4 +1,4 @@
-package sugtao4423.lod.userPageFragment;
+package sugtao4423.lod.userpage_fragment;
 
 import twitter4j.PagableResponseList;
 import twitter4j.TwitterException;
@@ -20,7 +20,7 @@ import sugtao4423.lod.tweetlistview.EndlessScrollListener;
 import sugtao4423.lod.tweetlistview.TweetListUserAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 
-public class _3_follow extends Fragment{
+public class _4_follower extends Fragment{
 
 	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
@@ -34,11 +34,11 @@ public class _3_follow extends Fragment{
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 		cursor = -1L;
 
-		TweetListView userFollow = (TweetListView)v.findViewById(R.id.UserPageList);
-		llm = userFollow.getLinearLayoutManager();
+		TweetListView userFollower = (TweetListView)v.findViewById(R.id.UserPageList);
+		llm = userFollower.getLinearLayoutManager();
 		adapter = new TweetListUserAdapter(container.getContext());
-		userFollow.setAdapter(adapter);
-		userFollow.addOnScrollListener(getLoadMoreListener());
+		userFollower.setAdapter(adapter);
+		userFollower.addOnScrollListener(getLoadMoreListener());
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -48,7 +48,7 @@ public class _3_follow extends Fragment{
 			public void onRefresh(){
 				adapter.clear();
 				cursor = -1L;
-				loadFollowLine();
+				loadFollowerLine();
 			}
 		});
 		return v;
@@ -59,18 +59,18 @@ public class _3_follow extends Fragment{
 
 			@Override
 			public void onLoadMore(int current_page){
-				loadFollowLine();
+				loadFollowerLine();
 			}
 		};
 	}
 
-	public void loadFollowLine(){
-		((UserPage)_3_follow.this.getActivity()).resetUser();
+	public void loadFollowerLine(){
+		((UserPage)_4_follower.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, PagableResponseList<User>>(){
 			@Override
 			protected PagableResponseList<User> doInBackground(Void... params){
 				try{
-					return appClass.getTwitter().getFriendsList(appClass.getTargetScreenName(), cursor);
+					return appClass.getTwitter().getFollowersList(appClass.getTargetScreenName(), cursor);
 				}catch(TwitterException e){
 					return null;
 				}
@@ -82,7 +82,7 @@ public class _3_follow extends Fragment{
 					adapter.addAll(result);
 					cursor = result.getNextCursor();
 				}else{
-					new ShowToast("フォローを取得できませんでした", getActivity(), 0);
+					new ShowToast("フォロワーを取得できませんでした", getActivity(), 0);
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);

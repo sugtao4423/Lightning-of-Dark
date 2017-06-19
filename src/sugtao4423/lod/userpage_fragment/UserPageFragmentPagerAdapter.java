@@ -1,4 +1,4 @@
-package sugtao4423.lod.userPageFragment;
+package sugtao4423.lod.userpage_fragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

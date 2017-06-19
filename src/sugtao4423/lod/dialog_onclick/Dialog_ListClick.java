@@ -1,4 +1,4 @@
-package sugtao4423.lod.dialog_onClick;
+package sugtao4423.lod.dialog_onclick;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -26,10 +26,10 @@ import sugtao4423.lod.ListViewListener;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 import sugtao4423.lod.Show_Video;
-import sugtao4423.lod.swipeImageViewer.ImageFragmentActivity;
+import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
-import sugtao4423.lod.userPageFragment.UserPage;
+import sugtao4423.lod.userpage_fragment.UserPage;
 
 public class Dialog_ListClick implements OnItemClickListener{
 
