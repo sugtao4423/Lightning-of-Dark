@@ -126,7 +126,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 				String clickedText = (String)parent.getItemAtPosition(position);
 				if(clickedText.startsWith("http")){
 					dialog.dismiss();
-					context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText)));
+					new ChromeIntent(context, Uri.parse(clickedText));
 				}
 				return true;
 			}

@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import twitter4j.MediaEntity;
 import twitter4j.Status;
 
+import com.tao.lightning_of_dark.ChromeIntent;
 import com.tao.lightning_of_dark.IntentActivity;
 import com.tao.lightning_of_dark.ListViewListener;
 import com.tao.lightning_of_dark.R;
@@ -138,7 +139,8 @@ public class Dialog_ListClick implements OnItemClickListener{
 				new IntentActivity().showStatus(Long.parseLong(state.group(2)), context, false);
 				return;
 			}else{
-				intent = new Intent(Intent.ACTION_VIEW, Uri.parse(clickedText));
+				new ChromeIntent(context, Uri.parse(clickedText));
+				return;
 			}
 			context.startActivity(intent);
 		}else if(clickedText.equals("ブラウザで開く")){

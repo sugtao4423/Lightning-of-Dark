@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.tao.lightning_of_dark.ChromeIntent;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
 import com.tenthbit.view.ZoomViewPager;
@@ -70,7 +71,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 			@Override
 			public void onClick(DialogInterface dialog, int which){
 				if(which == 0)
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(currentUrl)));
+					new ChromeIntent(ImageFragmentActivity.this, Uri.parse(currentUrl));
 				if(which == 1)
 					saveImage();
 			}

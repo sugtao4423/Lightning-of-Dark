@@ -86,7 +86,7 @@ public class StartOAuth extends Activity{
 			@Override
 			public void onPostExecute(Boolean result){
 				if(result)
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(rt.getAuthenticationURL())));
+					new ChromeIntent(StartOAuth.this, Uri.parse(rt.getAuthenticationURL()));
 				else
 					new ShowToast("RequestTokenの取得に失敗しました", StartOAuth.this, 0);
 			}

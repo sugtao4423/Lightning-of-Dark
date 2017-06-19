@@ -12,6 +12,7 @@ import twitter4j.User;
 
 import com.loopj.android.image.SmartImageView;
 import com.tao.lightning_of_dark.ApplicationClass;
+import com.tao.lightning_of_dark.ChromeIntent;
 import com.tao.lightning_of_dark.R;
 import com.tao.lightning_of_dark.ShowToast;
 import com.tao.lightning_of_dark.swipeImageViewer.ImageFragmentActivity;
@@ -99,37 +100,45 @@ public class _0_detail extends Fragment{
 			set_souce_and_targetIcon();
 		}
 
-		String bio = target.getDescription();
-		SpannableString ss = new SpannableString(bio);
+		setLinkTouch(context, userBio, target.getDescription());
+		setLinkTouch(context, userLocation, target.getLocation());
+		setLinkTouch(context, userLink, target.getURL());
+		userTweetC.setText(numberFormat(target.getStatusesCount()));
+		userFavoriteC.setText(numberFormat(target.getFavouritesCount()));
+		userFollowC.setText(numberFormat(target.getFriendsCount()));
+		userFollowerC.setText(numberFormat(target.getFollowersCount()));
+		userCreate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(target.getCreatedAt()));
+	}
+
+	public void setLinkTouch(final Context context, TextView view, String setStr){
+		if(setStr == null || setStr.isEmpty()){
+			view.setText("");
+			return;
+		}
+		SpannableString ss = new SpannableString(setStr);
 		final Matcher m =
-				Pattern.compile("@[0-9a-zA-Z_]+|(http://|https://){1}[\\w\\.\\-/:\\#\\?\\=\\&\\;\\%\\~\\+]+", Pattern.DOTALL)
-						.matcher(bio);
+				Pattern.compile("@[0-9a-zA-Z_]+|(http://|https://){1}[\\w\\.\\-/:\\#\\?\\=\\&\\;\\%\\~\\+]+", Pattern.DOTALL).matcher(setStr);
 		while(m.find()){
-			String t = m.group();
-			if(t.startsWith("@")) {
+			final String t = m.group();
+			if(t.startsWith("@") || t.startsWith("http")){
 				ss.setSpan(new URLSpan(t){
 					@Override
-					public void onClick(View widget){
-						Context cont = widget.getContext();
-						Intent intent = new Intent(cont, UserPage.class);
-						intent.putExtra("userScreenName", this.getURL().replace("@", ""));
-						cont.startActivity(intent);
+					public void onClick(View v){
+						if(t.startsWith("@")){
+							Intent intent = new Intent(context, UserPage.class);
+							intent.putExtra("userScreenName", this.getURL().replace("@", ""));
+							context.startActivity(intent);
+						}else if(t.startsWith("http")){
+							new ChromeIntent(context, Uri.parse(t));
+						}
 					}
 				}, m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}else{
 				ss.setSpan(new URLSpan(t), m.start(), m.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}
-		userBio.setText(ss);
-		userBio.setMovementMethod(LinkMovementMethod.getInstance());
-
-		userLocation.setText(target.getLocation());
-		userLink.setText(target.getURL());
-		userTweetC.setText(numberFormat(target.getStatusesCount()));
-		userFavoriteC.setText(numberFormat(target.getFavouritesCount()));
-		userFollowC.setText(numberFormat(target.getFriendsCount()));
-		userFollowerC.setText(numberFormat(target.getFollowersCount()));
-		userCreate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(target.getCreatedAt()));
+		view.setText(ss);
+		view.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 	public String numberFormat(int num){
@@ -199,7 +208,7 @@ public class _0_detail extends Fragment{
 		userIcon.setOnLongClickListener(new OnLongClickListener(){
 			@Override
 			public boolean onLongClick(View v){
-				context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getOriginalProfileImageURL())));
+				new ChromeIntent(context, Uri.parse(target.getOriginalProfileImageURL()));
 				return true;
 			}
 		});
@@ -218,7 +227,7 @@ public class _0_detail extends Fragment{
 			@Override
 			public boolean onLongClick(View v){
 				if(target.getProfileBannerURL() != null)
-					context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(target.getProfileBannerRetinaURL())));
+					new ChromeIntent(context, Uri.parse(target.getProfileBannerRetinaURL()));
 				return true;
 			}
 		});
