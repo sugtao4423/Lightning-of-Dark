@@ -37,8 +37,10 @@ public class _4_follower extends Fragment{
 
 		TweetListView userFollower = (TweetListView)v.findViewById(R.id.UserPageList);
 		llm = userFollower.getLinearLayoutManager();
+
 		adapter = new TweetListUserAdapter(container.getContext());
 		userFollower.setAdapter(adapter);
+
 		final EndlessScrollListener scrollListener = getLoadMoreListener();
 		userFollower.addOnScrollListener(scrollListener);
 

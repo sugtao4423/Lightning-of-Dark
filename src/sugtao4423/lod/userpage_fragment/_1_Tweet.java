@@ -34,12 +34,15 @@ public class _1_Tweet extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = View.inflate(container.getContext(), R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+
 		TweetListView userTweet = (TweetListView)v.findViewById(R.id.UserPageList);
 		llm = userTweet.getLinearLayoutManager();
+
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		userTweet.setAdapter(adapter);
+
 		final EndlessScrollListener scrollListener = getLoadMoreListener();
 		userTweet.addOnScrollListener(scrollListener);
 

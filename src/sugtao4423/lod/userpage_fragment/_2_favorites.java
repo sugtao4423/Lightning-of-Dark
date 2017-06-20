@@ -38,10 +38,12 @@ public class _2_favorites extends Fragment{
 
 		TweetListView userFavorite = (TweetListView)v.findViewById(R.id.UserPageList);
 		llm = userFavorite.getLinearLayoutManager();
+
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		userFavorite.setAdapter(adapter);
+
 		final EndlessScrollListener scrollListener = getLoadMoreListener();
 		userFavorite.addOnScrollListener(scrollListener);
 
