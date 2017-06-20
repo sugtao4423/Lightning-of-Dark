@@ -22,12 +22,9 @@ import sugtao4423.lod.tweetlistview.TweetListView;
 
 public class _1_Tweet extends Fragment{
 
-	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
-	private boolean alreadyLoad;
 	private boolean isAllLoaded;
-	private long tweetId;
 	private ApplicationClass appClass;
 
 	@Override
@@ -36,14 +33,13 @@ public class _1_Tweet extends Fragment{
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 
 		TweetListView userTweet = (TweetListView)v.findViewById(R.id.UserPageList);
-		llm = userTweet.getLinearLayoutManager();
 
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		userTweet.setAdapter(adapter);
 
-		final EndlessScrollListener scrollListener = getLoadMoreListener();
+		final EndlessScrollListener scrollListener = getLoadMoreListener(userTweet.getLinearLayoutManager());
 		userTweet.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
@@ -53,7 +49,6 @@ public class _1_Tweet extends Fragment{
 			@Override
 			public void onRefresh(){
 				adapter.clear();
-				alreadyLoad = false;
 				isAllLoaded = false;
 				loadTimeLine();
 				scrollListener.resetState();
@@ -62,7 +57,7 @@ public class _1_Tweet extends Fragment{
 		return v;
 	}
 
-	public EndlessScrollListener getLoadMoreListener(){
+	public EndlessScrollListener getLoadMoreListener(LinearLayoutManager llm){
 		return new EndlessScrollListener(llm){
 
 			@Override
@@ -73,20 +68,19 @@ public class _1_Tweet extends Fragment{
 		};
 	}
 
-	// なんか色々取得 //自分でもよくわからず組んだ is 屑
 	public void loadTimeLine(){
-		if(alreadyLoad)
-			tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
 		((UserPage)_1_Tweet.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
-					if(alreadyLoad)
+					if(adapter.getItemCount() > 0){
+						long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
 						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(),
 								new Paging(1, 50).maxId(tweetId - 1));
-					else
+					}else{
 						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(), new Paging(1, 50));
+					}
 				}catch(Exception e){
 					return null;
 				}
@@ -96,7 +90,6 @@ public class _1_Tweet extends Fragment{
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null) {
 					adapter.addAll(result);
-					alreadyLoad = true;
 					if(appClass.getTarget() != null && appClass.getTarget().getStatusesCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{

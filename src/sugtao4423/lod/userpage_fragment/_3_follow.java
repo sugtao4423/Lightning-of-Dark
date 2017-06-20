@@ -22,7 +22,6 @@ import sugtao4423.lod.tweetlistview.TweetListView;
 
 public class _3_follow extends Fragment{
 
-	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListUserAdapter adapter;
 	private long cursor;
@@ -36,12 +35,11 @@ public class _3_follow extends Fragment{
 		cursor = -1L;
 
 		TweetListView userFollow = (TweetListView)v.findViewById(R.id.UserPageList);
-		llm = userFollow.getLinearLayoutManager();
 
 		adapter = new TweetListUserAdapter(container.getContext());
 		userFollow.setAdapter(adapter);
 
-		final EndlessScrollListener scrollListener = getLoadMoreListener();
+		final EndlessScrollListener scrollListener = getLoadMoreListener(userFollow.getLinearLayoutManager());
 		userFollow.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
@@ -60,7 +58,7 @@ public class _3_follow extends Fragment{
 		return v;
 	}
 
-	public EndlessScrollListener getLoadMoreListener(){
+	public EndlessScrollListener getLoadMoreListener(LinearLayoutManager llm){
 		return new EndlessScrollListener(llm){
 
 			@Override

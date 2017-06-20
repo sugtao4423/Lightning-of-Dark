@@ -23,12 +23,9 @@ import sugtao4423.lod.tweetlistview.TweetListView;
 
 public class _2_favorites extends Fragment{
 
-	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
-	private boolean alreadyLoad;
 	private boolean isAllLoaded;
-	private long tweetId;
 	private ApplicationClass appClass;
 
 	@Override
@@ -37,14 +34,13 @@ public class _2_favorites extends Fragment{
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
 
 		TweetListView userFavorite = (TweetListView)v.findViewById(R.id.UserPageList);
-		llm = userFavorite.getLinearLayoutManager();
 
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		userFavorite.setAdapter(adapter);
 
-		final EndlessScrollListener scrollListener = getLoadMoreListener();
+		final EndlessScrollListener scrollListener = getLoadMoreListener(userFavorite.getLinearLayoutManager());
 		userFavorite.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
@@ -54,7 +50,6 @@ public class _2_favorites extends Fragment{
 			@Override
 			public void onRefresh(){
 				adapter.clear();
-				alreadyLoad = false;
 				isAllLoaded = false;
 				loadMentionLine();
 				scrollListener.resetState();
@@ -63,7 +58,7 @@ public class _2_favorites extends Fragment{
 		return v;
 	}
 
-	public EndlessScrollListener getLoadMoreListener(){
+	public EndlessScrollListener getLoadMoreListener(LinearLayoutManager llm){
 		return new EndlessScrollListener(llm){
 
 			@Override
@@ -75,18 +70,18 @@ public class _2_favorites extends Fragment{
 	}
 
 	public void loadMentionLine(){
-		if(alreadyLoad)
-			tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
 		((UserPage)_2_favorites.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
-					if(alreadyLoad)
+					if(adapter.getItemCount() > 0){
+						long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
 						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(),
 								new Paging(1, 50).maxId(tweetId - 1));
-					else
+					}else{
 						return appClass.getTwitter().getFavorites(appClass.getTargetScreenName(), new Paging(1, 50));
+					}
 				}catch(Exception e){
 					return null;
 				}
@@ -95,7 +90,6 @@ public class _2_favorites extends Fragment{
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null) {
 					adapter.addAll(result);
-					alreadyLoad = true;
 					if(appClass.getTarget() != null && appClass.getTarget().getFavouritesCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
