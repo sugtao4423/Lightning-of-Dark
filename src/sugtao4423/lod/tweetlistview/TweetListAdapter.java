@@ -198,34 +198,34 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 	}
 
 	public void add(final Status status){
+		data.add(status);
 		new UiHandler(){
 
 			@Override
 			public void run(){
-				data.add(status);
 				notifyItemInserted(data.size() - 1);
 			}
 		}.post();
 	}
 
 	public void addAll(final ResponseList<Status> status){
+		final int pos = data.size();
+		data.addAll(status);
 		new UiHandler(){
 
 			@Override
 			public void run(){
-				int pos = data.size();
-				data.addAll(status);
 				notifyItemRangeInserted(pos, status.size());
 			}
 		}.post();
 	}
 
 	public void insertTop(final Status item){
+		data.add(0, item);
 		new UiHandler(){
 
 			@Override
 			public void run(){
-				data.add(0, item);
 				notifyItemInserted(0);
 				if(data.size() - 1 != 0)
 					notifyItemRangeChanged(1, data.size());
@@ -234,12 +234,12 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 	}
 
 	public void clear(){
+		final int size = data.size();
+		data.clear();
 		new UiHandler(){
 
 			@Override
 			public void run(){
-				int size = data.size();
-				data.clear();
 				notifyItemRangeRemoved(0, size);
 			}
 		}.post();

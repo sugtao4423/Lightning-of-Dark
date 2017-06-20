@@ -91,24 +91,24 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 	}
 
 	public void addAll(final PagableResponseList<User> users){
+		final int pos = data.size();
+		data.addAll(users);
 		new UiHandler(){
 			
 			@Override
 			public void run(){
-				int pos = data.size();
-				data.addAll(users);
 				notifyItemRangeInserted(pos, users.size());
 			}
 		}.post();
 	}
 
 	public void clear(){
+		final int size = data.size();
+		data.clear();
 		new UiHandler(){
 
 			@Override
 			public void run(){
-				int size = data.size();
-				data.clear();
 				notifyItemRangeRemoved(0, size);
 			}
 		}.post();
