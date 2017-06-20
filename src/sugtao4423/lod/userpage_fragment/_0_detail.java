@@ -98,7 +98,7 @@ public class _0_detail extends Fragment{
 			targetIcon.setVisibility(View.VISIBLE);
 			isFollowIcon.setVisibility(View.VISIBLE);
 			followCheck();
-			set_souce_and_targetIcon();
+			set_source_and_targetIcon();
 		}
 
 		
@@ -187,7 +187,7 @@ public class _0_detail extends Fragment{
 		}.execute();
 	}
 
-	public void set_souce_and_targetIcon(){
+	public void set_source_and_targetIcon(){
 		new AsyncTask<Void, Void, String[]>(){
 			@Override
 			protected String[] doInBackground(Void... params){
