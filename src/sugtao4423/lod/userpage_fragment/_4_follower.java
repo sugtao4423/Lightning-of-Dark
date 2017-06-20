@@ -83,13 +83,13 @@ public class _4_follower extends Fragment{
 
 			@Override
 			public void onPostExecute(PagableResponseList<User> result){
-				if(result != null) {
+				if(result != null){
 					adapter.addAll(result);
 					cursor = result.getNextCursor();
 					if(appClass.getTarget() != null && appClass.getTarget().getFollowersCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
-					new ShowToast("フォロワーを取得できませんでした", getActivity(), 0);
+					new ShowToast(R.string.error_getFollower, getActivity(), 0);
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);

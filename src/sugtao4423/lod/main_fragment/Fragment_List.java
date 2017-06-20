@@ -2,6 +2,7 @@ package sugtao4423.lod.main_fragment;
 
 import twitter4j.Paging;
 import twitter4j.ResponseList;
+import twitter4j.Status;
 import twitter4j.TwitterException;
 
 import android.app.AlertDialog;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.Keys;
 import sugtao4423.lod.ListViewListener;
 import sugtao4423.lod.R;
 import sugtao4423.lod.Settings;
@@ -44,13 +46,15 @@ public class Fragment_List extends Fragment{
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
 		View v = View.inflate(container.getContext(), R.layout.fragment_list, null);
 		final ApplicationClass appClass = (ApplicationClass)container.getContext().getApplicationContext();
+
 		list = (TweetListView)v.findViewById(R.id.listLine);
 		adapter = appClass.getListAdapters()[listIndex];
-		list.setAdapter(adapter);
-		final EndlessScrollListener scrollListener = getLoadMoreListener(container.getContext(), list.getLinearLayoutManager());
-		list.addOnScrollListener(scrollListener);
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
+		list.setAdapter(adapter);
+
+		final EndlessScrollListener scrollListener = getLoadMoreListener(container.getContext(), list.getLinearLayoutManager());
+		list.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.ListPull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -59,9 +63,9 @@ public class Fragment_List extends Fragment{
 			@Override
 			public void onRefresh(){
 				adapter.clear();
-				boolean[] tmp = appClass.getList_AlreadyLoad();
+				boolean[] tmp = appClass.getListAlreadyLoad();
 				tmp[listIndex] = false;
-				appClass.setList_AlreadyLoad(tmp);
+				appClass.setListAlreadyLoad(tmp);
 				getList(container.getContext());
 				scrollListener.resetState();
 			}
@@ -83,17 +87,17 @@ public class Fragment_List extends Fragment{
 	public void getList(Context context){
 		final ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		if(pref.getBoolean("showList", false)){
-			String[] listId_str = pref.getString("SelectListIds", null).split(",", 0);
+		if(pref.getBoolean(Keys.SHOW_LIST, false)){
+			String[] listId_str = pref.getString(Keys.SELECT_LIST_IDS, null).split(",", 0);
 			final long[] listId = new long[listId_str.length];
 			for(int i = 0; i < listId_str.length; i++)
 				listId[i] = Long.parseLong(listId_str[i]);
 			if(listId[listIndex] != -1){
-				new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
+				new AsyncTask<Void, Void, ResponseList<Status>>(){
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 						try{
-							if(appClass.getList_AlreadyLoad()[listIndex]){
+							if(appClass.getListAlreadyLoad()[listIndex]){
 								long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
 								return appClass.getTwitter().getUserListStatuses(listId[listIndex],
 										new Paging(1, 50).maxId(tweetId - 1));
@@ -109,13 +113,13 @@ public class Fragment_List extends Fragment{
 					protected void onPostExecute(ResponseList<twitter4j.Status> result){
 						if(result != null){
 							adapter.addAll(result);
-							if(!appClass.getList_AlreadyLoad()[listIndex]){
-								boolean[] tmp = appClass.getList_AlreadyLoad();
+							if(!appClass.getListAlreadyLoad()[listIndex]){
+								boolean[] tmp = appClass.getListAlreadyLoad();
 								tmp[listIndex] = true;
-								appClass.setList_AlreadyLoad(tmp);
+								appClass.setListAlreadyLoad(tmp);
 							}
 						}else{
-							new ShowToast("リストを取得できませんでした", getActivity(), 0);
+							new ShowToast(R.string.error_getList, getActivity(), 0);
 						}
 						pulltoRefresh.setRefreshing(false);
 						pulltoRefresh.setEnabled(true);

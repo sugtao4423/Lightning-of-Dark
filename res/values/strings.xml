@@ -2,7 +2,43 @@
 <resources>
 
     <string name="app_name">Lightning of Dark</string>
-    <string name="action_settings">設定</string>
-    <string name="Tweet">Tweet</string>
+
+    <string name="success_tweet">ツイートしました</string>
+    <string name="error_tweet">ツイートできませんでした</string>
+    <string name="success_retweet">リツイートしました</string>
+    <string name="error_retweet">リツイートできませんでした</string>
+    <string name="success_fav">ふぁぼりました</string>
+    <string name="error_fav">ふぁぼれませんでした</string>
+    <string name="success_delpost">ツイ消ししました</string>
+    <string name="error_delpost">ツイ消しできませんでした</string>
+
+    <string name="error_getTimeLine">タイムライン取得エラー</string>
+    <string name="error_getMention">メンション取得エラー</string>
+    <string name="error_getFav">ふぁぼ取得エラー</string>
+    <string name="error_getFollo">フォロー取得エラー</string>
+    <string name="error_getFollower">フォロワー取得エラー</string>
+    <string name="error_getList">リスト取得エラー</string>
+
+    <string name="error_getUserIcon">ユーザーアイコンの取得に失敗しました</string>
+
+    <string name="success_getTalkList">会話取得完了</string>
+    <string name="error_getTalkList">会話取得エラー</string>
+
+    <string name="success_selectPic">画像を選択しました</string>
+    <string name="error_selectPic">画像を選択できませんでした</string>
+
+    <string name="error_getStatus">ツイートの取得に失敗しました</string>
+    <string name="nothing">ありませんでした</string>
+    <string name="error_streaming">ストリーミング系のエラー</string>
+    <string name="edittext_empty">なにも入力されていません</string>
+    <string name="deleteAccountX">\@%s を削除しました</string>
+    <string name="listNotSelected">リストが選択されていません</string>
+    <string name="error_getRequestToken">RequestTokenの取得に失敗しました</string>
+    <string name="success_addAccount">アカウントを追加しました</string>
+    <string name="error_getAccessToken">アクセストークンの取得に失敗しました</string>
+    <string name="done_clipBoardCopy">クリップボードにコピーしました</string>
+    <string name="urlNotMatchPatternDontSave">URLがパターンにマッチしません\n保存できませんでした</string>
+    <string name="error_getOriginalImage">オリジナル画像の取得に失敗しました</string>
+    <string name="error_getUserDetail">ユーザー情報を取得できませんでした</string>
 
 </resources>

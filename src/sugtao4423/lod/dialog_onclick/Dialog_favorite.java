@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
 import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 
 public class Dialog_favorite implements OnClickListener{
@@ -39,9 +40,9 @@ public class Dialog_favorite implements OnClickListener{
 			@Override
 			protected void onPostExecute(Boolean result){
 				if(result)
-					new ShowToast("ふぁぼりました", context, 0);
+					new ShowToast(R.string.success_fav, context, 0);
 				else
-					new ShowToast("ふぁぼれませんでした", context, 0);
+					new ShowToast(R.string.error_fav, context, 0);
 			}
 		}.execute();
 	}

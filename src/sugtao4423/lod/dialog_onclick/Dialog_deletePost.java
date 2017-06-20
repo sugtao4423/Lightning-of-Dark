@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
 import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 
 public class Dialog_deletePost implements OnClickListener{
@@ -52,9 +53,9 @@ public class Dialog_deletePost implements OnClickListener{
 			@Override
 			protected void onPostExecute(Boolean result){
 				if(result)
-					new ShowToast("ツイ消ししました", context, 0);
+					new ShowToast(R.string.success_delpost, context, 0);
 				else
-					new ShowToast("ツイ消しできませんでした", context, 0);
+					new ShowToast(R.string.error_delpost, context, 0);
 			}
 		}.execute();
 	}

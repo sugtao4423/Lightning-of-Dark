@@ -66,7 +66,7 @@ public class Fragment_home extends Fragment{
 
 			@Override
 			public void onLoadMore(int current_page){
-				AsyncTask<Void, Void, ResponseList<twitter4j.Status>> task = new AsyncTask<Void, Void, ResponseList<twitter4j.Status>>(){
+				AsyncTask<Void, Void, ResponseList<Status>> task = new AsyncTask<Void, Void, ResponseList<Status>>(){
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 						try{
@@ -82,7 +82,7 @@ public class Fragment_home extends Fragment{
 						if(result != null)
 							adapter.addAll(result);
 						else
-							new ShowToast("タイムライン取得エラー", getActivity(), 0);
+							new ShowToast(R.string.error_getTimeLine, getActivity(), 0);
 					}
 				};
 				if(adapter.getItemCount() > 30)

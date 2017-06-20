@@ -25,8 +25,8 @@ public class Dialog_unOfficialRT implements OnClickListener{
 	public void onClick(View v){
 		dialog.dismiss();
 		Intent i = new Intent(context, TweetActivity.class);
-		i.putExtra("type", TweetActivity.TYPE_UNOFFICIALRT);
-		i.putExtra("status", new StatusItem(status));
+		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_UNOFFICIALRT);
+		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, new StatusItem(status));
 		context.startActivity(i);
 	}
 }

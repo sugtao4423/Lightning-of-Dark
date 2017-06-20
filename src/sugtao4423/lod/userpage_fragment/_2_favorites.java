@@ -87,13 +87,14 @@ public class _2_favorites extends Fragment{
 				}
 			}
 
+			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
-				if(result != null) {
+				if(result != null){
 					adapter.addAll(result);
 					if(appClass.getTarget() != null && appClass.getTarget().getFavouritesCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
-					new ShowToast("ふぁぼ取得エラー", getActivity(), 0);
+					new ShowToast(R.string.error_getFav, getActivity(), 0);
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);

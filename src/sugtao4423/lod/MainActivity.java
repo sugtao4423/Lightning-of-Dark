@@ -13,7 +13,6 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterStream;
 import twitter4j.UserStreamAdapter;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +23,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import sugtao4423.lod.main_fragment.Fragment_home;
@@ -61,13 +59,13 @@ public class MainActivity extends FragmentActivity{
 		ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(1);
-		viewPager.setOffscreenPageLimit(pref.getInt("SelectListCount", 0) + 1);
-		listAdapters = new TweetListAdapter[pref.getInt("SelectListCount", 0)];
-		for(int i = 0; i < pref.getInt("SelectListCount", 0); i++)
+		viewPager.setOffscreenPageLimit(pref.getInt(Keys.SELECT_LIST_COUNT, 0) + 1);
+		listAdapters = new TweetListAdapter[pref.getInt(Keys.SELECT_LIST_COUNT, 0)];
+		for(int i = 0; i < pref.getInt(Keys.SELECT_LIST_COUNT, 0); i++)
 			listAdapters[i] = new TweetListAdapter(this);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.mainPagerTabStrip);
-		strip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
+		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabIndicator)));
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 
@@ -76,23 +74,22 @@ public class MainActivity extends FragmentActivity{
 		logIn();
 	}
 
-	@SuppressLint("InflateParams")
 	public void logIn(){
 		appClass = (ApplicationClass)getApplicationContext();
 		appClass.setListAdapters(listAdapters);
 		boolean[] list_alreadyLoad = new boolean[listAdapters.length];
 		for(int i = 0; i < listAdapters.length; i++)
 			list_alreadyLoad[i] = false;
-		appClass.setList_AlreadyLoad(list_alreadyLoad);
+		appClass.setListAlreadyLoad(list_alreadyLoad);
 		appClass.loadOption(this);
 
-		View customToast = LayoutInflater.from(this).inflate(R.layout.custom_toast, null);
+		View customToast = View.inflate(this, R.layout.custom_toast, null);
 		appClass.setToastView(customToast);
 		appClass.setToast_Main_Message((TextView)customToast.findViewById(R.id.toast_main_message));
 		appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
 		appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
 
-		if(pref.getString("AccessToken", "").equals("")){
+		if(pref.getString(Keys.ACCESS_TOKEN, "").equals("")){
 			startActivity(new Intent(this, StartOAuth.class));
 			finish();
 		}else{
@@ -120,17 +117,17 @@ public class MainActivity extends FragmentActivity{
 			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result == null){
-					new ShowToast("タイムライン取得エラー", MainActivity.this, 0);
+					new ShowToast(R.string.error_getTimeLine, MainActivity.this, 0);
 				}else{
 					fragmentHome.addAll(result);
 				}
 			}
 		}.execute();
 
-		if(!pref.getString("startApp_loadLists", "").equals("") && !pref.getString("SelectListIds", "").equals("")){
-			String[] listName_str = pref.getString("SelectListNames", "").split(",", 0);
-			String[] listIds_str = pref.getString("SelectListIds", "").split(",", 0);
-			String[] startApp_loadLists = pref.getString("startApp_loadLists", "").split(",", 0);
+		if(!pref.getString(Keys.APP_START_LOAD_LISTS, "").equals("") && !pref.getString(Keys.SELECT_LIST_IDS, "").equals("")){
+			String[] listName_str = pref.getString(Keys.SELECT_LIST_NAMES, "").split(",", 0);
+			String[] listIds_str = pref.getString(Keys.SELECT_LIST_IDS, "").split(",", 0);
+			String[] startApp_loadLists = pref.getString(Keys.APP_START_LOAD_LISTS, "").split(",", 0);
 			ArrayList<String> startApp_loadListsArray = new ArrayList<String>();
 			for(int i = 0; i < startApp_loadLists.length; i++)
 				startApp_loadListsArray.add(startApp_loadLists[i]);
@@ -160,9 +157,9 @@ public class MainActivity extends FragmentActivity{
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null){
 					listAdapters[index].addAll(result);
-					boolean[] tmp = appClass.getList_AlreadyLoad();
+					boolean[] tmp = appClass.getListAlreadyLoad();
 					tmp[index] = true;
-					appClass.setList_AlreadyLoad(tmp);
+					appClass.setListAlreadyLoad(tmp);
 				}
 			}
 		}.execute();
@@ -208,7 +205,7 @@ public class MainActivity extends FragmentActivity{
 			twitterStream.addConnectionLifeCycleListener(clcl);
 			twitterStream.user();
 		}catch(Exception e){
-			new ShowToast("ストリーミング系のエラー\n" + e.toString(), MainActivity.this, 0);
+			new ShowToast(R.string.error_streaming + "\n" + e.toString(), MainActivity.this, 0);
 		}
 	}
 

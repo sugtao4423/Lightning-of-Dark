@@ -39,7 +39,7 @@ public class StartOAuth extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.oauth);
 
-		TextView description = (TextView)findViewById(R.id.OAuthDescription);
+		TextView description = (TextView)findViewById(R.id.oauthDescription);
 		String descri = "Custom CK/CSを使う場合、CallbackURLを<br><font color=blue><u>https://twitter.com/lightning-of-dark</u></font><br>に設定してください。<br>（タップでコピー）";
 		description.setText(Html.fromHtml(descri));
 
@@ -50,8 +50,8 @@ public class StartOAuth extends Activity{
 
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		customCK.setText(pref.getString("CustomCK", ""));
-		customCS.setText(pref.getString("CustomCS", ""));
+		customCK.setText(pref.getString(Keys.CUSTOM_CK, ""));
+		customCS.setText(pref.getString(Keys.CUSTOM_CS, ""));
 	}
 
 	public void ninsyo(View v){
@@ -62,17 +62,18 @@ public class StartOAuth extends Activity{
 		}else{
 			ck = customCK.getText().toString();
 			cs = customCS.getText().toString();
-			pref.edit().putString("CustomCK", ck).putString("CustomCS", cs).commit();
+			pref.edit().putString(Keys.CUSTOM_CK, ck).putString(Keys.CUSTOM_CS, cs).commit();
 		}
 
-		new AsyncTask<Void, Void, Boolean>(){
-			@Override
-			protected Boolean doInBackground(Void... params){
-				ConfigurationBuilder builder = new ConfigurationBuilder();
-				builder.setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs);
-				Configuration jconf = builder.build();
+		Configuration conf = new ConfigurationBuilder()
+				.setOAuthConsumerKey(ck)
+				.setOAuthConsumerSecret(cs)
+				.build();
+		new AsyncTask<Configuration, Void, Boolean>(){
 
-				twitter = new TwitterFactory(jconf).getInstance();
+			@Override
+			protected Boolean doInBackground(Configuration... conf){
+				twitter = new TwitterFactory(conf[0]).getInstance();
 				try{
 					rt = twitter.getOAuthRequestToken("lightning-of-dark://twitter");
 					return true;
@@ -86,9 +87,9 @@ public class StartOAuth extends Activity{
 				if(result)
 					new ChromeIntent(StartOAuth.this, Uri.parse(rt.getAuthenticationURL()));
 				else
-					new ShowToast("RequestTokenの取得に失敗しました", StartOAuth.this, 0);
+					new ShowToast(R.string.error_getRequestToken, StartOAuth.this, 0);
 			}
-		}.execute();
+		}.execute(conf);
 	}
 
 	@Override
@@ -113,9 +114,9 @@ public class StartOAuth extends Activity{
 			protected void onPostExecute(AccessToken accessToken){
 				if(accessToken != null){
 					pref.edit()
-						.putString("ScreenName", accessToken.getScreenName())
-						.putString("AccessToken", accessToken.getToken())
-						.putString("AccessTokenSecret", accessToken.getTokenSecret())
+						.putString(Keys.SCREEN_NAME, accessToken.getScreenName())
+						.putString(Keys.ACCESS_TOKEN, accessToken.getToken())
+						.putString(Keys.ACCESS_TOKEN_SECRET, accessToken.getTokenSecret())
 					.commit();
 
 					if(ck.equals(getString(R.string.CK)))
@@ -127,20 +128,20 @@ public class StartOAuth extends Activity{
 							accessToken.getToken(), accessToken.getTokenSecret(), false, 0, "-1", "", "");
 					new DBUtil(StartOAuth.this).addAcount(account);
 
-					new ShowToast("アカウントを追加しました", StartOAuth.this, 0);
+					new ShowToast(R.string.success_addAccount, StartOAuth.this, 0);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
 				}else{
-					new ShowToast("失敗...", StartOAuth.this, 0);
+					new ShowToast(R.string.error_getAccessToken, StartOAuth.this, 0);
 				}
 				finish();
 			}
 		}.execute();
 	}
 
-	public void Description(View v){
+	public void copyClipBoardDescription(View v){
 		ClipboardManager clipboardManager = (ClipboardManager)this.getSystemService(Context.CLIPBOARD_SERVICE);
 		ClipData clipData = ClipData.newPlainText("Lightning of Dark", "https://twitter.com/lightning-of-dark");
 		clipboardManager.setPrimaryClip(clipData);
-		new ShowToast("クリップボードにコピーしました", this, 0);
+		new ShowToast(R.string.done_clipBoardCopy, this, 0);
 	}
 }

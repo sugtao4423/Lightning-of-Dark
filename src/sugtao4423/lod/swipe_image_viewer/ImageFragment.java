@@ -8,7 +8,6 @@ import java.net.URL;
 
 import com.tenthbit.view.ZoomImageView;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,11 +29,10 @@ public class ImageFragment extends Fragment{
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		Bundle bundle = getArguments();
-		url = bundle.getString("url");
+		url = bundle.getString(ImagePagerAdapter.BUNDLE_KEY_URL);
 		image = new ZoomImageView(getActivity());
 	}
 
-	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		new AsyncTask<String, Void, Bitmap>(){
@@ -76,7 +74,7 @@ public class ImageFragment extends Fragment{
 
 			@Override
 			protected void onPostExecute(Bitmap result){
-				if(result != null) {
+				if(result != null){
 					progDialog.dismiss();
 					image.setImageBitmap(result);
 				}else{

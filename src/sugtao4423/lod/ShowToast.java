@@ -30,11 +30,15 @@ public class ShowToast{
 		}
 	}
 
+	public ShowToast(int resId, Context context, int toastType){
+		this(context.getString(resId), context, toastType);
+	}
+
 	public void normalToast(String text, Context context){
 		Toast toast = new Toast(context);
 
 		main_message.setText(text);
-		main_message.setTextColor(Color.parseColor("#ffffff"));
+		main_message.setTextColor(Color.WHITE);
 		main_message.setPadding(3, 2, 3, 2);
 
 		tweet.setVisibility(View.GONE);

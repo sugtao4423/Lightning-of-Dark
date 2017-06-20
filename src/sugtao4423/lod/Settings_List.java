@@ -10,8 +10,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -22,11 +20,13 @@ import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.widget.Toast;
+import sugtao4423.lod.utils.DBUtil;
 
 public class Settings_List extends PreferenceActivity{
 
 	private Preference select_List, startApp_loadList;
-	private SQLiteDatabase db;
+	private DBUtil dbUtil;
+	private String myScreenName;
 	private ApplicationClass appClass;
 
 	@Override
@@ -46,9 +46,10 @@ public class Settings_List extends PreferenceActivity{
 			select_List = findPreference("select_List");
 			startApp_loadList = findPreference("startApp_loadList");
 
-			db = new SQLHelper(getActivity()).getWritableDatabase();
+			dbUtil = new DBUtil(getActivity());
 
 			appClass = (ApplicationClass)getActivity().getApplicationContext();
+			myScreenName = appClass.getMyScreenName();
 
 			setSummary();
 
@@ -61,31 +62,27 @@ public class Settings_List extends PreferenceActivity{
 			}
 
 			showList.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+
 				@Override
 				public boolean onPreferenceChange(Preference preference, Object newValue){
 					if(showList.isChecked()){
 						select_List.setEnabled(false);
 						startApp_loadList.setEnabled(false);
-						db.execSQL("update accounts set showList='false' where screen_name = '" + appClass.getMyScreenName() + "'");
+						dbUtil.updateShowList(false, myScreenName);
 					}else{
 						select_List.setEnabled(true);
 						startApp_loadList.setEnabled(true);
-						db.execSQL("update accounts set showList='true' where screen_name = '" + appClass.getMyScreenName() + "'");
+						dbUtil.updateShowList(true, myScreenName);
 					}
 					return true;
 				}
 			});
 
 			startApp_loadList.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+
 				@Override
 				public boolean onPreferenceClick(Preference preference){
-					Cursor c = db.rawQuery("select SelectListNames from accounts where screen_name=?",
-							new String[]{appClass.getMyScreenName()});
-					String c_str = null;
-					while(c.moveToNext())
-						c_str = c.getString(0);
-					c.close();
-					final String[] selectedListNames = c_str.split(",", 0);
+					final String[] selectedListNames = dbUtil.getSelectListNames(myScreenName);
 					boolean[] selectedLoadList = new boolean[selectedListNames.length];
 					for(int i = 0; i < selectedListNames.length; i++)
 						selectedLoadList[i] = false;
@@ -103,35 +100,33 @@ public class Settings_List extends PreferenceActivity{
 							}).setPositiveButton("OK", new OnClickListener(){
 								@Override
 								public void onClick(DialogInterface dialog, int which){
-									String startApp_loadLists = "";
+									String appStartLoadLists = "";
 									for(int i = 0; i < selectLoadList.size(); i++)
-										startApp_loadLists += selectLoadList.get(i) + ",";
+										appStartLoadLists += selectLoadList.get(i) + ",";
 									SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-									pref.edit().putString("startApp_loadLists", startApp_loadLists).commit();
-									db.execSQL("update accounts set startApp_loadLists='" + startApp_loadLists
-											+ "' where screen_name='" + appClass.getMyScreenName() + "'");
+									pref.edit().putString(Keys.APP_START_LOAD_LISTS, appStartLoadLists).commit();
+									dbUtil.updateStartAppLoadLists(appStartLoadLists, myScreenName);
 									setSummary();
 								}
 							}).setNegativeButton("キャンセル", null);
 					if(!selectedListNames[0].equals(""))
 						builder.show();
 					else
-						new ShowToast("リストが選択されていません", getActivity(), 0);
+						new ShowToast(R.string.listNotSelected, getActivity(), 0);
 					return false;
 				}
 			});
 
 			select_List.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
-				ArrayList<String> array = new ArrayList<String>();
-
 				@Override
 				public boolean onPreferenceClick(Preference preference){
+					final ArrayList<String> array = new ArrayList<String>();
 					new AsyncTask<Void, Void, ResponseList<UserList>>(){
 						@Override
 						protected ResponseList<UserList> doInBackground(Void... params){
 							try{
-								return appClass.getTwitter().getUserLists(appClass.getMyScreenName());
+								return appClass.getTwitter().getUserLists(myScreenName);
 							}catch(TwitterException e){
 								return null;
 							}
@@ -174,17 +169,14 @@ public class Settings_List extends PreferenceActivity{
 
 										SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 										pref.edit()
-											.putInt("SelectListCount", checkedSize)
-											.putString("SelectListIds", listIds)
-											.putString("SelectListNames", listNames)
+											.putInt(Keys.SELECT_LIST_COUNT, checkedSize)
+											.putString(Keys.SELECT_LIST_IDS, listIds)
+											.putString(Keys.SELECT_LIST_NAMES, listNames)
 										.commit();
-										db.execSQL("update accounts set SelectListCount='" + checkedSize
-												+ "' where screen_name = '" + appClass.getMyScreenName() + "'");
-										db.execSQL("update accounts set SelectListIds='" + listIds
-												+ "' where screen_name = '" + appClass.getMyScreenName() + "'");
-										db.execSQL("update accounts set SelectListNames='" + listNames
-												+ "' where screen_name = '" + appClass.getMyScreenName() + "'");
-										Dialog("リストを選択しました");
+										dbUtil.updateSelectListCount(checkedSize, myScreenName);
+										dbUtil.updateSelectListIds(listIds, myScreenName);
+										dbUtil.updateSelectListNames(listNames, myScreenName);
+										dialog("リストを選択しました");
 										setSummary();
 									}
 								}).show();
@@ -196,7 +188,7 @@ public class Settings_List extends PreferenceActivity{
 			});
 		}
 
-		public void Dialog(String title){
+		public void dialog(String title){
 			new AlertDialog.Builder(getActivity())
 			.setTitle(title)
 			.setMessage("アプリを再起動してください。")
@@ -214,21 +206,14 @@ public class Settings_List extends PreferenceActivity{
 		}
 
 		public void setSummary(){
-			Cursor nowSelectList = db.rawQuery("select SelectListNames from accounts where screen_name=?",
-					new String[]{appClass.getMyScreenName()});
-			Cursor nowStartAppLoadList = db.rawQuery("select startApp_loadLists from accounts where screen_name=?",
-					new String[]{appClass.getMyScreenName()});
-			nowSelectList.moveToNext();
-			nowStartAppLoadList.moveToNext();
-			String[] now1 = nowSelectList.getString(0).split(",", 0);
-			String[] now2 = nowStartAppLoadList.getString(0).split(",", 0);
-			nowSelectList.close();
-			nowStartAppLoadList.close();
-			String result1 = "設定値：", result2 = "設定値：";
-			for(int i = 0; i < now1.length; i++)
-				result1 += now1[i] + ", ";
-			for(int i = 0; i < now2.length; i++)
-				result2 += now2[i] + ", ";
+			String[] nowSelectList = dbUtil.getSelectListNames(myScreenName);
+			String[] nowStartAppLoadList = dbUtil.getNowStartAppLoadList(myScreenName);
+			String result1 = "設定値：";
+			String result2 = "設定値：";
+			for(String s : nowSelectList)
+				result1 += s + ", ";
+			for(String s : nowStartAppLoadList)
+				result2 += s + ", ";
 
 			result1 = result1.substring(0, result1.length() - 2);
 			result2 = result2.substring(0, result2.length() - 2);

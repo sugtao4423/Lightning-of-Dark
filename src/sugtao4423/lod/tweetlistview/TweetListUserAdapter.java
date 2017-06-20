@@ -74,7 +74,7 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 			@Override
 			public void onClick(View v){
 				Intent i = new Intent(context, UserPage.class);
-				i.putExtra("userScreenName", item.getScreenName());
+				i.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, item.getScreenName());
 				context.startActivity(i);
 			}
 		});

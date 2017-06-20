@@ -33,7 +33,7 @@ public class ApplicationClass extends Application{
 	private Pattern mentionPattern;
 	private TweetListAdapter[] listAdapters;
 	private boolean option_regex, option_openBrowser, isWebm;
-	private boolean[] list_AlreadyLoad;
+	private boolean[] listAlreadyLoad;
 	// MainActivity - CustomToast
 	private View customToast;
 	private TextView toast_main_message, toast_tweet;
@@ -46,18 +46,18 @@ public class ApplicationClass extends Application{
 	public void twitterLogin(Context context){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		String ck, cs;
-		if(pref.getString("CustomCK", "").equals("")){
+		if(pref.getString(Keys.CUSTOM_CK, "").equals("")){
 			ck = getString(R.string.CK);
 			cs = getString(R.string.CS);
 		}else{
-			ck = pref.getString("CustomCK", null);
-			cs = pref.getString("CustomCS", null);
+			ck = pref.getString(Keys.CUSTOM_CK, null);
+			cs = pref.getString(Keys.CUSTOM_CS, null);
 		}
-		AccessToken accessToken = new AccessToken(pref.getString("AccessToken", ""), pref.getString("AccessTokenSecret", ""));
+		AccessToken accessToken = new AccessToken(pref.getString(Keys.ACCESS_TOKEN, ""), pref.getString(Keys.ACCESS_TOKEN_SECRET, ""));
 
 		Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).setTweetModeExtended(true).build();
 		Twitter twitter = new TwitterFactory(conf).getInstance(accessToken);
-		this.myScreenName = pref.getString("ScreenName", "");
+		this.myScreenName = pref.getString(Keys.SCREEN_NAME, "");
 		this.twitter = twitter;
 		this.twitterStream = new TwitterStreamFactory(conf).getInstance(accessToken);
 		this.mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
@@ -78,9 +78,9 @@ public class ApplicationClass extends Application{
 			@Override
 			protected void onPostExecute(twitter4j.Status result){
 				if(result != null)
-					new ShowToast("ツイートしました", context, 0);
+					new ShowToast(R.string.success_tweet, context, 0);
 				else
-					new ShowToast("ツイートできませんでした", context, 0);
+					new ShowToast(R.string.error_tweet, context, 0);
 			}
 		}.execute();
 	}
@@ -148,18 +148,18 @@ public class ApplicationClass extends Application{
 
 	public void loadOption(Context context){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		setOption_regex(pref.getBoolean("menu_regex", false));
-		setOption_openBrowser(pref.getBoolean("menu_openBrowser", false));
-		setIsWebm(pref.getBoolean("isWebm", false));
+		setOption_regex(pref.getBoolean(Keys.MENU_REGEX, false));
+		setOption_openBrowser(pref.getBoolean(Keys.MENU_OPEN_BROWSER, false));
+		setIsWebm(pref.getBoolean(Keys.IS_WEBM, false));
 	}
 
 	// list_AlreadyLoad
-	public void setList_AlreadyLoad(boolean[] AlreadyLoad){
-		this.list_AlreadyLoad = AlreadyLoad;
+	public void setListAlreadyLoad(boolean[] AlreadyLoad){
+		this.listAlreadyLoad = AlreadyLoad;
 	}
 
-	public boolean[] getList_AlreadyLoad(){
-		return list_AlreadyLoad;
+	public boolean[] getListAlreadyLoad(){
+		return listAlreadyLoad;
 	}
 
 	// CustomToast

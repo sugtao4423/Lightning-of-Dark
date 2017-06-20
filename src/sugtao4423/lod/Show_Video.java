@@ -13,6 +13,9 @@ import android.widget.VideoView;
 
 public class Show_Video extends Activity{
 
+	public static final String INTENT_EXTRA_KEY_TYPE = "type";
+	public static final String INTENT_EXTRA_KEY_URL = "URL";
+
 	public static final int TYPE_VIDEO = 0;
 	public static final int TYPE_GIF = 1;
 
@@ -22,8 +25,8 @@ public class Show_Video extends Activity{
 		setContentView(R.layout.show_video);
 
 		Intent intent = getIntent();
-		String url = intent.getStringExtra("URL");
-		final int type = intent.getIntExtra("type", -1);
+		String url = intent.getStringExtra(INTENT_EXTRA_KEY_URL);
+		final int type = intent.getIntExtra(INTENT_EXTRA_KEY_TYPE, -1);
 		if(type == -1)
 			finish();
 

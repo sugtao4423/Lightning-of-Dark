@@ -26,6 +26,7 @@ import sugtao4423.lod.utils.Regex;
 
 public class IntentActivity extends Activity{
 
+	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
@@ -42,7 +43,7 @@ public class IntentActivity extends Activity{
 			appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
 			appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
 
-			if(pref.getString("AccessToken", "").equals("")){
+			if(pref.getString(Keys.ACCESS_TOKEN, "").equals("")){
 				startActivity(new Intent(this, StartOAuth.class));
 				finish();
 			}else{
@@ -63,7 +64,7 @@ public class IntentActivity extends Activity{
 				showStatus(Long.parseLong(status.group(2)), IntentActivity.this, true);
 			}else if(user.find()){
 				Intent i = new Intent(IntentActivity.this, UserPage.class);
-				i.putExtra("userScreenName", user.group(2));
+				i.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, user.group(2));
 				startActivity(i);
 				finish();
 			}
@@ -72,8 +73,8 @@ public class IntentActivity extends Activity{
 			String text = getIntent().getExtras().getString(Intent.EXTRA_TEXT);
 			text = subject.isEmpty() ? text : (subject + " " + text);
 			Intent i = new Intent(IntentActivity.this, TweetActivity.class);
-			i.putExtra("type", TweetActivity.TYPE_EXTERNALTEXT);
-			i.putExtra("text", text);
+			i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_EXTERNALTEXT);
+			i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TEXT, text);
 			startActivity(i);
 			finish();
 		}
@@ -113,7 +114,7 @@ public class IntentActivity extends Activity{
 					}
 					builder.show();
 				}else{
-					new ShowToast("ツイートの取得に失敗しました", IntentActivity.this, 0);
+					new ShowToast(R.string.error_getStatus, IntentActivity.this, 0);
 				}
 			}
 		}.execute(tweetId);

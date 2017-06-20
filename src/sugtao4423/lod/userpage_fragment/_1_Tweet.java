@@ -93,7 +93,7 @@ public class _1_Tweet extends Fragment{
 					if(appClass.getTarget() != null && appClass.getTarget().getStatusesCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
-					new ShowToast("タイムラインを取得できませんでした", getActivity(), 0);
+					new ShowToast(R.string.error_getTimeLine, getActivity(), 0);
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);

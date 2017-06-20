@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import sugtao4423.lod.Keys;
 import sugtao4423.lod.SQLHelper;
 import sugtao4423.lod.dataclass.Account;
 
@@ -43,29 +44,63 @@ public class DBUtil{
 	}
 
 	public void addAcount(Account account){
-		db.execSQL("insert into accounts values('" +
-						account.getScreenName() + "', '" +
-						account.getCK() + "', '" +
-						account.getCS() + "', '" +
-						account.getAT() + "', '" +
-						account.getATS() + "', '" +
-						String.valueOf(account.getShowList()) + "', '" +
-						String.valueOf(account.getSelectListCount()) + "', '" +
-						account.getSelectListIds() + "', '" +
-						account.getSelectListNames() + "', '" +
-						account.getStartAppLoadLists() + "')");
+		db.execSQL(String.format("insert into accounts values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+				account.getScreenName(), account.getCK(), account.getCS(), account.getAT(), account.getATS(),
+				account.getShowList(), account.getSelectListCount(),
+				account.getSelectListIds(), account.getSelectListNames(), account.getStartAppLoadLists()));
 	}
 
 	public void deleteAccount(Account account){
-		db.execSQL("delete from accounts where screen_name='" + account.getScreenName() + "' and CK='" +
-						account.getCK() + "' and CS='" +
-						account.getCS() + "' and AT='" +
-						account.getAT() + "' and ATS='" +
-						account.getATS() + "' and showList='" +
-						String.valueOf(account.getShowList()) + "' and SelectListCount='" +
-						String.valueOf(account.getSelectListCount()) + "' and SelectListIds='" +
-						account.getSelectListIds() + "' and SelectListNames='" +
-						account.getSelectListNames() + "' and startApp_loadLists='" +
-						account.getStartAppLoadLists() + "'");
+		db.execSQL(String.format(
+				"delete from accounts where %s='%s' and %s='%s' and %s='%s' and %s='%s' and %s='%s' "
+				+ "and %s='%s' and %s='%s' and %s='%s' and %s='%s' and %s='%s'",
+				Keys.SCREEN_NAME, account.getScreenName(), Keys.CK, account.getCK(), Keys.CS, account.getCS(),
+				Keys.ACCESS_TOKEN, account.getAT(), Keys.ACCESS_TOKEN_SECRET, account.getATS(),
+				Keys.SHOW_LIST, account.getShowList(), Keys.SELECT_LIST_COUNT, account.getSelectListCount(),
+				Keys.SELECT_LIST_IDS, account.getSelectListIds(), Keys.SELECT_LIST_NAMES, account.getSelectListNames(),
+				Keys.APP_START_LOAD_LISTS, account.getStartAppLoadLists()));
+	}
+
+	public void updateShowList(boolean showList, String screenName){
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SHOW_LIST, showList, Keys.SCREEN_NAME, screenName));
+	}
+
+	public void updateStartAppLoadLists(String startAppLoadLists, String screenName){
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.APP_START_LOAD_LISTS, startAppLoadLists, Keys.SCREEN_NAME, screenName));
+	}
+
+	public void updateSelectListCount(int count, String screenName){
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SELECT_LIST_COUNT, count, Keys.SCREEN_NAME, screenName));
+	}
+
+	public void updateSelectListIds(String ids, String screenName){
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SELECT_LIST_IDS, ids, Keys.SCREEN_NAME, screenName));
+	}
+
+	public void updateSelectListNames(String names, String screenName){
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SELECT_LIST_NAMES, names, Keys.SCREEN_NAME, screenName));
+	}
+
+	private String getUpdate1ColumnFromEq1Column(Object updateKey, Object update, Object whereKey, Object where){
+		return String.format("update accounts set %s='%s' where %s='%s'", updateKey, update, whereKey, where);
+	}
+
+	public String[] getSelectListNames(String screenName){
+		Cursor c = db.rawQuery(String.format("select %s from accounts where %s='%s'",
+				Keys.SELECT_LIST_NAMES, Keys.SCREEN_NAME, screenName), null);
+		String c_str = null;
+		while(c.moveToNext())
+			c_str = c.getString(0);
+		c.close();
+		return c_str.split(",", 0);
+	}
+
+	public String[] getNowStartAppLoadList(String screenName){
+		Cursor c = db.rawQuery(String.format("select %s from accounts where %s='%s'",
+				Keys.APP_START_LOAD_LISTS, Keys.SCREEN_NAME, screenName), null);
+		c.moveToNext();
+		String[] result = c.getString(0).split(",", 0);
+		c.close();
+		return result;
 	}
 }

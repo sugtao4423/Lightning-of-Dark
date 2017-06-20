@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.ListViewListener;
+import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
@@ -65,9 +66,9 @@ public class Dialog_talk implements OnClickListener{
 				if(result.getInReplyToStatusId() > 0)
 					new LoadConversation().execute();
 				else
-					new ShowToast("会話取得完了", context, 0);
+					new ShowToast(R.string.success_getTalkList, context, 0);
 			}else{
-				new ShowToast("会話取得エラー", context, 0);
+				new ShowToast(R.string.error_getTalkList, context, 0);
 			}
 		}
 	}

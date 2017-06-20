@@ -55,15 +55,14 @@
         android:singleLine="true" />
 
     <TextView
-        android:id="@+id/OAuthDescription"
+        android:id="@+id/oauthDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/edit_cs"
         android:layout_marginTop="20dp"
         android:clickable="true"
-        android:onClick="Description"
-        android:text="Description" />
+        android:onClick="copyClipBoardDescription" />
 
     <TextView
         android:id="@+id/description"

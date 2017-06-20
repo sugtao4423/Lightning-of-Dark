@@ -18,7 +18,7 @@
             android:summaryOn="webm"
             android:title="動画をwebmで取得する" />
         <Preference
-            android:key="ListSetting"
+            android:key="listSetting"
             android:title="リスト設定" />
         <Preference
             android:key="clearCache"

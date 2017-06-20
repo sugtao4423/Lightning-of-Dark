@@ -66,6 +66,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			for(URLEntity u : uentitys)
 				list.add(u.getExpandedURL());
 		}
+
 		MediaEntity[] mentitys = item.getMediaEntities();
 		if(mentitys != null && mentitys.length > 0){
 			for(MediaEntity media : mentitys){
@@ -141,19 +142,19 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 
 		if(!(status.getInReplyToStatusId() > 0)){
 			dialog_talk.setEnabled(false);
-			dialog_talk.setBackgroundColor(Color.parseColor("#a7a7a7"));
+			dialog_talk.setBackgroundColor(Color.parseColor(context.getString(R.color.grayout)));
 		}
 		if(!status.getUser().getScreenName().equals(((ApplicationClass)context.getApplicationContext()).getMyScreenName())){
 			dialog_deletePost.setEnabled(false);
-			dialog_deletePost.setBackgroundColor(Color.parseColor("#a7a7a7"));
+			dialog_deletePost.setBackgroundColor(Color.parseColor(context.getString(R.color.grayout)));
 		}
 	}
 
 	@Override
 	public boolean onItemLongClicked(Context context, ArrayList<Status> data, int position){
 		Intent i = new Intent(context, TweetActivity.class);
-		i.putExtra("type", TweetActivity.TYPE_PAKUTSUI);
-		i.putExtra("status", new StatusItem(data.get(position)));
+		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_PAKUTSUI);
+		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, new StatusItem(data.get(position)));
 		context.startActivity(i);
 		return true;
 	}

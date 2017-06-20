@@ -41,11 +41,11 @@ public abstract class EndlessScrollListener extends RecyclerView.OnScrollListene
 		}
 	}
 
-	public void resetState() {
-        this.current_page = 0;
-        this.previousTotal = 0;
-        this.loading = true;
-    }
+	public void resetState(){
+		this.current_page = 0;
+		this.previousTotal = 0;
+		this.loading = true;
+	}
 
 	public abstract void onLoadMore(int current_page);
 }

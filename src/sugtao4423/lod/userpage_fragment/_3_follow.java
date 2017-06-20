@@ -83,13 +83,13 @@ public class _3_follow extends Fragment{
 
 			@Override
 			public void onPostExecute(PagableResponseList<User> result){
-				if(result != null) {
+				if(result != null){
 					adapter.addAll(result);
 					cursor = result.getNextCursor();
 					if(appClass.getTarget() != null && appClass.getTarget().getFriendsCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
-					new ShowToast("フォローを取得できませんでした", getActivity(), 0);
+					new ShowToast(R.string.error_getFollo, getActivity(), 0);
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);

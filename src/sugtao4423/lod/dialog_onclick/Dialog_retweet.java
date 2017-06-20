@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
 import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 
 public class Dialog_retweet implements OnClickListener{
@@ -39,9 +40,9 @@ public class Dialog_retweet implements OnClickListener{
 			@Override
 			protected void onPostExecute(Boolean result){
 				if(result)
-					new ShowToast("リツイートしました", context, 0);
+					new ShowToast(R.string.success_retweet, context, 0);
 				else
-					new ShowToast("リツイートできませんでした", context, 0);
+					new ShowToast(R.string.error_retweet, context, 0);
 			}
 		}.execute();
 	}

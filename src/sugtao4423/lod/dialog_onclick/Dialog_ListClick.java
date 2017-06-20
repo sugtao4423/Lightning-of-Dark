@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.AdapterView.OnItemClickListener;
 import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.IntentActivity;
+import sugtao4423.lod.Keys;
 import sugtao4423.lod.ListViewListener;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
@@ -31,6 +32,7 @@ import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 import sugtao4423.lod.userpage_fragment.UserPage;
 import sugtao4423.lod.utils.Regex;
+import sugtao4423.lod.utils.Utils;
 
 public class Dialog_ListClick implements OnItemClickListener{
 
@@ -77,7 +79,7 @@ public class Dialog_ListClick implements OnItemClickListener{
 			kakko2_1.setOnClickListener(new Dialog_regButtonClick(regEdit, "}"));
 
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-			regEdit.setText(pref.getString("regularExpression", ""));
+			regEdit.setText(pref.getString(Keys.REGULAR_EXPRESSION, ""));
 			new AlertDialog.Builder(context)
 			.setTitle("正規表現を入力してください")
 			.setView(regView)
@@ -86,7 +88,7 @@ public class Dialog_ListClick implements OnItemClickListener{
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					String editReg = regEdit.getText().toString();
-					pref.edit().putString("regularExpression", editReg).commit();
+					pref.edit().putString(Keys.REGULAR_EXPRESSION, editReg).commit();
 					Pattern pattern = Pattern.compile(editReg, Pattern.DOTALL);
 					TweetListAdapter adapter = new TweetListAdapter(context);
 					boolean exists = false;
@@ -97,7 +99,7 @@ public class Dialog_ListClick implements OnItemClickListener{
 						}
 					}
 					if(!exists){
-						new ShowToast("ありませんでした", context, 0);
+						new ShowToast(R.string.nothing, context, 0);
 					}else{
 						TweetListView l = new TweetListView(context);
 						l.setAdapter(adapter);
@@ -118,23 +120,23 @@ public class Dialog_ListClick implements OnItemClickListener{
 				MediaEntity[] mentitys = status.getMediaEntities();
 				if(mentitys != null && mentitys.length > 0){
 					for(MediaEntity media : mentitys){
-						if(!media.getType().equals("video") || !media.getType().equals("animated_gif"))
+						if(!Utils.isVideoOrGif(media))
 							urls.add(media.getMediaURL());
 					}
 				}
 				int pos = urls.indexOf(clickedText);
 				String[] arr = (String[])urls.toArray(new String[0]);
 				intent = new Intent(context, ImageFragmentActivity.class);
-				intent.putExtra("urls", arr);
-				intent.putExtra("position", pos);
+				intent.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, arr);
+				intent.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_POSITION, pos);
 			}else if(video.find()){
 				intent = new Intent(context, Show_Video.class);
-				intent.putExtra("URL", clickedText);
-				intent.putExtra("type", Show_Video.TYPE_VIDEO);
+				intent.putExtra(Show_Video.INTENT_EXTRA_KEY_URL, clickedText);
+				intent.putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_VIDEO);
 			}else if(gif.find()){
 				intent = new Intent(context, Show_Video.class);
-				intent.putExtra("URL", clickedText);
-				intent.putExtra("type", Show_Video.TYPE_GIF);
+				intent.putExtra(Show_Video.INTENT_EXTRA_KEY_URL, clickedText);
+				intent.putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_GIF);
 			}else if(state.find()){
 				new IntentActivity().showStatus(Long.parseLong(state.group(2)), context, false);
 				return;
@@ -151,7 +153,7 @@ public class Dialog_ListClick implements OnItemClickListener{
 			context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 		}else if(clickedText.startsWith("@")){ // UserPage
 			Intent intent = new Intent(context, UserPage.class);
-			intent.putExtra("userScreenName", clickedText.substring(1));
+			intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, clickedText.substring(1));
 			context.startActivity(intent);
 		}
 	}

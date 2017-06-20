@@ -6,7 +6,7 @@
         <item name="android:actionBarStyle">@style/actionBarStyle</item>
     </style>
 
-     <style name="actionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
+    <style name="actionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:height">40dip</item>
         <item name="android:background">#E0E0E0</item>
         <item name="android:titleTextStyle">@style/actionBarTitleStyle</item>

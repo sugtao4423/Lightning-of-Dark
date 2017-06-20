@@ -107,7 +107,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 			@Override
 			public void onClick(View v){
 				Intent intent = new Intent(context, UserPage.class);
-				intent.putExtra("userScreenName", origStatus.getUser().getScreenName());
+				intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, origStatus.getUser().getScreenName());
 				context.startActivity(intent);
 			}
 		});
@@ -147,11 +147,11 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 						@Override
 						public void onClick(View v){
 							Intent intent = new Intent(context, Show_Video.class);
-							intent.putExtra("URL", videoUrl[videoUrl.length - 1]);
+							intent.putExtra(Show_Video.INTENT_EXTRA_KEY_URL, videoUrl[videoUrl.length - 1]);
 							if(isGif)
-								intent.putExtra("type", Show_Video.TYPE_GIF);
+								intent.putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_GIF);
 							else
-								intent.putExtra("type", Show_Video.TYPE_VIDEO);
+								intent.putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_VIDEO);
 							context.startActivity(intent);
 						}
 					});

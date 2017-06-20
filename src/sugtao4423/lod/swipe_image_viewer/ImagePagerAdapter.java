@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class ImagePagerAdapter extends FragmentPagerAdapter{
 
+	public static final String BUNDLE_KEY_URL = "url";
+
 	private String[] urls;
 	private ImageFragment[] fragments;
 
@@ -17,7 +19,7 @@ public class ImagePagerAdapter extends FragmentPagerAdapter{
 		for(int i = 0; i < urls.length; i++){
 			fragments[i] = new ImageFragment();
 			Bundle bundle = new Bundle();
-			bundle.putString("url", urls[i]);
+			bundle.putString(BUNDLE_KEY_URL, urls[i]);
 			fragments[i].setArguments(bundle);
 		}
 	}

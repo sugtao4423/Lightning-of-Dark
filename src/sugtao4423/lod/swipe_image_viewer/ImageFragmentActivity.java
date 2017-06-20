@@ -34,6 +34,10 @@ import sugtao4423.lod.utils.Regex;
 
 public class ImageFragmentActivity extends FragmentActivity{
 
+	public static final String INTENT_EXTRA_KEY_TYPE = "type";
+	public static final String INTENT_EXTRA_KEY_URLS = "urls";
+	public static final String INTENT_EXTRA_KEY_POSITION = "position";
+
 	public static final int TYPE_ICON = 0;
 	public static final int TYPE_BANNER = 1;
 
@@ -49,9 +53,9 @@ public class ImageFragmentActivity extends FragmentActivity{
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.show_image_pager);
 		Intent intent = getIntent();
-		urls = intent.getStringArrayExtra("urls");
-		type = intent.getIntExtra("type", -1);
-		int pos = intent.getIntExtra("position", 0);
+		urls = intent.getStringArrayExtra(INTENT_EXTRA_KEY_URLS);
+		type = intent.getIntExtra(INTENT_EXTRA_KEY_TYPE, -1);
+		int pos = intent.getIntExtra(INTENT_EXTRA_KEY_POSITION, 0);
 		adapter = new ImagePagerAdapter(getSupportFragmentManager(), urls);
 
 		pager = (ZoomViewPager)findViewById(R.id.show_image_pager);
@@ -60,7 +64,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 		pager.setCurrentItem(pos);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.show_image_pager_tab_strip);
-		strip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
+		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabIndicator)));
 		strip.setDrawFullUnderline(true);
 	}
 
@@ -82,7 +86,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 		if(type == TYPE_BANNER) {
 			Matcher banner = Regex.userBannerUrl.matcher(currentUrl);
 			if(!banner.find()) {
-				new ShowToast("URLがパターンにマッチしません\n保存できませんでした", this, 0);
+				new ShowToast(R.string.urlNotMatchPatternDontSave, this, 0);
 				return;
 			}
 			byte[] non_orig_image = ((ImageFragment)adapter.getItem(pager.getCurrentItem())).getNonOrigImage();
@@ -96,7 +100,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 
 		final Matcher pattern = Regex.userIconUrl.matcher(currentUrl);
 		if(!pattern.find()) {
-			new ShowToast("URLがパターンにマッチしません\n保存できませんでした", this, 0);
+			new ShowToast(R.string.urlNotMatchPatternDontSave, this, 0);
 			return;
 		}
 
@@ -145,7 +149,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 					else
 						save(pattern.group(2), pattern.group(3), result, true);
 				}else{
-					new ShowToast("オリジナル画像の取得に失敗しました", ImageFragmentActivity.this, 0);
+					new ShowToast(R.string.error_getOriginalImage, ImageFragmentActivity.this, 0);
 				}
 			}
 		}.execute(currentUrl + orig);

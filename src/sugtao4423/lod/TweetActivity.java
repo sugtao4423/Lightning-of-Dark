@@ -27,6 +27,10 @@ import sugtao4423.lod.tweetlistview.TweetListView;
 
 public class TweetActivity extends Activity{
 
+	public static final String INTENT_EXTRA_KEY_TYPE = "type";
+	public static final String INTENT_EXTRA_KEY_TEXT = "text";
+	public static final String INTENT_EXTRA_KEY_STATUS = "status";
+
 	public static final int TYPE_NEWTWEET = 0;
 	public static final int TYPE_REPLY = 1;
 	public static final int TYPE_REPLYALL = 2;
@@ -59,12 +63,12 @@ public class TweetActivity extends Activity{
 		moji140 = (TextView)findViewById(R.id.moji140);
 
 		Intent intent = getIntent();
-		if(intent.getSerializableExtra("status") != null){
-			status = ((StatusItem)intent.getSerializableExtra("status")).getStatus();
+		if(intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) != null){
+			status = ((StatusItem)intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS)).getStatus();
 			status = status.isRetweet() ? status.getRetweetedStatus() : status;
 		}
 
-		type = intent.getIntExtra("type", 0);
+		type = intent.getIntExtra(INTENT_EXTRA_KEY_TYPE, 0);
 
 		boolean setSelectionEnd = false;
 
@@ -125,7 +129,7 @@ public class TweetActivity extends Activity{
 			break;
 		case TYPE_EXTERNALTEXT:
 			actionBar.setTitle("New Tweet");
-			tweetText.setText(intent.getStringExtra("text"));
+			tweetText.setText(intent.getStringExtra(INTENT_EXTRA_KEY_TEXT));
 			setSelectionEnd = true;
 			break;
 		}
@@ -186,9 +190,9 @@ public class TweetActivity extends Activity{
 				image = new File(c.getString(0));
 				ImageView iv = (ImageView)findViewById(R.id.selectedImage);
 				iv.setImageURI(data.getData());
-				new ShowToast("画像を選択しました", TweetActivity.this, 0);
+				new ShowToast(R.string.success_selectPic, TweetActivity.this, 0);
 			}catch(Exception e){
-				new ShowToast("画像を選択できませんでした", TweetActivity.this, 0);
+				new ShowToast(R.string.error_selectPic, TweetActivity.this, 0);
 			}
 		}
 	}

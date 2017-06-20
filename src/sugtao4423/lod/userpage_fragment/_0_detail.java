@@ -12,7 +12,6 @@ import twitter4j.User;
 
 import com.loopj.android.image.SmartImageView;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -49,10 +48,9 @@ public class _0_detail extends Fragment{
 	private TextView userName, userScreenName;
 	private ImageView protect;
 
-	@SuppressLint("InflateParams")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View v = inflater.inflate(R.layout.user_0, null);
+		View v = View.inflate(container.getContext(), R.layout.user_0, null);
 
 		appClass = (ApplicationClass)getActivity().getApplicationContext();
 
@@ -89,7 +87,7 @@ public class _0_detail extends Fragment{
 		userName.setText(target.getName());
 		userScreenName.setText("@" + target.getScreenName());
 
-		if(appClass.getMyScreenName().equals(target.getScreenName())) {
+		if(appClass.getMyScreenName().equals(target.getScreenName())){
 			sourceIcon.setVisibility(View.GONE);
 			targetIcon.setVisibility(View.GONE);
 			isFollowIcon.setVisibility(View.GONE);
@@ -101,7 +99,6 @@ public class _0_detail extends Fragment{
 			set_source_and_targetIcon();
 		}
 
-		
 		setLinkTouch(context, userBio, replaceUrlEntity2ExUrl(target.getDescription(), target.getDescriptionURLEntities()));
 		setLinkTouch(context, userLocation, target.getLocation());
 		setLinkTouch(context, userLink, replaceUrlEntity2ExUrl(target.getURL(), target.getURLEntity()));
@@ -173,7 +170,7 @@ public class _0_detail extends Fragment{
 
 			@Override
 			protected void onPostExecute(Relationship ship){
-				if(ship != null) {
+				if(ship != null){
 					if(ship.isSourceFollowingTarget() && ship.isSourceFollowedByTarget())
 						isFollowIcon.setImageResource(R.drawable.follow_each);
 					else if(ship.isSourceFollowingTarget())
@@ -201,11 +198,11 @@ public class _0_detail extends Fragment{
 
 			@Override
 			protected void onPostExecute(String[] result){
-				if(result != null) {
+				if(result != null){
 					sourceIcon.setImageUrl(result[0], null, R.drawable.ic_action_refresh);
 					targetIcon.setImageUrl(result[1], null, R.drawable.ic_action_refresh);
 				}else
-					new ShowToast("ユーザーアイコンの取得に失敗しました", getActivity(), 0);
+					new ShowToast(R.string.error_getUserIcon, getActivity(), 0);
 			}
 		}.execute();
 	}
@@ -215,8 +212,8 @@ public class _0_detail extends Fragment{
 			@Override
 			public void onClick(View v){
 				Intent image = new Intent(context, ImageFragmentActivity.class);
-				image.putExtra("urls", new String[]{target.getOriginalProfileImageURL()});
-				image.putExtra("type", ImageFragmentActivity.TYPE_ICON);
+				image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, new String[]{target.getOriginalProfileImageURL()});
+				image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_TYPE, ImageFragmentActivity.TYPE_ICON);
 				context.startActivity(image);
 			}
 		});
@@ -230,10 +227,10 @@ public class _0_detail extends Fragment{
 		userBanner.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				if(target.getProfileBannerURL() != null) {
+				if(target.getProfileBannerURL() != null){
 					Intent image = new Intent(context, ImageFragmentActivity.class);
-					image.putExtra("urls", new String[]{target.getProfileBannerRetinaURL()});
-					image.putExtra("type", ImageFragmentActivity.TYPE_BANNER);
+					image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, new String[]{target.getProfileBannerRetinaURL()});
+					image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_TYPE, ImageFragmentActivity.TYPE_BANNER);
 					context.startActivity(image);
 				}
 			}

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="RetweetedByMe">#c9f999</color>
     <color name="Retweet">#c9d9f9</color>
     <color name="sameMyScreenName">#c9f999</color>
@@ -10,4 +11,8 @@
     <color name="Press">#6699cc</color>
 
     <color name="statusBar">#2196F3</color>
+
+    <color name="grayout">#a7a7a7</color>
+    <color name="pagerTabIndicator">#33b5e5</color>
+
 </resources>

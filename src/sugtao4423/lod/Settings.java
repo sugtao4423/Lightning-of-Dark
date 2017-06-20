@@ -27,11 +27,11 @@ public class Settings extends PreferenceActivity{
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preference);
 
-			Preference ListSetting = findPreference("ListSetting");
+			Preference listSetting = findPreference("listSetting");
 			Preference clearCache = findPreference("clearCache");
 			clearCache.setSummary("キャッシュ: " + getCacheSize());
 
-			ListSetting.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+			listSetting.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 				@Override
 				public boolean onPreferenceClick(Preference preference){
 					Intent intent = new Intent(getActivity(), Settings_List.class);
@@ -63,7 +63,6 @@ public class Settings extends PreferenceActivity{
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		ApplicationClass app = (ApplicationClass)getApplicationContext();
-		app.loadOption(getApplicationContext());
+		((ApplicationClass)getApplicationContext()).loadOption(getApplicationContext());
 	}
 }

@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 public class TweetListView extends RecyclerView{
-	
+
 	private LinearLayoutManager llm;
 
 	public TweetListView(Context context){

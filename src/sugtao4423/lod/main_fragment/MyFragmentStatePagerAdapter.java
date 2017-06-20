@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import sugtao4423.lod.Keys;
 
 public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 
@@ -19,8 +20,8 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 	public MyFragmentStatePagerAdapter(FragmentManager fm, Context context){
 		super(fm);
 		pref = PreferenceManager.getDefaultSharedPreferences(context);
-		showList = pref.getBoolean("showList", false);
-		listCount = pref.getInt("SelectListCount", 0);
+		showList = pref.getBoolean(Keys.SHOW_LIST, false);
+		listCount = pref.getInt(Keys.SELECT_LIST_COUNT, 0);
 
 		fragmentMention = new Fragment_mention();
 		fragmentHome = new Fragment_home();
@@ -53,8 +54,8 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 	@Override
 	public CharSequence getPageTitle(int position){
 		if(position > 1){
-			if(!pref.getString("SelectListNames", "").equals("")){
-				String[] names = pref.getString("SelectListNames", null).split(",", 0);
+			if(!pref.getString(Keys.SELECT_LIST_NAMES, "").equals("")){
+				String[] names = pref.getString(Keys.SELECT_LIST_NAMES, null).split(",", 0);
 
 				return names[position - 2];
 			}else{
@@ -64,11 +65,9 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 		switch(position){
 		case 0:
 			return "Mention";
-
 		case 1:
 		default:
 			return "Home";
-
 		}
 	}
 

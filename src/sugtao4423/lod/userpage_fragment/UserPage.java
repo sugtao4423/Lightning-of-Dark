@@ -15,6 +15,8 @@ import sugtao4423.lod.ShowToast;
 
 public class UserPage extends FragmentActivity{
 
+	public static final String INTENT_EXTRA_KEY_USER_SCREEN_NAME = "userScreenName";
+
 	private User target;
 	private String userScreenName;
 	private ApplicationClass appClass;
@@ -30,11 +32,11 @@ public class UserPage extends FragmentActivity{
 		viewPager.setOffscreenPageLimit(5);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.userPagerTabStrip);
-		strip.setTabIndicatorColor(Color.parseColor("#33b5e5"));
+		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabIndicator)));
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 
-		userScreenName = getIntent().getStringExtra("userScreenName");
+		userScreenName = getIntent().getStringExtra(INTENT_EXTRA_KEY_USER_SCREEN_NAME);
 
 		appClass = (ApplicationClass)UserPage.this.getApplicationContext();
 		appClass.setTargetScreenName(userScreenName);
@@ -52,12 +54,12 @@ public class UserPage extends FragmentActivity{
 
 			@Override
 			protected void onPostExecute(User result){
-				if(result != null) {
+				if(result != null){
 					appClass.setTarget(result);
 					getActionBar().setTitle(result.getName());
 					((_0_detail)(adapter.getItem(0))).setText(UserPage.this);
 				}else{
-					new ShowToast("ユーザー情報を取得できませんでした", UserPage.this, 0);
+					new ShowToast(R.string.error_getUserDetail, UserPage.this, 0);
 					finish();
 				}
 			}
