@@ -7,6 +7,7 @@ import com.loopj.android.image.SmartImageView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import sugtao4423.lod.R;
-import sugtao4423.lod.UiHandler;
 import sugtao4423.lod.userpage_fragment.UserPage;
 import twitter4j.PagableResponseList;
 import twitter4j.User;
@@ -27,11 +27,13 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 	private LayoutInflater inflater;
 	private ArrayList<User> data;
 	private Context context;
+	private Handler handler;
 
 	public TweetListUserAdapter(Context context){
 		this.inflater = LayoutInflater.from(context);
 		this.data = new ArrayList<User>();
 		this.context = context;
+		this.handler = new Handler();
 	}
 
 	@Override
@@ -93,25 +95,25 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 	public void addAll(final PagableResponseList<User> users){
 		final int pos = data.size();
 		data.addAll(users);
-		new UiHandler(){
-			
+		handler.post(new Runnable(){
+
 			@Override
 			public void run(){
 				notifyItemRangeInserted(pos, users.size());
 			}
-		}.post();
+		});
 	}
 
 	public void clear(){
 		final int size = data.size();
 		data.clear();
-		new UiHandler(){
+		handler.post(new Runnable(){
 
 			@Override
 			public void run(){
 				notifyItemRangeRemoved(0, size);
 			}
-		}.post();
+		});
 	}
 
 	class ViewHolder extends RecyclerView.ViewHolder{

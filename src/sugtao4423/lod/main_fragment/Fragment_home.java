@@ -6,6 +6,7 @@ import twitter4j.Status;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -15,7 +16,6 @@ import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.ListViewListener;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
-import sugtao4423.lod.UiHandler;
 import sugtao4423.lod.tweetlistview.EndlessScrollListener;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
@@ -25,14 +25,18 @@ public class Fragment_home extends Fragment{
 	private TweetListView list;
 	private LinearLayoutManager llm;
 	private TweetListAdapter adapter;
+	private Handler handler;
 	private ApplicationClass appClass;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		handler = new Handler();
 		View v = View.inflate(container.getContext(), R.layout.fragment_list, null);
+
 		list = (TweetListView)v.findViewById(R.id.listLine);
 		llm = list.getLinearLayoutManager();
+
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
@@ -47,14 +51,14 @@ public class Fragment_home extends Fragment{
 
 	public void insert(Status status){
 		adapter.insertTop(status);
-		new UiHandler(){
+		handler.post(new Runnable(){
 
 			@Override
 			public void run(){
 				if(llm.findFirstVisibleItemPosition() <= 1)
 					list.smoothScrollToPosition(0);
 			}
-		}.post();
+		});
 	}
 
 	public EndlessScrollListener getLoadMoreListener(){

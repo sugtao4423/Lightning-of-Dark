@@ -8,6 +8,7 @@ import com.loopj.android.image.SmartImageView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,7 +25,6 @@ import android.widget.LinearLayout.LayoutParams;
 import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.R;
 import sugtao4423.lod.Show_Video;
-import sugtao4423.lod.UiHandler;
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity;
 import sugtao4423.lod.userpage_fragment.UserPage;
 import sugtao4423.lod.utils.Utils;
@@ -38,6 +38,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 	private ArrayList<Status> data;
 	private Context context;
 	private ApplicationClass appClass;
+	private Handler handler;
 	private OnItemClickListener onItemClickListener;
 	private OnItemLongClickListener onItemLongClickListener;
 
@@ -46,6 +47,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		this.data = new ArrayList<Status>();
 		this.context = context;
 		this.appClass = (ApplicationClass)context.getApplicationContext();
+		this.handler = new Handler();
 	}
 
 	@Override
@@ -199,30 +201,30 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 
 	public void add(final Status status){
 		data.add(status);
-		new UiHandler(){
+		handler.post(new Runnable(){
 
 			@Override
 			public void run(){
 				notifyItemInserted(data.size() - 1);
 			}
-		}.post();
+		});
 	}
 
 	public void addAll(final ResponseList<Status> status){
 		final int pos = data.size();
 		data.addAll(status);
-		new UiHandler(){
+		handler.post(new Runnable(){
 
 			@Override
 			public void run(){
 				notifyItemRangeInserted(pos, status.size());
 			}
-		}.post();
+		});
 	}
 
 	public void insertTop(final Status item){
 		data.add(0, item);
-		new UiHandler(){
+		handler.post(new Runnable(){
 
 			@Override
 			public void run(){
@@ -230,19 +232,19 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 				if(data.size() - 1 != 0)
 					notifyItemRangeChanged(1, data.size());
 			}
-		}.post();
+		});
 	}
 
 	public void clear(){
 		final int size = data.size();
 		data.clear();
-		new UiHandler(){
+		handler.post(new Runnable(){
 
 			@Override
 			public void run(){
 				notifyItemRangeRemoved(0, size);
 			}
-		}.post();
+		});
 	}
 
 	public interface OnItemClickListener{

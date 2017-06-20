@@ -8,6 +8,7 @@ import twitter4j.TwitterException;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -19,7 +20,6 @@ import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.ListViewListener;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
-import sugtao4423.lod.UiHandler;
 import sugtao4423.lod.tweetlistview.EndlessScrollListener;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
@@ -30,14 +30,13 @@ public class Fragment_mention extends Fragment{
 	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
+	private Handler handler;
 	private ApplicationClass appClass;
-	private Context context;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		context = container.getContext();
-		View v = View.inflate(context, R.layout.fragment_list, null);
-		appClass = (ApplicationClass)context.getApplicationContext();
+		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		View v = View.inflate(container.getContext(), R.layout.fragment_list, null);
 
 		list = (TweetListView)v.findViewById(R.id.listLine);
 		llm = list.getLinearLayoutManager();
@@ -51,7 +50,7 @@ public class Fragment_mention extends Fragment{
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.ListPull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
 				android.R.color.holo_orange_light, android.R.color.holo_red_light);
-		OnRefreshListener onRefreshListener = getOnRefreshListener(scrollListener);
+		OnRefreshListener onRefreshListener = getOnRefreshListener(scrollListener, container.getContext());
 		pulltoRefresh.setOnRefreshListener(onRefreshListener);
 		onRefreshListener.onRefresh();
 		return v;
@@ -87,7 +86,7 @@ public class Fragment_mention extends Fragment{
 		};
 	}
 
-	public OnRefreshListener getOnRefreshListener(final EndlessScrollListener scrollListener){
+	public OnRefreshListener getOnRefreshListener(final EndlessScrollListener scrollListener, final Context context){
 		return new OnRefreshListener(){
 
 			@Override
@@ -120,14 +119,14 @@ public class Fragment_mention extends Fragment{
 
 	public void insert(Status status){
 		adapter.insertTop(status);
-		new UiHandler(){
+		handler.post(new Runnable(){
 
 			@Override
 			public void run(){
 				if(llm.findFirstVisibleItemPosition() <= 1)
 					list.smoothScrollToPosition(0);
 			}
-		}.post();
+		});
 	}
 
 	public void addAll(ResponseList<Status> status){
