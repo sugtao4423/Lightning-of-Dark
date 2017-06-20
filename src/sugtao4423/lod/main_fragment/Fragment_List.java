@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,13 +47,8 @@ public class Fragment_List extends Fragment{
 		list = (TweetListView)v.findViewById(R.id.listLine);
 		adapter = appClass.getListAdapters()[listIndex];
 		list.setAdapter(adapter);
-		list.addOnScrollListener(new EndlessScrollListener(list.getLinearLayoutManager()){
-			@Override
-			public void onLoadMore(int current_page){
-				if(adapter.getItemCount() > 30)
-					getList(container.getContext());
-			}
-		});
+		final EndlessScrollListener scrollListener = getLoadMoreListener(container.getContext(), list.getLinearLayoutManager());
+		list.addOnScrollListener(scrollListener);
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 
@@ -67,9 +63,21 @@ public class Fragment_List extends Fragment{
 				tmp[listIndex] = false;
 				appClass.setList_AlreadyLoad(tmp);
 				getList(container.getContext());
+				scrollListener.resetState();
 			}
 		});
 		return v;
+	}
+
+	public EndlessScrollListener getLoadMoreListener(final Context context, LinearLayoutManager llm){
+		return new EndlessScrollListener(llm){
+
+			@Override
+			public void onLoadMore(int current_page){
+				if(adapter.getItemCount() > 30)
+					getList(context);
+			}
+		};
 	}
 
 	public void getList(Context context){

@@ -38,7 +38,8 @@ public class _4_follower extends Fragment{
 		llm = userFollower.getLinearLayoutManager();
 		adapter = new TweetListUserAdapter(container.getContext());
 		userFollower.setAdapter(adapter);
-		userFollower.addOnScrollListener(getLoadMoreListener());
+		final EndlessScrollListener scrollListener = getLoadMoreListener();
+		userFollower.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -49,6 +50,7 @@ public class _4_follower extends Fragment{
 				adapter.clear();
 				cursor = -1L;
 				loadFollowerLine();
+				scrollListener.resetState();
 			}
 		});
 		return v;

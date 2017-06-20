@@ -40,7 +40,8 @@ public class _1_Tweet extends Fragment{
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		userTweet.setAdapter(adapter);
-		userTweet.addOnScrollListener(getLoadMoreListener());
+		final EndlessScrollListener scrollListener = getLoadMoreListener();
+		userTweet.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -51,6 +52,7 @@ public class _1_Tweet extends Fragment{
 				adapter.clear();
 				alreadyLoad = false;
 				loadTimeLine();
+				scrollListener.resetState();
 			}
 		});
 		return v;

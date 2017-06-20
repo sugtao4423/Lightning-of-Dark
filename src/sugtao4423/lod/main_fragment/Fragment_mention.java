@@ -24,7 +24,7 @@ import sugtao4423.lod.tweetlistview.EndlessScrollListener;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 
-public class Fragment_mention extends Fragment implements OnRefreshListener{
+public class Fragment_mention extends Fragment{
 
 	private TweetListView list;
 	private LinearLayoutManager llm;
@@ -45,13 +45,15 @@ public class Fragment_mention extends Fragment implements OnRefreshListener{
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		list.setAdapter(adapter);
-		list.addOnScrollListener(getLoadMoreListener());
+		EndlessScrollListener scrollListener = getLoadMoreListener();
+		list.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.ListPull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
 				android.R.color.holo_orange_light, android.R.color.holo_red_light);
-		pulltoRefresh.setOnRefreshListener(this);
-		onRefresh();
+		OnRefreshListener onRefreshListener = getOnRefreshListener(scrollListener);
+		pulltoRefresh.setOnRefreshListener(onRefreshListener);
+		onRefreshListener.onRefresh();
 		return v;
 	}
 
@@ -85,29 +87,35 @@ public class Fragment_mention extends Fragment implements OnRefreshListener{
 		};
 	}
 
-	@Override
-	public void onRefresh(){
-		adapter.clear();
-		new AsyncTask<Void, Void, ResponseList<Status>>(){
-			@Override
-			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
-				try{
-					return appClass.getTwitter().getMentionsTimeline(new Paging(1, 50));
-				}catch(TwitterException e){
-					return null;
-				}
-			}
+	public OnRefreshListener getOnRefreshListener(final EndlessScrollListener scrollListener){
+		return new OnRefreshListener(){
 
 			@Override
-			protected void onPostExecute(ResponseList<twitter4j.Status> result){
-				if(result != null)
-					addAll(result);
-				else
-					new ShowToast("メンション取得エラー", context, 0);
-				pulltoRefresh.setRefreshing(false);
-				pulltoRefresh.setEnabled(true);
+			public void onRefresh(){
+				adapter.clear();
+				new AsyncTask<Void, Void, ResponseList<Status>>(){
+					@Override
+					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
+						try{
+							return appClass.getTwitter().getMentionsTimeline(new Paging(1, 50));
+						}catch(TwitterException e){
+							return null;
+						}
+					}
+
+					@Override
+					protected void onPostExecute(ResponseList<twitter4j.Status> result){
+						if(result != null)
+							addAll(result);
+						else
+							new ShowToast("メンション取得エラー", context, 0);
+						scrollListener.resetState();
+						pulltoRefresh.setRefreshing(false);
+						pulltoRefresh.setEnabled(true);
+					}
+				}.execute();
 			}
-		}.execute();
+		};
 	}
 
 	public void insert(Status status){

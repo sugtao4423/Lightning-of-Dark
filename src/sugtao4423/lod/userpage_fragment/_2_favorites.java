@@ -42,7 +42,8 @@ public class _2_favorites extends Fragment{
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		userFavorite.setAdapter(adapter);
-		userFavorite.addOnScrollListener(getLoadMoreListener());
+		final EndlessScrollListener scrollListener = getLoadMoreListener();
+		userFavorite.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.UserPagePull);
 		pulltoRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
@@ -53,6 +54,7 @@ public class _2_favorites extends Fragment{
 				adapter.clear();
 				alreadyLoad = false;
 				loadMentionLine();
+				scrollListener.resetState();
 			}
 		});
 		return v;
