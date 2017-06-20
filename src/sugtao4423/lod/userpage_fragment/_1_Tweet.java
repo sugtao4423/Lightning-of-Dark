@@ -26,6 +26,7 @@ public class _1_Tweet extends Fragment{
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
 	private boolean alreadyLoad;
+	private boolean isAllLoaded;
 	private long tweetId;
 	private ApplicationClass appClass;
 
@@ -33,7 +34,6 @@ public class _1_Tweet extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = View.inflate(container.getContext(), R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
-		alreadyLoad = false;
 		TweetListView userTweet = (TweetListView)v.findViewById(R.id.UserPageList);
 		llm = userTweet.getLinearLayoutManager();
 		adapter = new TweetListAdapter(container.getContext());
@@ -51,6 +51,7 @@ public class _1_Tweet extends Fragment{
 			public void onRefresh(){
 				adapter.clear();
 				alreadyLoad = false;
+				isAllLoaded = false;
 				loadTimeLine();
 				scrollListener.resetState();
 			}
@@ -63,7 +64,8 @@ public class _1_Tweet extends Fragment{
 
 			@Override
 			public void onLoadMore(int current_page){
-				loadTimeLine();
+				if(!isAllLoaded)
+					loadTimeLine();
 			}
 		};
 	}
@@ -92,6 +94,8 @@ public class _1_Tweet extends Fragment{
 				if(result != null) {
 					adapter.addAll(result);
 					alreadyLoad = true;
+					if(appClass.getTarget() != null && appClass.getTarget().getStatusesCount() <= adapter.getItemCount())
+						isAllLoaded = true;
 				}else{
 					new ShowToast("タイムラインを取得できませんでした", getActivity(), 0);
 				}

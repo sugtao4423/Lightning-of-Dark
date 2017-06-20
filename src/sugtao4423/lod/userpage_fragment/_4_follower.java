@@ -26,6 +26,7 @@ public class _4_follower extends Fragment{
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListUserAdapter adapter;
 	private long cursor;
+	private boolean isAllLoaded;
 	private ApplicationClass appClass;
 
 	@Override
@@ -49,6 +50,7 @@ public class _4_follower extends Fragment{
 			public void onRefresh(){
 				adapter.clear();
 				cursor = -1L;
+				isAllLoaded = false;
 				loadFollowerLine();
 				scrollListener.resetState();
 			}
@@ -61,7 +63,8 @@ public class _4_follower extends Fragment{
 
 			@Override
 			public void onLoadMore(int current_page){
-				loadFollowerLine();
+				if(!isAllLoaded)
+					loadFollowerLine();
 			}
 		};
 	}
@@ -83,6 +86,8 @@ public class _4_follower extends Fragment{
 				if(result != null) {
 					adapter.addAll(result);
 					cursor = result.getNextCursor();
+					if(appClass.getTarget() != null && appClass.getTarget().getFollowersCount() <= adapter.getItemCount())
+						isAllLoaded = true;
 				}else{
 					new ShowToast("フォロワーを取得できませんでした", getActivity(), 0);
 				}

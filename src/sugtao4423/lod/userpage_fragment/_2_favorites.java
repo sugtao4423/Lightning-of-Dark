@@ -27,6 +27,7 @@ public class _2_favorites extends Fragment{
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
 	private boolean alreadyLoad;
+	private boolean isAllLoaded;
 	private long tweetId;
 	private ApplicationClass appClass;
 
@@ -34,7 +35,6 @@ public class _2_favorites extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = View.inflate(container.getContext(), R.layout.user_1, null);
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
-		alreadyLoad = false;
 
 		TweetListView userFavorite = (TweetListView)v.findViewById(R.id.UserPageList);
 		llm = userFavorite.getLinearLayoutManager();
@@ -53,6 +53,7 @@ public class _2_favorites extends Fragment{
 			public void onRefresh(){
 				adapter.clear();
 				alreadyLoad = false;
+				isAllLoaded = false;
 				loadMentionLine();
 				scrollListener.resetState();
 			}
@@ -65,7 +66,8 @@ public class _2_favorites extends Fragment{
 
 			@Override
 			public void onLoadMore(int current_page){
-				loadMentionLine();
+				if(!isAllLoaded)
+					loadMentionLine();
 			}
 		};
 	}
@@ -92,6 +94,8 @@ public class _2_favorites extends Fragment{
 				if(result != null) {
 					adapter.addAll(result);
 					alreadyLoad = true;
+					if(appClass.getTarget() != null && appClass.getTarget().getFavouritesCount() <= adapter.getItemCount())
+						isAllLoaded = true;
 				}else{
 					new ShowToast("ふぁぼ取得エラー", getActivity(), 0);
 				}
