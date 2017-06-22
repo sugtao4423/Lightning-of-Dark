@@ -83,15 +83,53 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		}
 
 		Status status = item.isRetweet() ? item.getRetweetedStatus() : item;
+		showDialog(context, status, data, list);
+	}
 
-		// ダイアログタイトルinflate
-		View dialog_title = View.inflate(context, R.layout.list_item_tweet, null);
-		SmartImageView icon = (SmartImageView)dialog_title.findViewById(R.id.icon);
-		TextView name_screenName = (TextView)dialog_title.findViewById(R.id.name_screenName);
-		TextView tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
-		TextView tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
-		ImageView protect = (ImageView)dialog_title.findViewById(R.id.UserProtected);
+	@Override
+	public boolean onItemLongClicked(Context context, ArrayList<Status> data, int position){
+		Intent i = new Intent(context, TweetActivity.class);
+		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_PAKUTSUI);
+		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, new StatusItem(data.get(position)));
+		context.startActivity(i);
+		return true;
+	}
+
+	private View dialog_title;
+	private SmartImageView icon;
+	private TextView name_screenName, tweetText, tweetDate;
+	private ImageView protect;
+
+	private View content;
+	private ListView dialog_list;
+	private ImageButton dialog_reply, dialog_retweet, dialog_unOfficialRT, dialog_favorite, dialog_talk, dialog_deletePost;
+
+	private AlertDialog dialog;
+
+	public void createDialog(Context context){
+		dialog_title = View.inflate(context, R.layout.list_item_tweet, null);
+		icon = (SmartImageView)dialog_title.findViewById(R.id.icon);
+		name_screenName = (TextView)dialog_title.findViewById(R.id.name_screenName);
+		tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
+		tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
+		protect = (ImageView)dialog_title.findViewById(R.id.UserProtected);
 		((HorizontalScrollView)dialog_title.findViewById(R.id.tweet_images_scroll)).setVisibility(View.GONE);
+
+		content = View.inflate(context, R.layout.custom_dialog, null);
+		dialog_list = (ListView)content.findViewById(R.id.dialog_List);
+		dialog_reply = (ImageButton)content.findViewById(R.id.dialog_reply);
+		dialog_retweet = (ImageButton)content.findViewById(R.id.dialog_retweet);
+		dialog_unOfficialRT = (ImageButton)content.findViewById(R.id.dialog_unofficialRT);
+		dialog_favorite = (ImageButton)content.findViewById(R.id.dialog_favorite);
+		dialog_talk = (ImageButton)content.findViewById(R.id.dialog_talk);
+		dialog_deletePost = (ImageButton)content.findViewById(R.id.dialog_delete);
+
+		dialog = new AlertDialog.Builder(context).setCustomTitle(dialog_title).setView(content).create();
+	}
+
+	public void showDialog(final Context context, Status status, ArrayList<Status> allStatusData, ArrayAdapter<String> listStrings){
+		if(dialog == null)
+			createDialog(context);
 
 		if(!status.getUser().isProtected())
 			protect.setVisibility(View.GONE);
@@ -102,24 +140,11 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(status.getCreatedAt()) + "  via "
 				+ status.getSource().replaceAll("<.+?>", ""));
 		icon.setImageUrl(status.getUser().getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
-		// ここまで
 
-		// ダイアログ本文inflate
-		View content = View.inflate(context, R.layout.custom_dialog, null);
-		ListView dialog_list = (ListView)content.findViewById(R.id.dialog_List);
-		ImageButton dialog_reply = (ImageButton)content.findViewById(R.id.dialog_reply);
-		ImageButton dialog_retweet = (ImageButton)content.findViewById(R.id.dialog_retweet);
-		ImageButton dialog_unOfficialRT = (ImageButton)content.findViewById(R.id.dialog_unofficialRT);
-		ImageButton dialog_favorite = (ImageButton)content.findViewById(R.id.dialog_favorite);
-		ImageButton dialog_talk = (ImageButton)content.findViewById(R.id.dialog_talk);
-		ImageButton dialog_deletePost = (ImageButton)content.findViewById(R.id.dialog_delete);
+		dialog.show();
 
-		final AlertDialog dialog = new AlertDialog.Builder(context)
-				.setCustomTitle(dialog_title)
-				.setView(content).show();
-
-		dialog_list.setAdapter(list);
-		dialog_list.setOnItemClickListener(new Dialog_ListClick(context, item, data, dialog));
+		dialog_list.setAdapter(listStrings);
+		dialog_list.setOnItemClickListener(new Dialog_ListClick(context, status, allStatusData, dialog));
 		dialog_list.setOnItemLongClickListener(new android.widget.AdapterView.OnItemLongClickListener(){
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
@@ -132,13 +157,13 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			}
 		});
 
-		dialog_reply.setOnClickListener(new Dialog_reply(item, context, dialog));
-		dialog_retweet.setOnClickListener(new Dialog_retweet(item, context, dialog));
-		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(item, context, dialog));
-		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(item, context, dialog));
-		dialog_favorite.setOnClickListener(new Dialog_favorite(item, context, dialog));
-		dialog_talk.setOnClickListener(new Dialog_talk(item, context, dialog));
-		dialog_deletePost.setOnClickListener(new Dialog_deletePost(item, context, dialog));
+		dialog_reply.setOnClickListener(new Dialog_reply(status, context, dialog));
+		dialog_retweet.setOnClickListener(new Dialog_retweet(status, context, dialog));
+		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(status, context, dialog));
+		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(status, context, dialog));
+		dialog_favorite.setOnClickListener(new Dialog_favorite(status, context, dialog));
+		dialog_talk.setOnClickListener(new Dialog_talk(status, context, dialog));
+		dialog_deletePost.setOnClickListener(new Dialog_deletePost(status, context, dialog));
 
 		if(!(status.getInReplyToStatusId() > 0)){
 			dialog_talk.setEnabled(false);
@@ -150,12 +175,4 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		}
 	}
 
-	@Override
-	public boolean onItemLongClicked(Context context, ArrayList<Status> data, int position){
-		Intent i = new Intent(context, TweetActivity.class);
-		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_PAKUTSUI);
-		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, new StatusItem(data.get(position)));
-		context.startActivity(i);
-		return true;
-	}
 }
