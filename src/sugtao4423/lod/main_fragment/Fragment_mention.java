@@ -36,6 +36,7 @@ public class Fragment_mention extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
 		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		handler = new Handler();
 		View v = View.inflate(container.getContext(), R.layout.fragment_list, null);
 
 		list = (TweetListView)v.findViewById(R.id.listLine);
