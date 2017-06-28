@@ -12,7 +12,6 @@
 
     <color name="statusBar">#2196F3</color>
 
-    <color name="grayout">#a7a7a7</color>
     <color name="pagerTabIndicator">#33b5e5</color>
 
 </resources>

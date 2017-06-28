@@ -6,16 +6,23 @@
 		android:state_enabled="true" >
 		<color android:color="#70e8ff" />
 	</item>
+
     <!-- ボタンにフォーカスがあたった時 -->
 	<item
 		android:state_focused="true"
 		android:state_enabled="true" >
 		<color android:color="#70e8ff" />
 	</item>
-	<!-- 上記以外の条件の時 -->
+
+	<!-- Disable -->
 	<item
-		android:state_enabled="true" >
-		<color android:color="#00000000" />
+		android:state_enabled="false" >
+		<color android:color="#a7a7a7" />
+	</item>
+
+	<!-- Enable -->
+	<item>
+	    <color android:color="#00000000" />
 	</item>
 
 </selector>

@@ -13,7 +13,6 @@ import twitter4j.UserMentionEntity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.view.View;
 import android.widget.AdapterView;
@@ -165,14 +164,8 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		dialog_talk.setOnClickListener(new Dialog_talk(status, context, dialog));
 		dialog_deletePost.setOnClickListener(new Dialog_deletePost(status, context, dialog));
 
-		if(!(status.getInReplyToStatusId() > 0)){
-			dialog_talk.setEnabled(false);
-			dialog_talk.setBackgroundColor(Color.parseColor(context.getString(R.color.grayout)));
-		}
-		if(!status.getUser().getScreenName().equals(((ApplicationClass)context.getApplicationContext()).getMyScreenName())){
-			dialog_deletePost.setEnabled(false);
-			dialog_deletePost.setBackgroundColor(Color.parseColor(context.getString(R.color.grayout)));
-		}
+		dialog_talk.setEnabled(status.getInReplyToStatusId() > 0);
+		dialog_deletePost.setEnabled(status.getUser().getScreenName().equals(((ApplicationClass)context.getApplicationContext()).getMyScreenName()));
 	}
 
 }
