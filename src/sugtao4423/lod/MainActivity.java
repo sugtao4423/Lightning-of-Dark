@@ -1,5 +1,6 @@
 package sugtao4423.lod;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -241,6 +242,15 @@ public class MainActivity extends FragmentActivity{
 					return null;
 				}
 			}.execute();
+		}
+		clearThumbnailCache();
+	}
+
+	public void clearThumbnailCache(){
+		File cache = new File(getCacheDir().getAbsolutePath() + "/web_image_cache/");
+		for(File f : cache.listFiles()){
+			if(f.getName().startsWith("http+pbs+twimg+com+media+"))
+				f.delete();
 		}
 	}
 }
