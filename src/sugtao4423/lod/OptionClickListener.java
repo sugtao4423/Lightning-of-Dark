@@ -2,14 +2,15 @@ package sugtao4423.lod;
 
 import java.util.ArrayList;
 
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 import sugtao4423.lod.dataclass.Account;
@@ -18,23 +19,25 @@ import sugtao4423.lod.utils.DBUtil;
 
 public class OptionClickListener implements OnClickListener{
 
-	private MainActivity context;
+	private Context context;
 	private String[] items;
-	private SharedPreferences pref;
-	private Twitter twitter;
 
-	public OptionClickListener(MainActivity context, String[] items, SharedPreferences pref, Twitter twitter){
+	public OptionClickListener(Context context, String[] items){
 		this.context = context;
 		this.items = items;
-		this.pref = pref;
-		this.twitter = twitter;
 	}
 
 	@Override
 	public void onClick(DialogInterface dialog, int which){
 		switch(items[which]){
+		case "ツイート爆撃":
+			tweetBomb();
+			break;
 		case "ユーザー検索":
 			searchUser();
+			break;
+		case "Homeを更新":
+			refreshHomeLine();
 			break;
 		case "アカウント":
 			accountSelect();
@@ -42,13 +45,37 @@ public class OptionClickListener implements OnClickListener{
 		case "設定":
 			context.startActivity(new Intent(context, Settings.class));
 			break;
-		case "ツイート爆撃":
-			tweetBomb();
-			break;
-		case "Homeを更新":
-			refreshHomeLine();
-			break;
 		}
+	}
+
+	public void tweetBomb(){
+		final View bombView = View.inflate(context, R.layout.tweet_bomb, null);
+		new AlertDialog.Builder(context)
+		.setView(bombView)
+		.setPositiveButton("OK", new OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+				final String staticText = ((EditText)bombView.findViewById(R.id.bomb_staticText)).getText().toString();
+				final String loopText = ((EditText)bombView.findViewById(R.id.bomb_loopText)).getText().toString();
+				int loopCount = Integer.parseInt(((EditText)bombView.findViewById(R.id.bomb_loopCount)).getText().toString());
+
+				String loop = "";
+				for(int i = 0; i < loopCount; i++){
+					loop += loopText;
+					new AsyncTask<String, Void, Void>(){
+						@Override
+						protected Void doInBackground(String... params){
+							try{
+								((ApplicationClass)context.getApplicationContext()).getTwitter().updateStatus(staticText + params[0]);
+							}catch(TwitterException e){
+							}
+							return null;
+						}
+					}.execute(loop);
+				}
+				new ShowToast(R.string.success_tweet, context, 0);
+			}
+		}).setNegativeButton("キャンセル", null).show();
 	}
 
 	public void searchUser(){
@@ -71,7 +98,19 @@ public class OptionClickListener implements OnClickListener{
 		}).show();
 	}
 
+	public void refreshHomeLine(){
+		new AlertDialog.Builder(context)
+		.setTitle("Homeを更新しますか？")
+		.setPositiveButton("OK", new OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+				((MainActivity)context).getTimeLine();
+			}
+		}).setNegativeButton("キャンセル", null).show();
+	}
+
 	public void accountSelect(){
+		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		final String myScreenName = pref.getString(Keys.SCREEN_NAME, "");
 		final DBUtil dbUtil = new DBUtil(context);
 		final Account[] accounts = dbUtil.getAccounts();
@@ -94,10 +133,10 @@ public class OptionClickListener implements OnClickListener{
 					new AlertDialog.Builder(context)
 					.setTitle(nameDialog[which])
 					.setPositiveButton("切り替え", new OnClickListener(){
-
 						@Override
 						public void onClick(DialogInterface dialog, int w){
-							pref.edit().putString(Keys.SCREEN_NAME, accounts[which].getScreenName())
+							pref.edit()
+								.putString(Keys.SCREEN_NAME, accounts[which].getScreenName())
 								.putString(Keys.CUSTOM_CK, accounts[which].getCK())
 								.putString(Keys.CUSTOM_CS, accounts[which].getCS())
 								.putString(Keys.ACCESS_TOKEN, accounts[which].getAT())
@@ -111,7 +150,6 @@ public class OptionClickListener implements OnClickListener{
 							((MainActivity)context).restart();
 						}
 					}).setNegativeButton("削除", new OnClickListener(){
-
 						@Override
 						public void onClick(DialogInterface dialog, int w){
 							dbUtil.deleteAccount(accounts[which]);
@@ -121,46 +159,5 @@ public class OptionClickListener implements OnClickListener{
 				}
 			}
 		}).show();
-	}
-
-	public void tweetBomb(){
-		final View bombView = View.inflate(context, R.layout.tweet_bomb, null);
-		new AlertDialog.Builder(context)
-		.setView(bombView)
-		.setPositiveButton("OK", new OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-				final String staticText = ((EditText)bombView.findViewById(R.id.bomb_staticText)).getText().toString();
-				final String loopText = ((EditText)bombView.findViewById(R.id.bomb_loopText)).getText().toString();
-				int loopCount = Integer.parseInt(((EditText)bombView.findViewById(R.id.bomb_loopCount)).getText().toString());
-
-				String loop = "";
-				for(int i = 0; i < loopCount; i++){
-					loop += loopText;
-					new AsyncTask<String, Void, Void>(){
-						@Override
-						protected Void doInBackground(String... params){
-							try{
-								twitter.updateStatus(staticText + params[0]);
-							}catch(TwitterException e){
-							}
-							return null;
-						}
-					}.execute(loop);
-				}
-				new ShowToast(R.string.success_tweet, context, 0);
-			}
-		}).setNegativeButton("キャンセル", null).show();
-	}
-
-	public void refreshHomeLine(){
-		new AlertDialog.Builder(context)
-		.setTitle("Homeを更新しますか？")
-		.setPositiveButton("OK", new OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-				context.getTimeLine();
-			}
-		}).setNegativeButton("キャンセル", null).show();
 	}
 }

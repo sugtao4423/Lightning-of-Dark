@@ -219,7 +219,7 @@ public class MainActivity extends FragmentActivity{
 	public void option(View v){
 		final String[] items = new String[]{"ツイート爆撃", "ユーザー検索", "Homeを更新", "アカウント", "設定"};
 		new AlertDialog.Builder(this)
-		.setItems(items, new OptionClickListener(this, items, pref, twitter))
+		.setItems(items, new OptionClickListener(this, items))
 		.show();
 	}
 
