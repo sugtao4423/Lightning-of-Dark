@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,12 +18,12 @@ import sugtao4423.lod.utils.DBUtil;
 
 public class OptionClickListener implements OnClickListener{
 
-	private Context context;
+	private MainActivity context;
 	private String[] items;
 	private SharedPreferences pref;
 	private Twitter twitter;
 
-	public OptionClickListener(Context context, String[] items, SharedPreferences pref, Twitter twitter){
+	public OptionClickListener(MainActivity context, String[] items, SharedPreferences pref, Twitter twitter){
 		this.context = context;
 		this.items = items;
 		this.pref = pref;
@@ -45,6 +44,9 @@ public class OptionClickListener implements OnClickListener{
 			break;
 		case "ツイート爆撃":
 			tweetBomb();
+			break;
+		case "Homeを更新":
+			refreshHomeLine();
 			break;
 		}
 	}
@@ -147,6 +149,17 @@ public class OptionClickListener implements OnClickListener{
 					}.execute(loop);
 				}
 				new ShowToast(R.string.success_tweet, context, 0);
+			}
+		}).setNegativeButton("キャンセル", null).show();
+	}
+
+	public void refreshHomeLine(){
+		new AlertDialog.Builder(context)
+		.setTitle("Homeを更新しますか？")
+		.setPositiveButton("OK", new OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+				context.getTimeLine();
 			}
 		}).setNegativeButton("キャンセル", null).show();
 	}

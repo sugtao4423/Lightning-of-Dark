@@ -104,6 +104,7 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void getTimeLine(){
+		fragmentHome.clear();
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 
 			@Override
@@ -216,7 +217,7 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void option(View v){
-		final String[] items = new String[]{"ツイート爆撃", "ユーザー検索", "アカウント", "設定"};
+		final String[] items = new String[]{"ツイート爆撃", "ユーザー検索", "Homeを更新", "アカウント", "設定"};
 		new AlertDialog.Builder(this)
 		.setItems(items, new OptionClickListener(this, items, pref, twitter))
 		.show();

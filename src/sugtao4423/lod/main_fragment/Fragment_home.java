@@ -61,6 +61,11 @@ public class Fragment_home extends Fragment{
 		});
 	}
 
+	public void clear(){
+		if(adapter != null)
+			adapter.clear();
+	}
+
 	public EndlessScrollListener getLoadMoreListener(){
 		return new EndlessScrollListener(llm){
 
