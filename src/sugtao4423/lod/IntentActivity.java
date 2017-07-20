@@ -1,6 +1,13 @@
 package sugtao4423.lod;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 
 import com.loopj.android.image.SmartImageView;
 
@@ -58,10 +65,33 @@ public class IntentActivity extends Activity{
 	public void jump(){
 		if(Intent.ACTION_VIEW.equals(getIntent().getAction())){
 			String uri = getIntent().getData().toString();
-			Matcher user = Regex.userUrl.matcher(uri);
 			Matcher status = Regex.statusUrl.matcher(uri);
+			Matcher share = Regex.shareUrl.matcher(uri);
+			Matcher user = Regex.userUrl.matcher(uri);
 			if(status.find()){
 				showStatus(Long.parseLong(status.group(2)), IntentActivity.this, true);
+			}else if(share.find()){
+				List<NameValuePair> params;
+				try{
+					params = URLEncodedUtils.parse(new URI(uri), "UTF-8");
+				}catch(URISyntaxException e){
+					new ShowToast(R.string.urlNotMatchPattern, this, 0);
+					finish();
+					return;
+				}
+				HashMap<String, String> map = new HashMap<String, String>();
+				for(NameValuePair param : params)
+					map.put(param.getName(), param.getValue());
+				String text = (map.get("text") == null ? "" : (map.get("text") + " ")) +
+						(map.get("url") == null ? "" : (map.get("url") + " ")) +
+						(map.get("hashtags") == null ? "" : ("#" + map.get("hashtags").replace(",", " #") + " ")) +
+						(map.get("via") == null ? "" : ("@" + map.get("via") + "さんから "));
+				text = text.substring(0, text.length() - 1);
+				Intent i = new Intent(IntentActivity.this, TweetActivity.class);
+				i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_EXTERNALTEXT);
+				i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TEXT, text);
+				startActivity(i);
+				finish();
 			}else if(user.find()){
 				Intent i = new Intent(IntentActivity.this, UserPage.class);
 				i.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, user.group(2));
