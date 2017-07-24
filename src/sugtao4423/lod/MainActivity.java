@@ -26,6 +26,8 @@ import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
+import sugtao4423.icondialog.IconDialog;
+import sugtao4423.icondialog.IconItem;
 import sugtao4423.lod.main_fragment.Fragment_home;
 import sugtao4423.lod.main_fragment.Fragment_mention;
 import sugtao4423.lod.main_fragment.MyFragmentStatePagerAdapter;
@@ -217,10 +219,13 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void option(View v){
-		final String[] items = new String[]{"ツイート爆撃", "ユーザー検索", "Homeを更新", "アカウント", "設定"};
-		new AlertDialog.Builder(this)
-		.setItems(items, new OptionClickListener(this, items))
-		.show();
+		IconItem[] items = new IconItem[5];
+		items[0] = new IconItem("ツイート爆撃", R.drawable.icon_bomb);
+		items[1] = new IconItem("ユーザー検索", R.drawable.icon_search);
+		items[2] = new IconItem("Homeを更新", R.drawable.icon_refresh);
+		items[3] = new IconItem("アカウント", R.drawable.icon_user);
+		items[4] = new IconItem("設定", R.drawable.icon_cog);
+		new IconDialog(this).setItems(items, new OptionClickListener(this)).show();
 	}
 
 	public void restart(){

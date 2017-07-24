@@ -20,29 +20,27 @@ import sugtao4423.lod.utils.DBUtil;
 public class OptionClickListener implements OnClickListener{
 
 	private Context context;
-	private String[] items;
 
-	public OptionClickListener(Context context, String[] items){
+	public OptionClickListener(Context context){
 		this.context = context;
-		this.items = items;
 	}
 
 	@Override
 	public void onClick(DialogInterface dialog, int which){
-		switch(items[which]){
-		case "ツイート爆撃":
+		switch(which){
+		case 0:
 			tweetBomb();
 			break;
-		case "ユーザー検索":
+		case 1:
 			searchUser();
 			break;
-		case "Homeを更新":
+		case 2:
 			refreshHomeLine();
 			break;
-		case "アカウント":
+		case 3:
 			accountSelect();
 			break;
-		case "設定":
+		case 4:
 			context.startActivity(new Intent(context, Settings.class));
 			break;
 		}
