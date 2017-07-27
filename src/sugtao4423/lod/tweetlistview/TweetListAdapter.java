@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,11 +18,11 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
 import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.R;
 import sugtao4423.lod.Show_Video;
@@ -130,19 +131,28 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 			holder.tweetImagesScroll.setVisibility(View.VISIBLE);
 			holder.tweetImagesLayout.removeAllViews();
 			for(int i = 0; i < mentitys.length; i++){
-				LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, 200);
+				LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200);
 				if(holder.tweetImagesLayout.getChildCount() != 0)
 					params.setMargins(8, 0, 0, 0);
 				SmartImageView child = new SmartImageView(context);
 				child.setLayoutParams(params);
 				child.setMaxHeight(200);
 				child.setAdjustViewBounds(true);
-				holder.tweetImagesLayout.addView(child);
 
 				if(Utils.isVideoOrGif(mentitys[i])){
+					ImageView play = new ImageView(context);
+					play.setImageResource(R.drawable.video_play);
+					FrameLayout.LayoutParams playParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
+							FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+					play.setLayoutParams(playParams);
+					FrameLayout fl = new FrameLayout(context);
+					fl.addView(child);
+					fl.addView(play);
+					holder.tweetImagesLayout.addView(fl);
+
 					final boolean isGif = Utils.isGif(mentitys[i]);
 					final String[] videoUrl = Utils.getVideoURLsSortByBitrate(appClass, mentitys);
-					child.setImageResource(R.drawable.video_play);
+					child.setImageUrl(mentitys[i].getMediaURL() + ":small", null, R.drawable.ic_action_refresh);
 					child.setOnClickListener(new OnClickListener(){
 						@Override
 						public void onClick(View v){
@@ -156,6 +166,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 						}
 					});
 				}else{
+					holder.tweetImagesLayout.addView(child);
 					child.setImageUrl(mentitys[i].getMediaURL() + ":small", null, R.drawable.ic_action_refresh);
 					final int pos = i;
 					final String[] urls = new String[mentitys.length];
