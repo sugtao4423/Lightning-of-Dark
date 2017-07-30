@@ -101,7 +101,7 @@ public class IntentActivity extends Activity{
 		}else if(Intent.ACTION_SEND.equals(getIntent().getAction())){
 			String subject = getIntent().getExtras().getString(Intent.EXTRA_SUBJECT);
 			String text = getIntent().getExtras().getString(Intent.EXTRA_TEXT);
-			text = subject.isEmpty() ? text : (subject + " " + text);
+			text = (subject == null) ? text : (subject.isEmpty() ? text : (subject + " " + text));
 			Intent i = new Intent(IntentActivity.this, TweetActivity.class);
 			i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_EXTERNALTEXT);
 			i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TEXT, text);
