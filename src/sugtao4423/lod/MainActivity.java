@@ -254,6 +254,8 @@ public class MainActivity extends FragmentActivity{
 
 	public void clearThumbnailCache(){
 		File cache = new File(getCacheDir().getAbsolutePath() + "/web_image_cache/");
+		if(!cache.exists())
+			return;
 		for(File f : cache.listFiles()){
 			if(f.getName().startsWith("http+pbs+twimg+com+media+"))
 				f.delete();
