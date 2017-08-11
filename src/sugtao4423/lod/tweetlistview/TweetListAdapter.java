@@ -69,22 +69,6 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		else
 			holder.protect.setVisibility(View.GONE);
 
-		// リスト背景
-		if(item.isRetweetedByMe()){
-			holder.v.setBackgroundResource(R.drawable.retweeted_by_me);
-		}else if(item.isRetweet()){
-			holder.v.setBackgroundResource(R.drawable.retweet);
-		}else if(item.getUser().getScreenName().equals(appClass.getMyScreenName())){
-			holder.v.setBackgroundResource(R.drawable.same_my_screenname);
-		}else if(appClass.getMentionPattern().matcher(item.getText()).find()){
-			holder.v.setBackgroundResource(R.drawable.mention);
-		}else{
-			if(position % 2 == 0)
-				holder.v.setBackgroundResource(R.drawable.position0);
-			else
-				holder.v.setBackgroundResource(R.drawable.position1);
-		}
-
 		// アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
 		if(item.isRetweet()){
 			holder.rt_icon.setVisibility(View.VISIBLE);
@@ -207,7 +191,10 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 	}
 
 	public Status getItem(int position){
-		return data.get(position);
+		if(position < 0)
+			return null;
+		else
+			return data.get(position);
 	}
 
 	public void add(final Status status){
@@ -240,8 +227,6 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 			@Override
 			public void run(){
 				notifyItemInserted(0);
-				if(data.size() - 1 != 0)
-					notifyItemRangeChanged(1, data.size());
 			}
 		});
 	}

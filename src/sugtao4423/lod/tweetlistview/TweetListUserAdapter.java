@@ -57,11 +57,6 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 		else
 			holder.protect.setVisibility(View.GONE);
 
-		if(position % 2 == 0)
-			holder.v.setBackgroundResource(R.drawable.position0);
-		else
-			holder.v.setBackgroundResource(R.drawable.position1);
-
 		holder.icon.setImageUrl(item.getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
 		holder.name_sn.setText(item.getName() + " - @" + item.getScreenName());
 		holder.content.setText(item.getDescription());
