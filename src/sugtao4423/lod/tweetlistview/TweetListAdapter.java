@@ -100,13 +100,13 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		holder.v.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v){
-				onItemClickListener.onItemClicked(context, data, position);
+				onItemClickListener.onItemClicked(context, data, holder.getLayoutPosition());
 			}
 		});
 		holder.v.setOnLongClickListener(new OnLongClickListener(){
 			@Override
 			public boolean onLongClick(View v){
-				return onItemLongClickListener.onItemLongClicked(context, data, position);
+				return onItemLongClickListener.onItemLongClicked(context, data, holder.getLayoutPosition());
 			}
 		});
 
