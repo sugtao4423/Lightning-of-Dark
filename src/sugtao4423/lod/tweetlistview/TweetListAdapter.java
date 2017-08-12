@@ -221,11 +221,11 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 	}
 
 	public void insertTop(final Status item){
-		data.add(0, item);
 		handler.post(new Runnable(){
 
 			@Override
 			public void run(){
+				data.add(0, item);
 				notifyItemInserted(0);
 			}
 		});
