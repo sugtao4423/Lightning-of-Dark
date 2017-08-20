@@ -15,7 +15,7 @@
     <string name="error_getTimeLine">タイムライン取得エラー</string>
     <string name="error_getMention">メンション取得エラー</string>
     <string name="error_getFav">ふぁぼ取得エラー</string>
-    <string name="error_getFollo">フォロー取得エラー</string>
+    <string name="error_getFollow">フォロー取得エラー</string>
     <string name="error_getFollower">フォロワー取得エラー</string>
     <string name="error_getList">リスト取得エラー</string>
 
