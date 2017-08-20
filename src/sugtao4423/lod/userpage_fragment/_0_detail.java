@@ -151,7 +151,7 @@ public class _0_detail extends Fragment{
 					public void onClick(View v){
 						if(t.startsWith("@")){
 							Intent intent = new Intent(context, UserPage.class);
-							intent.putExtra("userScreenName", this.getURL().replace("@", ""));
+							intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, this.getURL().replace("@", ""));
 							context.startActivity(intent);
 						}else if(t.startsWith("http")){
 							new ChromeIntent(context, Uri.parse(t));
