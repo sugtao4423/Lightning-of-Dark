@@ -15,10 +15,11 @@ import sugtao4423.lod.ShowToast;
 
 public class UserPage extends FragmentActivity{
 
+	public static final String INTENT_EXTRA_KEY_USER_OBJECT = "userObject";
 	public static final String INTENT_EXTRA_KEY_USER_SCREEN_NAME = "userScreenName";
 
 	private User target;
-	private String userScreenName;
+	private UserPageFragmentPagerAdapter adapter;
 	private ApplicationClass appClass;
 
 	@Override
@@ -26,7 +27,7 @@ public class UserPage extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.userpage);
 
-		final UserPageFragmentPagerAdapter adapter = new UserPageFragmentPagerAdapter(getSupportFragmentManager());
+		adapter = new UserPageFragmentPagerAdapter(getSupportFragmentManager());
 		ViewPager viewPager = (ViewPager)findViewById(R.id.Userpager);
 		viewPager.setAdapter(adapter);
 		viewPager.setOffscreenPageLimit(5);
@@ -36,17 +37,19 @@ public class UserPage extends FragmentActivity{
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 
-		userScreenName = getIntent().getStringExtra(INTENT_EXTRA_KEY_USER_SCREEN_NAME);
-
 		appClass = (ApplicationClass)UserPage.this.getApplicationContext();
-		appClass.setTargetScreenName(userScreenName);
+
+		target = (User)getIntent().getSerializableExtra(INTENT_EXTRA_KEY_USER_OBJECT);
+		if(target != null){
+			setTargetUser();
+			return;
+		}
 
 		new AsyncTask<Void, Void, User>(){
 			@Override
 			protected User doInBackground(Void... params){
 				try{
-					target = appClass.getTwitter().showUser(userScreenName);
-					return target;
+					return appClass.getTwitter().showUser(getIntent().getStringExtra(INTENT_EXTRA_KEY_USER_SCREEN_NAME));
 				}catch(TwitterException e){
 					return null;
 				}
@@ -55,9 +58,9 @@ public class UserPage extends FragmentActivity{
 			@Override
 			protected void onPostExecute(User result){
 				if(result != null){
-					appClass.setTarget(result);
-					getActionBar().setTitle(result.getName());
-					((_0_detail)(adapter.getItem(0))).setText(UserPage.this);
+					target = result;
+					setTargetUser();
+					((_0_detail)(adapter.getItem(0))).setText();
 				}else{
 					new ShowToast(R.string.error_getUserDetail, UserPage.this, 0);
 					finish();
@@ -66,8 +69,13 @@ public class UserPage extends FragmentActivity{
 		}.execute();
 	}
 
-	public void resetUser(){
-		appClass.setTarget(target);
-		appClass.setTargetScreenName(userScreenName);
+	public void setTargetUser(){
+		getActionBar().setTitle(target.getName());
+		((_0_detail)(adapter.getItem(0))).setTargetUser(target);
+		((_1_Tweet)(adapter.getItem(1))).setTargetUser(target);
+		((_2_favorites)(adapter.getItem(2))).setTargetUser(target);
+		((_3_follow)(adapter.getItem(3))).setTargetUser(target);
+		((_4_follower)(adapter.getItem(4))).setTargetUser(target);
 	}
+
 }

@@ -11,7 +11,6 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
-import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
@@ -38,10 +37,6 @@ public class ApplicationClass extends Application{
 	private View customToast;
 	private TextView toast_main_message, toast_tweet;
 	private SmartImageView toast_icon;
-
-	// UserPage
-	private User target;
-	private String targetScreenName;
 
 	public void twitterLogin(Context context){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -195,24 +190,4 @@ public class ApplicationClass extends Application{
 		return toast_icon;
 	}
 
-	/*
-	 * +-+-+-+-+-+-+-+-+
-	 * |U|s|e|r|P|a|g|e|
-	 * +-+-+-+-+-+-+-+-+
-	 */
-	public void setTarget(User target){
-		this.target = target;
-	}
-
-	public User getTarget(){
-		return target;
-	}
-
-	public void setTargetScreenName(String targetScreenName){
-		this.targetScreenName = targetScreenName;
-	}
-
-	public String getTargetScreenName(){
-		return targetScreenName;
-	}
 }

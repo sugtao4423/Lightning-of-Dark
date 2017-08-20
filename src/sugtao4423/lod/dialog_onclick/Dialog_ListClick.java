@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 import twitter4j.MediaEntity;
 import twitter4j.Status;
-
+import twitter4j.User;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -153,7 +153,12 @@ public class Dialog_ListClick implements OnItemClickListener{
 			context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
 		}else if(clickedText.startsWith("@")){ // UserPage
 			Intent intent = new Intent(context, UserPage.class);
-			intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, clickedText.substring(1));
+			String usersn = clickedText.substring(1);
+			User user = status.getUser().getScreenName().equals(usersn) ? status.getUser() : null;
+			if(user != null)
+				intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_OBJECT, user);
+			else
+				intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, usersn);
 			context.startActivity(intent);
 		}
 	}

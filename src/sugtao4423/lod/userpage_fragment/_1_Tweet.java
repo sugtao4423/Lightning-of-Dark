@@ -3,6 +3,7 @@ package sugtao4423.lod.userpage_fragment;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
+import twitter4j.User;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ public class _1_Tweet extends Fragment{
 	private TweetListAdapter adapter;
 	private boolean isAllLoaded;
 	private ApplicationClass appClass;
+	private User targetUser;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -57,6 +59,10 @@ public class _1_Tweet extends Fragment{
 		return v;
 	}
 
+	public void setTargetUser(User targetUser){
+		this.targetUser = targetUser;
+	}
+
 	public EndlessScrollListener getLoadMoreListener(LinearLayoutManager llm){
 		return new EndlessScrollListener(llm){
 
@@ -69,17 +75,16 @@ public class _1_Tweet extends Fragment{
 	}
 
 	public void loadTimeLine(){
-		((UserPage)_1_Tweet.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 				try{
 					if(adapter.getItemCount() > 0){
 						long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
-						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(),
+						return appClass.getTwitter().getUserTimeline(targetUser.getScreenName(),
 								new Paging(1, 50).maxId(tweetId - 1));
 					}else{
-						return appClass.getTwitter().getUserTimeline(appClass.getTargetScreenName(), new Paging(1, 50));
+						return appClass.getTwitter().getUserTimeline(targetUser.getScreenName(), new Paging(1, 50));
 					}
 				}catch(Exception e){
 					return null;
@@ -90,7 +95,7 @@ public class _1_Tweet extends Fragment{
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null) {
 					adapter.addAll(result);
-					if(appClass.getTarget() != null && appClass.getTarget().getStatusesCount() <= adapter.getItemCount())
+					if(targetUser != null && targetUser.getStatusesCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
 					new ShowToast(R.string.error_getTimeLine, getActivity(), 0);

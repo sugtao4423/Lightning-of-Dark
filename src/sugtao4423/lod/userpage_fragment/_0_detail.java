@@ -48,6 +48,8 @@ public class _0_detail extends Fragment{
 	private TextView userName, userScreenName;
 	private ImageView protect;
 
+	private boolean isTextSet;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = View.inflate(container.getContext(), R.layout.user_0, null);
@@ -77,9 +79,20 @@ public class _0_detail extends Fragment{
 		return v;
 	}
 
-	public void setText(Context context){
-		target = appClass.getTarget();
+	public void setTargetUser(User targetUser){
+		this.target = targetUser;
+	}
 
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState){
+		super.onViewCreated(view, savedInstanceState);
+		setText();
+	}
+
+	public void setText(){
+		if(target == null || isTextSet)
+			return;
+		isTextSet = true;
 		if(target.isProtected())
 			protect.setVisibility(View.VISIBLE);
 		userIcon.setImageUrl(target.getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
@@ -99,9 +112,9 @@ public class _0_detail extends Fragment{
 			set_source_and_targetIcon();
 		}
 
-		setLinkTouch(context, userBio, replaceUrlEntity2ExUrl(target.getDescription(), target.getDescriptionURLEntities()));
-		setLinkTouch(context, userLocation, target.getLocation());
-		setLinkTouch(context, userLink, replaceUrlEntity2ExUrl(target.getURL(), target.getURLEntity()));
+		setLinkTouch(getContext(), userBio, replaceUrlEntity2ExUrl(target.getDescription(), target.getDescriptionURLEntities()));
+		setLinkTouch(getContext(), userLocation, target.getLocation());
+		setLinkTouch(getContext(), userLink, replaceUrlEntity2ExUrl(target.getURL(), target.getURLEntity()));
 		userTweetC.setText(numberFormat(target.getStatusesCount()));
 		userFavoriteC.setText(numberFormat(target.getFavouritesCount()));
 		userFollowC.setText(numberFormat(target.getFriendsCount()));

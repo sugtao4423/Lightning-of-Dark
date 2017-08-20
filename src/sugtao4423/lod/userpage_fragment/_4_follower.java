@@ -27,6 +27,7 @@ public class _4_follower extends Fragment{
 	private long cursor;
 	private boolean isAllLoaded;
 	private ApplicationClass appClass;
+	private User targetUser;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
@@ -58,6 +59,10 @@ public class _4_follower extends Fragment{
 		return v;
 	}
 
+	public void setTargetUser(User targetUser){
+		this.targetUser = targetUser;
+	}
+
 	public EndlessScrollListener getLoadMoreListener(LinearLayoutManager llm){
 		return new EndlessScrollListener(llm){
 
@@ -70,12 +75,11 @@ public class _4_follower extends Fragment{
 	}
 
 	public void loadFollowerLine(){
-		((UserPage)_4_follower.this.getActivity()).resetUser();
 		new AsyncTask<Void, Void, PagableResponseList<User>>(){
 			@Override
 			protected PagableResponseList<User> doInBackground(Void... params){
 				try{
-					return appClass.getTwitter().getFollowersList(appClass.getTargetScreenName(), cursor);
+					return appClass.getTwitter().getFollowersList(targetUser.getScreenName(), cursor);
 				}catch(TwitterException e){
 					return null;
 				}
@@ -86,7 +90,7 @@ public class _4_follower extends Fragment{
 				if(result != null){
 					adapter.addAll(result);
 					cursor = result.getNextCursor();
-					if(appClass.getTarget() != null && appClass.getTarget().getFollowersCount() <= adapter.getItemCount())
+					if(targetUser != null && targetUser.getFollowersCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
 					new ShowToast(R.string.error_getFollower, getActivity(), 0);
