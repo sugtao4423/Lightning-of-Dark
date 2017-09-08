@@ -11,6 +11,7 @@ public class Keys{
 	public static final String SCREEN_NAME = "screenName";
 	public static final String MENU_REGEX = "menu_regex";
 	public static final String MENU_OPEN_BROWSER = "menu_openBrowser";
+	public static final String MENU_MILLISECOND = "menu_millisecond";
 	public static final String IS_WEBM = "isWebm";
 	public static final String REGULAR_EXPRESSION = "regularExpression";
 	public static final String SHOW_LIST = "showList";

@@ -2,6 +2,7 @@ package sugtao4423.lod.tweetlistview;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import com.loopj.android.image.SmartImageView;
@@ -70,18 +71,23 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 			holder.protect.setVisibility(View.GONE);
 
 		// アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (appClass.getOption_millisecond() ? ".SSS" : ""), Locale.getDefault());
 		if(item.isRetweet()){
 			holder.rt_icon.setVisibility(View.VISIBLE);
 			holder.rt_sn.setVisibility(View.VISIBLE);
-			holder.date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE)
-					.format(item.getRetweetedStatus().getCreatedAt()) + "  Retweeted by ");
+			String date = dateFormat.format(appClass.getOption_millisecond() ?
+					new Date((item.getRetweetedStatus().getId() >> 22) + 1288834974657L) :
+						item.getRetweetedStatus().getCreatedAt());
+			holder.date.setText(date + "  Retweeted by ");
 			holder.rt_icon.setImageUrl(item.getUser().getProfileImageURL(), null, R.drawable.ic_action_refresh);
 			holder.rt_sn.setText("@" + item.getUser().getScreenName());
 		}else{
 			holder.rt_icon.setVisibility(View.GONE);
 			holder.rt_sn.setVisibility(View.GONE);
-			holder.date.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(item.getCreatedAt())
-					+ "  via " + item.getSource().replaceAll("<.+?>", ""));
+			String date = dateFormat.format(appClass.getOption_millisecond() ?
+					new Date((item.getId() >> 22) + 1288834974657L) :
+						item.getCreatedAt());
+			holder.date.setText(date + "  via " + item.getSource().replaceAll("<.+?>", ""));
 		}
 
 		holder.name_sn.setText(origStatus.getUser().getName() + " - @" + origStatus.getUser().getScreenName());

@@ -31,7 +31,7 @@ public class ApplicationClass extends Application{
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 	private TweetListAdapter[] listAdapters;
-	private boolean option_regex, option_openBrowser, isWebm;
+	private boolean option_regex, option_openBrowser, option_millisecond, isWebm;
 	private boolean[] listAlreadyLoad;
 	// MainActivity - CustomToast
 	private View customToast;
@@ -132,6 +132,15 @@ public class ApplicationClass extends Application{
 		return option_openBrowser;
 	}
 
+	// option_millisecond
+	public void setOption_millisecond(boolean option_millisecond){
+		this.option_millisecond = option_millisecond;
+	}
+
+	public boolean getOption_millisecond(){
+		return option_millisecond;
+	}
+
 	// isWebm
 	public void setIsWebm(boolean isWebm){
 		this.isWebm = isWebm;
@@ -145,6 +154,7 @@ public class ApplicationClass extends Application{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		setOption_regex(pref.getBoolean(Keys.MENU_REGEX, false));
 		setOption_openBrowser(pref.getBoolean(Keys.MENU_OPEN_BROWSER, false));
+		setOption_millisecond(pref.getBoolean(Keys.MENU_MILLISECOND, false));
 		setIsWebm(pref.getBoolean(Keys.IS_WEBM, false));
 	}
 
