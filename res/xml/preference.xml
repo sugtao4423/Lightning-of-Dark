@@ -21,6 +21,7 @@
             android:summaryOff="mp4"
             android:summaryOn="webm"
             android:title="動画をwebmで取得する" />
+
         <Preference
             android:key="listSetting"
             android:title="リスト設定" />

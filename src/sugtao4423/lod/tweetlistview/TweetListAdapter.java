@@ -40,6 +40,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 	private ArrayList<Status> data;
 	private Context context;
 	private ApplicationClass appClass;
+	private SimpleDateFormat statusDateFormat;
 	private Handler handler;
 	private OnItemClickListener onItemClickListener;
 	private OnItemLongClickListener onItemLongClickListener;
@@ -49,6 +50,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		this.data = new ArrayList<Status>();
 		this.context = context;
 		this.appClass = (ApplicationClass)context.getApplicationContext();
+		this.statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (appClass.getOption_millisecond() ? ".SSS" : ""), Locale.getDefault());
 		this.handler = new Handler();
 	}
 
@@ -71,22 +73,17 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 			holder.protect.setVisibility(View.GONE);
 
 		// アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (appClass.getOption_millisecond() ? ".SSS" : ""), Locale.getDefault());
 		if(item.isRetweet()){
 			holder.rt_icon.setVisibility(View.VISIBLE);
 			holder.rt_sn.setVisibility(View.VISIBLE);
-			String date = dateFormat.format(appClass.getOption_millisecond() ?
-					new Date((item.getRetweetedStatus().getId() >> 22) + 1288834974657L) :
-						item.getRetweetedStatus().getCreatedAt());
+			String date = statusDateFormat.format(new Date((item.getRetweetedStatus().getId() >> 22) + 1288834974657L));
 			holder.date.setText(date + "  Retweeted by ");
 			holder.rt_icon.setImageUrl(item.getUser().getProfileImageURL(), null, R.drawable.ic_action_refresh);
 			holder.rt_sn.setText("@" + item.getUser().getScreenName());
 		}else{
 			holder.rt_icon.setVisibility(View.GONE);
 			holder.rt_sn.setVisibility(View.GONE);
-			String date = dateFormat.format(appClass.getOption_millisecond() ?
-					new Date((item.getId() >> 22) + 1288834974657L) :
-						item.getCreatedAt());
+			String date = statusDateFormat.format(new Date((item.getId() >> 22) + 1288834974657L));
 			holder.date.setText(date + "  via " + item.getSource().replaceAll("<.+?>", ""));
 		}
 

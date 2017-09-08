@@ -31,7 +31,7 @@ public class ApplicationClass extends Application{
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 	private TweetListAdapter[] listAdapters;
-	private boolean option_regex, option_openBrowser, option_millisecond, isWebm;
+	private boolean option_openBrowser, option_regex, option_millisecond, isWebm;
 	private boolean[] listAlreadyLoad;
 	// MainActivity - CustomToast
 	private View customToast;
@@ -114,48 +114,32 @@ public class ApplicationClass extends Application{
 		return listAdapters;
 	}
 
-	// option_regex
-	public void setOption_regex(boolean option_regex){
-		this.option_regex = option_regex;
-	}
-
-	public boolean getOption_regex(){
-		return option_regex;
-	}
-
 	// option_openBrowser
-	public void setOption_openBrowser(boolean option_openBrowser){
-		this.option_openBrowser = option_openBrowser;
-	}
-
 	public boolean getOption_openBrowser(){
 		return option_openBrowser;
 	}
 
-	// option_millisecond
-	public void setOption_millisecond(boolean option_millisecond){
-		this.option_millisecond = option_millisecond;
+	// option_regex
+	public boolean getOption_regex(){
+		return option_regex;
 	}
 
+	// option_millisecond
 	public boolean getOption_millisecond(){
 		return option_millisecond;
 	}
 
 	// isWebm
-	public void setIsWebm(boolean isWebm){
-		this.isWebm = isWebm;
-	}
-
 	public boolean getIsWebm(){
 		return isWebm;
 	}
 
 	public void loadOption(Context context){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		setOption_regex(pref.getBoolean(Keys.MENU_REGEX, false));
-		setOption_openBrowser(pref.getBoolean(Keys.MENU_OPEN_BROWSER, false));
-		setOption_millisecond(pref.getBoolean(Keys.MENU_MILLISECOND, false));
-		setIsWebm(pref.getBoolean(Keys.IS_WEBM, false));
+		this.option_openBrowser = pref.getBoolean(Keys.MENU_OPEN_BROWSER, false);
+		this.option_regex = pref.getBoolean(Keys.MENU_REGEX, false);
+		this.option_millisecond = pref.getBoolean(Keys.MENU_MILLISECOND, false);
+		this.isWebm = pref.getBoolean(Keys.IS_WEBM, false);
 	}
 
 	// list_AlreadyLoad
