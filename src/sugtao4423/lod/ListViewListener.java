@@ -2,6 +2,7 @@ package sugtao4423.lod;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import com.loopj.android.image.SmartImageView;
@@ -97,6 +98,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 	private View dialog_title;
 	private SmartImageView icon;
 	private TextView name_screenName, tweetText, tweetDate;
+	private SimpleDateFormat statusDateFormat;
 	private ImageView protect;
 
 	private View content;
@@ -111,6 +113,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		name_screenName = (TextView)dialog_title.findViewById(R.id.name_screenName);
 		tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
 		tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
+		statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (((ApplicationClass)context.getApplicationContext()).getOption_millisecond() ? ".SSS" : ""), Locale.getDefault());
 		protect = (ImageView)dialog_title.findViewById(R.id.UserProtected);
 		((HorizontalScrollView)dialog_title.findViewById(R.id.tweet_images_scroll)).setVisibility(View.GONE);
 
@@ -136,8 +139,8 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			protect.setVisibility(View.VISIBLE);
 		tweetText.setText(status.getText());
 		name_screenName.setText(status.getUser().getName() + " - @" + status.getUser().getScreenName());
-		tweetDate.setText(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(status.getCreatedAt()) + "  via "
-				+ status.getSource().replaceAll("<.+?>", ""));
+		String date = statusDateFormat.format(new Date((status.getId() >> 22) + 1288834974657L));
+		tweetDate.setText(date + "  via " + status.getSource().replaceAll("<.+?>", ""));
 		icon.setImageUrl(status.getUser().getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
 
 		dialog.show();
