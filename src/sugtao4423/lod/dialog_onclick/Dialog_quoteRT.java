@@ -26,7 +26,7 @@ public class Dialog_quoteRT implements OnLongClickListener{
 		dialog.dismiss();
 		Intent i = new Intent(context, TweetActivity.class);
 		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_QUOTERT);
-		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, new StatusItem(status));
+		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, status);
 		context.startActivity(i);
 		return true;
 	}

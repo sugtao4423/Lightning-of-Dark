@@ -55,14 +55,14 @@ public class Dialog_reply implements OnClickListener{
 	public void reply(Status item){
 		Intent reply = new Intent(context, TweetActivity.class);
 		reply.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_REPLY);
-		reply.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, new StatusItem(status));
+		reply.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, status);
 		context.startActivity(reply);
 	}
 
 	public void replyAll(Status item){
 		Intent reply = new Intent(context, TweetActivity.class);
 		reply.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_REPLYALL);
-		reply.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, new StatusItem(status));
+		reply.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, status);
 		context.startActivity(reply);
 	}
 }

@@ -31,7 +31,6 @@ import sugtao4423.lod.dialog_onclick.Dialog_reply;
 import sugtao4423.lod.dialog_onclick.Dialog_retweet;
 import sugtao4423.lod.dialog_onclick.Dialog_talk;
 import sugtao4423.lod.dialog_onclick.Dialog_unOfficialRT;
-import sugtao4423.lod.dialog_onclick.StatusItem;
 import sugtao4423.lod.tweetlistview.TweetListAdapter.OnItemClickListener;
 import sugtao4423.lod.tweetlistview.TweetListAdapter.OnItemLongClickListener;
 import sugtao4423.lod.utils.Utils;
@@ -90,7 +89,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 	public boolean onItemLongClicked(Context context, ArrayList<Status> data, int position){
 		Intent i = new Intent(context, TweetActivity.class);
 		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_PAKUTSUI);
-		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, new StatusItem(data.get(position)));
+		i.putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, data.get(position));
 		context.startActivity(i);
 		return true;
 	}

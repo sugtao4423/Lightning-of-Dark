@@ -21,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import sugtao4423.lod.dialog_onclick.StatusItem;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 
@@ -64,7 +63,7 @@ public class TweetActivity extends Activity{
 
 		Intent intent = getIntent();
 		if(intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) != null){
-			status = ((StatusItem)intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS)).getStatus();
+			status = (Status)intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS);
 			status = status.isRetweet() ? status.getRetweetedStatus() : status;
 		}
 
