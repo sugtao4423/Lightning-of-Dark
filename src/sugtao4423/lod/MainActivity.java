@@ -83,7 +83,6 @@ public class MainActivity extends FragmentActivity{
 		for(int i = 0; i < listAdapters.length; i++)
 			list_alreadyLoad[i] = false;
 		appClass.setListAlreadyLoad(list_alreadyLoad);
-		appClass.loadOption(this);
 
 		View customToast = View.inflate(this, R.layout.custom_toast, null);
 		appClass.setToastView(customToast);

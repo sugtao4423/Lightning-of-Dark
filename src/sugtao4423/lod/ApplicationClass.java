@@ -31,7 +31,7 @@ public class ApplicationClass extends Application{
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 	private TweetListAdapter[] listAdapters;
-	private boolean option_openBrowser, option_regex, option_millisecond, isWebm;
+	private boolean isOptionLoaded, option_openBrowser, option_regex, option_millisecond, isWebm;
 	private boolean[] listAlreadyLoad;
 	// MainActivity - CustomToast
 	private View customToast;
@@ -116,30 +116,39 @@ public class ApplicationClass extends Application{
 
 	// option_openBrowser
 	public boolean getOption_openBrowser(){
+		if(!isOptionLoaded)
+			loadOption();
 		return option_openBrowser;
 	}
 
 	// option_regex
 	public boolean getOption_regex(){
+		if(!isOptionLoaded)
+			loadOption();
 		return option_regex;
 	}
 
 	// option_millisecond
 	public boolean getOption_millisecond(){
+		if(!isOptionLoaded)
+			loadOption();
 		return option_millisecond;
 	}
 
 	// isWebm
 	public boolean getIsWebm(){
+		if(!isOptionLoaded)
+			loadOption();
 		return isWebm;
 	}
 
-	public void loadOption(Context context){
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+	public void loadOption(){
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		this.option_openBrowser = pref.getBoolean(Keys.MENU_OPEN_BROWSER, false);
 		this.option_regex = pref.getBoolean(Keys.MENU_REGEX, false);
 		this.option_millisecond = pref.getBoolean(Keys.MENU_MILLISECOND, false);
 		this.isWebm = pref.getBoolean(Keys.IS_WEBM, false);
+		isOptionLoaded = true;
 	}
 
 	// list_AlreadyLoad

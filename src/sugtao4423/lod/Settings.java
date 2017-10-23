@@ -63,6 +63,6 @@ public class Settings extends PreferenceActivity{
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		((ApplicationClass)getApplicationContext()).loadOption(getApplicationContext());
+		((ApplicationClass)getApplicationContext()).loadOption();
 	}
 }

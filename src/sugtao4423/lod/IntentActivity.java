@@ -42,7 +42,6 @@ public class IntentActivity extends Activity{
 		if(appClass.getTwitter() == null){
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 			appClass = (ApplicationClass)this.getApplicationContext();
-			appClass.loadOption(this);
 
 			View customToast = View.inflate(this, R.layout.custom_toast, null);
 			appClass.setToastView(customToast);
