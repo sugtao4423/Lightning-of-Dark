@@ -81,6 +81,7 @@ public class TweetActivity extends Activity{
 			originStatus.setFocusable(false);
 			TweetListAdapter adapter = new TweetListAdapter(this);
 			adapter.setOnItemClickListener(new ListViewListener());
+			adapter.setOnItemLongClickListener(new ListViewListener());
 			adapter.add(status);
 			originStatus.setAdapter(adapter);
 			break;
