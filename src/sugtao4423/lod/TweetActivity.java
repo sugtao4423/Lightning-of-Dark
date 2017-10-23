@@ -152,9 +152,9 @@ public class TweetActivity extends Activity{
 		if(image != null)
 			statusUpdate.media(image);
 		if(type == TYPE_REPLY || type == TYPE_REPLYALL)
-			appClass.updateStatus(getApplicationContext(), statusUpdate.inReplyToStatusId(TweetActivity.this.status.getId()));
+			appClass.updateStatus(statusUpdate.inReplyToStatusId(TweetActivity.this.status.getId()));
 		else
-			appClass.updateStatus(getApplicationContext(), statusUpdate);
+			appClass.updateStatus(statusUpdate);
 
 		finish();
 	}

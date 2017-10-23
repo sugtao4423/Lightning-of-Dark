@@ -15,7 +15,6 @@ import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -38,8 +37,8 @@ public class ApplicationClass extends Application{
 	private TextView toast_main_message, toast_tweet;
 	private SmartImageView toast_icon;
 
-	public void twitterLogin(Context context){
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+	public void twitterLogin(){
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		String ck, cs;
 		if(pref.getString(Keys.CUSTOM_CK, "").equals("")){
 			ck = getString(R.string.CK);
@@ -58,7 +57,7 @@ public class ApplicationClass extends Application{
 		this.mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
 	}
 
-	public void updateStatus(final Context context, final StatusUpdate status){
+	public void updateStatus(final StatusUpdate status){
 		new AsyncTask<Void, Void, Status>(){
 
 			@Override
@@ -73,9 +72,9 @@ public class ApplicationClass extends Application{
 			@Override
 			protected void onPostExecute(twitter4j.Status result){
 				if(result != null)
-					new ShowToast(R.string.success_tweet, context, 0);
+					new ShowToast(R.string.success_tweet, getApplicationContext(), 0);
 				else
-					new ShowToast(R.string.error_tweet, context, 0);
+					new ShowToast(R.string.error_tweet, getApplicationContext(), 0);
 			}
 		}.execute();
 	}
