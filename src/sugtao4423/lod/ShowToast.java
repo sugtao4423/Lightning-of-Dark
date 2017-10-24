@@ -22,10 +22,14 @@ public class ShowToast{
 		tweet = appClass.getToast_Tweet();
 		icon = appClass.getToast_Icon();
 
-		// 0:normal
+		// 0: normal, short
+		// 1: normal, long
 		switch(toastType){
 		case 0:
-			normalToast(text, context);
+			normalToast(text, context, Toast.LENGTH_SHORT);
+			break;
+		case 1:
+			normalToast(text, context, Toast.LENGTH_LONG);
 			break;
 		}
 	}
@@ -34,7 +38,7 @@ public class ShowToast{
 		this(context.getString(resId), context, toastType);
 	}
 
-	public void normalToast(String text, Context context){
+	public void normalToast(String text, Context context, int length){
 		Toast toast = new Toast(context);
 
 		main_message.setText(text);
@@ -44,7 +48,7 @@ public class ShowToast{
 		tweet.setVisibility(View.GONE);
 		icon.setVisibility(View.GONE);
 
-		toast.setDuration(Toast.LENGTH_SHORT);
+		toast.setDuration(length);
 		toast.setView(toastView);
 		toast.show();
 	}

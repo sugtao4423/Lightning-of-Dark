@@ -103,7 +103,7 @@ public class Dialog_ListClick implements OnItemClickListener{
 						new AlertDialog.Builder(context).setView(l).show();
 						String resultCount = context.getString(R.string.regResultCount);
 						resultCount = String.format(resultCount, listData.size(), find);
-						new ShowToast(resultCount, context, 0);
+						new ShowToast(resultCount, context, 1);
 					}
 				}
 			}).show();
