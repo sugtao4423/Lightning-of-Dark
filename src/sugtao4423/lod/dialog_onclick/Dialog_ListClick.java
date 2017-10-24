@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
 import android.widget.AdapterView.OnItemClickListener;
 import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.IntentActivity;
@@ -56,27 +58,16 @@ public class Dialog_ListClick implements OnItemClickListener{
 		if(clickedText.equals("正規表現で抽出")){
 			View regView = View.inflate(context, R.layout.reg_dialog, null);
 			final EditText regEdit = (EditText)regView.findViewById(R.id.regDialog_edit);
-			Button dot = (Button)regView.findViewById(R.id.regDialog_dot);
-			Button kome = (Button)regView.findViewById(R.id.regDialog_kome);
-			Button or = (Button)regView.findViewById(R.id.regDialog_or);
-			Button plus = (Button)regView.findViewById(R.id.regDialog_plus);
-			Button que = (Button)regView.findViewById(R.id.regDialog_q);
-			Button backslash = (Button)regView.findViewById(R.id.regDialog_backslash);
-			Button kakko1_0 = (Button)regView.findViewById(R.id.regDialog_kakko1_0);
-			Button kakko1_1 = (Button)regView.findViewById(R.id.regDialog_kakko1_1);
-			Button kakko2_0 = (Button)regView.findViewById(R.id.regDialog_kakko2_0);
-			Button kakko2_1 = (Button)regView.findViewById(R.id.regDialog_kakko2_1);
-
-			dot.setOnClickListener(new Dialog_regButtonClick(regEdit, "."));
-			kome.setOnClickListener(new Dialog_regButtonClick(regEdit, "*"));
-			or.setOnClickListener(new Dialog_regButtonClick(regEdit, "|"));
-			plus.setOnClickListener(new Dialog_regButtonClick(regEdit, "+"));
-			que.setOnClickListener(new Dialog_regButtonClick(regEdit, "?"));
-			backslash.setOnClickListener(new Dialog_regButtonClick(regEdit, "\\"));
-			kakko1_0.setOnClickListener(new Dialog_regButtonClick(regEdit, "("));
-			kakko1_1.setOnClickListener(new Dialog_regButtonClick(regEdit, ")"));
-			kakko2_0.setOnClickListener(new Dialog_regButtonClick(regEdit, "{"));
-			kakko2_1.setOnClickListener(new Dialog_regButtonClick(regEdit, "}"));
+			GridLayout gridLayout = (GridLayout)regView.findViewById(R.id.regDialog_grid);
+			String[] regItems = new String[]{".", "*", "|", "+", "?", "\\", "^", "$", "(", ")", "[", "]", "{", "}"};
+			LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(130, 130);
+			for(int i = 0; i < regItems.length; i++){
+				Button btn = new Button(context);
+				btn.setLayoutParams(params);
+				btn.setText(regItems[i]);
+				btn.setOnClickListener(new Dialog_regButtonClick(regEdit));
+				gridLayout.addView(btn);
+			}
 
 			final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 			regEdit.setText(pref.getString(Keys.REGULAR_EXPRESSION, ""));
