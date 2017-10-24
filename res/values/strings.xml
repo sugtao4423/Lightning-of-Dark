@@ -27,8 +27,10 @@
     <string name="success_selectPic">画像を選択しました</string>
     <string name="error_selectPic">画像を選択できませんでした</string>
 
-    <string name="error_getStatus">ツイートの取得に失敗しました</string>
     <string name="nothing">ありませんでした</string>
+    <string name="regResultCount">%1$d件中 %2$d件見つかりました</string>
+
+    <string name="error_getStatus">ツイートの取得に失敗しました</string>
     <string name="error_streaming">ストリーミング系のエラー</string>
     <string name="edittext_empty">なにも入力されていません</string>
     <string name="deleteAccountX">\@%s を削除しました</string>

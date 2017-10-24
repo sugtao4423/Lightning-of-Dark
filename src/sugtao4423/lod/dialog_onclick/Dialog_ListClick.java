@@ -16,6 +16,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -78,18 +79,21 @@ public class Dialog_ListClick implements OnItemClickListener{
 			.setPositiveButton("OK", new OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which){
+					InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(regEdit.getWindowToken(), 0);
+
 					String editReg = regEdit.getText().toString();
 					pref.edit().putString(Keys.REGULAR_EXPRESSION, editReg).commit();
 					Pattern pattern = Pattern.compile(editReg, Pattern.DOTALL);
 					TweetListAdapter adapter = new TweetListAdapter(context);
-					boolean exists = false;
+					int find = 0;
 					for(Status s : listData){
 						if(pattern.matcher(s.getText()).find()){
 							adapter.add(s);
-							exists = true;
+							find++;
 						}
 					}
-					if(!exists){
+					if(find == 0){
 						new ShowToast(R.string.nothing, context, 0);
 					}else{
 						TweetListView l = new TweetListView(context);
@@ -97,6 +101,9 @@ public class Dialog_ListClick implements OnItemClickListener{
 						adapter.setOnItemClickListener(new ListViewListener());
 						adapter.setOnItemLongClickListener(new ListViewListener());
 						new AlertDialog.Builder(context).setView(l).show();
+						String resultCount = context.getString(R.string.regResultCount);
+						resultCount = String.format(resultCount, listData.size(), find);
+						new ShowToast(resultCount, context, 0);
 					}
 				}
 			}).show();
