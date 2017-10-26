@@ -94,7 +94,6 @@ public class MainActivity extends FragmentActivity{
 			startActivity(new Intent(this, StartOAuth.class));
 			finish();
 		}else{
-			appClass.twitterLogin();
 			twitter = appClass.getTwitter();
 			twitterStream = appClass.getTwitterStream();
 			mentionPattern = appClass.getMentionPattern();

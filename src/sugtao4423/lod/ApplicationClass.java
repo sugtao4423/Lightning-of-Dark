@@ -37,7 +37,7 @@ public class ApplicationClass extends Application{
 	private TextView toast_main_message, toast_tweet;
 	private SmartImageView toast_icon;
 
-	public void twitterLogin(){
+	private void twitterLogin(){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		String ck, cs;
 		if(pref.getString(Keys.CUSTOM_CK, "").equals("")){
@@ -86,21 +86,29 @@ public class ApplicationClass extends Application{
 	 */
 	// MyScreenName
 	public String getMyScreenName(){
+		if(twitter == null)
+			twitterLogin();
 		return myScreenName;
 	}
 
 	// Twitter
 	public Twitter getTwitter(){
+		if(twitter == null)
+			twitterLogin();
 		return twitter;
 	}
 
 	// TwitterStream
 	public TwitterStream getTwitterStream(){
+		if(twitter == null)
+			twitterLogin();
 		return twitterStream;
 	}
 
 	// mentionPattern
 	public Pattern getMentionPattern(){
+		if(twitter == null)
+			twitterLogin();
 		return mentionPattern;
 	}
 

@@ -53,7 +53,6 @@ public class IntentActivity extends Activity{
 				startActivity(new Intent(this, StartOAuth.class));
 				finish();
 			}else{
-				appClass.twitterLogin();
 				jump();
 			}
 		}else{
