@@ -233,6 +233,7 @@ public class MainActivity extends FragmentActivity{
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
+		appClass.resetTwitter();
 		if(resetFlag){
 			resetFlag = false;
 			startActivity(new Intent(this, MainActivity.class));

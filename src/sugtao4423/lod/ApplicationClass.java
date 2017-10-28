@@ -84,6 +84,14 @@ public class ApplicationClass extends Application{
 	 * |M|a|i|n|A|c|t|i|v|i|t|y|
 	 * +-+-+-+-+-+-+-+-+-+-+-+-+
 	 */
+
+	public void resetTwitter(){
+		this.myScreenName = null;
+		this.twitter = null;
+		this.twitterStream = null;
+		this.mentionPattern = null;
+	}
+
 	// MyScreenName
 	public String getMyScreenName(){
 		if(myScreenName == null)
