@@ -86,7 +86,7 @@ public class ApplicationClass extends Application{
 	 */
 	// MyScreenName
 	public String getMyScreenName(){
-		if(twitter == null)
+		if(myScreenName == null)
 			twitterLogin();
 		return myScreenName;
 	}
@@ -100,14 +100,14 @@ public class ApplicationClass extends Application{
 
 	// TwitterStream
 	public TwitterStream getTwitterStream(){
-		if(twitter == null)
+		if(twitterStream == null)
 			twitterLogin();
 		return twitterStream;
 	}
 
 	// mentionPattern
 	public Pattern getMentionPattern(){
-		if(twitter == null)
+		if(mentionPattern == null)
 			twitterLogin();
 		return mentionPattern;
 	}
