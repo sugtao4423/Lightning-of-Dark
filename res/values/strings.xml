@@ -44,4 +44,17 @@
     <string name="error_getOriginalImage">オリジナル画像の取得に失敗しました</string>
     <string name="error_getUserDetail">ユーザー情報を取得できませんでした</string>
 
+    <string name="icon_bomb">&#xf1e2;</string>
+    <string name="icon_search">&#xf002;</string>
+    <string name="icon_refresh">&#xf021;</string>
+    <string name="icon_user">&#xf007;</string>
+    <string name="icon_cog">&#xf013;</string>
+
+    <string name="icon_reply">&#xf3e5;</string>
+    <string name="icon_retweet">&#xf079;</string>
+    <string name="icon_quote">&#xf10e;</string>
+    <string name="icon_star">&#xf005;</string>
+    <string name="icon_comment">&#xf086;</string>
+    <string name="icon_trash">&#xf2ed;</string>
+
 </resources>

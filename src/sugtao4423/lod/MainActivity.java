@@ -222,11 +222,11 @@ public class MainActivity extends FragmentActivity{
 		if(iconDialog == null){
 			int black = Color.rgb(97, 97, 97);
 			IconItem[] items = new IconItem[5];
-			items[0] = new IconItem(IconItem.ICON_BOMB, black, "ツイート爆撃");
-			items[1] = new IconItem(IconItem.ICON_SEARCH, black, "ユーザー検索");
-			items[2] = new IconItem(IconItem.ICON_REFRESH, black, "Homeを更新");
-			items[3] = new IconItem(IconItem.ICON_USER, black, "アカウント");
-			items[4] = new IconItem(IconItem.ICON_COG, black, "設定");
+			items[0] = new IconItem(getString(R.string.icon_bomb).charAt(0), black, "ツイート爆撃");
+			items[1] = new IconItem(getString(R.string.icon_search).charAt(0), black, "ユーザー検索");
+			items[2] = new IconItem(getString(R.string.icon_refresh).charAt(0), black, "Homeを更新");
+			items[3] = new IconItem(getString(R.string.icon_user).charAt(0), black, "アカウント");
+			items[4] = new IconItem(getString(R.string.icon_cog).charAt(0), black, "設定");
 			iconDialog = new IconDialog(this, "fontawesome.ttf").setItems(items, new OptionClickListener(this));
 		}
 		iconDialog.show();
