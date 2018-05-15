@@ -105,7 +105,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 
 	private View content;
 	private ListView dialog_list;
-	private Button dialog_reply, dialog_retweet, dialog_unOfficialRT, dialog_favorite, dialog_talk, dialog_deletePost;
+	private Button[] dialogBtn;
 
 	private AlertDialog dialog;
 
@@ -121,36 +121,22 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 
 		content = View.inflate(context, R.layout.custom_dialog, null);
 		dialog_list = (ListView)content.findViewById(R.id.dialog_List);
-		dialog_reply = (Button)content.findViewById(R.id.dialog_reply);
-		dialog_retweet = (Button)content.findViewById(R.id.dialog_retweet);
-		dialog_unOfficialRT = (Button)content.findViewById(R.id.dialog_unofficialRT);
-		dialog_favorite = (Button)content.findViewById(R.id.dialog_favorite);
-		dialog_talk = (Button)content.findViewById(R.id.dialog_talk);
-		dialog_deletePost = (Button)content.findViewById(R.id.dialog_delete);
+		dialogBtn = new Button[6];
+		dialogBtn[0] = (Button)content.findViewById(R.id.dialog_reply);
+		dialogBtn[1] = (Button)content.findViewById(R.id.dialog_retweet);
+		dialogBtn[2] = (Button)content.findViewById(R.id.dialog_unofficialRT);
+		dialogBtn[3] = (Button)content.findViewById(R.id.dialog_favorite);
+		dialogBtn[4] = (Button)content.findViewById(R.id.dialog_talk);
+		dialogBtn[5] = (Button)content.findViewById(R.id.dialog_delete);
 
 		Typeface tf = Typeface.createFromAsset(context.getAssets(), "fontawesome.ttf");
-		dialog_reply.setTypeface(tf);
-		dialog_retweet.setTypeface(tf);
-		dialog_unOfficialRT.setTypeface(tf);
-		dialog_favorite.setTypeface(tf);
-		dialog_talk.setTypeface(tf);
-		dialog_deletePost.setTypeface(tf);
-
 		float density = context.getResources().getDisplayMetrics().density;
-		dialog_reply.setTextSize(9 * density);
-		dialog_retweet.setTextSize(9 * density);
-		dialog_unOfficialRT.setTextSize(9 * density);
-		dialog_favorite.setTextSize(9 * density);
-		dialog_talk.setTextSize(9 * density);
-		dialog_deletePost.setTextSize(9 * density);
-
 		int black = Color.rgb(97, 97, 97);
-		dialog_reply.setTextColor(black);
-		dialog_retweet.setTextColor(black);
-		dialog_unOfficialRT.setTextColor(black);
-		dialog_favorite.setTextColor(black);
-		dialog_talk.setTextColor(black);
-		dialog_deletePost.setTextColor(black);
+		for(Button btn : dialogBtn){
+			btn.setTypeface(tf);
+			btn.setTextSize(9 * density);
+			btn.setTextColor(black);
+		}
 
 		dialog = new AlertDialog.Builder(context).setCustomTitle(dialog_title).setView(content).create();
 	}
@@ -185,16 +171,16 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			}
 		});
 
-		dialog_reply.setOnClickListener(new Dialog_reply(status, context, dialog));
-		dialog_retweet.setOnClickListener(new Dialog_retweet(status, context, dialog));
-		dialog_retweet.setOnLongClickListener(new Dialog_quoteRT(status, context, dialog));
-		dialog_unOfficialRT.setOnClickListener(new Dialog_unOfficialRT(status, context, dialog));
-		dialog_favorite.setOnClickListener(new Dialog_favorite(status, context, dialog));
-		dialog_talk.setOnClickListener(new Dialog_talk(status, context, dialog));
-		dialog_deletePost.setOnClickListener(new Dialog_deletePost(status, context, dialog));
+		dialogBtn[0].setOnClickListener(new Dialog_reply(status, context, dialog));
+		dialogBtn[1].setOnClickListener(new Dialog_retweet(status, context, dialog));
+		dialogBtn[1].setOnLongClickListener(new Dialog_quoteRT(status, context, dialog));
+		dialogBtn[2].setOnClickListener(new Dialog_unOfficialRT(status, context, dialog));
+		dialogBtn[3].setOnClickListener(new Dialog_favorite(status, context, dialog));
+		dialogBtn[4].setOnClickListener(new Dialog_talk(status, context, dialog));
+		dialogBtn[5].setOnClickListener(new Dialog_deletePost(status, context, dialog));
 
-		dialog_talk.setEnabled(status.getInReplyToStatusId() > 0);
-		dialog_deletePost.setEnabled(status.getUser().getScreenName().equals(((ApplicationClass)context.getApplicationContext()).getMyScreenName()));
+		dialogBtn[4].setEnabled(status.getInReplyToStatusId() > 0);
+		dialogBtn[5].setEnabled(status.getUser().getScreenName().equals(((ApplicationClass)context.getApplicationContext()).getMyScreenName()));
 	}
 
 }
