@@ -14,6 +14,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterStream;
 import twitter4j.UserStreamAdapter;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -47,6 +48,8 @@ public class MainActivity extends FragmentActivity{
 
 	private Fragment_mention fragmentMention;
 	private Fragment_home fragmentHome;
+
+	private Builder iconDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -216,13 +219,17 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void option(View v){
-		IconItem[] items = new IconItem[5];
-		items[0] = new IconItem("ツイート爆撃", R.drawable.icon_bomb);
-		items[1] = new IconItem("ユーザー検索", R.drawable.icon_search);
-		items[2] = new IconItem("Homeを更新", R.drawable.icon_refresh);
-		items[3] = new IconItem("アカウント", R.drawable.icon_user);
-		items[4] = new IconItem("設定", R.drawable.icon_cog);
-		new IconDialog(this).setItems(items, new OptionClickListener(this)).show();
+		if(iconDialog == null){
+			int black = Color.rgb(97, 97, 97);
+			IconItem[] items = new IconItem[5];
+			items[0] = new IconItem(IconItem.ICON_BOMB, black, "ツイート爆撃");
+			items[1] = new IconItem(IconItem.ICON_SEARCH, black, "ユーザー検索");
+			items[2] = new IconItem(IconItem.ICON_REFRESH, black, "Homeを更新");
+			items[3] = new IconItem(IconItem.ICON_USER, black, "アカウント");
+			items[4] = new IconItem(IconItem.ICON_COG, black, "設定");
+			iconDialog = new IconDialog(this, "fontawesome.ttf").setItems(items, new OptionClickListener(this));
+		}
+		iconDialog.show();
 	}
 
 	public void restart(){
