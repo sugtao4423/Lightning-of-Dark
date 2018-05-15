@@ -16,53 +16,71 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <ImageButton
+        <Button
             android:id="@+id/dialog_reply"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:src="@drawable/dialog_reply" />
+            android:minHeight="0dp"
+    		android:minWidth="0dp"
+    		android:padding="2dp"
+            android:text="&#xf3e5;"
+            android:background="@xml/dialog_background" />
 
-        <ImageButton
+        <Button
             android:id="@+id/dialog_retweet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:src="@drawable/dialog_retweet" />
+            android:minHeight="0dp"
+    		android:minWidth="0dp"
+    		android:padding="2dp"
+            android:text="&#xf079;"
+            android:background="@xml/dialog_background" />
 
-        <ImageButton
+        <Button
             android:id="@+id/dialog_unofficialRT"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:src="@drawable/dialog_quote" />
+            android:minHeight="0dp"
+    		android:minWidth="0dp"
+    		android:padding="2dp"
+            android:text="&#xf10e;"
+            android:background="@xml/dialog_background" />
 
-        <ImageButton
+        <Button
             android:id="@+id/dialog_favorite"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:src="@drawable/dialog_favorite" />
+            android:minHeight="0dp"
+    		android:minWidth="0dp"
+    		android:padding="2dp"
+            android:text="&#xf005;"
+            android:background="@xml/dialog_background" />
 
-        <ImageButton
+        <Button
             android:id="@+id/dialog_talk"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:src="@drawable/dialog_conversation" />
+            android:minHeight="0dp"
+    		android:minWidth="0dp"
+    		android:padding="2dp"
+            android:text="&#xf086;"
+            android:background="@xml/dialog_background" />
 
-        <ImageButton
+        <Button
             android:id="@+id/dialog_delete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:src="@drawable/dialog_deletepost" />
+            android:minHeight="0dp"
+    		android:minWidth="0dp"
+    		android:padding="2dp"
+            android:text="&#xf2ed;"
+            android:background="@xml/dialog_background" />
     </LinearLayout>
 
 </LinearLayout>

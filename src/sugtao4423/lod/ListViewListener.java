@@ -14,10 +14,13 @@ import twitter4j.UserMentionEntity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -102,7 +105,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 
 	private View content;
 	private ListView dialog_list;
-	private ImageButton dialog_reply, dialog_retweet, dialog_unOfficialRT, dialog_favorite, dialog_talk, dialog_deletePost;
+	private Button dialog_reply, dialog_retweet, dialog_unOfficialRT, dialog_favorite, dialog_talk, dialog_deletePost;
 
 	private AlertDialog dialog;
 
@@ -118,12 +121,36 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 
 		content = View.inflate(context, R.layout.custom_dialog, null);
 		dialog_list = (ListView)content.findViewById(R.id.dialog_List);
-		dialog_reply = (ImageButton)content.findViewById(R.id.dialog_reply);
-		dialog_retweet = (ImageButton)content.findViewById(R.id.dialog_retweet);
-		dialog_unOfficialRT = (ImageButton)content.findViewById(R.id.dialog_unofficialRT);
-		dialog_favorite = (ImageButton)content.findViewById(R.id.dialog_favorite);
-		dialog_talk = (ImageButton)content.findViewById(R.id.dialog_talk);
-		dialog_deletePost = (ImageButton)content.findViewById(R.id.dialog_delete);
+		dialog_reply = (Button)content.findViewById(R.id.dialog_reply);
+		dialog_retweet = (Button)content.findViewById(R.id.dialog_retweet);
+		dialog_unOfficialRT = (Button)content.findViewById(R.id.dialog_unofficialRT);
+		dialog_favorite = (Button)content.findViewById(R.id.dialog_favorite);
+		dialog_talk = (Button)content.findViewById(R.id.dialog_talk);
+		dialog_deletePost = (Button)content.findViewById(R.id.dialog_delete);
+
+		Typeface tf = Typeface.createFromAsset(context.getAssets(), "fontawesome.ttf");
+		dialog_reply.setTypeface(tf);
+		dialog_retweet.setTypeface(tf);
+		dialog_unOfficialRT.setTypeface(tf);
+		dialog_favorite.setTypeface(tf);
+		dialog_talk.setTypeface(tf);
+		dialog_deletePost.setTypeface(tf);
+
+		float density = context.getResources().getDisplayMetrics().density;
+		dialog_reply.setTextSize(9 * density);
+		dialog_retweet.setTextSize(9 * density);
+		dialog_unOfficialRT.setTextSize(9 * density);
+		dialog_favorite.setTextSize(9 * density);
+		dialog_talk.setTextSize(9 * density);
+		dialog_deletePost.setTextSize(9 * density);
+
+		int black = Color.rgb(97, 97, 97);
+		dialog_reply.setTextColor(black);
+		dialog_retweet.setTextColor(black);
+		dialog_unOfficialRT.setTextColor(black);
+		dialog_favorite.setTextColor(black);
+		dialog_talk.setTextColor(black);
+		dialog_deletePost.setTextColor(black);
 
 		dialog = new AlertDialog.Builder(context).setCustomTitle(dialog_title).setView(content).create();
 	}
