@@ -22,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import sugtao4423.lod.dialog_onclick.Dialog_ListClick;
@@ -98,9 +97,8 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 
 	private View dialog_title;
 	private SmartImageView icon;
-	private TextView name_screenName, tweetText, tweetDate;
+	private TextView name_screenName, tweetText, tweetDate, protect;
 	private SimpleDateFormat statusDateFormat;
-	private ImageView protect;
 
 	private View content;
 	private ListView dialog_list;
@@ -115,7 +113,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
 		tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
 		statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (((ApplicationClass)context.getApplicationContext()).getOption_millisecond() ? ".SSS" : ""), Locale.getDefault());
-		protect = (ImageView)dialog_title.findViewById(R.id.UserProtected);
+		protect = (TextView)dialog_title.findViewById(R.id.UserProtected);
 		((HorizontalScrollView)dialog_title.findViewById(R.id.tweet_images_scroll)).setVisibility(View.GONE);
 
 		content = View.inflate(context, R.layout.custom_dialog, null);
@@ -136,6 +134,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 			btn.setTextSize(9 * density);
 			btn.setTextColor(black);
 		}
+		protect.setTypeface(tf);
 
 		dialog = new AlertDialog.Builder(context).setCustomTitle(dialog_title).setView(content).create();
 	}
