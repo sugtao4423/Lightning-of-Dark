@@ -8,7 +8,7 @@
 
     <style name="actionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:height">40dip</item>
-        <item name="android:background">#E0E0E0</item>
+        <item name="android:background">@color/actionBarBackground</item>
         <item name="android:titleTextStyle">@style/actionBarTitleStyle</item>
     </style>
 

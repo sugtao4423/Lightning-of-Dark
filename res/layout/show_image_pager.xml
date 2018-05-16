@@ -13,9 +13,9 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_gravity="top"
-            android:background="#ececec"
+            android:background="@color/pagerTabBackground"
             android:paddingTop="2dp"
-            android:textColor="#33b5e5" />
+            android:textColor="@color/pagerTabText" />
     </com.tenthbit.view.ZoomViewPager>
 
     <ImageButton
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="#00000000"
+        android:background="@color/transparent"
         android:onClick="image_option_click"
         android:src="@drawable/ic_action_settings" />
 

@@ -20,7 +20,7 @@
         android:layout_marginLeft="8dp"
         android:layout_toRightOf="@+id/icon"
         android:text="名前 - \@hoge"
-        android:textColor="#6687a6"
+        android:textColor="@color/tweetName"
         android:textSize="13sp"
         android:textStyle="bold" />
 
@@ -42,7 +42,7 @@
         android:layout_below="@+id/tweetText"
         android:layout_marginTop="2sp"
         android:text="date"
-        android:textColor="#9b9e98"
+        android:textColor="@color/tweetDate"
         android:textSize="11sp" />
 
     <com.loopj.android.image.SmartImageView
@@ -59,7 +59,7 @@
         android:layout_alignBaseline="@+id/tweet_date"
         android:layout_alignBottom="@+id/tweet_date"
         android:layout_toRightOf="@+id/RetweetedUserIcon"
-        android:textColor="#9b9e98"
+        android:textColor="@color/tweetRetweetedUserName"
         android:textSize="11sp" />
 
     <ImageView

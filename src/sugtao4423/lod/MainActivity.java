@@ -70,7 +70,7 @@ public class MainActivity extends FragmentActivity{
 			listAdapters[i] = new TweetListAdapter(this);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.mainPagerTabStrip);
-		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabIndicator)));
+		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabText)));
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 

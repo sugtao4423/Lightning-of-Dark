@@ -33,7 +33,7 @@ public class UserPage extends FragmentActivity{
 		viewPager.setOffscreenPageLimit(5);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.userPagerTabStrip);
-		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabIndicator)));
+		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabText)));
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 

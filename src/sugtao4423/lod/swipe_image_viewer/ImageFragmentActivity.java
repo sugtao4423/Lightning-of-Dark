@@ -64,7 +64,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 		pager.setCurrentItem(pos);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.show_image_pager_tab_strip);
-		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabIndicator)));
+		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabText)));
 		strip.setDrawFullUnderline(true);
 	}
 

@@ -34,7 +34,7 @@
             android:layout_below="@+id/UserName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="12dp"
-            android:background="#f0f0f0f0"
+            android:background="@color/userpageTextBackground"
             android:text="ScreenName" />
 
         <TextView
@@ -44,7 +44,7 @@
             android:layout_below="@+id/UserIcon"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
-            android:background="#f0f0f0f0"
+            android:background="@color/userpageTextBackground"
             android:text="Name"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -231,7 +231,7 @@
             android:layout_alignBottom="@+id/UserName"
             android:layout_alignTop="@+id/UserName"
             android:layout_toRightOf="@+id/UserName"
-            android:background="#f0f0f0f0"
+            android:background="@color/userpageTextBackground"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_action_secure" />
     </RelativeLayout>

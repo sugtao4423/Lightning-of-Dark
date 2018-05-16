@@ -4,25 +4,25 @@
     <item
 		android:state_pressed="true"
 		android:state_enabled="true" >
-		<color android:color="#70e8ff" />
+		<color android:color="@color/tweetDialogButtonPress" />
 	</item>
 
     <!-- ボタンにフォーカスがあたった時 -->
 	<item
 		android:state_focused="true"
 		android:state_enabled="true" >
-		<color android:color="#70e8ff" />
+		<color android:color="@color/tweetDialogButtonPress" />
 	</item>
 
 	<!-- Disable -->
 	<item
 		android:state_enabled="false" >
-		<color android:color="#a7a7a7" />
+		<color android:color="@color/tweetDialogButtonDisable" />
 	</item>
 
 	<!-- Enable -->
 	<item>
-	    <color android:color="#00000000" />
+	    <color android:color="@color/transparent" />
 	</item>
 
 </selector>

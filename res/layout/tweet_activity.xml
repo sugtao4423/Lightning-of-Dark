@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e9e9e9"
+    android:background="@color/activityBackgroundGray"
     tools:context=".TweetActivity" >
 
     <EditText
@@ -45,7 +45,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="#00000000"
+        android:background="@color/transparent"
         android:onClick="back" />
 
     <ImageButton
@@ -55,7 +55,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/imageSelect"
-        android:background="#00000000"
+        android:background="@color/transparent"
         android:onClick="tweet" />
 
     <ImageButton
@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#00000000"
+        android:background="@color/transparent"
         android:onClick="cursor_start"
         android:src="@drawable/cursor_start" />
 
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/cursor_start"
-        android:background="#00000000"
+        android:background="@color/transparent"
         android:onClick="cursor_end"
         android:src="@drawable/cursor_end" />
 
@@ -85,7 +85,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/moji140"
-        android:background="#00000000"
+        android:background="@color/transparent"
         android:onClick="image" />
 
     <TextView
@@ -106,7 +106,7 @@
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/cursor_end"
-        android:background="#00000000"
+        android:background="@color/transparent"
         android:onClick="mic"
         android:src="@drawable/mic" />
 
