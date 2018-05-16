@@ -130,7 +130,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 
 		Typeface tf = ((ApplicationClass)context.getApplicationContext()).getFontAwesomeTypeface(context);
 		float density = context.getResources().getDisplayMetrics().density;
-		int black = Color.rgb(97, 97, 97);
+		int black = Color.parseColor(context.getString(R.color.icon));
 		for(Button btn : dialogBtn){
 			btn.setTypeface(tf);
 			btn.setTextSize(9 * density);

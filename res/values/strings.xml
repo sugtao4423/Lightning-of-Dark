@@ -57,4 +57,11 @@
     <string name="icon_comment">&#xf086;</string>
     <string name="icon_trash">&#xf2ed;</string>
 
+    <string name="icon_tweet">&#xf044;</string>
+    <string name="icon_image">&#xf03e;</string>
+    <string name="icon_close">&#xf00d;</string>
+    <string name="icon_mic">&#xf130;</string>
+    <string name="icon_cursorStart">&#xf048;</string>
+    <string name="icon_cursorEnd">&#xf051;</string>
+
 </resources>

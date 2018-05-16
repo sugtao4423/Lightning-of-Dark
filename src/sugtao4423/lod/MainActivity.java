@@ -220,7 +220,7 @@ public class MainActivity extends FragmentActivity{
 
 	public void option(View v){
 		if(iconDialog == null){
-			int black = Color.rgb(97, 97, 97);
+			int black = Color.parseColor(getString(R.color.icon));
 			IconItem[] items = new IconItem[5];
 			items[0] = new IconItem(getString(R.string.icon_bomb).charAt(0), black, "ツイート爆撃");
 			items[1] = new IconItem(getString(R.string.icon_search).charAt(0), black, "ユーザー検索");

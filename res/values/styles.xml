@@ -16,18 +16,6 @@
         <item name="android:textColor">@color/textDarkPrimary</item>
     </style>
 
-    <style name="tweet_btn">
-        <item name="android:src">@xml/tweetbtn</item>
-    </style>
-
-    <style name="pic_btn">
-        <item name="android:src">@xml/picbtn</item>
-    </style>
-
-    <style name="back_btn">
-        <item name="android:src">@xml/backbtn</item>
-    </style>
-
     <drawable name="transparameter">#bb000000</drawable>
 
     <style name="Theme.TranslucentBackground" parent="android:Theme.Light.NoTitleBar">

@@ -38,77 +38,99 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="11dp" />
 
-    <ImageButton
+    <Button
         android:id="@+id/tweetClose"
-        style="@style/back_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:background="@color/transparent"
-        android:onClick="back" />
+        android:onClick="back"
+        android:padding="10dp"
+        android:text="@string/icon_close"
+        android:textColor="@xml/activity_tweet_btn"
+        android:textSize="22sp" />
 
-    <ImageButton
+    <Button
         android:id="@+id/tweetButton"
-        style="@style/tweet_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/imageSelect"
         android:background="@color/transparent"
-        android:onClick="tweet" />
+        android:onClick="tweet"
+        android:padding="10dp"
+        android:text="@string/icon_tweet"
+        android:textColor="@xml/activity_tweet_btn"
+        android:textSize="22sp" />
 
-    <ImageButton
+    <Button
         android:id="@+id/cursor_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/transparent"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
         android:onClick="cursor_start"
-        android:src="@drawable/cursor_start" />
+        android:padding="8dp"
+        android:text="@string/icon_cursorStart"
+        android:textColor="@xml/activity_tweet_btn"
+        android:textSize="18sp" />
 
-    <ImageButton
+    <Button
         android:id="@+id/cursor_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/cursor_start"
         android:background="@color/transparent"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
         android:onClick="cursor_end"
-        android:src="@drawable/cursor_end" />
+        android:padding="8dp"
+        android:text="@string/icon_cursorEnd"
+        android:textColor="@xml/activity_tweet_btn"
+        android:textSize="18sp" />
 
-    <ImageButton
+    <Button
         android:id="@+id/imageSelect"
-        style="@style/pic_btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/moji140"
         android:background="@color/transparent"
-        android:onClick="image" />
+        android:onClick="image"
+        android:padding="10dp"
+        android:text="@string/icon_image"
+        android:textColor="@xml/activity_tweet_btn"
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/tweetAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/cursor_start"
         android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tweetText"
         android:layout_marginLeft="5dp"
         android:text="TweetAccount" />
 
-    <ImageButton
+    <Button
         android:id="@+id/tweetMic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/tweetAccount"
-        android:layout_marginBottom="3dp"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/cursor_end"
         android:background="@color/transparent"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
         android:onClick="mic"
-        android:src="@drawable/mic" />
+        android:padding="8dp"
+        android:text="@string/icon_mic"
+        android:textColor="@xml/activity_tweet_btn"
+        android:textSize="18sp" />
 
     <ScrollView
         android:id="@+id/scrollViewForOriginStatus"

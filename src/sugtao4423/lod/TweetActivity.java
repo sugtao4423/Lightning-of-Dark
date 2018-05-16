@@ -11,14 +11,15 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
@@ -54,6 +55,7 @@ public class TweetActivity extends Activity{
 		actionBar.setDisplayShowHomeEnabled(false);
 
 		appClass = (ApplicationClass)getApplicationContext();
+		setTypeface();
 
 		TextView tweetAccount = (TextView)findViewById(R.id.tweetAccount);
 		tweetAccount.setText("@" + appClass.getMyScreenName());
@@ -141,10 +143,24 @@ public class TweetActivity extends Activity{
 		moji140count();
 	}
 
+	public void setTypeface(){
+		Button[] btn = new Button[6];
+		btn[0] = (Button)findViewById(R.id.tweetButton);
+		btn[1] = (Button)findViewById(R.id.imageSelect);
+		btn[2] = (Button)findViewById(R.id.tweetClose);
+		btn[3] = (Button)findViewById(R.id.cursor_start);
+		btn[4] = (Button)findViewById(R.id.cursor_end);
+		btn[5] = (Button)findViewById(R.id.tweetMic);
+		Typeface tf = appClass.getFontAwesomeTypeface(this);
+		for(Button b : btn){
+			b.setTypeface(tf);
+		}
+	}
+
 	public void tweet(View v){
-		((ImageButton)findViewById(R.id.tweetButton)).setEnabled(false);
-		((ImageButton)findViewById(R.id.tweetClose)).setEnabled(false);
-		((ImageButton)findViewById(R.id.imageSelect)).setEnabled(false);
+		((Button)findViewById(R.id.tweetButton)).setEnabled(false);
+		((Button)findViewById(R.id.tweetClose)).setEnabled(false);
+		((Button)findViewById(R.id.imageSelect)).setEnabled(false);
 
 		String text = tweetText.getText().toString();
 

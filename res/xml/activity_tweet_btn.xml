@@ -4,15 +4,15 @@
     <item
 		android:state_pressed="true"
 		android:state_enabled="true"
-		android:drawable="@drawable/tweet_ena" />
+		android:color="@color/icon_press" />
     <!-- ボタンにフォーカスがあたった時 -->
 	<item
 		android:state_focused="true"
 		android:state_enabled="true"
-		android:drawable="@drawable/tweet_ena" />
+		android:color="@color/icon_press" />
 	<!-- 上記以外の条件の時 -->
 	<item
 		android:state_enabled="true"
-		android:drawable="@drawable/tweet" />
+		android:color="@color/icon" />
 
 </selector>
