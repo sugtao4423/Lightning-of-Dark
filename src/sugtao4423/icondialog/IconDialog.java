@@ -12,17 +12,16 @@ import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import sugtao4423.lod.ApplicationClass;
 
 public class IconDialog{
 
 	private Builder builder;
 	private Context context;
-	private String fontAwesomeName;
 
-	public IconDialog(Context context, String fontAwesomeName){
+	public IconDialog(Context context){
 		builder = new Builder(context);
 		this.context = context;
-		this.fontAwesomeName = fontAwesomeName;
 	}
 
 	public Builder setTitle(String title){
@@ -30,7 +29,7 @@ public class IconDialog{
 	}
 
 	public Builder setItems(IconItem[] items, OnClickListener listener){
-		IconDialogAdapter adapter = new IconDialogAdapter(context, items, fontAwesomeName);
+		IconDialogAdapter adapter = new IconDialogAdapter(context, items);
 		return builder.setAdapter(adapter, listener);
 	}
 
@@ -45,10 +44,10 @@ class IconDialogAdapter extends ArrayAdapter<IconItem>{
 	private Typeface tf;
 	private float density;
 
-	public IconDialogAdapter(Context context, IconItem[] items, String awesomeFontName){
+	public IconDialogAdapter(Context context, IconItem[] items){
 		super(context, android.R.layout.select_dialog_item, android.R.id.text1, items);
 		this.context = context;
-		this.tf = Typeface.createFromAsset(context.getAssets(), awesomeFontName);
+		this.tf = ((ApplicationClass)context.getApplicationContext()).getFontAwesomeTypeface(context);
 		this.density = context.getResources().getDisplayMetrics().density;
 	}
 

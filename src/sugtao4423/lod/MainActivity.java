@@ -227,7 +227,7 @@ public class MainActivity extends FragmentActivity{
 			items[2] = new IconItem(getString(R.string.icon_refresh).charAt(0), black, "Homeを更新");
 			items[3] = new IconItem(getString(R.string.icon_user).charAt(0), black, "アカウント");
 			items[4] = new IconItem(getString(R.string.icon_cog).charAt(0), black, "設定");
-			iconDialog = new IconDialog(this, "fontawesome.ttf").setItems(items, new OptionClickListener(this));
+			iconDialog = new IconDialog(this).setItems(items, new OptionClickListener(this));
 		}
 		iconDialog.show();
 	}

@@ -128,7 +128,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		dialogBtn[4] = (Button)content.findViewById(R.id.dialog_talk);
 		dialogBtn[5] = (Button)content.findViewById(R.id.dialog_delete);
 
-		Typeface tf = Typeface.createFromAsset(context.getAssets(), "fontawesome.ttf");
+		Typeface tf = ((ApplicationClass)context.getApplicationContext()).getFontAwesomeTypeface(context);
 		float density = context.getResources().getDisplayMetrics().density;
 		int black = Color.rgb(97, 97, 97);
 		for(Button btn : dialogBtn){

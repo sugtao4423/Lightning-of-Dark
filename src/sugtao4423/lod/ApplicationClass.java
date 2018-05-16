@@ -15,7 +15,9 @@ import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -24,6 +26,7 @@ import sugtao4423.lod.tweetlistview.TweetListAdapter;
 
 public class ApplicationClass extends Application{
 
+	private Typeface fontAwesomeTypeface;
 	// MainActivity
 	private String myScreenName;
 	private Twitter twitter;
@@ -77,6 +80,13 @@ public class ApplicationClass extends Application{
 					new ShowToast(R.string.error_tweet, getApplicationContext(), 0);
 			}
 		}.execute();
+	}
+
+	public Typeface getFontAwesomeTypeface(Context context){
+		if(fontAwesomeTypeface == null){
+			fontAwesomeTypeface = Typeface.createFromAsset(context.getAssets(), "fontawesome.ttf");
+		}
+		return fontAwesomeTypeface;
 	}
 
 	/*
