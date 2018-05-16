@@ -28,7 +28,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.ChromeIntent;
@@ -39,9 +38,8 @@ import sugtao4423.lod.utils.Regex;
 
 public class _0_detail extends Fragment{
 
-	private TextView userBio, userLocation, userLink, userTweetC, userFavoriteC, userFollowC, userFollowerC, userCreate;
+	private TextView isFollowIcon, userBio, userLocation, userLink, userTweetC, userFavoriteC, userFollowC, userFollowerC, userCreate;
 	private SmartImageView sourceIcon, targetIcon;
-	private ImageView isFollowIcon;
 	private User target;
 	private ApplicationClass appClass;
 
@@ -72,7 +70,7 @@ public class _0_detail extends Fragment{
 		userCreate = (TextView)v.findViewById(R.id.User_create_date);
 		sourceIcon = (SmartImageView)v.findViewById(R.id.UserPage_sourceIcon);
 		targetIcon = (SmartImageView)v.findViewById(R.id.UserPage_targetIcon);
-		isFollowIcon = (ImageView)v.findViewById(R.id.UserPage_isFollow);
+		isFollowIcon = (TextView)v.findViewById(R.id.UserPage_isFollow);
 
 		protect.setVisibility(View.GONE);
 
@@ -193,14 +191,15 @@ public class _0_detail extends Fragment{
 			@Override
 			protected void onPostExecute(Relationship ship){
 				if(ship != null){
+					isFollowIcon.setTypeface(appClass.getFontAwesomeTypeface(getContext().getApplicationContext()));
 					if(ship.isSourceFollowingTarget() && ship.isSourceFollowedByTarget())
-						isFollowIcon.setImageResource(R.drawable.follow_each);
+						isFollowIcon.setText(getContext().getString(R.string.icon_followEach));
 					else if(ship.isSourceFollowingTarget())
-						isFollowIcon.setImageResource(R.drawable.follow_follow);
+						isFollowIcon.setText(getContext().getString(R.string.icon_followFollow));
 					else if(ship.isSourceFollowedByTarget())
-						isFollowIcon.setImageResource(R.drawable.follow_follower);
+						isFollowIcon.setText(getContext().getString(R.string.icon_followFollower));
 					else if(ship.isSourceBlockingTarget())
-						isFollowIcon.setImageResource(R.drawable.follow_block);
+						isFollowIcon.setText(getContext().getString(R.string.icon_followBlock));
 				}
 			}
 		}.execute();

@@ -202,14 +202,16 @@
             android:text="bio"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <ImageView
+        <TextView
             android:id="@+id/UserPage_isFollow"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignTop="@+id/UserPage_sourceIcon"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/UserPage_sourceIcon"
-            android:scaleType="center" />
+            android:gravity="center"
+            android:textColor="@color/icon"
+            android:textSize="34sp" />
 
         <com.loopj.android.image.SmartImageView
             android:id="@+id/UserPage_targetIcon"

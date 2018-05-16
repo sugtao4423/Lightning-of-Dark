@@ -71,4 +71,9 @@
     <string name="icon_userCreate">&#xf234;</string>
     <string name="icon_protect">&#xf023;</string>
 
+    <string name="icon_followEach">&#xf337;</string>
+    <string name="icon_followFollow">&#xf30b;</string>
+    <string name="icon_followFollower">&#xf30a;</string>
+    <string name="icon_followBlock">&#xf05e;</string>
+
 </resources>
