@@ -64,4 +64,11 @@
     <string name="icon_cursorStart">&#xf048;</string>
     <string name="icon_cursorEnd">&#xf051;</string>
 
+    <string name="icon_tweetCount">&#xf007;&#xf075;</string>
+    <string name="icon_favCount">&#xf007;&#xf005;</string>
+    <string name="icon_followCount">&#xf007;&#xf061;</string>
+    <string name="icon_followerCount">&#xf007;&#xf060;</string>
+    <string name="icon_userCreate">&#xf234;</string>
+    <string name="icon_protect">&#xf023;</string>
+
 </resources>

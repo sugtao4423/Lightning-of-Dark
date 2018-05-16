@@ -14,6 +14,7 @@ import com.loopj.android.image.SmartImageView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,8 +46,7 @@ public class _0_detail extends Fragment{
 	private ApplicationClass appClass;
 
 	private SmartImageView userBanner, userIcon;
-	private TextView userName, userScreenName;
-	private ImageView protect;
+	private TextView userName, userScreenName, protect;
 
 	private boolean isTextSet;
 
@@ -60,7 +60,7 @@ public class _0_detail extends Fragment{
 		userIcon = (SmartImageView)v.findViewById(R.id.UserIcon);
 		userName = (TextView)v.findViewById(R.id.UserName);
 		userScreenName = (TextView)v.findViewById(R.id.UserScreenName);
-		protect = (ImageView)v.findViewById(R.id.UserPage_protected);
+		protect = (TextView)v.findViewById(R.id.UserPage_protected);
 
 		userBio = (TextView)v.findViewById(R.id.UserBio);
 		userLocation = (TextView)v.findViewById(R.id.location);
@@ -75,6 +75,15 @@ public class _0_detail extends Fragment{
 		isFollowIcon = (ImageView)v.findViewById(R.id.UserPage_isFollow);
 
 		protect.setVisibility(View.GONE);
+
+		Typeface tf = appClass.getFontAwesomeTypeface(getContext().getApplicationContext());
+		protect.setTypeface(tf);
+		((TextView)v.findViewById(R.id.icon_tweet_count)).setTypeface(tf);
+		((TextView)v.findViewById(R.id.icon_favorite_count)).setTypeface(tf);
+		((TextView)v.findViewById(R.id.icon_follow_count)).setTypeface(tf);
+		((TextView)v.findViewById(R.id.icon_follower_count)).setTypeface(tf);
+		((TextView)v.findViewById(R.id.icon_create_date)).setTypeface(tf);
+
 		setClick(getActivity());
 		return v;
 	}

@@ -67,10 +67,12 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		final Status origStatus = item.isRetweet() ? item.getRetweetedStatus() : item;
 
 		// 鍵
-		if(origStatus.getUser().isProtected())
+		if(origStatus.getUser().isProtected()){
+			holder.protect.setTypeface(appClass.getFontAwesomeTypeface(context));
 			holder.protect.setVisibility(View.VISIBLE);
-		else
+		}else{
 			holder.protect.setVisibility(View.GONE);
+		}
 
 		// アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
 		if(item.isRetweet()){
@@ -266,8 +268,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 
 		View v;
 		SmartImageView icon, rt_icon;
-		ImageView protect;
-		TextView name_sn, content, date, rt_sn;
+		TextView name_sn, content, date, rt_sn, protect;
 		HorizontalScrollView tweetImagesScroll;
 		LinearLayout tweetImagesLayout;
 
@@ -279,7 +280,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 			content = (TextView)itemView.findViewById(R.id.tweetText);
 			date = (TextView)itemView.findViewById(R.id.tweet_date);
 			rt_sn = (TextView)itemView.findViewById(R.id.RetweetedUserScreenName);
-			protect = (ImageView)itemView.findViewById(R.id.UserProtected);
+			protect = (TextView)itemView.findViewById(R.id.UserProtected);
 			tweetImagesScroll = (HorizontalScrollView)itemView.findViewById(R.id.tweet_images_scroll);
 			tweetImagesLayout = (LinearLayout)itemView.findViewById(R.id.tweet_images_layout);
 			v = itemView;

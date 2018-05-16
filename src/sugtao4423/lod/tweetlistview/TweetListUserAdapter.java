@@ -14,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.R;
 import sugtao4423.lod.userpage_fragment.UserPage;
 import twitter4j.PagableResponseList;
@@ -27,12 +27,14 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 	private LayoutInflater inflater;
 	private ArrayList<User> data;
 	private Context context;
+	private ApplicationClass appClass;
 	private Handler handler;
 
 	public TweetListUserAdapter(Context context){
 		this.inflater = LayoutInflater.from(context);
 		this.data = new ArrayList<User>();
 		this.context = context;
+		this.appClass = (ApplicationClass)context.getApplicationContext();
 		this.handler = new Handler();
 	}
 
@@ -52,10 +54,12 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 
 		final User item = data.get(position);
 
-		if(item.isProtected())
+		if(item.isProtected()){
+			holder.protect.setTypeface(appClass.getFontAwesomeTypeface(context));
 			holder.protect.setVisibility(View.VISIBLE);
-		else
+		}else{
 			holder.protect.setVisibility(View.GONE);
+		}
 
 		holder.icon.setImageUrl(item.getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
 		holder.name_sn.setText(item.getName() + " - @" + item.getScreenName());
@@ -115,8 +119,7 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 
 		View v;
 		SmartImageView icon, rt_icon;
-		ImageView protect;
-		TextView name_sn, content, date, rt_sn;
+		TextView name_sn, content, date, rt_sn, protect;
 		HorizontalScrollView tweetImagesScroll;
 		LinearLayout tweetImagesLayout;
 
@@ -128,7 +131,7 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 			content = (TextView)itemView.findViewById(R.id.tweetText);
 			date = (TextView)itemView.findViewById(R.id.tweet_date);
 			rt_sn = (TextView)itemView.findViewById(R.id.RetweetedUserScreenName);
-			protect = (ImageView)itemView.findViewById(R.id.UserProtected);
+			protect = (TextView)itemView.findViewById(R.id.UserProtected);
 			tweetImagesScroll = (HorizontalScrollView)itemView.findViewById(R.id.tweet_images_scroll);
 			tweetImagesLayout = (LinearLayout)itemView.findViewById(R.id.tweet_images_layout);
 			v = itemView;

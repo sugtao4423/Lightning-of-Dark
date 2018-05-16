@@ -96,95 +96,100 @@
             android:layout_marginTop="3dp"
             android:text="Loading..." />
 
-        <ImageView
-            android:id="@+id/img_tweet_count"
+        <TextView
+            android:id="@+id/icon_tweet_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/link"
             android:layout_below="@+id/link"
+            android:layout_marginRight="3dp"
             android:layout_marginTop="30dp"
-            android:src="@drawable/user_tweet_count" />
+            android:text="@string/icon_tweetCount" />
 
         <TextView
             android:id="@+id/User_tweet_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/img_tweet_count"
+            android:layout_alignBottom="@+id/icon_tweet_count"
             android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/img_tweet_count"
+            android:layout_toRightOf="@+id/icon_tweet_count"
             android:text="null" />
 
-        <ImageView
-            android:id="@+id/img_favorite_count"
+        <TextView
+            android:id="@+id/icon_favorite_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/img_tweet_count"
-            android:layout_below="@+id/img_tweet_count"
+            android:layout_alignLeft="@+id/icon_tweet_count"
+            android:layout_below="@+id/icon_tweet_count"
+            android:layout_marginRight="3dp"
             android:layout_marginTop="15dp"
-            android:src="@drawable/user_favorite_count" />
+            android:text="@string/icon_favCount" />
 
         <TextView
             android:id="@+id/User_favorite_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/img_favorite_count"
+            android:layout_alignBottom="@+id/icon_favorite_count"
             android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/img_favorite_count"
+            android:layout_toRightOf="@+id/icon_favorite_count"
             android:text="null" />
 
-        <ImageView
-            android:id="@+id/img_follow_count"
+        <TextView
+            android:id="@+id/icon_follow_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/img_favorite_count"
-            android:layout_below="@+id/img_favorite_count"
+            android:layout_alignLeft="@+id/icon_favorite_count"
+            android:layout_below="@+id/icon_favorite_count"
+            android:layout_marginRight="3dp"
             android:layout_marginTop="15dp"
-            android:src="@drawable/user_follow_count" />
+            android:text="@string/icon_followCount" />
 
         <TextView
             android:id="@+id/User_follow_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/img_follow_count"
+            android:layout_alignBottom="@+id/icon_follow_count"
             android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/img_follow_count"
+            android:layout_toRightOf="@+id/icon_follow_count"
             android:text="null" />
 
-        <ImageView
-            android:id="@+id/img_follower_count"
+        <TextView
+            android:id="@+id/icon_follower_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/img_follow_count"
-            android:layout_below="@+id/img_follow_count"
+            android:layout_alignLeft="@+id/icon_follow_count"
+            android:layout_below="@+id/icon_follow_count"
+            android:layout_marginRight="3dp"
             android:layout_marginTop="15dp"
-            android:src="@drawable/user_follower_count" />
+            android:text="@string/icon_followerCount" />
 
         <TextView
             android:id="@+id/User_follower_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/img_follower_count"
+            android:layout_alignBottom="@+id/icon_follower_count"
             android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/img_follower_count"
+            android:layout_toRightOf="@+id/icon_follower_count"
             android:text="null" />
 
-        <ImageView
-            android:id="@+id/img_create_date"
+        <TextView
+            android:id="@+id/icon_create_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/img_follower_count"
-            android:layout_below="@+id/img_follower_count"
+            android:layout_alignLeft="@+id/icon_follower_count"
+            android:layout_below="@+id/icon_follower_count"
             android:layout_marginBottom="20dp"
+            android:layout_marginRight="3dp"
             android:layout_marginTop="25dp"
-            android:src="@drawable/user_create_date" />
+            android:text="@string/icon_userCreate" />
 
         <TextView
             android:id="@+id/User_create_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/img_create_date"
+            android:layout_alignBottom="@+id/icon_create_date"
             android:layout_marginLeft="3dp"
-            android:layout_toRightOf="@+id/img_create_date"
+            android:layout_toRightOf="@+id/icon_create_date"
             android:text="null" />
 
         <TextView
@@ -224,16 +229,19 @@
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_action_refresh" />
 
-        <ImageView
+        <TextView
             android:id="@+id/UserPage_protected"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/UserName"
             android:layout_alignTop="@+id/UserName"
             android:layout_toRightOf="@+id/UserName"
             android:background="@color/userpageTextBackground"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_action_secure" />
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/icon_protect"
+            android:textColor="@color/icon"
+            android:textSize="20sp" />
     </RelativeLayout>
 
 </ScrollView>

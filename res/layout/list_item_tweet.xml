@@ -62,16 +62,18 @@
         android:textColor="@color/tweetRetweetedUserName"
         android:textSize="11sp" />
 
-    <ImageView
+    <TextView
         android:id="@+id/UserProtected"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/name_screenName"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/name_screenName"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_action_secure" />
+        android:gravity="center"
+        android:text="@string/icon_protect"
+        android:textColor="@color/icon"
+        android:textSize="10sp" />
 
     <HorizontalScrollView
         android:id="@+id/tweet_images_scroll"
