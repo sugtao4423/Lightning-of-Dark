@@ -47,7 +47,7 @@ class IconDialogAdapter extends ArrayAdapter<IconItem>{
 	public IconDialogAdapter(Context context, IconItem[] items){
 		super(context, android.R.layout.select_dialog_item, android.R.id.text1, items);
 		this.context = context;
-		this.tf = ((ApplicationClass)context.getApplicationContext()).getFontAwesomeTypeface(context);
+		this.tf = ((ApplicationClass)context.getApplicationContext()).getFontAwesomeTypeface();
 		this.density = context.getResources().getDisplayMetrics().density;
 	}
 

@@ -15,7 +15,6 @@ import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -82,9 +81,9 @@ public class ApplicationClass extends Application{
 		}.execute();
 	}
 
-	public Typeface getFontAwesomeTypeface(Context context){
+	public Typeface getFontAwesomeTypeface(){
 		if(fontAwesomeTypeface == null){
-			fontAwesomeTypeface = Typeface.createFromAsset(context.getAssets(), "fontawesome.ttf");
+			fontAwesomeTypeface = Typeface.createFromAsset(getAssets(), "fontawesome.ttf");
 		}
 		return fontAwesomeTypeface;
 	}

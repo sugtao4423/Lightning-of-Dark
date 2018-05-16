@@ -55,7 +55,7 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 		final User item = data.get(position);
 
 		if(item.isProtected()){
-			holder.protect.setTypeface(appClass.getFontAwesomeTypeface(context));
+			holder.protect.setTypeface(appClass.getFontAwesomeTypeface());
 			holder.protect.setVisibility(View.VISIBLE);
 		}else{
 			holder.protect.setVisibility(View.GONE);

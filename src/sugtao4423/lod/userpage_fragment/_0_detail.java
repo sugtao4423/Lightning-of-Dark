@@ -74,7 +74,7 @@ public class _0_detail extends Fragment{
 
 		protect.setVisibility(View.GONE);
 
-		Typeface tf = appClass.getFontAwesomeTypeface(getContext().getApplicationContext());
+		Typeface tf = appClass.getFontAwesomeTypeface();
 		protect.setTypeface(tf);
 		((TextView)v.findViewById(R.id.icon_tweet_count)).setTypeface(tf);
 		((TextView)v.findViewById(R.id.icon_favorite_count)).setTypeface(tf);
@@ -191,7 +191,7 @@ public class _0_detail extends Fragment{
 			@Override
 			protected void onPostExecute(Relationship ship){
 				if(ship != null){
-					isFollowIcon.setTypeface(appClass.getFontAwesomeTypeface(getContext().getApplicationContext()));
+					isFollowIcon.setTypeface(appClass.getFontAwesomeTypeface());
 					if(ship.isSourceFollowingTarget() && ship.isSourceFollowedByTarget())
 						isFollowIcon.setText(getContext().getString(R.string.icon_followEach));
 					else if(ship.isSourceFollowingTarget())

@@ -151,7 +151,7 @@ public class TweetActivity extends Activity{
 		btn[3] = (Button)findViewById(R.id.cursor_start);
 		btn[4] = (Button)findViewById(R.id.cursor_end);
 		btn[5] = (Button)findViewById(R.id.tweetMic);
-		Typeface tf = appClass.getFontAwesomeTypeface(this);
+		Typeface tf = appClass.getFontAwesomeTypeface();
 		for(Button b : btn){
 			b.setTypeface(tf);
 		}
