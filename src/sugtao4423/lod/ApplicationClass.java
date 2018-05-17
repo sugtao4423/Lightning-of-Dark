@@ -194,21 +194,21 @@ public class ApplicationClass extends Application{
 
 	public TextView getToast_Main_Message(){
 		if(toast_main_message == null){
-			toast_main_message = (TextView)customToast.findViewById(R.id.toast_main_message);
+			toast_main_message = (TextView)getToastView().findViewById(R.id.toast_main_message);
 		}
 		return toast_main_message;
 	}
 
 	public TextView getToast_Tweet(){
 		if(toast_tweet == null){
-			toast_tweet = (TextView)customToast.findViewById(R.id.toast_tweet);
+			toast_tweet = (TextView)getToastView().findViewById(R.id.toast_tweet);
 		}
 		return toast_tweet;
 	}
 
 	public SmartImageView getToast_Icon(){
 		if(toast_icon == null){
-			toast_icon = (SmartImageView)customToast.findViewById(R.id.toast_icon);
+			toast_icon = (SmartImageView)getToastView().findViewById(R.id.toast_icon);
 		}
 		return toast_icon;
 	}
