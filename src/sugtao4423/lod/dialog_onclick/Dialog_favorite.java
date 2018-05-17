@@ -40,9 +40,9 @@ public class Dialog_favorite implements OnClickListener{
 			@Override
 			protected void onPostExecute(Boolean result){
 				if(result)
-					new ShowToast(R.string.success_fav, context, 0);
+					new ShowToast(context.getApplicationContext(), R.string.success_fav);
 				else
-					new ShowToast(R.string.error_fav, context, 0);
+					new ShowToast(context.getApplicationContext(), R.string.error_fav);
 			}
 		}.execute();
 	}

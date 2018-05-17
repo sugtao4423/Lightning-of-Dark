@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.IntentActivity;
@@ -94,7 +95,7 @@ public class Dialog_ListClick implements OnItemClickListener{
 						}
 					}
 					if(find == 0){
-						new ShowToast(R.string.nothing, context, 0);
+						new ShowToast(context.getApplicationContext(), R.string.nothing);
 					}else{
 						TweetListView l = new TweetListView(context);
 						l.setAdapter(adapter);
@@ -103,7 +104,7 @@ public class Dialog_ListClick implements OnItemClickListener{
 						new AlertDialog.Builder(context).setView(l).show();
 						String resultCount = context.getString(R.string.regResultCount);
 						resultCount = String.format(resultCount, listData.size(), find);
-						new ShowToast(resultCount, context, 1);
+						new ShowToast(context.getApplicationContext(), resultCount, Toast.LENGTH_LONG);
 					}
 				}
 			}).show();

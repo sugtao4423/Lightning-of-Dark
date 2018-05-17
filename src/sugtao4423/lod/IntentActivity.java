@@ -63,7 +63,7 @@ public class IntentActivity extends Activity{
 				try{
 					params = URLEncodedUtils.parse(new URI(uri), "UTF-8");
 				}catch(URISyntaxException e){
-					new ShowToast(R.string.urlNotMatchPattern, this, 0);
+					new ShowToast(getApplicationContext(), R.string.urlNotMatchPattern);
 					finish();
 					return;
 				}
@@ -132,7 +132,7 @@ public class IntentActivity extends Activity{
 					}
 					builder.show();
 				}else{
-					new ShowToast(R.string.error_getStatus, IntentActivity.this, 0);
+					new ShowToast(getApplicationContext(), R.string.error_getStatus);
 				}
 			}
 		}.execute(tweetId);

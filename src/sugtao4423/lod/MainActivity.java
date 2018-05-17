@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.Toast;
 import sugtao4423.icondialog.IconDialog;
 import sugtao4423.icondialog.IconItem;
 import sugtao4423.lod.main_fragment.Fragment_home;
@@ -112,7 +113,7 @@ public class MainActivity extends FragmentActivity{
 			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result == null){
-					new ShowToast(R.string.error_getTimeLine, MainActivity.this, 0);
+					new ShowToast(getApplicationContext(), R.string.error_getTimeLine);
 				}else{
 					fragmentHome.addAll(result);
 				}
@@ -191,7 +192,7 @@ public class MainActivity extends FragmentActivity{
 					MainActivity.this.runOnUiThread(new Runnable(){
 						@Override
 						public void run(){
-							new ShowToast(text, MainActivity.this, 0);
+							new ShowToast(getApplicationContext(), text);
 						}
 					});
 				}
@@ -200,7 +201,7 @@ public class MainActivity extends FragmentActivity{
 			twitterStream.addConnectionLifeCycleListener(clcl);
 			twitterStream.user();
 		}catch(Exception e){
-			new ShowToast(R.string.error_streaming + "\n" + e.toString(), MainActivity.this, 0);
+			new ShowToast(getApplicationContext(), getString(R.string.error_streaming) + "\n" + e.toString(), Toast.LENGTH_LONG);
 		}
 	}
 

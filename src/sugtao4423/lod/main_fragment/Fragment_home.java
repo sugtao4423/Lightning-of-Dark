@@ -87,7 +87,7 @@ public class Fragment_home extends Fragment{
 						if(result != null)
 							adapter.addAll(result);
 						else
-							new ShowToast(R.string.error_getTimeLine, getActivity(), 0);
+							new ShowToast(getContext().getApplicationContext(), R.string.error_getTimeLine);
 					}
 				};
 				if(adapter.getItemCount() > 30)

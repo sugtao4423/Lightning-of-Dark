@@ -87,7 +87,7 @@ public class StartOAuth extends Activity{
 				if(result)
 					new ChromeIntent(StartOAuth.this, Uri.parse(rt.getAuthenticationURL()));
 				else
-					new ShowToast(R.string.error_getRequestToken, StartOAuth.this, 0);
+					new ShowToast(getApplicationContext(), R.string.error_getRequestToken);
 			}
 		}.execute(conf);
 	}
@@ -128,10 +128,10 @@ public class StartOAuth extends Activity{
 							accessToken.getToken(), accessToken.getTokenSecret(), false, 0, "-1", "", "");
 					new DBUtil(StartOAuth.this).addAcount(account);
 
-					new ShowToast(R.string.success_addAccount, StartOAuth.this, 0);
+					new ShowToast(getApplicationContext(), R.string.success_addAccount);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
 				}else{
-					new ShowToast(R.string.error_getAccessToken, StartOAuth.this, 0);
+					new ShowToast(getApplicationContext(), R.string.error_getAccessToken);
 				}
 				finish();
 			}
@@ -142,6 +142,6 @@ public class StartOAuth extends Activity{
 		ClipboardManager clipboardManager = (ClipboardManager)this.getSystemService(Context.CLIPBOARD_SERVICE);
 		ClipData clipData = ClipData.newPlainText("Lightning of Dark", "https://twitter.com/lightning-of-dark");
 		clipboardManager.setPrimaryClip(clipData);
-		new ShowToast(R.string.done_clipBoardCopy, this, 0);
+		new ShowToast(getApplicationContext(), R.string.done_clipBoardCopy);
 	}
 }

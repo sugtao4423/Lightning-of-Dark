@@ -86,7 +86,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 		if(type == TYPE_BANNER) {
 			Matcher banner = Regex.userBannerUrl.matcher(currentUrl);
 			if(!banner.find()) {
-				new ShowToast(R.string.urlNotMatchPatternDontSave, this, 0);
+				new ShowToast(getApplicationContext(), R.string.urlNotMatchPatternDontSave);
 				return;
 			}
 			byte[] non_orig_image = ((ImageFragment)adapter.getItem(pager.getCurrentItem())).getNonOrigImage();
@@ -100,7 +100,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 
 		final Matcher pattern = Regex.userIconUrl.matcher(currentUrl);
 		if(!pattern.find()) {
-			new ShowToast(R.string.urlNotMatchPatternDontSave, this, 0);
+			new ShowToast(getApplicationContext(), R.string.urlNotMatchPatternDontSave);
 			return;
 		}
 
@@ -149,7 +149,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 					else
 						save(pattern.group(2), pattern.group(3), result, true);
 				}else{
-					new ShowToast(R.string.error_getOriginalImage, ImageFragmentActivity.this, 0);
+					new ShowToast(getApplicationContext(), R.string.error_getOriginalImage);
 				}
 			}
 		}.execute(currentUrl + orig);

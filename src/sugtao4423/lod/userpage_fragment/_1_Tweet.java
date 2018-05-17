@@ -98,7 +98,7 @@ public class _1_Tweet extends Fragment{
 					if(targetUser != null && targetUser.getStatusesCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
-					new ShowToast(R.string.error_getTimeLine, getActivity(), 0);
+					new ShowToast(getContext().getApplicationContext(), R.string.error_getTimeLine);
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);

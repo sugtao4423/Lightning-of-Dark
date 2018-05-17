@@ -62,7 +62,7 @@ public class UserPage extends FragmentActivity{
 					setTargetUser();
 					((_0_detail)(adapter.getItem(0))).setText();
 				}else{
-					new ShowToast(R.string.error_getUserDetail, UserPage.this, 0);
+					new ShowToast(getApplicationContext(), R.string.error_getUserDetail);
 					finish();
 				}
 			}

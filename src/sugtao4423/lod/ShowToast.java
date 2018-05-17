@@ -10,11 +10,15 @@ import android.widget.Toast;
 
 public class ShowToast{
 
+	public enum Type{
+		NORMAL
+	}
+
 	private View toastView;
 	private TextView main_message, tweet;
 	private SmartImageView icon;
 
-	public ShowToast(String text, Context context, int toastType){
+	public ShowToast(Context context, String text, int duration, Type toastType){
 		ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
 
 		toastView = appClass.getToastView();
@@ -22,23 +26,34 @@ public class ShowToast{
 		tweet = appClass.getToast_Tweet();
 		icon = appClass.getToast_Icon();
 
-		// 0: normal, short
-		// 1: normal, long
 		switch(toastType){
-		case 0:
-			normalToast(text, context, Toast.LENGTH_SHORT);
-			break;
-		case 1:
-			normalToast(text, context, Toast.LENGTH_LONG);
+		case NORMAL:
+			normalToast(text, context, duration);
 			break;
 		}
 	}
 
-	public ShowToast(int resId, Context context, int toastType){
-		this(context.getString(resId), context, toastType);
+	public ShowToast(Context context, int resId, int duration, Type toastType){
+		this(context, context.getString(resId), duration, toastType);
 	}
 
-	public void normalToast(String text, Context context, int length){
+	public ShowToast(Context context, String text, int duration){
+		this(context, text, duration, Type.NORMAL);
+	}
+
+	public ShowToast(Context context, int resId, int duration){
+		this(context, resId, duration, Type.NORMAL);
+	}
+
+	public ShowToast(Context context, String text){
+		this(context, text, Toast.LENGTH_SHORT, Type.NORMAL);
+	}
+
+	public ShowToast(Context context, int resId){
+		this(context, resId, Toast.LENGTH_SHORT, Type.NORMAL);
+	}
+
+	public void normalToast(String text, Context context, int duration){
 		Toast toast = new Toast(context);
 
 		main_message.setText(text);
@@ -48,7 +63,7 @@ public class ShowToast{
 		tweet.setVisibility(View.GONE);
 		icon.setVisibility(View.GONE);
 
-		toast.setDuration(length);
+		toast.setDuration(duration);
 		toast.setView(toastView);
 		toast.show();
 	}

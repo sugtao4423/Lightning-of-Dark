@@ -93,7 +93,7 @@ public class _3_follow extends Fragment{
 					if(targetUser != null && targetUser.getFriendsCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
-					new ShowToast(R.string.error_getFollow, getActivity(), 0);
+					new ShowToast(getContext().getApplicationContext(), R.string.error_getFollow);
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);

@@ -206,9 +206,9 @@ public class TweetActivity extends Activity{
 				image = new File(c.getString(0));
 				ImageView iv = (ImageView)findViewById(R.id.selectedImage);
 				iv.setImageURI(data.getData());
-				new ShowToast(R.string.success_selectPic, TweetActivity.this, 0);
+				new ShowToast(getApplicationContext(), R.string.success_selectPic);
 			}catch(Exception e){
-				new ShowToast(R.string.error_selectPic, TweetActivity.this, 0);
+				new ShowToast(getApplicationContext(), R.string.error_selectPic);
 			}
 		}
 	}

@@ -98,7 +98,7 @@ public class _2_favorites extends Fragment{
 					if(targetUser != null && targetUser.getFavouritesCount() <= adapter.getItemCount())
 						isAllLoaded = true;
 				}else{
-					new ShowToast(R.string.error_getFav, getActivity(), 0);
+					new ShowToast(getContext().getApplicationContext(), R.string.error_getFav);
 				}
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);

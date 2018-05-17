@@ -74,9 +74,9 @@ public class ApplicationClass extends Application{
 			@Override
 			protected void onPostExecute(twitter4j.Status result){
 				if(result != null)
-					new ShowToast(R.string.success_tweet, getApplicationContext(), 0);
+					new ShowToast(getApplicationContext(), R.string.success_tweet);
 				else
-					new ShowToast(R.string.error_tweet, getApplicationContext(), 0);
+					new ShowToast(getApplicationContext(), R.string.error_tweet);
 			}
 		}.execute();
 	}

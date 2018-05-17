@@ -40,9 +40,9 @@ public class Dialog_retweet implements OnClickListener{
 			@Override
 			protected void onPostExecute(Boolean result){
 				if(result)
-					new ShowToast(R.string.success_retweet, context, 0);
+					new ShowToast(context.getApplicationContext(), R.string.success_retweet);
 				else
-					new ShowToast(R.string.error_retweet, context, 0);
+					new ShowToast(context.getApplicationContext(), R.string.error_retweet);
 			}
 		}.execute();
 	}

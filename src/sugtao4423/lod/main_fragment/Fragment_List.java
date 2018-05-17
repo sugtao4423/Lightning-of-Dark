@@ -119,7 +119,7 @@ public class Fragment_List extends Fragment{
 								appClass.setListAlreadyLoad(tmp);
 							}
 						}else{
-							new ShowToast(R.string.error_getList, getActivity(), 0);
+							new ShowToast(getContext().getApplicationContext(), R.string.error_getList);
 						}
 						pulltoRefresh.setRefreshing(false);
 						pulltoRefresh.setEnabled(true);

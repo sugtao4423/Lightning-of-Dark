@@ -112,7 +112,7 @@ public class Settings_List extends PreferenceActivity{
 					if(!selectedListNames[0].equals(""))
 						builder.show();
 					else
-						new ShowToast(R.string.listNotSelected, getActivity(), 0);
+						new ShowToast(getApplicationContext(), R.string.listNotSelected);
 					return false;
 				}
 			});

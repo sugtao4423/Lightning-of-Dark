@@ -223,7 +223,7 @@ public class _0_detail extends Fragment{
 					sourceIcon.setImageUrl(result[0], null, R.drawable.ic_action_refresh);
 					targetIcon.setImageUrl(result[1], null, R.drawable.ic_action_refresh);
 				}else
-					new ShowToast(R.string.error_getUserIcon, getActivity(), 0);
+					new ShowToast(getContext().getApplicationContext(), R.string.error_getUserIcon);
 			}
 		}.execute();
 	}

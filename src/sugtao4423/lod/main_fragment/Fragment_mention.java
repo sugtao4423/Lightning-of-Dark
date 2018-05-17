@@ -99,7 +99,7 @@ public class Fragment_mention extends Fragment{
 				if(result != null)
 					addAll(result);
 				else
-					new ShowToast(R.string.error_getMention, context, 0);
+					new ShowToast(getContext().getApplicationContext(), R.string.error_getMention);
 				pulltoRefresh.setRefreshing(false);
 				pulltoRefresh.setEnabled(true);
 			}

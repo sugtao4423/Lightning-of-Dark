@@ -71,7 +71,7 @@ public class OptionClickListener implements OnClickListener{
 						}
 					}.execute(loop);
 				}
-				new ShowToast(R.string.success_tweet, context, 0);
+				new ShowToast(context.getApplicationContext(), R.string.success_tweet);
 			}
 		}).setNegativeButton("キャンセル", null).show();
 	}
@@ -86,7 +86,7 @@ public class OptionClickListener implements OnClickListener{
 			public void onClick(DialogInterface dialog, int which){
 				String user_screen = userEdit.getText().toString();
 				if(user_screen.isEmpty()){
-					new ShowToast(R.string.edittext_empty, context, 0);
+					new ShowToast(context.getApplicationContext(), R.string.edittext_empty);
 				}else{
 					Intent userPage = new Intent(context, UserPage.class);
 					userPage.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, user_screen.replace("@", ""));
@@ -151,7 +151,7 @@ public class OptionClickListener implements OnClickListener{
 						@Override
 						public void onClick(DialogInterface dialog, int w){
 							dbUtil.deleteAccount(accounts[which]);
-							new ShowToast(String.format(context.getString(R.string.deleteAccountX), accounts[which].getScreenName()), context, 0);
+							new ShowToast(context.getApplicationContext(), String.format(context.getString(R.string.deleteAccountX), accounts[which].getScreenName()));
 						}
 					}).setNeutralButton("キャンセル", null).show();
 				}
