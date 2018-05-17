@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import com.loopj.android.image.SmartImageView;
-
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
@@ -25,7 +23,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.TextView;
 import sugtao4423.icondialog.IconDialog;
 import sugtao4423.icondialog.IconItem;
 import sugtao4423.lod.main_fragment.Fragment_home;
@@ -86,12 +83,6 @@ public class MainActivity extends FragmentActivity{
 		for(int i = 0; i < listAdapters.length; i++)
 			list_alreadyLoad[i] = false;
 		appClass.setListAlreadyLoad(list_alreadyLoad);
-
-		View customToast = View.inflate(this, R.layout.custom_toast, null);
-		appClass.setToastView(customToast);
-		appClass.setToast_Main_Message((TextView)customToast.findViewById(R.id.toast_main_message));
-		appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
-		appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
 
 		if(pref.getString(Keys.ACCESS_TOKEN, "").equals("")){
 			startActivity(new Intent(this, StartOAuth.class));

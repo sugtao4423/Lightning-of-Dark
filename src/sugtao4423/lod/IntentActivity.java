@@ -9,8 +9,6 @@ import java.util.regex.Matcher;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
-import com.loopj.android.image.SmartImageView;
-
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import android.annotation.SuppressLint;
@@ -24,8 +22,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.View;
-import android.widget.TextView;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 import sugtao4423.lod.userpage_fragment.UserPage;
@@ -42,12 +38,6 @@ public class IntentActivity extends Activity{
 		if(appClass.getTwitter() == null){
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 			appClass = (ApplicationClass)this.getApplicationContext();
-
-			View customToast = View.inflate(this, R.layout.custom_toast, null);
-			appClass.setToastView(customToast);
-			appClass.setToast_Main_Message((TextView)customToast.findViewById(R.id.toast_main_message));
-			appClass.setToast_Tweet((TextView)customToast.findViewById(R.id.toast_tweet));
-			appClass.setToast_Icon((SmartImageView)customToast.findViewById(R.id.toast_icon));
 
 			if(pref.getString(Keys.ACCESS_TOKEN, "").equals("")){
 				startActivity(new Intent(this, StartOAuth.class));
