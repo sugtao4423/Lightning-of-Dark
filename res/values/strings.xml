@@ -51,6 +51,7 @@
     <string name="icon_cog">&#xf013;</string>
 
     <string name="icon_reply">&#xf3e5;</string>
+    <string name="icon_replyAll">&#xf122;</string>
     <string name="icon_retweet">&#xf079;</string>
     <string name="icon_quote">&#xf10e;</string>
     <string name="icon_star">&#xf005;</string>

@@ -9,9 +9,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.View;
 import android.view.View.OnClickListener;
+import sugtao4423.icondialog.IconDialog;
+import sugtao4423.icondialog.IconItem;
 import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.R;
 import sugtao4423.lod.TweetActivity;
 
 public class Dialog_reply implements OnClickListener{
@@ -49,9 +53,11 @@ public class Dialog_reply implements OnClickListener{
 	}
 
 	public void selectReplyDialog(final Status item){
-		new AlertDialog.Builder(context)
-		.setItems(new String[]{"reply", "replyAll"}, new DialogInterface.OnClickListener(){
-
+		int black = Color.parseColor(context.getString(R.color.icon));
+		IconItem[] items = new IconItem[2];
+		items[0] = new IconItem(context.getString(R.string.icon_reply).charAt(0), black, "reply");
+		items[1] = new IconItem(context.getString(R.string.icon_replyAll).charAt(0), black, "replyAll");
+		new IconDialog(context).setItems(items, new DialogInterface.OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which){
 				switch(which){
