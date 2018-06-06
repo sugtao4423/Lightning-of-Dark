@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.Color;
 import android.net.Uri;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
+import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
@@ -52,6 +54,9 @@ public class ImageFragmentActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.show_image_pager);
+		if(((ApplicationClass)getApplicationContext()).getIsImageOrientationSensor())
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
 		Intent intent = getIntent();
 		urls = intent.getStringArrayExtra(INTENT_EXTRA_KEY_URLS);
 		type = intent.getIntExtra(INTENT_EXTRA_KEY_TYPE, -1);

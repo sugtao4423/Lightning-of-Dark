@@ -32,7 +32,7 @@ public class ApplicationClass extends Application{
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 	private TweetListAdapter[] listAdapters;
-	private boolean isOptionLoaded, option_openBrowser, option_regex, option_millisecond, isWebm;
+	private boolean isOptionLoaded, option_openBrowser, option_regex, option_millisecond, isWebm, isImageOrientaionSensor, isVideoOrientationSensor;
 	private boolean[] listAlreadyLoad;
 	// MainActivity - CustomToast
 	private View customToast;
@@ -166,12 +166,28 @@ public class ApplicationClass extends Application{
 		return isWebm;
 	}
 
+	// isImageOrientationSensor
+	public boolean getIsImageOrientationSensor(){
+		if(!isOptionLoaded)
+			loadOption();
+		return isImageOrientaionSensor;
+	}
+
+	// isVideoOrientationSensor
+	public boolean getIsVideoOrientationSensor(){
+		if(!isOptionLoaded)
+			loadOption();
+		return isVideoOrientationSensor;
+	}
+
 	public void loadOption(){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		this.option_openBrowser = pref.getBoolean(Keys.MENU_OPEN_BROWSER, false);
 		this.option_regex = pref.getBoolean(Keys.MENU_REGEX, false);
 		this.option_millisecond = pref.getBoolean(Keys.MENU_MILLISECOND, false);
 		this.isWebm = pref.getBoolean(Keys.IS_WEBM, false);
+		this.isImageOrientaionSensor = pref.getBoolean(Keys.IS_IMAGE_ORIENTATION_SENSOR, false);
+		this.isVideoOrientationSensor = pref.getBoolean(Keys.IS_VIDEO_ORIENTATION_SENSOR, false);
 		isOptionLoaded = true;
 	}
 

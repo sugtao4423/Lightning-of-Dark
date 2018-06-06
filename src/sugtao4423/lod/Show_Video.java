@@ -3,6 +3,7 @@ package sugtao4423.lod;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
@@ -23,6 +24,8 @@ public class Show_Video extends Activity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_video);
+		if(((ApplicationClass)getApplicationContext()).getIsVideoOrientationSensor())
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
 		Intent intent = getIntent();
 		String url = intent.getStringExtra(INTENT_EXTRA_KEY_URL);

@@ -15,6 +15,14 @@
             android:key="menu_millisecond"
             android:title="ミリ秒を表示" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="画面回転" >
+        <CheckBoxPreference
+            android:key="isImageOrientaionSensor"
+            android:title="画像表示時" />
+        <CheckBoxPreference
+            android:key="isVideoOrientationSensor"
+            android:title="動画再生時" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="その他" >
         <CheckBoxPreference
             android:key="isWebm"

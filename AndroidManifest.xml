@@ -95,13 +95,11 @@
         <activity
             android:name="sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="sensor"
             android:theme="@style/Theme.TranslucentBackground" >
         </activity>
         <activity
             android:name="Show_Video"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="sensor"
             android:theme="@style/Theme.TranslucentBackground" >
         </activity>
     </application>
