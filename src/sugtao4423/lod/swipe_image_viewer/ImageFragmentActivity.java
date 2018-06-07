@@ -54,7 +54,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.show_image_pager);
-		if(((ApplicationClass)getApplicationContext()).getIsImageOrientationSensor())
+		if(((ApplicationClass)getApplicationContext()).getOptions().getIsImageOrientaionSensor())
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
 		Intent intent = getIntent();

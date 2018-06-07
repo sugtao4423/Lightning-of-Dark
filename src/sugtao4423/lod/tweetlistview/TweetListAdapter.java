@@ -50,7 +50,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		this.data = new ArrayList<Status>();
 		this.context = context;
 		this.appClass = (ApplicationClass)context.getApplicationContext();
-		this.statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (appClass.getOption_millisecond() ? ".SSS" : ""), Locale.getDefault());
+		this.statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (appClass.getOptions().getIsMillisecond() ? ".SSS" : ""), Locale.getDefault());
 		this.handler = new Handler();
 	}
 

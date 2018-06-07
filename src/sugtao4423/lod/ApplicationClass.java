@@ -32,8 +32,8 @@ public class ApplicationClass extends Application{
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 	private TweetListAdapter[] listAdapters;
-	private boolean isOptionLoaded, option_openBrowser, option_regex, option_millisecond, isWebm, isImageOrientaionSensor, isVideoOrientationSensor;
 	private boolean[] listAlreadyLoad;
+	private Options options;
 	// MainActivity - CustomToast
 	private View customToast;
 	private TextView toast_main_message, toast_tweet;
@@ -138,59 +138,6 @@ public class ApplicationClass extends Application{
 		return listAdapters;
 	}
 
-	// option_openBrowser
-	public boolean getOption_openBrowser(){
-		if(!isOptionLoaded)
-			loadOption();
-		return option_openBrowser;
-	}
-
-	// option_regex
-	public boolean getOption_regex(){
-		if(!isOptionLoaded)
-			loadOption();
-		return option_regex;
-	}
-
-	// option_millisecond
-	public boolean getOption_millisecond(){
-		if(!isOptionLoaded)
-			loadOption();
-		return option_millisecond;
-	}
-
-	// isWebm
-	public boolean getIsWebm(){
-		if(!isOptionLoaded)
-			loadOption();
-		return isWebm;
-	}
-
-	// isImageOrientationSensor
-	public boolean getIsImageOrientationSensor(){
-		if(!isOptionLoaded)
-			loadOption();
-		return isImageOrientaionSensor;
-	}
-
-	// isVideoOrientationSensor
-	public boolean getIsVideoOrientationSensor(){
-		if(!isOptionLoaded)
-			loadOption();
-		return isVideoOrientationSensor;
-	}
-
-	public void loadOption(){
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		this.option_openBrowser = pref.getBoolean(Keys.MENU_OPEN_BROWSER, false);
-		this.option_regex = pref.getBoolean(Keys.MENU_REGEX, false);
-		this.option_millisecond = pref.getBoolean(Keys.MENU_MILLISECOND, false);
-		this.isWebm = pref.getBoolean(Keys.IS_WEBM, false);
-		this.isImageOrientaionSensor = pref.getBoolean(Keys.IS_IMAGE_ORIENTATION_SENSOR, false);
-		this.isVideoOrientationSensor = pref.getBoolean(Keys.IS_VIDEO_ORIENTATION_SENSOR, false);
-		isOptionLoaded = true;
-	}
-
 	// list_AlreadyLoad
 	public void setListAlreadyLoad(boolean[] AlreadyLoad){
 		this.listAlreadyLoad = AlreadyLoad;
@@ -198,6 +145,17 @@ public class ApplicationClass extends Application{
 
 	public boolean[] getListAlreadyLoad(){
 		return listAlreadyLoad;
+	}
+
+	// options
+	public void loadOption(){
+		options = new Options(getApplicationContext());
+	}
+
+	public Options getOptions(){
+		if(options == null)
+			loadOption();
+		return options;
 	}
 
 	// CustomToast

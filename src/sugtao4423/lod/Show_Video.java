@@ -24,7 +24,7 @@ public class Show_Video extends Activity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_video);
-		if(((ApplicationClass)getApplicationContext()).getIsVideoOrientationSensor())
+		if(((ApplicationClass)getApplicationContext()).getOptions().getIsVideoOrientationSensor())
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
 		Intent intent = getIntent();

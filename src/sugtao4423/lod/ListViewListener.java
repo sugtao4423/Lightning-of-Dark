@@ -44,9 +44,9 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
 
 		ArrayAdapter<String> list = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
-		if(appClass.getOption_regex())
+		if(appClass.getOptions().getIsRegex())
 			list.add("正規表現で抽出");
-		if(appClass.getOption_openBrowser())
+		if(appClass.getOptions().getIsOpenBrowser())
 			list.add("ブラウザで開く");
 
 		ArrayList<String> users = new ArrayList<String>();
@@ -112,7 +112,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		name_screenName = (TextView)dialog_title.findViewById(R.id.name_screenName);
 		tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
 		tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
-		statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (((ApplicationClass)context.getApplicationContext()).getOption_millisecond() ? ".SSS" : ""), Locale.getDefault());
+		statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (((ApplicationClass)context.getApplicationContext()).getOptions().getIsMillisecond() ? ".SSS" : ""), Locale.getDefault());
 		protect = (TextView)dialog_title.findViewById(R.id.UserProtected);
 		((HorizontalScrollView)dialog_title.findViewById(R.id.tweet_images_scroll)).setVisibility(View.GONE);
 

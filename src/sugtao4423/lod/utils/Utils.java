@@ -17,9 +17,9 @@ public class Utils{
 					ArrayList<VideoURLs> videos = new ArrayList<VideoURLs>();
 					for(Variant v : media.getVideoVariants()){
 						boolean find = false;
-						if(appClass.getIsWebm() && v.getContentType().equals("video/webm"))
+						if(appClass.getOptions().getIsWebm() && v.getContentType().equals("video/webm"))
 							find = true;
-						else if(!appClass.getIsWebm() && v.getContentType().equals("video/mp4"))
+						else if(!appClass.getOptions().getIsWebm() && v.getContentType().equals("video/mp4"))
 							find = true;
 
 						if(find)
