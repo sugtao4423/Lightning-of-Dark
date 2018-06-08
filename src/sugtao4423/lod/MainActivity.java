@@ -231,6 +231,18 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	@Override
+	public void onResume(){
+		super.onResume();
+		appClass.getUseTime().start();
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		appClass.getUseTime().stop();
+	}
+
+	@Override
 	public void onDestroy(){
 		super.onDestroy();
 		appClass.resetTwitter();

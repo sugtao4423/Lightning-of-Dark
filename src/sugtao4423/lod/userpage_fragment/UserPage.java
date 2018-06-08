@@ -78,4 +78,16 @@ public class UserPage extends FragmentActivity{
 		((_4_follower)(adapter.getItem(4))).setTargetUser(target);
 	}
 
+	@Override
+	public void onResume(){
+		super.onResume();
+		appClass.getUseTime().start();
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		appClass.getUseTime().stop();
+	}
+
 }

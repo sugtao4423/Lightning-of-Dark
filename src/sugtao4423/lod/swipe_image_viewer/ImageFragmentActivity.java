@@ -43,6 +43,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 	public static final int TYPE_ICON = 0;
 	public static final int TYPE_BANNER = 1;
 
+	private ApplicationClass appClass;
 	private ImagePagerAdapter adapter;
 	private ZoomViewPager pager;
 	private String[] urls;
@@ -54,7 +55,8 @@ public class ImageFragmentActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.show_image_pager);
-		if(((ApplicationClass)getApplicationContext()).getOptions().getIsImageOrientaionSensor())
+		appClass = (ApplicationClass)getApplicationContext();
+		if(appClass.getOptions().getIsImageOrientaionSensor())
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
 		Intent intent = getIntent();
@@ -212,4 +214,17 @@ public class ImageFragmentActivity extends FragmentActivity{
 		else
 			Toast.makeText(this, "保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
 	}
+
+	@Override
+	public void onResume(){
+		super.onResume();
+		appClass.getUseTime().start();
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		appClass.getUseTime().stop();
+	}
+
 }

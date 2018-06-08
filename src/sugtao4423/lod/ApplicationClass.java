@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
+import sugtao4423.lod.usetime.UseTime;
 
 public class ApplicationClass extends Application{
 
@@ -36,6 +37,7 @@ public class ApplicationClass extends Application{
 	private boolean[] listAlreadyLoad;
 	private Options options;
 	private Level level;
+	private UseTime useTime;
 	// MainActivity - CustomToast
 	private View customToast;
 	private TextView toast_main_message, toast_tweet;
@@ -170,6 +172,13 @@ public class ApplicationClass extends Application{
 		if(level == null)
 			level = new Level(getApplicationContext());
 		return level;
+	}
+
+	// UseTime
+	public UseTime getUseTime(){
+		if(useTime == null)
+			useTime = new UseTime(getApplicationContext());
+		return useTime;
 	}
 
 	// CustomToast

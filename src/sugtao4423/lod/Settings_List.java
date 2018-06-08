@@ -222,4 +222,17 @@ public class Settings_List extends PreferenceActivity{
 			startApp_loadList.setSummary(result2);
 		}
 	}
+
+	@Override
+	public void onResume(){
+		super.onResume();
+		appClass.getUseTime().start();
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		appClass.getUseTime().stop();
+	}
+
 }

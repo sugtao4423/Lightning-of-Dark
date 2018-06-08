@@ -20,12 +20,16 @@ public class Show_Video extends Activity{
 	public static final int TYPE_VIDEO = 0;
 	public static final int TYPE_GIF = 1;
 
+	private ApplicationClass appClass;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_video);
-		if(((ApplicationClass)getApplicationContext()).getOptions().getIsVideoOrientationSensor())
+		appClass = (ApplicationClass)getApplicationContext();
+		if(appClass.getOptions().getIsVideoOrientationSensor())
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
 
 		Intent intent = getIntent();
 		String url = intent.getStringExtra(INTENT_EXTRA_KEY_URL);
@@ -66,4 +70,17 @@ public class Show_Video extends Activity{
 			}
 		});
 	}
+
+	@Override
+	public void onResume(){
+		super.onResume();
+		appClass.getUseTime().start();
+	}
+
+	@Override
+	public void onPause(){
+		super.onPause();
+		appClass.getUseTime().stop();
+	}
+
 }
