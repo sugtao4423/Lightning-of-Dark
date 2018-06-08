@@ -6,10 +6,12 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import sugtao4423.lod.ApplicationClass;
 import sugtao4423.lod.Keys;
 
 public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 
+	private Context context;
 	private SharedPreferences pref;
 	private boolean showList;
 	private int listCount;
@@ -19,6 +21,7 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 
 	public MyFragmentStatePagerAdapter(FragmentManager fm, Context context){
 		super(fm);
+		this.context = context;
 		pref = PreferenceManager.getDefaultSharedPreferences(context);
 		showList = pref.getBoolean(Keys.SHOW_LIST, false);
 		listCount = pref.getInt(Keys.SELECT_LIST_COUNT, 0);
@@ -66,9 +69,9 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 		case 0:
 			return "Mention";
 		case 1:
-		default:
-			return "Home";
+			return "Home - Lv." + ((ApplicationClass)context.getApplicationContext()).getLevel().getLevel();
 		}
+		return null;
 	}
 
 	public Fragment_mention getFragmentMention(){

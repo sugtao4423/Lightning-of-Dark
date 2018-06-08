@@ -21,5 +21,6 @@ public class Keys{
 	public static final String SELECT_LIST_IDS = "selectListIds";
 	public static final String SELECT_LIST_NAMES = "selectListNames";
 	public static final String APP_START_LOAD_LISTS = "appStartLoadLists";
+	public static final String EXPERIENCE = "experience";
 
 }

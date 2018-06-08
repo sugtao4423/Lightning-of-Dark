@@ -3,7 +3,7 @@
 
     <string name="app_name">Lightning of Dark</string>
 
-    <string name="success_tweet">ツイートしました</string>
+    <string name="success_tweet">ツイートしました。%1$dEXP獲得。</string>
     <string name="error_tweet">ツイートできませんでした</string>
     <string name="success_retweet">リツイートしました</string>
     <string name="error_retweet">リツイートできませんでした</string>
@@ -11,6 +11,7 @@
     <string name="error_fav">ふぁぼれませんでした</string>
     <string name="success_delpost">ツイ消ししました</string>
     <string name="error_delpost">ツイ消しできませんでした</string>
+    <string name="level_up">レベル%1$dに上がった！</string>
 
     <string name="error_getTimeLine">タイムライン取得エラー</string>
     <string name="error_getMention">メンション取得エラー</string>

@@ -21,6 +21,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 
 public class ApplicationClass extends Application{
@@ -34,6 +35,7 @@ public class ApplicationClass extends Application{
 	private TweetListAdapter[] listAdapters;
 	private boolean[] listAlreadyLoad;
 	private Options options;
+	private Level level;
 	// MainActivity - CustomToast
 	private View customToast;
 	private TextView toast_main_message, toast_tweet;
@@ -73,10 +75,15 @@ public class ApplicationClass extends Application{
 
 			@Override
 			protected void onPostExecute(twitter4j.Status result){
-				if(result != null)
-					new ShowToast(getApplicationContext(), R.string.success_tweet);
-				else
+				if(result != null){
+					int exp = getLevel().getRandomExp();
+					boolean isLvUp = getLevel().addExp(exp);
+					new ShowToast(getApplicationContext(), getString(R.string.success_tweet, exp));
+					if(isLvUp)
+						new ShowToast(getApplicationContext(), getString(R.string.level_up, getLevel().getLevel()), Toast.LENGTH_LONG);
+				}else{
 					new ShowToast(getApplicationContext(), R.string.error_tweet);
+				}
 			}
 		}.execute();
 	}
@@ -156,6 +163,13 @@ public class ApplicationClass extends Application{
 		if(options == null)
 			loadOption();
 		return options;
+	}
+
+	// Level system
+	public Level getLevel(){
+		if(level == null)
+			level = new Level(getApplicationContext());
+		return level;
 	}
 
 	// CustomToast
