@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.EditText;
 import sugtao4423.lod.dataclass.Account;
 import sugtao4423.lod.userpage_fragment.UserPage;
+import sugtao4423.lod.usetime.UseTime;
 import sugtao4423.lod.utils.DBUtil;
 
 public class OptionClickListener implements OnClickListener{
@@ -45,6 +46,9 @@ public class OptionClickListener implements OnClickListener{
 			levelInfo();
 			break;
 		case 5:
+			useInfo();
+			break;
+		case 6:
 			context.startActivity(new Intent(context, Settings.class));
 			break;
 		}
@@ -170,6 +174,34 @@ public class OptionClickListener implements OnClickListener{
 		int totalExp = lv.getTotalExp();
 		String message = String.format(Locale.JAPAN, "Lv.%d\nレベルアップまで: %dEXP\n取得経験値: %dEXP", level, nextExp, totalExp);
 		new AlertDialog.Builder(context).setMessage(message).setPositiveButton("OK", null).show();
+	}
+
+	public void useInfo(){
+		UseTime useTime = ((ApplicationClass)context.getApplicationContext()).getUseTime();
+		int todayUse = useTime.getTodayUseTimeInMillis();
+		int yesterdayUse = useTime.getYesterdayUseTimeInMillis();
+		long last30daysUse = useTime.getLastNdaysUseTimeInMillis(30);
+		long totalUse = useTime.getTotalUseTimeInMillis();
+		String message = String.format(
+				"今日: %s\n昨日: %s\n\n過去30日: %s\n合計: %s",
+				milliTime2Str(todayUse), milliTime2Str(yesterdayUse), milliTime2Str(last30daysUse), milliTime2Str(totalUse));
+		new AlertDialog.Builder(context).setTitle("使用情報").setMessage(message).setPositiveButton("OK", null).show();
+	}
+
+	private String milliTime2Str(long time){
+		int day = (int)time / 1000 / 86400;
+		int hour = (int)(time / 1000 - day * 86400) / 3600;
+		int minute = (int)(time / 1000 - day * 86400 - hour * 3600) / 60;
+		int second = (int)time / 1000 - day * 86400 - hour * 3600 - minute * 60;
+
+		String result = "";
+		if(day != 0)
+			result += day + "日";
+		if(hour != 0)
+			result += hour + "時間";
+		if(minute != 0)
+			result += minute + "分";
+		return result + second + "秒";
 	}
 
 }
