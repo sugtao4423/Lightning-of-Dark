@@ -1,6 +1,7 @@
 package sugtao4423.lod;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import twitter4j.TwitterException;
 import android.app.AlertDialog;
@@ -41,6 +42,9 @@ public class OptionClickListener implements OnClickListener{
 			accountSelect();
 			break;
 		case 4:
+			levelInfo();
+			break;
+		case 5:
 			context.startActivity(new Intent(context, Settings.class));
 			break;
 		}
@@ -158,4 +162,14 @@ public class OptionClickListener implements OnClickListener{
 			}
 		}).show();
 	}
+
+	public void levelInfo(){
+		Level lv = ((ApplicationClass)context.getApplicationContext()).getLevel();
+		int level = lv.getLevel();
+		int nextExp = lv.getNextExp();
+		int totalExp = lv.getTotalExp();
+		String message = String.format(Locale.JAPAN, "Lv.%d\nレベルアップまで: %dEXP\n取得経験値: %dEXP", level, nextExp, totalExp);
+		new AlertDialog.Builder(context).setMessage(message).setPositiveButton("OK", null).show();
+	}
+
 }

@@ -213,12 +213,13 @@ public class MainActivity extends FragmentActivity{
 	public void option(View v){
 		if(iconDialog == null){
 			int black = Color.parseColor(getString(R.color.icon));
-			IconItem[] items = new IconItem[5];
+			IconItem[] items = new IconItem[6];
 			items[0] = new IconItem(getString(R.string.icon_bomb).charAt(0), black, "ツイート爆撃");
 			items[1] = new IconItem(getString(R.string.icon_search).charAt(0), black, "ユーザー検索");
 			items[2] = new IconItem(getString(R.string.icon_refresh).charAt(0), black, "Homeを更新");
 			items[3] = new IconItem(getString(R.string.icon_user).charAt(0), black, "アカウント");
-			items[4] = new IconItem(getString(R.string.icon_cog).charAt(0), black, "設定");
+			items[4] = new IconItem(getString(R.string.icon_experience).charAt(0), black, "レベル情報");
+			items[5] = new IconItem(getString(R.string.icon_cog).charAt(0), black, "設定");
 			iconDialog = new IconDialog(this).setItems(items, new OptionClickListener(this));
 		}
 		iconDialog.show();
