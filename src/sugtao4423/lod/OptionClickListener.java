@@ -196,12 +196,17 @@ public class OptionClickListener implements OnClickListener{
 
 		String result = "";
 		if(day != 0)
-			result += day + "日";
-		if(hour != 0)
-			result += hour + "時間";
-		if(minute != 0)
-			result += minute + "分";
-		return result + second + "秒";
+			result += day + " days, ";
+		result += zeroPad(hour) + ":" + zeroPad(minute) + ":" + zeroPad(second);
+		return result;
+	}
+
+	private String zeroPad(int i){
+		if(i < 10){
+			return "0" + i;
+		}else{
+			return String.valueOf(i);
+		}
 	}
 
 }
