@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import com.loopj.android.image.WebImageCache;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -32,7 +33,7 @@ public class Settings extends PreferenceActivity{
 
 			Preference listSetting = findPreference("listSetting");
 			Preference clearCache = findPreference("clearCache");
-			clearCache.setSummary("キャッシュ: " + getCacheSize());
+			setCacheSize(clearCache);
 
 			listSetting.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 				@Override
@@ -48,7 +49,7 @@ public class Settings extends PreferenceActivity{
 				@Override
 				public boolean onPreferenceClick(Preference preference){
 					new WebImageCache(Settings.this).clear();
-					preference.setSummary("キャッシュ: " + getCacheSize());
+					setCacheSize(preference);
 					Toast.makeText(Settings.this, "キャッシュが削除されました", Toast.LENGTH_SHORT).show();
 					return false;
 				}
@@ -56,11 +57,20 @@ public class Settings extends PreferenceActivity{
 		}
 	}
 
-	public String getCacheSize(){
-		DecimalFormat df = new DecimalFormat("#.#");
-		df.setMinimumFractionDigits(2);
-		df.setMaximumFractionDigits(2);
-		return df.format((double)new WebImageCache(Settings.this).getCacheSize() / 1024 / 1024) + "MB";
+	public void setCacheSize(final Preference clearCache){
+		new AsyncTask<Void, Void, String>(){
+			@Override
+			protected String doInBackground(Void... params){
+				DecimalFormat df = new DecimalFormat("#.#");
+				df.setMinimumFractionDigits(2);
+				df.setMaximumFractionDigits(2);
+				return df.format((double)new WebImageCache(Settings.this).getCacheSize() / 1024 / 1024) + "MB";
+			}
+			@Override
+			protected void onPostExecute(String result){
+				clearCache.setSummary("キャッシュ: " + result);
+			}
+		}.execute();
 	}
 
 	@Override
