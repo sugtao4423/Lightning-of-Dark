@@ -1,7 +1,7 @@
 package sugtao4423.lod;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import twitter4j.TwitterException;
 import android.app.AlertDialog;
@@ -169,10 +169,11 @@ public class OptionClickListener implements OnClickListener{
 
 	public void levelInfo(){
 		Level lv = ((ApplicationClass)context.getApplicationContext()).getLevel();
-		int level = lv.getLevel();
-		int nextExp = lv.getNextExp();
-		int totalExp = lv.getTotalExp();
-		String message = String.format(Locale.JAPAN, "Lv.%d\nレベルアップまで: %dEXP\n取得経験値: %dEXP", level, nextExp, totalExp);
+		NumberFormat nf = NumberFormat.getInstance();
+		String level = nf.format(lv.getLevel());
+		String nextExp = nf.format(lv.getNextExp());
+		String totalExp = nf.format(lv.getTotalExp());
+		String message = String.format("Lv.%s\nレベルアップまで: %s EXP\n取得経験値: %s EXP", level, nextExp, totalExp);
 		new AlertDialog.Builder(context).setMessage(message).setPositiveButton("OK", null).show();
 	}
 
