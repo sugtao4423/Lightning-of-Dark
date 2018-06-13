@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import sugtao4423.lod.dataclass.Music;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 
@@ -144,13 +145,14 @@ public class TweetActivity extends Activity{
 	}
 
 	public void setTypeface(){
-		Button[] btn = new Button[6];
+		Button[] btn = new Button[7];
 		btn[0] = (Button)findViewById(R.id.tweetButton);
 		btn[1] = (Button)findViewById(R.id.imageSelect);
 		btn[2] = (Button)findViewById(R.id.tweetClose);
 		btn[3] = (Button)findViewById(R.id.cursor_start);
 		btn[4] = (Button)findViewById(R.id.cursor_end);
 		btn[5] = (Button)findViewById(R.id.tweetMic);
+		btn[6] = (Button)findViewById(R.id.tweetMusic);
 		Typeface tf = appClass.getFontAwesomeTypeface();
 		for(Button b : btn){
 			b.setTypeface(tf);
@@ -187,6 +189,15 @@ public class TweetActivity extends Activity{
 		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 		intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "音声入力");
 		startActivityForResult(intent, 114514);
+	}
+
+	public void music(View v){
+		Music music = appClass.getMusic();
+		if(music == null)
+			return;
+		String str = music.getArtist() + " - " + music.getTrack() + " #nowplaying";
+		tweetText.setText(tweetText.getText().toString() + str);
+		tweetText.setSelection(tweetText.getText().length());
 	}
 
 	@Override

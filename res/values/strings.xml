@@ -65,6 +65,7 @@
     <string name="icon_image">&#xf03e;</string>
     <string name="icon_close">&#xf00d;</string>
     <string name="icon_mic">&#xf130;</string>
+    <string name="icon_music">&#xf001;</string>
     <string name="icon_cursorStart">&#xf048;</string>
     <string name="icon_cursorEnd">&#xf051;</string>
 

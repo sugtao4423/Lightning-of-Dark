@@ -14,6 +14,7 @@ import twitter4j.TwitterStream;
 import twitter4j.UserStreamAdapter;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -49,6 +50,8 @@ public class MainActivity extends FragmentActivity{
 
 	private Builder iconDialog;
 
+	private MusicReceiver musicReceiver;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -75,6 +78,7 @@ public class MainActivity extends FragmentActivity{
 		fragmentHome = pagerAdapter.getFragmentHome();
 		fragmentMention = pagerAdapter.getFragmentMention();
 		logIn();
+		setMusicReceiver();
 	}
 
 	public void logIn(){
@@ -205,6 +209,18 @@ public class MainActivity extends FragmentActivity{
 		}
 	}
 
+	public void setMusicReceiver(){
+		musicReceiver = new MusicReceiver();
+		IntentFilter filter = new IntentFilter();
+		for(String s : MusicReceiver.ACTIONS_GOOGLEPLAY){
+			filter.addAction(s);
+		}
+		for(String s : MusicReceiver.ACTIONS_SONYMUSIC){
+			filter.addAction(s);
+		}
+		registerReceiver(musicReceiver, filter);
+	}
+
 	public void new_tweet(View v){
 		Intent intent = new Intent(MainActivity.this, TweetActivity.class);
 		startActivity(intent);
@@ -246,6 +262,7 @@ public class MainActivity extends FragmentActivity{
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
+		unregisterReceiver(musicReceiver);
 		appClass.resetTwitter();
 		if(resetFlag){
 			resetFlag = false;

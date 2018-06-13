@@ -132,6 +132,22 @@
         android:textColor="@xml/activity_tweet_btn"
         android:textSize="18sp" />
 
+    <Button
+        android:id="@+id/tweetMusic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@+id/tweetMic"
+        android:background="@color/transparent"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:onClick="music"
+        android:padding="8dp"
+        android:text="@string/icon_music"
+        android:textColor="@xml/activity_tweet_btn"
+        android:textSize="18sp" />
+
     <ScrollView
         android:id="@+id/scrollViewForOriginStatus"
         android:layout_width="wrap_content"
