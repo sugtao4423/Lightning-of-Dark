@@ -13,11 +13,14 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import sugtao4423.lod.dataclass.Account;
 import sugtao4423.lod.userpage_fragment.UserPage;
 import sugtao4423.lod.usetime.UseTime;
 import sugtao4423.lod.utils.DBUtil;
+import sugtao4423.lod.utils.Utils;
 
 public class OptionClickListener implements OnClickListener{
 
@@ -86,9 +89,17 @@ public class OptionClickListener implements OnClickListener{
 
 	public void searchUser(){
 		final EditText userEdit = new EditText(context);
+		FrameLayout editContainer = new FrameLayout(context);
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		int margin = Utils.convertDpToPx(context, 24);
+		params.leftMargin = margin;
+		params.rightMargin = margin;
+		userEdit.setLayoutParams(params);
+		editContainer.addView(userEdit);
+
 		new AlertDialog.Builder(context)
 		.setMessage("ユーザーのスクリーンネームを入力してください")
-		.setView(userEdit)
+		.setView(editContainer)
 		.setPositiveButton("OK", new OnClickListener(){
 			@Override
 			public void onClick(DialogInterface dialog, int which){

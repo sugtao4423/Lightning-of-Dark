@@ -3,6 +3,7 @@ package sugtao4423.lod.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import android.content.Context;
 import sugtao4423.lod.ApplicationClass;
 import twitter4j.MediaEntity;
 import twitter4j.MediaEntity.Variant;
@@ -74,4 +75,10 @@ public class Utils{
 	public static boolean isGif(MediaEntity ex){
 		return ex.getType().equals("animated_gif");
 	}
+
+	public static int convertDpToPx(Context context, int dp){
+		float d = context.getResources().getDisplayMetrics().density;
+		return (int)((dp * d) + 0.5);
+	}
+
 }
