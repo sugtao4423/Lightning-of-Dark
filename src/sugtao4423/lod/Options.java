@@ -10,6 +10,7 @@ public class Options{
 	private boolean isRegex;
 	private boolean isMillisecond;
 	private boolean isWebm;
+	private String nowplayingFormat;
 	private boolean isImageOrientaionSensor;
 	private boolean isVideoOrientationSensor;
 
@@ -19,6 +20,7 @@ public class Options{
 		this.isRegex = pref.getBoolean(Keys.MENU_REGEX, false);
 		this.isMillisecond = pref.getBoolean(Keys.MENU_MILLISECOND, false);
 		this.isWebm = pref.getBoolean(Keys.IS_WEBM, false);
+		this.nowplayingFormat = pref.getString(Keys.NOWPLAYING_FORMAT, "");
 		this.isImageOrientaionSensor = pref.getBoolean(Keys.IS_IMAGE_ORIENTATION_SENSOR, false);
 		this.isVideoOrientationSensor = pref.getBoolean(Keys.IS_VIDEO_ORIENTATION_SENSOR, false);
 	}
@@ -37,6 +39,10 @@ public class Options{
 
 	public boolean getIsWebm(){
 		return this.isWebm;
+	}
+
+	public String getNowplayingFormat(){
+		return this.nowplayingFormat;
 	}
 
 	public boolean getIsImageOrientaionSensor(){

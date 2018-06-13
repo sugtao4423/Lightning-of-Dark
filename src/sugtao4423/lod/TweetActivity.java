@@ -195,7 +195,11 @@ public class TweetActivity extends Activity{
 		Music music = appClass.getMusic();
 		if(music == null)
 			return;
-		String str = music.getArtist() + " - " + music.getTrack() + " #nowplaying";
+		String nowplayingFormat = appClass.getOptions().getNowplayingFormat();
+		if(nowplayingFormat.equals("")){
+			nowplayingFormat = "%artist% - %track% #nowplaying";
+		}
+		String str = nowplayingFormat.replaceAll("%track%", music.getTrack()).replaceAll("%artist%", music.getArtist()).replaceAll("%album%", music.getAlbum());
 		tweetText.setText(tweetText.getText().toString() + str);
 		tweetText.setSelection(tweetText.getText().length());
 	}

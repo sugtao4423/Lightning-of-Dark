@@ -13,6 +13,7 @@ public class Keys{
 	public static final String MENU_OPEN_BROWSER = "menu_openBrowser";
 	public static final String MENU_MILLISECOND = "menu_millisecond";
 	public static final String IS_WEBM = "isWebm";
+	public static final String NOWPLAYING_FORMAT = "nowplayingFormat";
 	public static final String REGULAR_EXPRESSION = "regularExpression";
 	public static final String IS_IMAGE_ORIENTATION_SENSOR = "isImageOrientaionSensor";
 	public static final String IS_VIDEO_ORIENTATION_SENSOR = "isVideoOrientationSensor";

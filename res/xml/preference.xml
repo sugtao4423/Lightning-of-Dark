@@ -23,6 +23,14 @@
             android:key="isVideoOrientationSensor"
             android:title="動画再生時" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="再生中の曲" >
+        <EditTextPreference
+            android:dialogMessage="曲名: %track%\nアーティスト: %artist%\nアルバム: %album%\n\nデフォルト: %artist% - %track% #nowplaying"
+            android:key="nowplayingFormat"
+            android:negativeButtonText="キャンセル"
+            android:positiveButtonText="OK"
+            android:title="フォーマット" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="その他" >
         <CheckBoxPreference
             android:key="isWebm"
