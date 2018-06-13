@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import sugtao4423.lod.App;
 import sugtao4423.lod.Keys;
 
-public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
+public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter{
 
 	private Context context;
 	private SharedPreferences pref;
@@ -19,7 +19,7 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 	private Fragment_mention fragmentMention;
 	private Fragment_home fragmentHome;
 
-	public MyFragmentStatePagerAdapter(FragmentManager fm, Context context){
+	public MainFragmentPagerAdapter(FragmentManager fm, Context context){
 		super(fm);
 		this.context = context;
 		pref = PreferenceManager.getDefaultSharedPreferences(context);

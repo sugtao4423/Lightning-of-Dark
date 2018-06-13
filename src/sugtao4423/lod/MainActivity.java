@@ -29,7 +29,7 @@ import sugtao4423.icondialog.IconDialog;
 import sugtao4423.icondialog.IconItem;
 import sugtao4423.lod.main_fragment.Fragment_home;
 import sugtao4423.lod.main_fragment.Fragment_mention;
-import sugtao4423.lod.main_fragment.MyFragmentStatePagerAdapter;
+import sugtao4423.lod.main_fragment.MainFragmentPagerAdapter;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 
 public class MainActivity extends FragmentActivity{
@@ -60,7 +60,7 @@ public class MainActivity extends FragmentActivity{
 
 		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-		MyFragmentStatePagerAdapter pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), this);
+		MainFragmentPagerAdapter pagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager(), this);
 
 		ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
 		viewPager.setAdapter(pagerAdapter);
