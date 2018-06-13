@@ -4,9 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class SQLHelper extends SQLiteOpenHelper{
+public class AccountDB extends SQLiteOpenHelper{
 
-	public SQLHelper(Context context){
+	public AccountDB(Context context){
 		// DataBase name is "Accounts"
 		super(context, "Accounts", null, 1);
 	}

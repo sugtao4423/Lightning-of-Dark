@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import sugtao4423.lod.AccountDB;
 import sugtao4423.lod.Keys;
-import sugtao4423.lod.SQLHelper;
 import sugtao4423.lod.dataclass.Account;
 
 public class DBUtil{
@@ -14,7 +14,7 @@ public class DBUtil{
 	private SQLiteDatabase db;
 
 	public DBUtil(Context context){
-		db = new SQLHelper(context).getWritableDatabase();
+		db = new AccountDB(context).getWritableDatabase();
 	}
 
 	public Account[] getAccounts(){
