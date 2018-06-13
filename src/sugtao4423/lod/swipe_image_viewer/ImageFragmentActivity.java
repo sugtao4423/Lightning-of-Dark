@@ -28,7 +28,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
@@ -43,7 +43,7 @@ public class ImageFragmentActivity extends FragmentActivity{
 	public static final int TYPE_ICON = 0;
 	public static final int TYPE_BANNER = 1;
 
-	private ApplicationClass appClass;
+	private App app;
 	private ImagePagerAdapter adapter;
 	private ZoomViewPager pager;
 	private String[] urls;
@@ -55,8 +55,8 @@ public class ImageFragmentActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.show_image_pager);
-		appClass = (ApplicationClass)getApplicationContext();
-		if(appClass.getOptions().getIsImageOrientaionSensor())
+		app = (App)getApplicationContext();
+		if(app.getOptions().getIsImageOrientaionSensor())
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
 		Intent intent = getIntent();
@@ -218,13 +218,13 @@ public class ImageFragmentActivity extends FragmentActivity{
 	@Override
 	public void onResume(){
 		super.onResume();
-		appClass.getUseTime().start();
+		app.getUseTime().start();
 	}
 
 	@Override
 	public void onPause(){
 		super.onPause();
-		appClass.getUseTime().stop();
+		app.getUseTime().stop();
 	}
 
 }

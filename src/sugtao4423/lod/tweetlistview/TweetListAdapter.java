@@ -24,7 +24,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.R;
 import sugtao4423.lod.Show_Video;
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity;
@@ -39,7 +39,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 	private LayoutInflater inflater;
 	private ArrayList<Status> data;
 	private Context context;
-	private ApplicationClass appClass;
+	private App app;
 	private SimpleDateFormat statusDateFormat;
 	private Handler handler;
 	private OnItemClickListener onItemClickListener;
@@ -49,8 +49,8 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 		this.inflater = LayoutInflater.from(context);
 		this.data = new ArrayList<Status>();
 		this.context = context;
-		this.appClass = (ApplicationClass)context.getApplicationContext();
-		this.statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (appClass.getOptions().getIsMillisecond() ? ".SSS" : ""), Locale.getDefault());
+		this.app = (App)context.getApplicationContext();
+		this.statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (app.getOptions().getIsMillisecond() ? ".SSS" : ""), Locale.getDefault());
 		this.handler = new Handler();
 	}
 
@@ -68,7 +68,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 
 		// 鍵
 		if(origStatus.getUser().isProtected()){
-			holder.protect.setTypeface(appClass.getFontAwesomeTypeface());
+			holder.protect.setTypeface(app.getFontAwesomeTypeface());
 			holder.protect.setVisibility(View.VISIBLE);
 		}else{
 			holder.protect.setVisibility(View.GONE);
@@ -140,7 +140,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 					holder.tweetImagesLayout.addView(fl);
 
 					final boolean isGif = Utils.isGif(mentitys[i]);
-					final String[] videoUrl = Utils.getVideoURLsSortByBitrate(appClass, mentitys);
+					final String[] videoUrl = Utils.getVideoURLsSortByBitrate(app, mentitys);
 					child.setImageUrl(mentitys[i].getMediaURL() + ":small", null, R.drawable.ic_action_refresh);
 					child.setOnClickListener(new OnClickListener(){
 						@Override

@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.Keys;
 
 public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
@@ -69,7 +69,7 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter{
 		case 0:
 			return "Mention";
 		case 1:
-			return "Home - Lv." + ((ApplicationClass)context.getApplicationContext()).getLevel().getLevel();
+			return "Home - Lv." + ((App)context.getApplicationContext()).getLevel().getLevel();
 		}
 		return null;
 	}

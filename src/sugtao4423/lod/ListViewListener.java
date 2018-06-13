@@ -41,12 +41,12 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 	@Override
 	public void onItemClicked(final Context context, ArrayList<Status> data, int position){
 		Status item = data.get(position);
-		ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
+		App app = (App)context.getApplicationContext();
 
 		ArrayAdapter<String> list = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
-		if(appClass.getOptions().getIsRegex())
+		if(app.getOptions().getIsRegex())
 			list.add("正規表現で抽出");
-		if(appClass.getOptions().getIsOpenBrowser())
+		if(app.getOptions().getIsOpenBrowser())
 			list.add("ブラウザで開く");
 
 		ArrayList<String> users = new ArrayList<String>();
@@ -71,7 +71,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		if(mentitys != null && mentitys.length > 0){
 			for(MediaEntity media : mentitys){
 				if(Utils.isVideoOrGif(media)){
-					String[] videoUrls = Utils.getVideoURLsSortByBitrate(appClass, mentitys);
+					String[] videoUrls = Utils.getVideoURLsSortByBitrate(app, mentitys);
 					if(videoUrls.length == 0)
 						list.add("ビデオの取得に失敗");
 					else
@@ -112,7 +112,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		name_screenName = (TextView)dialog_title.findViewById(R.id.name_screenName);
 		tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
 		tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
-		statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (((ApplicationClass)context.getApplicationContext()).getOptions().getIsMillisecond() ? ".SSS" : ""), Locale.getDefault());
+		statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (((App)context.getApplicationContext()).getOptions().getIsMillisecond() ? ".SSS" : ""), Locale.getDefault());
 		protect = (TextView)dialog_title.findViewById(R.id.UserProtected);
 		((HorizontalScrollView)dialog_title.findViewById(R.id.tweet_images_scroll)).setVisibility(View.GONE);
 
@@ -126,7 +126,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		dialogBtn[4] = (Button)content.findViewById(R.id.dialog_talk);
 		dialogBtn[5] = (Button)content.findViewById(R.id.dialog_delete);
 
-		Typeface tf = ((ApplicationClass)context.getApplicationContext()).getFontAwesomeTypeface();
+		Typeface tf = ((App)context.getApplicationContext()).getFontAwesomeTypeface();
 		float density = context.getResources().getDisplayMetrics().density;
 		int black = Color.parseColor(context.getString(R.color.icon));
 		for(Button btn : dialogBtn){
@@ -178,7 +178,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		dialogBtn[5].setOnClickListener(new Dialog_deletePost(status, context, dialog));
 
 		dialogBtn[4].setEnabled(status.getInReplyToStatusId() > 0);
-		dialogBtn[5].setEnabled(status.getUser().getScreenName().equals(((ApplicationClass)context.getApplicationContext()).getMyScreenName()));
+		dialogBtn[5].setEnabled(status.getUser().getScreenName().equals(((App)context.getApplicationContext()).getMyScreenName()));
 	}
 
 }

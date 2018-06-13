@@ -27,7 +27,7 @@ public class Settings_List extends PreferenceActivity{
 	private Preference select_List, startApp_loadList;
 	private DBUtil dbUtil;
 	private String myScreenName;
-	private ApplicationClass appClass;
+	private App app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -48,8 +48,8 @@ public class Settings_List extends PreferenceActivity{
 
 			dbUtil = new DBUtil(getActivity());
 
-			appClass = (ApplicationClass)getActivity().getApplicationContext();
-			myScreenName = appClass.getMyScreenName();
+			app = (App)getActivity().getApplicationContext();
+			myScreenName = app.getMyScreenName();
 
 			setSummary();
 
@@ -126,7 +126,7 @@ public class Settings_List extends PreferenceActivity{
 						@Override
 						protected ResponseList<UserList> doInBackground(Void... params){
 							try{
-								return appClass.getTwitter().getUserLists(myScreenName);
+								return app.getTwitter().getUserLists(myScreenName);
 							}catch(TwitterException e){
 								return null;
 							}
@@ -226,13 +226,13 @@ public class Settings_List extends PreferenceActivity{
 	@Override
 	public void onResume(){
 		super.onResume();
-		appClass.getUseTime().start();
+		app.getUseTime().start();
 	}
 
 	@Override
 	public void onPause(){
 		super.onPause();
-		appClass.getUseTime().stop();
+		app.getUseTime().stop();
 	}
 
 }

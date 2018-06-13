@@ -16,7 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.ListViewListener;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
@@ -31,11 +31,11 @@ public class Fragment_mention extends Fragment{
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
 	private Handler handler;
-	private ApplicationClass appClass;
+	private App app;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
-		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		app = (App)container.getContext().getApplicationContext();
 		handler = new Handler();
 		View v = View.inflate(container.getContext(), R.layout.fragment_list, null);
 
@@ -85,9 +85,9 @@ public class Fragment_mention extends Fragment{
 				try{
 					if(adapter.getItemCount() > 0){
 						long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
-						return appClass.getTwitter().getMentionsTimeline(new Paging(1, 50).maxId(tweetId - 1));
+						return app.getTwitter().getMentionsTimeline(new Paging(1, 50).maxId(tweetId - 1));
 					}else{
-						return appClass.getTwitter().getMentionsTimeline(new Paging(1, 50));
+						return app.getTwitter().getMentionsTimeline(new Paging(1, 50));
 					}
 				}catch(TwitterException e){
 					return null;

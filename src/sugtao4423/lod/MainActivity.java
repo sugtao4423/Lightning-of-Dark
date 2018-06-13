@@ -38,7 +38,7 @@ public class MainActivity extends FragmentActivity{
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 
-	private ApplicationClass appClass;
+	private App app;
 
 	private SharedPreferences pref;
 	private boolean resetFlag;
@@ -82,20 +82,20 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void logIn(){
-		appClass = (ApplicationClass)getApplicationContext();
-		appClass.setListAdapters(listAdapters);
+		app = (App)getApplicationContext();
+		app.setListAdapters(listAdapters);
 		boolean[] list_alreadyLoad = new boolean[listAdapters.length];
 		for(int i = 0; i < listAdapters.length; i++)
 			list_alreadyLoad[i] = false;
-		appClass.setListAlreadyLoad(list_alreadyLoad);
+		app.setListAlreadyLoad(list_alreadyLoad);
 
 		if(pref.getString(Keys.ACCESS_TOKEN, "").equals("")){
 			startActivity(new Intent(this, StartOAuth.class));
 			finish();
 		}else{
-			twitter = appClass.getTwitter();
-			twitterStream = appClass.getTwitterStream();
-			mentionPattern = appClass.getMentionPattern();
+			twitter = app.getTwitter();
+			twitterStream = app.getTwitterStream();
+			mentionPattern = app.getMentionPattern();
 			getTimeLine();
 			connectStreaming();
 		}
@@ -157,9 +157,9 @@ public class MainActivity extends FragmentActivity{
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null){
 					listAdapters[index].addAll(result);
-					boolean[] tmp = appClass.getListAlreadyLoad();
+					boolean[] tmp = app.getListAlreadyLoad();
 					tmp[index] = true;
-					appClass.setListAlreadyLoad(tmp);
+					app.setListAlreadyLoad(tmp);
 				}
 			}
 		}.execute();
@@ -250,20 +250,20 @@ public class MainActivity extends FragmentActivity{
 	@Override
 	public void onResume(){
 		super.onResume();
-		appClass.getUseTime().start();
+		app.getUseTime().start();
 	}
 
 	@Override
 	public void onPause(){
 		super.onPause();
-		appClass.getUseTime().stop();
+		app.getUseTime().stop();
 	}
 
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
 		unregisterReceiver(musicReceiver);
-		appClass.resetTwitter();
+		app.resetTwitter();
 		if(resetFlag){
 			resetFlag = false;
 			startActivity(new Intent(this, MainActivity.class));

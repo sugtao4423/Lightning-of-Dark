@@ -7,7 +7,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.ListViewListener;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
@@ -52,7 +52,7 @@ public class Dialog_talk implements OnClickListener{
 		@Override
 		protected twitter4j.Status doInBackground(Void... params){
 			try{
-				reply = ((ApplicationClass)context.getApplicationContext()).getTwitter().showStatus(reply.getInReplyToStatusId());
+				reply = ((App)context.getApplicationContext()).getTwitter().showStatus(reply.getInReplyToStatusId());
 				return reply;
 			}catch(TwitterException e){
 				return null;

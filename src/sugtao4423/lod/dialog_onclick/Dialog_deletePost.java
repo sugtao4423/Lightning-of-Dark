@@ -8,7 +8,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.View.OnClickListener;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 
@@ -43,7 +43,7 @@ public class Dialog_deletePost implements OnClickListener{
 			@Override
 			protected Boolean doInBackground(Void... params){
 				try{
-					((ApplicationClass)context.getApplicationContext()).getTwitter().destroyStatus(status.getId());
+					((App)context.getApplicationContext()).getTwitter().destroyStatus(status.getId());
 					return true;
 				}catch(TwitterException e){
 					return false;

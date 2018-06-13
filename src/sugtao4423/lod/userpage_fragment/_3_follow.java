@@ -13,7 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 import sugtao4423.lod.tweetlistview.EndlessScrollListener;
@@ -26,13 +26,13 @@ public class _3_follow extends Fragment{
 	private TweetListUserAdapter adapter;
 	private long cursor;
 	private boolean isAllLoaded;
-	private ApplicationClass appClass;
+	private App app;
 	private User targetUser;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
 		View v = View.inflate(container.getContext(), R.layout.user_1, null);
-		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		app = (App)container.getContext().getApplicationContext();
 		cursor = -1L;
 
 		TweetListView userFollow = (TweetListView)v.findViewById(R.id.UserPageList);
@@ -79,7 +79,7 @@ public class _3_follow extends Fragment{
 			@Override
 			protected PagableResponseList<User> doInBackground(Void... params){
 				try{
-					return appClass.getTwitter().getFriendsList(targetUser.getScreenName(), cursor);
+					return app.getTwitter().getFriendsList(targetUser.getScreenName(), cursor);
 				}catch(TwitterException e){
 					return null;
 				}

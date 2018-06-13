@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.R;
 import sugtao4423.lod.userpage_fragment.UserPage;
 import twitter4j.PagableResponseList;
@@ -27,14 +27,14 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 	private LayoutInflater inflater;
 	private ArrayList<User> data;
 	private Context context;
-	private ApplicationClass appClass;
+	private App app;
 	private Handler handler;
 
 	public TweetListUserAdapter(Context context){
 		this.inflater = LayoutInflater.from(context);
 		this.data = new ArrayList<User>();
 		this.context = context;
-		this.appClass = (ApplicationClass)context.getApplicationContext();
+		this.app = (App)context.getApplicationContext();
 		this.handler = new Handler();
 	}
 
@@ -55,7 +55,7 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 		final User item = data.get(position);
 
 		if(item.isProtected()){
-			holder.protect.setTypeface(appClass.getFontAwesomeTypeface());
+			holder.protect.setTypeface(app.getFontAwesomeTypeface());
 			holder.protect.setVisibility(View.VISIBLE);
 		}else{
 			holder.protect.setVisibility(View.GONE);

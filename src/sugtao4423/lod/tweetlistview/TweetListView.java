@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ItemDecoration;
 import android.util.AttributeSet;
 import android.view.View;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.R;
 import twitter4j.Status;
 
@@ -43,10 +43,10 @@ public class TweetListView extends RecyclerView{
 
 class AlternatelyColor extends ItemDecoration{
 
-	private ApplicationClass appClass;
+	private App app;
 
 	public AlternatelyColor(Context context){
-		this.appClass = (ApplicationClass)context.getApplicationContext();
+		this.app = (App)context.getApplicationContext();
 	}
 
 	@Override
@@ -62,9 +62,9 @@ class AlternatelyColor extends ItemDecoration{
 				view.setBackgroundResource(R.drawable.retweeted_by_me);
 			}else if(item.isRetweet()){
 				view.setBackgroundResource(R.drawable.retweet);
-			}else if(item.getUser().getScreenName().equals(appClass.getMyScreenName())){
+			}else if(item.getUser().getScreenName().equals(app.getMyScreenName())){
 				view.setBackgroundResource(R.drawable.same_my_screenname);
-			}else if(appClass.getMentionPattern().matcher(item.getText()).find()){
+			}else if(app.getMentionPattern().matcher(item.getText()).find()){
 				view.setBackgroundResource(R.drawable.mention);
 			}else{
 				setAlternately(pos, view);

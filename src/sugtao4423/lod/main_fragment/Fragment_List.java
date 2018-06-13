@@ -21,7 +21,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.Keys;
 import sugtao4423.lod.ListViewListener;
 import sugtao4423.lod.R;
@@ -45,10 +45,10 @@ public class Fragment_List extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
 		View v = View.inflate(container.getContext(), R.layout.fragment_list, null);
-		final ApplicationClass appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		final App app = (App)container.getContext().getApplicationContext();
 
 		list = (TweetListView)v.findViewById(R.id.listLine);
-		adapter = appClass.getListAdapters()[listIndex];
+		adapter = app.getListAdapters()[listIndex];
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		list.setAdapter(adapter);
@@ -63,9 +63,9 @@ public class Fragment_List extends Fragment{
 			@Override
 			public void onRefresh(){
 				adapter.clear();
-				boolean[] tmp = appClass.getListAlreadyLoad();
+				boolean[] tmp = app.getListAlreadyLoad();
 				tmp[listIndex] = false;
-				appClass.setListAlreadyLoad(tmp);
+				app.setListAlreadyLoad(tmp);
 				getList(container.getContext());
 				scrollListener.resetState();
 			}
@@ -85,7 +85,7 @@ public class Fragment_List extends Fragment{
 	}
 
 	public void getList(Context context){
-		final ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
+		final App app = (App)context.getApplicationContext();
 		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		if(pref.getBoolean(Keys.SHOW_LIST, false)){
 			String[] listId_str = pref.getString(Keys.SELECT_LIST_IDS, null).split(",", 0);
@@ -97,12 +97,12 @@ public class Fragment_List extends Fragment{
 					@Override
 					protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 						try{
-							if(appClass.getListAlreadyLoad()[listIndex]){
+							if(app.getListAlreadyLoad()[listIndex]){
 								long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
-								return appClass.getTwitter().getUserListStatuses(listId[listIndex],
+								return app.getTwitter().getUserListStatuses(listId[listIndex],
 										new Paging(1, 50).maxId(tweetId - 1));
 							}else{
-								return appClass.getTwitter().getUserListStatuses(listId[listIndex], new Paging(1, 50));
+								return app.getTwitter().getUserListStatuses(listId[listIndex], new Paging(1, 50));
 							}
 						}catch(TwitterException e){
 							return null;
@@ -113,10 +113,10 @@ public class Fragment_List extends Fragment{
 					protected void onPostExecute(ResponseList<twitter4j.Status> result){
 						if(result != null){
 							adapter.addAll(result);
-							if(!appClass.getListAlreadyLoad()[listIndex]){
-								boolean[] tmp = appClass.getListAlreadyLoad();
+							if(!app.getListAlreadyLoad()[listIndex]){
+								boolean[] tmp = app.getListAlreadyLoad();
 								tmp[listIndex] = true;
-								appClass.setListAlreadyLoad(tmp);
+								app.setListAlreadyLoad(tmp);
 							}
 						}else{
 							new ShowToast(getContext().getApplicationContext(), R.string.error_getList);

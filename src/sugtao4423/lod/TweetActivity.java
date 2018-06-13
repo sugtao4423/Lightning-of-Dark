@@ -45,7 +45,7 @@ public class TweetActivity extends Activity{
 	private Status status;
 	private int type;
 	private File image;
-	private ApplicationClass appClass;
+	private App app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -55,11 +55,11 @@ public class TweetActivity extends Activity{
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowHomeEnabled(false);
 
-		appClass = (ApplicationClass)getApplicationContext();
+		app = (App)getApplicationContext();
 		setTypeface();
 
 		TextView tweetAccount = (TextView)findViewById(R.id.tweetAccount);
-		tweetAccount.setText("@" + appClass.getMyScreenName());
+		tweetAccount.setText("@" + app.getMyScreenName());
 
 		tweetText = (EditText)findViewById(R.id.tweetText);
 		moji140 = (TextView)findViewById(R.id.moji140);
@@ -106,7 +106,7 @@ public class TweetActivity extends Activity{
 			mentionUsers.add(status.getUser().getScreenName());
 			UserMentionEntity[] mentionEntitys = status.getUserMentionEntities();
 			for(UserMentionEntity mention : mentionEntitys){
-				if(mention.getScreenName().equals(appClass.getMyScreenName()) || mentionUsers.indexOf(mention.getScreenName()) != -1)
+				if(mention.getScreenName().equals(app.getMyScreenName()) || mentionUsers.indexOf(mention.getScreenName()) != -1)
 					continue;
 				mentionUsers.add(mention.getScreenName());
 			}
@@ -153,7 +153,7 @@ public class TweetActivity extends Activity{
 		btn[4] = (Button)findViewById(R.id.cursor_end);
 		btn[5] = (Button)findViewById(R.id.tweetMic);
 		btn[6] = (Button)findViewById(R.id.tweetMusic);
-		Typeface tf = appClass.getFontAwesomeTypeface();
+		Typeface tf = app.getFontAwesomeTypeface();
 		for(Button b : btn){
 			b.setTypeface(tf);
 		}
@@ -170,9 +170,9 @@ public class TweetActivity extends Activity{
 		if(image != null)
 			statusUpdate.media(image);
 		if(type == TYPE_REPLY || type == TYPE_REPLYALL)
-			appClass.updateStatus(statusUpdate.inReplyToStatusId(TweetActivity.this.status.getId()));
+			app.updateStatus(statusUpdate.inReplyToStatusId(TweetActivity.this.status.getId()));
 		else
-			appClass.updateStatus(statusUpdate);
+			app.updateStatus(statusUpdate);
 
 		finish();
 	}
@@ -192,10 +192,10 @@ public class TweetActivity extends Activity{
 	}
 
 	public void music(View v){
-		Music music = appClass.getMusic();
+		Music music = app.getMusic();
 		if(music == null)
 			return;
-		String nowplayingFormat = appClass.getOptions().getNowplayingFormat();
+		String nowplayingFormat = app.getOptions().getNowplayingFormat();
 		if(nowplayingFormat.equals("")){
 			nowplayingFormat = "%artist% - %track% #nowplaying";
 		}
@@ -260,13 +260,13 @@ public class TweetActivity extends Activity{
 	@Override
 	public void onResume(){
 		super.onResume();
-		appClass.getUseTime().start();
+		app.getUseTime().start();
 	}
 
 	@Override
 	public void onPause(){
 		super.onPause();
-		appClass.getUseTime().stop();
+		app.getUseTime().stop();
 	}
 
 	@Override

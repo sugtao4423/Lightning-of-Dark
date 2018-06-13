@@ -15,13 +15,13 @@ import android.preference.PreferenceFragment;
 
 public class Settings extends PreferenceActivity{
 
-	private ApplicationClass appClass;
+	private App app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
-		appClass = (ApplicationClass)getApplicationContext();
+		app = (App)getApplicationContext();
 		getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferencesFragment()).commit();
 		getActionBar().setTitle("設定");
 	}
@@ -76,19 +76,19 @@ public class Settings extends PreferenceActivity{
 	@Override
 	public void onResume(){
 		super.onResume();
-		appClass.getUseTime().start();
+		app.getUseTime().start();
 	}
 
 	@Override
 	public void onPause(){
 		super.onPause();
-		appClass.getUseTime().stop();
+		app.getUseTime().stop();
 	}
 
 	@Override
 	public void onDestroy(){
 		super.onDestroy();
-		appClass.loadOption();
+		app.loadOption();
 	}
 
 }

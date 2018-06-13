@@ -26,7 +26,7 @@ import sugtao4423.lod.dataclass.Music;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.usetime.UseTime;
 
-public class ApplicationClass extends Application{
+public class App extends Application{
 
 	private Typeface fontAwesomeTypeface;
 	// MainActivity
@@ -192,7 +192,12 @@ public class ApplicationClass extends Application{
 		return music;
 	}
 
-	// CustomToast
+	/*
+	 * +-+-+-+-+-+-+-+-+-+-+-+
+	 * |C|u|s|t|o|m|T|o|a|s|t|
+	 * +-+-+-+-+-+-+-+-+-+-+-+
+	 */
+
 	public View getToastView(){
 		if(customToast == null){
 			customToast = View.inflate(this, R.layout.custom_toast, null);

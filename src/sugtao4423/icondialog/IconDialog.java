@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import sugtao4423.lod.App;
 import android.widget.TextView;
-import sugtao4423.lod.ApplicationClass;
 
 public class IconDialog{
 
@@ -47,7 +47,7 @@ class IconDialogAdapter extends ArrayAdapter<IconItem>{
 	public IconDialogAdapter(Context context, IconItem[] items){
 		super(context, android.R.layout.select_dialog_item, android.R.id.text1, items);
 		this.context = context;
-		this.tf = ((ApplicationClass)context.getApplicationContext()).getFontAwesomeTypeface();
+		this.tf = ((App)context.getApplicationContext()).getFontAwesomeTypeface();
 		this.density = context.getResources().getDisplayMetrics().density;
 	}
 

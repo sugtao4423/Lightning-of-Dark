@@ -75,7 +75,7 @@ public class OptionClickListener implements OnClickListener{
 						@Override
 						protected Void doInBackground(String... params){
 							try{
-								((ApplicationClass)context.getApplicationContext()).getTwitter().updateStatus(staticText + params[0]);
+								((App)context.getApplicationContext()).getTwitter().updateStatus(staticText + params[0]);
 							}catch(TwitterException e){
 							}
 							return null;
@@ -179,7 +179,7 @@ public class OptionClickListener implements OnClickListener{
 	}
 
 	public void levelInfo(){
-		Level lv = ((ApplicationClass)context.getApplicationContext()).getLevel();
+		Level lv = ((App)context.getApplicationContext()).getLevel();
 		NumberFormat nf = NumberFormat.getInstance();
 		String level = nf.format(lv.getLevel());
 		String nextExp = nf.format(lv.getNextExp());
@@ -189,7 +189,7 @@ public class OptionClickListener implements OnClickListener{
 	}
 
 	public void useInfo(){
-		UseTime useTime = ((ApplicationClass)context.getApplicationContext()).getUseTime();
+		UseTime useTime = ((App)context.getApplicationContext()).getUseTime();
 		int todayUse = useTime.getTodayUseTimeInMillis();
 		int yesterdayUse = useTime.getYesterdayUseTimeInMillis();
 		long last30daysUse = useTime.getLastNdaysUseTimeInMillis(30);

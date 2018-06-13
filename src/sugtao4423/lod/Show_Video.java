@@ -20,14 +20,14 @@ public class Show_Video extends Activity{
 	public static final int TYPE_VIDEO = 0;
 	public static final int TYPE_GIF = 1;
 
-	private ApplicationClass appClass;
+	private App app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.show_video);
-		appClass = (ApplicationClass)getApplicationContext();
-		if(appClass.getOptions().getIsVideoOrientationSensor())
+		app = (App)getApplicationContext();
+		if(app.getOptions().getIsVideoOrientationSensor())
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 
 
@@ -74,13 +74,13 @@ public class Show_Video extends Activity{
 	@Override
 	public void onResume(){
 		super.onResume();
-		appClass.getUseTime().start();
+		app.getUseTime().start();
 	}
 
 	@Override
 	public void onPause(){
 		super.onPause();
-		appClass.getUseTime().stop();
+		app.getUseTime().stop();
 	}
 
 }

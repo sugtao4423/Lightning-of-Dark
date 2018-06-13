@@ -38,7 +38,7 @@ public class MusicReceiver extends BroadcastReceiver{
 		}
 
 		Music music = new Music(artist, album, track);
-		((ApplicationClass)context.getApplicationContext()).setMusic(music);
+		((App)context.getApplicationContext()).setMusic(music);
 	}
 
 }

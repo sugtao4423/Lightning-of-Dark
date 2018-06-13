@@ -29,7 +29,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
@@ -41,7 +41,7 @@ public class _0_detail extends Fragment{
 	private TextView isFollowIcon, userBio, userLocation, userLink, userTweetC, userFavoriteC, userFollowC, userFollowerC, userCreate;
 	private SmartImageView sourceIcon, targetIcon;
 	private User target;
-	private ApplicationClass appClass;
+	private App app;
 
 	private SmartImageView userBanner, userIcon;
 	private TextView userName, userScreenName, protect;
@@ -52,7 +52,7 @@ public class _0_detail extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = View.inflate(container.getContext(), R.layout.user_0, null);
 
-		appClass = (ApplicationClass)getActivity().getApplicationContext();
+		app = (App)getActivity().getApplicationContext();
 
 		userBanner = (SmartImageView)v.findViewById(R.id.banner);
 		userIcon = (SmartImageView)v.findViewById(R.id.UserIcon);
@@ -74,7 +74,7 @@ public class _0_detail extends Fragment{
 
 		protect.setVisibility(View.GONE);
 
-		Typeface tf = appClass.getFontAwesomeTypeface();
+		Typeface tf = app.getFontAwesomeTypeface();
 		protect.setTypeface(tf);
 		((TextView)v.findViewById(R.id.icon_tweet_count)).setTypeface(tf);
 		((TextView)v.findViewById(R.id.icon_favorite_count)).setTypeface(tf);
@@ -107,7 +107,7 @@ public class _0_detail extends Fragment{
 		userName.setText(target.getName());
 		userScreenName.setText("@" + target.getScreenName());
 
-		if(appClass.getMyScreenName().equals(target.getScreenName())){
+		if(app.getMyScreenName().equals(target.getScreenName())){
 			sourceIcon.setVisibility(View.GONE);
 			targetIcon.setVisibility(View.GONE);
 			isFollowIcon.setVisibility(View.GONE);
@@ -182,7 +182,7 @@ public class _0_detail extends Fragment{
 			@Override
 			protected Relationship doInBackground(Void... params){
 				try{
-					return appClass.getTwitter().showFriendship(appClass.getMyScreenName(), target.getScreenName());
+					return app.getTwitter().showFriendship(app.getMyScreenName(), target.getScreenName());
 				}catch(TwitterException e){
 					return null;
 				}
@@ -191,7 +191,7 @@ public class _0_detail extends Fragment{
 			@Override
 			protected void onPostExecute(Relationship ship){
 				if(ship != null){
-					isFollowIcon.setTypeface(appClass.getFontAwesomeTypeface());
+					isFollowIcon.setTypeface(app.getFontAwesomeTypeface());
 					if(ship.isSourceFollowingTarget() && ship.isSourceFollowedByTarget())
 						isFollowIcon.setText(getContext().getString(R.string.icon_followEach));
 					else if(ship.isSourceFollowingTarget())
@@ -210,7 +210,7 @@ public class _0_detail extends Fragment{
 			@Override
 			protected String[] doInBackground(Void... params){
 				try{
-					return new String[]{appClass.getTwitter().verifyCredentials().getBiggerProfileImageURL(),
+					return new String[]{app.getTwitter().verifyCredentials().getBiggerProfileImageURL(),
 							target.getBiggerProfileImageURL()};
 				}catch(TwitterException e){
 					return null;

@@ -13,7 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.ListViewListener;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
@@ -26,13 +26,13 @@ public class _1_Tweet extends Fragment{
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
 	private boolean isAllLoaded;
-	private ApplicationClass appClass;
+	private App app;
 	private User targetUser;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = View.inflate(container.getContext(), R.layout.user_1, null);
-		appClass = (ApplicationClass)container.getContext().getApplicationContext();
+		app = (App)container.getContext().getApplicationContext();
 
 		TweetListView userTweet = (TweetListView)v.findViewById(R.id.UserPageList);
 
@@ -81,10 +81,10 @@ public class _1_Tweet extends Fragment{
 				try{
 					if(adapter.getItemCount() > 0){
 						long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
-						return appClass.getTwitter().getUserTimeline(targetUser.getScreenName(),
+						return app.getTwitter().getUserTimeline(targetUser.getScreenName(),
 								new Paging(1, 50).maxId(tweetId - 1));
 					}else{
-						return appClass.getTwitter().getUserTimeline(targetUser.getScreenName(), new Paging(1, 50));
+						return app.getTwitter().getUserTimeline(targetUser.getScreenName(), new Paging(1, 50));
 					}
 				}catch(Exception e){
 					return null;

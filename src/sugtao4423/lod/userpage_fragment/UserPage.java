@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 
@@ -20,7 +20,7 @@ public class UserPage extends FragmentActivity{
 
 	private User target;
 	private UserPageFragmentPagerAdapter adapter;
-	private ApplicationClass appClass;
+	private App app;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -37,7 +37,7 @@ public class UserPage extends FragmentActivity{
 		strip.setDrawFullUnderline(true);
 		getActionBar().setDisplayShowHomeEnabled(false);
 
-		appClass = (ApplicationClass)UserPage.this.getApplicationContext();
+		app = (App)UserPage.this.getApplicationContext();
 
 		target = (User)getIntent().getSerializableExtra(INTENT_EXTRA_KEY_USER_OBJECT);
 		if(target != null){
@@ -49,7 +49,7 @@ public class UserPage extends FragmentActivity{
 			@Override
 			protected User doInBackground(Void... params){
 				try{
-					return appClass.getTwitter().showUser(getIntent().getStringExtra(INTENT_EXTRA_KEY_USER_SCREEN_NAME));
+					return app.getTwitter().showUser(getIntent().getStringExtra(INTENT_EXTRA_KEY_USER_SCREEN_NAME));
 				}catch(TwitterException e){
 					return null;
 				}
@@ -81,13 +81,13 @@ public class UserPage extends FragmentActivity{
 	@Override
 	public void onResume(){
 		super.onResume();
-		appClass.getUseTime().start();
+		app.getUseTime().start();
 	}
 
 	@Override
 	public void onPause(){
 		super.onPause();
-		appClass.getUseTime().stop();
+		app.getUseTime().stop();
 	}
 
 }

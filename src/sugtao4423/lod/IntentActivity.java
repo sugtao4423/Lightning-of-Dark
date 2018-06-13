@@ -33,11 +33,11 @@ public class IntentActivity extends Activity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
-		ApplicationClass appClass = (ApplicationClass)getApplicationContext();
+		App app = (App)getApplicationContext();
 
-		if(appClass.getTwitter() == null){
+		if(app.getTwitter() == null){
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-			appClass = (ApplicationClass)this.getApplicationContext();
+			app = (App)this.getApplicationContext();
 
 			if(pref.getString(Keys.ACCESS_TOKEN, "").equals("")){
 				startActivity(new Intent(this, StartOAuth.class));
@@ -99,12 +99,12 @@ public class IntentActivity extends Activity{
 	}
 
 	public void showStatus(long tweetId, final Context context, final boolean isClose){
-		final ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
+		final App app = (App)context.getApplicationContext();
 		new AsyncTask<Long, Void, Status>(){
 			@Override
 			protected twitter4j.Status doInBackground(Long... params){
 				try{
-					return appClass.getTwitter().showStatus(params[0]);
+					return app.getTwitter().showStatus(params[0]);
 				}catch(TwitterException e){
 					return null;
 				}

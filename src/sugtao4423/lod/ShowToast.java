@@ -19,12 +19,12 @@ public class ShowToast{
 	private SmartImageView icon;
 
 	public ShowToast(Context context, String text, int duration, Type toastType){
-		ApplicationClass appClass = (ApplicationClass)context.getApplicationContext();
+		App app = (App)context.getApplicationContext();
 
-		toastView = appClass.getToastView();
-		main_message = appClass.getToast_Main_Message();
-		tweet = appClass.getToast_Tweet();
-		icon = appClass.getToast_Icon();
+		toastView = app.getToastView();
+		main_message = app.getToast_Main_Message();
+		tweet = app.getToast_Tweet();
+		icon = app.getToast_Icon();
 
 		switch(toastType){
 		case NORMAL:

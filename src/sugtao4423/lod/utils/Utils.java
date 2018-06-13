@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.content.Context;
-import sugtao4423.lod.ApplicationClass;
+import sugtao4423.lod.App;
 import twitter4j.MediaEntity;
 import twitter4j.MediaEntity.Variant;
 
 public class Utils{
 
-	public static String[] getVideoURLsSortByBitrate(ApplicationClass appClass, MediaEntity[] mentitys){
+	public static String[] getVideoURLsSortByBitrate(App app, MediaEntity[] mentitys){
 		String[] urls = new String[0];
 		if(mentitys != null && mentitys.length > 0){
 			for(MediaEntity media : mentitys){
@@ -18,9 +18,9 @@ public class Utils{
 					ArrayList<VideoURLs> videos = new ArrayList<VideoURLs>();
 					for(Variant v : media.getVideoVariants()){
 						boolean find = false;
-						if(appClass.getOptions().getIsWebm() && v.getContentType().equals("video/webm"))
+						if(app.getOptions().getIsWebm() && v.getContentType().equals("video/webm"))
 							find = true;
-						else if(!appClass.getOptions().getIsWebm() && v.getContentType().equals("video/mp4"))
+						else if(!app.getOptions().getIsWebm() && v.getContentType().equals("video/mp4"))
 							find = true;
 
 						if(find)
