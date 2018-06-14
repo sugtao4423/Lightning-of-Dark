@@ -38,8 +38,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="twitter"
-                    android:scheme="lightning-of-dark" >
+                    android:host="localhost"
+                    android:pathPattern="/sugtao4423.lod/oauth.*"
+                    android:scheme="https" >
                 </data>
             </intent-filter>
         </activity>

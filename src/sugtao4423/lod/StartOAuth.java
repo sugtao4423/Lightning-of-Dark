@@ -1,6 +1,7 @@
 package sugtao4423.lod;
 
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
@@ -27,6 +28,8 @@ import sugtao4423.lod.utils.DBUtil;
 
 public class StartOAuth extends Activity{
 
+	public static final String CALLBACK_URL = "https://localhost/sugtao4423.lod/oauth";
+
 	private EditText customCK, customCS;
 	private Button ninsyobtn;
 	private String ck, cs;
@@ -40,7 +43,7 @@ public class StartOAuth extends Activity{
 		setContentView(R.layout.oauth);
 
 		TextView description = (TextView)findViewById(R.id.oauthDescription);
-		String descri = "Custom CK/CSを使う場合、CallbackURLを<br><font color=blue><u>https://twitter.com/lightning-of-dark</u></font><br>に設定してください。<br>（タップでコピー）";
+		String descri = "Custom CK/CSを使う場合、CallbackURLを<br><font color=blue><u>" + CALLBACK_URL + "</u></font><br>に設定してください。<br>（タップでコピー）";
 		description.setText(Html.fromHtml(descri));
 
 		customCK = (EditText)findViewById(R.id.edit_ck);
@@ -75,19 +78,21 @@ public class StartOAuth extends Activity{
 			protected Boolean doInBackground(Configuration... conf){
 				twitter = new TwitterFactory(conf[0]).getInstance();
 				try{
-					rt = twitter.getOAuthRequestToken("lightning-of-dark://twitter");
+					rt = twitter.getOAuthRequestToken(CALLBACK_URL);
 					return true;
-				}catch(Exception e){
+				}catch(TwitterException e){
 					return false;
 				}
 			}
 
 			@Override
 			public void onPostExecute(Boolean result){
-				if(result)
-					new ChromeIntent(StartOAuth.this, Uri.parse(rt.getAuthenticationURL()));
-				else
+				if(result){
+					Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(rt.getAuthenticationURL()));
+					startActivity(intent);
+				}else{
 					new ShowToast(getApplicationContext(), R.string.error_getRequestToken);
+				}
 			}
 		}.execute(conf);
 	}
@@ -95,7 +100,7 @@ public class StartOAuth extends Activity{
 	@Override
 	protected void onNewIntent(Intent intent){
 		super.onNewIntent(intent);
-		if(intent == null || intent.getData() == null || !intent.getData().toString().startsWith("lightning-of-dark://twitter"))
+		if(intent == null || intent.getData() == null || !intent.getData().toString().startsWith(CALLBACK_URL))
 			return;
 
 		final String verifier = intent.getData().getQueryParameter("oauth_verifier");
@@ -140,7 +145,7 @@ public class StartOAuth extends Activity{
 
 	public void copyClipBoardDescription(View v){
 		ClipboardManager clipboardManager = (ClipboardManager)this.getSystemService(Context.CLIPBOARD_SERVICE);
-		ClipData clipData = ClipData.newPlainText("Lightning of Dark", "https://twitter.com/lightning-of-dark");
+		ClipData clipData = ClipData.newPlainText("Lightning of Dark", CALLBACK_URL);
 		clipboardManager.setPrimaryClip(clipData);
 		new ShowToast(getApplicationContext(), R.string.done_clipBoardCopy);
 	}
