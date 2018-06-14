@@ -2,8 +2,6 @@ package sugtao4423.lod;
 
 import java.util.regex.Pattern;
 
-import com.loopj.android.image.SmartImageView;
-
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -19,8 +17,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 import sugtao4423.lod.dataclass.Music;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
@@ -40,10 +36,6 @@ public class App extends Application{
 	private Level level;
 	private UseTime useTime;
 	private Music music;
-	// MainActivity - CustomToast
-	private View customToast;
-	private TextView toast_main_message, toast_tweet;
-	private SmartImageView toast_icon;
 
 	private void twitterLogin(){
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -190,40 +182,6 @@ public class App extends Application{
 
 	public Music getMusic(){
 		return music;
-	}
-
-	/*
-	 * +-+-+-+-+-+-+-+-+-+-+-+
-	 * |C|u|s|t|o|m|T|o|a|s|t|
-	 * +-+-+-+-+-+-+-+-+-+-+-+
-	 */
-
-	public View getToastView(){
-		if(customToast == null){
-			customToast = View.inflate(this, R.layout.custom_toast, null);
-		}
-		return customToast;
-	}
-
-	public TextView getToast_Main_Message(){
-		if(toast_main_message == null){
-			toast_main_message = (TextView)getToastView().findViewById(R.id.toast_main_message);
-		}
-		return toast_main_message;
-	}
-
-	public TextView getToast_Tweet(){
-		if(toast_tweet == null){
-			toast_tweet = (TextView)getToastView().findViewById(R.id.toast_tweet);
-		}
-		return toast_tweet;
-	}
-
-	public SmartImageView getToast_Icon(){
-		if(toast_icon == null){
-			toast_icon = (SmartImageView)getToastView().findViewById(R.id.toast_icon);
-		}
-		return toast_icon;
 	}
 
 }

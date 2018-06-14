@@ -8,23 +8,22 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ShowToast{
+public class ShowToast extends Toast{
 
 	public enum Type{
 		NORMAL
 	}
 
-	private View toastView;
 	private TextView main_message, tweet;
 	private SmartImageView icon;
 
 	public ShowToast(Context context, String text, int duration, Type toastType){
-		App app = (App)context.getApplicationContext();
-
-		toastView = app.getToastView();
-		main_message = app.getToast_Main_Message();
-		tweet = app.getToast_Tweet();
-		icon = app.getToast_Icon();
+		super(context);
+		View v = View.inflate(context, R.layout.custom_toast, null);
+		main_message = (TextView)v.findViewById(R.id.toast_main_message);
+		tweet = (TextView)v.findViewById(R.id.toast_tweet);
+		icon = (SmartImageView)v.findViewById(R.id.toast_icon);
+		setView(v);
 
 		switch(toastType){
 		case NORMAL:
@@ -54,8 +53,6 @@ public class ShowToast{
 	}
 
 	public void normalToast(String text, Context context, int duration){
-		Toast toast = new Toast(context);
-
 		main_message.setText(text);
 		main_message.setTextColor(Color.WHITE);
 		main_message.setPadding(3, 2, 3, 2);
@@ -63,8 +60,7 @@ public class ShowToast{
 		tweet.setVisibility(View.GONE);
 		icon.setVisibility(View.GONE);
 
-		toast.setDuration(duration);
-		toast.setView(toastView);
-		toast.show();
+		setDuration(duration);
+		show();
 	}
 }
