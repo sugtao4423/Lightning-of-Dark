@@ -1,20 +1,16 @@
 package sugtao4423.lod.main_fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import sugtao4423.lod.App;
-import sugtao4423.lod.Keys;
+import sugtao4423.lod.dataclass.TwitterList;
 
 public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter{
 
 	private Context context;
-	private SharedPreferences pref;
-	private boolean showList;
-	private int listCount;
+	private App app;
 
 	private Fragment_mention fragmentMention;
 	private Fragment_home fragmentHome;
@@ -22,9 +18,7 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter{
 	public MainFragmentPagerAdapter(FragmentManager fm, Context context){
 		super(fm);
 		this.context = context;
-		pref = PreferenceManager.getDefaultSharedPreferences(context);
-		showList = pref.getBoolean(Keys.SHOW_LIST, false);
-		listCount = pref.getInt(Keys.SELECT_LIST_COUNT, 0);
+		this.app = (App)context.getApplicationContext();
 
 		fragmentMention = new Fragment_mention();
 		fragmentHome = new Fragment_home();
@@ -35,43 +29,29 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter{
 		switch(i){
 		case 0:
 			return fragmentMention;
-
 		case 1:
 			return fragmentHome;
-
-		}
-		if(showList && i > 1){
+		default:
 			return new Fragment_List(i - 2);
 		}
-		return null;
 	}
 
 	@Override
 	public int getCount(){
-		if(showList)
-			return listCount + 2;
-		else
-			return 2;
+		return app.getLists(context).length + 2;
 	}
 
 	@Override
 	public CharSequence getPageTitle(int position){
-		if(position > 1){
-			if(!pref.getString(Keys.SELECT_LIST_NAMES, "").equals("")){
-				String[] names = pref.getString(Keys.SELECT_LIST_NAMES, null).split(",", 0);
-
-				return names[position - 2];
-			}else{
-				return "List";
-			}
-		}
+		TwitterList[] lists = app.getLists(context);
 		switch(position){
 		case 0:
 			return "Mention";
 		case 1:
-			return "Home - Lv." + ((App)context.getApplicationContext()).getLevel().getLevel();
+			return "Home - Lv." + app.getLevel().getLevel();
+		default:
+			return lists[position - 2].getListName();
 		}
-		return null;
 	}
 
 	public Fragment_mention getFragmentMention(){

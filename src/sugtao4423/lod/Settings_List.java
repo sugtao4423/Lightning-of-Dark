@@ -19,7 +19,6 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.widget.Toast;
 import sugtao4423.lod.utils.DBUtil;
 
 public class Settings_List extends PreferenceActivity{
@@ -176,7 +175,6 @@ public class Settings_List extends PreferenceActivity{
 										dbUtil.updateSelectListCount(checkedSize, myScreenName);
 										dbUtil.updateSelectListIds(listIds, myScreenName);
 										dbUtil.updateSelectListNames(listNames, myScreenName);
-										dialog("リストを選択しました");
 										setSummary();
 									}
 								}).show();
@@ -186,23 +184,6 @@ public class Settings_List extends PreferenceActivity{
 					return false;
 				}
 			});
-		}
-
-		public void dialog(String title){
-			new AlertDialog.Builder(getActivity())
-			.setTitle(title)
-			.setMessage("アプリを再起動してください。")
-			.setPositiveButton("再起動", new OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialog, int which){
-					android.os.Process.killProcess(android.os.Process.myPid());
-				}
-			}).setNegativeButton("キャンセル", new OnClickListener(){
-				@Override
-				public void onClick(DialogInterface dialog, int which){
-					Toast.makeText(getActivity(), "大人しく再起動しような？", Toast.LENGTH_SHORT).show();
-				}
-			}).show();
 		}
 
 		public void setSummary(){

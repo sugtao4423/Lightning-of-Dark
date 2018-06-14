@@ -1,5 +1,6 @@
 package sugtao4423.lod;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 import twitter4j.Status;
@@ -13,12 +14,14 @@ import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 import sugtao4423.lod.dataclass.Music;
+import sugtao4423.lod.dataclass.TwitterList;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.usetime.UseTime;
 
@@ -30,8 +33,7 @@ public class App extends Application{
 	private Twitter twitter;
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
-	private TweetListAdapter[] listAdapters;
-	private boolean[] listAlreadyLoad;
+	private TwitterList[] lists;
 	private Options options;
 	private Level level;
 	private UseTime useTime;
@@ -132,22 +134,33 @@ public class App extends Application{
 		return mentionPattern;
 	}
 
-	// listAdapter
-	public void setListAdapters(TweetListAdapter[] listAdapters){
-		this.listAdapters = listAdapters;
+	// lists
+	public void resetLists(){
+		this.lists = null;
 	}
 
-	public TweetListAdapter[] getListAdapters(){
-		return listAdapters;
-	}
-
-	// list_AlreadyLoad
-	public void setListAlreadyLoad(boolean[] AlreadyLoad){
-		this.listAlreadyLoad = AlreadyLoad;
-	}
-
-	public boolean[] getListAlreadyLoad(){
-		return listAlreadyLoad;
+	public TwitterList[] getLists(Context context){
+		if(lists == null){
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			if(pref.getBoolean(Keys.SHOW_LIST, false) &&
+					!pref.getString(Keys.APP_START_LOAD_LISTS, "").equals("") && !pref.getString(Keys.SELECT_LIST_IDS, "").equals("")){
+				String[] listNames = pref.getString(Keys.SELECT_LIST_NAMES, "").split(",", 0);
+				String[] listIds = pref.getString(Keys.SELECT_LIST_IDS, "").split(",", 0);
+				String[] appStartLoadListNames = pref.getString(Keys.APP_START_LOAD_LISTS, "").split(",", 0);
+				lists = new TwitterList[listNames.length];
+				for(int i = 0; i < lists.length; i++){
+					TweetListAdapter adapter = new TweetListAdapter(context);
+					boolean isAlreadyLoad = false;
+					String listName = listNames[i];
+					long listId = Long.parseLong(listIds[i]);
+					boolean isAppStartLoad = Arrays.asList(appStartLoadListNames).contains(listName);
+					lists[i] = new TwitterList(adapter, isAlreadyLoad, listName, listId, isAppStartLoad);
+				}
+			}else{
+				lists = new TwitterList[0];
+			}
+		}
+		return lists;
 	}
 
 	// options
