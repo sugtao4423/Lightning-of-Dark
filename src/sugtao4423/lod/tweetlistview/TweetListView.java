@@ -62,7 +62,7 @@ class AlternatelyColor extends ItemDecoration{
 				view.setBackgroundResource(R.drawable.retweeted_by_me);
 			}else if(item.isRetweet()){
 				view.setBackgroundResource(R.drawable.retweet);
-			}else if(item.getUser().getScreenName().equals(app.getMyScreenName())){
+			}else if(item.getUser().getScreenName().equals(app.getCurrentAccount().getScreenName())){
 				view.setBackgroundResource(R.drawable.same_my_screenname);
 			}else if(app.getMentionPattern().matcher(item.getText()).find()){
 				view.setBackgroundResource(R.drawable.mention);

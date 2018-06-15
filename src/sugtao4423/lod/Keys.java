@@ -4,8 +4,6 @@ public class Keys{
 
 	public static final String CK = "ck";
 	public static final String CS = "cs";
-	public static final String CUSTOM_CK = "customCK";
-	public static final String CUSTOM_CS = "customCS";
 	public static final String ACCESS_TOKEN = "accessToken";
 	public static final String ACCESS_TOKEN_SECRET = "accessTokenSecret";
 	public static final String SCREEN_NAME = "screenName";

@@ -107,7 +107,7 @@ public class _0_detail extends Fragment{
 		userName.setText(target.getName());
 		userScreenName.setText("@" + target.getScreenName());
 
-		if(app.getMyScreenName().equals(target.getScreenName())){
+		if(app.getCurrentAccount().getScreenName().equals(target.getScreenName())){
 			sourceIcon.setVisibility(View.GONE);
 			targetIcon.setVisibility(View.GONE);
 			isFollowIcon.setVisibility(View.GONE);
@@ -182,7 +182,7 @@ public class _0_detail extends Fragment{
 			@Override
 			protected Relationship doInBackground(Void... params){
 				try{
-					return app.getTwitter().showFriendship(app.getMyScreenName(), target.getScreenName());
+					return app.getTwitter().showFriendship(app.getCurrentAccount().getScreenName(), target.getScreenName());
 				}catch(TwitterException e){
 					return null;
 				}

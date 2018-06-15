@@ -18,10 +18,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 import sugtao4423.lod.userpage_fragment.UserPage;
@@ -29,25 +27,19 @@ import sugtao4423.lod.utils.Regex;
 
 public class IntentActivity extends Activity{
 
+	private App app;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		app = (App)getApplicationContext();
 
-		App app = (App)getApplicationContext();
-
-		if(app.getTwitter() == null){
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-			app = (App)this.getApplicationContext();
-
-			if(pref.getString(Keys.ACCESS_TOKEN, "").equals("")){
-				startActivity(new Intent(this, StartOAuth.class));
-				finish();
-			}else{
-				jump();
-			}
-		}else{
-			jump();
+		if(!app.haveAccount()){
+			startActivity(new Intent(this, StartOAuth.class));
+			finish();
+			return;
 		}
+		jump();
 	}
 
 	public void jump(){
@@ -99,7 +91,6 @@ public class IntentActivity extends Activity{
 	}
 
 	public void showStatus(long tweetId, final Context context, final boolean isClose){
-		final App app = (App)context.getApplicationContext();
 		new AsyncTask<Long, Void, Status>(){
 			@Override
 			protected twitter4j.Status doInBackground(Long... params){

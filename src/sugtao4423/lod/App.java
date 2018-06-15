@@ -20,16 +20,18 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
+import sugtao4423.lod.dataclass.Account;
 import sugtao4423.lod.dataclass.Music;
 import sugtao4423.lod.dataclass.TwitterList;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.usetime.UseTime;
+import sugtao4423.lod.utils.DBUtil;
 
 public class App extends Application{
 
+	private Account account;
 	private Typeface fontAwesomeTypeface;
 	// MainActivity
-	private String myScreenName;
 	private Twitter twitter;
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
@@ -39,24 +41,42 @@ public class App extends Application{
 	private UseTime useTime;
 	private Music music;
 
+	public void resetCurrentAccount(){
+		account = null;
+	}
+
+	public Account getCurrentAccount(){
+		if(account == null){
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			account = new DBUtil(getApplicationContext()).getAccount(pref.getString(Keys.SCREEN_NAME, ""));
+			if(account == null){
+				account = new Account("", "", "", "", "", false, 0, "", "", "");
+			}
+		}
+		return account;
+	}
+
+	public boolean haveAccount(){
+		return !(getCurrentAccount().getScreenName().equals("") || getCurrentAccount().getAccessToken().equals("") ||
+				getCurrentAccount().getAccessTokenSecret().equals(""));
+	}
+
 	private void twitterLogin(){
-		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		String ck, cs;
-		if(pref.getString(Keys.CUSTOM_CK, "").equals("")){
+		if(getCurrentAccount().getConsumerKey().equals("")){
 			ck = getString(R.string.CK);
 			cs = getString(R.string.CS);
 		}else{
-			ck = pref.getString(Keys.CUSTOM_CK, null);
-			cs = pref.getString(Keys.CUSTOM_CS, null);
+			ck = getCurrentAccount().getConsumerKey();
+			cs = getCurrentAccount().getConsumerSecret();
 		}
-		AccessToken accessToken = new AccessToken(pref.getString(Keys.ACCESS_TOKEN, ""), pref.getString(Keys.ACCESS_TOKEN_SECRET, ""));
+		AccessToken accessToken = new AccessToken(getCurrentAccount().getAccessToken(), getCurrentAccount().getAccessTokenSecret());
 
 		Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).setTweetModeExtended(true).build();
 		Twitter twitter = new TwitterFactory(conf).getInstance(accessToken);
-		this.myScreenName = pref.getString(Keys.SCREEN_NAME, "");
 		this.twitter = twitter;
 		this.twitterStream = new TwitterStreamFactory(conf).getInstance(accessToken);
-		this.mentionPattern = Pattern.compile(".*@" + myScreenName + ".*", Pattern.DOTALL);
+		this.mentionPattern = Pattern.compile(".*@" + getCurrentAccount().getScreenName() + ".*", Pattern.DOTALL);
 	}
 
 	public void updateStatus(final StatusUpdate status){
@@ -65,7 +85,7 @@ public class App extends Application{
 			@Override
 			protected twitter4j.Status doInBackground(Void... params){
 				try{
-					return twitter.updateStatus(status);
+					return getTwitter().updateStatus(status);
 				}catch(TwitterException e){
 					return null;
 				}
@@ -100,17 +120,9 @@ public class App extends Application{
 	 */
 
 	public void resetTwitter(){
-		this.myScreenName = null;
 		this.twitter = null;
 		this.twitterStream = null;
 		this.mentionPattern = null;
-	}
-
-	// MyScreenName
-	public String getMyScreenName(){
-		if(myScreenName == null)
-			twitterLogin();
-		return myScreenName;
 	}
 
 	// Twitter
@@ -141,12 +153,11 @@ public class App extends Application{
 
 	public TwitterList[] getLists(Context context){
 		if(lists == null){
-			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			if(pref.getBoolean(Keys.SHOW_LIST, false) &&
-					!pref.getString(Keys.APP_START_LOAD_LISTS, "").equals("") && !pref.getString(Keys.SELECT_LIST_IDS, "").equals("")){
-				String[] listNames = pref.getString(Keys.SELECT_LIST_NAMES, "").split(",", 0);
-				String[] listIds = pref.getString(Keys.SELECT_LIST_IDS, "").split(",", 0);
-				String[] appStartLoadListNames = pref.getString(Keys.APP_START_LOAD_LISTS, "").split(",", 0);
+			if(getCurrentAccount().getShowList() &&
+					!getCurrentAccount().getStartAppLoadLists().equals("") && !getCurrentAccount().getSelectListIds().equals("")){
+				String[] listNames = getCurrentAccount().getSelectListNames().split(",", 0);
+				String[] listIds = getCurrentAccount().getSelectListIds().split(",", 0);
+				String[] appStartLoadListNames = getCurrentAccount().getStartAppLoadLists().split(",", 0);
 				lists = new TwitterList[listNames.length];
 				for(int i = 0; i < lists.length; i++){
 					TweetListAdapter adapter = new TweetListAdapter(context);

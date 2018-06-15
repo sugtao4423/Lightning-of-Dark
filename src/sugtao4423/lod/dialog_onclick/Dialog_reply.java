@@ -30,7 +30,7 @@ public class Dialog_reply implements OnClickListener{
 		this.status = status;
 		this.context = context;
 		this.dialog = dialog;
-		this.myScreenName = ((App)context.getApplicationContext()).getMyScreenName();
+		this.myScreenName = ((App)context.getApplicationContext()).getCurrentAccount().getScreenName();
 	}
 
 	@Override

@@ -14,8 +14,7 @@
 
 ## マルチアカウント
 [このCommit](https://github.com/sugtao4423/Lightning-of-Dark/tree/e10f6d80e89f9159e95ba101f2f3a82b506d38ea)から使えるように。  
-SQLiteで管理しています。  
-基本的にはSharedPreferencesに保存していて、アカウントを変える際などにSQLiteから読みだしてSharedPreferencesに保存してActivityを再起動という方法。
+SQLiteで管理しています。
 
 ## 使ってみたい方へ
 /res/values/strings.xml  

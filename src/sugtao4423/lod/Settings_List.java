@@ -8,7 +8,6 @@ import twitter4j.UserList;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import sugtao4423.lod.utils.DBUtil;
@@ -48,7 +46,7 @@ public class Settings_List extends PreferenceActivity{
 			dbUtil = new DBUtil(getActivity());
 
 			app = (App)getActivity().getApplicationContext();
-			myScreenName = app.getMyScreenName();
+			myScreenName = app.getCurrentAccount().getScreenName();
 
 			setSummary();
 
@@ -102,9 +100,8 @@ public class Settings_List extends PreferenceActivity{
 									String appStartLoadLists = "";
 									for(int i = 0; i < selectLoadList.size(); i++)
 										appStartLoadLists += selectLoadList.get(i) + ",";
-									SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-									pref.edit().putString(Keys.APP_START_LOAD_LISTS, appStartLoadLists).commit();
 									dbUtil.updateStartAppLoadLists(appStartLoadLists, myScreenName);
+									app.resetCurrentAccount();
 									setSummary();
 								}
 							}).setNegativeButton("キャンセル", null);
@@ -166,15 +163,10 @@ public class Settings_List extends PreferenceActivity{
 											listIds += checkedList.get(i).getId() + ",";
 										}
 
-										SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-										pref.edit()
-											.putInt(Keys.SELECT_LIST_COUNT, checkedSize)
-											.putString(Keys.SELECT_LIST_IDS, listIds)
-											.putString(Keys.SELECT_LIST_NAMES, listNames)
-										.commit();
 										dbUtil.updateSelectListCount(checkedSize, myScreenName);
 										dbUtil.updateSelectListIds(listIds, myScreenName);
 										dbUtil.updateSelectListNames(listNames, myScreenName);
+										app.resetCurrentAccount();
 										setSummary();
 									}
 								}).show();

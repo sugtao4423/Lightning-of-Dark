@@ -2,7 +2,7 @@ package sugtao4423.lod.dataclass;
 
 public class Account{
 
-	private String screen_name;
+	private String screenName;
 	private String consumerKey;
 	private String consumerSecret;
 	private String accessToken;
@@ -13,9 +13,9 @@ public class Account{
 	private String selectListNames;
 	private String startAppLoadLists;
 
-	public Account(String screen_name, String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret,
+	public Account(String screenName, String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret,
 			boolean showList, int selectListCount, String selectListIds, String selectListNames, String startAppLoadLists){
-		this.screen_name = screen_name;
+		this.screenName = screenName;
 		this.consumerKey = consumerKey;
 		this.consumerSecret = consumerSecret;
 		this.accessToken = accessToken;
@@ -28,22 +28,22 @@ public class Account{
 	}
 
 	public String getScreenName(){
-		return screen_name;
+		return screenName;
 	}
 
-	public String getCK(){
+	public String getConsumerKey(){
 		return consumerKey;
 	}
 
-	public String getCS(){
+	public String getConsumerSecret(){
 		return consumerSecret;
 	}
 
-	public String getAT(){
+	public String getAccessToken(){
 		return accessToken;
 	}
 
-	public String getATS(){
+	public String getAccessTokenSecret(){
 		return accessTokenSecret;
 	}
 

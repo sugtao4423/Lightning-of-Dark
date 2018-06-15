@@ -59,7 +59,7 @@ public class TweetActivity extends Activity{
 		setTypeface();
 
 		TextView tweetAccount = (TextView)findViewById(R.id.tweetAccount);
-		tweetAccount.setText("@" + app.getMyScreenName());
+		tweetAccount.setText("@" + app.getCurrentAccount().getScreenName());
 
 		tweetText = (EditText)findViewById(R.id.tweetText);
 		moji140 = (TextView)findViewById(R.id.moji140);
@@ -106,7 +106,7 @@ public class TweetActivity extends Activity{
 			mentionUsers.add(status.getUser().getScreenName());
 			UserMentionEntity[] mentionEntitys = status.getUserMentionEntities();
 			for(UserMentionEntity mention : mentionEntitys){
-				if(mention.getScreenName().equals(app.getMyScreenName()) || mentionUsers.indexOf(mention.getScreenName()) != -1)
+				if(mention.getScreenName().equals(app.getCurrentAccount().getScreenName()) || mentionUsers.indexOf(mention.getScreenName()) != -1)
 					continue;
 				mentionUsers.add(mention.getScreenName());
 			}

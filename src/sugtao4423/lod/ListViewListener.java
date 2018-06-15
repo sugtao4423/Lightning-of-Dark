@@ -178,7 +178,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 		dialogBtn[5].setOnClickListener(new Dialog_deletePost(status, context, dialog));
 
 		dialogBtn[4].setEnabled(status.getInReplyToStatusId() > 0);
-		dialogBtn[5].setEnabled(status.getUser().getScreenName().equals(((App)context.getApplicationContext()).getMyScreenName()));
+		dialogBtn[5].setEnabled(status.getUser().getScreenName().equals(((App)context.getApplicationContext()).getCurrentAccount().getScreenName()));
 	}
 
 }

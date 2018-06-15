@@ -14,11 +14,9 @@ import twitter4j.UserStreamAdapter;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
@@ -38,7 +36,6 @@ public class MainActivity extends FragmentActivity{
 	private Pattern mentionPattern;
 
 	private App app;
-	private SharedPreferences pref;
 	private boolean resetFlag;
 
 	private Fragment_mention fragmentMention;
@@ -53,16 +50,14 @@ public class MainActivity extends FragmentActivity{
 		super.onCreate(savedInstanceState);
 		getActionBar().hide();
 		setContentView(R.layout.activity_main);
-
 		app = (App)getApplicationContext();
-		pref = PreferenceManager.getDefaultSharedPreferences(this);
 
 		MainFragmentPagerAdapter pagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager(), this);
 
 		ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(1);
-		viewPager.setOffscreenPageLimit(pref.getInt(Keys.SELECT_LIST_COUNT, 0) + 1);
+		viewPager.setOffscreenPageLimit(app.getCurrentAccount().getSelectListCount() + 1);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.mainPagerTabStrip);
 		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabText)));
@@ -76,7 +71,7 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void logIn(){
-		if(pref.getString(Keys.ACCESS_TOKEN, "").equals("")){
+		if(!app.haveAccount()){
 			startActivity(new Intent(this, StartOAuth.class));
 			finish();
 		}else{
@@ -239,6 +234,7 @@ public class MainActivity extends FragmentActivity{
 	public void onDestroy(){
 		super.onDestroy();
 		unregisterReceiver(musicReceiver);
+		app.resetCurrentAccount();
 		app.resetTwitter();
 		app.resetLists();
 		if(resetFlag){

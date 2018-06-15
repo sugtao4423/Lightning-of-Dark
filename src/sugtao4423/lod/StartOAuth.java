@@ -13,7 +13,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,10 +29,10 @@ public class StartOAuth extends Activity{
 
 	public static final String CALLBACK_URL = "https://localhost/sugtao4423.lod/oauth";
 
+	private App app;
 	private EditText customCK, customCS;
 	private Button ninsyobtn;
 	private String ck, cs;
-	private SharedPreferences pref;
 
 	private Twitter twitter;
 	private RequestToken rt;
@@ -41,6 +40,7 @@ public class StartOAuth extends Activity{
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.oauth);
+		app = (App)getApplicationContext();
 
 		TextView description = (TextView)findViewById(R.id.oauthDescription);
 		String descri = "Custom CK/CSを使う場合、CallbackURLを<br><font color=blue><u>" + CALLBACK_URL + "</u></font><br>に設定してください。<br>（タップでコピー）";
@@ -51,21 +51,18 @@ public class StartOAuth extends Activity{
 
 		ninsyobtn = (Button)findViewById(R.id.ninsyo);
 
-		pref = PreferenceManager.getDefaultSharedPreferences(this);
-
-		customCK.setText(pref.getString(Keys.CUSTOM_CK, ""));
-		customCS.setText(pref.getString(Keys.CUSTOM_CS, ""));
+		customCK.setText(app.getCurrentAccount().getConsumerKey());
+		customCS.setText(app.getCurrentAccount().getConsumerSecret());
 	}
 
 	public void ninsyo(View v){
 		ninsyobtn.setEnabled(false);
-		if(customCK.getText().toString().equals("")){
+		if(customCK.getText().toString().isEmpty()){
 			ck = getString(R.string.CK);
 			cs = getString(R.string.CS);
 		}else{
 			ck = customCK.getText().toString();
 			cs = customCS.getText().toString();
-			pref.edit().putString(Keys.CUSTOM_CK, ck).putString(Keys.CUSTOM_CS, cs).commit();
 		}
 
 		Configuration conf = new ConfigurationBuilder()
@@ -118,10 +115,9 @@ public class StartOAuth extends Activity{
 			@Override
 			protected void onPostExecute(AccessToken accessToken){
 				if(accessToken != null){
-					pref.edit()
+					PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
+					.edit()
 						.putString(Keys.SCREEN_NAME, accessToken.getScreenName())
-						.putString(Keys.ACCESS_TOKEN, accessToken.getToken())
-						.putString(Keys.ACCESS_TOKEN_SECRET, accessToken.getTokenSecret())
 					.commit();
 
 					if(ck.equals(getString(R.string.CK)))
@@ -130,9 +126,9 @@ public class StartOAuth extends Activity{
 						cs = "";
 
 					Account account = new Account(accessToken.getScreenName(), ck, cs,
-							accessToken.getToken(), accessToken.getTokenSecret(), false, 0, "-1", "", "");
+							accessToken.getToken(), accessToken.getTokenSecret(), false, 0, "", "", "");
 					new DBUtil(StartOAuth.this).addAcount(account);
-
+					app.resetCurrentAccount();
 					new ShowToast(getApplicationContext(), R.string.success_addAccount);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
 				}else{

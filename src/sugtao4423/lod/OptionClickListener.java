@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -127,19 +126,18 @@ public class OptionClickListener implements OnClickListener{
 	}
 
 	public void accountSelect(){
-		final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-		final String myScreenName = pref.getString(Keys.SCREEN_NAME, "");
+		final String myScreenName = ((App)context.getApplicationContext()).getCurrentAccount().getScreenName();
 		final DBUtil dbUtil = new DBUtil(context);
 		final Account[] accounts = dbUtil.getAccounts();
-		ArrayList<String> screen_names = new ArrayList<String>();
+		ArrayList<String> screenNames = new ArrayList<String>();
 		for(Account acc : accounts){
 			if(acc.getScreenName().equals(myScreenName))
-				screen_names.add("@" + acc.getScreenName() + " (now)");
+				screenNames.add("@" + acc.getScreenName() + " (now)");
 			else
-				screen_names.add("@" + acc.getScreenName());
+				screenNames.add("@" + acc.getScreenName());
 		}
-		screen_names.add("アカウントを追加");
-		final String[] nameDialog = (String[])screen_names.toArray(new String[0]);
+		screenNames.add("アカウントを追加");
+		final String[] nameDialog = (String[])screenNames.toArray(new String[0]);
 		new AlertDialog.Builder(context)
 		.setItems(nameDialog, new OnClickListener(){
 			@Override
@@ -152,18 +150,11 @@ public class OptionClickListener implements OnClickListener{
 					.setPositiveButton("切り替え", new OnClickListener(){
 						@Override
 						public void onClick(DialogInterface dialog, int w){
-							pref.edit()
+							PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext())
+							.edit()
 								.putString(Keys.SCREEN_NAME, accounts[which].getScreenName())
-								.putString(Keys.CUSTOM_CK, accounts[which].getCK())
-								.putString(Keys.CUSTOM_CS, accounts[which].getCS())
-								.putString(Keys.ACCESS_TOKEN, accounts[which].getAT())
-								.putString(Keys.ACCESS_TOKEN_SECRET, accounts[which].getATS())
-								.putBoolean(Keys.SHOW_LIST, accounts[which].getShowList())
-								.putInt(Keys.SELECT_LIST_COUNT, accounts[which].getSelectListCount())
-								.putString(Keys.SELECT_LIST_IDS, accounts[which].getSelectListIds())
-								.putString(Keys.SELECT_LIST_NAMES, accounts[which].getSelectListNames())
-								.putString(Keys.APP_START_LOAD_LISTS, accounts[which].getStartAppLoadLists())
 							.commit();
+							((App)context.getApplicationContext()).resetCurrentAccount();
 							((MainActivity)context).restart();
 						}
 					}).setNegativeButton("削除", new OnClickListener(){
