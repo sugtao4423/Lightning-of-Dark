@@ -1,7 +1,6 @@
 package sugtao4423.lod;
 
 import java.io.File;
-import java.util.regex.Pattern;
 
 import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.Paging;
@@ -9,19 +8,18 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.TwitterStream;
 import twitter4j.UserStreamAdapter;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.Toast;
 import sugtao4423.icondialog.IconDialog;
 import sugtao4423.icondialog.IconItem;
 import sugtao4423.lod.dataclass.TwitterList;
@@ -31,11 +29,8 @@ import sugtao4423.lod.main_fragment.MainFragmentPagerAdapter;
 
 public class MainActivity extends FragmentActivity{
 
-	private Twitter twitter;
-	private TwitterStream twitterStream;
-	private Pattern mentionPattern;
-
 	private App app;
+	private Twitter twitter;
 	private boolean resetFlag;
 
 	private Fragment_mention fragmentMention;
@@ -76,8 +71,6 @@ public class MainActivity extends FragmentActivity{
 			finish();
 		}else{
 			twitter = app.getTwitter();
-			twitterStream = app.getTwitterStream();
-			mentionPattern = app.getMentionPattern();
 			getTimeLine();
 			connectStreaming();
 		}
@@ -137,46 +130,45 @@ public class MainActivity extends FragmentActivity{
 	}
 
 	public void connectStreaming(){
-		try{
-			// UserStreamAdapter
-			UserStreamAdapter streamAdapter = new UserStreamAdapter(){
-				@Override
-				public void onStatus(final Status status){
-					fragmentHome.insert(status);
-					if(mentionPattern.matcher(status.getText()).find() && !status.isRetweet())
-						fragmentMention.insert(status);
-				}
-			};
-			// ConnectionLifeCycleListener
-			ConnectionLifeCycleListener clcl = new ConnectionLifeCycleListener(){
-				@Override
-				public void onDisconnect(){
-					toast("接続が切れました");
-				}
+		UserStreamAdapter streamAdapter = new UserStreamAdapter(){
+			@Override
+			public void onStatus(final Status status){
+				fragmentHome.insert(status);
+				if(app.getMentionPattern().matcher(status.getText()).find() && !status.isRetweet())
+					fragmentMention.insert(status);
+			}
+		};
+		ConnectionLifeCycleListener clcl = new ConnectionLifeCycleListener(){
+			@Override
+			public void onDisconnect(){
+				toast("接続が切れました");
+			}
 
-				@Override
-				public void onConnect(){
-					toast("接続しました");
-				}
+			@Override
+			public void onConnect(){
+				toast("接続しました");
+			}
 
-				@Override
-				public void onCleanUp(){
-				}
+			@Override
+			public void onCleanUp(){
+			}
 
-				public void toast(final String text){
-					MainActivity.this.runOnUiThread(new Runnable(){
-						@Override
-						public void run(){
-							new ShowToast(getApplicationContext(), text);
-						}
-					});
-				}
-			};
-			twitterStream.addListener(streamAdapter);
-			twitterStream.addConnectionLifeCycleListener(clcl);
-			twitterStream.user();
-		}catch(Exception e){
-			new ShowToast(getApplicationContext(), getString(R.string.error_streaming) + "\n" + e.toString(), Toast.LENGTH_LONG);
+			public void toast(final String text){
+				MainActivity.this.runOnUiThread(new Runnable(){
+					@Override
+					public void run(){
+						new ShowToast(getApplicationContext(), text);
+					}
+				});
+			}
+		};
+		Intent intent = new Intent(this, UserStreamService.class);
+		app.setUserStreamAdapter(streamAdapter);
+		app.setConnectionLifeCycleListener(clcl);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+			startForegroundService(intent);
+		}else{
+			startService(intent);
 		}
 	}
 
@@ -234,21 +226,13 @@ public class MainActivity extends FragmentActivity{
 	public void onDestroy(){
 		super.onDestroy();
 		unregisterReceiver(musicReceiver);
+		stopService(new Intent(this, UserStreamService.class));
 		app.resetCurrentAccount();
 		app.resetTwitter();
 		app.resetLists();
 		if(resetFlag){
 			resetFlag = false;
 			startActivity(new Intent(this, MainActivity.class));
-		}else{
-			new AsyncTask<Void, Void, Void>(){
-				@Override
-				protected Void doInBackground(Void... params){
-					if(twitterStream != null)
-						twitterStream.shutdown();
-					return null;
-				}
-			}.execute();
 		}
 		clearThumbnailCache();
 	}

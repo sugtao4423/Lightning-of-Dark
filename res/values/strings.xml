@@ -32,7 +32,6 @@
     <string name="regResultCount">%1$d件中 %2$d件見つかりました</string>
 
     <string name="error_getStatus">ツイートの取得に失敗しました</string>
-    <string name="error_streaming">ストリーミング系のエラー</string>
     <string name="edittext_empty">なにも入力されていません</string>
     <string name="deleteAccountX">\@%s を削除しました</string>
     <string name="listNotSelected">リストが選択されていません</string>
@@ -40,7 +39,6 @@
     <string name="success_addAccount">アカウントを追加しました</string>
     <string name="error_getAccessToken">アクセストークンの取得に失敗しました</string>
     <string name="done_clipBoardCopy">クリップボードにコピーしました</string>
-    <string name="urlNotMatchPattern">URLがパターンにマッチしませんでした</string>
     <string name="urlNotMatchPatternDontSave">URLがパターンにマッチしません\n保存できませんでした</string>
     <string name="error_getOriginalImage">オリジナル画像の取得に失敗しました</string>
     <string name="error_getUserDetail">ユーザー情報を取得できませんでした</string>

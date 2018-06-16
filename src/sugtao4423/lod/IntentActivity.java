@@ -1,13 +1,7 @@
 package sugtao4423.lod;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 
 import twitter4j.Status;
 import twitter4j.TwitterException;
@@ -18,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
@@ -51,17 +46,11 @@ public class IntentActivity extends Activity{
 			if(status.find()){
 				showStatus(Long.parseLong(status.group(2)), IntentActivity.this, true);
 			}else if(share.find()){
-				List<NameValuePair> params;
-				try{
-					params = URLEncodedUtils.parse(new URI(uri), "UTF-8");
-				}catch(URISyntaxException e){
-					new ShowToast(getApplicationContext(), R.string.urlNotMatchPattern);
-					finish();
-					return;
-				}
+				Uri shareUri = Uri.parse(uri);
 				HashMap<String, String> map = new HashMap<String, String>();
-				for(NameValuePair param : params)
-					map.put(param.getName(), param.getValue());
+				for(String name : shareUri.getQueryParameterNames()){
+					map.put(name, shareUri.getQueryParameter(name));
+				}
 				String text = (map.get("text") == null ? "" : (map.get("text") + " ")) +
 						(map.get("url") == null ? "" : (map.get("url") + " ")) +
 						(map.get("hashtags") == null ? "" : ("#" + map.get("hashtags").replace(",", " #") + " ")) +

@@ -3,6 +3,7 @@ package sugtao4423.lod;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -10,6 +11,7 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
+import twitter4j.UserStreamAdapter;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
@@ -35,6 +37,8 @@ public class App extends Application{
 	private Twitter twitter;
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
+	private UserStreamAdapter userStreamAdapter;
+	private ConnectionLifeCycleListener clcl;
 	private TwitterList[] lists;
 	private Options options;
 	private Level level;
@@ -144,6 +148,24 @@ public class App extends Application{
 		if(mentionPattern == null)
 			twitterLogin();
 		return mentionPattern;
+	}
+
+	// UserStreamAdapter
+	public void setUserStreamAdapter(UserStreamAdapter userStreamAdapter){
+		this.userStreamAdapter = userStreamAdapter;
+	}
+
+	public UserStreamAdapter getUserStreamAdapter(){
+		return userStreamAdapter;
+	}
+
+	// ConnectionLifeCycleListener
+	public void setConnectionLifeCycleListener(ConnectionLifeCycleListener clcl){
+		this.clcl = clcl;
+	}
+
+	public ConnectionLifeCycleListener getConnectionLifeCycleListener(){
+		return clcl;
 	}
 
 	// lists
