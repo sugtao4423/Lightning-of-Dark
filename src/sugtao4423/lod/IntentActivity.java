@@ -5,15 +5,15 @@ import java.util.regex.Matcher;
 
 import twitter4j.Status;
 import twitter4j.TwitterException;
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
@@ -21,6 +21,8 @@ import sugtao4423.lod.userpage_fragment.UserPage;
 import sugtao4423.lod.utils.Regex;
 
 public class IntentActivity extends Activity{
+
+	public static final String TWEET_ID = "tweetId";
 
 	private App app;
 
@@ -34,7 +36,13 @@ public class IntentActivity extends Activity{
 			finish();
 			return;
 		}
-		jump();
+
+		long tweetId = getIntent().getLongExtra(TWEET_ID, -1);
+		if(tweetId == -1){
+			jump();
+		}else{
+			showStatus(tweetId);
+		}
 	}
 
 	public void jump(){
@@ -44,7 +52,7 @@ public class IntentActivity extends Activity{
 			Matcher share = Regex.shareUrl.matcher(uri);
 			Matcher user = Regex.userUrl.matcher(uri);
 			if(status.find()){
-				showStatus(Long.parseLong(status.group(2)), IntentActivity.this, true);
+				showStatus(Long.parseLong(status.group(2)));
 			}else if(share.find()){
 				Uri shareUri = Uri.parse(uri);
 				HashMap<String, String> map = new HashMap<String, String>();
@@ -79,7 +87,7 @@ public class IntentActivity extends Activity{
 		}
 	}
 
-	public void showStatus(long tweetId, final Context context, final boolean isClose){
+	public void showStatus(long tweetId){
 		new AsyncTask<Long, Void, Status>(){
 			@Override
 			protected twitter4j.Status doInBackground(Long... params){
@@ -90,27 +98,27 @@ public class IntentActivity extends Activity{
 				}
 			}
 
-			@SuppressLint("NewApi")
+			@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 			@Override
 			protected void onPostExecute(twitter4j.Status status){
 				if(status != null){
-					TweetListView l = new TweetListView(context);
-					TweetListAdapter adapter = new TweetListAdapter(context);
+					TweetListView l = new TweetListView(IntentActivity.this);
+					TweetListAdapter adapter = new TweetListAdapter(IntentActivity.this);
 					adapter.add(status);
 					l.setAdapter(adapter);
 					adapter.setOnItemClickListener(new ListViewListener());
 					adapter.setOnItemLongClickListener(new ListViewListener());
-					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					AlertDialog.Builder builder = new AlertDialog.Builder(IntentActivity.this);
 					builder.setView(l);
-					if(isClose){
-						builder.setOnDismissListener(new OnDismissListener(){
-							@Override
-							public void onDismiss(DialogInterface dialog){
-								((Activity)context).finish();
-							}
-						});
-					}
-					builder.show();
+					builder.setOnDismissListener(new OnDismissListener(){
+						@Override
+						public void onDismiss(DialogInterface dialog){
+							finish();
+						}
+					});
+					AlertDialog dialog = builder.create();
+					dialog.getWindow().setDimAmount(0f);
+					dialog.show();
 				}else{
 					new ShowToast(getApplicationContext(), R.string.error_getStatus);
 				}
