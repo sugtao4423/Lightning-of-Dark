@@ -26,17 +26,16 @@ import sugtao4423.lod.tweetlistview.TweetListView;
 
 public class Fragment_List extends Fragment{
 
+	public static final String LIST_INDEX = "listIndex";
+
 	private App app;
 	private TwitterList thisList;
 	private SwipeRefreshLayout pulltoRefresh;
 	private int listIndex;
 
-	public Fragment_List(int index){
-		listIndex = index;
-	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
+		listIndex = getArguments().getInt(LIST_INDEX);
 		View v = inflater.inflate(R.layout.fragment_list, container, false);
 		app = (App)getActivity().getApplicationContext();
 		thisList = app.getLists(container.getContext())[listIndex];

@@ -1,6 +1,7 @@
 package sugtao4423.lod.main_fragment;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -32,7 +33,11 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter{
 		case 1:
 			return fragmentHome;
 		default:
-			return new Fragment_List(i - 2);
+			Fragment_List list = new Fragment_List();
+			Bundle args = new Bundle();
+			args.putInt(Fragment_List.LIST_INDEX, i - 2);
+			list.setArguments(args);
+			return list;
 		}
 	}
 
