@@ -31,7 +31,7 @@ public class _1_Tweet extends Fragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View v = View.inflate(container.getContext(), R.layout.user_1, null);
+		View v = inflater.inflate(R.layout.user_1, container, false);
 		app = (App)container.getContext().getApplicationContext();
 
 		TweetListView userTweet = (TweetListView)v.findViewById(R.id.UserPageList);

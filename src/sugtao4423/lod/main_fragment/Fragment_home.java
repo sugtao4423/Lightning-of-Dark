@@ -32,7 +32,7 @@ public class Fragment_home extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		app = (App)container.getContext().getApplicationContext();
 		handler = new Handler();
-		View v = View.inflate(container.getContext(), R.layout.fragment_list, null);
+		View v = inflater.inflate(R.layout.fragment_list, container, false);
 
 		list = (TweetListView)v.findViewById(R.id.listLine);
 		llm = list.getLinearLayoutManager();

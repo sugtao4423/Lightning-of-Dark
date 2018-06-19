@@ -50,7 +50,7 @@ public class _0_detail extends Fragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View v = View.inflate(container.getContext(), R.layout.user_0, null);
+		View v = inflater.inflate(R.layout.user_0, container, false);
 
 		app = (App)getActivity().getApplicationContext();
 

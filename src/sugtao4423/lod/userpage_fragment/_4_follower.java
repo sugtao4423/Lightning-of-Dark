@@ -31,7 +31,7 @@ public class _4_follower extends Fragment{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
-		View v = View.inflate(container.getContext(), R.layout.user_1, null);
+		View v = inflater.inflate(R.layout.user_1, container, false);
 		app = (App)container.getContext().getApplicationContext();
 		cursor = -1L;
 
