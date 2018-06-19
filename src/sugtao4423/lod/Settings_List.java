@@ -101,7 +101,7 @@ public class Settings_List extends PreferenceActivity{
 									for(int i = 0; i < selectLoadList.size(); i++)
 										appStartLoadLists += selectLoadList.get(i) + ",";
 									dbUtil.updateStartAppLoadLists(appStartLoadLists, myScreenName);
-									app.resetCurrentAccount();
+									app.resetAccount();
 									setSummary();
 								}
 							}).setNegativeButton("キャンセル", null);
@@ -166,7 +166,7 @@ public class Settings_List extends PreferenceActivity{
 										dbUtil.updateSelectListCount(checkedSize, myScreenName);
 										dbUtil.updateSelectListIds(listIds, myScreenName);
 										dbUtil.updateSelectListNames(listNames, myScreenName);
-										app.resetCurrentAccount();
+										app.resetAccount();
 										setSummary();
 									}
 								}).show();

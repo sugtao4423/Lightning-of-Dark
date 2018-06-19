@@ -154,7 +154,6 @@ public class OptionClickListener implements OnClickListener{
 							.edit()
 								.putString(Keys.SCREEN_NAME, accounts[which].getScreenName())
 							.commit();
-							((App)context.getApplicationContext()).resetCurrentAccount();
 							((MainActivity)context).restart();
 						}
 					}).setNegativeButton("削除", new OnClickListener(){

@@ -135,7 +135,7 @@ public class StartOAuth extends Activity{
 					Account account = new Account(accessToken.getScreenName(), ck, cs,
 							accessToken.getToken(), accessToken.getTokenSecret(), false, 0, "", "", "");
 					dbUtil.addAcount(account);
-					app.resetCurrentAccount();
+					app.resetAccount();
 					new ShowToast(getApplicationContext(), R.string.success_addAccount);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));
 				}else{

@@ -227,9 +227,7 @@ public class MainActivity extends FragmentActivity{
 		super.onDestroy();
 		unregisterReceiver(musicReceiver);
 		stopService(new Intent(this, UserStreamService.class));
-		app.resetCurrentAccount();
-		app.resetTwitter();
-		app.resetLists();
+		app.resetAccount();
 		if(resetFlag){
 			resetFlag = false;
 			startActivity(new Intent(this, MainActivity.class));

@@ -45,8 +45,12 @@ public class App extends Application{
 	private UseTime useTime;
 	private Music music;
 
-	public void resetCurrentAccount(){
-		account = null;
+	public void resetAccount(){
+		this.account = null;
+		this.twitter = null;
+		this.twitterStream = null;
+		this.mentionPattern = null;
+		this.lists = null;
 	}
 
 	public Account getCurrentAccount(){
@@ -123,12 +127,6 @@ public class App extends Application{
 	 * +-+-+-+-+-+-+-+-+-+-+-+-+
 	 */
 
-	public void resetTwitter(){
-		this.twitter = null;
-		this.twitterStream = null;
-		this.mentionPattern = null;
-	}
-
 	// Twitter
 	public Twitter getTwitter(){
 		if(twitter == null)
@@ -169,10 +167,6 @@ public class App extends Application{
 	}
 
 	// lists
-	public void resetLists(){
-		this.lists = null;
-	}
-
 	public TwitterList[] getLists(Context context){
 		if(lists == null){
 			if(getCurrentAccount().getShowList() &&
