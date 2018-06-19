@@ -153,6 +153,7 @@ public class OptionClickListener implements OnClickListener{
 							PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext())
 							.edit()
 								.putString(Keys.SCREEN_NAME, accounts[which].getScreenName())
+								.putBoolean(Keys.SHOW_LIST, accounts[which].getShowList())
 							.commit();
 							((MainActivity)context).restart();
 						}

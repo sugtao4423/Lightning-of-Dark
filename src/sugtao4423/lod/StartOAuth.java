@@ -125,6 +125,7 @@ public class StartOAuth extends Activity{
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
 					.edit()
 						.putString(Keys.SCREEN_NAME, accessToken.getScreenName())
+						.putBoolean(Keys.SHOW_LIST, false)
 					.commit();
 
 					if(ck.equals(getString(R.string.CK)))
