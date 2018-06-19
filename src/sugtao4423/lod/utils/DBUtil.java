@@ -55,6 +55,14 @@ public class DBUtil{
 		return new Account(screen_name, ck, cs, at, ats, showList, selectListCount, selectListIds, selectListNames, startAppLoadLists);
 	}
 
+	public boolean existsAccount(String screenName){
+		Cursor c = db.rawQuery(String.format("select count(*) from accounts where %s='%s'", Keys.SCREEN_NAME, screenName), null);
+		c.moveToFirst();
+		int count = c.getInt(0);
+		c.close();
+		return count > 0;
+	}
+
 	public void addAcount(Account account){
 		db.execSQL(String.format("insert into accounts values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
 				account.getScreenName(), account.getConsumerKey(), account.getConsumerSecret(),

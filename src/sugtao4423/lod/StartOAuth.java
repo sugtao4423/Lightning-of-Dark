@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import sugtao4423.lod.dataclass.Account;
 import sugtao4423.lod.utils.DBUtil;
 
@@ -115,6 +116,12 @@ public class StartOAuth extends Activity{
 			@Override
 			protected void onPostExecute(AccessToken accessToken){
 				if(accessToken != null){
+					DBUtil dbUtil = new DBUtil(StartOAuth.this);
+					if(dbUtil.existsAccount(accessToken.getScreenName())){
+						new ShowToast(getApplicationContext(), getString(R.string.existsAccount, accessToken.getScreenName()), Toast.LENGTH_LONG);
+						finish();
+						return;
+					}
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
 					.edit()
 						.putString(Keys.SCREEN_NAME, accessToken.getScreenName())
@@ -127,7 +134,7 @@ public class StartOAuth extends Activity{
 
 					Account account = new Account(accessToken.getScreenName(), ck, cs,
 							accessToken.getToken(), accessToken.getTokenSecret(), false, 0, "", "", "");
-					new DBUtil(StartOAuth.this).addAcount(account);
+					dbUtil.addAcount(account);
 					app.resetCurrentAccount();
 					new ShowToast(getApplicationContext(), R.string.success_addAccount);
 					startActivity(new Intent(getApplicationContext(), MainActivity.class));

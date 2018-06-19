@@ -36,6 +36,7 @@
     <string name="deleteAccountX">\@%s を削除しました</string>
     <string name="listNotSelected">リストが選択されていません</string>
     <string name="error_getRequestToken">RequestTokenの取得に失敗しました</string>
+    <string name="existsAccount">\@%1$s はすでに登録されています</string>
     <string name="success_addAccount">アカウントを追加しました</string>
     <string name="error_getAccessToken">アクセストークンの取得に失敗しました</string>
     <string name="done_clipBoardCopy">クリップボードにコピーしました</string>
