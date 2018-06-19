@@ -3,25 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <EditText
-        android:id="@+id/regDialog_edit"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:ems="10" >
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp" >
 
-        <requestFocus />
-    </EditText>
+        <EditText
+            android:id="@+id/regDialog_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:ems="10" >
 
-    <GridLayout
-        android:id="@+id/regDialog_grid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/regDialog_edit"
-        android:layout_marginTop="10dp"
-        android:columnCount="6" />
+            <requestFocus />
+        </EditText>
+
+        <GridLayout
+            android:id="@+id/regDialog_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/regDialog_edit"
+            android:layout_marginTop="10dp"
+            android:columnCount="6" />
+    </RelativeLayout>
 
 </RelativeLayout>
