@@ -18,7 +18,7 @@ public class DBUtil{
 	}
 
 	public Account getAccount(String screenName){
-		Cursor c = db.rawQuery(String.format("select * from accounts where %s='%s'", Keys.SCREEN_NAME, screenName), null);
+		Cursor c = db.rawQuery(String.format("SELECT * FROM accounts WHERE %s='%s'", Keys.SCREEN_NAME, screenName), null);
 		if(!c.moveToFirst()){
 			return null;
 		}
@@ -28,7 +28,7 @@ public class DBUtil{
 	}
 
 	public Account[] getAccounts(){
-		Cursor c = db.rawQuery("select * from accounts", null);
+		Cursor c = db.rawQuery("SELECT * FROM accounts", null);
 		ArrayList<Account> accountList = new ArrayList<Account>();
 
 		boolean mov = c.moveToFirst();
@@ -56,7 +56,7 @@ public class DBUtil{
 	}
 
 	public boolean existsAccount(String screenName){
-		Cursor c = db.rawQuery(String.format("select count(*) from accounts where %s='%s'", Keys.SCREEN_NAME, screenName), null);
+		Cursor c = db.rawQuery(String.format("SELECT COUNT(*) FROM accounts WHERE %s='%s'", Keys.SCREEN_NAME, screenName), null);
 		c.moveToFirst();
 		int count = c.getInt(0);
 		c.close();
@@ -64,7 +64,7 @@ public class DBUtil{
 	}
 
 	public void addAcount(Account account){
-		db.execSQL(String.format("insert into accounts values('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+		db.execSQL(String.format("INSERT INTO accounts VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
 				account.getScreenName(), account.getConsumerKey(), account.getConsumerSecret(),
 				account.getAccessToken(), account.getAccessTokenSecret(),
 				account.getShowList(), account.getSelectListCount(),
@@ -73,8 +73,8 @@ public class DBUtil{
 
 	public void deleteAccount(Account account){
 		db.execSQL(String.format(
-				"delete from accounts where %s='%s' and %s='%s' and %s='%s' and %s='%s' and %s='%s' "
-				+ "and %s='%s' and %s='%s' and %s='%s' and %s='%s' and %s='%s'",
+				"DELETE FROM accounts WHERE %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' "
+				+ "AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s'",
 				Keys.SCREEN_NAME, account.getScreenName(), Keys.CK, account.getConsumerKey(), Keys.CS, account.getConsumerSecret(),
 				Keys.ACCESS_TOKEN, account.getAccessToken(), Keys.ACCESS_TOKEN_SECRET, account.getAccessTokenSecret(),
 				Keys.SHOW_LIST, account.getShowList(), Keys.SELECT_LIST_COUNT, account.getSelectListCount(),
@@ -103,11 +103,11 @@ public class DBUtil{
 	}
 
 	private String getUpdate1ColumnFromEq1Column(Object updateKey, Object update, Object whereKey, Object where){
-		return String.format("update accounts set %s='%s' where %s='%s'", updateKey, update, whereKey, where);
+		return String.format("UPDATE accounts SET %s='%s' WHERE %s='%s'", updateKey, update, whereKey, where);
 	}
 
 	public String[] getSelectListNames(String screenName){
-		Cursor c = db.rawQuery(String.format("select %s from accounts where %s='%s'",
+		Cursor c = db.rawQuery(String.format("SELECT %s FROM accounts WHERE %s='%s'",
 				Keys.SELECT_LIST_NAMES, Keys.SCREEN_NAME, screenName), null);
 		c.moveToFirst();
 		String[] result = c.getString(0).split(",", 0);
@@ -116,7 +116,7 @@ public class DBUtil{
 	}
 
 	public String[] getNowStartAppLoadList(String screenName){
-		Cursor c = db.rawQuery(String.format("select %s from accounts where %s='%s'",
+		Cursor c = db.rawQuery(String.format("SELECT %s FROM accounts WHERE %s='%s'",
 				Keys.APP_START_LOAD_LISTS, Keys.SCREEN_NAME, screenName), null);
 		c.moveToNext();
 		String[] result = c.getString(0).split(",", 0);

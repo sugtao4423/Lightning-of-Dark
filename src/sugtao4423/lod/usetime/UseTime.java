@@ -55,7 +55,7 @@ public class UseTime{
 	public long getLastNdaysUseTimeInMillis(int n){
 		long today = todayUnixTime();
 		long last = today - n * 86400000L;
-		String query = "SELECT SUM(use) FROM useTime WHERE date BETWEEN '" + last + "' and '" + today + "'";
+		String query = "SELECT SUM(use) FROM useTime WHERE date BETWEEN '" + last + "' AND '" + today + "'";
 		Cursor c = db.rawQuery(query, null);
 		if(!c.moveToFirst())
 			return 0;
