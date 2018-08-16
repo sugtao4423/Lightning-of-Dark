@@ -39,18 +39,15 @@ public class OptionClickListener implements OnClickListener{
 			searchUser();
 			break;
 		case 2:
-			refreshHomeLine();
-			break;
-		case 3:
 			accountSelect();
 			break;
-		case 4:
+		case 3:
 			levelInfo();
 			break;
-		case 5:
+		case 4:
 			useInfo();
 			break;
-		case 6:
+		case 5:
 			context.startActivity(new Intent(context, Settings.class));
 			break;
 		}
@@ -112,17 +109,6 @@ public class OptionClickListener implements OnClickListener{
 				}
 			}
 		}).show();
-	}
-
-	public void refreshHomeLine(){
-		new AlertDialog.Builder(context)
-		.setTitle("Homeを更新しますか？")
-		.setPositiveButton("OK", new OnClickListener(){
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-				((MainActivity)context).getTimeLine();
-			}
-		}).setNegativeButton("キャンセル", null).show();
 	}
 
 	public void accountSelect(){
