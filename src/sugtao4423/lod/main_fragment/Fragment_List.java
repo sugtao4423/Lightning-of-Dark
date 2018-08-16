@@ -5,7 +5,6 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -34,10 +33,10 @@ public class Fragment_List extends Fragment{
 	private int listIndex;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		listIndex = getArguments().getInt(LIST_INDEX);
 		View v = inflater.inflate(R.layout.fragment_list, container, false);
-		app = (App)getActivity().getApplicationContext();
+		app = (App)container.getContext().getApplicationContext();
 		thisList = app.getLists(container.getContext())[listIndex];
 		TweetListView list = (TweetListView)v.findViewById(R.id.listLine);
 		final TweetListAdapter adapter = thisList.getTweetListAdapter();
@@ -45,7 +44,7 @@ public class Fragment_List extends Fragment{
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		list.setAdapter(adapter);
 
-		final EndlessScrollListener scrollListener = getLoadMoreListener(container.getContext(), list.getLinearLayoutManager());
+		final EndlessScrollListener scrollListener = getLoadMoreListener(list.getLinearLayoutManager());
 		list.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.ListPull);
@@ -56,25 +55,25 @@ public class Fragment_List extends Fragment{
 			public void onRefresh(){
 				adapter.clear();
 				thisList.setIsAlreadyLoad(false);
-				getList(container.getContext());
+				getList();
 				scrollListener.resetState();
 			}
 		});
 		return v;
 	}
 
-	public EndlessScrollListener getLoadMoreListener(final Context context, LinearLayoutManager llm){
+	public EndlessScrollListener getLoadMoreListener(LinearLayoutManager llm){
 		return new EndlessScrollListener(llm){
 
 			@Override
 			public void onLoadMore(int current_page){
 				if(thisList.getTweetListAdapter().getItemCount() > 30)
-					getList(context);
+					getList();
 			}
 		};
 	}
 
-	public void getList(Context context){
+	public void getList(){
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){

@@ -5,14 +5,12 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,27 +25,24 @@ import sugtao4423.lod.tweetlistview.TweetListView;
 public class Fragment_mention extends Fragment{
 
 	private TweetListView list;
-	private LinearLayoutManager llm;
 	private SwipeRefreshLayout pulltoRefresh;
 	private TweetListAdapter adapter;
 	private Handler handler;
 	private App app;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		app = (App)container.getContext().getApplicationContext();
 		handler = new Handler();
 		View v = inflater.inflate(R.layout.fragment_list, container, false);
-
 		list = (TweetListView)v.findViewById(R.id.listLine);
-		llm = list.getLinearLayoutManager();
 
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
 		adapter.setOnItemLongClickListener(new ListViewListener());
 		list.setAdapter(adapter);
 
-		final EndlessScrollListener scrollListener = getLoadMoreListener(container.getContext());
+		final EndlessScrollListener scrollListener = getLoadMoreListener();
 		list.addOnScrollListener(scrollListener);
 
 		pulltoRefresh = (SwipeRefreshLayout)v.findViewById(R.id.ListPull);
@@ -58,7 +53,7 @@ public class Fragment_mention extends Fragment{
 			@Override
 			public void onRefresh(){
 				adapter.clear();
-				loadMention(container.getContext());
+				loadMention();
 				scrollListener.resetState();
 			}
 		};
@@ -67,18 +62,18 @@ public class Fragment_mention extends Fragment{
 		return v;
 	}
 
-	public EndlessScrollListener getLoadMoreListener(final Context context){
+	public EndlessScrollListener getLoadMoreListener(){
 		return new EndlessScrollListener(list.getLinearLayoutManager()){
 
 			@Override
 			public void onLoadMore(int current_page){
 				if(adapter.getItemCount() > 30)
-					loadMention(context);
+					loadMention();
 			}
 		};
 	}
 
-	public void loadMention(final Context context){
+	public void loadMention(){
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
@@ -112,7 +107,7 @@ public class Fragment_mention extends Fragment{
 
 			@Override
 			public void run(){
-				if(llm.findFirstVisibleItemPosition() <= 1)
+				if(list.getLinearLayoutManager().findFirstVisibleItemPosition() <= 1)
 					list.smoothScrollToPosition(0);
 			}
 		});
