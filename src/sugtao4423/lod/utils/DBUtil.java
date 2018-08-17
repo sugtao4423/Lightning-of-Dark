@@ -1,7 +1,6 @@
 package sugtao4423.lod.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -80,9 +79,9 @@ public class DBUtil{
 		db.execSQL(String.format("INSERT INTO accounts VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
 				account.getScreenName(), account.getConsumerKey(), account.getConsumerSecret(),
 				account.getAccessToken(), account.getAccessTokenSecret(),
-				Utils.implode(Arrays.asList(account.getSelectListIds())),
-				Utils.implode(Arrays.asList(account.getSelectListNames())),
-				Utils.implode(Arrays.asList(account.getStartAppLoadLists()))));
+				Utils.implode(account.getSelectListIds()),
+				Utils.implode(account.getSelectListNames()),
+				Utils.implode(account.getStartAppLoadLists())));
 	}
 
 	public void deleteAccount(Account account){
@@ -91,9 +90,9 @@ public class DBUtil{
 				+ "AND %s='%s' AND %s='%s' AND %s='%s'",
 				Keys.SCREEN_NAME, account.getScreenName(), Keys.CK, account.getConsumerKey(), Keys.CS, account.getConsumerSecret(),
 				Keys.ACCESS_TOKEN, account.getAccessToken(), Keys.ACCESS_TOKEN_SECRET, account.getAccessTokenSecret(),
-				Keys.SELECT_LIST_IDS, Utils.implode(Arrays.asList(account.getSelectListIds())),
-				Keys.SELECT_LIST_NAMES, Utils.implode(Arrays.asList(account.getSelectListNames())),
-				Keys.APP_START_LOAD_LISTS, Utils.implode(Arrays.asList(account.getStartAppLoadLists()))));
+				Keys.SELECT_LIST_IDS, Utils.implode(account.getSelectListIds()),
+				Keys.SELECT_LIST_NAMES, Utils.implode(account.getSelectListNames()),
+				Keys.APP_START_LOAD_LISTS, Utils.implode(account.getStartAppLoadLists())));
 	}
 
 	public void updateSelectListIds(String ids, String screenName){

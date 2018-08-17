@@ -1,7 +1,6 @@
 package sugtao4423.lod;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import twitter4j.ResponseList;
 import twitter4j.TwitterException;
@@ -126,10 +125,10 @@ public class Settings_List extends PreferenceActivity{
 								}).setPositiveButton("OK", new OnClickListener(){
 									@Override
 									public void onClick(DialogInterface dialog, int which){
-										ArrayList<Long> listIds = new ArrayList<Long>();
+										ArrayList<String> listIds = new ArrayList<String>();
 										ArrayList<String> listNames = new ArrayList<String>();
 										for(UserList l : checkedList){
-											listIds.add(l.getId());
+											listIds.add(String.valueOf(l.getId()));
 											listNames.add(l.getName());
 										}
 
@@ -150,8 +149,8 @@ public class Settings_List extends PreferenceActivity{
 		public void setSummary(){
 			String[] selectList = dbUtil.getSelectListNames(myScreenName);
 			String[] startAppLoadList = dbUtil.getNowStartAppLoadList(myScreenName);
-			String summary1 = "設定値: " + Utils.implode(Arrays.asList(selectList));
-			String summary2 = "設定値: " + Utils.implode(Arrays.asList(startAppLoadList));
+			String summary1 = "設定値: " + Utils.implode(selectList);
+			String summary2 = "設定値: " + Utils.implode(startAppLoadList);
 			select_List.setSummary(summary1);
 			startApp_loadList.setSummary(summary2);
 		}

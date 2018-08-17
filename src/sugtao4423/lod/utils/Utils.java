@@ -1,6 +1,7 @@
 package sugtao4423.lod.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -82,11 +83,23 @@ public class Utils{
 		return (int)((dp * d) + 0.5);
 	}
 
-	public static <T> String implode(List<T> list){
+	public static String implode(String[] arr){
+		return implode(Arrays.asList(arr));
+	}
+
+	public static String implode(long[] arr){
+		ArrayList<String> strarr = new ArrayList<String>();
+		for(long l : arr){
+			strarr.add(String.valueOf(l));
+		}
+		return implode(strarr);
+	}
+
+	public static String implode(List<String> list){
 		return implode(list, ",");
 	}
 
-	public static <T> String implode(List<T> list, String glue){
+	private static <T> String implode(List<T> list, String glue){
 		if(list.size() < 1){
 			return "";
 		}
