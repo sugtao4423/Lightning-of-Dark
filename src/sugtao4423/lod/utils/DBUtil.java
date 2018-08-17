@@ -1,6 +1,7 @@
 package sugtao4423.lod.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -46,9 +47,23 @@ public class DBUtil{
 		String cs = c.getString(2);
 		String at = c.getString(3);
 		String ats = c.getString(4);
-		String[] selectListIds = c.getString(5).split(",");
-		String[] selectListNames = c.getString(6).split(",");
-		String[] startAppLoadLists = c.getString(7).split(",");
+		String listIds = c.getString(5);
+		String listNames = c.getString(6);
+		String appLoadLists = c.getString(7);
+
+		long[] selectListIds;
+		if(listIds.equals("")){
+			selectListIds = new long[0];
+		}else{
+			String[] strarr = listIds.split(",");
+			selectListIds = new long[strarr.length];
+			for(int i = 0; i < strarr.length; i++){
+				selectListIds[i] = Long.parseLong(strarr[i]);
+			}
+		}
+		
+		String[] selectListNames = listNames.equals("") ? new String[0] : listNames.split(",");
+		String[] startAppLoadLists = appLoadLists.equals("") ? new String[0] : appLoadLists.split(",");
 
 		return new Account(screen_name, ck, cs, at, ats, selectListIds, selectListNames, startAppLoadLists);
 	}
@@ -65,7 +80,9 @@ public class DBUtil{
 		db.execSQL(String.format("INSERT INTO accounts VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
 				account.getScreenName(), account.getConsumerKey(), account.getConsumerSecret(),
 				account.getAccessToken(), account.getAccessTokenSecret(),
-				account.getSelectListIds(), account.getSelectListNames(), account.getStartAppLoadLists()));
+				Utils.implode(Arrays.asList(account.getSelectListIds())),
+				Utils.implode(Arrays.asList(account.getSelectListNames())),
+				Utils.implode(Arrays.asList(account.getStartAppLoadLists()))));
 	}
 
 	public void deleteAccount(Account account){
@@ -74,24 +91,25 @@ public class DBUtil{
 				+ "AND %s='%s' AND %s='%s' AND %s='%s'",
 				Keys.SCREEN_NAME, account.getScreenName(), Keys.CK, account.getConsumerKey(), Keys.CS, account.getConsumerSecret(),
 				Keys.ACCESS_TOKEN, account.getAccessToken(), Keys.ACCESS_TOKEN_SECRET, account.getAccessTokenSecret(),
-				Keys.SELECT_LIST_IDS, account.getSelectListIds(), Keys.SELECT_LIST_NAMES, account.getSelectListNames(),
-				Keys.APP_START_LOAD_LISTS, account.getStartAppLoadLists()));
-	}
-
-	public void updateStartAppLoadLists(String startAppLoadLists, String screenName){
-		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.APP_START_LOAD_LISTS, startAppLoadLists, Keys.SCREEN_NAME, screenName));
+				Keys.SELECT_LIST_IDS, Utils.implode(Arrays.asList(account.getSelectListIds())),
+				Keys.SELECT_LIST_NAMES, Utils.implode(Arrays.asList(account.getSelectListNames())),
+				Keys.APP_START_LOAD_LISTS, Utils.implode(Arrays.asList(account.getStartAppLoadLists()))));
 	}
 
 	public void updateSelectListIds(String ids, String screenName){
-		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SELECT_LIST_IDS, ids, Keys.SCREEN_NAME, screenName));
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SELECT_LIST_IDS, ids, screenName));
 	}
 
 	public void updateSelectListNames(String names, String screenName){
-		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SELECT_LIST_NAMES, names, Keys.SCREEN_NAME, screenName));
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SELECT_LIST_NAMES, names, screenName));
 	}
 
-	private String getUpdate1ColumnFromEq1Column(Object updateKey, Object update, Object whereKey, Object where){
-		return String.format("UPDATE accounts SET %s='%s' WHERE %s='%s'", updateKey, update, whereKey, where);
+	public void updateStartAppLoadLists(String startAppLoadLists, String screenName){
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.APP_START_LOAD_LISTS, startAppLoadLists, screenName));
+	}
+
+	private String getUpdate1ColumnFromEq1Column(Object updateKey, Object update, String screenName){
+		return String.format("UPDATE accounts SET %s='%s' WHERE %s='%s'", updateKey, update, Keys.SCREEN_NAME, screenName);
 	}
 
 	public String[] getSelectListNames(String screenName){

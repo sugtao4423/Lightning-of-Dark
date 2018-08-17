@@ -169,18 +169,16 @@ public class App extends Application{
 	// lists
 	public TwitterList[] getLists(Context context){
 		if(lists == null){
-			if(!getCurrentAccount().getStartAppLoadLists().equals("") && !getCurrentAccount().getSelectListIds().equals("")){
+			if(getCurrentAccount().getSelectListIds().length > 0){
 				String[] listNames = getCurrentAccount().getSelectListNames();
-				String[] listIds = getCurrentAccount().getSelectListIds();
+				long[] listIds = getCurrentAccount().getSelectListIds();
 				String[] appStartLoadListNames = getCurrentAccount().getStartAppLoadLists();
 				lists = new TwitterList[listNames.length];
 				for(int i = 0; i < lists.length; i++){
 					TweetListAdapter adapter = new TweetListAdapter(context);
-					boolean isAlreadyLoad = false;
 					String listName = listNames[i];
-					long listId = Long.parseLong(listIds[i]);
 					boolean isAppStartLoad = Arrays.asList(appStartLoadListNames).contains(listName);
-					lists[i] = new TwitterList(adapter, isAlreadyLoad, listName, listId, isAppStartLoad);
+					lists[i] = new TwitterList(adapter, false, listName, listIds[i], isAppStartLoad);
 				}
 			}else{
 				lists = new TwitterList[0];

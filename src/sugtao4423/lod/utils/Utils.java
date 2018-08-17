@@ -87,6 +87,9 @@ public class Utils{
 	}
 
 	public static <T> String implode(List<T> list, String glue){
+		if(list.size() < 1){
+			return "";
+		}
 		StringBuilder sb = new StringBuilder();
 		for(T e : list){
 			sb.append(glue).append(e);

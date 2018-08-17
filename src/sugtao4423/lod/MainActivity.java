@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity{
 		for(int i = 0; i < lists.length; i++){
 			final TwitterList list = lists[i];
 			if(!list.getIsAppStartLoad()){
-				return;
+				continue;
 			}
 			new AsyncTask<Void, Void, ResponseList<Status>>(){
 				@Override

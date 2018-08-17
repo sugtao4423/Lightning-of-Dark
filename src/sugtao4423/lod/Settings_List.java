@@ -71,10 +71,7 @@ public class Settings_List extends PreferenceActivity{
 							}).setPositiveButton("OK", new OnClickListener(){
 								@Override
 								public void onClick(DialogInterface dialog, int which){
-									String appStartLoadLists = "";
-									for(int i = 0; i < selectLoadList.size(); i++)
-										appStartLoadLists += selectLoadList.get(i) + ",";
-									dbUtil.updateStartAppLoadLists(appStartLoadLists, myScreenName);
+									dbUtil.updateStartAppLoadLists(Utils.implode(selectLoadList), myScreenName);
 									app.resetAccount();
 									setSummary();
 								}

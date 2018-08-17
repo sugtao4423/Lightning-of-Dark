@@ -7,12 +7,12 @@ public class Account{
 	private String consumerSecret;
 	private String accessToken;
 	private String accessTokenSecret;
-	private String[] selectListIds;
+	private long[] selectListIds;
 	private String[] selectListNames;
 	private String[] startAppLoadLists;
 
 	public Account(String screenName, String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret,
-			String[] selectListIds, String[] selectListNames, String[] startAppLoadLists){
+			long[] selectListIds, String[] selectListNames, String[] startAppLoadLists){
 		this.screenName = screenName;
 		this.consumerKey = consumerKey;
 		this.consumerSecret = consumerSecret;
@@ -24,7 +24,7 @@ public class Account{
 	}
 
 	public Account(String screenName, String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret){
-		this(screenName, consumerKey, consumerSecret, accessToken, accessTokenSecret, new String[0], new String[0], new String[0]);
+		this(screenName, consumerKey, consumerSecret, accessToken, accessTokenSecret, new long[0], new String[0], new String[0]);
 	}
 
 	public String getScreenName(){
@@ -47,7 +47,7 @@ public class Account{
 		return accessTokenSecret;
 	}
 
-	public String[] getSelectListIds(){
+	public long[] getSelectListIds(){
 		return selectListIds;
 	}
 
