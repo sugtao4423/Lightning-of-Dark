@@ -7,24 +7,24 @@ public class Account{
 	private String consumerSecret;
 	private String accessToken;
 	private String accessTokenSecret;
-	private boolean showList;
-	private int selectListCount;
-	private String selectListIds;
-	private String selectListNames;
-	private String startAppLoadLists;
+	private String[] selectListIds;
+	private String[] selectListNames;
+	private String[] startAppLoadLists;
 
 	public Account(String screenName, String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret,
-			boolean showList, int selectListCount, String selectListIds, String selectListNames, String startAppLoadLists){
+			String[] selectListIds, String[] selectListNames, String[] startAppLoadLists){
 		this.screenName = screenName;
 		this.consumerKey = consumerKey;
 		this.consumerSecret = consumerSecret;
 		this.accessToken = accessToken;
 		this.accessTokenSecret = accessTokenSecret;
-		this.showList = showList;
-		this.selectListCount = selectListCount;
 		this.selectListIds = selectListIds;
 		this.selectListNames = selectListNames;
 		this.startAppLoadLists = startAppLoadLists;
+	}
+
+	public Account(String screenName, String consumerKey, String consumerSecret, String accessToken, String accessTokenSecret){
+		this(screenName, consumerKey, consumerSecret, accessToken, accessTokenSecret, new String[0], new String[0], new String[0]);
 	}
 
 	public String getScreenName(){
@@ -47,23 +47,15 @@ public class Account{
 		return accessTokenSecret;
 	}
 
-	public boolean getShowList(){
-		return showList;
-	}
-
-	public int getSelectListCount(){
-		return selectListCount;
-	}
-
-	public String getSelectListIds(){
+	public String[] getSelectListIds(){
 		return selectListIds;
 	}
 
-	public String getSelectListNames(){
+	public String[] getSelectListNames(){
 		return selectListNames;
 	}
 
-	public String getStartAppLoadLists(){
+	public String[] getStartAppLoadLists(){
 		return startAppLoadLists;
 	}
 

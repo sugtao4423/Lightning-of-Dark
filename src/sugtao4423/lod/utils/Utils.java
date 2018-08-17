@@ -2,6 +2,7 @@ package sugtao4423.lod.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import android.content.Context;
 import sugtao4423.lod.App;
@@ -79,6 +80,18 @@ public class Utils{
 	public static int convertDpToPx(Context context, int dp){
 		float d = context.getResources().getDisplayMetrics().density;
 		return (int)((dp * d) + 0.5);
+	}
+
+	public static <T> String implode(List<T> list){
+		return implode(list, ",");
+	}
+
+	public static <T> String implode(List<T> list, String glue){
+		StringBuilder sb = new StringBuilder();
+		for(T e : list){
+			sb.append(glue).append(e);
+		}
+		return sb.substring(glue.length());
 	}
 
 }

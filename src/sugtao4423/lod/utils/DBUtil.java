@@ -46,13 +46,11 @@ public class DBUtil{
 		String cs = c.getString(2);
 		String at = c.getString(3);
 		String ats = c.getString(4);
-		boolean showList = Boolean.parseBoolean(c.getString(5));
-		int selectListCount = c.getInt(6);
-		String selectListIds = c.getString(7);
-		String selectListNames = c.getString(8);
-		String startAppLoadLists = c.getString(9);
+		String[] selectListIds = c.getString(5).split(",");
+		String[] selectListNames = c.getString(6).split(",");
+		String[] startAppLoadLists = c.getString(7).split(",");
 
-		return new Account(screen_name, ck, cs, at, ats, showList, selectListCount, selectListIds, selectListNames, startAppLoadLists);
+		return new Account(screen_name, ck, cs, at, ats, selectListIds, selectListNames, startAppLoadLists);
 	}
 
 	public boolean existsAccount(String screenName){
@@ -64,34 +62,24 @@ public class DBUtil{
 	}
 
 	public void addAcount(Account account){
-		db.execSQL(String.format("INSERT INTO accounts VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+		db.execSQL(String.format("INSERT INTO accounts VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
 				account.getScreenName(), account.getConsumerKey(), account.getConsumerSecret(),
 				account.getAccessToken(), account.getAccessTokenSecret(),
-				account.getShowList(), account.getSelectListCount(),
 				account.getSelectListIds(), account.getSelectListNames(), account.getStartAppLoadLists()));
 	}
 
 	public void deleteAccount(Account account){
 		db.execSQL(String.format(
 				"DELETE FROM accounts WHERE %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' "
-				+ "AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s'",
+				+ "AND %s='%s' AND %s='%s' AND %s='%s'",
 				Keys.SCREEN_NAME, account.getScreenName(), Keys.CK, account.getConsumerKey(), Keys.CS, account.getConsumerSecret(),
 				Keys.ACCESS_TOKEN, account.getAccessToken(), Keys.ACCESS_TOKEN_SECRET, account.getAccessTokenSecret(),
-				Keys.SHOW_LIST, account.getShowList(), Keys.SELECT_LIST_COUNT, account.getSelectListCount(),
 				Keys.SELECT_LIST_IDS, account.getSelectListIds(), Keys.SELECT_LIST_NAMES, account.getSelectListNames(),
 				Keys.APP_START_LOAD_LISTS, account.getStartAppLoadLists()));
 	}
 
-	public void updateShowList(boolean showList, String screenName){
-		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SHOW_LIST, showList, Keys.SCREEN_NAME, screenName));
-	}
-
 	public void updateStartAppLoadLists(String startAppLoadLists, String screenName){
 		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.APP_START_LOAD_LISTS, startAppLoadLists, Keys.SCREEN_NAME, screenName));
-	}
-
-	public void updateSelectListCount(int count, String screenName){
-		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.SELECT_LIST_COUNT, count, Keys.SCREEN_NAME, screenName));
 	}
 
 	public void updateSelectListIds(String ids, String screenName){
@@ -110,7 +98,7 @@ public class DBUtil{
 		Cursor c = db.rawQuery(String.format("SELECT %s FROM accounts WHERE %s='%s'",
 				Keys.SELECT_LIST_NAMES, Keys.SCREEN_NAME, screenName), null);
 		c.moveToFirst();
-		String[] result = c.getString(0).split(",", 0);
+		String[] result = c.getString(0).split(",");
 		c.close();
 		return result;
 	}
@@ -119,7 +107,7 @@ public class DBUtil{
 		Cursor c = db.rawQuery(String.format("SELECT %s FROM accounts WHERE %s='%s'",
 				Keys.APP_START_LOAD_LISTS, Keys.SCREEN_NAME, screenName), null);
 		c.moveToNext();
-		String[] result = c.getString(0).split(",", 0);
+		String[] result = c.getString(0).split(",");
 		c.close();
 		return result;
 	}

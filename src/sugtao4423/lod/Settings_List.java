@@ -1,6 +1,7 @@
 package sugtao4423.lod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import twitter4j.ResponseList;
 import twitter4j.TwitterException;
@@ -11,13 +12,12 @@ import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import sugtao4423.lod.utils.DBUtil;
+import sugtao4423.lod.utils.Utils;
 
 public class Settings_List extends PreferenceActivity{
 
@@ -39,7 +39,6 @@ public class Settings_List extends PreferenceActivity{
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preference_list);
 
-			final CheckBoxPreference showList = (CheckBoxPreference)findPreference("showList");
 			select_List = findPreference("select_List");
 			startApp_loadList = findPreference("startApp_loadList");
 
@@ -49,31 +48,6 @@ public class Settings_List extends PreferenceActivity{
 			myScreenName = app.getCurrentAccount().getScreenName();
 
 			setSummary();
-
-			if(showList.isChecked()){
-				select_List.setEnabled(true);
-				startApp_loadList.setEnabled(true);
-			}else{
-				select_List.setEnabled(false);
-				startApp_loadList.setEnabled(false);
-			}
-
-			showList.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
-
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object newValue){
-					if(showList.isChecked()){
-						select_List.setEnabled(false);
-						startApp_loadList.setEnabled(false);
-						dbUtil.updateShowList(false, myScreenName);
-					}else{
-						select_List.setEnabled(true);
-						startApp_loadList.setEnabled(true);
-						dbUtil.updateShowList(true, myScreenName);
-					}
-					return true;
-				}
-			});
 
 			startApp_loadList.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
@@ -155,17 +129,15 @@ public class Settings_List extends PreferenceActivity{
 								}).setPositiveButton("OK", new OnClickListener(){
 									@Override
 									public void onClick(DialogInterface dialog, int which){
-										int checkedSize = checkedList.size();
-										String listNames = "";
-										String listIds = "";
-										for(int i = 0; i < checkedSize; i++){
-											listNames += checkedList.get(i).getName() + ",";
-											listIds += checkedList.get(i).getId() + ",";
+										ArrayList<Long> listIds = new ArrayList<Long>();
+										ArrayList<String> listNames = new ArrayList<String>();
+										for(UserList l : checkedList){
+											listIds.add(l.getId());
+											listNames.add(l.getName());
 										}
 
-										dbUtil.updateSelectListCount(checkedSize, myScreenName);
-										dbUtil.updateSelectListIds(listIds, myScreenName);
-										dbUtil.updateSelectListNames(listNames, myScreenName);
+										dbUtil.updateSelectListIds(Utils.implode(listIds), myScreenName);
+										dbUtil.updateSelectListNames(Utils.implode(listNames), myScreenName);
 										app.resetAccount();
 										setSummary();
 									}
@@ -179,20 +151,12 @@ public class Settings_List extends PreferenceActivity{
 		}
 
 		public void setSummary(){
-			String[] nowSelectList = dbUtil.getSelectListNames(myScreenName);
-			String[] nowStartAppLoadList = dbUtil.getNowStartAppLoadList(myScreenName);
-			String result1 = "設定値：";
-			String result2 = "設定値：";
-			for(String s : nowSelectList)
-				result1 += s + ", ";
-			for(String s : nowStartAppLoadList)
-				result2 += s + ", ";
-
-			result1 = result1.substring(0, result1.length() - 2);
-			result2 = result2.substring(0, result2.length() - 2);
-
-			select_List.setSummary(result1);
-			startApp_loadList.setSummary(result2);
+			String[] selectList = dbUtil.getSelectListNames(myScreenName);
+			String[] startAppLoadList = dbUtil.getNowStartAppLoadList(myScreenName);
+			String summary1 = "設定値: " + Utils.implode(Arrays.asList(selectList));
+			String summary2 = "設定値: " + Utils.implode(Arrays.asList(startAppLoadList));
+			select_List.setSummary(summary1);
+			startApp_loadList.setSummary(summary2);
 		}
 	}
 

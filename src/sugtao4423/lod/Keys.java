@@ -15,8 +15,6 @@ public class Keys{
 	public static final String REGULAR_EXPRESSION = "regularExpression";
 	public static final String IS_IMAGE_ORIENTATION_SENSOR = "isImageOrientaionSensor";
 	public static final String IS_VIDEO_ORIENTATION_SENSOR = "isVideoOrientationSensor";
-	public static final String SHOW_LIST = "showList";
-	public static final String SELECT_LIST_COUNT = "selectListCount";
 	public static final String SELECT_LIST_IDS = "selectListIds";
 	public static final String SELECT_LIST_NAMES = "selectListNames";
 	public static final String APP_START_LOAD_LISTS = "appStartLoadLists";

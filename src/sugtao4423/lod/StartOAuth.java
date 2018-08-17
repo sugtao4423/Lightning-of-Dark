@@ -125,7 +125,6 @@ public class StartOAuth extends Activity{
 					PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
 					.edit()
 						.putString(Keys.SCREEN_NAME, accessToken.getScreenName())
-						.putBoolean(Keys.SHOW_LIST, false)
 					.commit();
 
 					if(ck.equals(getString(R.string.CK)))
@@ -133,8 +132,7 @@ public class StartOAuth extends Activity{
 					if(cs.equals(getString(R.string.CS)))
 						cs = "";
 
-					Account account = new Account(accessToken.getScreenName(), ck, cs,
-							accessToken.getToken(), accessToken.getTokenSecret(), false, 0, "", "", "");
+					Account account = new Account(accessToken.getScreenName(), ck, cs, accessToken.getToken(), accessToken.getTokenSecret());
 					dbUtil.addAcount(account);
 					app.resetAccount();
 					new ShowToast(getApplicationContext(), R.string.success_addAccount);

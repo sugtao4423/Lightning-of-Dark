@@ -58,7 +58,7 @@ public class App extends Application{
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 			account = new DBUtil(getApplicationContext()).getAccount(pref.getString(Keys.SCREEN_NAME, ""));
 			if(account == null){
-				account = new Account("", "", "", "", "", false, 0, "", "", "");
+				account = new Account("", "", "", "", "");
 			}
 		}
 		return account;
@@ -169,11 +169,10 @@ public class App extends Application{
 	// lists
 	public TwitterList[] getLists(Context context){
 		if(lists == null){
-			if(getCurrentAccount().getShowList() &&
-					!getCurrentAccount().getStartAppLoadLists().equals("") && !getCurrentAccount().getSelectListIds().equals("")){
-				String[] listNames = getCurrentAccount().getSelectListNames().split(",", 0);
-				String[] listIds = getCurrentAccount().getSelectListIds().split(",", 0);
-				String[] appStartLoadListNames = getCurrentAccount().getStartAppLoadLists().split(",", 0);
+			if(!getCurrentAccount().getStartAppLoadLists().equals("") && !getCurrentAccount().getSelectListIds().equals("")){
+				String[] listNames = getCurrentAccount().getSelectListNames();
+				String[] listIds = getCurrentAccount().getSelectListIds();
+				String[] appStartLoadListNames = getCurrentAccount().getStartAppLoadLists();
 				lists = new TwitterList[listNames.length];
 				for(int i = 0; i < lists.length; i++){
 					TweetListAdapter adapter = new TweetListAdapter(context);

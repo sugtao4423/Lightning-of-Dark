@@ -52,7 +52,7 @@ public class MainActivity extends FragmentActivity{
 		ViewPager viewPager = (ViewPager)findViewById(R.id.pager);
 		viewPager.setAdapter(pagerAdapter);
 		viewPager.setCurrentItem(1);
-		viewPager.setOffscreenPageLimit(app.getCurrentAccount().getSelectListCount() + 1);
+		viewPager.setOffscreenPageLimit(app.getCurrentAccount().getSelectListIds().length + 1);
 
 		PagerTabStrip strip = (PagerTabStrip)findViewById(R.id.mainPagerTabStrip);
 		strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabText)));
