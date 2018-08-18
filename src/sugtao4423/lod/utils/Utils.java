@@ -95,6 +95,14 @@ public class Utils{
 		return implode(strarr);
 	}
 
+	public static String implode(Long[] arr){
+		ArrayList<String> strarr = new ArrayList<String>();
+		for(Long l : arr){
+			strarr.add(String.valueOf(l));
+		}
+		return implode(strarr);
+	}
+
 	public static String implode(List<String> list){
 		return implode(list, ",");
 	}
