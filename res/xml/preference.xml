@@ -37,6 +37,9 @@
             android:summaryOff="mp4"
             android:summaryOn="webm"
             android:title="動画をwebmで取得する" />
+        <CheckBoxPreference
+            android:key="listAsTL"
+            android:title="リストをTLとして読み込む" />
 
         <Preference
             android:key="listSetting"

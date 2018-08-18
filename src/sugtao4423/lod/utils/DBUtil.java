@@ -46,9 +46,10 @@ public class DBUtil{
 		String cs = c.getString(2);
 		String at = c.getString(3);
 		String ats = c.getString(4);
-		String listIds = c.getString(5);
-		String listNames = c.getString(6);
-		String appLoadLists = c.getString(7);
+		long listAsTL = c.getLong(5);
+		String listIds = c.getString(6);
+		String listNames = c.getString(7);
+		String appLoadLists = c.getString(8);
 
 		long[] selectListIds;
 		if(listIds.equals("")){
@@ -64,7 +65,7 @@ public class DBUtil{
 		String[] selectListNames = listNames.equals("") ? new String[0] : listNames.split(",");
 		String[] startAppLoadLists = appLoadLists.equals("") ? new String[0] : appLoadLists.split(",");
 
-		return new Account(screen_name, ck, cs, at, ats, selectListIds, selectListNames, startAppLoadLists);
+		return new Account(screen_name, ck, cs, at, ats, listAsTL, selectListIds, selectListNames, startAppLoadLists);
 	}
 
 	public boolean existsAccount(String screenName){
@@ -76,9 +77,9 @@ public class DBUtil{
 	}
 
 	public void addAcount(Account account){
-		db.execSQL(String.format("INSERT INTO accounts VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+		db.execSQL(String.format("INSERT INTO accounts VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
 				account.getScreenName(), account.getConsumerKey(), account.getConsumerSecret(),
-				account.getAccessToken(), account.getAccessTokenSecret(),
+				account.getAccessToken(), account.getAccessTokenSecret(), account.getListAsTL(),
 				Utils.implode(account.getSelectListIds()),
 				Utils.implode(account.getSelectListNames()),
 				Utils.implode(account.getStartAppLoadLists())));
@@ -87,12 +88,17 @@ public class DBUtil{
 	public void deleteAccount(Account account){
 		db.execSQL(String.format(
 				"DELETE FROM accounts WHERE %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' "
-				+ "AND %s='%s' AND %s='%s' AND %s='%s'",
+				+ "AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s'",
 				Keys.SCREEN_NAME, account.getScreenName(), Keys.CK, account.getConsumerKey(), Keys.CS, account.getConsumerSecret(),
 				Keys.ACCESS_TOKEN, account.getAccessToken(), Keys.ACCESS_TOKEN_SECRET, account.getAccessTokenSecret(),
+				Keys.LIST_AS_TIMELINE, account.getListAsTL(),
 				Keys.SELECT_LIST_IDS, Utils.implode(account.getSelectListIds()),
 				Keys.SELECT_LIST_NAMES, Utils.implode(account.getSelectListNames()),
 				Keys.APP_START_LOAD_LISTS, Utils.implode(account.getStartAppLoadLists())));
+	}
+
+	public void updateListAsTL(long listAsTL, String screenName){
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.LIST_AS_TIMELINE, listAsTL, screenName));
 	}
 
 	public void updateSelectListIds(String ids, String screenName){

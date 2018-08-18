@@ -27,6 +27,7 @@ public class Fragment_home extends Fragment{
 	private TweetListAdapter adapter;
 	private Handler handler;
 	private SwipeRefreshLayout pulltoRefresh;
+	private long listAsTL;
 	private App app;
 
 	@Override
@@ -35,6 +36,7 @@ public class Fragment_home extends Fragment{
 		handler = new Handler();
 		View v = inflater.inflate(R.layout.fragment_list, container, false);
 		list = (TweetListView)v.findViewById(R.id.listLine);
+		listAsTL = app.getCurrentAccount().getListAsTL();
 
 		adapter = new TweetListAdapter(container.getContext());
 		adapter.setOnItemClickListener(new ListViewListener());
@@ -64,12 +66,19 @@ public class Fragment_home extends Fragment{
 		new AsyncTask<Void, Void, ResponseList<Status>>(){
 			@Override
 			protected ResponseList<twitter4j.Status> doInBackground(Void... params){
+				Paging paging;
+				if(adapter.getItemCount() > 0){
+					long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
+					paging = new Paging(1, 50).maxId(tweetId - 1);
+				}else{
+					paging = new Paging(1, 50);
+				}
+
 				try{
-					if(adapter.getItemCount() > 0){
-						long tweetId = adapter.getItem(adapter.getItemCount() - 1).getId();
-						return app.getTwitter().getHomeTimeline(new Paging(1, 50).maxId(tweetId - 1));
+					if(listAsTL > 0){
+						return app.getTwitter().getUserListStatuses(listAsTL, paging);
 					}else{
-						return app.getTwitter().getHomeTimeline(new Paging(1, 50));
+						return app.getTwitter().getHomeTimeline(paging);
 					}
 				}catch(TwitterException e){
 					return null;

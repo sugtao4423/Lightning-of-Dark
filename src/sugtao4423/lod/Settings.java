@@ -1,15 +1,25 @@
 package sugtao4423.lod;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 import com.loopj.android.image.WebImageCache;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.widget.Toast;
+import sugtao4423.lod.utils.DBUtil;
+import twitter4j.ResponseList;
+import twitter4j.TwitterException;
+import twitter4j.UserList;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
@@ -31,9 +41,20 @@ public class Settings extends PreferenceActivity{
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.preference);
 
+			CheckBoxPreference listAsTL = (CheckBoxPreference)findPreference("listAsTL");
 			Preference listSetting = findPreference("listSetting");
 			Preference clearCache = findPreference("clearCache");
 			setCacheSize(clearCache);
+
+			listAsTL.setChecked(app.getCurrentAccount().getListAsTL() > 0);
+			listAsTL.setSummary(app.getCurrentAccount().getListAsTL() > 0 ? String.valueOf(app.getCurrentAccount().getListAsTL()) : null);
+			listAsTL.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue){
+					boolean isCheck = Boolean.parseBoolean(newValue.toString());
+					return selectListAsTL(preference, isCheck);
+				}
+			});
 
 			listSetting.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 				@Override
@@ -45,7 +66,6 @@ public class Settings extends PreferenceActivity{
 			});
 
 			clearCache.setOnPreferenceClickListener(new OnPreferenceClickListener(){
-
 				@Override
 				public boolean onPreferenceClick(Preference preference){
 					new WebImageCache(Settings.this).clear();
@@ -55,6 +75,50 @@ public class Settings extends PreferenceActivity{
 				}
 			});
 		}
+	}
+
+	public boolean selectListAsTL(final Preference preference, boolean isCheck){
+		final DBUtil dbutil = new DBUtil(getApplicationContext());
+		if(!isCheck){
+			dbutil.updateListAsTL(-1, app.getCurrentAccount().getScreenName());
+			preference.setSummary(null);
+			return true;
+		}
+
+		final HashMap<String, Long> listMap = new HashMap<String, Long>();
+		new AsyncTask<Void, Void, ResponseList<UserList>>(){
+			@Override
+			protected ResponseList<UserList> doInBackground(Void... params){
+				try{
+					return app.getTwitter().getUserLists(app.getTwitter().getScreenName());
+				}catch(IllegalStateException | TwitterException e){
+					return null;
+				}
+			}
+			@Override
+			protected void onPostExecute(ResponseList<UserList> result){
+				if(result == null){
+					new ShowToast(getApplicationContext(), R.string.error_getList);
+					return;
+				}
+				for(UserList l : result){
+					listMap.put(l.getName(), l.getId());
+				}
+				final String[] listNames = (String[])listMap.keySet().toArray(new String[0]);
+				new AlertDialog.Builder(Settings.this)
+				.setTitle("TLとして読み込むリストを選択してください")
+				.setCancelable(false)
+				.setItems(listNames, new OnClickListener(){
+					@Override
+					public void onClick(DialogInterface dialog, int which){
+						long selectedListId = listMap.get(listNames[which]);
+						dbutil.updateListAsTL(selectedListId, app.getCurrentAccount().getScreenName());
+						preference.setSummary(String.valueOf(selectedListId));
+					}
+				}).show();
+			}
+		}.execute();
+		return true;
 	}
 
 	public void setCacheSize(final Preference clearCache){
@@ -89,6 +153,7 @@ public class Settings extends PreferenceActivity{
 	public void onDestroy(){
 		super.onDestroy();
 		app.loadOption();
+		app.reloadAccountFromDB();
 	}
 
 }

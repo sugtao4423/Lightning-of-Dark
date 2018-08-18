@@ -53,6 +53,10 @@ public class App extends Application{
 		this.lists = null;
 	}
 
+	public void reloadAccountFromDB(){
+		this.account = null;
+	}
+
 	public Account getCurrentAccount(){
 		if(account == null){
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

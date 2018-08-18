@@ -100,45 +100,47 @@ public class Settings_List extends PreferenceActivity{
 
 						@Override
 						protected void onPostExecute(final ResponseList<UserList> result){
-							if(result != null){
-								for(UserList userList : result)
-									array.add(userList.getName());
-
-								String[] listItem = (String[])array.toArray(new String[0]);
-								boolean[] isCheck = new boolean[array.size()];
-								for(int i = 0; i < array.size(); i++){
-									isCheck[i] = false;
-								}
-
-								final ArrayList<UserList> checkedList = new ArrayList<UserList>();
-
-								new AlertDialog.Builder(getActivity())
-								.setTitle("リストを選択してください")
-								.setMultiChoiceItems(listItem, isCheck, new OnMultiChoiceClickListener(){
-									@Override
-									public void onClick(DialogInterface dialog, int which, boolean isChecked){
-										if(isChecked)
-											checkedList.add(result.get(which));
-										else
-											checkedList.remove(result.get(which));
-									}
-								}).setPositiveButton("OK", new OnClickListener(){
-									@Override
-									public void onClick(DialogInterface dialog, int which){
-										ArrayList<String> listIds = new ArrayList<String>();
-										ArrayList<String> listNames = new ArrayList<String>();
-										for(UserList l : checkedList){
-											listIds.add(String.valueOf(l.getId()));
-											listNames.add(l.getName());
-										}
-
-										dbUtil.updateSelectListIds(Utils.implode(listIds), myScreenName);
-										dbUtil.updateSelectListNames(Utils.implode(listNames), myScreenName);
-										app.resetAccount();
-										setSummary();
-									}
-								}).show();
+							if(result == null){
+								new ShowToast(Settings_List.this, R.string.error_getList);
+								return;
 							}
+							for(UserList userList : result)
+								array.add(userList.getName());
+
+							String[] listItem = (String[])array.toArray(new String[0]);
+							boolean[] isCheck = new boolean[array.size()];
+							for(int i = 0; i < array.size(); i++){
+								isCheck[i] = false;
+							}
+
+							final ArrayList<UserList> checkedList = new ArrayList<UserList>();
+
+							new AlertDialog.Builder(getActivity())
+							.setTitle("リストを選択してください")
+							.setMultiChoiceItems(listItem, isCheck, new OnMultiChoiceClickListener(){
+								@Override
+								public void onClick(DialogInterface dialog, int which, boolean isChecked){
+									if(isChecked)
+										checkedList.add(result.get(which));
+									else
+										checkedList.remove(result.get(which));
+								}
+							}).setPositiveButton("OK", new OnClickListener(){
+								@Override
+								public void onClick(DialogInterface dialog, int which){
+									ArrayList<String> listIds = new ArrayList<String>();
+									ArrayList<String> listNames = new ArrayList<String>();
+									for(UserList l : checkedList){
+										listIds.add(String.valueOf(l.getId()));
+										listNames.add(l.getName());
+									}
+
+									dbUtil.updateSelectListIds(Utils.implode(listIds), myScreenName);
+									dbUtil.updateSelectListNames(Utils.implode(listNames), myScreenName);
+									app.resetAccount();
+									setSummary();
+								}
+							}).show();
 						}
 					}.execute();
 					return false;
