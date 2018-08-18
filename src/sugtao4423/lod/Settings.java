@@ -80,8 +80,20 @@ public class Settings extends PreferenceActivity{
 	public boolean selectListAsTL(final Preference preference, boolean isCheck){
 		final DBUtil dbutil = new DBUtil(getApplicationContext());
 		if(!isCheck){
-			dbutil.updateListAsTL(-1, app.getCurrentAccount().getScreenName());
-			preference.setSummary(null);
+			new AlertDialog.Builder(Settings.this)
+			.setTitle("解除しますか？")
+			.setPositiveButton("OK", new OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which){
+					dbutil.updateListAsTL(-1, app.getCurrentAccount().getScreenName());
+					preference.setSummary(null);
+				}
+			}).setNegativeButton("Cancel", new OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which){
+					((CheckBoxPreference)preference).setChecked(true);
+				}
+			}).show();
 			return true;
 		}
 
