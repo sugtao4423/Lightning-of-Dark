@@ -31,15 +31,21 @@
             android:positiveButtonText="OK"
             android:title="フォーマット" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="TL自動取得" >
+        <CheckBoxPreference
+            android:key="listAsTL"
+            android:title="リストをTLとして読み込む" />
+
+        <Preference
+            android:key="autoLoadTLInterval"
+            android:title="TLを自動で取得する秒間隔 (要再起動)" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="その他" >
         <CheckBoxPreference
             android:key="isWebm"
             android:summaryOff="mp4"
             android:summaryOn="webm"
             android:title="動画をwebmで取得する" />
-        <CheckBoxPreference
-            android:key="listAsTL"
-            android:title="リストをTLとして読み込む" />
 
         <Preference
             android:key="listSetting"

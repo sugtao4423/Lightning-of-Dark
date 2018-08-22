@@ -100,10 +100,12 @@ public class Fragment_home extends Fragment{
 
 	public void addAll(ResponseList<Status> status){
 		adapter.addAll(status);
+		app.setLatestTweetId(status.get(0).getId());
 	}
 
 	public void insert(Status status){
 		adapter.insertTop(status);
+		app.setLatestTweetId(status.getId());
 		handler.post(new Runnable(){
 
 			@Override

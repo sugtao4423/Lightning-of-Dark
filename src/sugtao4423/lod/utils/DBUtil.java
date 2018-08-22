@@ -47,9 +47,10 @@ public class DBUtil{
 		String at = c.getString(3);
 		String ats = c.getString(4);
 		long listAsTL = c.getLong(5);
-		String listIds = c.getString(6);
-		String listNames = c.getString(7);
-		String appLoadLists = c.getString(8);
+		int autoLoadTLInterval = c.getInt(6);
+		String listIds = c.getString(7);
+		String listNames = c.getString(8);
+		String appLoadLists = c.getString(9);
 
 		long[] selectListIds;
 		if(listIds.equals("")){
@@ -65,7 +66,7 @@ public class DBUtil{
 		String[] selectListNames = listNames.equals("") ? new String[0] : listNames.split(",");
 		String[] startAppLoadLists = appLoadLists.equals("") ? new String[0] : appLoadLists.split(",");
 
-		return new Account(screen_name, ck, cs, at, ats, listAsTL, selectListIds, selectListNames, startAppLoadLists);
+		return new Account(screen_name, ck, cs, at, ats, listAsTL, autoLoadTLInterval, selectListIds, selectListNames, startAppLoadLists);
 	}
 
 	public boolean existsAccount(String screenName){
@@ -88,10 +89,10 @@ public class DBUtil{
 	public void deleteAccount(Account account){
 		db.execSQL(String.format(
 				"DELETE FROM accounts WHERE %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' "
-				+ "AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s'",
+				+ "AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s'",
 				Keys.SCREEN_NAME, account.getScreenName(), Keys.CK, account.getConsumerKey(), Keys.CS, account.getConsumerSecret(),
 				Keys.ACCESS_TOKEN, account.getAccessToken(), Keys.ACCESS_TOKEN_SECRET, account.getAccessTokenSecret(),
-				Keys.LIST_AS_TIMELINE, account.getListAsTL(),
+				Keys.LIST_AS_TIMELINE, account.getListAsTL(), Keys.AUTO_LOAD_TL_INTERVAL, account.getAutoLoadTLInterval(),
 				Keys.SELECT_LIST_IDS, Utils.implode(account.getSelectListIds()),
 				Keys.SELECT_LIST_NAMES, Utils.implode(account.getSelectListNames()),
 				Keys.APP_START_LOAD_LISTS, Utils.implode(account.getStartAppLoadLists())));
@@ -99,6 +100,10 @@ public class DBUtil{
 
 	public void updateListAsTL(long listAsTL, String screenName){
 		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.LIST_AS_TIMELINE, listAsTL, screenName));
+	}
+
+	public void updateAutoLoadTLInterval(int autoLoadTLInterval, String screenName){
+		db.execSQL(getUpdate1ColumnFromEq1Column(Keys.AUTO_LOAD_TL_INTERVAL, autoLoadTLInterval, screenName));
 	}
 
 	public void updateSelectListIds(String ids, String screenName){

@@ -20,5 +20,6 @@ public class Keys{
 	public static final String APP_START_LOAD_LISTS = "appStartLoadLists";
 	public static final String EXPERIENCE = "experience";
 	public static final String LIST_AS_TIMELINE = "listAsTL";
+	public static final String AUTO_LOAD_TL_INTERVAL = "autoLoadTLInterval";
 
 }

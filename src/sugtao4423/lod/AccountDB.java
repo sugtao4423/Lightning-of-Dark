@@ -15,9 +15,10 @@ public class AccountDB extends SQLiteOpenHelper{
 	public void onCreate(SQLiteDatabase db){
 		// create table in "Accounts"
 		db.execSQL(String.format(
-				"CREATE TABLE accounts(%s TEXT, %s TEXT, %s TEXT, %s TEXT, %s TEXT, %s INTEGER, %s TEXT, %s TEXT, %s TEXT)",
+				"CREATE TABLE accounts(%s TEXT, %s TEXT, %s TEXT,  %s TEXT, %s TEXT, %s INTEGER, %s INTEGER, %s TEXT, %s TEXT, %s TEXT)",
 				Keys.SCREEN_NAME, Keys.CK, Keys.CS, Keys.ACCESS_TOKEN, Keys.ACCESS_TOKEN_SECRET,
-				Keys.LIST_AS_TIMELINE, Keys.SELECT_LIST_IDS, Keys.SELECT_LIST_NAMES, Keys.APP_START_LOAD_LISTS));
+				Keys.LIST_AS_TIMELINE, Keys.AUTO_LOAD_TL_INTERVAL,
+				Keys.SELECT_LIST_IDS, Keys.SELECT_LIST_NAMES, Keys.APP_START_LOAD_LISTS));
 	}
 
 	@Override

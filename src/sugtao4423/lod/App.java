@@ -22,6 +22,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
+import sugtao4423.lod.AutoLoadTLService.AutoLoadTLListener;
 import sugtao4423.lod.dataclass.Account;
 import sugtao4423.lod.dataclass.Music;
 import sugtao4423.lod.dataclass.TwitterList;
@@ -38,6 +39,8 @@ public class App extends Application{
 	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
 	private UserStreamAdapter userStreamAdapter;
+	private AutoLoadTLListener autoLoadTLListener;
+	private long latestTweetId;
 	private ConnectionLifeCycleListener clcl;
 	private TwitterList[] lists;
 	private Options options;
@@ -159,6 +162,24 @@ public class App extends Application{
 
 	public UserStreamAdapter getUserStreamAdapter(){
 		return userStreamAdapter;
+	}
+
+	// AutoLoadTLListener
+	public void setAutoLoadTLListener(AutoLoadTLListener autoLoadTLListener){
+		this.autoLoadTLListener = autoLoadTLListener;
+	}
+
+	public AutoLoadTLListener getAutoLoadTLListener(){
+		return autoLoadTLListener;
+	}
+
+	// LatestTweetId
+	public void setLatestTweetId(long latestTweetId){
+		this.latestTweetId = latestTweetId;
+	}
+
+	public long getLatestTweetId(){
+		return latestTweetId;
 	}
 
 	// ConnectionLifeCycleListener

@@ -106,6 +106,8 @@
 
         <service android:name="UserStreamService" >
         </service>
+        <service android:name="AutoLoadTLService" >
+        </service>
     </application>
 
 </manifest>

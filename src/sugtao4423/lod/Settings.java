@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.loopj.android.image.WebImageCache;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -15,17 +16,23 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import sugtao4423.lod.utils.DBUtil;
+import sugtao4423.lod.utils.Utils;
 import twitter4j.ResponseList;
 import twitter4j.TwitterException;
 import twitter4j.UserList;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.text.InputType;
 
 public class Settings extends PreferenceActivity{
 
 	private App app;
+	private Preference autoLoadTLInterval;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -42,6 +49,7 @@ public class Settings extends PreferenceActivity{
 			addPreferencesFromResource(R.xml.preference);
 
 			CheckBoxPreference listAsTL = (CheckBoxPreference)findPreference("listAsTL");
+			autoLoadTLInterval = findPreference("autoLoadTLInterval");
 			Preference listSetting = findPreference("listSetting");
 			Preference clearCache = findPreference("clearCache");
 			setCacheSize(clearCache);
@@ -53,6 +61,15 @@ public class Settings extends PreferenceActivity{
 				public boolean onPreferenceChange(Preference preference, Object newValue){
 					boolean isCheck = Boolean.parseBoolean(newValue.toString());
 					return selectListAsTL(preference, isCheck);
+				}
+			});
+
+			setAutoLoadTLIntervalSummary(app.getCurrentAccount().getAutoLoadTLInterval());
+			autoLoadTLInterval.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+				@Override
+				public boolean onPreferenceClick(Preference preference){
+					clickAutoLoadTLInterval(getActivity());
+					return false;
 				}
 			});
 
@@ -86,7 +103,10 @@ public class Settings extends PreferenceActivity{
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					dbutil.updateListAsTL(-1, app.getCurrentAccount().getScreenName());
+					dbutil.updateAutoLoadTLInterval(0, app.getCurrentAccount().getScreenName());
 					preference.setSummary(null);
+					setAutoLoadTLIntervalSummary(0);
+					app.reloadAccountFromDB();
 				}
 			}).setNegativeButton("Cancel", new OnClickListener(){
 				@Override
@@ -126,11 +146,49 @@ public class Settings extends PreferenceActivity{
 						long selectedListId = listMap.get(listNames[which]);
 						dbutil.updateListAsTL(selectedListId, app.getCurrentAccount().getScreenName());
 						preference.setSummary(String.valueOf(selectedListId));
+						app.reloadAccountFromDB();
 					}
 				}).show();
 			}
 		}.execute();
 		return true;
+	}
+
+	public void clickAutoLoadTLInterval(final Context context){
+		final EditText intervalEdit = new EditText(context);
+		intervalEdit.setInputType(InputType.TYPE_CLASS_NUMBER);
+		FrameLayout editContainer = new FrameLayout(context);
+		FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		int margin = Utils.convertDpToPx(context, 24);
+		params.leftMargin = margin;
+		params.rightMargin = margin;
+		intervalEdit.setLayoutParams(params);
+		editContainer.addView(intervalEdit);
+
+		new AlertDialog.Builder(context)
+		.setMessage("自動で取得する間隔を秒で入力してください")
+		.setView(editContainer)
+		.setPositiveButton("OK", new OnClickListener(){
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+				if(intervalEdit.getText().toString().isEmpty()){
+					return;
+				}
+				boolean isListAsTL = app.getCurrentAccount().getListAsTL() > 0;
+				int interval = Integer.parseInt(intervalEdit.getText().toString());
+				if(!isListAsTL && interval > 0 && interval < 60){
+					new ShowToast(context, R.string.error_autoLoadTLInterval, Toast.LENGTH_LONG);
+					return;
+				}
+				new DBUtil(getApplicationContext()).updateAutoLoadTLInterval(interval, app.getCurrentAccount().getScreenName());
+				setAutoLoadTLIntervalSummary(interval);
+				app.reloadAccountFromDB();
+			}
+		}).show();
+	}
+
+	public void setAutoLoadTLIntervalSummary(int interval){
+		autoLoadTLInterval.setSummary("設定値: " + interval + "  (0: 無効)");
 	}
 
 	public void setCacheSize(final Preference clearCache){
@@ -165,7 +223,6 @@ public class Settings extends PreferenceActivity{
 	public void onDestroy(){
 		super.onDestroy();
 		app.loadOption();
-		app.reloadAccountFromDB();
 	}
 
 }

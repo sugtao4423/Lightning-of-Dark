@@ -22,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import sugtao4423.icondialog.IconDialog;
 import sugtao4423.icondialog.IconItem;
+import sugtao4423.lod.AutoLoadTLService.AutoLoadTLListener;
 import sugtao4423.lod.dataclass.TwitterList;
 import sugtao4423.lod.main_fragment.Fragment_home;
 import sugtao4423.lod.main_fragment.Fragment_mention;
@@ -73,6 +74,7 @@ public class MainActivity extends FragmentActivity{
 			twitter = app.getTwitter();
 			getList();
 			connectStreaming();
+			autoLoadTL();
 		}
 	}
 
@@ -147,6 +149,31 @@ public class MainActivity extends FragmentActivity{
 		}
 	}
 
+	public void autoLoadTL(){
+		if(app.getCurrentAccount().getAutoLoadTLInterval() == 0){
+			return;
+		}
+		AutoLoadTLListener listener = new AutoLoadTLListener(){
+
+			@Override
+			public void onStatus(ResponseList<Status> statuses){
+				for(Status s : statuses){
+					fragmentHome.insert(s);
+					if(app.getMentionPattern().matcher(s.getText()).find() && !s.isRetweet()){
+						fragmentMention.insert(s);
+					}
+				}
+			}
+		};
+		app.setAutoLoadTLListener(listener);
+		Intent intent = new Intent(this, AutoLoadTLService.class);
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+			startForegroundService(intent);
+		}else{
+			startService(intent);
+		}
+	}
+
 	public void setMusicReceiver(){
 		musicReceiver = new MusicReceiver();
 		IntentFilter filter = new IntentFilter();
@@ -201,6 +228,7 @@ public class MainActivity extends FragmentActivity{
 		super.onDestroy();
 		unregisterReceiver(musicReceiver);
 		stopService(new Intent(this, UserStreamService.class));
+		stopService(new Intent(this, AutoLoadTLService.class));
 		app.resetAccount();
 		if(resetFlag){
 			resetFlag = false;
