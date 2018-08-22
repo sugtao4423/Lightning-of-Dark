@@ -32,7 +32,7 @@ public class Settings_List extends PreferenceActivity{
 		super.onCreate(savedInstanceState);
 
 		getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferencesFragment()).commit();
-		getActionBar().setTitle("リスト設定");
+		getActionBar().setTitle("リスト設定 (要再起動)");
 	}
 
 	public class MyPreferencesFragment extends PreferenceFragment{

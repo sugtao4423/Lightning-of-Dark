@@ -3,7 +3,7 @@
 
     <Preference
         android:key="select_List"
-        android:title="リストを選択（チェック順）" />
+        android:title="リストを選択 (チェック順)" />
     <Preference
         android:key="startApp_loadList"
         android:title="起動時に取得するリストを選択" />

@@ -43,7 +43,7 @@
 
         <Preference
             android:key="listSetting"
-            android:title="リスト設定" />
+            android:title="リスト設定 (要再起動)" />
         <Preference
             android:key="clearCache"
             android:title="キャッシュクリア" />
