@@ -102,8 +102,8 @@ public class _0_detail extends Fragment{
 		isTextSet = true;
 		if(target.isProtected())
 			protect.setVisibility(View.VISIBLE);
-		userIcon.setImageUrl(target.getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
-		userBanner.setImageUrl(target.getProfileBannerURL());
+		userIcon.setImageUrl(target.getOriginalProfileImageURL(), null, R.drawable.ic_action_refresh);
+		userBanner.setImageUrl(target.getProfileBannerRetinaURL());
 		userName.setText(target.getName());
 		userScreenName.setText("@" + target.getScreenName());
 
