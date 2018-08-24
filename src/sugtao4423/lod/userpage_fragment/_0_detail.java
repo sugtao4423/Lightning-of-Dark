@@ -250,7 +250,7 @@ public class _0_detail extends Fragment{
 			public void onClick(View v){
 				if(target.getProfileBannerURL() != null){
 					Intent image = new Intent(context, ImageFragmentActivity.class);
-					image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, new String[]{target.getProfileBannerRetinaURL()});
+					image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, new String[]{target.getProfileBanner1500x500URL()});
 					image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_TYPE, ImageFragmentActivity.TYPE_BANNER);
 					context.startActivity(image);
 				}
@@ -260,7 +260,7 @@ public class _0_detail extends Fragment{
 			@Override
 			public boolean onLongClick(View v){
 				if(target.getProfileBannerURL() != null)
-					new ChromeIntent(context, Uri.parse(target.getProfileBannerRetinaURL()));
+					new ChromeIntent(context, Uri.parse(target.getProfileBanner1500x500URL()));
 				return true;
 			}
 		});
