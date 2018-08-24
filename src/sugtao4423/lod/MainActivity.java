@@ -5,7 +5,6 @@ import java.io.File;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
-import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
@@ -29,7 +28,6 @@ import sugtao4423.lod.main_fragment.MainFragmentPagerAdapter;
 public class MainActivity extends FragmentActivity{
 
 	private App app;
-	private Twitter twitter;
 	private boolean resetFlag;
 
 	private Fragment_mention fragmentMention;
@@ -69,7 +67,6 @@ public class MainActivity extends FragmentActivity{
 			startActivity(new Intent(this, StartOAuth.class));
 			finish();
 		}else{
-			twitter = app.getTwitter();
 			getList();
 			autoLoadTL();
 		}
@@ -86,7 +83,7 @@ public class MainActivity extends FragmentActivity{
 				@Override
 				protected ResponseList<twitter4j.Status> doInBackground(Void... params){
 					try{
-						return twitter.getUserListStatuses(list.getListId(), new Paging(1, 50));
+						return app.getTwitter().getUserListStatuses(list.getListId(), new Paging(1, 50));
 					}catch(TwitterException e){
 						return null;
 					}
@@ -140,7 +137,7 @@ public class MainActivity extends FragmentActivity{
 		registerReceiver(musicReceiver, filter);
 	}
 
-	public void new_tweet(View v){
+	public void newTweet(View v){
 		Intent intent = new Intent(MainActivity.this, TweetActivity.class);
 		startActivity(intent);
 	}

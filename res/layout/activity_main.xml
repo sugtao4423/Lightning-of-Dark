@@ -24,7 +24,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:background="@color/transparent"
-        android:onClick="new_tweet"
+        android:onClick="newTweet"
         android:src="@drawable/edit" />
 
     <ImageButton
