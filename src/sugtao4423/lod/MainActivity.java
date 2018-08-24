@@ -2,13 +2,11 @@ package sugtao4423.lod;
 
 import java.io.File;
 
-import twitter4j.ConnectionLifeCycleListener;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitter4j.UserStreamAdapter;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -73,7 +71,6 @@ public class MainActivity extends FragmentActivity{
 		}else{
 			twitter = app.getTwitter();
 			getList();
-			connectStreaming();
 			autoLoadTL();
 		}
 	}
@@ -103,49 +100,6 @@ public class MainActivity extends FragmentActivity{
 					}
 				}
 			}.execute();
-		}
-	}
-
-	public void connectStreaming(){
-		UserStreamAdapter streamAdapter = new UserStreamAdapter(){
-			@Override
-			public void onStatus(final Status status){
-				fragmentHome.insert(status);
-				if(app.getMentionPattern().matcher(status.getText()).find() && !status.isRetweet())
-					fragmentMention.insert(status);
-			}
-		};
-		ConnectionLifeCycleListener clcl = new ConnectionLifeCycleListener(){
-			@Override
-			public void onDisconnect(){
-				toast("接続が切れました");
-			}
-
-			@Override
-			public void onConnect(){
-				toast("接続しました");
-			}
-
-			@Override
-			public void onCleanUp(){
-			}
-
-			public void toast(final String text){
-				MainActivity.this.runOnUiThread(new Runnable(){
-					@Override
-					public void run(){
-						new ShowToast(getApplicationContext(), text);
-					}
-				});
-			}
-		};
-		Intent intent = new Intent(this, UserStreamService.class);
-		app.setUserStreamAdapter(streamAdapter);
-		app.setConnectionLifeCycleListener(clcl);
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-			startForegroundService(intent);
-		}else{
-			startService(intent);
 		}
 	}
 
@@ -227,7 +181,6 @@ public class MainActivity extends FragmentActivity{
 	public void onDestroy(){
 		super.onDestroy();
 		unregisterReceiver(musicReceiver);
-		stopService(new Intent(this, UserStreamService.class));
 		stopService(new Intent(this, AutoLoadTLService.class));
 		app.resetAccount();
 		if(resetFlag){

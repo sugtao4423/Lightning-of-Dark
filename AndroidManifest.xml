@@ -104,8 +104,6 @@
             android:theme="@style/Theme.TranslucentBackground" >
         </activity>
 
-        <service android:name="UserStreamService" >
-        </service>
         <service android:name="AutoLoadTLService" >
         </service>
     </application>

@@ -9,9 +9,6 @@ import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.TwitterStream;
-import twitter4j.TwitterStreamFactory;
-import twitter4j.UserStreamAdapter;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
@@ -36,9 +33,7 @@ public class App extends Application{
 	private Typeface fontAwesomeTypeface;
 	// MainActivity
 	private Twitter twitter;
-	private TwitterStream twitterStream;
 	private Pattern mentionPattern;
-	private UserStreamAdapter userStreamAdapter;
 	private AutoLoadTLListener autoLoadTLListener;
 	private long latestTweetId;
 	private ConnectionLifeCycleListener clcl;
@@ -51,7 +46,6 @@ public class App extends Application{
 	public void resetAccount(){
 		this.account = null;
 		this.twitter = null;
-		this.twitterStream = null;
 		this.mentionPattern = null;
 		this.lists = null;
 	}
@@ -90,7 +84,6 @@ public class App extends Application{
 		Configuration conf = new ConfigurationBuilder().setOAuthConsumerKey(ck).setOAuthConsumerSecret(cs).setTweetModeExtended(true).build();
 		Twitter twitter = new TwitterFactory(conf).getInstance(accessToken);
 		this.twitter = twitter;
-		this.twitterStream = new TwitterStreamFactory(conf).getInstance(accessToken);
 		this.mentionPattern = Pattern.compile(".*@" + getCurrentAccount().getScreenName() + ".*", Pattern.DOTALL);
 	}
 
@@ -141,27 +134,11 @@ public class App extends Application{
 		return twitter;
 	}
 
-	// TwitterStream
-	public TwitterStream getTwitterStream(){
-		if(twitterStream == null)
-			twitterLogin();
-		return twitterStream;
-	}
-
 	// mentionPattern
 	public Pattern getMentionPattern(){
 		if(mentionPattern == null)
 			twitterLogin();
 		return mentionPattern;
-	}
-
-	// UserStreamAdapter
-	public void setUserStreamAdapter(UserStreamAdapter userStreamAdapter){
-		this.userStreamAdapter = userStreamAdapter;
-	}
-
-	public UserStreamAdapter getUserStreamAdapter(){
-		return userStreamAdapter;
 	}
 
 	// AutoLoadTLListener
