@@ -88,7 +88,10 @@ public class Fragment_home extends Fragment{
 			@Override
 			protected void onPostExecute(ResponseList<twitter4j.Status> result){
 				if(result != null){
-					addAll(result);
+					if(adapter.getItemCount() <= 0){
+						app.setLatestTweetId(result.get(0).getId());
+					}
+					adapter.addAll(result);
 				}else{
 					new ShowToast(getContext().getApplicationContext(), R.string.error_getTimeLine);
 				}
@@ -96,11 +99,6 @@ public class Fragment_home extends Fragment{
 				pulltoRefresh.setEnabled(true);
 			}
 		}.execute();
-	}
-
-	public void addAll(ResponseList<Status> status){
-		adapter.addAll(status);
-		app.setLatestTweetId(status.get(0).getId());
 	}
 
 	public void insert(Status status){
