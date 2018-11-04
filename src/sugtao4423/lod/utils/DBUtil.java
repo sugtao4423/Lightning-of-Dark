@@ -87,15 +87,7 @@ public class DBUtil{
 	}
 
 	public void deleteAccount(Account account){
-		db.execSQL(String.format(
-				"DELETE FROM accounts WHERE %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' "
-				+ "AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s' AND %s='%s'",
-				Keys.SCREEN_NAME, account.getScreenName(), Keys.CK, account.getConsumerKey(), Keys.CS, account.getConsumerSecret(),
-				Keys.ACCESS_TOKEN, account.getAccessToken(), Keys.ACCESS_TOKEN_SECRET, account.getAccessTokenSecret(),
-				Keys.LIST_AS_TIMELINE, account.getListAsTL(), Keys.AUTO_LOAD_TL_INTERVAL, account.getAutoLoadTLInterval(),
-				Keys.SELECT_LIST_IDS, Utils.implode(account.getSelectListIds()),
-				Keys.SELECT_LIST_NAMES, Utils.implode(account.getSelectListNames()),
-				Keys.APP_START_LOAD_LISTS, Utils.implode(account.getStartAppLoadLists())));
+		db.execSQL(String.format("DELETE FROM accounts WHERE %s='%s'", Keys.SCREEN_NAME, account.getScreenName()));
 	}
 
 	public void updateListAsTL(long listAsTL, String screenName){
