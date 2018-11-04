@@ -78,9 +78,9 @@ public class DBUtil{
 	}
 
 	public void addAcount(Account account){
-		db.execSQL(String.format("INSERT INTO accounts VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+		db.execSQL(String.format("INSERT INTO accounts VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
 				account.getScreenName(), account.getConsumerKey(), account.getConsumerSecret(),
-				account.getAccessToken(), account.getAccessTokenSecret(), account.getListAsTL(),
+				account.getAccessToken(), account.getAccessTokenSecret(), account.getListAsTL(), account.getAutoLoadTLInterval(),
 				Utils.implode(account.getSelectListIds()),
 				Utils.implode(account.getSelectListNames()),
 				Utils.implode(account.getStartAppLoadLists())));
