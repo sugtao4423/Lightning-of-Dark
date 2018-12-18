@@ -180,6 +180,8 @@ public class MainActivity extends FragmentActivity{
 		unregisterReceiver(musicReceiver);
 		stopService(new Intent(this, AutoLoadTLService.class));
 		app.resetAccount();
+		app.closeAccountDB();
+		app.closeUseTimeDB();
 		if(resetFlag){
 			resetFlag = false;
 			startActivity(new Intent(this, MainActivity.class));

@@ -40,8 +40,10 @@ public class App extends Application{
 	private TwitterList[] lists;
 	private Options options;
 	private Level level;
-	private UseTime useTime;
 	private Music music;
+	// Database
+	private DBUtil accountDBUtil;
+	private UseTime useTime;
 
 	public void resetAccount(){
 		this.account = null;
@@ -57,7 +59,7 @@ public class App extends Application{
 	public Account getCurrentAccount(){
 		if(account == null){
 			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			account = new DBUtil(getApplicationContext()).getAccount(pref.getString(Keys.SCREEN_NAME, ""));
+			account = getAccountDBUtil().getAccount(pref.getString(Keys.SCREEN_NAME, ""));
 			if(account == null){
 				account = new Account("", "", "", "", "");
 			}
@@ -203,13 +205,6 @@ public class App extends Application{
 		return level;
 	}
 
-	// UseTime
-	public UseTime getUseTime(){
-		if(useTime == null)
-			useTime = new UseTime(getApplicationContext());
-		return useTime;
-	}
-
 	// Music
 	public void setMusic(Music music){
 		this.music = music;
@@ -217,6 +212,34 @@ public class App extends Application{
 
 	public Music getMusic(){
 		return music;
+	}
+
+	// DBUtil
+	public DBUtil getAccountDBUtil(){
+		if(accountDBUtil == null)
+			accountDBUtil = new DBUtil(getApplicationContext());
+		return accountDBUtil;
+	}
+
+	public void closeAccountDB(){
+		if(accountDBUtil != null){
+			accountDBUtil.dbClose();
+			accountDBUtil = null;
+		}
+	}
+
+	// UseTime
+	public UseTime getUseTime(){
+		if(useTime == null)
+			useTime = new UseTime(getApplicationContext());
+		return useTime;
+	}
+
+	public void closeUseTimeDB(){
+		if(useTime != null){
+			useTime.dbClose();
+			useTime = null;
+		}
 	}
 
 }

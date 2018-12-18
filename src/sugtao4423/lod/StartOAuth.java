@@ -116,7 +116,7 @@ public class StartOAuth extends Activity{
 			@Override
 			protected void onPostExecute(AccessToken accessToken){
 				if(accessToken != null){
-					DBUtil dbUtil = new DBUtil(StartOAuth.this);
+					DBUtil dbUtil = app.getAccountDBUtil();
 					if(dbUtil.existsAccount(accessToken.getScreenName())){
 						new ShowToast(getApplicationContext(), getString(R.string.existsAccount, accessToken.getScreenName()), Toast.LENGTH_LONG);
 						finish();

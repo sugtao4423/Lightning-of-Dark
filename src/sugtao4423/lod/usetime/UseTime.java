@@ -16,6 +16,10 @@ public class UseTime{
 		db = new UseTimeDB(context).getWritableDatabase();
 	}
 
+	public void dbClose(){
+		db.close();
+	}
+
 	public void start(){
 		startTime = System.currentTimeMillis();
 	}

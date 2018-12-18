@@ -43,9 +43,8 @@ public class Settings_List extends PreferenceActivity{
 			select_List = findPreference("select_List");
 			startApp_loadList = findPreference("startApp_loadList");
 
-			dbUtil = new DBUtil(getActivity());
-
 			app = (App)getActivity().getApplicationContext();
+			dbUtil = app.getAccountDBUtil();
 			myScreenName = app.getCurrentAccount().getScreenName();
 
 			setSummary();

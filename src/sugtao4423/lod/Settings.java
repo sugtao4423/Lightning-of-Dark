@@ -95,7 +95,7 @@ public class Settings extends PreferenceActivity{
 	}
 
 	public boolean selectListAsTL(final Preference preference, boolean isCheck){
-		final DBUtil dbutil = new DBUtil(getApplicationContext());
+		final DBUtil dbutil = app.getAccountDBUtil();
 		if(!isCheck){
 			new AlertDialog.Builder(Settings.this)
 			.setTitle("解除しますか？")
@@ -180,7 +180,7 @@ public class Settings extends PreferenceActivity{
 					new ShowToast(context, R.string.error_autoLoadTLInterval, Toast.LENGTH_LONG);
 					return;
 				}
-				new DBUtil(getApplicationContext()).updateAutoLoadTLInterval(interval, app.getCurrentAccount().getScreenName());
+				app.getAccountDBUtil().updateAutoLoadTLInterval(interval, app.getCurrentAccount().getScreenName());
 				setAutoLoadTLIntervalSummary(interval);
 				app.reloadAccountFromDB();
 			}

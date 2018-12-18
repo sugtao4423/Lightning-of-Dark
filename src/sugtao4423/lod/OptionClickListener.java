@@ -112,8 +112,9 @@ public class OptionClickListener implements OnClickListener{
 	}
 
 	public void accountSelect(){
-		final String myScreenName = ((App)context.getApplicationContext()).getCurrentAccount().getScreenName();
-		final DBUtil dbUtil = new DBUtil(context);
+		App app = (App)context.getApplicationContext();
+		final String myScreenName = app.getCurrentAccount().getScreenName();
+		final DBUtil dbUtil = app.getAccountDBUtil();
 		final Account[] accounts = dbUtil.getAccounts();
 		ArrayList<String> screenNames = new ArrayList<String>();
 		for(Account acc : accounts){

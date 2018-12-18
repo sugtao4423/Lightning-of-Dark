@@ -17,6 +17,10 @@ public class DBUtil{
 		db = new AccountDB(context).getWritableDatabase();
 	}
 
+	public void dbClose(){
+		db.close();
+	}
+
 	public Account getAccount(String screenName){
 		Cursor c = db.rawQuery(String.format("SELECT * FROM accounts WHERE %s='%s'", Keys.SCREEN_NAME, screenName), null);
 		if(!c.moveToFirst()){
