@@ -1,5 +1,6 @@
 package sugtao4423.lod.tweetlistview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.v7.widget.DividerItemDecoration;
@@ -50,6 +51,7 @@ class AlternatelyColor extends ItemDecoration{
         this.app = (App)context.getApplicationContext();
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state){
         super.getItemOffsets(outRect, view, parent, state);
@@ -61,13 +63,13 @@ class AlternatelyColor extends ItemDecoration{
                 return;
             }
             if(item.isRetweetedByMe()){
-                view.setBackgroundResource(R.drawable.retweeted_by_me);
+                view.setBackgroundResource(R.xml.retweeted_by_me);
             }else if(item.isRetweet()){
-                view.setBackgroundResource(R.drawable.retweet);
+                view.setBackgroundResource(R.xml.retweet);
             }else if(item.getUser().getScreenName().equals(app.getCurrentAccount().getScreenName())){
-                view.setBackgroundResource(R.drawable.same_my_screenname);
+                view.setBackgroundResource(R.xml.same_my_screenname);
             }else if(app.getMentionPattern().matcher(item.getText()).find()){
-                view.setBackgroundResource(R.drawable.mention);
+                view.setBackgroundResource(R.xml.mention);
             }else{
                 setAlternately(pos, view);
             }
@@ -76,8 +78,9 @@ class AlternatelyColor extends ItemDecoration{
         }
     }
 
+    @SuppressLint("ResourceType")
     public void setAlternately(int pos, View view){
-        view.setBackgroundResource(pos % 2 == 0 ? R.drawable.position0 : R.drawable.position1);
+        view.setBackgroundResource(pos % 2 == 0 ? R.xml.position0 : R.xml.position1);
     }
 
 }

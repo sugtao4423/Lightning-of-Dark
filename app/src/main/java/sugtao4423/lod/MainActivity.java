@@ -1,5 +1,6 @@
 package sugtao4423.lod;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity{
 
     private MusicReceiver musicReceiver;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
