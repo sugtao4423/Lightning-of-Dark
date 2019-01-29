@@ -132,11 +132,14 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
                 child.setAdjustViewBounds(true);
 
                 if(Utils.isVideoOrGif(mentitys[i])){
+                    FrameLayout.LayoutParams centerParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 200, Gravity.CENTER);
                     ImageView play = new ImageView(context);
+                    play.setLayoutParams(centerParams);
+                    play.setMaxHeight(200);
+                    play.setAdjustViewBounds(true);
+                    play.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     play.setImageResource(R.drawable.video_play);
-                    FrameLayout.LayoutParams playParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,
-                            FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
-                    play.setLayoutParams(playParams);
+
                     FrameLayout fl = new FrameLayout(context);
                     fl.addView(child);
                     fl.addView(play);
