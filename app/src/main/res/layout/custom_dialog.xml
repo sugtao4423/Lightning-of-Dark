@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ListViewListener" >
+    tools:context=".ListViewListener">
 
     <ListView
         android:id="@+id/dialog_List"
@@ -14,7 +14,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/dialog_reply"
@@ -22,8 +22,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@xml/dialog_background"
-            android:minHeight="0dp"
             android:minWidth="0dp"
+            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_reply" />
 
@@ -33,8 +33,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@xml/dialog_background"
-            android:minHeight="0dp"
             android:minWidth="0dp"
+            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_retweet" />
 
@@ -44,8 +44,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@xml/dialog_background"
-            android:minHeight="0dp"
             android:minWidth="0dp"
+            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_quote" />
 
@@ -55,8 +55,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@xml/dialog_background"
-            android:minHeight="0dp"
             android:minWidth="0dp"
+            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_star" />
 
@@ -66,8 +66,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@xml/dialog_background"
-            android:minHeight="0dp"
             android:minWidth="0dp"
+            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_comment" />
 
@@ -77,8 +77,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@xml/dialog_background"
-            android:minHeight="0dp"
             android:minWidth="0dp"
+            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_trash" />
     </LinearLayout>

@@ -8,17 +8,18 @@ import android.widget.EditText;
 
 public class Dialog_regButtonClick implements OnClickListener{
 
-	private EditText regEdit;
+    private EditText regEdit;
 
-	public Dialog_regButtonClick(EditText regEdit){
-		this.regEdit = regEdit;
-	}
+    public Dialog_regButtonClick(EditText regEdit){
+        this.regEdit = regEdit;
+    }
 
-	@Override
-	public void onClick(View v){
-		int start = regEdit.getSelectionStart();
-		int end = regEdit.getSelectionEnd();
-		Editable editable = regEdit.getText();
-		editable.replace(Math.min(start, end), Math.max(start, end), ((Button)v).getText());
-	}
+    @Override
+    public void onClick(View v){
+        int start = regEdit.getSelectionStart();
+        int end = regEdit.getSelectionEnd();
+        Editable editable = regEdit.getText();
+        editable.replace(Math.min(start, end), Math.max(start, end), ((Button)v).getText());
+    }
+
 }

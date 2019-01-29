@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="オプションメニュー" >
+    <PreferenceCategory android:title="オプションメニュー">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="menu_openBrowser"
@@ -15,7 +15,7 @@
             android:key="menu_millisecond"
             android:title="ミリ秒を表示" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="画面回転" >
+    <PreferenceCategory android:title="画面回転">
         <CheckBoxPreference
             android:key="isImageOrientaionSensor"
             android:title="画像表示時" />
@@ -23,7 +23,7 @@
             android:key="isVideoOrientationSensor"
             android:title="動画再生時" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="再生中の曲" >
+    <PreferenceCategory android:title="再生中の曲">
         <EditTextPreference
             android:dialogMessage="曲名: %track%\nアーティスト: %artist%\nアルバム: %album%\n\nデフォルト: %artist% - %track% #nowplaying"
             android:key="nowplayingFormat"
@@ -31,7 +31,7 @@
             android:positiveButtonText="OK"
             android:title="フォーマット" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="TL自動取得" >
+    <PreferenceCategory android:title="TL自動取得">
         <CheckBoxPreference
             android:key="listAsTL"
             android:title="リストをTLとして読み込む" />
@@ -40,7 +40,7 @@
             android:key="autoLoadTLInterval"
             android:title="TLを自動で取得する秒間隔 (要再起動)" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="その他" >
+    <PreferenceCategory android:title="その他">
         <CheckBoxPreference
             android:key="isWebm"
             android:summaryOff="mp4"

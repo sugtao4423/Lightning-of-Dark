@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".StartOAuth" >
+    tools:context=".StartOAuth">
 
     <Button
         android:id="@+id/ninsyo"
@@ -29,8 +29,8 @@
         android:id="@+id/text_ck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/description"
+        android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
         android:text="CK" />
 
@@ -38,8 +38,8 @@
         android:id="@+id/text_cs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/text_ck"
+        android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
         android:text="CS" />
 
@@ -58,8 +58,8 @@
         android:id="@+id/oauthDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/edit_cs"
+        android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
         android:clickable="true"
         android:onClick="copyClipBoardDescription" />

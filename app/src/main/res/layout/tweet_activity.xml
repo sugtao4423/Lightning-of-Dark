@@ -4,19 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/activityBackgroundGray"
-    tools:context=".TweetActivity" >
+    tools:context=".TweetActivity">
 
     <EditText
         android:id="@+id/tweetText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tweetButton"
+        android:layout_below="@+id/scrollViewForOriginStatus"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/scrollViewForOriginStatus"
         android:ems="10"
         android:gravity="top|left"
-        android:inputType="textMultiLine" >
+        android:inputType="textMultiLine">
 
         <requestFocus />
     </EditText>
@@ -42,8 +42,8 @@
         android:id="@+id/tweetClose"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:background="@color/transparent"
         android:onClick="back"
         android:padding="10dp"
@@ -70,8 +70,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/transparent"
-        android:minHeight="0dp"
         android:minWidth="0dp"
+        android:minHeight="0dp"
         android:onClick="cursor_start"
         android:padding="8dp"
         android:text="@string/icon_cursorStart"
@@ -85,8 +85,8 @@
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/cursor_start"
         android:background="@color/transparent"
-        android:minHeight="0dp"
         android:minWidth="0dp"
+        android:minHeight="0dp"
         android:onClick="cursor_end"
         android:padding="8dp"
         android:text="@string/icon_cursorEnd"
@@ -111,8 +111,8 @@
         android:id="@+id/tweetAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@+id/tweetText"
+        android:layout_alignParentLeft="true"
         android:layout_marginLeft="5dp"
         android:text="TweetAccount" />
 
@@ -124,8 +124,8 @@
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/cursor_end"
         android:background="@color/transparent"
-        android:minHeight="0dp"
         android:minWidth="0dp"
+        android:minHeight="0dp"
         android:onClick="mic"
         android:padding="8dp"
         android:text="@string/icon_mic"
@@ -140,8 +140,8 @@
         android:layout_marginLeft="12dp"
         android:layout_toRightOf="@+id/tweetMic"
         android:background="@color/transparent"
-        android:minHeight="0dp"
         android:minWidth="0dp"
+        android:minHeight="0dp"
         android:onClick="music"
         android:padding="8dp"
         android:text="@string/icon_music"
@@ -153,13 +153,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <sugtao4423.lod.tweetlistview.TweetListView
                 android:id="@+id/originStatus"
