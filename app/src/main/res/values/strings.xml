@@ -46,6 +46,8 @@
 
     <string name="error_autoLoadTLInterval">TLを自動で取得するには60秒間隔以上で設定する必要があります\nこれを回避するにはリストをTLとして使用してください</string>
 
+    <string name="permission_rejected">(๑•﹏•๑*)</string>
+
     <string name="icon_bomb">&#xf1e2;</string>
     <string name="icon_search">&#xf002;</string>
     <string name="icon_refresh">&#xf021;</string>

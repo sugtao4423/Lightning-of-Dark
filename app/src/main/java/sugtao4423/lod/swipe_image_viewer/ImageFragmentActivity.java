@@ -1,16 +1,21 @@
 package sugtao4423.lod.swipe_image_viewer;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -93,6 +98,10 @@ public class ImageFragmentActivity extends AppCompatActivity{
     }
 
     public void saveImage(){
+        if(!hasWriteExternalStoragePermission()){
+            requestWriteExternalStoragePermission();
+            return;
+        }
         if(type == TYPE_BANNER){
             Matcher banner = Regex.userBannerUrl.matcher(currentUrl);
             if(!banner.find()){
@@ -220,6 +229,28 @@ public class ImageFragmentActivity extends AppCompatActivity{
             Toast.makeText(this, "オリジナルを保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(this, "保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public boolean hasWriteExternalStoragePermission(){
+        int writeExternalStorage = PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return writeExternalStorage == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestWriteExternalStoragePermission(){
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 364);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode != 364){
+            return;
+        }
+        if(permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            saveImage();
+        }else{
+            new ShowToast(getApplicationContext(), R.string.permission_rejected);
         }
     }
 

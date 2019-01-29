@@ -1,12 +1,17 @@
 package sugtao4423.lod;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -184,6 +189,10 @@ public class TweetActivity extends AppCompatActivity{
     }
 
     public void image(View v){
+        if(!hasWriteExternalStoragePermission()){
+            requestWriteExternalStoragePermission();
+            return;
+        }
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_PICK);
@@ -264,6 +273,28 @@ public class TweetActivity extends AppCompatActivity{
         finish();
     }
 
+    public boolean hasWriteExternalStoragePermission(){
+        int writeExternalStorage = PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return writeExternalStorage == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public void requestWriteExternalStoragePermission(){
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 364);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode != 364){
+            return;
+        }
+        if(permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            image(null);
+        }else{
+            new ShowToast(getApplicationContext(), R.string.permission_rejected);
+        }
+    }
+
     @Override
     public void onResume(){
         super.onResume();
@@ -279,8 +310,9 @@ public class TweetActivity extends AppCompatActivity{
     @Override
     public void onDestroy(){
         super.onDestroy();
-        if(image != null)
+        if(image != null){
             image = null;
+        }
     }
 
 }
