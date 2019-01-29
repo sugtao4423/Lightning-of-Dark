@@ -121,7 +121,7 @@ public class Dialog_ListClick implements OnItemClickListener{
                 if(mentitys != null && mentitys.length > 0){
                     for(MediaEntity media : mentitys){
                         if(!Utils.isVideoOrGif(media))
-                            urls.add(media.getMediaURL());
+                            urls.add(media.getMediaURLHttps());
                     }
                 }
                 int pos = urls.indexOf(clickedText);

@@ -82,7 +82,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
             holder.rt_sn.setVisibility(View.VISIBLE);
             String date = statusDateFormat.format(new Date((item.getRetweetedStatus().getId() >> 22) + 1288834974657L));
             holder.date.setText(date + "  Retweeted by ");
-            holder.rt_icon.setImageUrl(item.getUser().getProfileImageURL(), null, R.drawable.ic_action_refresh);
+            holder.rt_icon.setImageUrl(item.getUser().getProfileImageURLHttps(), null, R.drawable.ic_action_refresh);
             holder.rt_sn.setText("@" + item.getUser().getScreenName());
         }else{
             holder.rt_icon.setVisibility(View.GONE);
@@ -93,7 +93,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 
         holder.name_sn.setText(origStatus.getUser().getName() + " - @" + origStatus.getUser().getScreenName());
         holder.content.setText(origStatus.getText());
-        holder.icon.setImageUrl(origStatus.getUser().getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
+        holder.icon.setImageUrl(origStatus.getUser().getBiggerProfileImageURLHttps(), null, R.drawable.ic_action_refresh);
 
         holder.icon.setOnClickListener(new OnClickListener(){
             @Override
@@ -144,7 +144,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
 
                     final boolean isGif = Utils.isGif(mentitys[i]);
                     final String[] videoUrl = Utils.getVideoURLsSortByBitrate(app, mentitys);
-                    child.setImageUrl(mentitys[i].getMediaURL() + ":small", null, R.drawable.ic_action_refresh);
+                    child.setImageUrl(mentitys[i].getMediaURLHttps() + ":small", null, R.drawable.ic_action_refresh);
                     child.setOnClickListener(new OnClickListener(){
                         @Override
                         public void onClick(View v){
@@ -160,11 +160,11 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
                     });
                 }else{
                     holder.tweetImagesLayout.addView(child);
-                    child.setImageUrl(mentitys[i].getMediaURL() + ":small", null, R.drawable.ic_action_refresh);
+                    child.setImageUrl(mentitys[i].getMediaURLHttps() + ":small", null, R.drawable.ic_action_refresh);
                     final int pos = i;
                     final String[] urls = new String[mentitys.length];
                     for(int j = 0; j < urls.length; j++){
-                        urls[j] = mentitys[j].getMediaURL();
+                        urls[j] = mentitys[j].getMediaURLHttps();
                     }
                     child.setOnClickListener(new OnClickListener(){
                         @Override

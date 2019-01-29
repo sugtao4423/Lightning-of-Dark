@@ -83,7 +83,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
                         list.add(videoUrls[videoUrls.length - 1]);
                     }
                 }else{
-                    list.add(media.getMediaURL());
+                    list.add(media.getMediaURLHttps());
                 }
             }
         }
@@ -159,7 +159,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         name_screenName.setText(status.getUser().getName() + " - @" + status.getUser().getScreenName());
         String date = statusDateFormat.format(new Date((status.getId() >> 22) + 1288834974657L));
         tweetDate.setText(date + "  via " + status.getSource().replaceAll("<.+?>", ""));
-        icon.setImageUrl(status.getUser().getBiggerProfileImageURL(), null, R.drawable.ic_action_refresh);
+        icon.setImageUrl(status.getUser().getBiggerProfileImageURLHttps(), null, R.drawable.ic_action_refresh);
 
         dialog.show();
 

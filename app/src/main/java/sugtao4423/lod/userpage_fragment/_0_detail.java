@@ -104,7 +104,7 @@ public class _0_detail extends Fragment{
         if(target.isProtected()){
             protect.setVisibility(View.VISIBLE);
         }
-        userIcon.setImageUrl(target.getOriginalProfileImageURL(), null, R.drawable.ic_action_refresh);
+        userIcon.setImageUrl(target.getOriginalProfileImageURLHttps(), null, R.drawable.ic_action_refresh);
         userBanner.setImageUrl(target.getProfileBannerRetinaURL());
         userName.setText(target.getName());
         userScreenName.setText("@" + target.getScreenName());
@@ -217,7 +217,7 @@ public class _0_detail extends Fragment{
             protected String[] doInBackground(Void... params){
                 try{
                     return new String[]{
-                            app.getTwitter().verifyCredentials().getBiggerProfileImageURL(), target.getBiggerProfileImageURL()
+                            app.getTwitter().verifyCredentials().getBiggerProfileImageURLHttps(), target.getBiggerProfileImageURLHttps()
                     };
                 }catch(TwitterException e){
                     return null;
@@ -241,7 +241,7 @@ public class _0_detail extends Fragment{
             @Override
             public void onClick(View v){
                 Intent image = new Intent(context, ImageFragmentActivity.class);
-                image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, new String[]{target.getOriginalProfileImageURL()});
+                image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, new String[]{target.getOriginalProfileImageURLHttps()});
                 image.putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_TYPE, ImageFragmentActivity.TYPE_ICON);
                 context.startActivity(image);
             }
@@ -249,7 +249,7 @@ public class _0_detail extends Fragment{
         userIcon.setOnLongClickListener(new OnLongClickListener(){
             @Override
             public boolean onLongClick(View v){
-                new ChromeIntent(context, Uri.parse(target.getOriginalProfileImageURL()));
+                new ChromeIntent(context, Uri.parse(target.getOriginalProfileImageURLHttps()));
                 return true;
             }
         });

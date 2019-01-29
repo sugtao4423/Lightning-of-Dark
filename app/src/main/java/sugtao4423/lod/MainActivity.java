@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity{
             return;
         }
         for(File f : cache.listFiles()){
-            if(f.getName().startsWith("http+pbs+twimg+com+media+")){
+            if(f.getName().startsWith("https+pbs+twimg+com+media+")){
                 f.delete();
             }
         }
