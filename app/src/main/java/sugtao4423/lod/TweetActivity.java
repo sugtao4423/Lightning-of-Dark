@@ -194,7 +194,7 @@ public class TweetActivity extends AppCompatActivity{
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "音声入力");
-        startActivityForResult(intent, 114514);
+        startActivityForResult(intent, 1919);
     }
 
     public void music(View v){
@@ -214,7 +214,7 @@ public class TweetActivity extends AppCompatActivity{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 114514 && resultCode == RESULT_OK){ // 音声入力
+        if(requestCode == 1919 && resultCode == RESULT_OK){ // 音声入力
             ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             tweetText.setText(tweetText.getText().toString() + results.get(0));
             cursor_end(null);
