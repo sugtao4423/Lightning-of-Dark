@@ -25,6 +25,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/transparent"
         android:onClick="image_option_click"
-        android:src="@drawable/ic_action_settings" />
+        android:src="@drawable/icon_download" />
 
 </RelativeLayout>
