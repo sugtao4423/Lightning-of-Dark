@@ -25,7 +25,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:src="@drawable/ic_action_refresh" />
+            android:src="@drawable/icon_loading" />
 
         <TextView
             android:id="@+id/UserScreenName"
@@ -220,7 +220,7 @@
             android:layout_alignTop="@+id/UserPage_isFollow"
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@+id/UserPage_isFollow"
-            android:src="@drawable/ic_action_refresh" />
+            android:src="@drawable/icon_loading" />
 
         <com.loopj.android.image.SmartImageView
             android:id="@+id/UserPage_sourceIcon"
@@ -229,7 +229,7 @@
             android:layout_below="@+id/banner"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/ic_action_refresh" />
+            android:src="@drawable/icon_loading" />
 
         <TextView
             android:id="@+id/UserPage_protected"

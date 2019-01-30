@@ -63,7 +63,7 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
             holder.protect.setVisibility(View.GONE);
         }
 
-        holder.icon.setImageUrl(item.getBiggerProfileImageURLHttps(), null, R.drawable.ic_action_refresh);
+        holder.icon.setImageUrl(item.getBiggerProfileImageURLHttps(), null, R.drawable.icon_loading);
         holder.name_sn.setText(item.getName() + " - @" + item.getScreenName());
         holder.content.setText(item.getDescription());
         holder.date.setText("Tweet: " + numberFormat(item.getStatusesCount()) + "  Fav: "

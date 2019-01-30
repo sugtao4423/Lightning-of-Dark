@@ -59,7 +59,7 @@ public class AutoLoadTLService extends Service{
             notificationManager.createNotificationChannel(channel);
             Notification notification = new Notification.Builder(getApplicationContext(), channelId)
                     .setContentTitle(title)
-                    .setSmallIcon(R.drawable.notification_icon)
+                    .setSmallIcon(R.drawable.icon_notification)
                     .setAutoCancel(true)
                     .setContentIntent(pendingIntent)
                     .setWhen(System.currentTimeMillis())
