@@ -79,8 +79,12 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name="Settings" />
-        <activity android:name="Settings_List" />
+        <activity
+            android:name="Settings"
+            android:label="@string/settings" />
+        <activity
+            android:name="Settings_List"
+            android:label="@string/settings_list" />
         <activity
             android:name="sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity"
             android:configChanges="orientation|screenSize|screenLayout"

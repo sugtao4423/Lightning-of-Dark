@@ -31,7 +31,6 @@ public class Settings_List extends AppCompatActivity{
 
         app = (App)getApplicationContext();
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferencesFragment()).commit();
-        getSupportActionBar().setTitle("リスト設定 (要再起動)");
     }
 
     public static class MyPreferencesFragment extends PreferenceFragment{

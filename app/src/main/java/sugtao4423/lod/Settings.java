@@ -40,7 +40,6 @@ public class Settings extends AppCompatActivity{
 
         app = (App)getApplicationContext();
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferencesFragment()).commit();
-        getSupportActionBar().setTitle("設定");
     }
 
     public static class MyPreferencesFragment extends PreferenceFragment{

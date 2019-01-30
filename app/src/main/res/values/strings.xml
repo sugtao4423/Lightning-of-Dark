@@ -2,6 +2,8 @@
 <resources>
 
     <string name="app_name">Lightning of Dark</string>
+    <string name="settings">設定</string>
+    <string name="settings_list">リスト設定 (要再起動)</string>
 
     <string name="success_tweet">ツイートしました。%1$dEXP獲得。</string>
     <string name="error_tweet">ツイートできませんでした</string>
