@@ -11,7 +11,7 @@ public class Options{
     private boolean isMillisecond;
     private boolean isWebm;
     private String nowplayingFormat;
-    private boolean isImageOrientaionSensor;
+    private boolean isImageOrientationSensor;
     private boolean isVideoOrientationSensor;
 
     public Options(Context context){
@@ -21,7 +21,7 @@ public class Options{
         this.isMillisecond = pref.getBoolean(Keys.MENU_MILLISECOND, false);
         this.isWebm = pref.getBoolean(Keys.IS_WEBM, false);
         this.nowplayingFormat = pref.getString(Keys.NOWPLAYING_FORMAT, "");
-        this.isImageOrientaionSensor = pref.getBoolean(Keys.IS_IMAGE_ORIENTATION_SENSOR, false);
+        this.isImageOrientationSensor = pref.getBoolean(Keys.IS_IMAGE_ORIENTATION_SENSOR, false);
         this.isVideoOrientationSensor = pref.getBoolean(Keys.IS_VIDEO_ORIENTATION_SENSOR, false);
     }
 
@@ -45,8 +45,8 @@ public class Options{
         return this.nowplayingFormat;
     }
 
-    public boolean getIsImageOrientaionSensor(){
-        return this.isImageOrientaionSensor;
+    public boolean getIsImageOrientationSensor(){
+        return this.isImageOrientationSensor;
     }
 
     public boolean getIsVideoOrientationSensor(){

@@ -13,7 +13,7 @@ public class Keys{
     public static final String IS_WEBM = "isWebm";
     public static final String NOWPLAYING_FORMAT = "nowplayingFormat";
     public static final String REGULAR_EXPRESSION = "regularExpression";
-    public static final String IS_IMAGE_ORIENTATION_SENSOR = "isImageOrientaionSensor";
+    public static final String IS_IMAGE_ORIENTATION_SENSOR = "isImageOrientationSensor";
     public static final String IS_VIDEO_ORIENTATION_SENSOR = "isVideoOrientationSensor";
     public static final String SELECT_LIST_IDS = "selectListIds";
     public static final String SELECT_LIST_NAMES = "selectListNames";

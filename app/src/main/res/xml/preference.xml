@@ -17,7 +17,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="画面回転">
         <CheckBoxPreference
-            android:key="isImageOrientaionSensor"
+            android:key="isImageOrientationSensor"
             android:title="画像表示時" />
         <CheckBoxPreference
             android:key="isVideoOrientationSensor"
