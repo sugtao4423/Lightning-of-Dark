@@ -46,6 +46,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
     private Handler handler;
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
+    private boolean hideImages;
 
     public TweetListAdapter(Context context){
         this.inflater = LayoutInflater.from(context);
@@ -54,6 +55,10 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
         this.app = (App)context.getApplicationContext();
         this.statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (app.getOptions().getIsMillisecond() ? ".SSS" : ""), Locale.getDefault());
         this.handler = new Handler();
+    }
+
+    public void setHideImages(boolean hideImages){
+        this.hideImages = hideImages;
     }
 
     @Override
@@ -116,18 +121,24 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
         holder.v.setOnClickListener(new OnClickListener(){
             @Override
             public void onClick(View v){
-                onItemClickListener.onItemClicked(context, data, holder.getLayoutPosition());
+                if(onItemClickListener != null){
+                    onItemClickListener.onItemClicked(context, data, holder.getLayoutPosition());
+                }
             }
         });
         holder.v.setOnLongClickListener(new OnLongClickListener(){
             @Override
             public boolean onLongClick(View v){
-                return onItemLongClickListener.onItemLongClicked(context, data, holder.getLayoutPosition());
+                if(onItemLongClickListener != null){
+                    return onItemLongClickListener.onItemLongClicked(context, data, holder.getLayoutPosition());
+                }else{
+                    return false;
+                }
             }
         });
 
         MediaEntity[] mentitys = origStatus.getMediaEntities();
-        if(mentitys != null && mentitys.length > 0){
+        if(mentitys != null && mentitys.length > 0 && !hideImages){
             holder.tweetImagesScroll.setVisibility(View.VISIBLE);
             holder.tweetImagesLayout.removeAllViews();
             for(int i = 0; i < mentitys.length; i++){

@@ -6,20 +6,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.loopj.android.image.SmartImageView;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import sugtao4423.lod.dialog_onclick.Dialog_ListClick;
 import sugtao4423.lod.dialog_onclick.Dialog_deletePost;
@@ -29,6 +24,7 @@ import sugtao4423.lod.dialog_onclick.Dialog_reply;
 import sugtao4423.lod.dialog_onclick.Dialog_retweet;
 import sugtao4423.lod.dialog_onclick.Dialog_talk;
 import sugtao4423.lod.dialog_onclick.Dialog_unOfficialRT;
+import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListAdapter.OnItemClickListener;
 import sugtao4423.lod.tweetlistview.TweetListAdapter.OnItemLongClickListener;
 import sugtao4423.lod.utils.Utils;
@@ -101,29 +97,24 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
         return true;
     }
 
-    private View dialog_title;
-    private SmartImageView icon;
-    private TextView name_screenName, tweetText, tweetDate, protect;
-    private SimpleDateFormat statusDateFormat;
+    private TweetListAdapter adapter;
 
     private View content;
-    private ListView dialog_list;
+    private ListView dialogList;
     private Button[] dialogBtn;
 
     private AlertDialog dialog;
 
     public void createDialog(Context context){
-        dialog_title = View.inflate(context, R.layout.list_item_tweet, null);
-        icon = (SmartImageView)dialog_title.findViewById(R.id.icon);
-        name_screenName = (TextView)dialog_title.findViewById(R.id.name_screenName);
-        tweetText = (TextView)dialog_title.findViewById(R.id.tweetText);
-        tweetDate = (TextView)dialog_title.findViewById(R.id.tweet_date);
-        statusDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (((App)context.getApplicationContext()).getOptions().getIsMillisecond() ? ".SSS" : ""), Locale.getDefault());
-        protect = (TextView)dialog_title.findViewById(R.id.UserProtected);
-        ((HorizontalScrollView)dialog_title.findViewById(R.id.tweet_images_scroll)).setVisibility(View.GONE);
+        RecyclerView tweetListView = new RecyclerView(context);
+        LinearLayoutManager llm = new LinearLayoutManager(context);
+        tweetListView.setLayoutManager(llm);
+        adapter = new TweetListAdapter(context);
+        adapter.setHideImages(true);
+        tweetListView.setAdapter(adapter);
 
         content = View.inflate(context, R.layout.custom_dialog, null);
-        dialog_list = (ListView)content.findViewById(R.id.dialog_List);
+        dialogList = (ListView)content.findViewById(R.id.dialog_List);
         dialogBtn = new Button[6];
         dialogBtn[0] = (Button)content.findViewById(R.id.dialog_reply);
         dialogBtn[1] = (Button)content.findViewById(R.id.dialog_retweet);
@@ -140,32 +131,21 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
             btn.setTextSize(9 * density);
             btn.setTextColor(black);
         }
-        protect.setTypeface(tf);
 
-        dialog = new AlertDialog.Builder(context).setCustomTitle(dialog_title).setView(content).create();
+        dialog = new AlertDialog.Builder(context).setCustomTitle(tweetListView).setView(content).create();
     }
 
     public void showDialog(final Context context, Status status, ArrayList<Status> allStatusData, ArrayAdapter<String> listStrings){
         if(dialog == null){
             createDialog(context);
         }
-
-        if(!status.getUser().isProtected()){
-            protect.setVisibility(View.GONE);
-        }else{
-            protect.setVisibility(View.VISIBLE);
-        }
-        tweetText.setText(status.getText());
-        name_screenName.setText(status.getUser().getName() + " - @" + status.getUser().getScreenName());
-        String date = statusDateFormat.format(new Date((status.getId() >> 22) + 1288834974657L));
-        tweetDate.setText(date + "  via " + status.getSource().replaceAll("<.+?>", ""));
-        icon.setImageUrl(status.getUser().getBiggerProfileImageURLHttps(), null, R.drawable.icon_loading);
-
+        adapter.clear();
+        adapter.add(status);
         dialog.show();
 
-        dialog_list.setAdapter(listStrings);
-        dialog_list.setOnItemClickListener(new Dialog_ListClick(context, status, allStatusData, dialog));
-        dialog_list.setOnItemLongClickListener(new android.widget.AdapterView.OnItemLongClickListener(){
+        dialogList.setAdapter(listStrings);
+        dialogList.setOnItemClickListener(new Dialog_ListClick(context, status, allStatusData, dialog));
+        dialogList.setOnItemLongClickListener(new android.widget.AdapterView.OnItemLongClickListener(){
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
                 String clickedText = (String)parent.getItemAtPosition(position);
