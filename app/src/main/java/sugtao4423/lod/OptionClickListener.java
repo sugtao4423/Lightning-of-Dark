@@ -80,7 +80,8 @@ public class OptionClickListener implements OnClickListener{
                                 }
                             }.execute(loop);
                         }
-                        new ShowToast(context.getApplicationContext(), R.string.success_tweet);
+                        String toast = context.getString(R.string.param_success_tweet, 0);
+                        new ShowToast(context.getApplicationContext(), toast);
                     }
                 }).show();
     }
@@ -150,7 +151,8 @@ public class OptionClickListener implements OnClickListener{
                                 @Override
                                 public void onClick(DialogInterface dialog, int w){
                                     dbUtil.deleteAccount(accounts[which]);
-                                    new ShowToast(context.getApplicationContext(), String.format(context.getString(R.string.success_account_delete), accounts[which].getScreenName()));
+                                    String toast = context.getString(R.string.param_success_account_delete, accounts[which].getScreenName());
+                                    new ShowToast(context.getApplicationContext(), toast);
                                 }
                             }).setNeutralButton("キャンセル", null).show();
                         }

@@ -107,9 +107,9 @@ public class App extends Application{
                 if(result != null){
                     int exp = getLevel().getRandomExp();
                     boolean isLvUp = getLevel().addExp(exp);
-                    new ShowToast(getApplicationContext(), getString(R.string.success_tweet, exp));
+                    new ShowToast(getApplicationContext(), getString(R.string.param_success_tweet, exp));
                     if(isLvUp){
-                        new ShowToast(getApplicationContext(), getString(R.string.level_up, getLevel().getLevel()), Toast.LENGTH_LONG);
+                        new ShowToast(getApplicationContext(), getString(R.string.param_level_up, getLevel().getLevel()), Toast.LENGTH_LONG);
                     }
                 }else{
                     new ShowToast(getApplicationContext(), R.string.error_tweet);

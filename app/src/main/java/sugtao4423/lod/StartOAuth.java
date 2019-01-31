@@ -119,7 +119,8 @@ public class StartOAuth extends AppCompatActivity{
                 if(accessToken != null){
                     DBUtil dbUtil = app.getAccountDBUtil();
                     if(dbUtil.existsAccount(accessToken.getScreenName())){
-                        new ShowToast(getApplicationContext(), getString(R.string.account_already_exists, accessToken.getScreenName()), Toast.LENGTH_LONG);
+                        String toast = getString(R.string.param_account_already_exists, accessToken.getScreenName());
+                        new ShowToast(getApplicationContext(), toast, Toast.LENGTH_LONG);
                         finish();
                         return;
                     }

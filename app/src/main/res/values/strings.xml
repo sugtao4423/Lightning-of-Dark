@@ -5,7 +5,7 @@
     <string name="settings">設定</string>
     <string name="settings_list">リスト設定 (要再起動)</string>
 
-    <string name="success_tweet">ツイートしました。%1$dEXP獲得。</string>
+    <string name="param_success_tweet">ツイートしました。%1$dEXP獲得。</string>
     <string name="error_tweet">ツイートできませんでした</string>
     <string name="success_retweet">リツイートしました</string>
     <string name="error_retweet">リツイートできませんでした</string>
@@ -13,7 +13,7 @@
     <string name="error_favorite">ふぁぼれませんでした</string>
     <string name="success_post_delete">ツイ消ししました</string>
     <string name="error_post_delete">ツイ消しできませんでした</string>
-    <string name="level_up">レベル%1$dに上がった！</string>
+    <string name="param_level_up">レベル%1$dに上がった！</string>
 
     <string name="error_get_timeline">タイムライン取得エラー</string>
     <string name="error_get_mention">メンション取得エラー</string>
@@ -31,14 +31,14 @@
     <string name="error_select_picture">画像を選択できませんでした</string>
 
     <string name="nothing">ありませんでした</string>
-    <string name="regex_result_count">%1$d件中 %2$d件見つかりました</string>
+    <string name="param_regex_result_count">%1$d件中 %2$d件見つかりました</string>
 
     <string name="error_get_status">ツイートの取得に失敗しました</string>
     <string name="edittext_empty">なにも入力されていません</string>
-    <string name="success_account_delete">\@%s を削除しました</string>
+    <string name="param_success_account_delete">\@%s を削除しました</string>
     <string name="list_not_selected">リストが選択されていません</string>
     <string name="error_get_request_token">RequestTokenの取得に失敗しました</string>
-    <string name="account_already_exists">\@%1$s はすでに登録されています</string>
+    <string name="param_account_already_exists">\@%1$s はすでに登録されています</string>
     <string name="success_add_account">アカウントを追加しました</string>
     <string name="error_get_access_token">アクセストークンの取得に失敗しました</string>
     <string name="done_copy_clip_board">クリップボードにコピーしました</string>
