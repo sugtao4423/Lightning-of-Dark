@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -58,6 +59,7 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
 
         if(item.isProtected()){
             holder.protect.setTypeface(app.getFontAwesomeTypeface());
+            holder.protect.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().getUserNameFontSize() - 3);
             holder.protect.setVisibility(View.VISIBLE);
         }else{
             holder.protect.setVisibility(View.GONE);
@@ -73,6 +75,10 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
                 numberFormat(item.getFollowersCount())
         );
         holder.date.setText(userCountsText);
+
+        holder.name_sn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().getUserNameFontSize());
+        holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().getContentFontSize());
+        holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().getDateFontSize());
 
         holder.v.setOnClickListener(new OnClickListener(){
 

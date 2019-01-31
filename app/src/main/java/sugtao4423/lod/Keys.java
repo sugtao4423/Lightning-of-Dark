@@ -21,5 +21,8 @@ public class Keys{
     public static final String EXPERIENCE = "experience";
     public static final String LIST_AS_TIMELINE = "listAsTL";
     public static final String AUTO_LOAD_TL_INTERVAL = "autoLoadTLInterval";
+    public static final String USER_NAME_FONT_SIZE = "userNameFontSize";
+    public static final String CONTENT_FONT_SIZE = "contentFontSize";
+    public static final String DATE_FONT_SIZE = "dateFontSize";
 
 }

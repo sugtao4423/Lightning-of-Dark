@@ -27,8 +27,8 @@
         <EditTextPreference
             android:dialogMessage="曲名: %track%\nアーティスト: %artist%\nアルバム: %album%\n\nデフォルト: %artist% - %track% #nowplaying"
             android:key="nowplayingFormat"
-            android:negativeButtonText="キャンセル"
-            android:positiveButtonText="OK"
+            android:negativeButtonText="@string/cancel"
+            android:positiveButtonText="@string/ok"
             android:title="フォーマット" />
     </PreferenceCategory>
     <PreferenceCategory android:title="TL自動取得">
@@ -39,6 +39,29 @@
         <Preference
             android:key="autoLoadTLInterval"
             android:title="TLを自動で取得する秒間隔 (要再起動)" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="フォントサイズ">
+        <ListPreference
+            android:defaultValue="13"
+            android:entries="@array/fontSizeList"
+            android:entryValues="@array/fontSizeList"
+            android:key="userNameFontSize"
+            android:summary="%ssp"
+            android:title="ユーザー名" />
+        <ListPreference
+            android:defaultValue="13"
+            android:entries="@array/fontSizeList"
+            android:entryValues="@array/fontSizeList"
+            android:key="contentFontSize"
+            android:summary="%ssp"
+            android:title="本文" />
+        <ListPreference
+            android:defaultValue="11"
+            android:entries="@array/fontSizeList"
+            android:entryValues="@array/fontSizeList"
+            android:key="dateFontSize"
+            android:summary="%ssp"
+            android:title="日付" />
     </PreferenceCategory>
     <PreferenceCategory android:title="その他">
         <CheckBoxPreference

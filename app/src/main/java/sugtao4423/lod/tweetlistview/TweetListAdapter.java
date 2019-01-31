@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -71,6 +72,7 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
         // 鍵
         if(origStatus.getUser().isProtected()){
             holder.protect.setTypeface(app.getFontAwesomeTypeface());
+            holder.protect.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().getUserNameFontSize() - 3);
             holder.protect.setVisibility(View.VISIBLE);
         }else{
             holder.protect.setVisibility(View.GONE);
@@ -94,6 +96,13 @@ public class TweetListAdapter extends RecyclerView.Adapter<TweetListAdapter.View
         holder.name_sn.setText(origStatus.getUser().getName() + " - @" + origStatus.getUser().getScreenName());
         holder.content.setText(origStatus.getText());
         holder.icon.setImageUrl(origStatus.getUser().getBiggerProfileImageURLHttps(), null, R.drawable.icon_loading);
+
+        holder.name_sn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().getUserNameFontSize());
+        holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().getContentFontSize());
+        holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().getDateFontSize());
+        if(item.isRetweet()){
+            holder.rt_sn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().getDateFontSize());
+        }
 
         holder.icon.setOnClickListener(new OnClickListener(){
             @Override

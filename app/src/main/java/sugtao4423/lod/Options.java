@@ -13,6 +13,9 @@ public class Options{
     private String nowplayingFormat;
     private boolean isImageOrientationSensor;
     private boolean isVideoOrientationSensor;
+    private float userNameFontSize;
+    private float contentFontSize;
+    private float dateFontSize;
 
     public Options(Context context){
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
@@ -23,6 +26,9 @@ public class Options{
         this.nowplayingFormat = pref.getString(Keys.NOWPLAYING_FORMAT, "");
         this.isImageOrientationSensor = pref.getBoolean(Keys.IS_IMAGE_ORIENTATION_SENSOR, false);
         this.isVideoOrientationSensor = pref.getBoolean(Keys.IS_VIDEO_ORIENTATION_SENSOR, false);
+        this.userNameFontSize = Float.parseFloat(pref.getString(Keys.USER_NAME_FONT_SIZE, "13"));
+        this.contentFontSize = Float.parseFloat(pref.getString(Keys.CONTENT_FONT_SIZE, "13"));
+        this.dateFontSize = Float.parseFloat(pref.getString(Keys.DATE_FONT_SIZE, "11"));
     }
 
     public boolean getIsOpenBrowser(){
@@ -51,6 +57,18 @@ public class Options{
 
     public boolean getIsVideoOrientationSensor(){
         return this.isVideoOrientationSensor;
+    }
+
+    public float getUserNameFontSize(){
+        return userNameFontSize;
+    }
+
+    public float getContentFontSize(){
+        return contentFontSize;
+    }
+
+    public float getDateFontSize(){
+        return dateFontSize;
     }
 
 }
