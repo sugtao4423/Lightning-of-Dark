@@ -30,7 +30,8 @@
         android:layout_below="@+id/name_screenName"
         android:layout_alignLeft="@+id/name_screenName"
         android:layout_alignParentRight="true"
-        android:text="本文" />
+        android:text="本文"
+        android:textColor="@color/textDarkPrimary" />
 
     <TextView
         android:id="@+id/tweet_date"
