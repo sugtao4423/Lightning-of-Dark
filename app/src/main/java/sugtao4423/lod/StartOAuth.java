@@ -89,7 +89,7 @@ public class StartOAuth extends AppCompatActivity{
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(rt.getAuthenticationURL()));
                     startActivity(intent);
                 }else{
-                    new ShowToast(getApplicationContext(), R.string.error_getRequestToken);
+                    new ShowToast(getApplicationContext(), R.string.error_get_request_token);
                 }
             }
         }.execute(conf);
@@ -119,7 +119,7 @@ public class StartOAuth extends AppCompatActivity{
                 if(accessToken != null){
                     DBUtil dbUtil = app.getAccountDBUtil();
                     if(dbUtil.existsAccount(accessToken.getScreenName())){
-                        new ShowToast(getApplicationContext(), getString(R.string.existsAccount, accessToken.getScreenName()), Toast.LENGTH_LONG);
+                        new ShowToast(getApplicationContext(), getString(R.string.account_already_exists, accessToken.getScreenName()), Toast.LENGTH_LONG);
                         finish();
                         return;
                     }
@@ -138,10 +138,10 @@ public class StartOAuth extends AppCompatActivity{
                     Account account = new Account(accessToken.getScreenName(), ck, cs, accessToken.getToken(), accessToken.getTokenSecret());
                     dbUtil.addAcount(account);
                     app.resetAccount();
-                    new ShowToast(getApplicationContext(), R.string.success_addAccount);
+                    new ShowToast(getApplicationContext(), R.string.success_add_account);
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }else{
-                    new ShowToast(getApplicationContext(), R.string.error_getAccessToken);
+                    new ShowToast(getApplicationContext(), R.string.error_get_access_token);
                 }
                 finish();
             }
@@ -152,7 +152,7 @@ public class StartOAuth extends AppCompatActivity{
         ClipboardManager clipboardManager = (ClipboardManager)this.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText("Lightning of Dark", CALLBACK_URL);
         clipboardManager.setPrimaryClip(clipData);
-        new ShowToast(getApplicationContext(), R.string.done_clipBoardCopy);
+        new ShowToast(getApplicationContext(), R.string.done_copy_clip_board);
     }
 
 }

@@ -105,7 +105,7 @@ public class ImageFragmentActivity extends AppCompatActivity{
         if(type == TYPE_BANNER){
             Matcher banner = Regex.userBannerUrl.matcher(currentUrl);
             if(!banner.find()){
-                new ShowToast(getApplicationContext(), R.string.urlNotMatchPatternDontSave);
+                new ShowToast(getApplicationContext(), R.string.url_not_match_pattern_and_dont_save);
                 return;
             }
             byte[] non_orig_image = ((ImageFragment)adapter.getItem(pager.getCurrentItem())).getNonOrigImage();
@@ -120,7 +120,7 @@ public class ImageFragmentActivity extends AppCompatActivity{
 
         final Matcher pattern = Regex.userIconUrl.matcher(currentUrl);
         if(!pattern.find()){
-            new ShowToast(getApplicationContext(), R.string.urlNotMatchPatternDontSave);
+            new ShowToast(getApplicationContext(), R.string.url_not_match_pattern_and_dont_save);
             return;
         }
 
@@ -171,7 +171,7 @@ public class ImageFragmentActivity extends AppCompatActivity{
                         save(pattern.group(2), pattern.group(3), result, true);
                     }
                 }else{
-                    new ShowToast(getApplicationContext(), R.string.error_getOriginalImage);
+                    new ShowToast(getApplicationContext(), R.string.error_get_original_image);
                 }
             }
         }.execute(currentUrl + orig);

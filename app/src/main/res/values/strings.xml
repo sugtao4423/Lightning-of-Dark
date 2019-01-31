@@ -9,44 +9,44 @@
     <string name="error_tweet">ツイートできませんでした</string>
     <string name="success_retweet">リツイートしました</string>
     <string name="error_retweet">リツイートできませんでした</string>
-    <string name="success_fav">ふぁぼりました</string>
-    <string name="error_fav">ふぁぼれませんでした</string>
-    <string name="success_delpost">ツイ消ししました</string>
-    <string name="error_delpost">ツイ消しできませんでした</string>
+    <string name="success_favorite">ふぁぼりました</string>
+    <string name="error_favorite">ふぁぼれませんでした</string>
+    <string name="success_post_delete">ツイ消ししました</string>
+    <string name="error_post_delete">ツイ消しできませんでした</string>
     <string name="level_up">レベル%1$dに上がった！</string>
 
-    <string name="error_getTimeLine">タイムライン取得エラー</string>
-    <string name="error_getMention">メンション取得エラー</string>
-    <string name="error_getFav">ふぁぼ取得エラー</string>
-    <string name="error_getFollow">フォロー取得エラー</string>
-    <string name="error_getFollower">フォロワー取得エラー</string>
-    <string name="error_getList">リスト取得エラー</string>
+    <string name="error_get_timeline">タイムライン取得エラー</string>
+    <string name="error_get_mention">メンション取得エラー</string>
+    <string name="error_get_favorite">ふぁぼ取得エラー</string>
+    <string name="error_get_follow">フォロー取得エラー</string>
+    <string name="error_get_follower">フォロワー取得エラー</string>
+    <string name="error_get_list">リスト取得エラー</string>
 
-    <string name="error_getUserIcon">ユーザーアイコンの取得に失敗しました</string>
+    <string name="error_get_user_icon">ユーザーアイコンの取得に失敗しました</string>
 
-    <string name="success_getTalkList">会話取得完了</string>
-    <string name="error_getTalkList">会話取得エラー</string>
+    <string name="success_get_talk_list">会話取得完了</string>
+    <string name="error_get_talk_list">会話取得エラー</string>
 
-    <string name="success_selectPic">画像を選択しました</string>
-    <string name="error_selectPic">画像を選択できませんでした</string>
+    <string name="success_select_picture">画像を選択しました</string>
+    <string name="error_select_picture">画像を選択できませんでした</string>
 
     <string name="nothing">ありませんでした</string>
-    <string name="regResultCount">%1$d件中 %2$d件見つかりました</string>
+    <string name="regex_result_count">%1$d件中 %2$d件見つかりました</string>
 
-    <string name="error_getStatus">ツイートの取得に失敗しました</string>
+    <string name="error_get_status">ツイートの取得に失敗しました</string>
     <string name="edittext_empty">なにも入力されていません</string>
-    <string name="deleteAccountX">\@%s を削除しました</string>
-    <string name="listNotSelected">リストが選択されていません</string>
-    <string name="error_getRequestToken">RequestTokenの取得に失敗しました</string>
-    <string name="existsAccount">\@%1$s はすでに登録されています</string>
-    <string name="success_addAccount">アカウントを追加しました</string>
-    <string name="error_getAccessToken">アクセストークンの取得に失敗しました</string>
-    <string name="done_clipBoardCopy">クリップボードにコピーしました</string>
-    <string name="urlNotMatchPatternDontSave">URLがパターンにマッチしません\n保存できませんでした</string>
-    <string name="error_getOriginalImage">オリジナル画像の取得に失敗しました</string>
-    <string name="error_getUserDetail">ユーザー情報を取得できませんでした</string>
+    <string name="success_account_delete">\@%s を削除しました</string>
+    <string name="list_not_selected">リストが選択されていません</string>
+    <string name="error_get_request_token">RequestTokenの取得に失敗しました</string>
+    <string name="account_already_exists">\@%1$s はすでに登録されています</string>
+    <string name="success_add_account">アカウントを追加しました</string>
+    <string name="error_get_access_token">アクセストークンの取得に失敗しました</string>
+    <string name="done_copy_clip_board">クリップボードにコピーしました</string>
+    <string name="url_not_match_pattern_and_dont_save">URLがパターンにマッチしません\n保存できませんでした</string>
+    <string name="error_get_original_image">オリジナル画像の取得に失敗しました</string>
+    <string name="error_get_user_detail">ユーザー情報を取得できませんでした</string>
 
-    <string name="error_autoLoadTLInterval">TLを自動で取得するには60秒間隔以上で設定する必要があります\nこれを回避するにはリストをTLとして使用してください</string>
+    <string name="error_auto_load_tl_interval">TLを自動で取得するには60秒間隔以上で設定する必要があります\nこれを回避するにはリストをTLとして使用してください</string>
 
     <string name="permission_rejected">(๑•﹏•๑*)</string>
 

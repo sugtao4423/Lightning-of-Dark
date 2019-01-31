@@ -94,7 +94,7 @@ public class Fragment_home extends Fragment{
                     }
                     adapter.addAll(result);
                 }else{
-                    new ShowToast(getContext().getApplicationContext(), R.string.error_getTimeLine);
+                    new ShowToast(getContext().getApplicationContext(), R.string.error_get_timeline);
                 }
                 pulltoRefresh.setRefreshing(false);
                 pulltoRefresh.setEnabled(true);

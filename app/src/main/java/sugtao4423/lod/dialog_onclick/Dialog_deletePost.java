@@ -54,9 +54,9 @@ public class Dialog_deletePost implements OnClickListener{
             @Override
             protected void onPostExecute(Boolean result){
                 if(result)
-                    new ShowToast(context.getApplicationContext(), R.string.success_delpost);
+                    new ShowToast(context.getApplicationContext(), R.string.success_post_delete);
                 else
-                    new ShowToast(context.getApplicationContext(), R.string.error_delpost);
+                    new ShowToast(context.getApplicationContext(), R.string.error_post_delete);
             }
         }.execute();
     }

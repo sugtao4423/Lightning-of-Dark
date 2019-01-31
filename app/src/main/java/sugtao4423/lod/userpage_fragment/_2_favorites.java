@@ -100,7 +100,7 @@ public class _2_favorites extends Fragment{
                         isAllLoaded = true;
                     }
                 }else{
-                    new ShowToast(getContext().getApplicationContext(), R.string.error_getFav);
+                    new ShowToast(getContext().getApplicationContext(), R.string.error_get_favorite);
                 }
                 pulltoRefresh.setRefreshing(false);
                 pulltoRefresh.setEnabled(true);

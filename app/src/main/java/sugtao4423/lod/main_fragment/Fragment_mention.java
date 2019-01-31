@@ -95,7 +95,7 @@ public class Fragment_mention extends Fragment{
                 if(result != null){
                     addAll(result);
                 }else{
-                    new ShowToast(getContext().getApplicationContext(), R.string.error_getMention);
+                    new ShowToast(getContext().getApplicationContext(), R.string.error_get_mention);
                 }
                 pulltoRefresh.setRefreshing(false);
                 pulltoRefresh.setEnabled(true);

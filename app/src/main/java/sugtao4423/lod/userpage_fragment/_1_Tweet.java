@@ -100,7 +100,7 @@ public class _1_Tweet extends Fragment{
                         isAllLoaded = true;
                     }
                 }else{
-                    new ShowToast(getContext().getApplicationContext(), R.string.error_getTimeLine);
+                    new ShowToast(getContext().getApplicationContext(), R.string.error_get_timeline);
                 }
                 pulltoRefresh.setRefreshing(false);
                 pulltoRefresh.setEnabled(true);

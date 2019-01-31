@@ -62,7 +62,7 @@ public class UserPage extends AppCompatActivity{
                     setTargetUser();
                     ((_0_detail)(adapter.getItem(0))).setText();
                 }else{
-                    new ShowToast(getApplicationContext(), R.string.error_getUserDetail);
+                    new ShowToast(getApplicationContext(), R.string.error_get_user_detail);
                     finish();
                 }
             }

@@ -82,7 +82,7 @@ public class Settings_List extends AppCompatActivity{
                     if(!selectedListNames[0].equals("")){
                         builder.show();
                     }else{
-                        new ShowToast(getActivity().getApplicationContext(), R.string.listNotSelected);
+                        new ShowToast(getActivity().getApplicationContext(), R.string.list_not_selected);
                     }
                     return false;
                 }
@@ -105,7 +105,7 @@ public class Settings_List extends AppCompatActivity{
                         @Override
                         protected void onPostExecute(ResponseList<UserList> result){
                             if(result == null){
-                                new ShowToast(getActivity().getApplicationContext(), R.string.error_getList);
+                                new ShowToast(getActivity().getApplicationContext(), R.string.error_get_list);
                                 return;
                             }
                             final HashMap<String, Long> listMap = new HashMap<String, Long>();

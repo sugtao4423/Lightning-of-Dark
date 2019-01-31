@@ -237,9 +237,9 @@ public class TweetActivity extends AppCompatActivity{
                 image = new File(c.getString(0));
                 ImageView iv = (ImageView)findViewById(R.id.selectedImage);
                 iv.setImageURI(data.getData());
-                new ShowToast(getApplicationContext(), R.string.success_selectPic);
+                new ShowToast(getApplicationContext(), R.string.success_select_picture);
             }catch(Exception e){
-                new ShowToast(getApplicationContext(), R.string.error_selectPic);
+                new ShowToast(getApplicationContext(), R.string.error_select_picture);
             }
         }
     }

@@ -135,7 +135,7 @@ public class Settings extends AppCompatActivity{
                 @Override
                 protected void onPostExecute(ResponseList<UserList> result){
                     if(result == null){
-                        new ShowToast(getActivity().getApplicationContext(), R.string.error_getList);
+                        new ShowToast(getActivity().getApplicationContext(), R.string.error_get_list);
                         return;
                     }
                     for(UserList l : result){
@@ -182,7 +182,7 @@ public class Settings extends AppCompatActivity{
                             boolean isListAsTL = app.getCurrentAccount().getListAsTL() > 0;
                             int interval = Integer.parseInt(intervalEdit.getText().toString());
                             if(!isListAsTL && interval > 0 && interval < 60){
-                                new ShowToast(context, R.string.error_autoLoadTLInterval, Toast.LENGTH_LONG);
+                                new ShowToast(context, R.string.error_auto_load_tl_interval, Toast.LENGTH_LONG);
                                 return;
                             }
                             app.getAccountDBUtil().updateAutoLoadTLInterval(interval, app.getCurrentAccount().getScreenName());

@@ -150,7 +150,7 @@ public class OptionClickListener implements OnClickListener{
                                 @Override
                                 public void onClick(DialogInterface dialog, int w){
                                     dbUtil.deleteAccount(accounts[which]);
-                                    new ShowToast(context.getApplicationContext(), String.format(context.getString(R.string.deleteAccountX), accounts[which].getScreenName()));
+                                    new ShowToast(context.getApplicationContext(), String.format(context.getString(R.string.success_account_delete), accounts[which].getScreenName()));
                                 }
                             }).setNeutralButton("キャンセル", null).show();
                         }

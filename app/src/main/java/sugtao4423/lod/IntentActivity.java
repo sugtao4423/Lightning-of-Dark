@@ -121,7 +121,7 @@ public class IntentActivity extends AppCompatActivity{
                     dialog.getWindow().setDimAmount(0f);
                     dialog.show();
                 }else{
-                    new ShowToast(getApplicationContext(), R.string.error_getStatus);
+                    new ShowToast(getApplicationContext(), R.string.error_get_status);
                 }
             }
         }.execute(tweetId);

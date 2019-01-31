@@ -230,7 +230,7 @@ public class _0_detail extends Fragment{
                     sourceIcon.setImageUrl(result[0], null, R.drawable.icon_loading);
                     targetIcon.setImageUrl(result[1], null, R.drawable.icon_loading);
                 }else{
-                    new ShowToast(getContext().getApplicationContext(), R.string.error_getUserIcon);
+                    new ShowToast(getContext().getApplicationContext(), R.string.error_get_user_icon);
                 }
             }
         }.execute();

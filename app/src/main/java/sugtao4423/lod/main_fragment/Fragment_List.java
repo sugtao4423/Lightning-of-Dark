@@ -96,7 +96,7 @@ public class Fragment_List extends Fragment{
                     thisList.getTweetListAdapter().addAll(result);
                     thisList.setIsAlreadyLoad(true);
                 }else{
-                    new ShowToast(getContext().getApplicationContext(), R.string.error_getList);
+                    new ShowToast(getContext().getApplicationContext(), R.string.error_get_list);
                 }
                 pulltoRefresh.setRefreshing(false);
                 pulltoRefresh.setEnabled(true);

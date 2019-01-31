@@ -95,7 +95,7 @@ public class _3_follow extends Fragment{
                         isAllLoaded = true;
                     }
                 }else{
-                    new ShowToast(getContext().getApplicationContext(), R.string.error_getFollow);
+                    new ShowToast(getContext().getApplicationContext(), R.string.error_get_follow);
                 }
                 pulltoRefresh.setRefreshing(false);
                 pulltoRefresh.setEnabled(true);

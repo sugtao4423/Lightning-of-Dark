@@ -64,10 +64,10 @@ public class Dialog_talk implements OnClickListener{
                 if(result.getInReplyToStatusId() > 0){
                     new LoadConversation().execute();
                 }else{
-                    new ShowToast(context.getApplicationContext(), R.string.success_getTalkList);
+                    new ShowToast(context.getApplicationContext(), R.string.success_get_talk_list);
                 }
             }else{
-                new ShowToast(context.getApplicationContext(), R.string.error_getTalkList);
+                new ShowToast(context.getApplicationContext(), R.string.error_get_talk_list);
             }
         }
     }
