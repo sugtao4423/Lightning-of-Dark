@@ -22,7 +22,7 @@
         android:layout_alignBaseline="@+id/bomb_staticText"
         android:layout_alignBottom="@+id/bomb_staticText"
         android:layout_alignParentLeft="true"
-        android:text="固定テキスト" />
+        android:text="@string/layout_static_text" />
 
     <EditText
         android:id="@+id/bomb_loopText"
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/bomb_staticText"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/text_static"
+        android:layout_toRightOf="@+id/text_loop"
         android:ems="10" />
 
     <TextView
@@ -40,7 +40,7 @@
         android:layout_alignBaseline="@+id/bomb_loopText"
         android:layout_alignBottom="@+id/bomb_loopText"
         android:layout_alignParentLeft="true"
-        android:text="繰り返し" />
+        android:text="@string/layout_repeat_text" />
 
     <EditText
         android:id="@+id/bomb_loopCount"
@@ -48,9 +48,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/bomb_loopText"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/text_static"
+        android:layout_toRightOf="@+id/text_loopcount"
         android:ems="10"
-        android:inputType="phone" />
+        android:inputType="number" />
 
     <TextView
         android:id="@+id/text_loopcount"
@@ -59,6 +59,6 @@
         android:layout_alignBaseline="@+id/bomb_loopCount"
         android:layout_alignBottom="@+id/bomb_loopCount"
         android:layout_alignParentLeft="true"
-        android:text="繰り返し回数" />
+        android:text="@string/layout_repeat_count" />
 
 </RelativeLayout>

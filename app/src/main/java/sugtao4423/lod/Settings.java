@@ -92,7 +92,7 @@ public class Settings extends AppCompatActivity{
                 public boolean onPreferenceClick(Preference preference){
                     new WebImageCache(getActivity().getApplicationContext()).clear();
                     setCacheSize(preference);
-                    Toast.makeText(getActivity().getApplicationContext(), "キャッシュが削除されました", Toast.LENGTH_SHORT).show();
+                    new ShowToast(getActivity().getApplicationContext(), R.string.cache_deleted);
                     return false;
                 }
             });
@@ -102,8 +102,8 @@ public class Settings extends AppCompatActivity{
             final DBUtil dbutil = app.getAccountDBUtil();
             if(!isCheck){
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("解除しますか？")
-                        .setPositiveButton("OK", new OnClickListener(){
+                        .setTitle(R.string.is_release)
+                        .setPositiveButton(R.string.ok, new OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialog, int which){
                                 dbutil.updateListAsTL(-1, app.getCurrentAccount().getScreenName());
@@ -112,7 +112,7 @@ public class Settings extends AppCompatActivity{
                                 setAutoLoadTLIntervalSummary(0);
                                 app.reloadAccountFromDB();
                             }
-                        }).setNegativeButton("Cancel", new OnClickListener(){
+                        }).setNegativeButton(R.string.cancel, new OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         ((CheckBoxPreference)preference).setChecked(true);
@@ -143,7 +143,7 @@ public class Settings extends AppCompatActivity{
                     }
                     final String[] listNames = (String[])listMap.keySet().toArray(new String[0]);
                     new AlertDialog.Builder(getActivity())
-                            .setTitle("TLとして読み込むリストを選択してください")
+                            .setTitle(R.string.choose_list_as_tl)
                             .setCancelable(false)
                             .setItems(listNames, new OnClickListener(){
                                 @Override
@@ -171,9 +171,9 @@ public class Settings extends AppCompatActivity{
             editContainer.addView(intervalEdit);
 
             new AlertDialog.Builder(context)
-                    .setMessage("自動で取得する間隔を秒で入力してください")
+                    .setMessage(R.string.input_auto_load_interval_second)
                     .setView(editContainer)
-                    .setPositiveButton("OK", new OnClickListener(){
+                    .setPositiveButton(R.string.ok, new OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which){
                             if(intervalEdit.getText().toString().isEmpty()){
@@ -193,7 +193,8 @@ public class Settings extends AppCompatActivity{
         }
 
         public void setAutoLoadTLIntervalSummary(int interval){
-            autoLoadTLInterval.setSummary("設定値: " + interval + "  (0: 無効)");
+            String str = getString(R.string.param_setting_value_num_zero_is_disable, interval);
+            autoLoadTLInterval.setSummary(str);
         }
 
         public void setCacheSize(final Preference clearCache){
@@ -203,12 +204,12 @@ public class Settings extends AppCompatActivity{
                     DecimalFormat df = new DecimalFormat("#.#");
                     df.setMinimumFractionDigits(2);
                     df.setMaximumFractionDigits(2);
-                    return df.format((double)new WebImageCache(getActivity().getApplicationContext()).getCacheSize() / 1024 / 1024) + "MB";
+                    return df.format((double)new WebImageCache(getActivity().getApplicationContext()).getCacheSize() / 1024 / 1024);
                 }
 
                 @Override
                 protected void onPostExecute(String result){
-                    clearCache.setSummary("キャッシュ: " + result);
+                    clearCache.setSummary(getString(R.string.param_cache_num_megabyte, result));
                 }
             }.execute();
         }

@@ -101,7 +101,7 @@ public class TweetActivity extends AppCompatActivity{
 
         switch(type){
             case TYPE_NEWTWEET:
-                actionBar.setTitle("New Tweet");
+                actionBar.setTitle(R.string.new_tweet);
                 break;
             case TYPE_REPLY:
                 tweetText.setText("@" + status.getUser().getScreenName() + " ");
@@ -129,17 +129,17 @@ public class TweetActivity extends AppCompatActivity{
                 tweetText.setText(quote);
                 break;
             case TYPE_UNOFFICIALRT:
-                actionBar.setTitle("UnOfficialRT");
+                actionBar.setTitle(R.string.unofficial_rt);
                 String unOfficial = " RT @" + status.getUser().getScreenName() + ": " + status.getText();
                 tweetText.setText(unOfficial);
                 break;
             case TYPE_PAKUTSUI:
-                actionBar.setTitle("New Tweet");
+                actionBar.setTitle(R.string.new_tweet);
                 tweetText.setText(status.getText());
                 setSelectionEnd = true;
                 break;
             case TYPE_EXTERNALTEXT:
-                actionBar.setTitle("New Tweet");
+                actionBar.setTitle(R.string.new_tweet);
                 tweetText.setText(intent.getStringExtra(INTENT_EXTRA_KEY_TEXT));
                 setSelectionEnd = true;
                 break;
@@ -202,7 +202,7 @@ public class TweetActivity extends AppCompatActivity{
     public void mic(View v){
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "音声入力");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_input));
         startActivityForResult(intent, 1919);
     }
 

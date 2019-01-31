@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:onClick="ninsyo"
-        android:text="OAuth認証" />
+        android:text="@string/layout_oauth_auth" />
 
     <EditText
         android:id="@+id/edit_ck"
@@ -32,7 +32,7 @@
         android:layout_below="@+id/description"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
-        android:text="CK" />
+        android:text="@string/layout_consumer_key" />
 
     <TextView
         android:id="@+id/text_cs"
@@ -41,7 +41,7 @@
         android:layout_below="@+id/text_ck"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
-        android:text="CS" />
+        android:text="@string/layout_consumer_secret" />
 
     <EditText
         android:id="@+id/edit_cs"
@@ -70,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Custom CK/CS\n使いたい場合は入力してください。使わなくても認証できます"
+        android:text="@string/layout_oauth_description"
         android:textSize="15sp" />
 
 </RelativeLayout>

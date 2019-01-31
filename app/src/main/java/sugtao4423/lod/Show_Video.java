@@ -42,7 +42,7 @@ public class Show_Video extends AppCompatActivity{
         vv.setMediaController(new MediaController(this));
 
         final ProgressDialog progDialog = new ProgressDialog(Show_Video.this);
-        progDialog.setMessage("Loading...");
+        progDialog.setMessage(getString(R.string.loading));
         progDialog.setIndeterminate(false);
         progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progDialog.setCancelable(true);

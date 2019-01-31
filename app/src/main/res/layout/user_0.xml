@@ -35,7 +35,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="12dp"
             android:background="@color/userpageTextBackground"
-            android:text="ScreenName" />
+            android:text="@string/no_text" />
 
         <TextView
             android:id="@+id/UserName"
@@ -45,7 +45,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:background="@color/userpageTextBackground"
-            android:text="Name"
+            android:text="@string/no_text"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -56,7 +56,7 @@
             android:layout_below="@+id/text_bio"
             android:layout_alignLeft="@+id/text_bio"
             android:layout_marginTop="3dp"
-            android:text="Loading..." />
+            android:text="@string/loading" />
 
         <TextView
             android:id="@+id/text_location"
@@ -65,7 +65,7 @@
             android:layout_below="@+id/UserBio"
             android:layout_alignLeft="@+id/UserBio"
             android:layout_marginTop="15dp"
-            android:text="場所"
+            android:text="@string/layout_location"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -75,7 +75,7 @@
             android:layout_below="@+id/text_location"
             android:layout_alignLeft="@+id/text_location"
             android:layout_marginTop="3dp"
-            android:text="Loading..." />
+            android:text="@string/loading" />
 
         <TextView
             android:id="@+id/text_link"
@@ -84,7 +84,7 @@
             android:layout_below="@+id/location"
             android:layout_alignLeft="@+id/location"
             android:layout_marginTop="15dp"
-            android:text="リンク"
+            android:text="@string/layout_link"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -94,7 +94,7 @@
             android:layout_below="@+id/text_link"
             android:layout_alignLeft="@+id/text_link"
             android:layout_marginTop="3dp"
-            android:text="Loading..." />
+            android:text="@string/loading" />
 
         <TextView
             android:id="@+id/icon_tweet_count"
@@ -113,7 +113,7 @@
             android:layout_alignBottom="@+id/icon_tweet_count"
             android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/icon_tweet_count"
-            android:text="null" />
+            android:text="@string/no_text" />
 
         <TextView
             android:id="@+id/icon_favorite_count"
@@ -132,7 +132,7 @@
             android:layout_alignBottom="@+id/icon_favorite_count"
             android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/icon_favorite_count"
-            android:text="null" />
+            android:text="@string/no_text" />
 
         <TextView
             android:id="@+id/icon_follow_count"
@@ -151,7 +151,7 @@
             android:layout_alignBottom="@+id/icon_follow_count"
             android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/icon_follow_count"
-            android:text="null" />
+            android:text="@string/no_text" />
 
         <TextView
             android:id="@+id/icon_follower_count"
@@ -170,7 +170,7 @@
             android:layout_alignBottom="@+id/icon_follower_count"
             android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/icon_follower_count"
-            android:text="null" />
+            android:text="@string/no_text" />
 
         <TextView
             android:id="@+id/icon_create_date"
@@ -190,7 +190,7 @@
             android:layout_alignBottom="@+id/icon_create_date"
             android:layout_marginLeft="3dp"
             android:layout_toRightOf="@+id/icon_create_date"
-            android:text="null" />
+            android:text="@string/no_text" />
 
         <TextView
             android:id="@+id/text_bio"
@@ -199,7 +199,7 @@
             android:layout_below="@+id/UserPage_sourceIcon"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
-            android:text="bio"
+            android:text="@string/layout_bio"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView

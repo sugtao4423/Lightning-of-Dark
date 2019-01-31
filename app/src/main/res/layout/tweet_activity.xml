@@ -113,8 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tweetText"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dp"
-        android:text="TweetAccount" />
+        android:layout_marginLeft="5dp" />
 
     <Button
         android:id="@+id/tweetMic"

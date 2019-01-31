@@ -58,7 +58,7 @@ public class Dialog_ListClick implements OnItemClickListener{
         dialog.dismiss();
         String clickedText = (String)parent.getItemAtPosition(position);
 
-        if(clickedText.equals("正規表現で抽出")){
+        if(clickedText.equals(context.getString(R.string.extract_with_regex))){
             View regView = View.inflate(context, R.layout.reg_dialog, null);
             final EditText regEdit = (EditText)regView.findViewById(R.id.regDialog_edit);
             GridLayout gridLayout = (GridLayout)regView.findViewById(R.id.regDialog_grid);
@@ -75,10 +75,10 @@ public class Dialog_ListClick implements OnItemClickListener{
             final SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
             regEdit.setText(pref.getString(Keys.REGULAR_EXPRESSION, ""));
             new AlertDialog.Builder(context)
-                    .setTitle("正規表現を入力してください")
+                    .setTitle(R.string.input_regex)
                     .setView(regView)
-                    .setNegativeButton("キャンセル", null)
-                    .setPositiveButton("OK", new OnClickListener(){
+                    .setNegativeButton(R.string.cancel, null)
+                    .setPositiveButton(R.string.ok, new OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which){
                             InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -144,7 +144,7 @@ public class Dialog_ListClick implements OnItemClickListener{
                 return;
             }
             context.startActivity(intent);
-        }else if(clickedText.equals("ブラウザで開く")){
+        }else if(clickedText.equals(context.getString(R.string.open_in_browser))){
             Status orig = status.isRetweet() ? status.getRetweetedStatus() : status;
             String tweet_sn = orig.getUser().getScreenName();
             String tweet_id = String.valueOf(orig.getId());

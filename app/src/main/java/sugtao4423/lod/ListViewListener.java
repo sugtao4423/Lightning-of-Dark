@@ -46,10 +46,10 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
 
         ArrayAdapter<String> list = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
         if(app.getOptions().getIsRegex()){
-            list.add("正規表現で抽出");
+            list.add(context.getString(R.string.extract_with_regex));
         }
         if(app.getOptions().getIsOpenBrowser()){
-            list.add("ブラウザで開く");
+            list.add(context.getString(R.string.open_in_browser));
         }
 
         ArrayList<String> users = new ArrayList<String>();
@@ -78,7 +78,7 @@ public class ListViewListener implements OnItemClickListener, OnItemLongClickLis
                 if(Utils.isVideoOrGif(media)){
                     String[] videoUrls = Utils.getVideoURLsSortByBitrate(app, mentitys);
                     if(videoUrls.length == 0){
-                        list.add("ビデオの取得に失敗");
+                        list.add(context.getString(R.string.error_get_video));
                     }else{
                         list.add(videoUrls[videoUrls.length - 1]);
                     }

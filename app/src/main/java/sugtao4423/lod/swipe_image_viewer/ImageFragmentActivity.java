@@ -85,7 +85,7 @@ public class ImageFragmentActivity extends AppCompatActivity{
     public void image_option_click(View v){
         currentUrl = urls[pager.getCurrentItem()];
         new AlertDialog.Builder(this)
-                .setItems(new String[]{"ブラウザで開く", "保存する"}, new OnClickListener(){
+                .setItems(new String[]{getString(R.string.open_in_browser), getString(R.string.save)}, new OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         if(which == 0){
@@ -130,7 +130,7 @@ public class ImageFragmentActivity extends AppCompatActivity{
             @Override
             protected void onPreExecute(){
                 progDialog = new ProgressDialog(ImageFragmentActivity.this);
-                progDialog.setMessage("Loading...");
+                progDialog.setMessage(getString(R.string.loading));
                 progDialog.setIndeterminate(false);
                 progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progDialog.setCancelable(true);
@@ -183,8 +183,12 @@ public class ImageFragmentActivity extends AppCompatActivity{
 
         if(new File(imgPath).exists()){
             new AlertDialog.Builder(this)
-                    .setTitle("エラー:ファイルが既に存在しています")
-                    .setItems(new String[]{"上書き", "ファイル名を指定して保存", "キャンセル"}, new OnClickListener(){
+                    .setTitle(R.string.error_file_is_already_exists)
+                    .setItems(new String[]{
+                            getString(R.string.overwrite),
+                            getString(R.string.save_as),
+                            getString(R.string.cancel)
+                    }, new OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int which){
                             if(which == 0){
@@ -193,10 +197,10 @@ public class ImageFragmentActivity extends AppCompatActivity{
                                 final EditText edit = new EditText(ImageFragmentActivity.this);
                                 edit.setText(fileName);
                                 new AlertDialog.Builder(ImageFragmentActivity.this)
-                                        .setTitle("ファイル名を指定してください")
+                                        .setTitle(R.string.save_as)
                                         .setView(edit)
-                                        .setNegativeButton("キャンセル", null)
-                                        .setPositiveButton("OK", new OnClickListener(){
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .setPositiveButton(R.string.ok, new OnClickListener(){
                                             @Override
                                             public void onClick(DialogInterface dialog, int which){
                                                 String newPath = saveDir + "/" + edit.getText().toString() + type;
@@ -226,9 +230,9 @@ public class ImageFragmentActivity extends AppCompatActivity{
             return;
         }
         if(isOriginal){
-            Toast.makeText(this, "オリジナルを保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.saved_original) + "\n" + imgPath, Toast.LENGTH_LONG).show();
         }else{
-            Toast.makeText(this, "保存しました\n" + imgPath, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.saved) + "\n" + imgPath, Toast.LENGTH_LONG).show();
         }
     }
 

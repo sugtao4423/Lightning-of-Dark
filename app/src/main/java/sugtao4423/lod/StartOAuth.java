@@ -44,8 +44,8 @@ public class StartOAuth extends AppCompatActivity{
         app = (App)getApplicationContext();
 
         TextView description = (TextView)findViewById(R.id.oauthDescription);
-        String descri = "Custom CK/CSを使う場合、CallbackURLを<br><font color=blue><u>" + CALLBACK_URL + "</u></font><br>に設定してください。<br>（タップでコピー）";
-        description.setText(Html.fromHtml(descri));
+        String descriptionText = getString(R.string.param_oauth_description, CALLBACK_URL);
+        description.setText(Html.fromHtml(descriptionText));
 
         customCK = (EditText)findViewById(R.id.edit_ck);
         customCS = (EditText)findViewById(R.id.edit_cs);
@@ -151,7 +151,7 @@ public class StartOAuth extends AppCompatActivity{
 
     public void copyClipBoardDescription(View v){
         ClipboardManager clipboardManager = (ClipboardManager)this.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText("Lightning of Dark", CALLBACK_URL);
+        ClipData clipData = ClipData.newPlainText(getString(R.string.app_name), CALLBACK_URL);
         clipboardManager.setPrimaryClip(clipData);
         new ShowToast(getApplicationContext(), R.string.done_copy_clip_board);
     }

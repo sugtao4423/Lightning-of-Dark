@@ -61,7 +61,7 @@ public class Settings_List extends AppCompatActivity{
                     boolean[] selectedLoadList = new boolean[selectedListNames.length];
                     final ArrayList<String> selectLoadList = new ArrayList<String>();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                            .setTitle("起動時に読み込むリストを選択してください")
+                            .setTitle(R.string.choose_app_start_load_list)
                             .setMultiChoiceItems(selectedListNames, selectedLoadList, new OnMultiChoiceClickListener(){
                                 @Override
                                 public void onClick(DialogInterface dialog, int which, boolean isChecked){
@@ -71,14 +71,14 @@ public class Settings_List extends AppCompatActivity{
                                         selectLoadList.remove(selectedListNames[which]);
                                     }
                                 }
-                            }).setPositiveButton("OK", new OnClickListener(){
+                            }).setPositiveButton(R.string.ok, new OnClickListener(){
                                 @Override
                                 public void onClick(DialogInterface dialog, int which){
                                     dbUtil.updateStartAppLoadLists(Utils.implode(selectLoadList), myScreenName);
                                     app.resetAccount();
                                     setSummary();
                                 }
-                            }).setNegativeButton("キャンセル", null);
+                            }).setNegativeButton(R.string.cancel, null);
                     if(!selectedListNames[0].equals("")){
                         builder.show();
                     }else{
@@ -117,7 +117,7 @@ public class Settings_List extends AppCompatActivity{
                             final LinkedHashMap<String, Long> checkedList = new LinkedHashMap<String, Long>();
 
                             new AlertDialog.Builder(getActivity())
-                                    .setTitle("リストを選択してください")
+                                    .setTitle(R.string.choose_list)
                                     .setMultiChoiceItems(listItem, new boolean[listItem.length], new OnMultiChoiceClickListener(){
                                         @Override
                                         public void onClick(DialogInterface dialog, int which, boolean isChecked){
@@ -127,7 +127,7 @@ public class Settings_List extends AppCompatActivity{
                                                 checkedList.remove(listItem[which]);
                                             }
                                         }
-                                    }).setPositiveButton("OK", new OnClickListener(){
+                                    }).setPositiveButton(R.string.ok, new OnClickListener(){
                                 @Override
                                 public void onClick(DialogInterface dialog, int which){
                                     String[] checkedListNames = checkedList.keySet().toArray(new String[0]);
@@ -149,8 +149,8 @@ public class Settings_List extends AppCompatActivity{
         public void setSummary(){
             String[] selectList = dbUtil.getSelectListNames(myScreenName);
             String[] startAppLoadList = dbUtil.getNowStartAppLoadList(myScreenName);
-            String summary1 = "設定値: " + Utils.implode(selectList);
-            String summary2 = "設定値: " + Utils.implode(startAppLoadList);
+            String summary1 = getString(R.string.param_setting_value_str, Utils.implode(selectList));
+            String summary2 = getString(R.string.param_setting_value_str, Utils.implode(startAppLoadList));
             select_List.setSummary(summary1);
             startApp_loadList.setSummary(summary2);
         }

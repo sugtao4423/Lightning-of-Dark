@@ -57,8 +57,8 @@ public class Dialog_reply implements OnClickListener{
     public void selectReplyDialog(final Status item){
         int black = Color.parseColor(context.getString(R.color.icon));
         IconItem[] items = new IconItem[2];
-        items[0] = new IconItem(context.getString(R.string.icon_reply).charAt(0), black, "reply");
-        items[1] = new IconItem(context.getString(R.string.icon_replyAll).charAt(0), black, "replyAll");
+        items[0] = new IconItem(context.getString(R.string.icon_reply).charAt(0), black, context.getString(R.string.reply));
+        items[1] = new IconItem(context.getString(R.string.icon_replyAll).charAt(0), black, context.getString(R.string.reply_all));
         new IconDialog(context).setItems(items, new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which){

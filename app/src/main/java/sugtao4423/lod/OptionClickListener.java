@@ -58,8 +58,8 @@ public class OptionClickListener implements OnClickListener{
         final View bombView = View.inflate(context, R.layout.tweet_bomb, null);
         new AlertDialog.Builder(context)
                 .setView(bombView)
-                .setNegativeButton("キャンセル", null)
-                .setPositiveButton("OK", new OnClickListener(){
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.ok, new OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         final String staticText = ((EditText)bombView.findViewById(R.id.bomb_staticText)).getText().toString();
@@ -97,9 +97,9 @@ public class OptionClickListener implements OnClickListener{
         editContainer.addView(userEdit);
 
         new AlertDialog.Builder(context)
-                .setMessage("ユーザーのスクリーンネームを入力してください")
+                .setMessage(R.string.input_users_screen_name)
                 .setView(editContainer)
-                .setPositiveButton("OK", new OnClickListener(){
+                .setPositiveButton(R.string.ok, new OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         String user_screen = userEdit.getText().toString();
@@ -127,18 +127,18 @@ public class OptionClickListener implements OnClickListener{
                 screenNames.add("@" + acc.getScreenName());
             }
         }
-        screenNames.add("アカウントを追加");
+        screenNames.add(context.getString(R.string.add_account));
         final String[] nameDialog = (String[])screenNames.toArray(new String[0]);
         new AlertDialog.Builder(context)
                 .setItems(nameDialog, new OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, final int which){
-                        if(nameDialog[which].equals("アカウントを追加")){
+                        if(nameDialog[which].equals(context.getString(R.string.add_account))){
                             context.startActivity(new Intent(context, StartOAuth.class));
                         }else if(!nameDialog[which].equals("@" + myScreenName + " (now)")){
                             new AlertDialog.Builder(context)
                                     .setTitle(nameDialog[which])
-                                    .setPositiveButton("切り替え", new OnClickListener(){
+                                    .setPositiveButton(R.string.change_account, new OnClickListener(){
                                         @Override
                                         public void onClick(DialogInterface dialog, int w){
                                             PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext())
@@ -147,14 +147,14 @@ public class OptionClickListener implements OnClickListener{
                                                     .commit();
                                             ((MainActivity)context).restart();
                                         }
-                                    }).setNegativeButton("削除", new OnClickListener(){
+                                    }).setNegativeButton(R.string.delete, new OnClickListener(){
                                 @Override
                                 public void onClick(DialogInterface dialog, int w){
                                     dbUtil.deleteAccount(accounts[which]);
                                     String toast = context.getString(R.string.param_success_account_delete, accounts[which].getScreenName());
                                     new ShowToast(context.getApplicationContext(), toast);
                                 }
-                            }).setNeutralButton("キャンセル", null).show();
+                            }).setNeutralButton(R.string.cancel, null).show();
                         }
                     }
                 }).show();
@@ -166,8 +166,8 @@ public class OptionClickListener implements OnClickListener{
         String level = nf.format(lv.getLevel());
         String nextExp = nf.format(lv.getNextExp());
         String totalExp = nf.format(lv.getTotalExp());
-        String message = String.format("Lv.%s\nレベルアップまで: %s EXP\n取得経験値: %s EXP", level, nextExp, totalExp);
-        new AlertDialog.Builder(context).setMessage(message).setPositiveButton("OK", null).show();
+        String message = context.getString(R.string.param_next_level_total_exp, level, nextExp, totalExp);
+        new AlertDialog.Builder(context).setMessage(message).setPositiveButton(R.string.ok, null).show();
     }
 
     public void useInfo(){
@@ -176,10 +176,9 @@ public class OptionClickListener implements OnClickListener{
         int yesterdayUse = useTime.getYesterdayUseTimeInMillis();
         long last30daysUse = useTime.getLastNdaysUseTimeInMillis(30);
         long totalUse = useTime.getTotalUseTimeInMillis();
-        String message = String.format(
-                "今日: %s\n昨日: %s\n\n過去30日: %s\n合計: %s",
+        String message = context.getString(R.string.param_use_info_text,
                 milliTime2Str(todayUse), milliTime2Str(yesterdayUse), milliTime2Str(last30daysUse), milliTime2Str(totalUse));
-        new AlertDialog.Builder(context).setTitle("使用情報").setMessage(message).setPositiveButton("OK", null).show();
+        new AlertDialog.Builder(context).setTitle(R.string.use_info).setMessage(message).setPositiveButton(R.string.ok, null).show();
     }
 
     private String milliTime2Str(long time){

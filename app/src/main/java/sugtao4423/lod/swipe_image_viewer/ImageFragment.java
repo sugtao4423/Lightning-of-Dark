@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import sugtao4423.lod.R;
+
 public class ImageFragment extends Fragment{
 
     private ZoomImageView image;
@@ -41,7 +43,7 @@ public class ImageFragment extends Fragment{
             @Override
             protected void onPreExecute(){
                 progDialog = new ProgressDialog(getActivity());
-                progDialog.setMessage("Loading...");
+                progDialog.setMessage(getString(R.string.loading));
                 progDialog.setIndeterminate(false);
                 progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progDialog.setCancelable(true);
@@ -79,7 +81,7 @@ public class ImageFragment extends Fragment{
                     progDialog.dismiss();
                     image.setImageBitmap(result);
                 }else{
-                    Toast.makeText(getActivity(), "画像の取得失敗", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), R.string.error_get_image, Toast.LENGTH_LONG).show();
                 }
             }
         }.execute(url);

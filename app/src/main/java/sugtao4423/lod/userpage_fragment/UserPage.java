@@ -27,7 +27,7 @@ public class UserPage extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userpage);
 
-        adapter = new UserPageFragmentPagerAdapter(getSupportFragmentManager());
+        adapter = new UserPageFragmentPagerAdapter(getSupportFragmentManager(), this);
         ViewPager viewPager = (ViewPager)findViewById(R.id.Userpager);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(5);

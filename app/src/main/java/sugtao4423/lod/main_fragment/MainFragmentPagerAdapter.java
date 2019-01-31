@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import sugtao4423.lod.App;
+import sugtao4423.lod.R;
 import sugtao4423.lod.dataclass.TwitterList;
 
 public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter{
@@ -52,9 +53,9 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter{
         TwitterList[] lists = app.getLists(context);
         switch(position){
             case 0:
-                return "Mention";
+                return context.getString(R.string.page_title_mention);
             case 1:
-                return "Home - Lv." + app.getLevel().getLevel();
+                return context.getString(R.string.param_page_title_home, app.getLevel().getLevel());
             default:
                 return lists[position - 2].getListName();
         }

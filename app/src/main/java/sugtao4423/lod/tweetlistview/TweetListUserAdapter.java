@@ -66,9 +66,13 @@ public class TweetListUserAdapter extends RecyclerView.Adapter<TweetListUserAdap
         holder.icon.setImageUrl(item.getBiggerProfileImageURLHttps(), null, R.drawable.icon_loading);
         holder.name_sn.setText(item.getName() + " - @" + item.getScreenName());
         holder.content.setText(item.getDescription());
-        holder.date.setText("Tweet: " + numberFormat(item.getStatusesCount()) + "  Fav: "
-                + numberFormat(item.getFavouritesCount()) + "  Follow: " + numberFormat(item.getFriendsCount()) + "  Follower: "
-                + numberFormat(item.getFollowersCount()));
+        String userCountsText = context.getString(R.string.param_user_count_detail,
+                numberFormat(item.getStatusesCount()),
+                numberFormat(item.getFavouritesCount()),
+                numberFormat(item.getFriendsCount()),
+                numberFormat(item.getFollowersCount())
+        );
+        holder.date.setText(userCountsText);
 
         holder.v.setOnClickListener(new OnClickListener(){
 

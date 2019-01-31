@@ -29,9 +29,9 @@ public class Dialog_deletePost implements OnClickListener{
     public void onClick(View v){
         dialog.dismiss();
         new AlertDialog.Builder(context)
-                .setMessage("本当にツイ消ししますか？")
-                .setNegativeButton("No", null)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                .setMessage(R.string.is_post_delete)
+                .setNegativeButton(R.string.no, null)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         deletePost();

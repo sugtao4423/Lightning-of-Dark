@@ -149,12 +149,12 @@ public class MainActivity extends AppCompatActivity{
         if(iconDialog == null){
             int black = Color.parseColor(getString(R.color.icon));
             IconItem[] items = new IconItem[6];
-            items[0] = new IconItem(getString(R.string.icon_bomb).charAt(0), black, "ツイート爆撃");
-            items[1] = new IconItem(getString(R.string.icon_search).charAt(0), black, "ユーザー検索");
-            items[2] = new IconItem(getString(R.string.icon_user).charAt(0), black, "アカウント");
-            items[3] = new IconItem(getString(R.string.icon_experience).charAt(0), black, "レベル情報");
-            items[4] = new IconItem(getString(R.string.icon_clock).charAt(0), black, "使用情報");
-            items[5] = new IconItem(getString(R.string.icon_cog).charAt(0), black, "設定");
+            items[0] = new IconItem(getString(R.string.icon_bomb).charAt(0), black, getString(R.string.tweet_bomb));
+            items[1] = new IconItem(getString(R.string.icon_search).charAt(0), black, getString(R.string.search_user));
+            items[2] = new IconItem(getString(R.string.icon_user).charAt(0), black, getString(R.string.account));
+            items[3] = new IconItem(getString(R.string.icon_experience).charAt(0), black, getString(R.string.level_info));
+            items[4] = new IconItem(getString(R.string.icon_clock).charAt(0), black, getString(R.string.use_info));
+            items[5] = new IconItem(getString(R.string.icon_cog).charAt(0), black, getString(R.string.settings));
             iconDialog = new IconDialog(this).setItems(items, new OptionClickListener(this));
         }
         iconDialog.show();
