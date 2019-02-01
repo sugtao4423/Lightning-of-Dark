@@ -24,7 +24,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/transparent"
         android:onClick="newTweet"
-        android:src="@drawable/edit" />
+        android:src="@drawable/icon_edit" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -33,6 +33,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/transparent"
         android:onClick="option"
-        android:src="@drawable/option" />
+        android:src="@drawable/icon_option" />
 
 </RelativeLayout>
