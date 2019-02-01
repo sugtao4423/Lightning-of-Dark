@@ -138,7 +138,7 @@ public class Dialog_ListClick implements OnItemClickListener{
                 intent.putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_GIF);
             }else if(state.find()){
                 intent = new Intent(context, IntentActivity.class);
-                intent.putExtra(IntentActivity.TWEET_ID, Long.parseLong(state.group(2)));
+                intent.putExtra(IntentActivity.TWEET_ID, Long.parseLong(state.group(3)));
             }else{
                 new ChromeIntent(context, Uri.parse(clickedText));
                 return;

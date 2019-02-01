@@ -53,7 +53,7 @@ public class IntentActivity extends AppCompatActivity{
             Matcher share = Regex.shareUrl.matcher(uri);
             Matcher user = Regex.userUrl.matcher(uri);
             if(status.find()){
-                showStatus(Long.parseLong(status.group(2)));
+                showStatus(Long.parseLong(status.group(3)));
             }else if(share.find()){
                 Uri shareUri = Uri.parse(uri);
                 HashMap<String, String> map = new HashMap<String, String>();
