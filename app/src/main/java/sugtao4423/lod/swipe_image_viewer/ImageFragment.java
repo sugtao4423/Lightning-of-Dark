@@ -1,14 +1,16 @@
 package sugtao4423.lod.swipe_image_viewer;
 
-import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.tenthbit.view.ZoomImageView;
@@ -23,32 +25,37 @@ import sugtao4423.lod.R;
 
 public class ImageFragment extends Fragment{
 
+    private FrameLayout parentLayout;
     private ZoomImageView image;
+    private ProgressBar progressBar;
     private String url;
-    private byte[] non_orig_image;
+    private byte[] nonOrigImage;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         url = bundle.getString(ImagePagerAdapter.BUNDLE_KEY_URL);
-        image = new ZoomImageView(getActivity());
+
+        parentLayout = new FrameLayout(getContext());
+        image = new ZoomImageView(getContext());
+
+        progressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleHorizontal);
+        progressBar.setIndeterminate(true);
+        progressBar.setScaleY(1.5f);
+        progressBar.setVisibility(View.VISIBLE);
+
+        FrameLayout.LayoutParams imageLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+        parentLayout.addView(image, imageLayoutParams);
+
+        FrameLayout.LayoutParams barLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
+        barLayoutParams.setMargins(64, 0, 64, 0);
+        parentLayout.addView(progressBar, barLayoutParams);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         new AsyncTask<String, Void, Bitmap>(){
-            private ProgressDialog progDialog;
-
-            @Override
-            protected void onPreExecute(){
-                progDialog = new ProgressDialog(getActivity());
-                progDialog.setMessage(getString(R.string.loading));
-                progDialog.setIndeterminate(false);
-                progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progDialog.setCancelable(true);
-                progDialog.show();
-            }
 
             @Override
             protected Bitmap doInBackground(String... params){
@@ -64,8 +71,8 @@ public class ImageFragment extends Fragment{
                     while((len = is.read(buffer)) > 0){
                         bout.write(buffer, 0, len);
                     }
-                    non_orig_image = bout.toByteArray();
-                    Bitmap myBitmap = BitmapFactory.decodeByteArray(non_orig_image, 0, non_orig_image.length);
+                    nonOrigImage = bout.toByteArray();
+                    Bitmap myBitmap = BitmapFactory.decodeByteArray(nonOrigImage, 0, nonOrigImage.length);
                     is.close();
                     bout.close();
                     connection.disconnect();
@@ -78,7 +85,7 @@ public class ImageFragment extends Fragment{
             @Override
             protected void onPostExecute(Bitmap result){
                 if(result != null){
-                    progDialog.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     image.setImageBitmap(result);
                 }else{
                     Toast.makeText(getActivity(), R.string.error_get_image, Toast.LENGTH_LONG).show();
@@ -86,11 +93,11 @@ public class ImageFragment extends Fragment{
             }
         }.execute(url);
 
-        return image;
+        return parentLayout;
     }
 
     public byte[] getNonOrigImage(){
-        return non_orig_image;
+        return nonOrigImage;
     }
 
 }
