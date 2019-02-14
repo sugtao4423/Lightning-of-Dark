@@ -7,6 +7,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -62,9 +63,13 @@ public class OptionClickListener implements OnClickListener{
                 .setPositiveButton(R.string.ok, new OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
-                        final String staticText = ((EditText)bombView.findViewById(R.id.bomb_staticText)).getText().toString();
-                        final String loopText = ((EditText)bombView.findViewById(R.id.bomb_loopText)).getText().toString();
-                        int loopCount = Integer.parseInt(((EditText)bombView.findViewById(R.id.bomb_loopCount)).getText().toString());
+                        final String staticText = ((TextInputEditText)bombView.findViewById(R.id.bomb_static_text)).getText().toString();
+                        final String loopText = ((TextInputEditText)bombView.findViewById(R.id.bomb_loop_text)).getText().toString();
+                        String loopCountStr = ((TextInputEditText)bombView.findViewById(R.id.bomb_loop_count)).getText().toString();
+                        if(loopCountStr.isEmpty()){
+                            return;
+                        }
+                        int loopCount = Integer.parseInt(loopCountStr);
 
                         String loop = "";
                         for(int i = 0; i < loopCount; i++){
