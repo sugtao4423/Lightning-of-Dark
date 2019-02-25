@@ -59,6 +59,9 @@ public class Fragment_List extends Fragment{
                 scrollListener.resetState();
             }
         });
+        if(thisList.getIsAppStartLoad()){
+            getList();
+        }
         return v;
     }
 

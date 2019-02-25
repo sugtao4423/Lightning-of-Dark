@@ -5,7 +5,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerTabStrip;
@@ -18,14 +17,11 @@ import java.io.File;
 import sugtao4423.icondialog.IconDialog;
 import sugtao4423.icondialog.IconItem;
 import sugtao4423.lod.AutoLoadTLService.AutoLoadTLListener;
-import sugtao4423.lod.dataclass.TwitterList;
 import sugtao4423.lod.main_fragment.Fragment_home;
 import sugtao4423.lod.main_fragment.Fragment_mention;
 import sugtao4423.lod.main_fragment.MainFragmentPagerAdapter;
-import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
-import twitter4j.TwitterException;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -70,36 +66,7 @@ public class MainActivity extends AppCompatActivity{
             startActivity(new Intent(this, StartOAuth.class));
             finish();
         }else{
-            getList();
             autoLoadTL();
-        }
-    }
-
-    public void getList(){
-        TwitterList[] lists = app.getLists(this);
-        for(int i = 0; i < lists.length; i++){
-            final TwitterList list = lists[i];
-            if(!list.getIsAppStartLoad()){
-                continue;
-            }
-            new AsyncTask<Void, Void, ResponseList<Status>>(){
-                @Override
-                protected ResponseList<twitter4j.Status> doInBackground(Void... params){
-                    try{
-                        return app.getTwitter().getUserListStatuses(list.getListId(), new Paging(1, 50));
-                    }catch(TwitterException e){
-                        return null;
-                    }
-                }
-
-                @Override
-                protected void onPostExecute(ResponseList<twitter4j.Status> result){
-                    if(result != null){
-                        list.getTweetListAdapter().addAll(result);
-                        list.setIsAlreadyLoad(true);
-                    }
-                }
-            }.execute();
         }
     }
 
