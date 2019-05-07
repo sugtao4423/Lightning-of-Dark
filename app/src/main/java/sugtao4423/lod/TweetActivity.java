@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -32,7 +31,7 @@ import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.UserMentionEntity;
 
-public class TweetActivity extends AppCompatActivity{
+public class TweetActivity extends LoDBaseActivity{
 
     public static final String INTENT_EXTRA_KEY_TYPE = "type";
     public static final String INTENT_EXTRA_KEY_TEXT = "text";
@@ -51,7 +50,6 @@ public class TweetActivity extends AppCompatActivity{
     private Status status;
     private int type;
     private File image;
-    private App app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -61,7 +59,6 @@ public class TweetActivity extends AppCompatActivity{
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(false);
 
-        app = (App)getApplicationContext();
         setTypeface();
 
         TextView tweetAccount = (TextView)findViewById(R.id.tweetAccount);
@@ -293,18 +290,6 @@ public class TweetActivity extends AppCompatActivity{
         }else{
             new ShowToast(getApplicationContext(), R.string.permission_rejected);
         }
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        app.getUseTime().start();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        app.getUseTime().stop();
     }
 
     @Override

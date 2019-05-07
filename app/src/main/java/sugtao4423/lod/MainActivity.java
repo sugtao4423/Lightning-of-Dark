@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import java.io.File;
@@ -23,9 +22,8 @@ import sugtao4423.lod.main_fragment.MainFragmentPagerAdapter;
 import twitter4j.ResponseList;
 import twitter4j.Status;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends LoDBaseActivity{
 
-    private App app;
     private boolean resetFlag;
 
     private Fragment_mention fragmentMention;
@@ -41,7 +39,6 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
-        app = (App)getApplicationContext();
 
         MainFragmentPagerAdapter pagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager(), this);
 
@@ -130,18 +127,6 @@ public class MainActivity extends AppCompatActivity{
     public void restart(){
         resetFlag = true;
         finish();
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        app.getUseTime().start();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        app.getUseTime().stop();
     }
 
     @Override

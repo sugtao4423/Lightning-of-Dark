@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
-import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,15 +20,12 @@ import twitter4j.ResponseList;
 import twitter4j.TwitterException;
 import twitter4j.UserList;
 
-public class Settings_List extends AppCompatActivity{
-
-    private App app;
+public class Settings_List extends LoDBaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        app = (App)getApplicationContext();
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferencesFragment()).commit();
     }
 
@@ -40,6 +36,7 @@ public class Settings_List extends AppCompatActivity{
         private String myScreenName;
         private App app;
 
+        @Override
         public void onCreate(Bundle savedInstanceState){
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preference_list);
@@ -154,18 +151,6 @@ public class Settings_List extends AppCompatActivity{
             select_List.setSummary(summary1);
             startApp_loadList.setSummary(summary2);
         }
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        app.getUseTime().start();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        app.getUseTime().stop();
     }
 
 }

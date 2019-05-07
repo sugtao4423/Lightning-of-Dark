@@ -17,7 +17,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v4.view.PagerTabStrip;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -34,13 +33,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Matcher;
 
-import sugtao4423.lod.App;
 import sugtao4423.lod.ChromeIntent;
+import sugtao4423.lod.LoDBaseActivity;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 import sugtao4423.lod.utils.Regex;
 
-public class ImageFragmentActivity extends AppCompatActivity{
+public class ImageFragmentActivity extends LoDBaseActivity{
 
     public static final String INTENT_EXTRA_KEY_TYPE = "type";
     public static final String INTENT_EXTRA_KEY_URLS = "urls";
@@ -49,7 +48,6 @@ public class ImageFragmentActivity extends AppCompatActivity{
     public static final int TYPE_ICON = 0;
     public static final int TYPE_BANNER = 1;
 
-    private App app;
     private ImagePagerAdapter adapter;
     private ZoomViewPager pager;
     private String[] urls;
@@ -61,7 +59,6 @@ public class ImageFragmentActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.show_image_pager);
-        app = (App)getApplicationContext();
         if(app.getOptions().getIsImageOrientationSensor()){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         }
@@ -256,18 +253,6 @@ public class ImageFragmentActivity extends AppCompatActivity{
         }else{
             new ShowToast(getApplicationContext(), R.string.permission_rejected);
         }
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        app.getUseTime().start();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        app.getUseTime().stop();
     }
 
 }

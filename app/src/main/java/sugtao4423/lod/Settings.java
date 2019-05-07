@@ -12,7 +12,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -30,15 +29,12 @@ import twitter4j.ResponseList;
 import twitter4j.TwitterException;
 import twitter4j.UserList;
 
-public class Settings extends AppCompatActivity{
-
-    private App app;
+public class Settings extends LoDBaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        app = (App)getApplicationContext();
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferencesFragment()).commit();
     }
 
@@ -47,6 +43,7 @@ public class Settings extends AppCompatActivity{
         private App app;
         private Preference autoLoadTLInterval;
 
+        @Override
         public void onCreate(Bundle savedInstanceState){
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preference);
@@ -214,18 +211,6 @@ public class Settings extends AppCompatActivity{
             }.execute();
         }
 
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        app.getUseTime().start();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        app.getUseTime().stop();
     }
 
     @Override

@@ -5,22 +5,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 
-import sugtao4423.lod.App;
+import sugtao4423.lod.LoDBaseActivity;
 import sugtao4423.lod.R;
 import sugtao4423.lod.ShowToast;
 import twitter4j.TwitterException;
 import twitter4j.User;
 
-public class UserPage extends AppCompatActivity{
+public class UserPage extends LoDBaseActivity{
 
     public static final String INTENT_EXTRA_KEY_USER_OBJECT = "userObject";
     public static final String INTENT_EXTRA_KEY_USER_SCREEN_NAME = "userScreenName";
 
     private User target;
     private UserPageFragmentPagerAdapter adapter;
-    private App app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -36,8 +34,6 @@ public class UserPage extends AppCompatActivity{
         strip.setTabIndicatorColor(Color.parseColor(getString(R.color.pagerTabText)));
         strip.setDrawFullUnderline(true);
         getSupportActionBar().setDisplayShowHomeEnabled(false);
-
-        app = (App)UserPage.this.getApplicationContext();
 
         target = (User)getIntent().getSerializableExtra(INTENT_EXTRA_KEY_USER_OBJECT);
         if(target != null){
@@ -76,18 +72,6 @@ public class UserPage extends AppCompatActivity{
         ((_2_favorites)(adapter.getItem(2))).setTargetUser(target);
         ((_3_follow)(adapter.getItem(3))).setTargetUser(target);
         ((_4_follower)(adapter.getItem(4))).setTargetUser(target);
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        app.getUseTime().start();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        app.getUseTime().stop();
     }
 
 }

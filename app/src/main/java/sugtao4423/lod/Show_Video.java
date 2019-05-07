@@ -8,11 +8,10 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-public class Show_Video extends AppCompatActivity{
+public class Show_Video extends LoDBaseActivity{
 
     public static final String INTENT_EXTRA_KEY_TYPE = "type";
     public static final String INTENT_EXTRA_KEY_URL = "URL";
@@ -20,13 +19,10 @@ public class Show_Video extends AppCompatActivity{
     public static final int TYPE_VIDEO = 0;
     public static final int TYPE_GIF = 1;
 
-    private App app;
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_video);
-        app = (App)getApplicationContext();
         if(app.getOptions().getIsVideoOrientationSensor()){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         }
@@ -70,18 +66,6 @@ public class Show_Video extends AppCompatActivity{
                 }
             }
         });
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        app.getUseTime().start();
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        app.getUseTime().stop();
     }
 
 }
