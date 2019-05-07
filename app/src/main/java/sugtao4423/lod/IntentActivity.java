@@ -53,7 +53,7 @@ public class IntentActivity extends AppCompatActivity{
             Matcher share = Regex.shareUrl.matcher(uri);
             Matcher user = Regex.userUrl.matcher(uri);
             if(status.find()){
-                showStatus(Long.parseLong(status.group(3)));
+                showStatus(Long.parseLong(status.group(Regex.statusUrlStatusIdGroup)));
             }else if(share.find()){
                 Uri shareUri = Uri.parse(uri);
                 HashMap<String, String> map = new HashMap<String, String>();
@@ -72,7 +72,7 @@ public class IntentActivity extends AppCompatActivity{
                 finish();
             }else if(user.find()){
                 Intent i = new Intent(IntentActivity.this, UserPage.class);
-                i.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, user.group(2));
+                i.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, user.group(Regex.userUrlScreenNameGroup));
                 startActivity(i);
                 finish();
             }

@@ -109,7 +109,7 @@ public class ImageFragmentActivity extends AppCompatActivity{
                 return;
             }
             byte[] non_orig_image = ((ImageFragment)adapter.getItem(pager.getCurrentItem())).getNonOrigImage();
-            save(banner.group(2), ".jpg", non_orig_image, false);
+            save(banner.group(Regex.userBannerUrlFileNameGroup), ".jpg", non_orig_image, false);
             return;
         }
 
@@ -166,9 +166,9 @@ public class ImageFragmentActivity extends AppCompatActivity{
                 if(result != null){
                     progDialog.dismiss();
                     if(type == TYPE_ICON){
-                        save(pattern.group(2), pattern.group(3), result, false);
+                        save(pattern.group(Regex.userIconUrlFileNameGroup), pattern.group(Regex.userIconUrlDotExtGroup), result, false);
                     }else{
-                        save(pattern.group(2), pattern.group(3), result, true);
+                        save(pattern.group(Regex.userIconUrlFileNameGroup), pattern.group(Regex.userIconUrlDotExtGroup), result, true);
                     }
                 }else{
                     new ShowToast(getApplicationContext(), R.string.error_get_original_image);
