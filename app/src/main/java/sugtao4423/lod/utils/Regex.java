@@ -9,7 +9,7 @@ public class Regex{
     public static final Pattern media_gif = Pattern.compile("http(s)?://pbs.twimg.com/tweet_video/");
     public static final Pattern statusUrl = Pattern.compile("http(s)?://(mobile.)?twitter.com/(i/web|[0-9a-zA-Z_]+)/status/([0-9]+)");
     public static final int statusUrlStatusIdGroup = 4;
-    public static final Pattern shareUrl = Pattern.compile("http(s)?://(mobile.)?twitter.com/intent/tweet\\?.+");
+    public static final Pattern shareUrl = Pattern.compile("http(s)?://(mobile.)?twitter.com/(intent/tweet|share)\\?.+");
     public static final Pattern userUrl = Pattern.compile("http(s)?://(mobile.)?twitter.com/([0-9a-zA-Z_]+)");
     public static final int userUrlScreenNameGroup = 3;
     public static final Pattern userIconUrl = Pattern.compile("^http(s)?://pbs.twimg.com/.+/+(.+)(\\..+)$");
