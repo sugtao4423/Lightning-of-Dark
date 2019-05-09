@@ -18,8 +18,9 @@ import com.tenthbit.view.ZoomImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import sugtao4423.lod.R;
 
@@ -61,7 +62,7 @@ public class ImageFragment extends Fragment{
             protected Bitmap doInBackground(String... params){
                 try{
                     URL url = new URL(params[0]);
-                    HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                    HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
                     connection.setDoInput(true);
                     connection.connect();
                     InputStream is = connection.getInputStream();

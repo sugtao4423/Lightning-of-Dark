@@ -36,7 +36,7 @@ public class ImagePagerAdapter extends FragmentPagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position){
-        return String.valueOf(position + 1) + "/" + String.valueOf(getCount());
+        return (position + 1) + "/" + getCount();
     }
 
 }

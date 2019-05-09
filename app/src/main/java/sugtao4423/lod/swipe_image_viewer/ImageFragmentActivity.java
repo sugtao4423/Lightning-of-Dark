@@ -29,9 +29,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.regex.Matcher;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import sugtao4423.lod.ChromeIntent;
 import sugtao4423.lod.LoDBaseActivity;
@@ -52,7 +53,6 @@ public class ImageFragmentActivity extends LoDBaseActivity{
     private ZoomViewPager pager;
     private String[] urls;
     private int type;
-    private String currentUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -80,42 +80,39 @@ public class ImageFragmentActivity extends LoDBaseActivity{
     }
 
     public void image_option_click(View v){
-        currentUrl = urls[pager.getCurrentItem()];
+        final String imageUrl = urls[pager.getCurrentItem()];
         new AlertDialog.Builder(this)
                 .setItems(new String[]{getString(R.string.open_in_browser), getString(R.string.save)}, new OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
                         if(which == 0){
-                            new ChromeIntent(ImageFragmentActivity.this, Uri.parse(currentUrl));
+                            new ChromeIntent(ImageFragmentActivity.this, Uri.parse(imageUrl));
                         }else if(which == 1){
-                            saveImage();
+                            saveImage(imageUrl);
                         }
                     }
                 }).show();
     }
 
-    public void saveImage(){
+    public void saveImage(String imageUrl){
         if(!hasWriteExternalStoragePermission()){
             requestWriteExternalStoragePermission();
             return;
         }
         if(type == TYPE_BANNER){
-            Matcher banner = Regex.userBannerUrl.matcher(currentUrl);
+            Matcher banner = Regex.userBannerUrl.matcher(imageUrl);
             if(!banner.find()){
                 new ShowToast(getApplicationContext(), R.string.url_not_match_pattern_and_dont_save);
                 return;
             }
-            byte[] non_orig_image = ((ImageFragment)adapter.getItem(pager.getCurrentItem())).getNonOrigImage();
-            save(banner.group(Regex.userBannerUrlFileNameGroup), ".jpg", non_orig_image, false);
+            byte[] bannerImg = ((ImageFragment)adapter.getItem(pager.getCurrentItem())).getNonOrigImage();
+            save(banner.group(Regex.userBannerUrlFileNameGroup), ".jpg", bannerImg, false);
             return;
         }
 
-        String orig = "";
-        if(type != TYPE_ICON){
-            orig = ":orig";
-        }
+        String imgUrl = imageUrl + ((type == TYPE_ICON) ? "" : ":orig");
 
-        final Matcher pattern = Regex.userIconUrl.matcher(currentUrl);
+        final Matcher pattern = Regex.twimgUrl.matcher(imgUrl);
         if(!pattern.find()){
             new ShowToast(getApplicationContext(), R.string.url_not_match_pattern_and_dont_save);
             return;
@@ -138,7 +135,7 @@ public class ImageFragmentActivity extends LoDBaseActivity{
             protected byte[] doInBackground(String... params){
                 try{
                     URL url = new URL(params[0]);
-                    HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+                    HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
                     connection.setDoInput(true);
                     connection.connect();
                     InputStream is = connection.getInputStream();
@@ -159,24 +156,21 @@ public class ImageFragmentActivity extends LoDBaseActivity{
             }
 
             @Override
-            protected void onPostExecute(final byte[] result){
+            protected void onPostExecute(byte[] result){
                 if(result != null){
                     progDialog.dismiss();
-                    if(type == TYPE_ICON){
-                        save(pattern.group(Regex.userIconUrlFileNameGroup), pattern.group(Regex.userIconUrlDotExtGroup), result, false);
-                    }else{
-                        save(pattern.group(Regex.userIconUrlFileNameGroup), pattern.group(Regex.userIconUrlDotExtGroup), result, true);
-                    }
+                    boolean isOriginal = (type != TYPE_ICON);
+                    save(pattern.group(Regex.twimgUrlFileNameGroup), pattern.group(Regex.twimgUrlDotExtGroup), result, isOriginal);
                 }else{
                     new ShowToast(getApplicationContext(), R.string.error_get_original_image);
                 }
             }
-        }.execute(currentUrl + orig);
+        }.execute(imgUrl);
     }
 
     public void save(final String fileName, final String type, final byte[] byteImage, final boolean isOriginal){
         final String saveDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DOWNLOADS;
-        final String imgPath = saveDir + "/" + fileName + type;
+        final String imgPath = saveDir + "/" + fileName + type.replaceAll(":orig$", "");
 
         if(new File(imgPath).exists()){
             new AlertDialog.Builder(this)
@@ -217,20 +211,16 @@ public class ImageFragmentActivity extends LoDBaseActivity{
     }
 
     public void output(String imgPath, byte[] byteImage, boolean isOriginal){
-        FileOutputStream fos;
         try{
-            fos = new FileOutputStream(imgPath, true);
+            FileOutputStream fos = new FileOutputStream(imgPath, true);
             fos.write(byteImage);
             fos.close();
         }catch(IOException e){
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            new ShowToast(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
             return;
         }
-        if(isOriginal){
-            Toast.makeText(this, getString(R.string.saved_original) + "\n" + imgPath, Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(this, getString(R.string.saved) + "\n" + imgPath, Toast.LENGTH_LONG).show();
-        }
+        String message = (isOriginal ? getString(R.string.saved_original) : getString(R.string.saved)) + "\n" + imgPath;
+        new ShowToast(getApplicationContext(), message, Toast.LENGTH_LONG);
     }
 
     public boolean hasWriteExternalStoragePermission(){
@@ -249,7 +239,7 @@ public class ImageFragmentActivity extends LoDBaseActivity{
             return;
         }
         if(permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            saveImage();
+            saveImage(urls[pager.getCurrentItem()]);
         }else{
             new ShowToast(getApplicationContext(), R.string.permission_rejected);
         }
