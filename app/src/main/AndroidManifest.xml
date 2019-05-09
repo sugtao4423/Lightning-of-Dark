@@ -96,6 +96,15 @@
             android:theme="@style/Theme.TranslucentBackground" />
 
         <service android:name="AutoLoadTLService" />
+        <service
+            android:name=".playing_music_data.MusicNotificationListener"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

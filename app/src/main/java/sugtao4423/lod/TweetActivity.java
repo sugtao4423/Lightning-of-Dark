@@ -23,8 +23,10 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import sugtao4423.lod.dataclass.Music;
+import sugtao4423.lod.playing_music_data.MusicDataKey;
+import sugtao4423.lod.playing_music_data.PlayingMusicData;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.tweetlistview.TweetListView;
 import twitter4j.Status;
@@ -204,15 +206,21 @@ public class TweetActivity extends LoDBaseActivity{
     }
 
     public void music(View v){
-        Music music = app.getMusic();
-        if(music == null){
+        HashMap<MusicDataKey, String> playingMusicData = new PlayingMusicData(this).getPlayingMusicData();
+        if(playingMusicData == null){
             return;
         }
+        String title = playingMusicData.get(MusicDataKey.TITLE);
+        String artist = playingMusicData.get(MusicDataKey.ARTIST);
+        String album = playingMusicData.get(MusicDataKey.ALBUM);
         String nowplayingFormat = app.getOptions().getNowplayingFormat();
         if(nowplayingFormat.equals("")){
             nowplayingFormat = "%artist% - %track% #nowplaying";
         }
-        String str = nowplayingFormat.replaceAll("%track%", music.getTrack()).replaceAll("%artist%", music.getArtist()).replaceAll("%album%", music.getAlbum());
+        String str = nowplayingFormat
+                .replaceAll("%track%", title)
+                .replaceAll("%artist%", artist)
+                .replaceAll("%album%", album);
         tweetText.setText(tweetText.getText().toString() + str);
         tweetText.setSelection(tweetText.getText().length());
     }

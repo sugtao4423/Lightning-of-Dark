@@ -99,6 +99,7 @@
     <string name="unofficial_rt">UnOfficialRT</string>
     <string name="voice_input">音声入力</string>
 
+    <string name="permission_notification_access_message">楽曲情報を取得するため通知へのアクセスを許可してください。</string>
     <string name="permission_rejected">(๑•﹏•๑*)</string>
 
     <string name="param_user_count_detail">Tweet: %1$s  Fav: %2$s  Follow: %3$s  Follower: %4$s</string>

@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 
 import sugtao4423.lod.AutoLoadTLService.AutoLoadTLListener;
 import sugtao4423.lod.dataclass.Account;
-import sugtao4423.lod.dataclass.Music;
 import sugtao4423.lod.dataclass.TwitterList;
 import sugtao4423.lod.tweetlistview.TweetListAdapter;
 import sugtao4423.lod.usetime.UseTime;
@@ -41,7 +40,6 @@ public class App extends Application{
     private TwitterList[] lists;
     private Options options;
     private Level level;
-    private Music music;
     // Database
     private DBUtil accountDBUtil;
     private UseTime useTime;
@@ -209,15 +207,6 @@ public class App extends Application{
             level = new Level(getApplicationContext());
         }
         return level;
-    }
-
-    // Music
-    public void setMusic(Music music){
-        this.music = music;
-    }
-
-    public Music getMusic(){
-        return music;
     }
 
     // DBUtil

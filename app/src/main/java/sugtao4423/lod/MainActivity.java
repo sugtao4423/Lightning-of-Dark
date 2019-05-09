@@ -3,7 +3,6 @@ package sugtao4423.lod;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,8 +30,6 @@ public class MainActivity extends LoDBaseActivity{
 
     private Builder iconDialog;
 
-    private MusicReceiver musicReceiver;
-
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -55,7 +52,6 @@ public class MainActivity extends LoDBaseActivity{
         fragmentHome = pagerAdapter.getFragmentHome();
         fragmentMention = pagerAdapter.getFragmentMention();
         logIn();
-        setMusicReceiver();
     }
 
     public void logIn(){
@@ -92,18 +88,6 @@ public class MainActivity extends LoDBaseActivity{
         }
     }
 
-    public void setMusicReceiver(){
-        musicReceiver = new MusicReceiver();
-        IntentFilter filter = new IntentFilter();
-        for(String s : MusicReceiver.ACTIONS_GOOGLEPLAY){
-            filter.addAction(s);
-        }
-        for(String s : MusicReceiver.ACTIONS_SONYMUSIC){
-            filter.addAction(s);
-        }
-        registerReceiver(musicReceiver, filter);
-    }
-
     public void newTweet(View v){
         Intent intent = new Intent(MainActivity.this, TweetActivity.class);
         startActivity(intent);
@@ -132,7 +116,6 @@ public class MainActivity extends LoDBaseActivity{
     @Override
     public void onDestroy(){
         super.onDestroy();
-        unregisterReceiver(musicReceiver);
         stopService(new Intent(this, AutoLoadTLService.class));
         app.resetAccount();
         app.closeAccountDB();
