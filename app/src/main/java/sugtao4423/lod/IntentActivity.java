@@ -1,13 +1,11 @@
 package sugtao4423.lod;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -99,7 +97,6 @@ public class IntentActivity extends AppCompatActivity{
                 }
             }
 
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
             @Override
             protected void onPostExecute(twitter4j.Status status){
                 if(status != null){
