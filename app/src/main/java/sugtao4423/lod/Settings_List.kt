@@ -3,8 +3,8 @@ package sugtao4423.lod
 import android.app.AlertDialog
 import android.os.AsyncTask
 import android.os.Bundle
-import android.preference.Preference
-import android.preference.PreferenceFragment
+import android.support.v7.preference.Preference
+import android.support.v7.preference.PreferenceFragmentCompat
 import sugtao4423.lod.utils.DBUtil
 import twitter4j.ResponseList
 import twitter4j.TwitterException
@@ -14,11 +14,10 @@ class Settings_List : LoDBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        fragmentManager.beginTransaction().replace(android.R.id.content, MyPreferencesFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(android.R.id.content, PreferencesFragment()).commit()
     }
 
-    class MyPreferencesFragment : PreferenceFragment() {
+    class PreferencesFragment : PreferenceFragmentCompat() {
 
         private lateinit var selectList: Preference
         private lateinit var startAppLoadList: Preference
@@ -26,9 +25,12 @@ class Settings_List : LoDBaseActivity() {
         private lateinit var myScreenName: String
         private lateinit var app: App
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            addPreferencesFromResource(R.xml.preference_list)
+        override fun onCreatePreferences(bundle: Bundle?, rootKey: String?) {
+            if (activity == null) {
+                return
+            }
+            val activity = activity!!
+            setPreferencesFromResource(R.xml.preference_list, rootKey)
 
             selectList = findPreference("select_List")
             startAppLoadList = findPreference("startApp_loadList")

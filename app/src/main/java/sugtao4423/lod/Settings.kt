@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
-import android.preference.CheckBoxPreference
-import android.preference.Preference
-import android.preference.PreferenceFragment
+import android.support.v7.preference.CheckBoxPreference
+import android.support.v7.preference.Preference
+import android.support.v7.preference.PreferenceFragmentCompat
 import android.text.InputType
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -22,8 +22,7 @@ class Settings : LoDBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        fragmentManager.beginTransaction().replace(android.R.id.content, MyPreferencesFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(android.R.id.content, PreferencesFragment()).commit()
     }
 
     override fun onDestroy() {
@@ -31,14 +30,17 @@ class Settings : LoDBaseActivity() {
         app.loadOption()
     }
 
-    class MyPreferencesFragment : PreferenceFragment() {
+    class PreferencesFragment : PreferenceFragmentCompat() {
 
         private lateinit var app: App
         private lateinit var autoLoadTLInterval: Preference
 
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            addPreferencesFromResource(R.xml.preference)
+        override fun onCreatePreferences(bundle: Bundle?, rootKey: String?) {
+            if (activity == null) {
+                return
+            }
+            val activity = activity!!
+            setPreferencesFromResource(R.xml.preference, rootKey)
 
             app = activity.applicationContext as App
 
@@ -108,7 +110,7 @@ class Settings : LoDBaseActivity() {
 
                 override fun onPostExecute(result: ResponseList<UserList>?) {
                     if (result == null) {
-                        ShowToast(activity.applicationContext, R.string.error_get_list)
+                        ShowToast(activity!!.applicationContext, R.string.error_get_list)
                         return
                     }
                     result.map {
@@ -176,7 +178,7 @@ class Settings : LoDBaseActivity() {
                     DecimalFormat("#.#").let {
                         it.minimumFractionDigits = 2
                         it.maximumFractionDigits = 2
-                        return it.format(WebImageCache(activity.applicationContext).cacheSize.toDouble() / 1024 / 1024)
+                        return it.format(WebImageCache(activity!!.applicationContext).cacheSize.toDouble() / 1024 / 1024)
                     }
                 }
 
