@@ -1,17 +1,16 @@
 package sugtao4423.lod.swipe_image_viewer
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker
 import android.support.v4.view.PagerTabStrip
 import android.view.View
@@ -47,7 +46,6 @@ class ImageFragmentActivity : LoDBaseActivity() {
     private lateinit var urls: Array<String>
     private var type = -1
 
-    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -68,7 +66,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
         }
 
         findViewById<PagerTabStrip>(R.id.show_image_pager_tab_strip).apply {
-            tabIndicatorColor = Color.parseColor(getString(R.color.pagerTabText))
+            tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }
     }

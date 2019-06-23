@@ -3,8 +3,8 @@ package sugtao4423.lod
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -101,7 +101,7 @@ class ListViewListener : TweetListAdapter.OnItemClickListener, TweetListAdapter.
 
         val tf = (context.applicationContext as App).getFontAwesomeTypeface()
         val density = context.resources.displayMetrics.density
-        val black = Color.parseColor(context.getString(R.color.icon))
+        val black = ContextCompat.getColor(context, R.color.icon)
         dialogBtn.map {
             it.typeface = tf
             it.textSize = 9 * density

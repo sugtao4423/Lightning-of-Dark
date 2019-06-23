@@ -1,11 +1,10 @@
 package sugtao4423.lod
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerTabStrip
 import android.support.v4.view.ViewPager
 import android.view.View
@@ -27,7 +26,6 @@ class MainActivity : LoDBaseActivity() {
 
     private var iconDialog: AlertDialog.Builder? = null
 
-    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
@@ -42,7 +40,7 @@ class MainActivity : LoDBaseActivity() {
         }
 
         findViewById<PagerTabStrip>(R.id.mainPagerTabStrip).apply {
-            tabIndicatorColor = Color.parseColor(getString(R.color.pagerTabText))
+            tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }
         supportActionBar?.setDisplayShowHomeEnabled(false)
@@ -88,10 +86,9 @@ class MainActivity : LoDBaseActivity() {
         startActivity(Intent(this, TweetActivity::class.java))
     }
 
-    @SuppressLint("ResourceType")
     fun option(@Suppress("UNUSED_PARAMETER") v: View) {
         if (iconDialog == null) {
-            val black = Color.parseColor(getString(R.color.icon))
+            val black = ContextCompat.getColor(applicationContext, R.color.icon)
             val items = arrayOf(
                     IconItem(getString(R.string.icon_bomb)[0], black, getString(R.string.tweet_bomb)),
                     IconItem(getString(R.string.icon_search)[0], black, getString(R.string.search_user)),

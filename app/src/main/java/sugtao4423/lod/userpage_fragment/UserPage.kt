@@ -1,9 +1,8 @@
 package sugtao4423.lod.userpage_fragment
 
-import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.AsyncTask
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerTabStrip
 import android.support.v4.view.ViewPager
 import sugtao4423.lod.LoDBaseActivity
@@ -21,7 +20,6 @@ class UserPage : LoDBaseActivity() {
 
     private lateinit var adapter: UserPageFragmentPagerAdapter
 
-    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.userpage)
@@ -33,7 +31,7 @@ class UserPage : LoDBaseActivity() {
         }
 
         findViewById<PagerTabStrip>(R.id.userPagerTabStrip).apply {
-            tabIndicatorColor = Color.parseColor(getString(R.color.pagerTabText))
+            tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }
         supportActionBar?.setDisplayShowHomeEnabled(false)
