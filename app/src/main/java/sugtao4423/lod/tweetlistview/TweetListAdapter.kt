@@ -1,0 +1,229 @@
+package sugtao4423.lod.tweetlistview
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.os.Handler
+import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.*
+import com.loopj.android.image.SmartImageView
+import sugtao4423.lod.App
+import sugtao4423.lod.R
+import sugtao4423.lod.Show_Video
+import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
+import sugtao4423.lod.userpage_fragment.UserPage
+import sugtao4423.lod.utils.Utils
+import twitter4j.ResponseList
+import twitter4j.Status
+import java.text.SimpleDateFormat
+import java.util.*
+
+class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
+
+    private val inflater = LayoutInflater.from(context)
+    private val data = arrayListOf<Status>()
+    private val app = context.applicationContext as App
+    private val statusDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (if (app.getOptions().isMillisecond) ".SSS" else ""), Locale.getDefault())
+    private val handler = Handler()
+    var onItemClickListener: OnItemClickListener? = null
+    var onItemLongClickListener: OnItemLongClickListener? = null
+    var hideImages = false
+
+    override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
+        return ViewHolder(inflater.inflate(R.layout.list_item_tweet, viewGroup, false))
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if (data.size <= position) {
+            return
+        }
+        val item = data[position]
+        val origStatus = if (item.isRetweet) item.retweetedStatus else item
+
+        // 鍵
+        if (origStatus.user.isProtected) {
+            holder.protect.typeface = app.getFontAwesomeTypeface()
+            holder.protect.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().userNameFontSize - 3)
+            holder.protect.visibility = View.VISIBLE
+        } else {
+            holder.protect.visibility = View.GONE
+        }
+
+        // アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
+        if (item.isRetweet) {
+            holder.rtIcon.visibility = View.VISIBLE
+            holder.rtSn.visibility = View.VISIBLE
+            val date = statusDateFormat.format(Date((item.retweetedStatus.id shr 22) + 1288834974657L))
+            holder.date.text = "$date  Retweeted by "
+            holder.rtIcon.setImageUrl(item.user.profileImageURLHttps, null, R.drawable.icon_loading)
+            holder.rtSn.text = "@" + item.user.screenName
+        } else {
+            holder.rtIcon.visibility = View.GONE
+            holder.rtSn.visibility = View.GONE
+            val date = statusDateFormat.format(Date((item.id shr 22) + 1288834974657L))
+            holder.date.text = "$date  via " + item.source.replace(Regex("<.+?>"), "")
+        }
+
+        holder.nameSn.text = origStatus.user.name + " - @" + origStatus.user.screenName
+        holder.content.text = origStatus.text
+        holder.icon.setImageUrl(origStatus.user.biggerProfileImageURLHttps, null, R.drawable.icon_loading)
+
+        holder.nameSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().userNameFontSize)
+        holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().contentFontSize)
+        holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().dateFontSize)
+        if (item.isRetweet) {
+            holder.rtSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().dateFontSize)
+        }
+
+        holder.icon.setOnClickListener {
+            val intent = Intent(context, UserPage::class.java)
+            intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_OBJECT, origStatus.user)
+            context.startActivity(intent)
+        }
+
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.onItemClicked(context, data, holder.layoutPosition)
+        }
+        holder.itemView.setOnLongClickListener {
+            onItemLongClickListener?.onItemLongClicked(context, data, holder.layoutPosition)
+                    ?: false
+        }
+
+        val mentitys = origStatus.mediaEntities
+        if (mentitys.isNotEmpty() && !hideImages) {
+            holder.tweetImagesScroll.visibility = View.VISIBLE
+            holder.tweetImagesLayout.removeAllViews()
+            mentitys.mapIndexed { index, media ->
+                val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 200)
+                if (holder.tweetImagesLayout.childCount != 0) {
+                    params.setMargins(8, 0, 0, 0)
+                }
+                val child = SmartImageView(context).apply {
+                    layoutParams = params
+                    maxHeight = 200
+                    adjustViewBounds = true
+                }
+
+                if (Utils.isVideoOrGif(media)) {
+                    val centerParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 200, Gravity.CENTER)
+                    val play = ImageView(context).apply {
+                        layoutParams = centerParams
+                        maxHeight = 200
+                        adjustViewBounds = true
+                        scaleType = ImageView.ScaleType.FIT_CENTER
+                        setImageResource(R.drawable.icon_video_play)
+                    }
+
+                    val fl = FrameLayout(context)
+                    fl.addView(child)
+                    fl.addView(play)
+                    holder.tweetImagesLayout.addView(fl)
+
+                    val isGif = Utils.isGif(media)
+                    val videoUrl = Utils.getVideoURLsSortByBitrate(app, mentitys)
+                    child.setImageUrl(media.mediaURLHttps + ":small", null, R.drawable.icon_loading)
+                    child.setOnClickListener {
+                        val intent = Intent(context, Show_Video::class.java).apply {
+                            putExtra(Show_Video.INTENT_EXTRA_KEY_URL, videoUrl[videoUrl.size - 1])
+                            if (isGif) {
+                                putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_GIF)
+                            } else {
+                                putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_VIDEO)
+                            }
+                        }
+                        context.startActivity(intent)
+                    }
+                } else {
+                    holder.tweetImagesLayout.addView(child)
+                    child.setImageUrl(media.mediaURLHttps + ":small", null, R.drawable.icon_loading)
+                    val urls = arrayOfNulls<String>(mentitys.size)
+                    mentitys.mapIndexed { j, it ->
+                        urls[j] = it.mediaURLHttps
+                    }
+                    child.setOnClickListener {
+                        val intent = Intent(context, ImageFragmentActivity::class.java).apply {
+                            putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, urls)
+                            putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_POSITION, index)
+                        }
+                        context.startActivity(intent)
+                    }
+                }
+            }
+            holder.tweetImagesScroll.setOnTouchListener { v, event ->
+                val sv = v as HorizontalScrollView
+                if (sv.getChildAt(0).width > sv.width) {
+                    v.onTouchEvent(event)
+                } else {
+                    holder.itemView.onTouchEvent(event)
+                }
+            }
+        } else {
+            holder.tweetImagesScroll.visibility = View.GONE
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
+
+    fun getItem(position: Int): Status {
+        return data[position]
+    }
+
+    fun add(status: Status) {
+        handler.post {
+            data.add(status)
+            notifyItemInserted(data.size - 1)
+        }
+    }
+
+    fun addAll(statuses: ResponseList<Status>) {
+        val pos = data.size
+        data.addAll(statuses)
+        handler.post {
+            notifyItemRangeInserted(pos, statuses.size)
+        }
+    }
+
+    fun insertTop(item: Status) {
+        handler.post {
+            data.add(0, item)
+            notifyItemInserted(0)
+        }
+    }
+
+    fun clear() {
+        val size = data.size
+        data.clear()
+        handler.post {
+            notifyItemRangeRemoved(0, size)
+        }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClicked(context: Context, data: ArrayList<Status>, position: Int)
+    }
+
+    interface OnItemLongClickListener {
+        fun onItemLongClicked(context: Context, data: ArrayList<Status>, position: Int): Boolean
+    }
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val icon: SmartImageView = itemView.findViewById(R.id.icon)
+        val rtIcon: SmartImageView = itemView.findViewById(R.id.RetweetedUserIcon)
+        val nameSn: TextView = itemView.findViewById(R.id.name_screenName)
+        val content: TextView = itemView.findViewById(R.id.tweetText)
+        val date: TextView = itemView.findViewById(R.id.tweet_date)
+        val rtSn: TextView = itemView.findViewById(R.id.RetweetedUserScreenName)
+        val protect: TextView = itemView.findViewById(R.id.UserProtected)
+        val tweetImagesScroll: HorizontalScrollView = itemView.findViewById(R.id.tweet_images_scroll)
+        val tweetImagesLayout: LinearLayout = itemView.findViewById(R.id.tweet_images_layout)
+    }
+
+}

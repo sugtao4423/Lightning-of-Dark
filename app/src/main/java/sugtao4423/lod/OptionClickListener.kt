@@ -1,0 +1,181 @@
+package sugtao4423.lod
+
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.os.AsyncTask
+import android.preference.PreferenceManager
+import android.support.design.widget.TextInputEditText
+import android.view.View
+import android.widget.EditText
+import android.widget.FrameLayout
+import sugtao4423.lod.userpage_fragment.UserPage
+import sugtao4423.lod.utils.Utils
+import twitter4j.TwitterException
+import java.text.NumberFormat
+
+class OptionClickListener(private val context: Context) : DialogInterface.OnClickListener {
+
+    override fun onClick(dialog: DialogInterface?, which: Int) {
+        when (which) {
+            0 -> tweetBomb()
+            1 -> searchUser()
+            2 -> accountSelect()
+            3 -> levelInfo()
+            4 -> useInfo()
+            5 -> context.startActivity(Intent(context, Settings::class.java))
+        }
+    }
+
+    private fun tweetBomb() {
+        val bombView = View.inflate(context, R.layout.tweet_bomb, null)
+        AlertDialog.Builder(context).apply {
+            setView(bombView)
+            setNegativeButton(R.string.cancel, null)
+            setPositiveButton(R.string.ok) { _, _ ->
+                val staticText = (bombView.findViewById<TextInputEditText>(R.id.bomb_static_text)).text.toString()
+                val loopText = (bombView.findViewById<TextInputEditText>(R.id.bomb_loop_text)).text.toString()
+                val loopCountStr = (bombView.findViewById<TextInputEditText>(R.id.bomb_loop_count)).text.toString()
+                if (loopCountStr.isEmpty()) {
+                    return@setPositiveButton
+                }
+                val loopCount = loopCountStr.toInt()
+
+                var loop = ""
+                for (i in 0 until loopCount) {
+                    loop += loopText
+                    object : AsyncTask<String, Unit, Unit>() {
+                        override fun doInBackground(vararg params: String?) {
+                            try {
+                                (context.applicationContext as App).getTwitter().updateStatus(staticText + params[0])
+                            } catch (e: TwitterException) {
+                            }
+                        }
+                    }.execute(loop)
+                }
+                val toast = context.getString(R.string.param_success_tweet, 0)
+                ShowToast(context.applicationContext, toast)
+            }
+            show()
+        }
+    }
+
+    private fun searchUser() {
+        val userEdit = EditText(context)
+        val editContainer = FrameLayout(context)
+        FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).also {
+            val margin = Utils.convertDpToPx(context, 24)
+            it.leftMargin = margin
+            it.rightMargin = margin
+            userEdit.layoutParams = it
+        }
+        editContainer.addView(userEdit)
+
+        AlertDialog.Builder(context).apply {
+            setMessage(R.string.input_users_screen_name)
+            setView(editContainer)
+            setPositiveButton(R.string.ok) { _, _ ->
+                val userScreenName = userEdit.text.toString()
+                if (userScreenName.isEmpty()) {
+                    ShowToast(context.applicationContext, R.string.edittext_empty)
+                } else {
+                    val userPage = Intent(context, UserPage::class.java)
+                    userPage.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, userScreenName.replace("@", ""))
+                    context.startActivity(userPage)
+                }
+            }
+            show()
+        }
+    }
+
+    private fun accountSelect() {
+        val app = context.applicationContext as App
+        val myScreenName = app.getCurrentAccount().screenName
+        val dbUtil = app.getAccountDBUtil()
+        val accounts = dbUtil.getAccounts()
+        val screenNames = arrayListOf<String>()
+        accounts.map {
+            if (it.screenName == myScreenName) {
+                screenNames.add("@${it.screenName} (now)")
+            } else {
+                screenNames.add("@${it.screenName}")
+            }
+        }
+        screenNames.add(context.getString(R.string.add_account))
+        AlertDialog.Builder(context).apply {
+            setItems(screenNames.toTypedArray()) { _, which ->
+                val selected = screenNames[which]
+                if (selected == context.getString(R.string.add_account)) {
+                    context.startActivity(Intent(context, StartOAuth::class.java))
+                } else if (selected != "@$myScreenName (now)") {
+                    AlertDialog.Builder(context).also {
+                        it.setTitle(selected)
+                        it.setPositiveButton(R.string.change_account) { _, _ ->
+                            PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+                                    .edit()
+                                    .putString(Keys.SCREEN_NAME, accounts[which].screenName)
+                                    .commit()
+                            (context as MainActivity).restart()
+                        }
+                        it.setNegativeButton(R.string.delete) { _, _ ->
+                            dbUtil.deleteAccount(accounts[which])
+                            val toast = context.getString(R.string.param_success_account_delete, accounts[which].screenName)
+                            ShowToast(context.applicationContext, toast)
+                        }
+                        it.setNeutralButton(R.string.cancel, null)
+                        it.show()
+                    }
+                }
+            }
+            show()
+        }
+    }
+
+    private fun levelInfo() {
+        val lv = (context.applicationContext as App).getLevel()
+        NumberFormat.getInstance().apply {
+            val level = format(lv.getLevel())
+            val nextExp = format(lv.getNextExp())
+            val totalExp = format(lv.getTotalExp())
+            val message = context.getString(R.string.param_next_level_total_exp, level, nextExp, totalExp)
+            AlertDialog.Builder(context).setMessage(message).setPositiveButton(R.string.ok, null).show()
+        }
+    }
+
+    private fun useInfo() {
+        (context.applicationContext as App).getUseTime().apply {
+            val todayUse = getTodayUseTimeInMillis()
+            val yesterdayUse = getYesterdayUseTimeInMillis()
+            val last30daysUse = getLastNdaysUseTimeInMillis(30)
+            val totalUse = getTotalUseTimeInMillis()
+            val message = context.getString(R.string.param_use_info_text,
+                    milliTime2Str(todayUse.toLong()), milliTime2Str(yesterdayUse.toLong()), milliTime2Str(last30daysUse), milliTime2Str(totalUse))
+            AlertDialog.Builder(context).setTitle(R.string.use_info).setMessage(message).setPositiveButton(R.string.ok, null).show()
+        }
+    }
+
+    private fun milliTime2Str(time: Long): String {
+        val day = (time / 1000 / 86400).toInt()
+        val hour = ((time / 1000 - day * 86400) / 3600).toInt()
+        val minute = ((time / 1000 - day * 86400 - hour * 3600) / 60).toInt()
+        val second = (time / 1000 - day * 86400 - hour * 3600 - minute * 60).toInt()
+
+        var result = if (day != 0) {
+            "$day days, "
+        } else {
+            ""
+        }
+        result += zeroPad(hour) + ":" + zeroPad(minute) + ":" + zeroPad(second)
+        return result
+    }
+
+    private fun zeroPad(i: Int): String {
+        return if (i < 10) {
+            "0$i"
+        } else {
+            i.toString()
+        }
+    }
+
+}
