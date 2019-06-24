@@ -7,14 +7,14 @@
     <color name="icon">#757575</color>
     <color name="icon_press">#424242</color>
 
-    <color name="RetweetedByMe">#c9f999</color>
-    <color name="Retweet">#c9d9f9</color>
+    <color name="retweetedByMe">#c9f999</color>
+    <color name="retweet">#c9d9f9</color>
     <color name="sameMyScreenName">#c9f999</color>
     <color name="mention">#f9c9c9</color>
-    <color name="Position0">#f9f9f9</color>
-    <color name="Position1">#e9e9e9</color>
+    <color name="position0">#f9f9f9</color>
+    <color name="position1">#e9e9e9</color>
 
-    <color name="Press">#6699cc</color>
+    <color name="press">#6699cc</color>
 
     <color name="statusBar">#2196f3</color>
 
