@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.widget.MediaController
 import android.widget.VideoView
 
-class Show_Video : LoDBaseActivity() {
+class ShowVideo : LoDBaseActivity() {
 
     companion object {
         const val INTENT_EXTRA_KEY_TYPE = "type"

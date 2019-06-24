@@ -91,7 +91,7 @@
             android:configChanges="orientation|screenSize|screenLayout"
             android:theme="@style/Theme.TranslucentBackground" />
         <activity
-            android:name="Show_Video"
+            android:name="ShowVideo"
             android:configChanges="orientation|screenSize|screenLayout"
             android:theme="@style/Theme.TranslucentBackground" />
 

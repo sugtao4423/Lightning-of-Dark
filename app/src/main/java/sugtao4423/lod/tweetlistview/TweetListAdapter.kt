@@ -14,7 +14,7 @@ import android.widget.*
 import com.loopj.android.image.SmartImageView
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.Show_Video
+import sugtao4423.lod.ShowVideo
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
 import sugtao4423.lod.userpage_fragment.UserPage
 import sugtao4423.lod.utils.Utils
@@ -129,12 +129,12 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
                     val videoUrl = Utils.getVideoURLsSortByBitrate(app, mentitys)
                     child.setImageUrl(media.mediaURLHttps + ":small", null, R.drawable.icon_loading)
                     child.setOnClickListener {
-                        val intent = Intent(context, Show_Video::class.java).apply {
-                            putExtra(Show_Video.INTENT_EXTRA_KEY_URL, videoUrl[videoUrl.size - 1])
+                        val intent = Intent(context, ShowVideo::class.java).apply {
+                            putExtra(ShowVideo.INTENT_EXTRA_KEY_URL, videoUrl[videoUrl.size - 1])
                             if (isGif) {
-                                putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_GIF)
+                                putExtra(ShowVideo.INTENT_EXTRA_KEY_TYPE, ShowVideo.TYPE_GIF)
                             } else {
-                                putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_VIDEO)
+                                putExtra(ShowVideo.INTENT_EXTRA_KEY_TYPE, ShowVideo.TYPE_VIDEO)
                             }
                         }
                         context.startActivity(intent)

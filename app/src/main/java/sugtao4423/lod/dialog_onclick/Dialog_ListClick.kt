@@ -98,15 +98,15 @@ class Dialog_ListClick(private val context: Context, private val status: Status,
                     }
                 }
                 video.find() -> {
-                    Intent(context, Show_Video::class.java).apply {
-                        putExtra(Show_Video.INTENT_EXTRA_KEY_URL, clickedText)
-                        putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_VIDEO)
+                    Intent(context, ShowVideo::class.java).apply {
+                        putExtra(ShowVideo.INTENT_EXTRA_KEY_URL, clickedText)
+                        putExtra(ShowVideo.INTENT_EXTRA_KEY_TYPE, ShowVideo.TYPE_VIDEO)
                     }
                 }
                 gif.find() -> {
-                    Intent(context, Show_Video::class.java).apply {
-                        putExtra(Show_Video.INTENT_EXTRA_KEY_URL, clickedText)
-                        putExtra(Show_Video.INTENT_EXTRA_KEY_TYPE, Show_Video.TYPE_GIF)
+                    Intent(context, ShowVideo::class.java).apply {
+                        putExtra(ShowVideo.INTENT_EXTRA_KEY_URL, clickedText)
+                        putExtra(ShowVideo.INTENT_EXTRA_KEY_TYPE, ShowVideo.TYPE_GIF)
                     }
                 }
                 state.find() -> {
