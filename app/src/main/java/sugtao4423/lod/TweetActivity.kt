@@ -94,7 +94,7 @@ class TweetActivity : LoDBaseActivity() {
                 val mentionUsers = arrayListOf<String>()
                 mentionUsers.add(status.user.screenName)
                 status.userMentionEntities.map {
-                    if (it.screenName != app.getCurrentAccount().screenName || !mentionUsers.contains(it.screenName)) {
+                    if (it.screenName != app.getCurrentAccount().screenName && !mentionUsers.contains(it.screenName)) {
                         mentionUsers.add(it.screenName)
                     }
                 }
