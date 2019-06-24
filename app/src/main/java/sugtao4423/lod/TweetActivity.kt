@@ -162,7 +162,7 @@ class TweetActivity : LoDBaseActivity() {
         })
     }
 
-    fun tweet(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun clickTweet(@Suppress("UNUSED_PARAMETER") v: View) {
         findViewById<Button>(R.id.tweetButton).isEnabled = false
         findViewById<Button>(R.id.tweetClose).isEnabled = false
         findViewById<Button>(R.id.imageSelect).isEnabled = false
@@ -182,7 +182,7 @@ class TweetActivity : LoDBaseActivity() {
         finish()
     }
 
-    fun image(@Suppress("UNUSED_PARAMETER") v: View?) {
+    fun clickImage(@Suppress("UNUSED_PARAMETER") v: View?) {
         if (!hasWriteExternalStoragePermission()) {
             requestWriteExternalStoragePermission()
             return
@@ -194,7 +194,7 @@ class TweetActivity : LoDBaseActivity() {
         startActivityForResult(intent, 810)
     }
 
-    fun mic(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun clickMic(@Suppress("UNUSED_PARAMETER") v: View) {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_input))
@@ -202,7 +202,7 @@ class TweetActivity : LoDBaseActivity() {
         startActivityForResult(intent, 1919)
     }
 
-    fun music(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun clickMusic(@Suppress("UNUSED_PARAMETER") v: View) {
         val playingMusicData = PlayingMusicData(this).getPlayingMusicData() ?: return
 
         val title = playingMusicData[MusicDataKey.TITLE] ?: ""
@@ -229,7 +229,7 @@ class TweetActivity : LoDBaseActivity() {
         if (requestCode == 1919 && resultCode == RESULT_OK) { // 音声入力
             val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             tweetText.setText(tweetText.text.toString() + results[0])
-            cursor_end(null)
+            clickCursorEnd(null)
         }
         if (requestCode == 810 && resultCode == RESULT_OK) { // 画像選択
             try {
@@ -250,15 +250,15 @@ class TweetActivity : LoDBaseActivity() {
         }
     }
 
-    fun cursor_start(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun clickCursorStart(@Suppress("UNUSED_PARAMETER") v: View) {
         tweetText.setSelection(0)
     }
 
-    fun cursor_end(@Suppress("UNUSED_PARAMETER") v: View?) {
+    fun clickCursorEnd(@Suppress("UNUSED_PARAMETER") v: View?) {
         tweetText.setSelection(tweetText.text.count())
     }
 
-    fun back(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun clickClose(@Suppress("UNUSED_PARAMETER") v: View) {
         finish()
     }
 
@@ -277,7 +277,7 @@ class TweetActivity : LoDBaseActivity() {
             return
         }
         if (permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            image(null)
+            clickImage(null)
         } else {
             ShowToast(applicationContext, R.string.permission_rejected)
         }

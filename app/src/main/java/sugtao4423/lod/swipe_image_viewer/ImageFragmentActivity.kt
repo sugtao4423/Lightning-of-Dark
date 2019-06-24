@@ -71,7 +71,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
         }
     }
 
-    fun image_option_click(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun clickImageOption(@Suppress("UNUSED_PARAMETER") v: View) {
         val imageUrl = urls[pager.currentItem]
         AlertDialog.Builder(this).apply {
             setItems(arrayOf(getString(R.string.open_in_browser), getString(R.string.save))) { _, which ->

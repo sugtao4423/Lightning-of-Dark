@@ -82,11 +82,11 @@ class MainActivity : LoDBaseActivity() {
         }
     }
 
-    fun newTweet(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun clickNewTweet(@Suppress("UNUSED_PARAMETER") v: View) {
         startActivity(Intent(this, TweetActivity::class.java))
     }
 
-    fun option(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun clickOption(@Suppress("UNUSED_PARAMETER") v: View) {
         if (iconDialog == null) {
             val black = ContextCompat.getColor(applicationContext, R.color.icon)
             val items = arrayOf(

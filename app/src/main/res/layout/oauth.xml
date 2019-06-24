@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:onClick="ninsyo"
+        android:onClick="clickOAuth"
         android:text="@string/layout_oauth_auth" />
 
     <EditText
@@ -62,7 +62,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
         android:clickable="true"
-        android:onClick="copyClipBoardDescription" />
+        android:onClick="clickOAuthDescription" />
 
     <TextView
         android:id="@+id/description"

@@ -53,7 +53,7 @@ class StartOAuth : AppCompatActivity() {
         customCS.setText(app.getCurrentAccount().consumerSecret)
     }
 
-    fun ninsyo(v: View) {
+    fun clickOAuth(v: View) {
         v.isEnabled = false
         if (customCK.text.toString().isEmpty()) {
             ck = getString(R.string.CK)
@@ -143,7 +143,7 @@ class StartOAuth : AppCompatActivity() {
         }.execute()
     }
 
-    fun copyClipBoardDescription(@Suppress("UNUSED_PARAMETER") v: View) {
+    fun clickOAuthDescription(@Suppress("UNUSED_PARAMETER") v: View) {
         (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip = ClipData.newPlainText(getString(R.string.app_name), CALLBACK_URL)
         ShowToast(applicationContext, R.string.done_copy_clip_board)
     }
