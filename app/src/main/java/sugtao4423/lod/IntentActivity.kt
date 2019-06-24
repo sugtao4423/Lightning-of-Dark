@@ -40,11 +40,11 @@ class IntentActivity : AppCompatActivity() {
     }
 
     private fun jump() {
-        if (intent.data == null) {
-            return
-        }
-
         if (intent.action == Intent.ACTION_VIEW) {
+            if (intent.data == null) {
+                return
+            }
+
             val uri = intent.data!!.toString()
             val status = Regex.statusUrl.matcher(uri)
             val share = Regex.shareUrl.matcher(uri)
