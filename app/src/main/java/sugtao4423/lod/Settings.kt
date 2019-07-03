@@ -178,7 +178,7 @@ class Settings : LoDBaseActivity() {
                     DecimalFormat("#.#").let {
                         it.minimumFractionDigits = 2
                         it.maximumFractionDigits = 2
-                        return it.format(WebImageCache(activity!!.applicationContext).cacheSize.toDouble() / 1024 / 1024)
+                        return it.format(WebImageCache(activity!!.applicationContext).getCacheSize().toDouble() / 1024 / 1024)
                     }
                 }
 
