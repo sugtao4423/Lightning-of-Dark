@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
@@ -43,7 +44,12 @@ class StartOAuth : AppCompatActivity() {
 
         val description = findViewById<TextView>(R.id.oauthDescription)
         getString(R.string.param_oauth_description, CALLBACK_URL).let {
-            description.text = Html.fromHtml(it)
+            description.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
+            } else {
+                @Suppress("DEPRECATION")
+                Html.fromHtml(it)
+            }
         }
 
         customCK = findViewById(R.id.edit_ck)
