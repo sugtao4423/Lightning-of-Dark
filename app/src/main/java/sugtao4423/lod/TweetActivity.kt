@@ -205,9 +205,9 @@ class TweetActivity : LoDBaseActivity() {
     fun clickMusic(@Suppress("UNUSED_PARAMETER") v: View) {
         val playingMusicData = PlayingMusicData(this).getPlayingMusicData() ?: return
 
-        val title = playingMusicData[MusicDataKey.TITLE] ?: ""
-        val artist = playingMusicData[MusicDataKey.ARTIST] ?: ""
-        val album = playingMusicData[MusicDataKey.ALBUM] ?: ""
+        val title = playingMusicData[MusicDataKey.TITLE]!!
+        val artist = playingMusicData[MusicDataKey.ARTIST]!!
+        val album = playingMusicData[MusicDataKey.ALBUM]!!
         var nowplayingFormat = app.getOptions().nowplayingFormat
         if (nowplayingFormat == "") {
             nowplayingFormat = "%artist% - %track% #nowplaying"

@@ -34,9 +34,9 @@ class PlayingMusicData(private val context: Context) {
                 val title = it.metadata!!.getString(MediaMetadata.METADATA_KEY_TITLE)
                 val artist = it.metadata!!.getString(MediaMetadata.METADATA_KEY_ARTIST)
                 val album = it.metadata!!.getString(MediaMetadata.METADATA_KEY_ALBUM)
-                map[MusicDataKey.TITLE] = title
-                map[MusicDataKey.ARTIST] = artist
-                map[MusicDataKey.ALBUM] = album
+                map[MusicDataKey.TITLE] = title ?: "unknown"
+                map[MusicDataKey.ARTIST] = artist ?: "unknown"
+                map[MusicDataKey.ALBUM] = album ?: "unknown"
                 return map
             }
         }
