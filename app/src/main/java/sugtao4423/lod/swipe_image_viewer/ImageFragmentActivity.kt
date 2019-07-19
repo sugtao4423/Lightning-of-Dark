@@ -2,7 +2,6 @@ package sugtao4423.lod.swipe_image_viewer
 
 import android.Manifest
 import android.app.AlertDialog
-import android.app.ProgressDialog
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -23,6 +22,7 @@ import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.utils.Regex
+import sugtao4423.support.progressdialog.ProgressDialog
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
