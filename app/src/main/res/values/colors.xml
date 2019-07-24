@@ -22,8 +22,6 @@
 
     <color name="toastStroke">#ddcccccc</color>
     <color name="toastSolid">#dd333333</color>
-    <color name="toastMainMessage">#ffccee</color>
-    <color name="toastTweetText">#ffffff</color>
 
     <color name="tweetDialogButtonPress">#70e8ff</color>
     <color name="tweetDialogButtonDisable">#a7a7a7</color>
