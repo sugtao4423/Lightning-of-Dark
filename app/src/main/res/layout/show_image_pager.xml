@@ -4,12 +4,12 @@
     android:layout_height="match_parent">
 
     <com.tenthbit.view.ZoomViewPager
-        android:id="@+id/show_image_pager"
+        android:id="@+id/showImagePager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v4.view.PagerTabStrip
-            android:id="@+id/show_image_pager_tab_strip"
+            android:id="@+id/showImagePagerTabStrip"
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_gravity="top"

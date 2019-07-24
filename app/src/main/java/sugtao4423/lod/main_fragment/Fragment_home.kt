@@ -47,7 +47,7 @@ class Fragment_home : Fragment() {
         val scrollListener = getLoadMoreListener()
         list.addOnScrollListener(scrollListener)
 
-        pullToRefresh = v.findViewById(R.id.ListPull)
+        pullToRefresh = v.findViewById(R.id.listPull)
         pullToRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                 android.R.color.holo_orange_light, android.R.color.holo_red_light)
         val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {

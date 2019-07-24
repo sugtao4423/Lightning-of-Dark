@@ -12,7 +12,7 @@
         android:layout_marginRight="24dp">
 
         <EditText
-            android:id="@+id/regDialog_edit"
+            android:id="@+id/regDialogEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -22,10 +22,10 @@
         </EditText>
 
         <GridLayout
-            android:id="@+id/regDialog_grid"
+            android:id="@+id/regDialogGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/regDialog_edit"
+            android:layout_below="@+id/regDialogEdit"
             android:layout_marginTop="10dp"
             android:columnCount="6" />
     </RelativeLayout>

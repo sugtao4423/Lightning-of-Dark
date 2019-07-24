@@ -216,14 +216,14 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val icon: SmartImageView = itemView.findViewById(R.id.icon)
-        val rtIcon: SmartImageView = itemView.findViewById(R.id.RetweetedUserIcon)
-        val nameSn: TextView = itemView.findViewById(R.id.name_screenName)
+        val rtIcon: SmartImageView = itemView.findViewById(R.id.retweetedUserIcon)
+        val nameSn: TextView = itemView.findViewById(R.id.nameAndScreenName)
         val content: TextView = itemView.findViewById(R.id.tweetText)
-        val date: TextView = itemView.findViewById(R.id.tweet_date)
-        val rtSn: TextView = itemView.findViewById(R.id.RetweetedUserScreenName)
-        val protect: TextView = itemView.findViewById(R.id.UserProtected)
-        val tweetImagesScroll: HorizontalScrollView = itemView.findViewById(R.id.tweet_images_scroll)
-        val tweetImagesLayout: LinearLayout = itemView.findViewById(R.id.tweet_images_layout)
+        val date: TextView = itemView.findViewById(R.id.tweetDate)
+        val rtSn: TextView = itemView.findViewById(R.id.retweetedUserScreenName)
+        val protect: TextView = itemView.findViewById(R.id.userProtected)
+        val tweetImagesScroll: HorizontalScrollView = itemView.findViewById(R.id.tweetImagesScroll)
+        val tweetImagesLayout: LinearLayout = itemView.findViewById(R.id.tweetImagesLayout)
     }
 
 }

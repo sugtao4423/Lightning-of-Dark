@@ -91,12 +91,12 @@ class ListViewListener : TweetListAdapter.OnItemClickListener, TweetListAdapter.
         content = View.inflate(context, R.layout.custom_dialog, null)
         dialogList = content.findViewById(R.id.dialog_List)
         dialogBtn = arrayOf(
-                content.findViewById(R.id.dialog_reply),
-                content.findViewById(R.id.dialog_retweet),
-                content.findViewById(R.id.dialog_unofficialRT),
-                content.findViewById(R.id.dialog_favorite),
-                content.findViewById(R.id.dialog_talk),
-                content.findViewById(R.id.dialog_delete)
+                content.findViewById(R.id.dialogReply),
+                content.findViewById(R.id.dialogRetweet),
+                content.findViewById(R.id.dialogUnofficialRT),
+                content.findViewById(R.id.dialogFavorite),
+                content.findViewById(R.id.dialogTalk),
+                content.findViewById(R.id.dialogDelete)
         )
 
         val tf = (context.applicationContext as App).getFontAwesomeTypeface()

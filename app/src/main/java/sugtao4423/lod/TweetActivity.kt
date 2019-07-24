@@ -40,7 +40,7 @@ class TweetActivity : LoDBaseActivity() {
     }
 
     private lateinit var tweetText: EditText
-    private lateinit var moji140: TextView
+    private lateinit var text140: TextView
     private lateinit var status: Status
     private var type = 0
     private var image: File? = null
@@ -57,7 +57,7 @@ class TweetActivity : LoDBaseActivity() {
         tweetAccount.text = "@" + app.getCurrentAccount().screenName
 
         tweetText = findViewById(R.id.tweetText)
-        moji140 = findViewById(R.id.moji140)
+        text140 = findViewById(R.id.text140)
 
         if (intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) != null) {
             status = intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) as Status
@@ -127,8 +127,8 @@ class TweetActivity : LoDBaseActivity() {
             tweetText.setSelection(tweetText.text.count())
         }
 
-        moji140.text = (140 - tweetText.text.count()).toString()
-        moji140count()
+        text140.text = (140 - tweetText.text.count()).toString()
+        text140count()
     }
 
     private fun setTypeface() {
@@ -136,8 +136,8 @@ class TweetActivity : LoDBaseActivity() {
                 findViewById<Button>(R.id.tweetButton),
                 findViewById<Button>(R.id.imageSelect),
                 findViewById<Button>(R.id.tweetClose),
-                findViewById<Button>(R.id.cursor_start),
-                findViewById<Button>(R.id.cursor_end),
+                findViewById<Button>(R.id.cursorStart),
+                findViewById<Button>(R.id.cursorEnd),
                 findViewById<Button>(R.id.tweetMic),
                 findViewById<Button>(R.id.tweetMusic)
         )
@@ -147,11 +147,11 @@ class TweetActivity : LoDBaseActivity() {
         }
     }
 
-    private fun moji140count() {
+    private fun text140count() {
         tweetText.addTextChangedListener(object : TextWatcher {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                moji140.text = (140 - s!!.count()).toString()
+                text140.text = (140 - s!!.count()).toString()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

@@ -34,9 +34,9 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
             setView(bombView)
             setNegativeButton(R.string.cancel, null)
             setPositiveButton(R.string.ok) { _, _ ->
-                val staticText = (bombView.findViewById<TextInputEditText>(R.id.bomb_static_text)).text.toString()
-                val loopText = (bombView.findViewById<TextInputEditText>(R.id.bomb_loop_text)).text.toString()
-                val loopCountStr = (bombView.findViewById<TextInputEditText>(R.id.bomb_loop_count)).text.toString()
+                val staticText = (bombView.findViewById<TextInputEditText>(R.id.bombStaticText)).text.toString()
+                val loopText = (bombView.findViewById<TextInputEditText>(R.id.bombLoopText)).text.toString()
+                val loopCountStr = (bombView.findViewById<TextInputEditText>(R.id.bombLoopCount)).text.toString()
                 if (loopCountStr.isEmpty()) {
                     return@setPositiveButton
                 }

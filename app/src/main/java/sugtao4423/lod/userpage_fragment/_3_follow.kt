@@ -35,7 +35,7 @@ class _3_follow : Fragment() {
         val v = inflater.inflate(R.layout.user_1, container, false)
         app = activity!!.applicationContext as App
 
-        val userFollow = v.findViewById<TweetListView>(R.id.UserPageList)
+        val userFollow = v.findViewById<TweetListView>(R.id.userPageList)
 
         adapter = TweetListUserAdapter(activity!!)
         userFollow.adapter = adapter
@@ -43,7 +43,7 @@ class _3_follow : Fragment() {
         val scrollListener = getLoadMoreListener(userFollow.linearLayoutManager)
         userFollow.addOnScrollListener(scrollListener)
 
-        pullToRefresh = v.findViewById<SwipeRefreshLayout>(R.id.UserPagePull).apply {
+        pullToRefresh = v.findViewById<SwipeRefreshLayout>(R.id.userPagePull).apply {
             setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                     android.R.color.holo_orange_light, android.R.color.holo_red_light)
             setOnRefreshListener {

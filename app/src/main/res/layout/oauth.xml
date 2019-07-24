@@ -6,7 +6,6 @@
     tools:context=".StartOAuth">
 
     <Button
-        android:id="@+id/ninsyo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -15,18 +14,18 @@
         android:text="@string/layout_oauth_auth" />
 
     <EditText
-        android:id="@+id/edit_ck"
+        android:id="@+id/editCk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/text_ck"
-        android:layout_alignBottom="@+id/text_ck"
+        android:layout_alignBaseline="@+id/textCk"
+        android:layout_alignBottom="@+id/textCk"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/text_ck"
+        android:layout_toRightOf="@+id/textCk"
         android:ems="10"
         android:singleLine="true" />
 
     <TextView
-        android:id="@+id/text_ck"
+        android:id="@+id/textCk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/description"
@@ -35,22 +34,22 @@
         android:text="@string/layout_consumer_key" />
 
     <TextView
-        android:id="@+id/text_cs"
+        android:id="@+id/textCs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_ck"
+        android:layout_below="@+id/textCk"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
         android:text="@string/layout_consumer_secret" />
 
     <EditText
-        android:id="@+id/edit_cs"
+        android:id="@+id/editCs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/text_cs"
-        android:layout_alignBottom="@+id/text_cs"
+        android:layout_alignBaseline="@+id/textCs"
+        android:layout_alignBottom="@+id/textCs"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/text_cs"
+        android:layout_toRightOf="@+id/textCs"
         android:ems="10"
         android:singleLine="true" />
 
@@ -58,10 +57,11 @@
         android:id="@+id/oauthDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edit_cs"
+        android:layout_below="@+id/editCs"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
         android:clickable="true"
+        android:focusable="true"
         android:onClick="clickOAuthDescription" />
 
     <TextView

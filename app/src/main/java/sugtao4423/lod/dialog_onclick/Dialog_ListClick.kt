@@ -30,8 +30,8 @@ class Dialog_ListClick(private val context: Context, private val status: Status,
 
         if (clickedText == context.getString(R.string.extract_with_regex)) {
             val regView = View.inflate(context, R.layout.reg_dialog, null)
-            val regEdit = regView.findViewById<EditText>(R.id.regDialog_edit)
-            val gridLayout = regView.findViewById<GridLayout>(R.id.regDialog_grid)
+            val regEdit = regView.findViewById<EditText>(R.id.regDialogEdit)
+            val gridLayout = regView.findViewById<GridLayout>(R.id.regDialogGrid)
             val regItems = arrayOf(".", "*", "|", "+", "?", "\\", "^", "$", "(", ")", "[", "]", "{", "}")
             val params = LinearLayout.LayoutParams(130, 130)
             regItems.map {

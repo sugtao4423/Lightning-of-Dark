@@ -59,13 +59,13 @@ class ImageFragmentActivity : LoDBaseActivity() {
         val pos = intent.getIntExtra(INTENT_EXTRA_KEY_POSITION, 0)
         adapter = ImagePagerAdapter(supportFragmentManager, urls)
 
-        pager = findViewById<ZoomViewPager>(R.id.show_image_pager).also {
+        pager = findViewById<ZoomViewPager>(R.id.showImagePager).also {
             it.adapter = adapter
             it.offscreenPageLimit = urls.size - 1
             it.currentItem = pos
         }
 
-        findViewById<PagerTabStrip>(R.id.show_image_pager_tab_strip).apply {
+        findViewById<PagerTabStrip>(R.id.showImagePagerTabStrip).apply {
             tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }

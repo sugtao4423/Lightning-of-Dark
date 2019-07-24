@@ -13,13 +13,12 @@
         android:src="@drawable/icon_loading" />
 
     <TextView
-        android:id="@+id/name_screenName"
+        android:id="@+id/nameAndScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="@+id/icon"
         android:layout_marginLeft="8dp"
         android:layout_toRightOf="@+id/icon"
-        android:text="名前 - \@hoge"
         android:textColor="@color/tweetName"
         android:textStyle="bold" />
 
@@ -27,62 +26,60 @@
         android:id="@+id/tweetText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/name_screenName"
-        android:layout_alignLeft="@+id/name_screenName"
+        android:layout_below="@+id/nameAndScreenName"
+        android:layout_alignLeft="@+id/nameAndScreenName"
         android:layout_alignParentRight="true"
-        android:text="本文"
         android:textColor="@color/textDarkPrimary" />
 
     <TextView
-        android:id="@+id/tweet_date"
+        android:id="@+id/tweetDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tweetText"
         android:layout_alignLeft="@+id/tweetText"
         android:layout_marginTop="2sp"
-        android:text="date"
         android:textColor="@color/tweetDate" />
 
     <com.loopj.android.image.SmartImageView
-        android:id="@+id/RetweetedUserIcon"
+        android:id="@+id/retweetedUserIcon"
         android:layout_width="15dp"
         android:layout_height="15dp"
-        android:layout_alignBottom="@+id/tweet_date"
-        android:layout_toRightOf="@+id/tweet_date" />
+        android:layout_alignBottom="@+id/tweetDate"
+        android:layout_toRightOf="@+id/tweetDate" />
 
     <TextView
-        android:id="@+id/RetweetedUserScreenName"
+        android:id="@+id/retweetedUserScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tweet_date"
-        android:layout_alignBottom="@+id/tweet_date"
-        android:layout_toRightOf="@+id/RetweetedUserIcon"
+        android:layout_alignBaseline="@+id/tweetDate"
+        android:layout_alignBottom="@+id/tweetDate"
+        android:layout_toRightOf="@+id/retweetedUserIcon"
         android:textColor="@color/tweetRetweetedUserName" />
 
     <TextView
-        android:id="@+id/UserProtected"
+        android:id="@+id/userProtected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/name_screenName"
+        android:layout_alignBottom="@+id/nameAndScreenName"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/name_screenName"
+        android:layout_toRightOf="@+id/nameAndScreenName"
         android:gravity="center"
         android:text="@string/icon_protect"
         android:textColor="@color/icon" />
 
     <HorizontalScrollView
-        android:id="@+id/tweet_images_scroll"
+        android:id="@+id/tweetImagesScroll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tweet_date"
-        android:layout_alignLeft="@+id/tweet_date"
+        android:layout_below="@+id/tweetDate"
+        android:layout_alignLeft="@+id/tweetDate"
         android:layout_alignParentRight="true"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="4dp">
 
         <LinearLayout
-            android:id="@+id/tweet_images_layout"
+            android:id="@+id/tweetImagesLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal" />

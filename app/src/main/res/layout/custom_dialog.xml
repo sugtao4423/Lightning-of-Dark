@@ -17,7 +17,7 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/dialog_reply"
+            android:id="@+id/dialogReply"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -28,7 +28,7 @@
             android:text="@string/icon_reply" />
 
         <Button
-            android:id="@+id/dialog_retweet"
+            android:id="@+id/dialogRetweet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -39,7 +39,7 @@
             android:text="@string/icon_retweet" />
 
         <Button
-            android:id="@+id/dialog_unofficialRT"
+            android:id="@+id/dialogUnofficialRT"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -50,7 +50,7 @@
             android:text="@string/icon_quote" />
 
         <Button
-            android:id="@+id/dialog_favorite"
+            android:id="@+id/dialogFavorite"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -61,7 +61,7 @@
             android:text="@string/icon_star" />
 
         <Button
-            android:id="@+id/dialog_talk"
+            android:id="@+id/dialogTalk"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -72,7 +72,7 @@
             android:text="@string/icon_comment" />
 
         <Button
-            android:id="@+id/dialog_delete"
+            android:id="@+id/dialogDelete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

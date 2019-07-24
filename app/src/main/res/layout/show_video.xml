@@ -5,7 +5,7 @@
     android:gravity="center">
 
     <VideoView
-        android:id="@+id/tw_video"
+        android:id="@+id/twVideo"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 

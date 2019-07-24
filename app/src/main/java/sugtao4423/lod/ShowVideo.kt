@@ -31,7 +31,7 @@ class ShowVideo : LoDBaseActivity() {
             return
         }
 
-        val vv = findViewById<VideoView>(R.id.tw_video)
+        val vv = findViewById<VideoView>(R.id.twVideo)
         vv.setMediaController(MediaController(this))
 
         val progressDialog = ProgressDialog(this).apply {

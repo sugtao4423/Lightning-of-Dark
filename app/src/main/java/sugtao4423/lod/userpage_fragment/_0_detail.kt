@@ -63,32 +63,32 @@ class _0_detail : Fragment() {
         app = activity!!.applicationContext as App
 
         userBanner = v.findViewById(R.id.banner)
-        userIcon = v.findViewById(R.id.UserIcon)
-        userName = v.findViewById(R.id.UserName)
-        userScreenName = v.findViewById(R.id.UserScreenName)
-        protect = v.findViewById(R.id.UserPage_protected)
+        userIcon = v.findViewById(R.id.userIcon)
+        userName = v.findViewById(R.id.userName)
+        userScreenName = v.findViewById(R.id.userScreenName)
+        protect = v.findViewById(R.id.userPageProtected)
 
-        userBio = v.findViewById(R.id.UserBio)
+        userBio = v.findViewById(R.id.userBio)
         userLocation = v.findViewById(R.id.location)
         userLink = v.findViewById(R.id.link)
-        userTweetC = v.findViewById(R.id.User_tweet_count)
-        userFavoriteC = v.findViewById(R.id.User_favorite_count)
-        userFollowC = v.findViewById(R.id.User_follow_count)
-        userFollowerC = v.findViewById(R.id.User_follower_count)
-        userCreate = v.findViewById(R.id.User_create_date)
-        sourceIcon = v.findViewById(R.id.UserPage_sourceIcon)
-        targetIcon = v.findViewById(R.id.UserPage_targetIcon)
-        isFollowIcon = v.findViewById(R.id.UserPage_isFollow)
+        userTweetC = v.findViewById(R.id.userTweetCount)
+        userFavoriteC = v.findViewById(R.id.userFavoriteCount)
+        userFollowC = v.findViewById(R.id.userFollowCount)
+        userFollowerC = v.findViewById(R.id.userFollowerCount)
+        userCreate = v.findViewById(R.id.userCreateDate)
+        sourceIcon = v.findViewById(R.id.userPageSourceIcon)
+        targetIcon = v.findViewById(R.id.userPageTargetIcon)
+        isFollowIcon = v.findViewById(R.id.userPageIsFollow)
 
         protect.visibility = View.GONE
 
         val tf = app.getFontAwesomeTypeface()
         protect.typeface = tf
-        (v.findViewById<TextView>(R.id.icon_tweet_count)).typeface = tf
-        (v.findViewById<TextView>(R.id.icon_favorite_count)).typeface = tf
-        (v.findViewById<TextView>(R.id.icon_follow_count)).typeface = tf
-        (v.findViewById<TextView>(R.id.icon_follower_count)).typeface = tf
-        (v.findViewById<TextView>(R.id.icon_create_date)).typeface = tf
+        (v.findViewById<TextView>(R.id.iconTweetCount)).typeface = tf
+        (v.findViewById<TextView>(R.id.iconFavoriteCount)).typeface = tf
+        (v.findViewById<TextView>(R.id.iconFollowCount)).typeface = tf
+        (v.findViewById<TextView>(R.id.iconFollowerCount)).typeface = tf
+        (v.findViewById<TextView>(R.id.iconCreateDate)).typeface = tf
 
         setClick()
         return v

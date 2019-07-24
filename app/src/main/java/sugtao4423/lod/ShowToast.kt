@@ -14,7 +14,7 @@ class ShowToast(context: Context, text: String, duration: Int) : Toast(context) 
     constructor(context: Context, resId: Int) : this(context, resId, LENGTH_SHORT)
 
     private val v: View = View.inflate(context, R.layout.custom_toast, null)
-    private val message: TextView = v.findViewById(R.id.toast_message)
+    private val message: TextView = v.findViewById(R.id.toastMessage)
 
     init {
         view = v

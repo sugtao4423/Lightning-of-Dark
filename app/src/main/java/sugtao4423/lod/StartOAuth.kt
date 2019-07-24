@@ -52,8 +52,8 @@ class StartOAuth : AppCompatActivity() {
             }
         }
 
-        customCK = findViewById(R.id.edit_ck)
-        customCS = findViewById(R.id.edit_cs)
+        customCK = findViewById(R.id.editCk)
+        customCS = findViewById(R.id.editCs)
 
         customCK.setText(app.getCurrentAccount().consumerKey)
         customCS.setText(app.getCurrentAccount().consumerSecret)

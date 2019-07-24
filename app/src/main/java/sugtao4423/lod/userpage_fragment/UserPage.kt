@@ -25,7 +25,7 @@ class UserPage : LoDBaseActivity() {
         setContentView(R.layout.userpage)
 
         adapter = UserPageFragmentPagerAdapter(supportFragmentManager, this)
-        findViewById<ViewPager>(R.id.Userpager).let {
+        findViewById<ViewPager>(R.id.userPager).let {
             it.adapter = adapter
             it.offscreenPageLimit = 5
         }

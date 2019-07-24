@@ -19,7 +19,7 @@
             android:src="@raw/empty" />
 
         <com.loopj.android.image.SmartImageView
-            android:id="@+id/UserIcon"
+            android:id="@+id/userIcon"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_alignParentTop="true"
@@ -28,20 +28,20 @@
             android:src="@drawable/icon_loading" />
 
         <TextView
-            android:id="@+id/UserScreenName"
+            android:id="@+id/userScreenName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/UserName"
+            android:layout_below="@+id/userName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="12dp"
             android:background="@color/userpageTextBackground"
             android:text="@string/no_text" />
 
         <TextView
-            android:id="@+id/UserName"
+            android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/UserIcon"
+            android:layout_below="@+id/userIcon"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:background="@color/userpageTextBackground"
@@ -50,20 +50,20 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/UserBio"
+            android:id="@+id/userBio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/text_bio"
-            android:layout_alignLeft="@+id/text_bio"
+            android:layout_below="@+id/textBio"
+            android:layout_alignLeft="@+id/textBio"
             android:layout_marginTop="3dp"
             android:text="@string/loading" />
 
         <TextView
-            android:id="@+id/text_location"
+            android:id="@+id/textLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/UserBio"
-            android:layout_alignLeft="@+id/UserBio"
+            android:layout_below="@+id/userBio"
+            android:layout_alignLeft="@+id/userBio"
             android:layout_marginTop="15dp"
             android:text="@string/layout_location"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -72,13 +72,13 @@
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/text_location"
-            android:layout_alignLeft="@+id/text_location"
+            android:layout_below="@+id/textLocation"
+            android:layout_alignLeft="@+id/textLocation"
             android:layout_marginTop="3dp"
             android:text="@string/loading" />
 
         <TextView
-            android:id="@+id/text_link"
+            android:id="@+id/textLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/location"
@@ -91,13 +91,13 @@
             android:id="@+id/link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/text_link"
-            android:layout_alignLeft="@+id/text_link"
+            android:layout_below="@+id/textLink"
+            android:layout_alignLeft="@+id/textLink"
             android:layout_marginTop="3dp"
             android:text="@string/loading" />
 
         <TextView
-            android:id="@+id/icon_tweet_count"
+            android:id="@+id/iconTweetCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/link"
@@ -107,123 +107,123 @@
             android:text="@string/icon_tweetCount" />
 
         <TextView
-            android:id="@+id/User_tweet_count"
+            android:id="@+id/userTweetCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/icon_tweet_count"
+            android:layout_alignBottom="@+id/iconTweetCount"
             android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/icon_tweet_count"
+            android:layout_toRightOf="@+id/iconTweetCount"
             android:text="@string/no_text" />
 
         <TextView
-            android:id="@+id/icon_favorite_count"
+            android:id="@+id/iconFavoriteCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/icon_tweet_count"
-            android:layout_alignLeft="@+id/icon_tweet_count"
+            android:layout_below="@+id/iconTweetCount"
+            android:layout_alignLeft="@+id/iconTweetCount"
             android:layout_marginTop="15dp"
             android:layout_marginRight="3dp"
             android:text="@string/icon_favCount" />
 
         <TextView
-            android:id="@+id/User_favorite_count"
+            android:id="@+id/userFavoriteCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/icon_favorite_count"
+            android:layout_alignBottom="@+id/iconFavoriteCount"
             android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/icon_favorite_count"
+            android:layout_toRightOf="@+id/iconFavoriteCount"
             android:text="@string/no_text" />
 
         <TextView
-            android:id="@+id/icon_follow_count"
+            android:id="@+id/iconFollowCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/icon_favorite_count"
-            android:layout_alignLeft="@+id/icon_favorite_count"
+            android:layout_below="@+id/iconFavoriteCount"
+            android:layout_alignLeft="@+id/iconFavoriteCount"
             android:layout_marginTop="15dp"
             android:layout_marginRight="3dp"
             android:text="@string/icon_followCount" />
 
         <TextView
-            android:id="@+id/User_follow_count"
+            android:id="@+id/userFollowCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/icon_follow_count"
+            android:layout_alignBottom="@+id/iconFollowCount"
             android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/icon_follow_count"
+            android:layout_toRightOf="@+id/iconFollowCount"
             android:text="@string/no_text" />
 
         <TextView
-            android:id="@+id/icon_follower_count"
+            android:id="@+id/iconFollowerCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/icon_follow_count"
-            android:layout_alignLeft="@+id/icon_follow_count"
+            android:layout_below="@+id/iconFollowCount"
+            android:layout_alignLeft="@+id/iconFollowCount"
             android:layout_marginTop="15dp"
             android:layout_marginRight="3dp"
             android:text="@string/icon_followerCount" />
 
         <TextView
-            android:id="@+id/User_follower_count"
+            android:id="@+id/userFollowerCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/icon_follower_count"
+            android:layout_alignBottom="@+id/iconFollowerCount"
             android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/icon_follower_count"
+            android:layout_toRightOf="@+id/iconFollowerCount"
             android:text="@string/no_text" />
 
         <TextView
-            android:id="@+id/icon_create_date"
+            android:id="@+id/iconCreateDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/icon_follower_count"
-            android:layout_alignLeft="@+id/icon_follower_count"
+            android:layout_below="@+id/iconFollowerCount"
+            android:layout_alignLeft="@+id/iconFollowerCount"
             android:layout_marginTop="25dp"
             android:layout_marginRight="3dp"
             android:layout_marginBottom="20dp"
             android:text="@string/icon_userCreate" />
 
         <TextView
-            android:id="@+id/User_create_date"
+            android:id="@+id/userCreateDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/icon_create_date"
+            android:layout_alignBottom="@+id/iconCreateDate"
             android:layout_marginLeft="3dp"
-            android:layout_toRightOf="@+id/icon_create_date"
+            android:layout_toRightOf="@+id/iconCreateDate"
             android:text="@string/no_text" />
 
         <TextView
-            android:id="@+id/text_bio"
+            android:id="@+id/textBio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/UserPage_sourceIcon"
+            android:layout_below="@+id/userPageSourceIcon"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/layout_bio"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/UserPage_isFollow"
+            android:id="@+id/userPageIsFollow"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignTop="@+id/UserPage_sourceIcon"
+            android:layout_alignTop="@+id/userPageSourceIcon"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/UserPage_sourceIcon"
+            android:layout_toRightOf="@+id/userPageSourceIcon"
             android:gravity="center"
             android:textColor="@color/icon"
             android:textSize="34sp" />
 
         <com.loopj.android.image.SmartImageView
-            android:id="@+id/UserPage_targetIcon"
+            android:id="@+id/userPageTargetIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignTop="@+id/UserPage_isFollow"
+            android:layout_alignTop="@+id/userPageIsFollow"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/UserPage_isFollow"
+            android:layout_toRightOf="@+id/userPageIsFollow"
             android:src="@drawable/icon_loading" />
 
         <com.loopj.android.image.SmartImageView
-            android:id="@+id/UserPage_sourceIcon"
+            android:id="@+id/userPageSourceIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_below="@+id/banner"
@@ -232,12 +232,12 @@
             android:src="@drawable/icon_loading" />
 
         <TextView
-            android:id="@+id/UserPage_protected"
+            android:id="@+id/userPageProtected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/UserName"
-            android:layout_alignBottom="@+id/UserName"
-            android:layout_toRightOf="@+id/UserName"
+            android:layout_alignTop="@+id/userName"
+            android:layout_alignBottom="@+id/userName"
+            android:layout_toRightOf="@+id/userName"
             android:background="@color/userpageTextBackground"
             android:gravity="center"
             android:padding="4dp"

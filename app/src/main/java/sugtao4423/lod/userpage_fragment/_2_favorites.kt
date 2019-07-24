@@ -33,7 +33,7 @@ class _2_favorites : Fragment() {
         val v = inflater.inflate(R.layout.user_1, container, false)
         app = activity!!.applicationContext as App
 
-        val userFavorite = v.findViewById<TweetListView>(R.id.UserPageList)
+        val userFavorite = v.findViewById<TweetListView>(R.id.userPageList)
 
         adapter = TweetListAdapter(activity!!).apply {
             onItemClickListener = ListViewListener()
@@ -44,7 +44,7 @@ class _2_favorites : Fragment() {
         val scrollListener = getLoadMoreListener(userFavorite.linearLayoutManager)
         userFavorite.addOnScrollListener(scrollListener)
 
-        pullToRefresh = v.findViewById<SwipeRefreshLayout>(R.id.UserPagePull).apply {
+        pullToRefresh = v.findViewById<SwipeRefreshLayout>(R.id.userPagePull).apply {
             setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                     android.R.color.holo_orange_light, android.R.color.holo_red_light)
             setOnRefreshListener {
