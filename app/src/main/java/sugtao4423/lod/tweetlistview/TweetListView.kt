@@ -11,9 +11,7 @@ import android.view.View
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 
-class TweetListView(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
-
-    constructor(context: Context) : this(context, null)
+class TweetListView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : RecyclerView(context, attrs, defStyle) {
 
     val linearLayoutManager: LinearLayoutManager
 
