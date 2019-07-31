@@ -3,6 +3,8 @@ package sugtao4423.lod
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
@@ -15,6 +17,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.twitter.twittertext.TwitterTextParser
 import sugtao4423.lod.playing_music_data.MusicDataKey
 import sugtao4423.lod.playing_music_data.PlayingMusicData
 import sugtao4423.lod.tweetlistview.TweetListAdapter
@@ -40,7 +43,7 @@ class TweetActivity : LoDBaseActivity() {
     }
 
     private lateinit var tweetText: EditText
-    private lateinit var text140: TextView
+    private lateinit var text140DefaultColors: ColorStateList
     private lateinit var status: Status
     private var type = 0
     private var image: File? = null
@@ -57,7 +60,9 @@ class TweetActivity : LoDBaseActivity() {
         tweetAccount.text = "@" + app.getCurrentAccount().screenName
 
         tweetText = findViewById(R.id.tweetText)
-        text140 = findViewById(R.id.text140)
+        val text140 = findViewById<TextView>(R.id.text140)
+        text140DefaultColors = text140.textColors
+        text140count(text140)
 
         if (intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) != null) {
             status = intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) as Status
@@ -126,9 +131,6 @@ class TweetActivity : LoDBaseActivity() {
         if (setSelectionEnd) {
             tweetText.setSelection(tweetText.text.count())
         }
-
-        text140.text = (140 - tweetText.text.count()).toString()
-        text140count()
     }
 
     private fun setTypeface() {
@@ -147,11 +149,23 @@ class TweetActivity : LoDBaseActivity() {
         }
     }
 
-    private fun text140count() {
+    private fun text140count(text140: TextView) {
         tweetText.addTextChangedListener(object : TextWatcher {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                text140.text = (140 - s!!.count()).toString()
+                val parseResult = TwitterTextParser.parseTweet(s.toString())
+                val length140 = if (parseResult.weightedLength % 2 == 0) {
+                    parseResult.weightedLength / 2
+                } else {
+                    (parseResult.weightedLength + 1) / 2
+                }
+                text140.text = (140 - length140).toString()
+
+                if (parseResult.isValid || length140 == 0) {
+                    text140.setTextColor(text140DefaultColors)
+                } else {
+                    text140.setTextColor(Color.RED)
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
