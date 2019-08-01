@@ -154,10 +154,12 @@ class TweetActivity : LoDBaseActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val parseResult = TwitterTextParser.parseTweet(s.toString())
-                val length140 = if (parseResult.weightedLength % 2 == 0) {
-                    parseResult.weightedLength / 2
-                } else {
-                    (parseResult.weightedLength + 1) / 2
+                val length140 = parseResult.weightedLength.let {
+                    if (it % 2 == 0) {
+                        it / 2
+                    } else {
+                        (it + 1) / 2
+                    }
                 }
                 text140.text = (140 - length140).toString()
 
