@@ -2,7 +2,6 @@ package sugtao4423.lod.tweetlistview
 
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
 import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -24,7 +23,6 @@ class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<
     private val inflater = LayoutInflater.from(context)
     private val data = ArrayList<User>()
     private val app = context.applicationContext as App
-    private val handler = Handler()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
         return ViewHolder(inflater.inflate(R.layout.list_item_tweet, viewGroup, false))
@@ -84,17 +82,13 @@ class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<
     fun addAll(users: PagableResponseList<User>) {
         val pos = data.size
         data.addAll(users)
-        handler.post {
-            notifyItemRangeInserted(pos, users.size)
-        }
+        notifyItemRangeInserted(pos, users.size)
     }
 
     fun clear() {
         val size = data.size
         data.clear()
-        handler.post {
-            notifyItemRangeRemoved(0, size)
-        }
+        notifyItemRangeRemoved(0, size)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
