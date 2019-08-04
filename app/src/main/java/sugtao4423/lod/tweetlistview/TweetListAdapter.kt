@@ -3,7 +3,6 @@ package sugtao4423.lod.tweetlistview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
 import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.Gravity
@@ -29,7 +28,6 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
     private val data = arrayListOf<Status>()
     private val app = context.applicationContext as App
     private val statusDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (if (app.getOptions().isMillisecond) ".SSS" else ""), Locale.getDefault())
-    private val handler = Handler()
     var onItemClickListener: OnItemClickListener? = null
     var onItemLongClickListener: OnItemLongClickListener? = null
     var hideImages = false
@@ -177,33 +175,25 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
     }
 
     fun add(status: Status) {
-        handler.post {
-            data.add(status)
-            notifyItemInserted(data.size - 1)
-        }
+        data.add(status)
+        notifyItemInserted(data.size - 1)
     }
 
     fun addAll(statuses: ResponseList<Status>) {
         val pos = data.size
         data.addAll(statuses)
-        handler.post {
-            notifyItemRangeInserted(pos, statuses.size)
-        }
+        notifyItemRangeInserted(pos, statuses.size)
     }
 
     fun insertTop(item: Status) {
-        handler.post {
-            data.add(0, item)
-            notifyItemInserted(0)
-        }
+        data.add(0, item)
+        notifyItemInserted(0)
     }
 
     fun clear() {
         val size = data.size
         data.clear()
-        handler.post {
-            notifyItemRangeRemoved(0, size)
-        }
+        notifyItemRangeRemoved(0, size)
     }
 
     interface OnItemClickListener {

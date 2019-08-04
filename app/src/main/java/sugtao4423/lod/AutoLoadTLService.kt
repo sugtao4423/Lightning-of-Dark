@@ -5,6 +5,7 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
 import twitter4j.Paging
 import twitter4j.ResponseList
@@ -19,6 +20,7 @@ class AutoLoadTLService : Service() {
     }
 
     private lateinit var autoLoadTimer: Timer
+    private val handler = Handler()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val app = applicationContext as App
@@ -79,7 +81,11 @@ class AutoLoadTLService : Service() {
                     app.getTwitter().getHomeTimeline(Paging(1, 50).sinceId(app.latestTweetId))
                 }
                 statuses.reverse()
-                listener?.onStatus(statuses)
+                listener?.let {
+                    handler.post {
+                        it.onStatus(statuses)
+                    }
+                }
             } catch (e: TwitterException) {
             }
         }

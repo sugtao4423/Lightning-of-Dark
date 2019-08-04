@@ -2,7 +2,6 @@ package sugtao4423.lod.main_fragment
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
@@ -24,7 +23,6 @@ class Fragment_home : Fragment() {
 
     private lateinit var list: TweetListView
     private lateinit var adapter: TweetListAdapter
-    private val handler = Handler()
     private lateinit var pullToRefresh: SwipeRefreshLayout
     private var listAsTL = -1L
     private lateinit var app: App
@@ -100,10 +98,8 @@ class Fragment_home : Fragment() {
     fun insert(status: Status) {
         adapter.insertTop(status)
         app.latestTweetId = status.id
-        handler.post {
-            if (list.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
-                list.smoothScrollToPosition(0)
-            }
+        if (list.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
+            list.smoothScrollToPosition(0)
         }
     }
 
