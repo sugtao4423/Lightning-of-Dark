@@ -65,7 +65,7 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                 imm.hideSoftInputFromWindow(regEdit.windowToken, 0)
 
                 val editReg = regEdit.text.toString()
-                pref.edit().putString(Keys.REGULAR_EXPRESSION, editReg).commit()
+                pref.edit().putString(Keys.REGULAR_EXPRESSION, editReg).apply()
                 val pattern = Pattern.compile(editReg, Pattern.DOTALL)
                 val adapter = TweetListAdapter(context)
                 var find = 0

@@ -115,7 +115,7 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
                             PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
                                     .edit()
                                     .putString(Keys.SCREEN_NAME, accounts[which].screenName)
-                                    .commit()
+                                    .apply()
                             (context as MainActivity).restart()
                         }
                         it.setNegativeButton(R.string.delete) { _, _ ->

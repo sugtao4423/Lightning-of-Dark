@@ -111,7 +111,7 @@ class Level(context: Context) {
     fun addExp(exp: Int): Boolean {
         val oldLevel = getLevel()
         experience += exp
-        pref.edit().putInt(Keys.EXPERIENCE, experience).commit()
+        pref.edit().putInt(Keys.EXPERIENCE, experience).apply()
         return oldLevel != getLevel()
     }
 

@@ -127,7 +127,7 @@ class StartOAuth : AppCompatActivity() {
                     PreferenceManager.getDefaultSharedPreferences(applicationContext)
                             .edit()
                             .putString(Keys.SCREEN_NAME, result.screenName)
-                            .commit()
+                            .apply()
 
                     if (ck == getString(R.string.CK)) {
                         ck = ""
