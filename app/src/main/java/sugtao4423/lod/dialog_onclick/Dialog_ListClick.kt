@@ -45,7 +45,7 @@ class Dialog_ListClick(private val context: Context, private val status: Status,
 
             val pref = PreferenceManager.getDefaultSharedPreferences(context)
             regEdit.setText(pref.getString(Keys.REGULAR_EXPRESSION, ""))
-            AlertDialog.Builder(context).apply {
+            AlertDialog.Builder(parent.context).apply {
                 setTitle(R.string.input_regex)
                 setView(regView)
                 setNegativeButton(R.string.cancel, null)
@@ -56,7 +56,7 @@ class Dialog_ListClick(private val context: Context, private val status: Status,
                     val editReg = regEdit.text.toString()
                     pref.edit().putString(Keys.REGULAR_EXPRESSION, editReg).commit()
                     val pattern = Pattern.compile(editReg, Pattern.DOTALL)
-                    val adapter = TweetListAdapter(context)
+                    val adapter = TweetListAdapter(parent.context)
                     var find = 0
                     listData.map {
                         if (pattern.matcher(it.text).find()) {
@@ -67,11 +67,11 @@ class Dialog_ListClick(private val context: Context, private val status: Status,
                     if (find == 0) {
                         ShowToast(context.applicationContext, R.string.nothing)
                     } else {
-                        val l = TweetListView(context)
+                        val l = TweetListView(parent.context)
                         l.adapter = adapter
                         adapter.onItemClickListener = ListViewListener()
                         adapter.onItemLongClickListener = ListViewListener()
-                        AlertDialog.Builder(context).setView(l).show()
+                        AlertDialog.Builder(parent.context).setView(l).show()
                         val resultCount = context.getString(R.string.param_regex_result_count, listData.size, find)
                         ShowToast(context.applicationContext, resultCount, Toast.LENGTH_LONG)
                     }
