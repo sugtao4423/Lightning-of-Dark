@@ -1,12 +1,12 @@
 package sugtao4423.lod
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerTabStrip
 import android.support.v4.view.ViewPager
+import android.support.v7.app.AlertDialog
 import android.view.View
 import sugtao4423.icondialog.IconDialog
 import sugtao4423.icondialog.IconItem

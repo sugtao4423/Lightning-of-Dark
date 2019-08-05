@@ -1,7 +1,6 @@
 package sugtao4423.lod.swipe_image_viewer
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -12,6 +11,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker
 import android.support.v4.view.PagerTabStrip
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.Window
 import android.widget.EditText

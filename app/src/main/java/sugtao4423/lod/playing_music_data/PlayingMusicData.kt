@@ -1,6 +1,5 @@
 package sugtao4423.lod.playing_music_data
 
-import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -10,6 +9,7 @@ import android.media.session.PlaybackState
 import android.os.Build
 import android.provider.Settings
 import android.support.v4.app.NotificationManagerCompat
+import android.support.v7.app.AlertDialog
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 

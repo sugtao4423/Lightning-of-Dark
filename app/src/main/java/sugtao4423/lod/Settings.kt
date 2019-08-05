@@ -1,10 +1,10 @@
 package sugtao4423.lod
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.preference.CheckBoxPreference
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
@@ -80,7 +80,7 @@ class Settings : LoDBaseActivity() {
         private fun selectListAsTL(preference: CheckBoxPreference, isCheck: Boolean): Boolean {
             val dbUtil = app.getAccountDBUtil()
             if (!isCheck) {
-                AlertDialog.Builder(activity).apply {
+                AlertDialog.Builder(activity!!).apply {
                     setTitle(R.string.is_release)
                     setPositiveButton(R.string.ok) { _, _ ->
                         dbUtil.updateListAsTL(-1, app.getCurrentAccount().screenName)
@@ -117,7 +117,7 @@ class Settings : LoDBaseActivity() {
                         listMap[it.name] = it.id
                     }
                     val listNames = listMap.keys.toTypedArray()
-                    AlertDialog.Builder(activity).apply {
+                    AlertDialog.Builder(activity!!).apply {
                         setTitle(R.string.choose_list_as_tl)
                         setCancelable(false)
                         setItems(listNames) { _, which ->

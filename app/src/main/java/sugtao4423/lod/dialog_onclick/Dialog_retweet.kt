@@ -1,8 +1,8 @@
 package sugtao4423.lod.dialog_onclick
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.AsyncTask
+import android.support.v7.app.AlertDialog
 import android.view.View
 import sugtao4423.lod.App
 import sugtao4423.lod.R
