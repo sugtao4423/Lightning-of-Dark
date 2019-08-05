@@ -18,7 +18,7 @@ import sugtao4423.lod.utils.Utils
 import twitter4j.Status
 import java.util.regex.Pattern
 
-class Dialog_ListClick(private val context: Context, private val status: Status, private val listData: ArrayList<Status>, private val dialog: AlertDialog) :
+class Dialog_ListClick(private val status: Status, private val listData: ArrayList<Status>, private val dialog: AlertDialog) :
         AdapterView.OnItemClickListener {
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -26,6 +26,7 @@ class Dialog_ListClick(private val context: Context, private val status: Status,
             return
         }
         dialog.dismiss()
+        val context = parent.context
         val clickedText = parent.getItemAtPosition(position) as String
 
         if (clickedText == context.getString(R.string.extract_with_regex)) {
@@ -45,7 +46,7 @@ class Dialog_ListClick(private val context: Context, private val status: Status,
 
             val pref = PreferenceManager.getDefaultSharedPreferences(context)
             regEdit.setText(pref.getString(Keys.REGULAR_EXPRESSION, ""))
-            AlertDialog.Builder(parent.context).apply {
+            AlertDialog.Builder(context).apply {
                 setTitle(R.string.input_regex)
                 setView(regView)
                 setNegativeButton(R.string.cancel, null)
@@ -56,7 +57,7 @@ class Dialog_ListClick(private val context: Context, private val status: Status,
                     val editReg = regEdit.text.toString()
                     pref.edit().putString(Keys.REGULAR_EXPRESSION, editReg).commit()
                     val pattern = Pattern.compile(editReg, Pattern.DOTALL)
-                    val adapter = TweetListAdapter(parent.context)
+                    val adapter = TweetListAdapter(context)
                     var find = 0
                     listData.map {
                         if (pattern.matcher(it.text).find()) {
@@ -67,11 +68,11 @@ class Dialog_ListClick(private val context: Context, private val status: Status,
                     if (find == 0) {
                         ShowToast(context.applicationContext, R.string.nothing)
                     } else {
-                        val l = TweetListView(parent.context)
+                        val l = TweetListView(context)
                         l.adapter = adapter
                         adapter.onItemClickListener = ListViewListener()
                         adapter.onItemLongClickListener = ListViewListener()
-                        AlertDialog.Builder(parent.context).setView(l).show()
+                        AlertDialog.Builder(context).setView(l).show()
                         val resultCount = context.getString(R.string.param_regex_result_count, listData.size, find)
                         ShowToast(context.applicationContext, resultCount, Toast.LENGTH_LONG)
                     }

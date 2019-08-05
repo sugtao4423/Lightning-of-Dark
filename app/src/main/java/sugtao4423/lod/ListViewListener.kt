@@ -124,7 +124,7 @@ class ListViewListener : TweetListAdapter.OnItemClickListener, TweetListAdapter.
         dialog!!.show()
 
         dialogList.adapter = listStrings
-        dialogList.onItemClickListener = Dialog_ListClick(context, status, allStatusData, dialog!!)
+        dialogList.onItemClickListener = Dialog_ListClick(status, allStatusData, dialog!!)
         dialogList.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, _, position, _ ->
             val clickedText = parent.getItemAtPosition(position) as String
             if (clickedText.startsWith("http")) {
