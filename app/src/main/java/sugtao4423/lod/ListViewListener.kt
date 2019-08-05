@@ -73,7 +73,6 @@ class ListViewListener : TweetListAdapter.OnItemClickListener, TweetListAdapter.
 
     private lateinit var adapter: TweetListAdapter
 
-    private lateinit var content: View
     private lateinit var dialogList: ListView
     private lateinit var dialogBtn: Array<Button>
 
@@ -88,7 +87,7 @@ class ListViewListener : TweetListAdapter.OnItemClickListener, TweetListAdapter.
             tweetListView.adapter = it
         }
 
-        content = View.inflate(context, R.layout.custom_dialog, null)
+        val content = View.inflate(context, R.layout.custom_dialog, null)
         dialogList = content.findViewById(R.id.dialog_List)
         dialogBtn = arrayOf(
                 content.findViewById(R.id.dialogReply),
