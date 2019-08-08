@@ -12,9 +12,9 @@ import android.view.ViewGroup
 import android.widget.*
 import com.loopj.android.image.SmartImageView
 import sugtao4423.lod.App
-import sugtao4423.lod.ListViewListener
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowVideo
+import sugtao4423.lod.StatusClickListener
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
 import sugtao4423.lod.userpage_fragment.UserPage
 import sugtao4423.lod.utils.Utils
@@ -28,7 +28,7 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
     private val data = arrayListOf<Status>()
     private val app = context.applicationContext as App
     private val statusDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (if (app.getOptions().isMillisecond) ".SSS" else ""), Locale.getDefault())
-    private val listViewListener = ListViewListener()
+    private val statusClickListener = StatusClickListener()
     var hideImages = false
 
     interface OnItemClickListener {
@@ -93,10 +93,10 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
         }
 
         holder.itemView.setOnClickListener {
-            listViewListener.onItemClicked(context, data, holder.layoutPosition)
+            statusClickListener.onItemClicked(context, data, holder.layoutPosition)
         }
         holder.itemView.setOnLongClickListener {
-            listViewListener.onItemLongClicked(context, data, holder.layoutPosition)
+            statusClickListener.onItemLongClicked(context, data, holder.layoutPosition)
         }
 
         val mentitys = origStatus.mediaEntities

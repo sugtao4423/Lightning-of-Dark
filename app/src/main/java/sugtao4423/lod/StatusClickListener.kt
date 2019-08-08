@@ -17,7 +17,7 @@ import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.utils.Utils
 import twitter4j.Status
 
-class ListViewListener : TweetListAdapter.OnItemClickListener, TweetListAdapter.OnItemLongClickListener {
+class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapter.OnItemLongClickListener {
 
     override fun onItemClicked(context: Context, data: ArrayList<Status>, position: Int) {
         val item = data[position]
