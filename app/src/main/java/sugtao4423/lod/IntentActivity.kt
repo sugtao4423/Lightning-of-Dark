@@ -127,8 +127,6 @@ class IntentActivity : AppCompatActivity() {
                     val adapter = TweetListAdapter(this@IntentActivity)
                     adapter.add(result)
                     l.adapter = adapter
-                    adapter.onItemClickListener = ListViewListener()
-                    adapter.onItemLongClickListener = ListViewListener()
                     AlertDialog.Builder(this@IntentActivity).apply {
                         setView(l)
                         setOnDismissListener {

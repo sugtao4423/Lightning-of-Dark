@@ -8,7 +8,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import sugtao4423.lod.*
+import sugtao4423.lod.App
+import sugtao4423.lod.R
+import sugtao4423.lod.ShowToast
+import sugtao4423.lod.TwitterList
 import sugtao4423.lod.tweetlistview.EndlessScrollListener
 import sugtao4423.lod.tweetlistview.TweetListView
 import twitter4j.Paging
@@ -38,11 +41,8 @@ class Fragment_List : Fragment() {
         app = activity!!.applicationContext as App
         thisList = app.getLists(activity!!)[listIndex]
         val list = v.findViewById<TweetListView>(R.id.listLine)
-        val adapter = thisList.adapter.apply {
-            onItemClickListener = ListViewListener()
-            onItemLongClickListener = ListViewListener()
-            list.adapter = this
-        }
+        val adapter = thisList.adapter
+        list.adapter = adapter
 
         val scrollListener = getLoadMoreListener(list.linearLayoutManager)
         list.addOnScrollListener(scrollListener)

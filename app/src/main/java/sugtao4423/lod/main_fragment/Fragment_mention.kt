@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import sugtao4423.lod.App
-import sugtao4423.lod.ListViewListener
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.tweetlistview.EndlessScrollListener
@@ -35,11 +34,8 @@ class Fragment_mention : Fragment() {
         val v = inflater.inflate(R.layout.fragment_list, container, false)
         list = v.findViewById(R.id.listLine)
 
-        adapter = TweetListAdapter(activity!!).apply {
-            onItemClickListener = ListViewListener()
-            onItemLongClickListener = ListViewListener()
-            list.adapter = this
-        }
+        adapter = TweetListAdapter(activity!!)
+        list.adapter = adapter
 
         val scrollListener = getLoadMoreListener()
         list.addOnScrollListener(scrollListener)

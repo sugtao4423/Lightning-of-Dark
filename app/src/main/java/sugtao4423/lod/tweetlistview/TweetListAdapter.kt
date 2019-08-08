@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.loopj.android.image.SmartImageView
 import sugtao4423.lod.App
+import sugtao4423.lod.ListViewListener
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowVideo
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
@@ -27,9 +28,16 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
     private val data = arrayListOf<Status>()
     private val app = context.applicationContext as App
     private val statusDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (if (app.getOptions().isMillisecond) ".SSS" else ""), Locale.getDefault())
-    var onItemClickListener: OnItemClickListener? = null
-    var onItemLongClickListener: OnItemLongClickListener? = null
+    private val listViewListener = ListViewListener()
     var hideImages = false
+
+    interface OnItemClickListener {
+        fun onItemClicked(context: Context, data: ArrayList<Status>, position: Int)
+    }
+
+    interface OnItemLongClickListener {
+        fun onItemLongClicked(context: Context, data: ArrayList<Status>, position: Int): Boolean
+    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
         return ViewHolder(inflater.inflate(R.layout.list_item_tweet, viewGroup, false))
@@ -85,11 +93,10 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
         }
 
         holder.itemView.setOnClickListener {
-            onItemClickListener?.onItemClicked(context, data, holder.layoutPosition)
+            listViewListener.onItemClicked(context, data, holder.layoutPosition)
         }
         holder.itemView.setOnLongClickListener {
-            onItemLongClickListener?.onItemLongClicked(context, data, holder.layoutPosition)
-                    ?: false
+            listViewListener.onItemLongClicked(context, data, holder.layoutPosition)
         }
 
         val mentitys = origStatus.mediaEntities
@@ -193,14 +200,6 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
         val size = data.size
         data.clear()
         notifyItemRangeRemoved(0, size)
-    }
-
-    interface OnItemClickListener {
-        fun onItemClicked(context: Context, data: ArrayList<Status>, position: Int)
-    }
-
-    interface OnItemLongClickListener {
-        fun onItemLongClicked(context: Context, data: ArrayList<Status>, position: Int): Boolean
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -85,8 +85,6 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                 } else {
                     val l = TweetListView(context)
                     l.adapter = adapter
-                    adapter.onItemClickListener = ListViewListener()
-                    adapter.onItemLongClickListener = ListViewListener()
                     AlertDialog.Builder(context).setView(l).show()
                     val resultCount = context.getString(R.string.param_regex_result_count, listData.size, adapter.itemCount)
                     ShowToast(context.applicationContext, resultCount, Toast.LENGTH_LONG)

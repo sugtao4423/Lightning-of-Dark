@@ -80,8 +80,6 @@ class TweetActivity : LoDBaseActivity() {
                 originStatus.visibility = View.VISIBLE
                 originStatus.isFocusable = false
                 TweetListAdapter(this).apply {
-                    onItemClickListener = ListViewListener()
-                    onItemLongClickListener = ListViewListener()
                     add(status)
                     originStatus.adapter = this
                 }

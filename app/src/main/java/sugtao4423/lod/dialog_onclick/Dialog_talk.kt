@@ -5,7 +5,6 @@ import android.os.AsyncTask
 import android.support.v7.app.AlertDialog
 import android.view.View
 import sugtao4423.lod.App
-import sugtao4423.lod.ListViewListener
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.tweetlistview.TweetListAdapter
@@ -21,11 +20,7 @@ class Dialog_talk(status: Status, private val context: Context, private val dial
     override fun onClick(v: View?) {
         dialog.dismiss()
         val result = TweetListView(context)
-        resultAdapter.let {
-            it.onItemClickListener = ListViewListener()
-            it.onItemLongClickListener = ListViewListener()
-            result.adapter = it
-        }
+        result.adapter = resultAdapter
         AlertDialog.Builder(context).setView(result).show()
 
         resultAdapter.add(reply)

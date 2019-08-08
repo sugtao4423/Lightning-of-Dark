@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import sugtao4423.lod.App
-import sugtao4423.lod.ListViewListener
 import sugtao4423.lod.R
 import sugtao4423.lod.tweetlistview.EndlessScrollListener
 import sugtao4423.lod.tweetlistview.TweetListAdapter
@@ -41,10 +40,7 @@ abstract class UserPageListBaseFragment(private val fragmentType: FragmentType) 
         val list = v.findViewById<TweetListView>(R.id.userPageList)
 
         if (fragmentType == FragmentType.TYPE_TWEET) {
-            tweetListAdapter = TweetListAdapter(activity!!).apply {
-                onItemClickListener = ListViewListener()
-                onItemLongClickListener = ListViewListener()
-            }
+            tweetListAdapter = TweetListAdapter(activity!!)
             list.adapter = tweetListAdapter
         } else {
             tweetListUserAdapter = TweetListUserAdapter(activity!!)
