@@ -24,6 +24,7 @@
     <string name="extract_with_regex">正規表現で抽出</string>
     <string name="input_regex">正規表現を入力してください</string>
     <string name="include_retweet">リツイートを含める</string>
+    <string name="invalid_pattern">正規表現が不正です</string>
     <string name="open_in_browser">ブラウザで開く</string>
     <string name="reply">Reply</string>
     <string name="reply_all">ReplyAll</string>

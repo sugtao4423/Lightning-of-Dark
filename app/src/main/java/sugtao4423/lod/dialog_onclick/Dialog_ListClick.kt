@@ -17,6 +17,7 @@ import sugtao4423.lod.utils.Regex
 import sugtao4423.lod.utils.Utils
 import twitter4j.Status
 import java.util.regex.Pattern
+import java.util.regex.PatternSyntaxException
 
 class Dialog_ListClick(private val status: Status, private val listData: ArrayList<Status>, private val dialog: AlertDialog) :
         AdapterView.OnItemClickListener {
@@ -67,7 +68,13 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
 
                 val editReg = regEdit.text.toString()
                 pref.edit().putString(Keys.REGULAR_EXPRESSION, editReg).apply()
-                val pattern = Pattern.compile(editReg, Pattern.DOTALL)
+                val pattern: Pattern
+                try {
+                    pattern = Pattern.compile(editReg, Pattern.DOTALL)
+                } catch (e: PatternSyntaxException) {
+                    ShowToast(context.applicationContext, R.string.invalid_pattern, Toast.LENGTH_LONG)
+                    return@setPositiveButton
+                }
                 val adapter = TweetListAdapter(context)
                 adapter.addAll(listData.filter { status ->
                     pattern.matcher(status.text).find() &&
