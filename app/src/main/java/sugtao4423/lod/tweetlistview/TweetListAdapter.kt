@@ -17,7 +17,6 @@ import sugtao4423.lod.ShowVideo
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
 import sugtao4423.lod.userpage_fragment.UserPage
 import sugtao4423.lod.utils.Utils
-import twitter4j.ResponseList
 import twitter4j.Status
 import java.text.SimpleDateFormat
 import java.util.*
@@ -179,7 +178,7 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
         notifyItemInserted(data.size - 1)
     }
 
-    fun addAll(statuses: ResponseList<Status>) {
+    fun addAll(statuses: List<Status>) {
         val pos = data.size
         data.addAll(statuses)
         notifyItemRangeInserted(pos, statuses.size)

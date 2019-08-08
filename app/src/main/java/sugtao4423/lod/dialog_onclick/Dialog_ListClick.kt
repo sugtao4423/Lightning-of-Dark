@@ -42,6 +42,7 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
     private fun extractTweetsWithRegex() {
         val regView = View.inflate(context, R.layout.reg_dialog, null)
         val regEdit = regView.findViewById<EditText>(R.id.regDialogEdit)
+        val regIncludeRT = regView.findViewById<CheckBox>(R.id.regDialogIncludeRetweet)
         val gridLayout = regView.findViewById<GridLayout>(R.id.regDialogGrid)
         val regItems = arrayOf(".", "*", "|", "+", "?", "\\", "^", "$", "(", ")", "[", "]", "{", "}")
         val params = LinearLayout.LayoutParams(130, 130)
@@ -68,14 +69,11 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                 pref.edit().putString(Keys.REGULAR_EXPRESSION, editReg).apply()
                 val pattern = Pattern.compile(editReg, Pattern.DOTALL)
                 val adapter = TweetListAdapter(context)
-                var find = 0
-                listData.map { status ->
-                    if (pattern.matcher(status.text).find()) {
-                        adapter.add(status)
-                        find++
-                    }
-                }
-                if (find == 0) {
+                adapter.addAll(listData.filter { status ->
+                    pattern.matcher(status.text).find() &&
+                            (regIncludeRT.isChecked || (!regIncludeRT.isChecked && !status.isRetweet))
+                })
+                if (adapter.itemCount == 0) {
                     ShowToast(context.applicationContext, R.string.nothing)
                 } else {
                     val l = TweetListView(context)
@@ -83,7 +81,7 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                     adapter.onItemClickListener = ListViewListener()
                     adapter.onItemLongClickListener = ListViewListener()
                     AlertDialog.Builder(context).setView(l).show()
-                    val resultCount = context.getString(R.string.param_regex_result_count, listData.size, find)
+                    val resultCount = context.getString(R.string.param_regex_result_count, listData.size, adapter.itemCount)
                     ShowToast(context.applicationContext, resultCount, Toast.LENGTH_LONG)
                 }
             }
