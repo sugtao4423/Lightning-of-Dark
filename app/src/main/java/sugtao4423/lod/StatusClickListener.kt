@@ -19,8 +19,9 @@ import twitter4j.Status
 
 class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapter.OnItemLongClickListener {
 
-    override fun onItemClicked(context: Context, data: ArrayList<Status>, position: Int) {
-        val item = data[position]
+    override fun onItemClicked(tweetListAdapter: TweetListAdapter, position: Int) {
+        val item = tweetListAdapter.data[position]
+        val context = tweetListAdapter.context
         val app = context.applicationContext as App
 
         val list = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1)
@@ -59,15 +60,15 @@ class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapt
         }
 
         val status = if (item.isRetweet) item.retweetedStatus else item
-        showDialog(context, status, data, list)
+        showDialog(context, status, tweetListAdapter.data, list)
     }
 
-    override fun onItemLongClicked(context: Context, data: ArrayList<Status>, position: Int): Boolean {
-        val i = Intent(context, TweetActivity::class.java).apply {
+    override fun onItemLongClicked(tweetListAdapter: TweetListAdapter, position: Int): Boolean {
+        val i = Intent(tweetListAdapter.context, TweetActivity::class.java).apply {
             putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_PAKUTSUI)
-            putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, data[position])
+            putExtra(TweetActivity.INTENT_EXTRA_KEY_STATUS, tweetListAdapter.data[position])
         }
-        context.startActivity(i)
+        tweetListAdapter.context.startActivity(i)
         return true
     }
 

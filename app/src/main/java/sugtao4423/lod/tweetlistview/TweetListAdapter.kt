@@ -22,21 +22,21 @@ import twitter4j.Status
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
+class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
-    private val data = arrayListOf<Status>()
     private val app = context.applicationContext as App
     private val statusDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (if (app.getOptions().isMillisecond) ".SSS" else ""), Locale.getDefault())
     private val statusClickListener = StatusClickListener()
+    val data = arrayListOf<Status>()
     var hideImages = false
 
     interface OnItemClickListener {
-        fun onItemClicked(context: Context, data: ArrayList<Status>, position: Int)
+        fun onItemClicked(tweetListAdapter: TweetListAdapter, position: Int)
     }
 
     interface OnItemLongClickListener {
-        fun onItemLongClicked(context: Context, data: ArrayList<Status>, position: Int): Boolean
+        fun onItemLongClicked(tweetListAdapter: TweetListAdapter, position: Int): Boolean
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
@@ -93,10 +93,10 @@ class TweetListAdapter(private val context: Context) : RecyclerView.Adapter<Twee
         }
 
         holder.itemView.setOnClickListener {
-            statusClickListener.onItemClicked(context, data, holder.layoutPosition)
+            statusClickListener.onItemClicked(this, holder.layoutPosition)
         }
         holder.itemView.setOnLongClickListener {
-            statusClickListener.onItemLongClicked(context, data, holder.layoutPosition)
+            statusClickListener.onItemLongClicked(this, holder.layoutPosition)
         }
 
         val mentitys = origStatus.mediaEntities
