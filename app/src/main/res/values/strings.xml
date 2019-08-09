@@ -14,8 +14,14 @@
     <string name="error_tweet">ツイートできませんでした</string>
     <string name="success_retweet">リツイートしました</string>
     <string name="error_retweet">リツイートできませんでした</string>
+    <string name="is_unretweet">リツイート済みです。\nリツイートを取り消しますか？</string>
+    <string name="success_unretweet">リツイートを取り消しました</string>
+    <string name="error_unretweet">リツイートを取り消せませんでした</string>
     <string name="success_favorite">ふぁぼりました</string>
     <string name="error_favorite">ふぁぼれませんでした</string>
+    <string name="is_unfavorite">ふぁぼ済みです。\nあんふぁぼしますか？</string>
+    <string name="success_unfavorite">あんふぁぼしました</string>
+    <string name="error_unfavorite">あんふぁぼできませんでした</string>
     <string name="is_post_delete">本当にツイ消ししますか？</string>
     <string name="success_post_delete">ツイ消ししました</string>
     <string name="error_post_delete">ツイ消しできませんでした</string>

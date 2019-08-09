@@ -14,24 +14,46 @@ class Dialog_retweet(private val status: Status, private val context: Context, p
 
     override fun onClick(v: View?) {
         dialog.dismiss()
-        object : AsyncTask<Unit, Unit, Boolean>() {
-            override fun doInBackground(vararg params: Unit?): Boolean {
-                return try {
-                    (context.applicationContext as App).getTwitter().retweetStatus(this@Dialog_retweet.status.id)
-                    true
-                } catch (e: TwitterException) {
-                    false
+        if (status.isRetweeted) {
+            AlertDialog.Builder(context).apply {
+                setMessage(R.string.is_unretweet)
+                setNegativeButton(R.string.cancel, null)
+                setPositiveButton(R.string.ok) { _, _ ->
+                    Retweet(true).execute()
                 }
+                show()
             }
+        } else {
+            Retweet(false).execute()
+        }
+    }
 
-            override fun onPostExecute(result: Boolean) {
-                if (result) {
-                    ShowToast(context.applicationContext, R.string.success_retweet)
+    inner class Retweet(private val isUnretweet: Boolean) : AsyncTask<Unit, Unit, Status?>() {
+
+        override fun doInBackground(vararg params: Unit?): twitter4j.Status? {
+            val twitter = (context.applicationContext as App).getTwitter()
+            return try {
+                if (isUnretweet) {
+                    twitter.unRetweetStatus(this@Dialog_retweet.status.id)
                 } else {
-                    ShowToast(context.applicationContext, R.string.error_retweet)
+                    twitter.retweetStatus(this@Dialog_retweet.status.id)
                 }
+            } catch (e: TwitterException) {
+                null
             }
-        }.execute()
+        }
+
+        override fun onPostExecute(result: twitter4j.Status?) {
+            val toastMessage = when {
+                result != null && isUnretweet -> R.string.success_unretweet
+                result != null && !isUnretweet -> R.string.success_retweet
+                result == null && isUnretweet -> R.string.error_unretweet
+                result == null && !isUnretweet -> R.string.error_retweet
+                else -> -1
+            }
+            ShowToast(context.applicationContext, toastMessage)
+        }
+
     }
 
 }
