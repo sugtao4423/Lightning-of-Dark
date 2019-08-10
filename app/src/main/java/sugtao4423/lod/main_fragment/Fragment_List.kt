@@ -79,7 +79,7 @@ class Fragment_List : Fragment() {
             override fun doInBackground(vararg params: Unit?): ResponseList<twitter4j.Status>? {
                 return try {
                     if (thisList.isAlreadyLoad) {
-                        val lastTweetId = thisList.adapter.getItem(thisList.adapter.itemCount - 1).id
+                        val lastTweetId = thisList.adapter.data.last().id
                         app.getTwitter().getUserListStatuses(thisList.listId, Paging(1, 50).maxId(lastTweetId - 1))
                     } else {
                         app.getTwitter().getUserListStatuses(thisList.listId, Paging(1, 50))

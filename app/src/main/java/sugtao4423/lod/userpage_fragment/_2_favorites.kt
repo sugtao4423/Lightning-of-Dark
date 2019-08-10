@@ -16,7 +16,7 @@ class _2_favorites : UserPageListBaseFragment(FragmentType.TYPE_TWEET) {
             override fun doInBackground(vararg params: Unit?): ResponseList<twitter4j.Status>? {
                 return try {
                     if (tweetListAdapter.itemCount > 0) {
-                        val tweetId = tweetListAdapter.getItem(tweetListAdapter.itemCount - 1).id
+                        val tweetId = tweetListAdapter.data.last().id
                         app.getTwitter().getFavorites(targetUser!!.screenName, Paging(1, 50).maxId(tweetId - 1))
                     } else {
                         app.getTwitter().getFavorites(targetUser!!.screenName, Paging(1, 50))

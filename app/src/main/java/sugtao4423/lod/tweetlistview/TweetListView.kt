@@ -36,7 +36,7 @@ class TweetListView @JvmOverloads constructor(context: Context, attrs: Attribute
             }
             val adapter = parent.adapter
             if (adapter is TweetListAdapter) {
-                val item = adapter.getItem(pos)
+                val item = adapter.data[pos]
                 when {
                     item.isRetweetedByMe -> view.setBackgroundResource(R.xml.retweeted_by_me)
                     item.isRetweet -> view.setBackgroundResource(R.xml.retweet)

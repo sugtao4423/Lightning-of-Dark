@@ -69,7 +69,7 @@ class Fragment_mention : Fragment() {
             override fun doInBackground(vararg params: Unit?): ResponseList<twitter4j.Status>? {
                 return try {
                     if (adapter.itemCount > 0) {
-                        val tweetId = adapter.getItem(adapter.itemCount - 1).id
+                        val tweetId = adapter.data.last().id
                         app.getTwitter().getMentionsTimeline(Paging(1, 50).maxId(tweetId - 1))
                     } else {
                         app.getTwitter().getMentionsTimeline(Paging(1, 50))

@@ -176,10 +176,6 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         return data.size
     }
 
-    fun getItem(position: Int): Status {
-        return data[position]
-    }
-
     fun add(status: Status) {
         data.add(status)
         notifyItemInserted(data.size - 1)

@@ -59,7 +59,7 @@ class Fragment_home : Fragment() {
 
             override fun doInBackground(vararg params: Unit?): ResponseList<twitter4j.Status>? {
                 val paging = if (adapter.itemCount > 0) {
-                    val tweetId = adapter.getItem(adapter.itemCount - 1).id
+                    val tweetId = adapter.data.last().id
                     Paging(1, 50).maxId(tweetId - 1)
                 } else {
                     Paging(1, 50)
