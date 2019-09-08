@@ -14,7 +14,9 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import com.loopj.android.image.WebImageCache
 import sugtao4423.lod.utils.Utils
+import sugtao4423.support.progressdialog.ProgressDialog
 import twitter4j.ResponseList
+import twitter4j.TwitterException
 import twitter4j.UserList
 import java.text.DecimalFormat
 
@@ -44,11 +46,17 @@ class Settings : LoDBaseActivity() {
 
             app = activity.applicationContext as App
 
+            val follow2list = findPreference("follow2list")
             val listAsTL = findPreference("listAsTL") as CheckBoxPreference
             autoLoadTLInterval = findPreference("autoLoadTLInterval")
             val listSetting = findPreference("listSetting")
             val clearCache = findPreference("clearCache")
             setCacheSize(clearCache)
+
+            follow2list.setOnPreferenceClickListener {
+                clickFollow2List()
+                false
+            }
 
             listAsTL.apply {
                 isChecked = (app.getCurrentAccount().listAsTL > 0)
@@ -75,6 +83,148 @@ class Settings : LoDBaseActivity() {
                 ShowToast(activity.applicationContext, R.string.cache_deleted)
                 false
             }
+        }
+
+        private fun clickFollow2List() {
+            AlertDialog.Builder(activity!!).also {
+                it.setTitle(R.string.limit_5000_users)
+                it.setItems(R.array.follow2list_methods) { _, which ->
+                    when (which) {
+                        0 -> createFollowSyncList()
+                        1 -> selectFollowSyncList()
+                    }
+                }
+                it.show()
+            }
+        }
+
+        private fun createFollowSyncList() {
+            val listName = "home_timeline"
+            object : AsyncTask<Unit, Unit, UserList?>() {
+                private lateinit var progressDialog: ProgressDialog
+
+                override fun onPreExecute() {
+                    progressDialog = ProgressDialog(activity!!).apply {
+                        setMessage(getString(R.string.loading))
+                        isIndeterminate = false
+                        setProgressStyle(ProgressDialog.STYLE_SPINNER)
+                        setCancelable(false)
+                        show()
+                    }
+                }
+
+                override fun doInBackground(vararg params: Unit?): UserList? {
+                    return try {
+                        app.getTwitter().createUserList(listName, false, "user count = follow + me")
+                    } catch (e: TwitterException) {
+                        null
+                    }
+                }
+
+                override fun onPostExecute(result: UserList?) {
+                    progressDialog.dismiss()
+                    if (result == null) {
+                        ShowToast(activity!!.applicationContext, R.string.error_create_list)
+                        return
+                    }
+                    syncFollowList(result.id)
+                }
+
+            }.execute()
+        }
+
+        private fun selectFollowSyncList() {
+            object : AsyncTask<Unit, Unit, ResponseList<UserList>?>() {
+                private lateinit var progressDialog: ProgressDialog
+
+                override fun onPreExecute() {
+                    progressDialog = ProgressDialog(activity!!).apply {
+                        setMessage(getString(R.string.loading))
+                        isIndeterminate = false
+                        setProgressStyle(ProgressDialog.STYLE_SPINNER)
+                        setCancelable(false)
+                        show()
+                    }
+                }
+
+                override fun doInBackground(vararg params: Unit?): ResponseList<UserList>? {
+                    return try {
+                        app.getTwitter().getUserLists(app.getTwitter().screenName)
+                    } catch (e: TwitterException) {
+                        null
+                    }
+                }
+
+                override fun onPostExecute(result: ResponseList<UserList>?) {
+                    progressDialog.dismiss()
+                    if (result == null) {
+                        ShowToast(activity!!.applicationContext, R.string.error_get_list)
+                        return
+                    }
+                    val listNames = arrayOfNulls<String>(result.size)
+                    result.mapIndexed { index, userList ->
+                        listNames[index] = userList.name
+                    }
+                    AlertDialog.Builder(activity!!).apply {
+                        setItems(listNames) { _, which ->
+                            val selectedListId = result[which].id
+                            syncFollowList(selectedListId)
+                        }
+                        show()
+                    }
+                }
+            }.execute()
+        }
+
+        private fun syncFollowList(listId: Long) {
+            object : AsyncTask<Unit, Unit, Boolean>() {
+                private lateinit var progressDialog: ProgressDialog
+
+                override fun onPreExecute() {
+                    progressDialog = ProgressDialog(activity!!).apply {
+                        setMessage(getString(R.string.loading))
+                        isIndeterminate = false
+                        setProgressStyle(ProgressDialog.STYLE_SPINNER)
+                        setCancelable(false)
+                        show()
+                    }
+                }
+
+                override fun doInBackground(vararg params: Unit?): Boolean {
+                    val twitter = app.getTwitter()
+                    return try {
+                        val usersInList = twitter.getUserListMembers(listId, 5000, -1).let {
+                            val userIds = LongArray(it.size)
+                            it.mapIndexed { index, user ->
+                                userIds[index] = user.id
+                            }
+                            userIds
+                        }
+
+                        if (usersInList.isNotEmpty()) {
+                            twitter.destroyUserListMembers(listId, usersInList)
+                        }
+
+                        val friendIds = twitter.getFriendsIDs(-1).iDs + twitter.verifyCredentials().id
+                        friendIds.toList().chunked(100).map {
+                            twitter.createUserListMembers(listId, *it.toLongArray())
+                        }
+                        true
+                    } catch (e: TwitterException) {
+                        false
+                    }
+                }
+
+                override fun onPostExecute(result: Boolean) {
+                    progressDialog.dismiss()
+                    val message = if (result) R.string.success_follow2list else R.string.error_follow2list
+                    AlertDialog.Builder(activity!!).apply {
+                        setMessage(message)
+                        setPositiveButton(R.string.ok, null)
+                        show()
+                    }
+                }
+            }.execute()
         }
 
         private fun selectListAsTL(preference: CheckBoxPreference, isCheck: Boolean): Boolean {

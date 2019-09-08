@@ -32,6 +32,9 @@
             android:title="フォーマット" />
     </PreferenceCategory>
     <PreferenceCategory android:title="TL自動取得">
+        <Preference
+            android:key="follow2list"
+            android:title="フォローしているユーザーをリストにぶち込む" />
         <CheckBoxPreference
             android:key="listAsTL"
             android:title="リストをTLとして読み込む" />
