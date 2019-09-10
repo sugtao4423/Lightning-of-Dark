@@ -94,8 +94,8 @@
     <string name="cache_deleted">キャッシュが削除されました</string>
     <string name="limit_5000_users">5,000ユーザーまでの対応</string>
     <string-array name="follow2list_methods">
-        <item>既存のリストと同期をとる</item>
         <item>新しくリストを作って同期する</item>
+        <item>既存のリストと同期をとる</item>
     </string-array>
     <string name="error_create_list">リストの作成に失敗しました</string>
     <string name="success_follow2list">フォローしているユーザーをリストにぶち込みました</string>
