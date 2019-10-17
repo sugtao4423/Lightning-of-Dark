@@ -130,11 +130,11 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                     holder.tweetImagesLayout.addView(fl)
 
                     val isGif = Utils.isGif(media)
-                    val videoUrl = Utils.getVideoURLsSortByBitrate(app, mentitys)
+                    val videoUrl = Utils.getVideoUrlHiBitrate(app, mentitys)
                     child.setImageUrl(media.mediaURLHttps + ":small", null, R.drawable.icon_loading)
                     child.setOnClickListener {
                         val intent = Intent(context, ShowVideo::class.java).apply {
-                            putExtra(ShowVideo.INTENT_EXTRA_KEY_URL, videoUrl[videoUrl.size - 1])
+                            putExtra(ShowVideo.INTENT_EXTRA_KEY_URL, videoUrl)
                             if (isGif) {
                                 putExtra(ShowVideo.INTENT_EXTRA_KEY_TYPE, ShowVideo.TYPE_GIF)
                             } else {

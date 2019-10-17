@@ -8,52 +8,38 @@ class Utils {
 
     companion object {
 
-        fun getVideoURLsSortByBitrate(app: App, mentitys: Array<MediaEntity>): Array<String> {
-            var urls = arrayOf<String?>()
-            mentitys.map { media ->
-                if (isVideoOrGif(media)) {
-                    val videos = arrayListOf<VideoURLs>()
-                    media.videoVariants.map {
-                        var find = false
-                        if (app.getOptions().isWebm && it.contentType == "video/webm") {
-                            find = true
-                        } else if (!app.getOptions().isWebm && it.contentType == "video/mp4") {
-                            find = true
-                        }
-
-                        if (find) {
-                            videos.add(VideoURLs(it.bitrate, it.url))
+        fun getVideoUrlHiBitrate(app: App, mediaEntities: Array<MediaEntity>): String? {
+            val mp4 = ArrayList<VideoUrl>()
+            val webm = ArrayList<VideoUrl>()
+            mediaEntities.map {
+                if (isVideoOrGif(it)) {
+                    it.videoVariants.map { variant ->
+                        val videoUrl = VideoUrl(variant.bitrate, variant.url)
+                        when (variant.contentType) {
+                            "video/mp4" -> mp4.add(videoUrl)
+                            "video/webm" -> webm.add(videoUrl)
+                            else -> false
                         }
                     }
-                    if (videos.isEmpty()) {
-                        media.videoVariants.map {
-                            var find = false
-                            if (it.contentType == "video/mp4") {
-                                find = true
-                            } else if (it.contentType == "video/webm") {
-                                find = true
-                            }
-
-                            if (find) {
-                                videos.add(VideoURLs(it.bitrate, it.url))
-                            }
-                        }
-                    }
-                    videos.sort()
-                    urls = arrayOfNulls(videos.size)
-                    videos.mapIndexed { index, videoURLs ->
-                        urls[index] = videoURLs.url
-                    }
+                    mp4.sort()
+                    webm.sort()
                 }
             }
-            return urls.requireNoNulls()
+
+            return when {
+                app.getOptions().isWebm && webm.isNotEmpty() -> webm.last().url
+                !app.getOptions().isWebm && mp4.isNotEmpty() -> mp4.last().url
+                mp4.isNotEmpty() -> mp4.last().url
+                webm.isNotEmpty() -> webm.last().url
+                else -> null
+            }
         }
 
-        data class VideoURLs(
+        data class VideoUrl(
                 val bitrate: Int,
                 val url: String
-        ) : Comparable<VideoURLs> {
-            override fun compareTo(other: VideoURLs): Int {
+        ) : Comparable<VideoUrl> {
+            override fun compareTo(other: VideoUrl): Int {
                 return this.bitrate - other.bitrate
             }
         }
