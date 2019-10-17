@@ -15,7 +15,7 @@ class ImagePagerAdapter(fm: FragmentManager, private val urls: Array<String>) : 
 
     init {
         val fragments = arrayOfNulls<ImageFragment>(urls.size)
-        for (i in 0 until urls.size) {
+        for (i in urls.indices) {
             val bundle = Bundle().apply {
                 putString(BUNDLE_KEY_URL, urls[i])
             }
