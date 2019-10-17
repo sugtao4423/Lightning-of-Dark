@@ -140,7 +140,7 @@ class App : Application() {
             val listIds = getCurrentAccount().selectListIds
             val appStartLoadListNames = getCurrentAccount().startAppLoadLists
             val result = arrayOfNulls<TwitterList>(listNames.size)
-            for (i in 0 until listNames.size) {
+            for (i in listNames.indices) {
                 val adapter = TweetListAdapter(context)
                 val listName = listNames[i]
                 val listId = listIds[i]
