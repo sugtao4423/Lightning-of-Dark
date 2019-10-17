@@ -132,14 +132,14 @@ class TweetActivity : LoDBaseActivity() {
     }
 
     private fun setTypeface() {
-        val buttons = arrayOf(
-                findViewById<Button>(R.id.tweetButton),
-                findViewById<Button>(R.id.imageSelect),
-                findViewById<Button>(R.id.tweetClose),
-                findViewById<Button>(R.id.cursorStart),
-                findViewById<Button>(R.id.cursorEnd),
-                findViewById<Button>(R.id.tweetMic),
-                findViewById<Button>(R.id.tweetMusic)
+        val buttons: Array<Button> = arrayOf(
+                findViewById(R.id.tweetButton),
+                findViewById(R.id.imageSelect),
+                findViewById(R.id.tweetClose),
+                findViewById(R.id.cursorStart),
+                findViewById(R.id.cursorEnd),
+                findViewById(R.id.tweetMic),
+                findViewById(R.id.tweetMusic)
         )
         val tf = app.getFontAwesomeTypeface()
         buttons.map {
