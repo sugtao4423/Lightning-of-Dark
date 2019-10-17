@@ -1,37 +1,27 @@
 package sugtao4423.lod.utils
 
 import android.content.Context
-import sugtao4423.lod.App
 import twitter4j.MediaEntity
 
 class Utils {
 
     companion object {
 
-        fun getVideoUrlHiBitrate(app: App, mediaEntities: Array<MediaEntity>): String? {
-            val mp4 = ArrayList<VideoUrl>()
-            val webm = ArrayList<VideoUrl>()
+        fun getVideoUrlHiBitrate(mediaEntities: Array<MediaEntity>): String? {
+            val videos = ArrayList<VideoUrl>()
             mediaEntities.map {
                 if (isVideoOrGif(it)) {
                     it.videoVariants.map { variant ->
-                        val videoUrl = VideoUrl(variant.bitrate, variant.url)
-                        when (variant.contentType) {
-                            "video/mp4" -> mp4.add(videoUrl)
-                            "video/webm" -> webm.add(videoUrl)
-                            else -> false
-                        }
+                        videos.add(VideoUrl(variant.bitrate, variant.url))
                     }
-                    mp4.sort()
-                    webm.sort()
+                    videos.sort()
                 }
             }
 
-            return when {
-                app.getOptions().isWebm && webm.isNotEmpty() -> webm.last().url
-                !app.getOptions().isWebm && mp4.isNotEmpty() -> mp4.last().url
-                mp4.isNotEmpty() -> mp4.last().url
-                webm.isNotEmpty() -> webm.last().url
-                else -> null
+            return if (videos.isEmpty()) {
+                null
+            } else {
+                videos.last().url
             }
         }
 

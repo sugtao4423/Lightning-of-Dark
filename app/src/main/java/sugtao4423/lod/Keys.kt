@@ -11,7 +11,6 @@ class Keys {
         const val MENU_REGEX = "menu_regex"
         const val MENU_OPEN_BROWSER = "menu_openBrowser"
         const val MENU_MILLISECOND = "menu_millisecond"
-        const val IS_WEBM = "isWebm"
         const val NOWPLAYING_FORMAT = "nowplayingFormat"
         const val REGULAR_EXPRESSION = "regularExpression"
         const val IS_IMAGE_ORIENTATION_SENSOR = "isImageOrientationSensor"

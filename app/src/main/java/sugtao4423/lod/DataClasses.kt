@@ -65,7 +65,6 @@ class Options(context: Context) {
     val isOpenBrowser = pref.getBoolean(Keys.MENU_OPEN_BROWSER, false)
     val isRegex = pref.getBoolean(Keys.MENU_REGEX, false)
     val isMillisecond = pref.getBoolean(Keys.MENU_MILLISECOND, false)
-    val isWebm = pref.getBoolean(Keys.IS_WEBM, false)
     val nowplayingFormat = pref.getString(Keys.NOWPLAYING_FORMAT, "") ?: ""
     val isImageOrientationSensor = pref.getBoolean(Keys.IS_IMAGE_ORIENTATION_SENSOR, false)
     val isVideoOrientationSensor = pref.getBoolean(Keys.IS_VIDEO_ORIENTATION_SENSOR, false)
