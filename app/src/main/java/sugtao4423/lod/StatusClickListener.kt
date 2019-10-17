@@ -48,7 +48,7 @@ class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapt
 
         item.mediaEntities.map {
             if (Utils.isVideoOrGif(it)) {
-                val videoUrl = Utils.getVideoUrlHiBitrate(item.mediaEntities)
+                val videoUrl = Utils.getHiBitrateVideoUrl(item.mediaEntities)
                 if (videoUrl == null) {
                     list.add(context.getString(R.string.error_get_video))
                 } else {

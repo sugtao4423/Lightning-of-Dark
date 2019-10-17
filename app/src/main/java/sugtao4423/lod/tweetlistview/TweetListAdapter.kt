@@ -129,7 +129,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                     fl.addView(play)
                     holder.tweetImagesLayout.addView(fl)
 
-                    val videoUrl = Utils.getVideoUrlHiBitrate(mentitys)
+                    val videoUrl = Utils.getHiBitrateVideoUrl(mentitys)
                     child.setImageUrl(media.mediaURLHttps + ":small", null, R.drawable.icon_loading)
                     child.setOnClickListener {
                         val intent = Intent(context, ShowVideo::class.java).apply {

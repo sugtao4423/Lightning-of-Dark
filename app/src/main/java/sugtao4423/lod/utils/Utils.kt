@@ -7,7 +7,7 @@ class Utils {
 
     companion object {
 
-        fun getVideoUrlHiBitrate(mediaEntities: Array<MediaEntity>): String? {
+        fun getHiBitrateVideoUrl(mediaEntities: Array<MediaEntity>): String? {
             val videos = ArrayList<VideoUrl>()
             mediaEntities.map {
                 if (isVideoOrGif(it)) {
