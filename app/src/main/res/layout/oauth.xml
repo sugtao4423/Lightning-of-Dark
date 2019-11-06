@@ -22,6 +22,8 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/textCk"
         android:ems="10"
+        android:importantForAutofill="no"
+        android:inputType="text"
         android:singleLine="true" />
 
     <TextView
@@ -31,6 +33,7 @@
         android:layout_below="@+id/description"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
+        android:labelFor="@+id/editCk"
         android:text="@string/layout_consumer_key" />
 
     <TextView
@@ -40,6 +43,7 @@
         android:layout_below="@+id/textCk"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
+        android:labelFor="@id/editCs"
         android:text="@string/layout_consumer_secret" />
 
     <EditText
@@ -51,6 +55,8 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/textCs"
         android:ems="10"
+        android:importantForAutofill="no"
+        android:inputType="text"
         android:singleLine="true" />
 
     <TextView
