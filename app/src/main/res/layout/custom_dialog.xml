@@ -13,11 +13,13 @@
         android:layout_weight="1" />
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/dialogReply"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -29,6 +31,7 @@
 
         <Button
             android:id="@+id/dialogRetweet"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -40,6 +43,7 @@
 
         <Button
             android:id="@+id/dialogUnofficialRT"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -51,6 +55,7 @@
 
         <Button
             android:id="@+id/dialogFavorite"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -62,6 +67,7 @@
 
         <Button
             android:id="@+id/dialogTalk"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -73,6 +79,7 @@
 
         <Button
             android:id="@+id/dialogDelete"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
