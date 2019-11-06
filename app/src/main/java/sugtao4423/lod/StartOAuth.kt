@@ -9,10 +9,10 @@ import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import twitter4j.Twitter
@@ -29,8 +29,8 @@ class StartOAuth : AppCompatActivity() {
     }
 
     private lateinit var app: App
-    private lateinit var customCK: EditText
-    private lateinit var customCS: EditText
+    private lateinit var customCK: TextInputEditText
+    private lateinit var customCS: TextInputEditText
     private lateinit var ck: String
     private lateinit var cs: String
 
@@ -52,8 +52,8 @@ class StartOAuth : AppCompatActivity() {
             }
         }
 
-        customCK = findViewById(R.id.editCk)
-        customCS = findViewById(R.id.editCs)
+        customCK = findViewById(R.id.editConsumerKey)
+        customCS = findViewById(R.id.editConsumerSecret)
 
         customCK.setText(app.getCurrentAccount().consumerKey)
         customCS.setText(app.getCurrentAccount().consumerSecret)

@@ -23,57 +23,45 @@
         android:text="@string/layout_oauth_description"
         android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/textCk"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textConsumerKey"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/description"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dp"
-        android:labelFor="@+id/editCk"
-        android:text="@string/layout_consumer_key" />
+        android:layout_marginTop="20dp">
 
-    <EditText
-        android:id="@+id/editCk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textCk"
-        android:layout_alignBottom="@+id/textCk"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/textCk"
-        android:ems="10"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:singleLine="true" />
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editConsumerKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/layout_consumer_key"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
-    <TextView
-        android:id="@+id/textCs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textCk"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dp"
-        android:labelFor="@id/editCs"
-        android:text="@string/layout_consumer_secret" />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:id="@+id/editCs"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textConsumerSecret"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textCs"
-        android:layout_alignBottom="@+id/textCs"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/textCs"
-        android:ems="10"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:singleLine="true" />
+        android:layout_below="@+id/textConsumerKey"
+        android:layout_marginTop="20dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/editConsumerSecret"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/layout_consumer_secret"
+            android:importantForAutofill="no"
+            android:inputType="text" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <TextView
         android:id="@+id/oauthDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editCs"
+        android:layout_below="@+id/textConsumerSecret"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="20dp"
         android:clickable="true"

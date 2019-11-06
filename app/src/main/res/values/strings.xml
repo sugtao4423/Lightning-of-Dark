@@ -128,8 +128,8 @@
     <!-- oauth.xml -->
     <string name="layout_oauth_auth">OAuth認証</string>
     <string name="layout_oauth_description">Custom CK/CS\n使いたい場合は入力してください。使わなくても認証できます</string>
-    <string name="layout_consumer_key">CK</string>
-    <string name="layout_consumer_secret">CS</string>
+    <string name="layout_consumer_key">Consumer Key</string>
+    <string name="layout_consumer_secret">Consumer Secret</string>
 
     <!-- tweet_bomb.xml -->
     <string name="layout_static_text">固定テキスト</string>
