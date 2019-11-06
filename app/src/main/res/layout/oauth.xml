@@ -13,6 +13,25 @@
         android:onClick="clickOAuth"
         android:text="@string/layout_oauth_auth" />
 
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/layout_oauth_description"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textCk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/description"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dp"
+        android:labelFor="@+id/editCk"
+        android:text="@string/layout_consumer_key" />
+
     <EditText
         android:id="@+id/editCk"
         android:layout_width="wrap_content"
@@ -25,16 +44,6 @@
         android:importantForAutofill="no"
         android:inputType="text"
         android:singleLine="true" />
-
-    <TextView
-        android:id="@+id/textCk"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/description"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="20dp"
-        android:labelFor="@+id/editCk"
-        android:text="@string/layout_consumer_key" />
 
     <TextView
         android:id="@+id/textCs"
@@ -69,14 +78,5 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="clickOAuthDescription" />
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/layout_oauth_description"
-        android:textSize="15sp" />
 
 </RelativeLayout>
