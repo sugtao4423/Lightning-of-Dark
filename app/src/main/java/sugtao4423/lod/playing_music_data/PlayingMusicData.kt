@@ -23,7 +23,7 @@ class PlayingMusicData(private val context: Context) {
             return null
         }
 
-        val map = HashMap<MusicDataKey, String>()
+        val musicMap = HashMap<MusicDataKey, String>()
         val controllers = mediaSessionManager.getActiveSessions(ComponentName(context, MusicNotificationListener::class.java))
         controllers.map {
             if (it == null || it.playbackState == null || it.metadata == null) {
@@ -34,10 +34,10 @@ class PlayingMusicData(private val context: Context) {
                 val title = it.metadata!!.getString(MediaMetadata.METADATA_KEY_TITLE)
                 val artist = it.metadata!!.getString(MediaMetadata.METADATA_KEY_ARTIST)
                 val album = it.metadata!!.getString(MediaMetadata.METADATA_KEY_ALBUM)
-                map[MusicDataKey.TITLE] = title ?: "unknown"
-                map[MusicDataKey.ARTIST] = artist ?: "unknown"
-                map[MusicDataKey.ALBUM] = album ?: "unknown"
-                return map
+                musicMap[MusicDataKey.TITLE] = title ?: "unknown"
+                musicMap[MusicDataKey.ARTIST] = artist ?: "unknown"
+                musicMap[MusicDataKey.ALBUM] = album ?: "unknown"
+                return musicMap
             }
         }
         return null
