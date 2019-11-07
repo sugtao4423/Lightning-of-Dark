@@ -1,8 +1,10 @@
 package sugtao4423.lod
 
 import android.content.Context
+import android.graphics.Point
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 
@@ -60,7 +62,10 @@ class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(c
     init {
         if (errorMessageRes.contains(resId)) {
             v.setBackgroundResource(R.drawable.toast_error_bg)
-            setGravity(Gravity.CENTER, 0, 0)
+
+            val appSize = Point()
+            (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getSize(appSize)
+            setGravity(Gravity.TOP, 0, appSize.y / 6)
         }
         duration = if (showLongRes.contains(resId)) {
             LENGTH_LONG
