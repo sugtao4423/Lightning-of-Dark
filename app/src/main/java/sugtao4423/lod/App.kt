@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.AsyncTask
 import android.preference.PreferenceManager
-import android.widget.Toast
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.usetime.UseTime
 import sugtao4423.lod.utils.DBUtil
@@ -93,9 +92,9 @@ class App : Application() {
                 if (result != null) {
                     val exp = getLevel().getRandomExp()
                     val isLvUp = getLevel().addExp(exp)
-                    ShowToast(applicationContext, getString(R.string.param_success_tweet, exp))
+                    ShowToast(applicationContext, R.string.param_success_tweet, exp)
                     if (isLvUp) {
-                        ShowToast(applicationContext, getString(R.string.param_level_up, getLevel().getLevel()), Toast.LENGTH_LONG)
+                        ShowToast(applicationContext, R.string.param_level_up, getLevel().getLevel())
                     }
                 } else {
                     ShowToast(applicationContext, R.string.error_tweet)

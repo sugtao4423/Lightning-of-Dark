@@ -11,9 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import android.widget.Toast
 import com.tenthbit.view.ZoomImageView
 import sugtao4423.lod.R
+import sugtao4423.lod.ShowToast
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.URL
@@ -84,7 +84,7 @@ class ImageFragment : Fragment() {
                     progressBar.visibility = View.GONE
                     image.setImageBitmap(result)
                 } else {
-                    Toast.makeText(activity, R.string.error_get_image, Toast.LENGTH_LONG).show()
+                    ShowToast(context!!.applicationContext, R.string.error_get_image)
                 }
             }
         }.execute()

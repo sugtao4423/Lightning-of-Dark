@@ -1,28 +1,77 @@
 package sugtao4423.lod
 
 import android.content.Context
+import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 
-class ShowToast(context: Context, text: String, duration: Int) : Toast(context) {
+class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(context) {
 
-    constructor(context: Context, resId: Int, duration: Int) : this(context, context.getString(resId), duration)
+    constructor(context: Context, resId: Int) : this(context, resId, null)
 
-    constructor(context: Context, text: String) : this(context, text, LENGTH_SHORT)
+    private val errorMessageRes = arrayOf(
+            R.string.error_auto_load_tl_interval,
+            R.string.error_create_list,
+            R.string.error_favorite,
+            R.string.error_file_is_already_exists,
+            R.string.error_follow2list,
+            R.string.error_get_access_token,
+            R.string.error_get_favorite,
+            R.string.error_get_follow,
+            R.string.error_get_follower,
+            R.string.error_get_image,
+            R.string.error_get_list,
+            R.string.error_get_mention,
+            R.string.error_get_original_image,
+            R.string.error_get_request_token,
+            R.string.error_get_status,
+            R.string.error_get_talk_list,
+            R.string.error_get_timeline,
+            R.string.error_get_user_detail,
+            R.string.error_get_user_icon,
+            R.string.error_get_video,
+            R.string.error_post_delete,
+            R.string.error_retweet,
+            R.string.error_save,
+            R.string.error_select_picture,
+            R.string.error_tweet,
+            R.string.error_unfavorite,
+            R.string.error_unretweet,
+            R.string.invalid_pattern,
+            R.string.param_account_already_exists
+    )
 
-    constructor(context: Context, resId: Int) : this(context, resId, LENGTH_SHORT)
+    private val showLongRes = arrayOf(
+            R.string.error_auto_load_tl_interval,
+            R.string.error_get_image,
+            R.string.error_save,
+            R.string.invalid_pattern,
+            R.string.param_account_already_exists,
+            R.string.param_level_up,
+            R.string.param_regex_result_count,
+            R.string.saved,
+            R.string.saved_original
+    )
 
     private val v: View = View.inflate(context, R.layout.custom_toast, null)
     private val message: TextView = v.findViewById(R.id.toastMessage)
 
     init {
+        if (errorMessageRes.contains(resId)) {
+            v.setBackgroundResource(R.drawable.toast_error_bg)
+            setGravity(Gravity.CENTER, 0, 0)
+        }
+        duration = if (showLongRes.contains(resId)) {
+            LENGTH_LONG
+        } else {
+            LENGTH_SHORT
+        }
         view = v
 
-        message.text = text
+        message.text = context.getString(resId, *formatArgs)
         message.setPadding(3, 2, 3, 2)
 
-        setDuration(duration)
         show()
     }
 

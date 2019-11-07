@@ -69,8 +69,9 @@
     <string name="error_get_video">ビデオの取得失敗</string>
     <string name="error_get_user_detail">ユーザー情報を取得できませんでした</string>
     <string name="save">保存</string>
-    <string name="saved">保存しました</string>
-    <string name="saved_original">オリジナルを保存しました</string>
+    <string name="saved">保存しました\n%s</string>
+    <string name="saved_original">オリジナルを保存しました\n%s</string>
+    <string name="error_save">保存できませんでした</string>
     <string name="error_file_is_already_exists">エラー: ファイルが既に存在しています</string>
     <string name="overwrite">上書き</string>
     <string name="save_as">ファイル名を指定して保存</string>

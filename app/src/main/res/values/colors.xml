@@ -22,6 +22,7 @@
 
     <color name="toastStroke">#ddcccccc</color>
     <color name="toastSolid">#dd333333</color>
+    <color name="toastErrorSolid">#ddcc6666</color>
 
     <color name="tweetDialogButtonPress">#70e8ff</color>
     <color name="tweetDialogButtonDisable">#a7a7a7</color>

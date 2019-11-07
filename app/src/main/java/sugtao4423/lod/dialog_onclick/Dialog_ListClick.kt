@@ -72,7 +72,7 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                 try {
                     pattern = Pattern.compile(editReg, Pattern.DOTALL)
                 } catch (e: PatternSyntaxException) {
-                    ShowToast(context.applicationContext, R.string.invalid_pattern, Toast.LENGTH_LONG)
+                    ShowToast(context.applicationContext, R.string.invalid_pattern)
                     return@setPositiveButton
                 }
                 val adapter = TweetListAdapter(context)
@@ -86,8 +86,7 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                     val l = TweetListView(context)
                     l.adapter = adapter
                     AlertDialog.Builder(context).setView(l).show()
-                    val resultCount = context.getString(R.string.param_regex_result_count, listData.size, adapter.itemCount)
-                    ShowToast(context.applicationContext, resultCount, Toast.LENGTH_LONG)
+                    ShowToast(context.applicationContext, R.string.param_regex_result_count, listData.size, adapter.itemCount)
                 }
             }
             it.show()

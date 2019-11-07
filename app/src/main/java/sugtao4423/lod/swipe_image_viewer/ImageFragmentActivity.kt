@@ -15,7 +15,6 @@ import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.Window
 import android.widget.EditText
-import android.widget.Toast
 import com.tenthbit.view.ZoomViewPager
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.LoDBaseActivity
@@ -205,11 +204,11 @@ class ImageFragmentActivity : LoDBaseActivity() {
                 close()
             }
         } catch (e: IOException) {
-            ShowToast(applicationContext, e.message!!, Toast.LENGTH_LONG)
+            ShowToast(applicationContext, R.string.error_save)
             return
         }
-        val message = (if (isOriginal) getString(R.string.saved_original) else getString(R.string.saved)) + "\n$imgPath"
-        ShowToast(applicationContext, message, Toast.LENGTH_LONG)
+        val message = if (isOriginal) R.string.saved_original else R.string.saved
+        ShowToast(applicationContext, message, imgPath)
     }
 
     private fun hasWriteExternalStoragePermission(): Boolean {

@@ -54,8 +54,7 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
                         }
                     }.execute(loop)
                 }
-                val toast = context.getString(R.string.param_success_tweet, 0)
-                ShowToast(context.applicationContext, toast)
+                ShowToast(context.applicationContext, R.string.param_success_tweet, 0)
             }
             show()
         }
@@ -120,8 +119,7 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
                         }
                         it.setNegativeButton(R.string.delete) { _, _ ->
                             dbUtil.deleteAccount(accounts[which])
-                            val toast = context.getString(R.string.param_success_account_delete, accounts[which].screenName)
-                            ShowToast(context.applicationContext, toast)
+                            ShowToast(context.applicationContext, R.string.param_success_account_delete, accounts[which].screenName)
                         }
                         it.setNeutralButton(R.string.cancel, null)
                         it.show()

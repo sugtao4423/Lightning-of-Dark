@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import twitter4j.Twitter
 import twitter4j.TwitterException
 import twitter4j.TwitterFactory
@@ -119,8 +118,7 @@ class StartOAuth : AppCompatActivity() {
                 if (result != null) {
                     val dbUtil = app.getAccountDBUtil()
                     if (dbUtil.existsAccount(result.screenName)) {
-                        val toast = getString(R.string.param_account_already_exists, result.screenName)
-                        ShowToast(applicationContext, toast, Toast.LENGTH_LONG)
+                        ShowToast(applicationContext, R.string.param_account_already_exists, result.screenName)
                         finish()
                         return
                     }

@@ -11,7 +11,6 @@ import android.support.v7.preference.PreferenceFragmentCompat
 import android.text.InputType
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.Toast
 import com.loopj.android.image.WebImageCache
 import sugtao4423.lod.utils.Utils
 import sugtao4423.support.progressdialog.ProgressDialog
@@ -306,7 +305,7 @@ class Settings : LoDBaseActivity() {
                     val isListAsTL = app.getCurrentAccount().listAsTL > 0
                     val interval = intervalEdit.text.toString().toInt()
                     if (!isListAsTL && interval > 0 && interval < 60) {
-                        ShowToast(context, R.string.error_auto_load_tl_interval, Toast.LENGTH_LONG)
+                        ShowToast(context, R.string.error_auto_load_tl_interval)
                         return@setPositiveButton
                     }
                     app.getAccountDBUtil().updateAutoLoadTLInterval(interval, app.getCurrentAccount().screenName)
