@@ -60,18 +60,18 @@ class IntentActivity : AppCompatActivity() {
                         map.put(it, shareUri.getQueryParameter(it) ?: "")
                     }
                     val text = arrayListOf<String>().apply {
-                        if (map["text"] != null) {
-                            add(map["text"]!!)
+                        map["text"]?.let {
+                            add(it)
                         }
-                        if (map["url"] != null) {
-                            add(map["url"]!!)
+                        map["url"]?.let {
+                            add(it)
                         }
-                        if (map["hashtags"] != null) {
-                            val str = "#" + map["hashtags"]!!.replace(",", " #")
+                        map["hashtags"]?.let {
+                            val str = "#" + it.replace(",", " #")
                             add(str)
                         }
-                        if (map["via"] != null) {
-                            val str = "@" + map["via"]!! + "さんから"
+                        map["via"]?.let {
+                            val str = "@${it}さんから"
                             add(str)
                         }
                     }.joinToString(" ")
