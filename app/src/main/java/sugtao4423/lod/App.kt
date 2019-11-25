@@ -180,10 +180,8 @@ class App : Application() {
     }
 
     fun closeAccountDB() {
-        if (accountDBUtil != null) {
-            accountDBUtil!!.dbClose()
-            accountDBUtil = null
-        }
+        accountDBUtil?.dbClose()
+        accountDBUtil = null
     }
 
     // UseTime
@@ -195,10 +193,8 @@ class App : Application() {
     }
 
     fun closeUseTimeDB() {
-        if (useTime != null) {
-            useTime!!.dbClose()
-            useTime = null
-        }
+        useTime?.dbClose()
+        useTime = null
     }
 
 }
