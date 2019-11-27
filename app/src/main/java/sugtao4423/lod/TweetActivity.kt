@@ -3,20 +3,22 @@ package sugtao4423.lod
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.twitter.twittertext.Extractor
 import com.twitter.twittertext.TwitterTextParser
 import sugtao4423.lod.playing_music_data.MusicDataKey
 import sugtao4423.lod.playing_music_data.PlayingMusicData
@@ -43,7 +45,6 @@ class TweetActivity : LoDBaseActivity() {
     }
 
     private lateinit var tweetText: EditText
-    private lateinit var text140DefaultColors: ColorStateList
     private lateinit var status: Status
     private var type = 0
     private var image: File? = null
@@ -60,9 +61,7 @@ class TweetActivity : LoDBaseActivity() {
         tweetAccount.text = "@" + app.getCurrentAccount().screenName
 
         tweetText = findViewById(R.id.tweetText)
-        val text140 = findViewById<TextView>(R.id.text140)
-        text140DefaultColors = text140.textColors
-        text140count(text140)
+        text140count(findViewById(R.id.text140))
 
         if (intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) != null) {
             status = intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) as Status
@@ -148,6 +147,10 @@ class TweetActivity : LoDBaseActivity() {
     }
 
     private fun text140count(text140: TextView) {
+        val defaultTextViewColors = text140.textColors
+        val entityColor = ContextCompat.getColor(applicationContext, R.color.twitterBrand)
+        val extractor = Extractor()
+
         tweetText.addTextChangedListener(object : TextWatcher {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -162,7 +165,7 @@ class TweetActivity : LoDBaseActivity() {
                 text140.text = (140 - length140).toString()
 
                 if (parseResult.isValid || length140 == 0) {
-                    text140.setTextColor(text140DefaultColors)
+                    text140.setTextColor(defaultTextViewColors)
                 } else {
                     text140.setTextColor(Color.RED)
                 }
@@ -172,6 +175,12 @@ class TweetActivity : LoDBaseActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
+                s?.getSpans(0, s.length, ForegroundColorSpan::class.java)?.map {
+                    s.removeSpan(it)
+                }
+                extractor.extractEntitiesWithIndices(s.toString()).map {
+                    s?.setSpan(ForegroundColorSpan(entityColor), it.start, it.end, 0)
+                }
             }
         })
     }
