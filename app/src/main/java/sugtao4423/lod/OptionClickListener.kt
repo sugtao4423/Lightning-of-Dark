@@ -147,8 +147,9 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
             val yesterdayUse = getYesterdayUseTimeInMillis()
             val last30daysUse = getLastNdaysUseTimeInMillis(30)
             val totalUse = getTotalUseTimeInMillis()
+            val startDate = getRecordStartDate()
             val message = context.getString(R.string.param_use_info_text,
-                    milliTime2Str(todayUse.toLong()), milliTime2Str(yesterdayUse.toLong()), milliTime2Str(last30daysUse), milliTime2Str(totalUse))
+                    milliTime2Str(todayUse.toLong()), milliTime2Str(yesterdayUse.toLong()), milliTime2Str(last30daysUse), milliTime2Str(totalUse), startDate)
             AlertDialog.Builder(context).setTitle(R.string.use_info).setMessage(message).setPositiveButton(R.string.ok, null).show()
         }
     }

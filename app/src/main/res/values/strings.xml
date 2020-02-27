@@ -87,7 +87,7 @@
     <string name="change_account">切り替え</string>
     <string name="delete">削除</string>
     <string name="param_next_level_total_exp">Lv.%1$s\nレベルアップまで: %2$s EXP\n取得経験値: %3$s EXP</string>
-    <string name="param_use_info_text">今日: %1$s\n昨日: %2$s\n\n過去30日: %3$s\n合計: %4$s</string>
+    <string name="param_use_info_text">今日: %1$s\n昨日: %2$s\n\n過去30日: %3$s\n合計: %4$s\n\n計測開始日: %5$s</string>
 
     <string name="page_title_mention">Mention</string>
     <string name="param_page_title_home">Home - Lv.%d</string>

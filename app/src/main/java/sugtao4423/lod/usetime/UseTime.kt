@@ -2,6 +2,7 @@ package sugtao4423.lod.usetime
 
 import android.content.Context
 import android.os.AsyncTask
+import java.text.SimpleDateFormat
 import java.util.*
 
 class UseTime(context: Context) {
@@ -71,6 +72,17 @@ class UseTime(context: Context) {
         val totalUseTime = c.getLong(0)
         c.close()
         return totalUseTime
+    }
+
+    fun getRecordStartDate(): String {
+        val query = "SELECT date FROM useTime LIMIT 1"
+        val c = db.rawQuery(query, null)
+        if (!c.moveToFirst()) {
+            return "null"
+        }
+        val startDate = c.getLong(0)
+        c.close()
+        return SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(startDate)
     }
 
     private fun todayUnixTime(): Long {
