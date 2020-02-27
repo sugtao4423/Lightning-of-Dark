@@ -102,31 +102,31 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
             }
         }
         screenNames.add(context.getString(R.string.add_account))
-        AlertDialog.Builder(context).apply {
-            setItems(screenNames.toTypedArray()) { _, which ->
+        AlertDialog.Builder(context).also { selectDialog ->
+            selectDialog.setItems(screenNames.toTypedArray()) { _, which ->
                 val selected = screenNames[which]
                 if (selected == context.getString(R.string.add_account)) {
                     context.startActivity(Intent(context, StartOAuth::class.java))
                 } else if (selected != "@$myScreenName (now)") {
-                    AlertDialog.Builder(context).also {
-                        it.setTitle(selected)
-                        it.setPositiveButton(R.string.change_account) { _, _ ->
+                    AlertDialog.Builder(context).also { confirmDialog ->
+                        confirmDialog.setTitle(selected)
+                        confirmDialog.setPositiveButton(R.string.change_account) { _, _ ->
                             PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
                                     .edit()
                                     .putString(Keys.SCREEN_NAME, accounts[which].screenName)
                                     .apply()
                             (context as MainActivity).restart()
                         }
-                        it.setNegativeButton(R.string.delete) { _, _ ->
+                        confirmDialog.setNegativeButton(R.string.delete) { _, _ ->
                             dbUtil.deleteAccount(accounts[which])
                             ShowToast(context.applicationContext, R.string.param_success_account_delete, accounts[which].screenName)
                         }
-                        it.setNeutralButton(R.string.cancel, null)
-                        it.show()
+                        confirmDialog.setNeutralButton(R.string.cancel, null)
+                        confirmDialog.show()
                     }
                 }
             }
-            show()
+            selectDialog.show()
         }
     }
 
