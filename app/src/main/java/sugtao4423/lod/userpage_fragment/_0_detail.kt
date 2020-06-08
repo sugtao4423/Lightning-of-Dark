@@ -52,6 +52,7 @@ class _0_detail : Fragment() {
     private lateinit var protect: TextView
 
     private var isTextSet = false
+    private var isPrepared = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.user_0, container, false)
@@ -91,11 +92,12 @@ class _0_detail : Fragment() {
         (view.findViewById<TextView>(R.id.iconCreateDate)).typeface = tf
 
         setClick()
+        isPrepared = true
         setText()
     }
 
     fun setText() {
-        if (targetUser == null || isTextSet) {
+        if (targetUser == null || isTextSet || !isPrepared) {
             return
         }
         isTextSet = true

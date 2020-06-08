@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import sugtao4423.lod.R
+import twitter4j.User
 
 class UserPageFragmentPagerAdapter(fm: FragmentManager, private val context: Context) : FragmentStatePagerAdapter(fm) {
 
@@ -38,6 +39,15 @@ class UserPageFragmentPagerAdapter(fm: FragmentManager, private val context: Con
             4 -> context.getString(R.string.page_title_follower)
             else -> null
         }
+    }
+
+    fun setTargetUser(user: User) {
+        detail.targetUser = user
+        detail.setText()
+        tweet.targetUser = user
+        favorites.targetUser = user
+        follow.targetUser = user
+        follower.targetUser = user
     }
 
 }

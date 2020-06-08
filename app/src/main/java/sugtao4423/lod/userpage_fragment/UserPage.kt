@@ -56,7 +56,6 @@ class UserPage : LoDBaseActivity() {
             override fun onPostExecute(result: User?) {
                 if (result != null) {
                     setTargetUser(result)
-                    (adapter.getItem(0) as _0_detail).setText()
                 } else {
                     ShowToast(applicationContext, R.string.error_get_user_detail)
                     finish()
@@ -67,11 +66,7 @@ class UserPage : LoDBaseActivity() {
 
     private fun setTargetUser(target: User) {
         supportActionBar?.title = target.name
-        (adapter.getItem(0) as _0_detail).targetUser = target
-        (adapter.getItem(1) as _1_Tweet).targetUser = target
-        (adapter.getItem(2) as _2_favorites).targetUser = target
-        (adapter.getItem(3) as _3_follow).targetUser = target
-        (adapter.getItem(4) as _4_follower).targetUser = target
+        adapter.setTargetUser(target)
     }
 
 
