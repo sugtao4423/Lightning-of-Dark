@@ -5,7 +5,7 @@
     android:descendantFocusability="blocksDescendants">
 
     <com.loopj.android.image.SmartImageView
-        android:id="@+id/icon"
+        android:id="@+id/tweetIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
@@ -13,12 +13,12 @@
         android:src="@drawable/icon_loading" />
 
     <TextView
-        android:id="@+id/nameAndScreenName"
+        android:id="@+id/tweetNameScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="@+id/icon"
+        android:layout_alignParentTop="@+id/tweetIcon"
         android:layout_marginLeft="8dp"
-        android:layout_toRightOf="@+id/icon"
+        android:layout_toRightOf="@+id/tweetIcon"
         android:textColor="@color/tweetName"
         android:textStyle="bold" />
 
@@ -26,8 +26,8 @@
         android:id="@+id/tweetText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nameAndScreenName"
-        android:layout_alignLeft="@+id/nameAndScreenName"
+        android:layout_below="@+id/tweetNameScreenName"
+        android:layout_alignLeft="@+id/tweetNameScreenName"
         android:layout_alignParentRight="true"
         android:textColor="@color/textDarkPrimary" />
 
@@ -57,13 +57,13 @@
         android:textColor="@color/tweetRetweetedUserName" />
 
     <TextView
-        android:id="@+id/userProtected"
+        android:id="@+id/tweetUserProtected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/nameAndScreenName"
+        android:layout_alignBottom="@+id/tweetNameScreenName"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/nameAndScreenName"
+        android:layout_toRightOf="@+id/tweetNameScreenName"
         android:gravity="center"
         android:text="@string/icon_protect"
         android:textColor="@color/icon" />

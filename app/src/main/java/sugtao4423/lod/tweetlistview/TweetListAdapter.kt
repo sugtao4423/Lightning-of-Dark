@@ -195,13 +195,13 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: SmartImageView = itemView.findViewById(R.id.icon)
+        val icon: SmartImageView = itemView.findViewById(R.id.tweetIcon)
         val rtIcon: SmartImageView = itemView.findViewById(R.id.retweetedUserIcon)
-        val nameSn: TextView = itemView.findViewById(R.id.nameAndScreenName)
+        val nameSn: TextView = itemView.findViewById(R.id.tweetNameScreenName)
         val content: TextView = itemView.findViewById(R.id.tweetText)
         val date: TextView = itemView.findViewById(R.id.tweetDate)
         val rtSn: TextView = itemView.findViewById(R.id.retweetedUserScreenName)
-        val protect: TextView = itemView.findViewById(R.id.userProtected)
+        val protect: TextView = itemView.findViewById(R.id.tweetUserProtected)
         val tweetImagesScroll: HorizontalScrollView = itemView.findViewById(R.id.tweetImagesScroll)
         val tweetImagesLayout: LinearLayout = itemView.findViewById(R.id.tweetImagesLayout)
     }
