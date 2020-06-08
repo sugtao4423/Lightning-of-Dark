@@ -63,15 +63,15 @@ class _0_detail : Fragment() {
 
         app = activity!!.applicationContext as App
 
-        userBanner = view.findViewById(R.id.banner)
+        userBanner = view.findViewById(R.id.userBanner)
         userIcon = view.findViewById(R.id.userIcon)
         userName = view.findViewById(R.id.userName)
         userScreenName = view.findViewById(R.id.userScreenName)
         protect = view.findViewById(R.id.userPageProtected)
 
         userBio = view.findViewById(R.id.userBio)
-        userLocation = view.findViewById(R.id.location)
-        userLink = view.findViewById(R.id.link)
+        userLocation = view.findViewById(R.id.userLocation)
+        userLink = view.findViewById(R.id.userLink)
         userTweetC = view.findViewById(R.id.userTweetCount)
         userFavoriteC = view.findViewById(R.id.userFavoriteCount)
         userFollowC = view.findViewById(R.id.userFollowCount)

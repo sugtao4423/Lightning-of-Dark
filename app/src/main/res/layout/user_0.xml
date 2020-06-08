@@ -8,7 +8,7 @@
         android:layout_height="wrap_content">
 
         <com.loopj.android.image.SmartImageView
-            android:id="@+id/banner"
+            android:id="@+id/userBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -69,7 +69,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/location"
+            android:id="@+id/userLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textLocation"
@@ -81,14 +81,14 @@
             android:id="@+id/textLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/location"
-            android:layout_alignLeft="@+id/location"
+            android:layout_below="@+id/userLocation"
+            android:layout_alignLeft="@+id/userLocation"
             android:layout_marginTop="15dp"
             android:text="@string/layout_link"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/link"
+            android:id="@+id/userLink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textLink"
@@ -100,8 +100,8 @@
             android:id="@+id/iconTweetCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/link"
-            android:layout_alignLeft="@+id/link"
+            android:layout_below="@+id/userLink"
+            android:layout_alignLeft="@+id/userLink"
             android:layout_marginTop="30dp"
             android:layout_marginRight="3dp"
             android:text="@string/icon_tweetCount" />
@@ -226,7 +226,7 @@
             android:id="@+id/userPageSourceIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/banner"
+            android:layout_below="@+id/userBanner"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/icon_loading" />
