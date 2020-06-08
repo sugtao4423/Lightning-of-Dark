@@ -255,10 +255,6 @@ class _0_detail : Fragment() {
             }
         }
         userBanner.setOnLongClickListener {
-            ChromeIntent(context, Uri.parse(targetUser!!.originalProfileImageURLHttps))
-            true
-        }
-        userBanner.setOnLongClickListener {
             if (targetUser!!.profileBannerURL != null) {
                 ChromeIntent(context, Uri.parse(targetUser!!.profileBanner1500x500URL))
             }
