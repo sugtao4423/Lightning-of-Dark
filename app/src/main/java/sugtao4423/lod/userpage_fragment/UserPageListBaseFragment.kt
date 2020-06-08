@@ -30,14 +30,15 @@ abstract class UserPageListBaseFragment(private val fragmentType: FragmentType) 
     var targetUser: User? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (activity == null) {
-            return super.onCreateView(inflater, container, savedInstanceState)
-        }
+        return inflater.inflate(R.layout.user_1, container, false)
+    }
 
-        val v = inflater.inflate(R.layout.user_1, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         app = activity!!.applicationContext as App
 
-        val list = v.findViewById<TweetListView>(R.id.userPageList)
+        val list = view.findViewById<TweetListView>(R.id.userPageList)
 
         if (fragmentType == FragmentType.TYPE_TWEET) {
             tweetListAdapter = TweetListAdapter(activity!!)
@@ -56,7 +57,7 @@ abstract class UserPageListBaseFragment(private val fragmentType: FragmentType) 
         }
         list.addOnScrollListener(scrollListener)
 
-        pullToRefresh = v.findViewById<SwipeRefreshLayout>(R.id.userPagePull).apply {
+        pullToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.userPagePull).apply {
             setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                     android.R.color.holo_orange_light, android.R.color.holo_red_light)
             setOnRefreshListener {
@@ -71,7 +72,6 @@ abstract class UserPageListBaseFragment(private val fragmentType: FragmentType) 
                 scrollListener.resetState()
             }
         }
-        return v
     }
 
     abstract fun loadList()

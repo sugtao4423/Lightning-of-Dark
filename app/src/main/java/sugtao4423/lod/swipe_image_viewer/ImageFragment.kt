@@ -27,12 +27,8 @@ class ImageFragment : Fragment() {
     private lateinit var url: String
     lateinit var nonOrigImage: ByteArray
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (arguments == null || context == null) {
-            return
-        }
-        url = arguments!!.getString(ImagePagerAdapter.BUNDLE_KEY_URL) ?: return
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        url = arguments!!.getString(ImagePagerAdapter.BUNDLE_KEY_URL)!!
 
         parentLayout = FrameLayout(context!!)
         image = ZoomImageView(context!!)
@@ -49,9 +45,13 @@ class ImageFragment : Fragment() {
         val barLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.CENTER)
         barLayoutParams.setMargins(64, 0, 64, 0)
         parentLayout.addView(progressBar, barLayoutParams)
+
+        return parentLayout
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         object : AsyncTask<Unit, Unit, Bitmap?>() {
 
             override fun doInBackground(vararg params: Unit?): Bitmap? {
@@ -88,8 +88,6 @@ class ImageFragment : Fragment() {
                 }
             }
         }.execute()
-
-        return parentLayout
     }
 
 }

@@ -31,23 +31,23 @@ class Fragment_List : Fragment() {
     private var listIndex = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (activity == null) {
-            return super.onCreateView(inflater, container, savedInstanceState)
-        }
+        return inflater.inflate(R.layout.fragment_list, container, false)
+    }
 
-        listIndex = arguments?.getInt(LIST_INDEX)
-                ?: return super.onCreateView(inflater, container, savedInstanceState)
-        val v = inflater.inflate(R.layout.fragment_list, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        listIndex = arguments?.getInt(LIST_INDEX)!!
         app = activity!!.applicationContext as App
         thisList = app.getLists(activity!!)[listIndex]
-        val list = v.findViewById<TweetListView>(R.id.listLine)
+        val list = view.findViewById<TweetListView>(R.id.listLine)
         val adapter = thisList.adapter
         list.adapter = adapter
 
         val scrollListener = getLoadMoreListener(list.linearLayoutManager)
         list.addOnScrollListener(scrollListener)
 
-        pullToRefresh = v.findViewById<SwipeRefreshLayout>(R.id.listPull).apply {
+        pullToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.listPull).apply {
             setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                     android.R.color.holo_orange_light, android.R.color.holo_red_light)
             setOnRefreshListener {
@@ -60,7 +60,6 @@ class Fragment_List : Fragment() {
         if (thisList.isAppStartLoad) {
             getList()
         }
-        return v
     }
 
     private fun getLoadMoreListener(llm: LinearLayoutManager): EndlessScrollListener {

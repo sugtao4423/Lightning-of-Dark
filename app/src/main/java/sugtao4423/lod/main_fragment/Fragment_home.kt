@@ -27,13 +27,14 @@ class Fragment_home : Fragment() {
     private lateinit var app: App
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (activity == null) {
-            return super.onCreateView(inflater, container, savedInstanceState)
-        }
+        return inflater.inflate(R.layout.fragment_list, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         app = activity!!.applicationContext as App
-        val v = inflater.inflate(R.layout.fragment_list, container, false)
-        list = v.findViewById(R.id.listLine)
+        list = view.findViewById(R.id.listLine)
         listAsTL = app.getCurrentAccount().listAsTL
 
         adapter = TweetListAdapter(activity!!)
@@ -41,7 +42,7 @@ class Fragment_home : Fragment() {
         val scrollListener = getLoadMoreListener()
         list.addOnScrollListener(scrollListener)
 
-        pullToRefresh = v.findViewById(R.id.listPull)
+        pullToRefresh = view.findViewById(R.id.listPull)
         pullToRefresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                 android.R.color.holo_orange_light, android.R.color.holo_red_light)
         val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
@@ -51,7 +52,6 @@ class Fragment_home : Fragment() {
         }
         pullToRefresh.setOnRefreshListener(onRefreshListener)
         onRefreshListener.onRefresh()
-        return v
     }
 
     private fun loadTimeLine() {

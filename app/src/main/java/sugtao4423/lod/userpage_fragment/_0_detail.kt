@@ -54,48 +54,43 @@ class _0_detail : Fragment() {
     private var isTextSet = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (activity == null) {
-            return super.onCreateView(inflater, container, savedInstanceState)
-        }
+        return inflater.inflate(R.layout.user_0, container, false)
+    }
 
-        val v = inflater.inflate(R.layout.user_0, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         app = activity!!.applicationContext as App
 
-        userBanner = v.findViewById(R.id.banner)
-        userIcon = v.findViewById(R.id.userIcon)
-        userName = v.findViewById(R.id.userName)
-        userScreenName = v.findViewById(R.id.userScreenName)
-        protect = v.findViewById(R.id.userPageProtected)
+        userBanner = view.findViewById(R.id.banner)
+        userIcon = view.findViewById(R.id.userIcon)
+        userName = view.findViewById(R.id.userName)
+        userScreenName = view.findViewById(R.id.userScreenName)
+        protect = view.findViewById(R.id.userPageProtected)
 
-        userBio = v.findViewById(R.id.userBio)
-        userLocation = v.findViewById(R.id.location)
-        userLink = v.findViewById(R.id.link)
-        userTweetC = v.findViewById(R.id.userTweetCount)
-        userFavoriteC = v.findViewById(R.id.userFavoriteCount)
-        userFollowC = v.findViewById(R.id.userFollowCount)
-        userFollowerC = v.findViewById(R.id.userFollowerCount)
-        userCreate = v.findViewById(R.id.userCreateDate)
-        sourceIcon = v.findViewById(R.id.userPageSourceIcon)
-        targetIcon = v.findViewById(R.id.userPageTargetIcon)
-        isFollowIcon = v.findViewById(R.id.userPageIsFollow)
+        userBio = view.findViewById(R.id.userBio)
+        userLocation = view.findViewById(R.id.location)
+        userLink = view.findViewById(R.id.link)
+        userTweetC = view.findViewById(R.id.userTweetCount)
+        userFavoriteC = view.findViewById(R.id.userFavoriteCount)
+        userFollowC = view.findViewById(R.id.userFollowCount)
+        userFollowerC = view.findViewById(R.id.userFollowerCount)
+        userCreate = view.findViewById(R.id.userCreateDate)
+        sourceIcon = view.findViewById(R.id.userPageSourceIcon)
+        targetIcon = view.findViewById(R.id.userPageTargetIcon)
+        isFollowIcon = view.findViewById(R.id.userPageIsFollow)
 
         protect.visibility = View.GONE
 
         val tf = app.getFontAwesomeTypeface()
         protect.typeface = tf
-        (v.findViewById<TextView>(R.id.iconTweetCount)).typeface = tf
-        (v.findViewById<TextView>(R.id.iconFavoriteCount)).typeface = tf
-        (v.findViewById<TextView>(R.id.iconFollowCount)).typeface = tf
-        (v.findViewById<TextView>(R.id.iconFollowerCount)).typeface = tf
-        (v.findViewById<TextView>(R.id.iconCreateDate)).typeface = tf
+        (view.findViewById<TextView>(R.id.iconTweetCount)).typeface = tf
+        (view.findViewById<TextView>(R.id.iconFavoriteCount)).typeface = tf
+        (view.findViewById<TextView>(R.id.iconFollowCount)).typeface = tf
+        (view.findViewById<TextView>(R.id.iconFollowerCount)).typeface = tf
+        (view.findViewById<TextView>(R.id.iconCreateDate)).typeface = tf
 
         setClick()
-        return v
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         setText()
     }
 
