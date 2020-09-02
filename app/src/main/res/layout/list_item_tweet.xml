@@ -8,7 +8,7 @@
         android:id="@+id/tweetIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/icon_loading" />
 
@@ -17,8 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="@+id/tweetIcon"
-        android:layout_marginLeft="8dp"
-        android:layout_toRightOf="@+id/tweetIcon"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/tweetIcon"
         android:textColor="@color/tweetName"
         android:textStyle="bold" />
 
@@ -27,8 +27,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tweetNameScreenName"
-        android:layout_alignLeft="@+id/tweetNameScreenName"
-        android:layout_alignParentRight="true"
+        android:layout_alignStart="@+id/tweetNameScreenName"
+        android:layout_alignParentEnd="true"
         android:textColor="@color/textDarkPrimary" />
 
     <TextView
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tweetText"
-        android:layout_alignLeft="@+id/tweetText"
+        android:layout_alignStart="@+id/tweetText"
         android:layout_marginTop="2sp"
         android:textColor="@color/tweetDate" />
 
@@ -45,7 +45,7 @@
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:layout_alignBottom="@+id/tweetDate"
-        android:layout_toRightOf="@+id/tweetDate" />
+        android:layout_toEndOf="@+id/tweetDate" />
 
     <TextView
         android:id="@+id/retweetedUserScreenName"
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tweetDate"
         android:layout_alignBottom="@+id/tweetDate"
-        android:layout_toRightOf="@+id/retweetedUserIcon"
+        android:layout_toEndOf="@+id/retweetedUserIcon"
         android:textColor="@color/tweetRetweetedUserName" />
 
     <TextView
@@ -62,8 +62,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tweetNameScreenName"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/tweetNameScreenName"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/tweetNameScreenName"
         android:gravity="center"
         android:text="@string/icon_protect"
         android:textColor="@color/icon" />
@@ -73,8 +73,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tweetDate"
-        android:layout_alignLeft="@+id/tweetDate"
-        android:layout_alignParentRight="true"
+        android:layout_alignStart="@+id/tweetDate"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="4dp">
 

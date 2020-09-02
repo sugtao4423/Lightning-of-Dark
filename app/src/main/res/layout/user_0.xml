@@ -11,9 +11,9 @@
             android:id="@+id/userBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:adjustViewBounds="true"
             android:scaleType="fitStart"
             android:src="@raw/empty" />
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textBio"
-            android:layout_alignLeft="@+id/textBio"
+            android:layout_alignStart="@+id/textBio"
             android:layout_marginTop="3dp"
             android:text="@string/loading" />
 
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userBio"
-            android:layout_alignLeft="@+id/userBio"
+            android:layout_alignStart="@+id/userBio"
             android:layout_marginTop="15dp"
             android:text="@string/layout_location"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textLocation"
-            android:layout_alignLeft="@+id/textLocation"
+            android:layout_alignStart="@+id/textLocation"
             android:layout_marginTop="3dp"
             android:text="@string/loading" />
 
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userLocation"
-            android:layout_alignLeft="@+id/userLocation"
+            android:layout_alignStart="@+id/userLocation"
             android:layout_marginTop="15dp"
             android:text="@string/layout_link"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -92,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textLink"
-            android:layout_alignLeft="@+id/textLink"
+            android:layout_alignStart="@+id/textLink"
             android:layout_marginTop="3dp"
             android:text="@string/loading" />
 
@@ -101,9 +101,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userLink"
-            android:layout_alignLeft="@+id/userLink"
+            android:layout_alignStart="@+id/userLink"
             android:layout_marginTop="30dp"
-            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
             android:text="@string/icon_tweetCount" />
 
         <TextView
@@ -111,8 +111,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iconTweetCount"
-            android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/iconTweetCount"
+            android:layout_marginStart="1dp"
+            android:layout_toEndOf="@+id/iconTweetCount"
             android:text="@string/no_text" />
 
         <TextView
@@ -120,9 +120,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iconTweetCount"
-            android:layout_alignLeft="@+id/iconTweetCount"
+            android:layout_alignStart="@+id/iconTweetCount"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
             android:text="@string/icon_favCount" />
 
         <TextView
@@ -130,8 +130,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iconFavoriteCount"
-            android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/iconFavoriteCount"
+            android:layout_marginStart="1dp"
+            android:layout_toEndOf="@+id/iconFavoriteCount"
             android:text="@string/no_text" />
 
         <TextView
@@ -139,9 +139,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iconFavoriteCount"
-            android:layout_alignLeft="@+id/iconFavoriteCount"
+            android:layout_alignStart="@+id/iconFavoriteCount"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
             android:text="@string/icon_followCount" />
 
         <TextView
@@ -149,8 +149,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iconFollowCount"
-            android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/iconFollowCount"
+            android:layout_marginStart="1dp"
+            android:layout_toEndOf="@+id/iconFollowCount"
             android:text="@string/no_text" />
 
         <TextView
@@ -158,9 +158,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iconFollowCount"
-            android:layout_alignLeft="@+id/iconFollowCount"
+            android:layout_alignStart="@+id/iconFollowCount"
             android:layout_marginTop="15dp"
-            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
             android:text="@string/icon_followerCount" />
 
         <TextView
@@ -168,8 +168,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iconFollowerCount"
-            android:layout_marginLeft="1dp"
-            android:layout_toRightOf="@+id/iconFollowerCount"
+            android:layout_marginStart="1dp"
+            android:layout_toEndOf="@+id/iconFollowerCount"
             android:text="@string/no_text" />
 
         <TextView
@@ -177,9 +177,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/iconFollowerCount"
-            android:layout_alignLeft="@+id/iconFollowerCount"
+            android:layout_alignStart="@+id/iconFollowerCount"
             android:layout_marginTop="25dp"
-            android:layout_marginRight="3dp"
+            android:layout_marginEnd="3dp"
             android:layout_marginBottom="20dp"
             android:text="@string/icon_userCreate" />
 
@@ -188,8 +188,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iconCreateDate"
-            android:layout_marginLeft="3dp"
-            android:layout_toRightOf="@+id/iconCreateDate"
+            android:layout_marginStart="3dp"
+            android:layout_toEndOf="@+id/iconCreateDate"
             android:text="@string/no_text" />
 
         <TextView
@@ -197,7 +197,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/userPageSourceIcon"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/layout_bio"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -207,8 +207,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignTop="@+id/userPageSourceIcon"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/userPageSourceIcon"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/userPageSourceIcon"
             android:gravity="center"
             android:textColor="@color/icon"
             android:textSize="34sp" />
@@ -218,8 +218,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignTop="@+id/userPageIsFollow"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/userPageIsFollow"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/userPageIsFollow"
             android:src="@drawable/icon_loading" />
 
         <com.loopj.android.image.SmartImageView
@@ -227,7 +227,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_below="@+id/userBanner"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/icon_loading" />
 
@@ -237,7 +237,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/userName"
             android:layout_alignBottom="@+id/userName"
-            android:layout_toRightOf="@+id/userName"
+            android:layout_toEndOf="@+id/userName"
             android:background="@color/userpageTextBackground"
             android:gravity="center"
             android:padding="4dp"
