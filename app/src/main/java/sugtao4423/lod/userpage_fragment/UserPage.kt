@@ -3,8 +3,7 @@ package sugtao4423.lod.userpage_fragment
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.PagerTabStrip
-import android.support.v4.view.ViewPager
+import kotlinx.android.synthetic.main.userpage.*
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
@@ -25,12 +24,12 @@ class UserPage : LoDBaseActivity() {
         setContentView(R.layout.userpage)
 
         adapter = UserPageFragmentPagerAdapter(supportFragmentManager, this)
-        findViewById<ViewPager>(R.id.userPager).let {
+        userPager.let {
             it.adapter = adapter
             it.offscreenPageLimit = 5
         }
 
-        findViewById<PagerTabStrip>(R.id.userPagerTabStrip).apply {
+        userPagerTabStrip.apply {
             tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }
@@ -68,6 +67,5 @@ class UserPage : LoDBaseActivity() {
         supportActionBar?.title = target.name
         adapter.setTargetUser(target)
     }
-
 
 }

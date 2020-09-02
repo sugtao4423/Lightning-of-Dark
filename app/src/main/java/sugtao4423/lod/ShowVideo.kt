@@ -4,7 +4,7 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.widget.MediaController
-import android.widget.VideoView
+import kotlinx.android.synthetic.main.show_video.*
 import sugtao4423.support.progressdialog.ProgressDialog
 
 class ShowVideo : LoDBaseActivity() {
@@ -31,8 +31,7 @@ class ShowVideo : LoDBaseActivity() {
             return
         }
 
-        val vv = findViewById<VideoView>(R.id.twVideo)
-        vv.setMediaController(MediaController(this))
+        twVideo.setMediaController(MediaController(this))
 
         val progressDialog = ProgressDialog(this).apply {
             setMessage(getString(R.string.loading))
@@ -42,16 +41,16 @@ class ShowVideo : LoDBaseActivity() {
             show()
         }
 
-        vv.setVideoURI(Uri.parse(url))
-        vv.setOnPreparedListener {
+        twVideo.setVideoURI(Uri.parse(url))
+        twVideo.setOnPreparedListener {
             progressDialog.dismiss()
-            vv.start()
+            twVideo.start()
         }
 
-        vv.setOnCompletionListener {
+        twVideo.setOnCompletionListener {
             if (type == TYPE_GIF) {
-                vv.seekTo(0)
-                vv.start()
+                twVideo.seekTo(0)
+                twVideo.start()
             } else {
                 finish()
             }

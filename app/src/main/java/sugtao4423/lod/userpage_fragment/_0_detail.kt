@@ -13,7 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.loopj.android.image.SmartImageView
+import kotlinx.android.synthetic.main.user_0.*
 import sugtao4423.lod.App
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.R
@@ -33,24 +33,6 @@ class _0_detail : Fragment() {
     private lateinit var app: App
     var targetUser: User? = null
 
-    private lateinit var isFollowIcon: TextView
-    private lateinit var userBio: TextView
-    private lateinit var userLocation: TextView
-    private lateinit var userLink: TextView
-    private lateinit var userTweetC: TextView
-    private lateinit var userFavoriteC: TextView
-    private lateinit var userFollowC: TextView
-    private lateinit var userFollowerC: TextView
-    private lateinit var userCreate: TextView
-    private lateinit var sourceIcon: SmartImageView
-    private lateinit var targetIcon: SmartImageView
-
-    private lateinit var userBanner: SmartImageView
-    private lateinit var userIcon: SmartImageView
-    private lateinit var userName: TextView
-    private lateinit var userScreenName: TextView
-    private lateinit var protect: TextView
-
     private var isTextSet = false
     private var isPrepared = false
 
@@ -62,34 +44,16 @@ class _0_detail : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         app = activity!!.applicationContext as App
+        userPageProtected.visibility = View.GONE
 
-        userBanner = view.findViewById(R.id.userBanner)
-        userIcon = view.findViewById(R.id.userIcon)
-        userName = view.findViewById(R.id.userName)
-        userScreenName = view.findViewById(R.id.userScreenName)
-        protect = view.findViewById(R.id.userPageProtected)
-
-        userBio = view.findViewById(R.id.userBio)
-        userLocation = view.findViewById(R.id.userLocation)
-        userLink = view.findViewById(R.id.userLink)
-        userTweetC = view.findViewById(R.id.userTweetCount)
-        userFavoriteC = view.findViewById(R.id.userFavoriteCount)
-        userFollowC = view.findViewById(R.id.userFollowCount)
-        userFollowerC = view.findViewById(R.id.userFollowerCount)
-        userCreate = view.findViewById(R.id.userCreateDate)
-        sourceIcon = view.findViewById(R.id.userPageSourceIcon)
-        targetIcon = view.findViewById(R.id.userPageTargetIcon)
-        isFollowIcon = view.findViewById(R.id.userPageIsFollow)
-
-        protect.visibility = View.GONE
-
-        val tf = app.getFontAwesomeTypeface()
-        protect.typeface = tf
-        (view.findViewById<TextView>(R.id.iconTweetCount)).typeface = tf
-        (view.findViewById<TextView>(R.id.iconFavoriteCount)).typeface = tf
-        (view.findViewById<TextView>(R.id.iconFollowCount)).typeface = tf
-        (view.findViewById<TextView>(R.id.iconFollowerCount)).typeface = tf
-        (view.findViewById<TextView>(R.id.iconCreateDate)).typeface = tf
+        app.getFontAwesomeTypeface().let {
+            userPageProtected.typeface = it
+            iconTweetCount.typeface = it
+            iconFavoriteCount.typeface = it
+            iconFollowCount.typeface = it
+            iconFollowerCount.typeface = it
+            iconCreateDate.typeface = it
+        }
 
         setClick()
         isPrepared = true
@@ -104,7 +68,7 @@ class _0_detail : Fragment() {
 
         targetUser!!.also {
             if (it.isProtected) {
-                protect.visibility = View.VISIBLE
+                userPageProtected.visibility = View.VISIBLE
             }
             userIcon.setImageUrl(it.originalProfileImageURLHttps, null, R.drawable.icon_loading)
             userBanner.setImageUrl(it.profileBannerRetinaURL)
@@ -112,13 +76,13 @@ class _0_detail : Fragment() {
             userScreenName.text = "@${it.screenName}"
 
             if (app.getCurrentAccount().screenName == it.screenName) {
-                sourceIcon.visibility = View.GONE
-                targetIcon.visibility = View.GONE
-                isFollowIcon.visibility = View.GONE
+                userPageSourceIcon.visibility = View.GONE
+                userPageTargetIcon.visibility = View.GONE
+                userPageIsFollow.visibility = View.GONE
             } else {
-                sourceIcon.visibility = View.VISIBLE
-                targetIcon.visibility = View.VISIBLE
-                isFollowIcon.visibility = View.VISIBLE
+                userPageSourceIcon.visibility = View.VISIBLE
+                userPageTargetIcon.visibility = View.VISIBLE
+                userPageIsFollow.visibility = View.VISIBLE
                 followCheck()
                 setSourceAndTargetIcon()
             }
@@ -126,11 +90,11 @@ class _0_detail : Fragment() {
             setLinkTouch(userBio, replaceUrlEntity2ExUrl(it.description, it.descriptionURLEntities))
             setLinkTouch(userLocation, it.location)
             setLinkTouch(userLink, replaceUrlEntity2ExUrl(it.url, it.urlEntity))
-            userTweetC.text = numberFormat(it.statusesCount)
-            userFavoriteC.text = numberFormat(it.favouritesCount)
-            userFollowC.text = numberFormat(it.friendsCount)
-            userFollowerC.text = numberFormat(it.followersCount)
-            userCreate.text = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(it.createdAt)
+            userTweetCount.text = numberFormat(it.statusesCount)
+            userFavoriteCount.text = numberFormat(it.favouritesCount)
+            userFollowCount.text = numberFormat(it.friendsCount)
+            userFollowerCount.text = numberFormat(it.followersCount)
+            userCreateDate.text = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(it.createdAt)
         }
     }
 
@@ -192,8 +156,8 @@ class _0_detail : Fragment() {
 
             override fun onPostExecute(result: Relationship?) {
                 if (result != null) {
-                    isFollowIcon.typeface = app.getFontAwesomeTypeface()
-                    isFollowIcon.text = when {
+                    userPageIsFollow.typeface = app.getFontAwesomeTypeface()
+                    userPageIsFollow.text = when {
                         result.isSourceFollowingTarget && result.isSourceFollowedByTarget -> getString(R.string.icon_followEach)
                         result.isSourceFollowingTarget -> getString(R.string.icon_followFollow)
                         result.isSourceFollowedByTarget -> getString(R.string.icon_followFollower)
@@ -221,8 +185,8 @@ class _0_detail : Fragment() {
 
             override fun onPostExecute(result: Pair<String, String>?) {
                 if (result != null) {
-                    sourceIcon.setImageUrl(result.first, null, R.drawable.icon_loading)
-                    targetIcon.setImageUrl(result.second, null, R.drawable.icon_loading)
+                    userPageSourceIcon.setImageUrl(result.first, null, R.drawable.icon_loading)
+                    userPageTargetIcon.setImageUrl(result.second, null, R.drawable.icon_loading)
                 } else {
                     ShowToast(activity!!.applicationContext, R.string.error_get_user_icon)
                 }

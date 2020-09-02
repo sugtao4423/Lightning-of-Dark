@@ -15,15 +15,12 @@ import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
 import com.twitter.twittertext.Extractor
 import com.twitter.twittertext.TwitterTextParser
+import kotlinx.android.synthetic.main.tweet_activity.*
 import sugtao4423.lod.playing_music_data.MusicDataKey
 import sugtao4423.lod.playing_music_data.PlayingMusicData
 import sugtao4423.lod.tweetlistview.TweetListAdapter
-import sugtao4423.lod.tweetlistview.TweetListView
 import twitter4j.Status
 import twitter4j.StatusUpdate
 import java.io.File
@@ -44,7 +41,6 @@ class TweetActivity : LoDBaseActivity() {
         const val TYPE_EXTERNALTEXT = 6
     }
 
-    private lateinit var tweetText: EditText
     private lateinit var status: Status
     private var type = 0
     private var image: File? = null
@@ -57,11 +53,9 @@ class TweetActivity : LoDBaseActivity() {
 
         setTypeface()
 
-        val tweetAccount = findViewById<TextView>(R.id.tweetAccount)
         tweetAccount.text = "@" + app.getCurrentAccount().screenName
 
-        tweetText = findViewById(R.id.tweetText)
-        text140count(findViewById(R.id.text140))
+        text140count()
 
         if (intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) != null) {
             status = intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) as Status
@@ -72,7 +66,6 @@ class TweetActivity : LoDBaseActivity() {
 
         var setSelectionEnd = false
 
-        val originStatus = findViewById<TweetListView>(R.id.originStatus)
         when (type) {
             TYPE_REPLY, TYPE_REPLYALL, TYPE_QUOTERT -> {
                 supportActionBar?.hide()
@@ -132,13 +125,13 @@ class TweetActivity : LoDBaseActivity() {
 
     private fun setTypeface() {
         val buttons: Array<Button> = arrayOf(
-                findViewById(R.id.tweetButton),
-                findViewById(R.id.imageSelect),
-                findViewById(R.id.tweetClose),
-                findViewById(R.id.cursorStart),
-                findViewById(R.id.cursorEnd),
-                findViewById(R.id.tweetMic),
-                findViewById(R.id.tweetMusic)
+                tweetButton,
+                imageSelect,
+                tweetClose,
+                cursorStart,
+                cursorEnd,
+                tweetMic,
+                tweetMusic
         )
         val tf = app.getFontAwesomeTypeface()
         buttons.map {
@@ -146,7 +139,7 @@ class TweetActivity : LoDBaseActivity() {
         }
     }
 
-    private fun text140count(text140: TextView) {
+    private fun text140count() {
         val defaultTextViewColors = text140.textColors
         val entityColor = ContextCompat.getColor(applicationContext, R.color.twitterBrand)
         val extractor = Extractor()
@@ -186,9 +179,9 @@ class TweetActivity : LoDBaseActivity() {
     }
 
     fun clickTweet(@Suppress("UNUSED_PARAMETER") v: View) {
-        findViewById<Button>(R.id.tweetButton).isEnabled = false
-        findViewById<Button>(R.id.tweetClose).isEnabled = false
-        findViewById<Button>(R.id.imageSelect).isEnabled = false
+        tweetButton.isEnabled = false
+        tweetClose.isEnabled = false
+        imageSelect.isEnabled = false
 
         val text = tweetText.text.toString()
 
@@ -265,7 +258,7 @@ class TweetActivity : LoDBaseActivity() {
                     image = File(getString(0))
                     close()
                 }
-                findViewById<ImageView>(R.id.selectedImage).setImageURI(data.data)
+                selectedImage.setImageURI(data.data)
                 ShowToast(applicationContext, R.string.success_select_picture)
             } catch (e: Exception) {
                 ShowToast(applicationContext, R.string.error_select_picture)

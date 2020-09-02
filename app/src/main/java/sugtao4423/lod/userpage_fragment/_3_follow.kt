@@ -1,6 +1,7 @@
 package sugtao4423.lod.userpage_fragment
 
 import android.os.AsyncTask
+import kotlinx.android.synthetic.main.user_1.*
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import twitter4j.PagableResponseList
@@ -30,8 +31,8 @@ class _3_follow : UserPageListBaseFragment(FragmentType.TYPE_USER) {
                 } else {
                     ShowToast(activity!!.applicationContext, R.string.error_get_follow)
                 }
-                pullToRefresh.isRefreshing = false
-                pullToRefresh.isEnabled = true
+                userPagePull.isRefreshing = false
+                userPagePull.isEnabled = true
             }
         }.execute()
     }

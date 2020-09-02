@@ -2,16 +2,15 @@ package sugtao4423.lod.userpage_fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.user_1.*
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.tweetlistview.EndlessScrollListener
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.tweetlistview.TweetListUserAdapter
-import sugtao4423.lod.tweetlistview.TweetListView
 import twitter4j.User
 
 abstract class UserPageListBaseFragment(private val fragmentType: FragmentType) : Fragment() {
@@ -21,7 +20,6 @@ abstract class UserPageListBaseFragment(private val fragmentType: FragmentType) 
         TYPE_USER
     }
 
-    protected lateinit var pullToRefresh: SwipeRefreshLayout
     protected lateinit var tweetListAdapter: TweetListAdapter
     protected lateinit var tweetListUserAdapter: TweetListUserAdapter
     protected var cursor = -1L
@@ -38,26 +36,24 @@ abstract class UserPageListBaseFragment(private val fragmentType: FragmentType) 
 
         app = activity!!.applicationContext as App
 
-        val list = view.findViewById<TweetListView>(R.id.userPageList)
-
         if (fragmentType == FragmentType.TYPE_TWEET) {
             tweetListAdapter = TweetListAdapter(activity!!)
-            list.adapter = tweetListAdapter
+            userPageList.adapter = tweetListAdapter
         } else {
             tweetListUserAdapter = TweetListUserAdapter(activity!!)
-            list.adapter = tweetListUserAdapter
+            userPageList.adapter = tweetListUserAdapter
         }
 
-        val scrollListener = object : EndlessScrollListener(list.linearLayoutManager) {
+        val scrollListener = object : EndlessScrollListener(userPageList.linearLayoutManager) {
             override fun onLoadMore(currentPage: Int) {
                 if (!isAllLoaded) {
                     loadList()
                 }
             }
         }
-        list.addOnScrollListener(scrollListener)
+        userPageList.addOnScrollListener(scrollListener)
 
-        pullToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.userPagePull).apply {
+        userPagePull.apply {
             setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                     android.R.color.holo_orange_light, android.R.color.holo_red_light)
             setOnRefreshListener {

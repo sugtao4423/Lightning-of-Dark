@@ -10,12 +10,11 @@ import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker
-import android.support.v4.view.PagerTabStrip
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.Window
 import android.widget.EditText
-import com.tenthbit.view.ZoomViewPager
+import kotlinx.android.synthetic.main.show_image_pager.*
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
@@ -41,7 +40,6 @@ class ImageFragmentActivity : LoDBaseActivity() {
     }
 
     private lateinit var adapter: ImagePagerAdapter
-    private lateinit var pager: ZoomViewPager
     private lateinit var urls: Array<String>
     private var type = -1
 
@@ -58,20 +56,20 @@ class ImageFragmentActivity : LoDBaseActivity() {
         val pos = intent.getIntExtra(INTENT_EXTRA_KEY_POSITION, 0)
         adapter = ImagePagerAdapter(supportFragmentManager, urls)
 
-        pager = findViewById<ZoomViewPager>(R.id.showImagePager).also {
+        showImagePager.also {
             it.adapter = adapter
             it.offscreenPageLimit = urls.size - 1
             it.currentItem = pos
         }
 
-        findViewById<PagerTabStrip>(R.id.showImagePagerTabStrip).apply {
+        showImagePagerTabStrip.apply {
             tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }
     }
 
     fun clickImageOption(@Suppress("UNUSED_PARAMETER") v: View) {
-        val imageUrl = urls[pager.currentItem]
+        val imageUrl = urls[showImagePager.currentItem]
         AlertDialog.Builder(this).apply {
             setItems(arrayOf(getString(R.string.open_in_browser), getString(R.string.save))) { _, which ->
                 when (which) {
@@ -94,7 +92,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
                 ShowToast(applicationContext, R.string.url_not_match_pattern_and_dont_save)
                 return
             }
-            val bannerImg = (adapter.getItem(pager.currentItem) as ImageFragment).nonOrigImage
+            val bannerImg = (adapter.getItem(showImagePager.currentItem) as ImageFragment).nonOrigImage
             save(banner.group(Regex.userBannerUrlFileNameGroup), ".jpg", bannerImg, false)
             return
         }
@@ -226,7 +224,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
             return
         }
         if (permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            saveImage(urls[pager.currentItem])
+            saveImage(urls[showImagePager.currentItem])
         } else {
             ShowToast(applicationContext, R.string.permission_rejected)
         }

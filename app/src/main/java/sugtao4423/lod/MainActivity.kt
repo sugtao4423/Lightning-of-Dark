@@ -4,10 +4,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.PagerTabStrip
-import android.support.v4.view.ViewPager
 import android.support.v7.app.AlertDialog
 import android.view.View
+import kotlinx.android.synthetic.main.activity_main.*
 import sugtao4423.icondialog.IconDialog
 import sugtao4423.icondialog.IconItem
 import sugtao4423.lod.main_fragment.Fragment_home
@@ -33,13 +32,13 @@ class MainActivity : LoDBaseActivity() {
 
         val pagerAdapter = MainFragmentPagerAdapter(supportFragmentManager, this)
 
-        findViewById<ViewPager>(R.id.pager).apply {
+        pager.apply {
             adapter = pagerAdapter
             currentItem = 1
             offscreenPageLimit = app.getCurrentAccount().selectListIds.size + 1
         }
 
-        findViewById<PagerTabStrip>(R.id.mainPagerTabStrip).apply {
+        mainPagerTabStrip.apply {
             tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }

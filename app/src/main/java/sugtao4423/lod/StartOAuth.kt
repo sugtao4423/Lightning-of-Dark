@@ -9,11 +9,10 @@ import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.view.View
-import android.widget.TextView
+import kotlinx.android.synthetic.main.oauth.*
 import twitter4j.Twitter
 import twitter4j.TwitterException
 import twitter4j.TwitterFactory
@@ -28,8 +27,6 @@ class StartOAuth : AppCompatActivity() {
     }
 
     private lateinit var app: App
-    private lateinit var customCK: TextInputEditText
-    private lateinit var customCS: TextInputEditText
     private lateinit var ck: String
     private lateinit var cs: String
 
@@ -41,9 +38,8 @@ class StartOAuth : AppCompatActivity() {
         setContentView(R.layout.oauth)
         app = applicationContext as App
 
-        val description = findViewById<TextView>(R.id.oauthDescription)
         getString(R.string.param_oauth_description, CALLBACK_URL).let {
-            description.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            oauthDescription.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
             } else {
                 @Suppress("DEPRECATION")
@@ -51,21 +47,18 @@ class StartOAuth : AppCompatActivity() {
             }
         }
 
-        customCK = findViewById(R.id.editConsumerKey)
-        customCS = findViewById(R.id.editConsumerSecret)
-
-        customCK.setText(app.getCurrentAccount().consumerKey)
-        customCS.setText(app.getCurrentAccount().consumerSecret)
+        editConsumerKey.setText(app.getCurrentAccount().consumerKey)
+        editConsumerSecret.setText(app.getCurrentAccount().consumerSecret)
     }
 
     fun clickOAuth(v: View) {
         v.isEnabled = false
-        if (customCK.text.toString().isEmpty()) {
+        if (editConsumerKey.text.toString().isEmpty()) {
             ck = getString(R.string.CK)
             cs = getString(R.string.CS)
         } else {
-            ck = customCK.text.toString()
-            cs = customCS.text.toString()
+            ck = editConsumerKey.text.toString()
+            cs = editConsumerSecret.text.toString()
         }
 
         val conf = ConfigurationBuilder().run {
