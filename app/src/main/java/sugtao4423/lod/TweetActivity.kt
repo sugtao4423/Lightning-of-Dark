@@ -128,8 +128,6 @@ class TweetActivity : LoDBaseActivity() {
                 tweetButton,
                 imageSelect,
                 tweetClose,
-                cursorStart,
-                cursorEnd,
                 tweetMic,
                 tweetMusic
         )
@@ -245,7 +243,7 @@ class TweetActivity : LoDBaseActivity() {
         if (requestCode == 1919 && resultCode == RESULT_OK) { // 音声入力
             val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             tweetText.setText(tweetText.text.toString() + results[0])
-            clickCursorEnd(null)
+            tweetText.setSelection(tweetText.text.count())
         }
         if (requestCode == 810 && resultCode == RESULT_OK) { // 画像選択
             try {
@@ -264,14 +262,6 @@ class TweetActivity : LoDBaseActivity() {
                 ShowToast(applicationContext, R.string.error_select_picture)
             }
         }
-    }
-
-    fun clickCursorStart(@Suppress("UNUSED_PARAMETER") v: View) {
-        tweetText.setSelection(0)
-    }
-
-    fun clickCursorEnd(@Suppress("UNUSED_PARAMETER") v: View?) {
-        tweetText.setSelection(tweetText.text.count())
     }
 
     fun clickClose(@Suppress("UNUSED_PARAMETER") v: View) {

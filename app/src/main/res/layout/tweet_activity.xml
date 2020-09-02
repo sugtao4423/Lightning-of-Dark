@@ -67,35 +67,6 @@
         android:textSize="22sp" />
 
     <Button
-        android:id="@+id/cursorStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:onClick="clickCursorStart"
-        android:padding="8dp"
-        android:text="@string/icon_cursorStart"
-        android:textColor="@xml/activity_tweet_btn"
-        android:textSize="18sp" />
-
-    <Button
-        android:id="@+id/cursorEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/cursorStart"
-        android:background="@color/transparent"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:onClick="clickCursorEnd"
-        android:padding="8dp"
-        android:text="@string/icon_cursorEnd"
-        android:textColor="@xml/activity_tweet_btn"
-        android:textSize="18sp" />
-
-    <Button
         android:id="@+id/imageSelect"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -113,17 +84,17 @@
         android:id="@+id/tweetAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tweetText"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="5dp" />
+        android:layout_alignParentBottom="true"
+        android:padding="8dp" />
 
     <Button
         android:id="@+id/tweetMic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/cursorEnd"
+        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@+id/tweetAccount"
         android:background="@color/transparent"
         android:minWidth="0dp"
         android:minHeight="0dp"
