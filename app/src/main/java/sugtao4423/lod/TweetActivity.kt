@@ -25,6 +25,8 @@ import sugtao4423.lod.tweetlistview.TweetListAdapter
 import twitter4j.Status
 import twitter4j.StatusUpdate
 import java.io.File
+import kotlin.math.max
+import kotlin.math.round
 
 class TweetActivity : LoDBaseActivity() {
 
@@ -244,6 +246,34 @@ class TweetActivity : LoDBaseActivity() {
                         val chars = tweetText.text.toString().toCharArray()
                         val modified = chars.joinToString("　")
                         tweetText.setText(modified)
+                    }
+                    1 -> {
+                        fun stringSize(text: String): Double {
+                            var len = 0.0
+                            text.toCharArray().forEach { char ->
+                                len += if (char.toString().toByteArray().size <= 1) .5 else 1.0
+                            }
+                            return len
+                        }
+
+                        val lines = tweetText.text.toString().split("\n")
+                        var maxWidthLength = 0.0
+                        lines.forEach {
+                            maxWidthLength = max(maxWidthLength, stringSize((it)))
+                        }
+                        val repeatCount = round(maxWidthLength).toInt()
+
+                        var dead = "＿" + "人".repeat(repeatCount) + "＿\n"
+                        lines.forEach {
+                            val spacers = if (stringSize(it) == maxWidthLength) {
+                                ""
+                            } else {
+                                " ".repeat(((repeatCount - stringSize(it)) * 3).toInt())
+                            }
+                            dead += "＞ ${it}${spacers} ＜\n"
+                        }
+                        dead += "￣" + "Y^".repeat(repeatCount) + "￣"
+                        tweetText.setText(dead)
                     }
                 }
                 tweetText.setSelection(tweetText.text.count())

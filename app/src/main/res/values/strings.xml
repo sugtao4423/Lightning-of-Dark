@@ -167,6 +167,7 @@
     <string name="icon_text">&#xf031;</string>
     <string-array name="text_options">
         <item>お　ま　た　せ</item>
+        <item>突然の死</item>
     </string-array>
 
     <string name="icon_tweetCount">&#xf007;&#xf075;</string>
