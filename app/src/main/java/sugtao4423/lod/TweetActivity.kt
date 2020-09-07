@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker
+import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
@@ -129,7 +130,8 @@ class TweetActivity : LoDBaseActivity() {
                 imageSelect,
                 tweetClose,
                 tweetMic,
-                tweetMusic
+                tweetMusic,
+                tweetTextOption
         )
         val tf = app.getFontAwesomeTypeface()
         buttons.map {
@@ -232,6 +234,22 @@ class TweetActivity : LoDBaseActivity() {
                 .replace("%album%", album)
         tweetText.setText(tweetText.text.toString() + str)
         tweetText.setSelection(tweetText.text.count())
+    }
+
+    fun clickTextOption(@Suppress("UNUSED_PARAMETER") v: View) {
+        AlertDialog.Builder(this).apply {
+            setItems(R.array.text_options) { _, which ->
+                when (which) {
+                    0 -> {
+                        val chars = tweetText.text.toString().toCharArray()
+                        val modified = chars.joinToString("　")
+                        tweetText.setText(modified)
+                    }
+                }
+                tweetText.setSelection(tweetText.text.count())
+            }
+            show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

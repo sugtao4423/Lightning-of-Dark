@@ -164,8 +164,10 @@
     <string name="icon_close">&#xf00d;</string>
     <string name="icon_mic">&#xf130;</string>
     <string name="icon_music">&#xf001;</string>
-    <string name="icon_cursorStart">&#xf048;</string>
-    <string name="icon_cursorEnd">&#xf051;</string>
+    <string name="icon_text">&#xf031;</string>
+    <string-array name="text_options">
+        <item>お　ま　た　せ</item>
+    </string-array>
 
     <string name="icon_tweetCount">&#xf007;&#xf075;</string>
     <string name="icon_favCount">&#xf007;&#xf005;</string>
