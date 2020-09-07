@@ -52,8 +52,8 @@ class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(c
             R.string.param_account_already_exists,
             R.string.param_level_up,
             R.string.param_regex_result_count,
-            R.string.saved,
-            R.string.saved_original
+            R.string.param_saved,
+            R.string.param_saved_original
     )
 
     private val v: View = View.inflate(context, R.layout.custom_toast, null)

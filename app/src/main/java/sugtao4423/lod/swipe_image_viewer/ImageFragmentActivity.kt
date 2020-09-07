@@ -205,7 +205,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
             ShowToast(applicationContext, R.string.error_save)
             return
         }
-        val message = if (isOriginal) R.string.saved_original else R.string.saved
+        val message = if (isOriginal) R.string.param_saved_original else R.string.param_saved
         ShowToast(applicationContext, message, imgPath)
     }
 
