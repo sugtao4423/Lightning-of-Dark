@@ -9,17 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.tenthbit.view.ZoomImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 class ImageFragment : Fragment() {
 
@@ -54,37 +54,26 @@ class ImageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val result = withContext(Dispatchers.IO) {
-                try {
-                    val connection = (URL(url).openConnection() as HttpsURLConnection).apply {
-                        doInput = true
-                        connect()
-                    }
-                    val inputStream = connection.inputStream
-                    val bout = ByteArrayOutputStream()
-                    val buffer = ByteArray(1024)
-                    var len = inputStream.read(buffer)
-                    while (len > 0) {
-                        bout.write(buffer, 0, len)
-                        len = inputStream.read(buffer)
-                    }
-                    nonOrigImage = bout.toByteArray()
-                    val bitmap = BitmapFactory.decodeByteArray(nonOrigImage, 0, nonOrigImage.size)
-                    inputStream.close()
-                    bout.close()
-                    connection.disconnect()
-                    bitmap
-                } catch (e: IOException) {
-                    null
+        val requestListener = object : RequestListener<ByteArray> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<ByteArray>?, isFirstResource: Boolean): Boolean {
+                CoroutineScope(Dispatchers.Main).launch {
+                    ShowToast(context!!.applicationContext, R.string.error_get_image)
                 }
+                return false
             }
-            if (result != null) {
-                progressBar.visibility = View.GONE
-                image.setImageBitmap(result)
-            } else {
-                ShowToast(context!!.applicationContext, R.string.error_get_image)
+
+            override fun onResourceReady(resource: ByteArray?, model: Any?, target: Target<ByteArray>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                CoroutineScope(Dispatchers.Main).launch {
+                    nonOrigImage = resource!!
+                    val bitmap = BitmapFactory.decodeByteArray(resource, 0, resource.size)
+                    image.setImageBitmap(bitmap)
+                    progressBar.visibility = View.GONE
+                }
+                return false
             }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            Glide.with(this@ImageFragment).`as`(ByteArray::class.java).load(url).listener(requestListener).submit().get()
         }
     }
 

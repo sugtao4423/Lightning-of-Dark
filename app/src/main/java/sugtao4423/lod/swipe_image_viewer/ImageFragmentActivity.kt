@@ -13,23 +13,24 @@ import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.Window
 import android.widget.EditText
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.show_image_pager.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.utils.Regex
 import sugtao4423.support.progressdialog.ProgressDialog
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 class ImageFragmentActivity : LoDBaseActivity() {
 
@@ -113,44 +114,33 @@ class ImageFragmentActivity : LoDBaseActivity() {
             return
         }
 
-        CoroutineScope(Dispatchers.Main).launch {
-            val progressDialog = ProgressDialog(this@ImageFragmentActivity).apply {
-                setMessage(getString(R.string.loading))
-                isIndeterminate = false
-                setProgressStyle(ProgressDialog.STYLE_SPINNER)
-                setCancelable(true)
-                show()
-            }
-            val result = withContext(Dispatchers.IO) {
-                try {
-                    val connection = (URL(imgUrl).openConnection() as HttpsURLConnection).apply {
-                        doInput = true
-                        connect()
-                    }
-                    val inputStream = connection.inputStream
-                    val bout = ByteArrayOutputStream()
-                    val buffer = ByteArray(1024)
-                    var len = inputStream.read(buffer)
-                    while (len > 0) {
-                        bout.write(buffer, 0, len)
-                        len = inputStream.read(buffer)
-                    }
-                    val result = bout.toByteArray()
-                    inputStream.close()
-                    bout.close()
-                    connection.disconnect()
-                    result
-                } catch (e: IOException) {
-                    null
+        val progressDialog = ProgressDialog(this@ImageFragmentActivity).apply {
+            setMessage(getString(R.string.loading))
+            isIndeterminate = false
+            setProgressStyle(ProgressDialog.STYLE_SPINNER)
+            setCancelable(true)
+            show()
+        }
+        val requestListener = object : RequestListener<ByteArray> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<ByteArray>?, isFirstResource: Boolean): Boolean {
+                CoroutineScope(Dispatchers.Main).launch {
+                    progressDialog.dismiss()
+                    ShowToast(applicationContext, R.string.error_get_original_image)
                 }
+                return false
             }
-            if (result != null) {
-                progressDialog.dismiss()
-                val isOriginal = (type != TYPE_ICON)
-                save(pattern.group(Regex.twimgUrlFileNameGroup), pattern.group(Regex.twimgUrlDotExtGroup), result, isOriginal)
-            } else {
-                ShowToast(applicationContext, R.string.error_get_original_image)
+
+            override fun onResourceReady(resource: ByteArray?, model: Any?, target: Target<ByteArray>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                CoroutineScope(Dispatchers.Main).launch {
+                    progressDialog.dismiss()
+                    val isOriginal = (type != TYPE_ICON)
+                    save(pattern.group(Regex.twimgUrlFileNameGroup), pattern.group(Regex.twimgUrlDotExtGroup), resource!!, isOriginal)
+                }
+                return false
             }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            Glide.with(this@ImageFragmentActivity).`as`(ByteArray::class.java).load(imgUrl).listener(requestListener).submit().get()
         }
     }
 
