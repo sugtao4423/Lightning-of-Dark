@@ -1,14 +1,15 @@
 package sugtao4423.lod
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.utils.DBUtil
-import twitter4j.ResponseList
 import twitter4j.TwitterException
-import twitter4j.UserList
 
 class Settings_List : LoDBaseActivity() {
 
@@ -70,51 +71,47 @@ class Settings_List : LoDBaseActivity() {
             }
 
             selectList.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                object : AsyncTask<Unit, Unit, ResponseList<UserList>?>() {
-
-                    override fun doInBackground(vararg params: Unit?): ResponseList<UserList>? {
-                        return try {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val result = withContext(Dispatchers.IO) {
+                        try {
                             app.getTwitter().getUserLists(myScreenName)
                         } catch (e: TwitterException) {
                             null
                         }
                     }
-
-                    override fun onPostExecute(result: ResponseList<UserList>?) {
-                        if (result == null) {
-                            ShowToast(activity.applicationContext, R.string.error_get_list)
-                            return
-                        }
-                        val listMap = HashMap<String, Long>()
-                        result.map {
-                            listMap[it.name] = it.id
-                        }
-
-                        val listItems = listMap.keys.toTypedArray()
-                        val checkedList = LinkedHashMap<String, Long>()
-
-                        AlertDialog.Builder(activity).apply {
-                            setTitle(R.string.choose_list)
-                            setMultiChoiceItems(listItems, BooleanArray(listItems.size)) { _, which, isChecked ->
-                                if (isChecked) {
-                                    checkedList[listItems[which]] = listMap[listItems[which]]!!
-                                } else {
-                                    checkedList.remove(listItems[which])
-                                }
-                            }
-                            setPositiveButton(R.string.ok) { _, _ ->
-                                val checkedListNames = checkedList.keys.toTypedArray()
-                                val checkedListIds = checkedList.values.toTypedArray()
-
-                                dbUtil.updateSelectListNames(checkedListNames.joinToString(), myScreenName)
-                                dbUtil.updateSelectListIds(checkedListIds.joinToString(), myScreenName)
-                                app.resetAccount()
-                                setSummary()
-                            }
-                            show()
-                        }
+                    if (result == null) {
+                        ShowToast(activity.applicationContext, R.string.error_get_list)
+                        return@launch
                     }
-                }.execute()
+                    val listMap = HashMap<String, Long>()
+                    result.map {
+                        listMap[it.name] = it.id
+                    }
+
+                    val listItems = listMap.keys.toTypedArray()
+                    val checkedList = LinkedHashMap<String, Long>()
+
+                    AlertDialog.Builder(activity).apply {
+                        setTitle(R.string.choose_list)
+                        setMultiChoiceItems(listItems, BooleanArray(listItems.size)) { _, which, isChecked ->
+                            if (isChecked) {
+                                checkedList[listItems[which]] = listMap[listItems[which]]!!
+                            } else {
+                                checkedList.remove(listItems[which])
+                            }
+                        }
+                        setPositiveButton(R.string.ok) { _, _ ->
+                            val checkedListNames = checkedList.keys.toTypedArray()
+                            val checkedListIds = checkedList.values.toTypedArray()
+
+                            dbUtil.updateSelectListNames(checkedListNames.joinToString(), myScreenName)
+                            dbUtil.updateSelectListIds(checkedListIds.joinToString(), myScreenName)
+                            app.resetAccount()
+                            setSummary()
+                        }
+                        show()
+                    }
+                }
                 false
             }
         }

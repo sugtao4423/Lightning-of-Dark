@@ -3,12 +3,18 @@ package sugtao4423.lod
 import android.app.Application
 import android.content.Context
 import android.graphics.Typeface
-import android.os.AsyncTask
 import android.preference.PreferenceManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.usetime.UseTime
 import sugtao4423.lod.utils.DBUtil
-import twitter4j.*
+import twitter4j.StatusUpdate
+import twitter4j.Twitter
+import twitter4j.TwitterException
+import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
 import twitter4j.conf.ConfigurationBuilder
 import java.util.regex.Pattern
@@ -78,29 +84,26 @@ class App : Application() {
     }
 
     fun updateStatus(status: StatusUpdate) {
-        object : AsyncTask<Unit, Unit, Status?>() {
-
-            override fun doInBackground(vararg params: Unit?): twitter4j.Status? {
-                return try {
+        val scope = CoroutineScope(Dispatchers.Main)
+        scope.launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     getTwitter().updateStatus(status)
                 } catch (e: TwitterException) {
                     null
                 }
             }
-
-            override fun onPostExecute(result: twitter4j.Status?) {
-                if (result != null) {
-                    val exp = getLevel().getRandomExp()
-                    val isLvUp = getLevel().addExp(exp)
-                    ShowToast(applicationContext, R.string.param_success_tweet, exp)
-                    if (isLvUp) {
-                        ShowToast(applicationContext, R.string.param_level_up, getLevel().getLevel())
-                    }
-                } else {
-                    ShowToast(applicationContext, R.string.error_tweet)
+            if (result != null) {
+                val exp = getLevel().getRandomExp()
+                val isLvUp = getLevel().addExp(exp)
+                ShowToast(applicationContext, R.string.param_success_tweet, exp)
+                if (isLvUp) {
+                    ShowToast(applicationContext, R.string.param_level_up, getLevel().getLevel())
                 }
+            } else {
+                ShowToast(applicationContext, R.string.error_tweet)
             }
-        }.execute()
+        }
     }
 
     fun getFontAwesomeTypeface(): Typeface {

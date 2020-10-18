@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Environment
 import android.support.v4.app.ActivityCompat
@@ -15,6 +14,10 @@ import android.view.View
 import android.view.Window
 import android.widget.EditText
 import kotlinx.android.synthetic.main.show_image_pager.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
@@ -110,21 +113,16 @@ class ImageFragmentActivity : LoDBaseActivity() {
             return
         }
 
-        object : AsyncTask<Unit, Unit, ByteArray?>() {
-            private lateinit var progressDialog: ProgressDialog
-
-            override fun onPreExecute() {
-                progressDialog = ProgressDialog(this@ImageFragmentActivity).apply {
-                    setMessage(getString(R.string.loading))
-                    isIndeterminate = false
-                    setProgressStyle(ProgressDialog.STYLE_SPINNER)
-                    setCancelable(true)
-                    show()
-                }
+        CoroutineScope(Dispatchers.Main).launch {
+            val progressDialog = ProgressDialog(this@ImageFragmentActivity).apply {
+                setMessage(getString(R.string.loading))
+                isIndeterminate = false
+                setProgressStyle(ProgressDialog.STYLE_SPINNER)
+                setCancelable(true)
+                show()
             }
-
-            override fun doInBackground(vararg params: Unit?): ByteArray? {
-                return try {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     val connection = (URL(imgUrl).openConnection() as HttpsURLConnection).apply {
                         doInput = true
                         connect()
@@ -146,17 +144,14 @@ class ImageFragmentActivity : LoDBaseActivity() {
                     null
                 }
             }
-
-            override fun onPostExecute(result: ByteArray?) {
-                if (result != null) {
-                    progressDialog.dismiss()
-                    val isOriginal = (type != TYPE_ICON)
-                    save(pattern.group(Regex.twimgUrlFileNameGroup), pattern.group(Regex.twimgUrlDotExtGroup), result, isOriginal)
-                } else {
-                    ShowToast(applicationContext, R.string.error_get_original_image)
-                }
+            if (result != null) {
+                progressDialog.dismiss()
+                val isOriginal = (type != TYPE_ICON)
+                save(pattern.group(Regex.twimgUrlFileNameGroup), pattern.group(Regex.twimgUrlDotExtGroup), result, isOriginal)
+            } else {
+                ShowToast(applicationContext, R.string.error_get_original_image)
             }
-        }.execute()
+        }
     }
 
     private fun save(fileName: String, type: String, byteImage: ByteArray, isOriginal: Boolean) {

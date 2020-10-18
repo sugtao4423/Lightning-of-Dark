@@ -1,9 +1,12 @@
 package sugtao4423.lod.dialog_onclick
 
 import android.content.Context
-import android.os.AsyncTask
 import android.support.v7.app.AlertDialog
 import android.view.View
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
@@ -25,24 +28,20 @@ class Dialog_deletePost(private val status: Status, private val context: Context
     }
 
     private fun deletePost() {
-        object : AsyncTask<Unit, Unit, Boolean>() {
-            override fun doInBackground(vararg params: Unit?): Boolean {
-                return try {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     (context.applicationContext as App).getTwitter().destroyStatus(this@Dialog_deletePost.status.id)
-                    true
                 } catch (e: TwitterException) {
-                    false
+                    null
                 }
             }
-
-            override fun onPostExecute(result: Boolean) {
-                if (result) {
-                    ShowToast(context.applicationContext, R.string.success_post_delete)
-                } else {
-                    ShowToast(context.applicationContext, R.string.error_post_delete)
-                }
+            if (result != null) {
+                ShowToast(context.applicationContext, R.string.success_post_delete)
+            } else {
+                ShowToast(context.applicationContext, R.string.error_post_delete)
             }
-        }.execute()
+        }
     }
 
 }

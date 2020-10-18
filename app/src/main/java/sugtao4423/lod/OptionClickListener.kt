@@ -3,13 +3,16 @@ package sugtao4423.lod
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.os.AsyncTask
 import android.preference.PreferenceManager
 import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.userpage_fragment.UserPage
 import sugtao4423.lod.utils.Utils
 import twitter4j.TwitterException
@@ -42,19 +45,19 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
                 }
                 val loopCount = loopCountStr.toInt()
 
-                var loop = ""
-                for (i in 0 until loopCount) {
-                    loop += loopText
-                    object : AsyncTask<String, Unit, Unit>() {
-                        override fun doInBackground(vararg params: String?) {
-                            try {
-                                (context.applicationContext as App).getTwitter().updateStatus(staticText + params[0])
-                            } catch (e: TwitterException) {
-                            }
+                CoroutineScope(Dispatchers.IO).launch {
+                    var loop = ""
+                    for (i in 0 until loopCount) {
+                        loop += loopText
+                        try {
+                            (context.applicationContext as App).getTwitter().updateStatus(staticText + loop)
+                        } catch (e: TwitterException) {
                         }
-                    }.execute(loop)
+                    }
+                    withContext(Dispatchers.Main) {
+                        ShowToast(context.applicationContext, R.string.param_success_tweet, 0)
+                    }
                 }
-                ShowToast(context.applicationContext, R.string.param_success_tweet, 0)
             }
             show()
         }

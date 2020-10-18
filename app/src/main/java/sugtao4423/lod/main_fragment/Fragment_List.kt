@@ -1,6 +1,5 @@
 package sugtao4423.lod.main_fragment
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -8,14 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.TwitterList
 import sugtao4423.lod.tweetlistview.EndlessScrollListener
 import twitter4j.Paging
-import twitter4j.ResponseList
-import twitter4j.Status
 import twitter4j.TwitterException
 
 class Fragment_List : Fragment() {
@@ -70,10 +71,9 @@ class Fragment_List : Fragment() {
     }
 
     private fun getList() {
-        object : AsyncTask<Unit, Unit, ResponseList<Status>?>() {
-
-            override fun doInBackground(vararg params: Unit?): ResponseList<twitter4j.Status>? {
-                return try {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     if (thisList.isAlreadyLoad) {
                         val lastTweetId = thisList.adapter.data.last().id
                         app.getTwitter().getUserListStatuses(thisList.listId, Paging(1, 50).maxId(lastTweetId - 1))
@@ -84,18 +84,15 @@ class Fragment_List : Fragment() {
                     null
                 }
             }
-
-            override fun onPostExecute(result: ResponseList<twitter4j.Status>?) {
-                if (result != null) {
-                    thisList.adapter.addAll(result)
-                    thisList.isAlreadyLoad = true
-                } else {
-                    ShowToast(activity!!.applicationContext, R.string.error_get_list)
-                }
-                listPull2Refresh.isRefreshing = false
-                listPull2Refresh.isEnabled = true
+            if (result != null) {
+                thisList.adapter.addAll(result)
+                thisList.isAlreadyLoad = true
+            } else {
+                ShowToast(activity!!.applicationContext, R.string.error_get_list)
             }
-        }.execute()
+            listPull2Refresh.isRefreshing = false
+            listPull2Refresh.isEnabled = true
+        }
     }
 
 }

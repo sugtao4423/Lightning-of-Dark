@@ -1,8 +1,6 @@
 package sugtao4423.lod.swipe_image_viewer
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.Gravity
@@ -12,6 +10,10 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import com.tenthbit.view.ZoomImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import java.io.ByteArrayOutputStream
@@ -52,10 +54,9 @@ class ImageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        object : AsyncTask<Unit, Unit, Bitmap?>() {
-
-            override fun doInBackground(vararg params: Unit?): Bitmap? {
-                return try {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     val connection = (URL(url).openConnection() as HttpsURLConnection).apply {
                         doInput = true
                         connect()
@@ -73,21 +74,18 @@ class ImageFragment : Fragment() {
                     inputStream.close()
                     bout.close()
                     connection.disconnect()
-                    return bitmap
+                    bitmap
                 } catch (e: IOException) {
                     null
                 }
             }
-
-            override fun onPostExecute(result: Bitmap?) {
-                if (result != null) {
-                    progressBar.visibility = View.GONE
-                    image.setImageBitmap(result)
-                } else {
-                    ShowToast(context!!.applicationContext, R.string.error_get_image)
-                }
+            if (result != null) {
+                progressBar.visibility = View.GONE
+                image.setImageBitmap(result)
+            } else {
+                ShowToast(context!!.applicationContext, R.string.error_get_image)
             }
-        }.execute()
+        }
     }
 
 }

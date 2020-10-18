@@ -2,7 +2,6 @@ package sugtao4423.lod
 
 import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.preference.CheckBoxPreference
@@ -12,11 +11,13 @@ import android.text.InputType
 import android.widget.EditText
 import android.widget.FrameLayout
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.utils.Utils
 import sugtao4423.support.progressdialog.ProgressDialog
-import twitter4j.ResponseList
 import twitter4j.TwitterException
-import twitter4j.UserList
 import java.io.File
 import java.text.DecimalFormat
 
@@ -78,17 +79,13 @@ class Settings : LoDBaseActivity() {
             }
 
             clearCache.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                object : AsyncTask<Void, Void, Void?>() {
-                    override fun doInBackground(vararg params: Void?): Void? {
+                CoroutineScope(Dispatchers.Main).launch {
+                    withContext(Dispatchers.IO) {
                         Glide.get(context!!).clearDiskCache()
-                        return null
                     }
-
-                    override fun onPostExecute(result: Void?) {
-                        setCacheSize(it)
-                        ShowToast(activity.applicationContext, R.string.cache_deleted)
-                    }
-                }.execute()
+                    setCacheSize(it)
+                    ShowToast(activity.applicationContext, R.string.cache_deleted)
+                }
                 false
             }
         }
@@ -108,99 +105,77 @@ class Settings : LoDBaseActivity() {
 
         private fun createFollowSyncList() {
             val listName = "home_timeline"
-            object : AsyncTask<Unit, Unit, UserList?>() {
-                private lateinit var progressDialog: ProgressDialog
-
-                override fun onPreExecute() {
-                    progressDialog = ProgressDialog(activity!!).apply {
-                        setMessage(getString(R.string.loading))
-                        isIndeterminate = false
-                        setProgressStyle(ProgressDialog.STYLE_SPINNER)
-                        setCancelable(false)
-                        show()
-                    }
+            CoroutineScope(Dispatchers.Main).launch {
+                val progressDialog = ProgressDialog(activity!!).apply {
+                    setMessage(getString(R.string.loading))
+                    isIndeterminate = false
+                    setProgressStyle(ProgressDialog.STYLE_SPINNER)
+                    setCancelable(false)
+                    show()
                 }
-
-                override fun doInBackground(vararg params: Unit?): UserList? {
-                    return try {
+                val result = withContext(Dispatchers.IO) {
+                    try {
                         app.getTwitter().createUserList(listName, false, "user count = follow + me")
                     } catch (e: TwitterException) {
                         null
                     }
                 }
-
-                override fun onPostExecute(result: UserList?) {
-                    progressDialog.dismiss()
-                    if (result == null) {
-                        ShowToast(activity!!.applicationContext, R.string.error_create_list)
-                        return
-                    }
-                    syncFollowList(result.id)
+                progressDialog.dismiss()
+                if (result == null) {
+                    ShowToast(activity!!.applicationContext, R.string.error_create_list)
+                    return@launch
                 }
-
-            }.execute()
+                syncFollowList(result.id)
+            }
         }
 
         private fun selectFollowSyncList() {
-            object : AsyncTask<Unit, Unit, ResponseList<UserList>?>() {
-                private lateinit var progressDialog: ProgressDialog
-
-                override fun onPreExecute() {
-                    progressDialog = ProgressDialog(activity!!).apply {
-                        setMessage(getString(R.string.loading))
-                        isIndeterminate = false
-                        setProgressStyle(ProgressDialog.STYLE_SPINNER)
-                        setCancelable(false)
-                        show()
-                    }
+            CoroutineScope(Dispatchers.Main).launch {
+                val progressDialog = ProgressDialog(activity!!).apply {
+                    setMessage(getString(R.string.loading))
+                    isIndeterminate = false
+                    setProgressStyle(ProgressDialog.STYLE_SPINNER)
+                    setCancelable(false)
+                    show()
                 }
-
-                override fun doInBackground(vararg params: Unit?): ResponseList<UserList>? {
-                    return try {
+                val result = withContext(Dispatchers.IO) {
+                    try {
                         app.getTwitter().getUserLists(app.getTwitter().screenName)
                     } catch (e: TwitterException) {
                         null
                     }
                 }
-
-                override fun onPostExecute(result: ResponseList<UserList>?) {
-                    progressDialog.dismiss()
-                    if (result == null) {
-                        ShowToast(activity!!.applicationContext, R.string.error_get_list)
-                        return
-                    }
-                    val listNames = arrayOfNulls<String>(result.size)
-                    result.mapIndexed { index, userList ->
-                        listNames[index] = userList.name
-                    }
-                    AlertDialog.Builder(activity!!).apply {
-                        setItems(listNames) { _, which ->
-                            val selectedListId = result[which].id
-                            syncFollowList(selectedListId)
-                        }
-                        show()
-                    }
+                progressDialog.dismiss()
+                if (result == null) {
+                    ShowToast(activity!!.applicationContext, R.string.error_get_list)
+                    return@launch
                 }
-            }.execute()
+                val listNames = arrayOfNulls<String>(result.size)
+                result.mapIndexed { index, userList ->
+                    listNames[index] = userList.name
+                }
+                AlertDialog.Builder(activity!!).apply {
+                    setItems(listNames) { _, which ->
+                        val selectedListId = result[which].id
+                        syncFollowList(selectedListId)
+                    }
+                    show()
+                }
+            }
         }
 
         private fun syncFollowList(listId: Long) {
-            object : AsyncTask<Unit, Unit, Boolean>() {
-                private lateinit var progressDialog: ProgressDialog
-
-                override fun onPreExecute() {
-                    progressDialog = ProgressDialog(activity!!).apply {
-                        setMessage(getString(R.string.loading))
-                        isIndeterminate = false
-                        setProgressStyle(ProgressDialog.STYLE_SPINNER)
-                        setCancelable(false)
-                        show()
-                    }
+            CoroutineScope(Dispatchers.Main).launch {
+                val progressDialog = ProgressDialog(activity!!).apply {
+                    setMessage(getString(R.string.loading))
+                    isIndeterminate = false
+                    setProgressStyle(ProgressDialog.STYLE_SPINNER)
+                    setCancelable(false)
+                    show()
                 }
-
-                override fun doInBackground(vararg params: Unit?): Boolean {
+                val result = withContext(Dispatchers.IO) {
                     val twitter = app.getTwitter()
-                    return try {
+                    try {
                         val usersInList = twitter.getUserListMembers(listId, 5000, -1).let {
                             val userIds = LongArray(it.size)
                             it.mapIndexed { index, user ->
@@ -222,17 +197,14 @@ class Settings : LoDBaseActivity() {
                         false
                     }
                 }
-
-                override fun onPostExecute(result: Boolean) {
-                    progressDialog.dismiss()
-                    val message = if (result) R.string.success_follow2list else R.string.error_follow2list
-                    AlertDialog.Builder(activity!!).apply {
-                        setMessage(message)
-                        setPositiveButton(R.string.ok, null)
-                        show()
-                    }
+                progressDialog.dismiss()
+                val message = if (result) R.string.success_follow2list else R.string.error_follow2list
+                AlertDialog.Builder(activity!!).apply {
+                    setMessage(message)
+                    setPositiveButton(R.string.ok, null)
+                    show()
                 }
-            }.execute()
+            }
         }
 
         private fun selectListAsTL(preference: CheckBoxPreference, isCheck: Boolean): Boolean {
@@ -255,39 +227,35 @@ class Settings : LoDBaseActivity() {
                 return true
             }
 
-            val listMap = HashMap<String, Long>()
-            object : AsyncTask<Unit, Unit, ResponseList<UserList>?>() {
-
-                override fun doInBackground(vararg params: Unit?): ResponseList<UserList>? {
-                    return try {
+            CoroutineScope(Dispatchers.Main).launch {
+                val result = withContext(Dispatchers.IO) {
+                    try {
                         app.getTwitter().getUserLists(app.getTwitter().screenName)
                     } catch (e: Exception) {
                         null
                     }
                 }
-
-                override fun onPostExecute(result: ResponseList<UserList>?) {
-                    if (result == null) {
-                        ShowToast(activity!!.applicationContext, R.string.error_get_list)
-                        return
-                    }
-                    result.map {
-                        listMap[it.name] = it.id
-                    }
-                    val listNames = listMap.keys.toTypedArray()
-                    AlertDialog.Builder(activity!!).apply {
-                        setTitle(R.string.choose_list_as_tl)
-                        setCancelable(false)
-                        setItems(listNames) { _, which ->
-                            val selectedListId = listMap[listNames[which]]!!
-                            dbUtil.updateListAsTL(selectedListId, app.getCurrentAccount().screenName)
-                            preference.summary = selectedListId.toString()
-                            app.reloadAccountFromDB()
-                        }
-                        show()
-                    }
+                if (result == null) {
+                    ShowToast(activity!!.applicationContext, R.string.error_get_list)
+                    return@launch
                 }
-            }.execute()
+                val listMap = HashMap<String, Long>()
+                result.map {
+                    listMap[it.name] = it.id
+                }
+                val listNames = listMap.keys.toTypedArray()
+                AlertDialog.Builder(activity!!).apply {
+                    setTitle(R.string.choose_list_as_tl)
+                    setCancelable(false)
+                    setItems(listNames) { _, which ->
+                        val selectedListId = listMap[listNames[which]]!!
+                        dbUtil.updateListAsTL(selectedListId, app.getCurrentAccount().screenName)
+                        preference.summary = selectedListId.toString()
+                        app.reloadAccountFromDB()
+                    }
+                    show()
+                }
+            }
             return true
         }
 
@@ -331,8 +299,8 @@ class Settings : LoDBaseActivity() {
         }
 
         private fun setCacheSize(clearCache: Preference) {
-            object : AsyncTask<Unit, Unit, String>() {
-                private fun getDirSize(dir: File): Long {
+            CoroutineScope(Dispatchers.Main).launch {
+                fun getDirSize(dir: File): Long {
                     var size = 0L
                     dir.listFiles().map {
                         when {
@@ -344,18 +312,15 @@ class Settings : LoDBaseActivity() {
                     return size
                 }
 
-                override fun doInBackground(vararg params: Unit?): String {
+                val result = withContext(Dispatchers.IO) {
                     DecimalFormat("#.#").let {
                         it.minimumFractionDigits = 2
                         it.maximumFractionDigits = 2
-                        return it.format(getDirSize(context!!.cacheDir).toDouble() / 1024 / 1024)
+                        it.format(getDirSize(context!!.cacheDir).toDouble() / 1024 / 1024)
                     }
                 }
-
-                override fun onPostExecute(result: String?) {
-                    clearCache.summary = getString(R.string.param_cache_num_megabyte, result)
-                }
-            }.execute()
+                clearCache.summary = getString(R.string.param_cache_num_megabyte, result)
+            }
         }
 
     }

@@ -1,9 +1,12 @@
 package sugtao4423.lod.userpage_fragment
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import kotlinx.android.synthetic.main.userpage.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
@@ -42,25 +45,21 @@ class UserPage : LoDBaseActivity() {
             }
         }
 
-        object : AsyncTask<Unit, Unit, User?>() {
-
-            override fun doInBackground(vararg params: Unit?): User? {
-                return try {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     app.getTwitter().showUser(intent.getStringExtra(INTENT_EXTRA_KEY_USER_SCREEN_NAME))
                 } catch (e: TwitterException) {
                     null
                 }
             }
-
-            override fun onPostExecute(result: User?) {
-                if (result != null) {
-                    setTargetUser(result)
-                } else {
-                    ShowToast(applicationContext, R.string.error_get_user_detail)
-                    finish()
-                }
+            if (result != null) {
+                setTargetUser(result)
+            } else {
+                ShowToast(applicationContext, R.string.error_get_user_detail)
+                finish()
             }
-        }.execute()
+        }
     }
 
     private fun setTargetUser(target: User) {

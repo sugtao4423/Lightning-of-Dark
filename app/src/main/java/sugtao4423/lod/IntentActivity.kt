@@ -2,15 +2,17 @@ package sugtao4423.lod
 
 import android.content.Intent
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.tweetlistview.TweetListView
 import sugtao4423.lod.userpage_fragment.UserPage
 import sugtao4423.lod.utils.Regex
-import twitter4j.Status
 import twitter4j.TwitterException
 
 class IntentActivity : AppCompatActivity() {
@@ -111,35 +113,32 @@ class IntentActivity : AppCompatActivity() {
     }
 
     private fun showStatus(tweetId: Long) {
-        object : AsyncTask<Long, Unit, Status?>() {
-
-            override fun doInBackground(vararg params: Long?): twitter4j.Status? {
-                return try {
+        val scope = CoroutineScope(Dispatchers.Main)
+        scope.launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     app.getTwitter().showStatus(tweetId)
                 } catch (e: TwitterException) {
                     null
                 }
             }
-
-            override fun onPostExecute(result: twitter4j.Status?) {
-                if (result != null) {
-                    val l = TweetListView(this@IntentActivity)
-                    val adapter = TweetListAdapter(this@IntentActivity)
-                    adapter.add(result)
-                    l.adapter = adapter
-                    AlertDialog.Builder(this@IntentActivity).apply {
-                        setView(l)
-                        setOnDismissListener {
-                            finish()
-                        }
-                        window.setDimAmount(0f)
-                        show()
+            if (result != null) {
+                val l = TweetListView(this@IntentActivity)
+                val adapter = TweetListAdapter(this@IntentActivity)
+                adapter.add(result)
+                l.adapter = adapter
+                AlertDialog.Builder(this@IntentActivity).apply {
+                    setView(l)
+                    setOnDismissListener {
+                        finish()
                     }
-                } else {
-                    ShowToast(applicationContext, R.string.error_get_status)
+                    window.setDimAmount(0f)
+                    show()
                 }
+            } else {
+                ShowToast(applicationContext, R.string.error_get_status)
             }
-        }.execute()
+        }
     }
 
 }

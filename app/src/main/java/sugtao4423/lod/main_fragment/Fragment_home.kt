@@ -1,6 +1,5 @@
 package sugtao4423.lod.main_fragment
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -8,13 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.tweetlistview.EndlessScrollListener
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import twitter4j.Paging
-import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.TwitterException
 
@@ -51,17 +53,15 @@ class Fragment_home : Fragment() {
     }
 
     private fun loadTimeLine() {
-        object : AsyncTask<Unit, Unit, ResponseList<Status>?>() {
-
-            override fun doInBackground(vararg params: Unit?): ResponseList<twitter4j.Status>? {
-                val paging = if (adapter.itemCount > 0) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                val paging = Paging(1, 50)
+                if (adapter.itemCount > 0) {
                     val tweetId = adapter.data.last().id
-                    Paging(1, 50).maxId(tweetId - 1)
-                } else {
-                    Paging(1, 50)
+                    paging.maxId(tweetId - 1)
                 }
 
-                return try {
+                try {
                     if (listAsTL > 0) {
                         app.getTwitter().getUserListStatuses(listAsTL, paging)
                     } else {
@@ -71,20 +71,17 @@ class Fragment_home : Fragment() {
                     null
                 }
             }
-
-            override fun onPostExecute(result: ResponseList<twitter4j.Status>?) {
-                if (result != null) {
-                    if (adapter.itemCount <= 0) {
-                        app.latestTweetId = result[0].id
-                    }
-                    adapter.addAll(result)
-                } else {
-                    ShowToast(activity!!.applicationContext, R.string.error_get_timeline)
+            if (result != null) {
+                if (adapter.itemCount <= 0) {
+                    app.latestTweetId = result[0].id
                 }
-                listPull2Refresh.isRefreshing = false
-                listPull2Refresh.isEnabled = true
+                adapter.addAll(result)
+            } else {
+                ShowToast(activity!!.applicationContext, R.string.error_get_timeline)
             }
-        }.execute()
+            listPull2Refresh.isRefreshing = false
+            listPull2Refresh.isEnabled = true
+        }
     }
 
     fun insert(status: Status) {

@@ -1,7 +1,9 @@
 package sugtao4423.lod.usetime
 
 import android.content.Context
-import android.os.AsyncTask
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,11 +22,9 @@ class UseTime(context: Context) {
 
     fun stop() {
         val useTime = System.currentTimeMillis() - startTime
-        object : AsyncTask<Unit, Unit, Unit>() {
-            override fun doInBackground(vararg params: Unit?) {
-                save(useTime)
-            }
-        }.execute()
+        CoroutineScope(Dispatchers.IO).launch {
+            save(useTime)
+        }
     }
 
     fun getTodayUseTimeInMillis(): Int {

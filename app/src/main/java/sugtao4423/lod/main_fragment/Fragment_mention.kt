@@ -1,6 +1,5 @@
 package sugtao4423.lod.main_fragment
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -8,6 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
@@ -60,10 +63,9 @@ class Fragment_mention : Fragment() {
     }
 
     private fun loadMention() {
-        object : AsyncTask<Unit, Unit, ResponseList<Status>?>() {
-
-            override fun doInBackground(vararg params: Unit?): ResponseList<twitter4j.Status>? {
-                return try {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     if (adapter.itemCount > 0) {
                         val tweetId = adapter.data.last().id
                         app.getTwitter().getMentionsTimeline(Paging(1, 50).maxId(tweetId - 1))
@@ -74,17 +76,14 @@ class Fragment_mention : Fragment() {
                     null
                 }
             }
-
-            override fun onPostExecute(result: ResponseList<twitter4j.Status>?) {
-                if (result != null) {
-                    addAll(result)
-                } else {
-                    ShowToast(activity!!.applicationContext, R.string.error_get_mention)
-                }
-                listPull2Refresh.isRefreshing = false
-                listPull2Refresh.isEnabled = true
+            if (result != null) {
+                addAll(result)
+            } else {
+                ShowToast(activity!!.applicationContext, R.string.error_get_mention)
             }
-        }.execute()
+            listPull2Refresh.isRefreshing = false
+            listPull2Refresh.isEnabled = true
+        }
     }
 
     fun insert(status: Status) {

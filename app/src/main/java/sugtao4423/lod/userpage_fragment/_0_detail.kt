@@ -2,7 +2,6 @@ package sugtao4423.lod.userpage_fragment
 
 import android.content.Intent
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.SpannableString
@@ -15,13 +14,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.user_0.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
 import sugtao4423.lod.utils.Regex
-import twitter4j.Relationship
 import twitter4j.TwitterException
 import twitter4j.URLEntity
 import twitter4j.User
@@ -147,54 +149,44 @@ class _0_detail : Fragment() {
     }
 
     private fun followCheck() {
-        object : AsyncTask<Unit, Unit, Relationship?>() {
-
-            override fun doInBackground(vararg params: Unit?): Relationship? {
-                return try {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     app.getTwitter().showFriendship(app.getCurrentAccount().screenName, targetUser!!.screenName)
                 } catch (e: TwitterException) {
                     null
                 }
             }
-
-            override fun onPostExecute(result: Relationship?) {
-                if (result != null) {
-                    userPageIsFollow.typeface = app.getFontAwesomeTypeface()
-                    userPageIsFollow.text = when {
-                        result.isSourceFollowingTarget && result.isSourceFollowedByTarget -> getString(R.string.icon_followEach)
-                        result.isSourceFollowingTarget -> getString(R.string.icon_followFollow)
-                        result.isSourceFollowedByTarget -> getString(R.string.icon_followFollower)
-                        result.isSourceBlockingTarget -> getString(R.string.icon_followBlock)
-                        else -> ""
-                    }
+            if (result != null) {
+                userPageIsFollow.typeface = app.getFontAwesomeTypeface()
+                userPageIsFollow.text = when {
+                    result.isSourceFollowingTarget && result.isSourceFollowedByTarget -> getString(R.string.icon_followEach)
+                    result.isSourceFollowingTarget -> getString(R.string.icon_followFollow)
+                    result.isSourceFollowedByTarget -> getString(R.string.icon_followFollower)
+                    result.isSourceBlockingTarget -> getString(R.string.icon_followBlock)
+                    else -> ""
                 }
             }
-        }.execute()
+        }
     }
 
     private fun setSourceAndTargetIcon() {
-        object : AsyncTask<Unit, Unit, Pair<String, String>?>() {
-
-            override fun doInBackground(vararg params: Unit?): Pair<String, String>? {
-                return try {
-                    Pair(
-                            app.getTwitter().verifyCredentials().biggerProfileImageURLHttps,
-                            targetUser!!.biggerProfileImageURLHttps
-                    )
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
+                    Pair(app.getTwitter().verifyCredentials().biggerProfileImageURLHttps,
+                            targetUser!!.biggerProfileImageURLHttps)
                 } catch (e: TwitterException) {
                     null
                 }
             }
-
-            override fun onPostExecute(result: Pair<String, String>?) {
-                if (result != null) {
-                    Glide.with(this@_0_detail).load(result.first).placeholder(R.drawable.icon_loading).into(userPageSourceIcon)
-                    Glide.with(this@_0_detail).load(result.second).placeholder(R.drawable.icon_loading).into(userPageTargetIcon)
-                } else {
-                    ShowToast(activity!!.applicationContext, R.string.error_get_user_icon)
-                }
+            if (result != null) {
+                Glide.with(this@_0_detail).load(result.first).placeholder(R.drawable.icon_loading).into(userPageSourceIcon)
+                Glide.with(this@_0_detail).load(result.second).placeholder(R.drawable.icon_loading).into(userPageTargetIcon)
+            } else {
+                ShowToast(activity!!.applicationContext, R.string.error_get_user_icon)
             }
-        }.execute()
+        }
     }
 
     private fun setClick() {

@@ -5,7 +5,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -13,10 +12,13 @@ import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.view.View
 import kotlinx.android.synthetic.main.oauth.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import twitter4j.Twitter
 import twitter4j.TwitterException
 import twitter4j.TwitterFactory
-import twitter4j.auth.AccessToken
 import twitter4j.auth.RequestToken
 import twitter4j.conf.ConfigurationBuilder
 
@@ -68,25 +70,21 @@ class StartOAuth : AppCompatActivity() {
         }
         twitter = TwitterFactory(conf).instance
 
-        object : AsyncTask<Unit, Unit, Boolean>() {
-
-            override fun doInBackground(vararg params: Unit?): Boolean {
-                return try {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     rt = twitter.getOAuthRequestToken(CALLBACK_URL)
                     true
                 } catch (e: TwitterException) {
                     false
                 }
             }
-
-            override fun onPostExecute(result: Boolean) {
-                if (result) {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(rt.authenticationURL)))
-                } else {
-                    ShowToast(applicationContext, R.string.error_get_request_token)
-                }
+            if (result) {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(rt.authenticationURL)))
+            } else {
+                ShowToast(applicationContext, R.string.error_get_request_token)
             }
-        }.execute()
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -97,47 +95,43 @@ class StartOAuth : AppCompatActivity() {
 
         val verifier = intent.data!!.getQueryParameter("oauth_verifier")
 
-        object : AsyncTask<Unit, Unit, AccessToken?>() {
-
-            override fun doInBackground(vararg params: Unit?): AccessToken? {
-                return try {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
                     twitter.getOAuthAccessToken(rt, verifier)
                 } catch (e: TwitterException) {
                     null
                 }
             }
-
-            override fun onPostExecute(result: AccessToken?) {
-                if (result != null) {
-                    val dbUtil = app.getAccountDBUtil()
-                    if (dbUtil.existsAccount(result.screenName)) {
-                        ShowToast(applicationContext, R.string.param_account_already_exists, result.screenName)
-                        finish()
-                        return
-                    }
-                    PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                            .edit()
-                            .putString(Keys.SCREEN_NAME, result.screenName)
-                            .apply()
-
-                    if (ck == getString(R.string.CK)) {
-                        ck = ""
-                    }
-                    if (cs == getString(R.string.CS)) {
-                        cs = ""
-                    }
-
-                    val account = Account(result.screenName, ck, cs, result.token, result.tokenSecret)
-                    dbUtil.addAccount(account)
-                    app.resetAccount()
-                    ShowToast(applicationContext, R.string.success_add_account)
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
-                } else {
-                    ShowToast(applicationContext, R.string.error_get_access_token)
+            if (result != null) {
+                val dbUtil = app.getAccountDBUtil()
+                if (dbUtil.existsAccount(result.screenName)) {
+                    ShowToast(applicationContext, R.string.param_account_already_exists, result.screenName)
+                    finish()
+                    return@launch
                 }
-                finish()
+                PreferenceManager.getDefaultSharedPreferences(applicationContext)
+                        .edit()
+                        .putString(Keys.SCREEN_NAME, result.screenName)
+                        .apply()
+
+                if (ck == getString(R.string.CK)) {
+                    ck = ""
+                }
+                if (cs == getString(R.string.CS)) {
+                    cs = ""
+                }
+
+                val account = Account(result.screenName, ck, cs, result.token, result.tokenSecret)
+                dbUtil.addAccount(account)
+                app.resetAccount()
+                ShowToast(applicationContext, R.string.success_add_account)
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+            } else {
+                ShowToast(applicationContext, R.string.error_get_access_token)
             }
-        }.execute()
+            finish()
+        }
     }
 
     fun clickOAuthDescription(@Suppress("UNUSED_PARAMETER") v: View) {
