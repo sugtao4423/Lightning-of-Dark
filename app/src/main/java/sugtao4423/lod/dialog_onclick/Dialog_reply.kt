@@ -1,7 +1,6 @@
 package sugtao4423.lod.dialog_onclick
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -44,12 +43,12 @@ class Dialog_reply(private val status: Status, private val context: Context, pri
                 IconItem(context.getString(R.string.icon_replyAll)[0], black, context.getString(R.string.reply_all))
         )
         IconDialog(context).apply {
-            setItems(items, DialogInterface.OnClickListener { _, which ->
+            setItems(items) { _, which ->
                 when (which) {
                     0 -> reply()
                     1 -> replyAll()
                 }
-            })
+            }
             show()
         }
     }
