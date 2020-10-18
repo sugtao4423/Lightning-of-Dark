@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.view.View
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import sugtao4423.icondialog.IconDialog
 import sugtao4423.icondialog.IconItem
@@ -14,7 +15,6 @@ import sugtao4423.lod.main_fragment.Fragment_mention
 import sugtao4423.lod.main_fragment.MainFragmentPagerAdapter
 import twitter4j.ResponseList
 import twitter4j.Status
-import java.io.File
 
 class MainActivity : LoDBaseActivity() {
 
@@ -116,19 +116,11 @@ class MainActivity : LoDBaseActivity() {
             resetFlag = false
             startActivity(Intent(this, MainActivity::class.java))
         }
-        clearThumbnailCache()
+        clearImageMemoryCache()
     }
 
-    private fun clearThumbnailCache() {
-        val cache = File("${cacheDir.absolutePath}/web_image_cache/")
-        if (!cache.exists()) {
-            return
-        }
-        cache.listFiles().map {
-            if (it.name.startsWith("https+pbs+twimg+com+media+")) {
-                it.delete()
-            }
-        }
+    private fun clearImageMemoryCache() {
+        Glide.get(this).clearMemory()
     }
 
 }

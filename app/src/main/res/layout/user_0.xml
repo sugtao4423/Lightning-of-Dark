@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.loopj.android.image.SmartImageView
+        <ImageView
             android:id="@+id/userBanner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             android:scaleType="fitStart"
             android:src="@raw/empty" />
 
-        <com.loopj.android.image.SmartImageView
+        <ImageView
             android:id="@+id/userIcon"
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -213,7 +213,7 @@
             android:textColor="@color/icon"
             android:textSize="34sp" />
 
-        <com.loopj.android.image.SmartImageView
+        <ImageView
             android:id="@+id/userPageTargetIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -222,7 +222,7 @@
             android:layout_toEndOf="@+id/userPageIsFollow"
             android:src="@drawable/icon_loading" />
 
-        <com.loopj.android.image.SmartImageView
+        <ImageView
             android:id="@+id/userPageSourceIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"

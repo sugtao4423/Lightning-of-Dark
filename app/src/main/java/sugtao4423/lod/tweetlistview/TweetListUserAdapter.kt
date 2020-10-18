@@ -8,9 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.HorizontalScrollView
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.loopj.android.image.SmartImageView
+import com.bumptech.glide.Glide
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.userpage_fragment.UserPage
@@ -49,7 +50,7 @@ class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<
             holder.protect.visibility = View.GONE
         }
 
-        holder.icon.setImageUrl(item.biggerProfileImageURLHttps, null, R.drawable.icon_loading)
+        Glide.with(context).load(item.biggerProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.icon)
         holder.nameSn.text = item.name + " - @" + item.screenName
         holder.content.text = item.description
         val userCountsText = context.getString(R.string.param_user_count_detail,
@@ -92,8 +93,8 @@ class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: SmartImageView = itemView.findViewById(R.id.tweetIcon)
-        val rtIcon: SmartImageView = itemView.findViewById(R.id.retweetedUserIcon)
+        val icon: ImageView = itemView.findViewById(R.id.tweetIcon)
+        val rtIcon: ImageView = itemView.findViewById(R.id.retweetedUserIcon)
         val nameSn: TextView = itemView.findViewById(R.id.tweetNameScreenName)
         val content: TextView = itemView.findViewById(R.id.tweetText)
         val date: TextView = itemView.findViewById(R.id.tweetDate)

@@ -11,12 +11,13 @@ import android.support.v7.preference.PreferenceFragmentCompat
 import android.text.InputType
 import android.widget.EditText
 import android.widget.FrameLayout
-import com.loopj.android.image.WebImageCache
+import com.bumptech.glide.Glide
 import sugtao4423.lod.utils.Utils
 import sugtao4423.support.progressdialog.ProgressDialog
 import twitter4j.ResponseList
 import twitter4j.TwitterException
 import twitter4j.UserList
+import java.io.File
 import java.text.DecimalFormat
 
 class Settings : LoDBaseActivity() {
@@ -77,9 +78,17 @@ class Settings : LoDBaseActivity() {
             }
 
             clearCache.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                WebImageCache(activity.applicationContext).clear()
-                setCacheSize(it)
-                ShowToast(activity.applicationContext, R.string.cache_deleted)
+                object : AsyncTask<Void, Void, Void?>() {
+                    override fun doInBackground(vararg params: Void?): Void? {
+                        Glide.get(context!!).clearDiskCache()
+                        return null
+                    }
+
+                    override fun onPostExecute(result: Void?) {
+                        setCacheSize(it)
+                        ShowToast(activity.applicationContext, R.string.cache_deleted)
+                    }
+                }.execute()
                 false
             }
         }
@@ -323,11 +332,23 @@ class Settings : LoDBaseActivity() {
 
         private fun setCacheSize(clearCache: Preference) {
             object : AsyncTask<Unit, Unit, String>() {
+                private fun getDirSize(dir: File): Long {
+                    var size = 0L
+                    dir.listFiles().map {
+                        when {
+                            it == null -> return@map
+                            it.isDirectory -> size += getDirSize(it)
+                            it.isFile -> size += it.length()
+                        }
+                    }
+                    return size
+                }
+
                 override fun doInBackground(vararg params: Unit?): String {
                     DecimalFormat("#.#").let {
                         it.minimumFractionDigits = 2
                         it.maximumFractionDigits = 2
-                        return it.format(WebImageCache(activity!!.applicationContext).getCacheSize().toDouble() / 1024 / 1024)
+                        return it.format(getDirSize(context!!.cacheDir) / 1024 / 1024)
                     }
                 }
 

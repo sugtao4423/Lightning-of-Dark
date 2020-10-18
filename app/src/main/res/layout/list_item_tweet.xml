@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants">
 
-    <com.loopj.android.image.SmartImageView
+    <ImageView
         android:id="@+id/tweetIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -40,7 +40,7 @@
         android:layout_marginTop="2sp"
         android:textColor="@color/tweetDate" />
 
-    <com.loopj.android.image.SmartImageView
+    <ImageView
         android:id="@+id/retweetedUserIcon"
         android:layout_width="15dp"
         android:layout_height="15dp"

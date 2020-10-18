@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.loopj.android.image.SmartImageView
+import com.bumptech.glide.Glide
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowVideo
@@ -66,7 +66,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
             holder.rtSn.visibility = View.VISIBLE
             val date = statusDateFormat.format(Date((item.retweetedStatus.id shr 22) + 1288834974657L))
             holder.date.text = "$date  Retweeted by "
-            holder.rtIcon.setImageUrl(item.user.profileImageURLHttps, null, R.drawable.icon_loading)
+            Glide.with(context).load(item.user.profileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.rtIcon)
             holder.rtSn.text = "@" + item.user.screenName
         } else {
             holder.rtIcon.visibility = View.GONE
@@ -77,7 +77,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
 
         holder.nameSn.text = origStatus.user.name + " - @" + origStatus.user.screenName
         holder.content.text = origStatus.text
-        holder.icon.setImageUrl(origStatus.user.biggerProfileImageURLHttps, null, R.drawable.icon_loading)
+        Glide.with(context).load(origStatus.user.biggerProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.icon)
 
         holder.nameSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().userNameFontSize)
         holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().contentFontSize)
@@ -108,7 +108,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                 if (holder.tweetImagesLayout.childCount != 0) {
                     params.setMargins(8, 0, 0, 0)
                 }
-                val child = SmartImageView(context).apply {
+                val child = ImageView(context).apply {
                     layoutParams = params
                     maxHeight = 200
                     adjustViewBounds = true
@@ -130,7 +130,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                     holder.tweetImagesLayout.addView(fl)
 
                     val videoUrl = Utils.getHiBitrateVideoUrl(mentitys)
-                    child.setImageUrl(media.mediaURLHttps + ":small", null, R.drawable.icon_loading)
+                    Glide.with(context).load(media.mediaURLHttps + ":small").placeholder(R.drawable.icon_loading).into(child)
                     child.setOnClickListener {
                         val intent = Intent(context, ShowVideo::class.java).apply {
                             val videoType = if (Utils.isGif(media)) ShowVideo.TYPE_GIF else ShowVideo.TYPE_VIDEO
@@ -141,7 +141,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                     }
                 } else {
                     holder.tweetImagesLayout.addView(child)
-                    child.setImageUrl(media.mediaURLHttps + ":small", null, R.drawable.icon_loading)
+                    Glide.with(context).load(media.mediaURLHttps + ":small").placeholder(R.drawable.icon_loading).into(child)
                     val urls = arrayOfNulls<String>(mentitys.size)
                     mentitys.mapIndexed { j, it ->
                         urls[j] = it.mediaURLHttps
@@ -195,8 +195,8 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: SmartImageView = itemView.findViewById(R.id.tweetIcon)
-        val rtIcon: SmartImageView = itemView.findViewById(R.id.retweetedUserIcon)
+        val icon: ImageView = itemView.findViewById(R.id.tweetIcon)
+        val rtIcon: ImageView = itemView.findViewById(R.id.retweetedUserIcon)
         val nameSn: TextView = itemView.findViewById(R.id.tweetNameScreenName)
         val content: TextView = itemView.findViewById(R.id.tweetText)
         val date: TextView = itemView.findViewById(R.id.tweetDate)

@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.user_0.*
 import sugtao4423.lod.App
 import sugtao4423.lod.ChromeIntent
@@ -70,8 +71,8 @@ class _0_detail : Fragment() {
             if (it.isProtected) {
                 userPageProtected.visibility = View.VISIBLE
             }
-            userIcon.setImageUrl(it.originalProfileImageURLHttps, null, R.drawable.icon_loading)
-            userBanner.setImageUrl(it.profileBannerRetinaURL)
+            Glide.with(this).load(it.originalProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(userIcon)
+            Glide.with(this).load(it.profileBannerRetinaURL).into(userBanner)
             userName.text = it.name
             userScreenName.text = "@${it.screenName}"
 
@@ -185,8 +186,8 @@ class _0_detail : Fragment() {
 
             override fun onPostExecute(result: Pair<String, String>?) {
                 if (result != null) {
-                    userPageSourceIcon.setImageUrl(result.first, null, R.drawable.icon_loading)
-                    userPageTargetIcon.setImageUrl(result.second, null, R.drawable.icon_loading)
+                    Glide.with(this@_0_detail).load(result.first).placeholder(R.drawable.icon_loading).into(userPageSourceIcon)
+                    Glide.with(this@_0_detail).load(result.second).placeholder(R.drawable.icon_loading).into(userPageTargetIcon)
                 } else {
                     ShowToast(activity!!.applicationContext, R.string.error_get_user_icon)
                 }
