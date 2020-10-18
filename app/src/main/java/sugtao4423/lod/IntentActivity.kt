@@ -113,8 +113,7 @@ class IntentActivity : AppCompatActivity() {
     }
 
     private fun showStatus(tweetId: Long) {
-        val scope = CoroutineScope(Dispatchers.Main)
-        scope.launch {
+        CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
                     app.getTwitter().showStatus(tweetId)

@@ -84,8 +84,7 @@ class App : Application() {
     }
 
     fun updateStatus(status: StatusUpdate) {
-        val scope = CoroutineScope(Dispatchers.Main)
-        scope.launch {
+        CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
                     getTwitter().updateStatus(status)
