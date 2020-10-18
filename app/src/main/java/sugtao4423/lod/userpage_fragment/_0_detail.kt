@@ -72,7 +72,9 @@ class _0_detail : Fragment() {
                 userPageProtected.visibility = View.VISIBLE
             }
             Glide.with(this).load(it.originalProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(userIcon)
-            Glide.with(this).load(it.profileBannerRetinaURL).into(userBanner)
+            if (!it.profileBannerRetinaURL.isNullOrEmpty()) {
+                Glide.with(this).load(it.profileBannerRetinaURL).placeholder(R.drawable.user_header_empty).into(userBanner)
+            }
             userName.text = it.name
             userScreenName.text = "@${it.screenName}"
 

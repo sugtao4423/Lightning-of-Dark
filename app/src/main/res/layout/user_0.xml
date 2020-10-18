@@ -15,8 +15,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:adjustViewBounds="true"
-            android:scaleType="fitStart"
-            android:src="@raw/empty" />
+            android:scaleType="fitXY"
+            android:src="@drawable/user_header_empty" />
 
         <ImageView
             android:id="@+id/userIcon"
