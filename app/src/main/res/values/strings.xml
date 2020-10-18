@@ -75,6 +75,14 @@
     <string name="error_file_is_already_exists">エラー: ファイルが既に存在しています</string>
     <string name="overwrite">上書き</string>
     <string name="save_as">ファイル名を指定して保存</string>
+    <string-array name="image_option">
+        <item>@string/open_in_browser</item>
+        <item>@string/save</item>
+    </string-array>
+    <string-array name="image_option_orig">
+        <item>オリジナル画質をブラウザで開く</item>
+        <item>@string/save</item>
+    </string-array>
 
     <string name="tweet_bomb">ツイート爆撃</string>
     <string name="search_user">ユーザー検索</string>

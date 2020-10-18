@@ -70,10 +70,15 @@ class ImageFragmentActivity : LoDBaseActivity() {
 
     fun clickImageOption(@Suppress("UNUSED_PARAMETER") v: View) {
         val imageUrl = urls[showImagePager.currentItem]
+        val existsOriginal = (type != TYPE_BANNER && type != TYPE_ICON)
+        val listItemRes = if (existsOriginal) R.array.image_option_orig else R.array.image_option
         AlertDialog.Builder(this).apply {
-            setItems(arrayOf(getString(R.string.open_in_browser), getString(R.string.save))) { _, which ->
+            setItems(listItemRes) { _, which ->
                 when (which) {
-                    0 -> ChromeIntent(this@ImageFragmentActivity, Uri.parse(imageUrl))
+                    0 -> {
+                        val openUrl = imageUrl + (if (existsOriginal) ":orig" else "")
+                        ChromeIntent(this@ImageFragmentActivity, Uri.parse(openUrl))
+                    }
                     1 -> saveImage(imageUrl)
                 }
             }
