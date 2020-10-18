@@ -94,9 +94,9 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
     }
 
     private fun openUrl(urlText: String) {
-        val image = Regex.media_image.matcher(urlText)
-        val video = Regex.media_video.matcher(urlText)
-        val gif = Regex.media_gif.matcher(urlText)
+        val image = Regex.mediaImage.matcher(urlText)
+        val video = Regex.mediaVideo.matcher(urlText)
+        val gif = Regex.mediaGif.matcher(urlText)
         val state = Regex.statusUrl.matcher(urlText)
         val intent = when {
             image.find() -> {

@@ -5,9 +5,9 @@ import java.util.regex.Pattern
 class Regex {
 
     companion object {
-        val media_image: Pattern = Pattern.compile("https?://pbs.twimg.com/media/")
-        val media_video: Pattern = Pattern.compile("https?://video.twimg.com/ext_tw_video/[0-9]+/(pu|pr)/vid/.+/.+(.mp4|.webm)")
-        val media_gif: Pattern = Pattern.compile("https?://pbs.twimg.com/tweet_video/")
+        val mediaImage: Pattern = Pattern.compile("https?://pbs.twimg.com/media/")
+        val mediaVideo: Pattern = Pattern.compile("https?://video.twimg.com/ext_tw_video/[0-9]+/(pu|pr)/vid/.+/.+(.mp4|.webm)")
+        val mediaGif: Pattern = Pattern.compile("https?://pbs.twimg.com/tweet_video/")
         val statusUrl: Pattern = Pattern.compile("https?://(mobile.)?twitter.com/(i/web|[0-9a-zA-Z_]+)/status/([0-9]+)")
         const val statusUrlStatusIdGroup = 3
         val shareUrl: Pattern = Pattern.compile("https?://(mobile.)?twitter.com/(intent/tweet|share)\\?.+")
