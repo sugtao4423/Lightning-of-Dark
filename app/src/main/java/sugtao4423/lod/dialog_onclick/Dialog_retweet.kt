@@ -1,9 +1,12 @@
 package sugtao4423.lod.dialog_onclick
 
 import android.content.Context
-import android.os.AsyncTask
 import android.support.v7.app.AlertDialog
 import android.view.View
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
@@ -19,41 +22,38 @@ class Dialog_retweet(private val status: Status, private val context: Context, p
                 setMessage(R.string.is_unretweet)
                 setNegativeButton(R.string.cancel, null)
                 setPositiveButton(R.string.ok) { _, _ ->
-                    Retweet(true).execute()
+                    retweet(false)
                 }
                 show()
             }
         } else {
-            Retweet(false).execute()
+            retweet(true)
         }
     }
 
-    inner class Retweet(private val isUnretweet: Boolean) : AsyncTask<Unit, Unit, Status?>() {
-
-        override fun doInBackground(vararg params: Unit?): twitter4j.Status? {
-            val twitter = (context.applicationContext as App).getTwitter()
-            return try {
-                if (isUnretweet) {
-                    twitter.unRetweetStatus(this@Dialog_retweet.status.id)
-                } else {
-                    twitter.retweetStatus(this@Dialog_retweet.status.id)
+    private fun retweet(isRetweet: Boolean) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                val twitter = (context.applicationContext as App).getTwitter()
+                try {
+                    if (isRetweet) {
+                        twitter.retweetStatus(this@Dialog_retweet.status.id)
+                    } else {
+                        twitter.unRetweetStatus(this@Dialog_retweet.status.id)
+                    }
+                } catch (e: TwitterException) {
+                    null
                 }
-            } catch (e: TwitterException) {
-                null
             }
-        }
-
-        override fun onPostExecute(result: twitter4j.Status?) {
             val toastMessage = when {
-                result != null && isUnretweet -> R.string.success_unretweet
-                result != null && !isUnretweet -> R.string.success_retweet
-                result == null && isUnretweet -> R.string.error_unretweet
-                result == null && !isUnretweet -> R.string.error_retweet
+                result != null && isRetweet -> R.string.success_retweet
+                result != null && !isRetweet -> R.string.success_unretweet
+                result == null && isRetweet -> R.string.error_retweet
+                result == null && !isRetweet -> R.string.error_unretweet
                 else -> -1
             }
             ShowToast(context.applicationContext, toastMessage)
         }
-
     }
 
 }

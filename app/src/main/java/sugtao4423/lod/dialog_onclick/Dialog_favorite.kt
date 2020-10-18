@@ -1,9 +1,12 @@
 package sugtao4423.lod.dialog_onclick
 
 import android.content.Context
-import android.os.AsyncTask
 import android.support.v7.app.AlertDialog
 import android.view.View
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
@@ -19,41 +22,38 @@ class Dialog_favorite(private val status: Status, private val context: Context, 
                 setMessage(R.string.is_unfavorite)
                 setNegativeButton(R.string.cancel, null)
                 setPositiveButton(R.string.ok) { _, _ ->
-                    Favorite(true).execute()
+                    favorite(false)
                 }
                 show()
             }
         } else {
-            Favorite(false).execute()
+            favorite(true)
         }
     }
 
-    inner class Favorite(private val isUnfavorite: Boolean) : AsyncTask<Unit, Unit, Status?>() {
-
-        override fun doInBackground(vararg params: Unit?): twitter4j.Status? {
-            val twitter = (context.applicationContext as App).getTwitter()
-            return try {
-                if (isUnfavorite) {
-                    twitter.destroyFavorite(this@Dialog_favorite.status.id)
-                } else {
-                    twitter.createFavorite(this@Dialog_favorite.status.id)
+    private fun favorite(isFavorite: Boolean) {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                val twitter = (context.applicationContext as App).getTwitter()
+                try {
+                    if (isFavorite) {
+                        twitter.createFavorite(this@Dialog_favorite.status.id)
+                    } else {
+                        twitter.destroyFavorite(this@Dialog_favorite.status.id)
+                    }
+                } catch (e: TwitterException) {
+                    null
                 }
-            } catch (e: TwitterException) {
-                null
             }
-        }
-
-        override fun onPostExecute(result: twitter4j.Status?) {
             val toastMessage = when {
-                result != null && isUnfavorite -> R.string.success_unfavorite
-                result != null && !isUnfavorite -> R.string.success_favorite
-                result == null && isUnfavorite -> R.string.error_unfavorite
-                result == null && !isUnfavorite -> R.string.error_favorite
+                result != null && isFavorite -> R.string.success_favorite
+                result != null && !isFavorite -> R.string.success_unfavorite
+                result == null && isFavorite -> R.string.error_favorite
+                result == null && !isFavorite -> R.string.error_unfavorite
                 else -> -1
             }
             ShowToast(context.applicationContext, toastMessage)
         }
-
     }
 
 }

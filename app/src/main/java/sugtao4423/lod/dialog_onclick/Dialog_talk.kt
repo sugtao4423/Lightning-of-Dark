@@ -1,9 +1,12 @@
 package sugtao4423.lod.dialog_onclick
 
 import android.content.Context
-import android.os.AsyncTask
 import android.support.v7.app.AlertDialog
 import android.view.View
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
@@ -25,25 +28,23 @@ class Dialog_talk(status: Status, private val context: Context, private val dial
 
         resultAdapter.add(reply)
 
-        LoadConversation().execute()
+        loadConversation()
     }
 
-    private inner class LoadConversation : AsyncTask<Unit, Unit, Status?>() {
-
-        override fun doInBackground(vararg params: Unit?): twitter4j.Status? {
-            return try {
-                reply = (context.applicationContext as App).getTwitter().showStatus(reply.inReplyToStatusId)
-                reply
-            } catch (e: TwitterException) {
-                null
+    private fun loadConversation() {
+        CoroutineScope(Dispatchers.Main).launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
+                    reply = (context.applicationContext as App).getTwitter().showStatus(reply.inReplyToStatusId)
+                    reply
+                } catch (e: TwitterException) {
+                    null
+                }
             }
-        }
-
-        override fun onPostExecute(result: twitter4j.Status?) {
             if (result != null) {
                 resultAdapter.add(result)
                 if (result.inReplyToStatusId > 0) {
-                    LoadConversation().execute()
+                    loadConversation()
                 } else {
                     ShowToast(context.applicationContext, R.string.success_get_talk_list)
                 }
@@ -51,7 +52,6 @@ class Dialog_talk(status: Status, private val context: Context, private val dial
                 ShowToast(context.applicationContext, R.string.error_get_talk_list)
             }
         }
-
     }
 
 }
