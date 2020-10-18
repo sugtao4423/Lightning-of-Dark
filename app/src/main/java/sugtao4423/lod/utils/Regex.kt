@@ -18,7 +18,7 @@ class Regex {
         const val twimgUrlDotExtGroup = 3
         val userBannerUrl: Pattern = Pattern.compile("^http(s)?://pbs.twimg.com/profile_banners/[0-9]+/([0-9]+)/")
         const val userBannerUrlFileNameGroup = 2
-        val userAndAnyUrl: Pattern = Pattern.compile("@[0-9a-zA-Z_]+|(http://|https://){1}[\\w\\.\\-/:\\#\\?\\=\\&\\;\\%\\~\\+]+", Pattern.DOTALL)
+        val userAndAnyUrl: Pattern = Pattern.compile("@[0-9a-zA-Z_]+|http(s)?://[\\w.\\-/:#?=&;%~+]+", Pattern.DOTALL)
     }
 
 }
