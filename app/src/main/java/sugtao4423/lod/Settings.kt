@@ -348,7 +348,7 @@ class Settings : LoDBaseActivity() {
                     DecimalFormat("#.#").let {
                         it.minimumFractionDigits = 2
                         it.maximumFractionDigits = 2
-                        return it.format(getDirSize(context!!.cacheDir) / 1024 / 1024)
+                        return it.format(getDirSize(context!!.cacheDir).toDouble() / 1024 / 1024)
                     }
                 }
 
