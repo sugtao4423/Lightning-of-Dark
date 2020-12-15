@@ -1,35 +1,29 @@
 package sugtao4423.lod.swipe_image_viewer
 
 import android.Manifest
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.view.Window
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
+import androidx.core.net.toUri
 import kotlinx.android.synthetic.main.show_image_pager.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.utils.Regex
-import sugtao4423.support.progressdialog.ProgressDialog
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 class ImageFragmentActivity : LoDBaseActivity() {
 
@@ -100,8 +94,8 @@ class ImageFragmentActivity : LoDBaseActivity() {
                 ShowToast(applicationContext, R.string.url_not_match_pattern_and_dont_save)
                 return
             }
-            val bannerImg = (adapter.getItem(showImagePager.currentItem) as ImageFragment).nonOrigImage
-            save(banner.group(Regex.userBannerUrlFileNameGroup)!!, ".jpg", bannerImg, false)
+            val fileName = banner.group(Regex.userBannerUrlFileNameGroup)!! + ".jpg"
+            download(imageUrl, fileName, false)
             return
         }
 
@@ -113,89 +107,27 @@ class ImageFragmentActivity : LoDBaseActivity() {
             return
         }
 
-        val progressDialog = ProgressDialog(this@ImageFragmentActivity).apply {
-            setMessage(getString(R.string.loading))
-            isIndeterminate = false
-            setProgressStyle(ProgressDialog.STYLE_SPINNER)
-            setCancelable(true)
-            show()
-        }
-        val requestListener = object : RequestListener<ByteArray> {
-            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<ByteArray>?, isFirstResource: Boolean): Boolean {
-                CoroutineScope(Dispatchers.Main).launch {
-                    progressDialog.dismiss()
-                    ShowToast(applicationContext, R.string.error_get_original_image)
-                }
-                return false
-            }
-
-            override fun onResourceReady(resource: ByteArray?, model: Any?, target: Target<ByteArray>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                CoroutineScope(Dispatchers.Main).launch {
-                    progressDialog.dismiss()
-                    val isOriginal = (type != TYPE_ICON)
-                    save(pattern.group(Regex.twimgUrlFileNameGroup)!!, pattern.group(Regex.twimgUrlDotExtGroup)!!, resource!!, isOriginal)
-                }
-                return false
-            }
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            Glide.with(this@ImageFragmentActivity).`as`(ByteArray::class.java).load(imgUrl).listener(requestListener).submit().get()
-        }
+        val fileName = pattern.group(Regex.twimgUrlFileNameGroup)!!
+        val fileExt = pattern.group(Regex.twimgUrlDotExtGroup)!!.replace(Regex(":orig$"), "")
+        download(imgUrl, "$fileName$fileExt", (type != TYPE_ICON))
     }
 
-    private fun save(fileName: String, type: String, byteImage: ByteArray, isOriginal: Boolean) {
-        val saveDir = "/storage/emulated/0/Download"
-        val imgPath = saveDir + "/" + fileName + type.replace(Regex(":orig$"), "")
-
-        if (File(imgPath).exists()) {
-            AlertDialog.Builder(this).apply {
-                setTitle(R.string.error_file_is_already_exists)
-                setItems(arrayOf(
-                        getString(R.string.overwrite),
-                        getString(R.string.save_as),
-                        getString(R.string.cancel)
-                )) { _, which ->
-                    when (which) {
-                        0 -> output(imgPath, byteImage, isOriginal)
-                        1 -> {
-                            val edit = EditText(this@ImageFragmentActivity)
-                            edit.setText(fileName)
-                            AlertDialog.Builder(this@ImageFragmentActivity).also {
-                                it.setTitle(R.string.save_as)
-                                it.setView(edit)
-                                it.setNegativeButton(R.string.cancel, null)
-                                it.setPositiveButton(R.string.ok) { _, _ ->
-                                    val newPath = "$saveDir/${edit.text}$type"
-                                    if (File(newPath).exists()) {
-                                        save(fileName, type, byteImage, isOriginal)
-                                    } else {
-                                        output(newPath, byteImage, isOriginal)
-                                    }
-                                }
-                                it.show()
-                            }
-                        }
-                    }
-                }
-                show()
+    private fun download(fileUrl: String, fileName: String, isOriginal: Boolean) {
+        val dlManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val message = if (isOriginal) R.string.param_saved_original else R.string.param_saved
+                ShowToast(applicationContext, message, fileName)
+                unregisterReceiver(this)
             }
-        } else {
-            output(imgPath, byteImage, isOriginal)
         }
-    }
+        registerReceiver(downloadReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
-    private fun output(imgPath: String, byteImage: ByteArray, isOriginal: Boolean) {
-        try {
-            FileOutputStream(imgPath, true).apply {
-                write(byteImage)
-                close()
-            }
-        } catch (e: IOException) {
-            ShowToast(applicationContext, R.string.error_save)
-            return
+        val dlRequest = DownloadManager.Request(fileUrl.toUri()).apply {
+            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
         }
-        val message = if (isOriginal) R.string.param_saved_original else R.string.param_saved
-        ShowToast(applicationContext, message, imgPath)
+        dlManager.enqueue(dlRequest)
     }
 
     private fun hasWriteExternalStoragePermission(): Boolean {

@@ -1,6 +1,6 @@
 package sugtao4423.lod.swipe_image_viewer
 
-import android.graphics.BitmapFactory
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -27,7 +27,6 @@ class ImageFragment : Fragment() {
     private lateinit var image: ZoomImageView
     private lateinit var progressBar: ProgressBar
     private lateinit var url: String
-    lateinit var nonOrigImage: ByteArray
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         url = requireArguments().getString(ImagePagerAdapter.BUNDLE_KEY_URL)!!
@@ -54,26 +53,24 @@ class ImageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val requestListener = object : RequestListener<ByteArray> {
-            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<ByteArray>?, isFirstResource: Boolean): Boolean {
+        val requestListener = object : RequestListener<Bitmap> {
+            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
                 CoroutineScope(Dispatchers.Main).launch {
                     ShowToast(requireContext().applicationContext, R.string.error_get_image)
                 }
                 return false
             }
 
-            override fun onResourceReady(resource: ByteArray?, model: Any?, target: Target<ByteArray>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+            override fun onResourceReady(resource: Bitmap?, model: Any?, target: Target<Bitmap>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                 CoroutineScope(Dispatchers.Main).launch {
-                    nonOrigImage = resource!!
-                    val bitmap = BitmapFactory.decodeByteArray(resource, 0, resource.size)
-                    image.setImageBitmap(bitmap)
+                    image.setImageBitmap(resource)
                     progressBar.visibility = View.GONE
                 }
                 return false
             }
         }
         CoroutineScope(Dispatchers.IO).launch {
-            Glide.with(this@ImageFragment).`as`(ByteArray::class.java).load(url).listener(requestListener).submit().get()
+            Glide.with(this@ImageFragment).asBitmap().load(url).listener(requestListener).submit().get()
         }
     }
 
