@@ -28,7 +28,7 @@ class ImageFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var url: String
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         url = requireArguments().getString(ImagePagerAdapter.BUNDLE_KEY_URL)!!
 
         parentLayout = FrameLayout(requireContext())
