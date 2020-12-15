@@ -1,11 +1,11 @@
 package sugtao4423.lod.swipe_image_viewer
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 
-class ImagePagerAdapter(fm: FragmentManager, private val urls: Array<String>) : FragmentPagerAdapter(fm) {
+class ImagePagerAdapter(fm: FragmentManager, private val urls: Array<String>) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     companion object {
         const val BUNDLE_KEY_URL = "url"
@@ -33,7 +33,7 @@ class ImagePagerAdapter(fm: FragmentManager, private val urls: Array<String>) : 
         return urls.size
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return "${position + 1}/$count"
     }
 

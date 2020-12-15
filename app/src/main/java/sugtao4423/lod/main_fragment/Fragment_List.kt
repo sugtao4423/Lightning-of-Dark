@@ -1,11 +1,11 @@
 package sugtao4423.lod.main_fragment
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,8 +37,8 @@ class Fragment_List : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         listIndex = arguments?.getInt(LIST_INDEX)!!
-        app = activity!!.applicationContext as App
-        thisList = app.getLists(activity!!)[listIndex]
+        app = requireContext().applicationContext as App
+        thisList = app.getLists(requireContext())[listIndex]
         val adapter = thisList.adapter
         listLine.adapter = adapter
 
@@ -88,7 +88,7 @@ class Fragment_List : Fragment() {
                 thisList.adapter.addAll(result)
                 thisList.isAlreadyLoad = true
             } else {
-                ShowToast(activity!!.applicationContext, R.string.error_get_list)
+                ShowToast(requireContext().applicationContext, R.string.error_get_list)
             }
             listPull2Refresh.isRefreshing = false
             listPull2Refresh.isEnabled = true

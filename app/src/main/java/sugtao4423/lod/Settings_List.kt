@@ -1,9 +1,10 @@
 package sugtao4423.lod
 
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.commit
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,7 +16,9 @@ class Settings_List : LoDBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager.beginTransaction().replace(android.R.id.content, PreferencesFragment()).commit()
+        supportFragmentManager.commit {
+            replace(android.R.id.content, PreferencesFragment())
+        }
     }
 
     class PreferencesFragment : PreferenceFragmentCompat() {
@@ -27,16 +30,12 @@ class Settings_List : LoDBaseActivity() {
         private lateinit var app: App
 
         override fun onCreatePreferences(bundle: Bundle?, rootKey: String?) {
-            if (activity == null) {
-                return
-            }
-            val activity = activity!!
             setPreferencesFromResource(R.xml.preference_list, rootKey)
 
-            selectList = findPreference("select_List")
-            startAppLoadList = findPreference("startApp_loadList")
+            selectList = findPreference("select_List")!!
+            startAppLoadList = findPreference("startApp_loadList")!!
 
-            app = activity.applicationContext as App
+            app = requireContext().applicationContext as App
             dbUtil = app.getAccountDBUtil()
             myScreenName = app.getCurrentAccount().screenName
 
@@ -46,7 +45,7 @@ class Settings_List : LoDBaseActivity() {
                 val selectedListNames = dbUtil.getSelectListNames(myScreenName)
                 val selectedLoadList = BooleanArray(selectedListNames.size)
                 val selectLoadList = arrayListOf<String>()
-                val builder = AlertDialog.Builder(activity).apply {
+                val builder = AlertDialog.Builder(requireContext()).apply {
                     setTitle(R.string.choose_app_start_load_list)
                     setMultiChoiceItems(selectedListNames, selectedLoadList) { _, which, isChecked ->
                         if (isChecked) {
@@ -65,7 +64,7 @@ class Settings_List : LoDBaseActivity() {
                 if (selectedListNames[0] != "") {
                     builder.show()
                 } else {
-                    ShowToast(activity.applicationContext, R.string.list_not_selected)
+                    ShowToast(requireContext().applicationContext, R.string.list_not_selected)
                 }
                 false
             }
@@ -80,7 +79,7 @@ class Settings_List : LoDBaseActivity() {
                         }
                     }
                     if (result == null) {
-                        ShowToast(activity.applicationContext, R.string.error_get_list)
+                        ShowToast(requireContext().applicationContext, R.string.error_get_list)
                         return@launch
                     }
                     val listMap = HashMap<String, Long>()
@@ -91,7 +90,7 @@ class Settings_List : LoDBaseActivity() {
                     val listItems = listMap.keys.toTypedArray()
                     val checkedList = LinkedHashMap<String, Long>()
 
-                    AlertDialog.Builder(activity).apply {
+                    AlertDialog.Builder(requireContext()).apply {
                         setTitle(R.string.choose_list)
                         setMultiChoiceItems(listItems, BooleanArray(listItems.size)) { _, which, isChecked ->
                             if (isChecked) {

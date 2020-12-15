@@ -2,12 +2,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.view.PagerTabStrip
+        <androidx.viewpager.widget.PagerTabStrip
             android:id="@+id/mainPagerTabStrip"
             android:layout_width="match_parent"
             android:layout_height="25dp"
@@ -15,7 +15,7 @@
             android:background="@color/pagerTabBackground"
             android:paddingTop="2dp"
             android:textColor="@color/pagerTabText" />
-    </android.support.v4.view.ViewPager>
+    </androidx.viewpager.widget.ViewPager>
 
     <ImageButton
         android:layout_width="wrap_content"

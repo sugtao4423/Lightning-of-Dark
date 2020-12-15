@@ -8,8 +8,8 @@ import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
 import android.os.Build
 import android.provider.Settings
-import android.support.v4.app.NotificationManagerCompat
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationManagerCompat
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 

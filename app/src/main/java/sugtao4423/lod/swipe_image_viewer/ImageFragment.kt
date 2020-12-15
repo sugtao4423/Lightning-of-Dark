@@ -2,13 +2,13 @@ package sugtao4423.lod.swipe_image_viewer
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -30,12 +30,12 @@ class ImageFragment : Fragment() {
     lateinit var nonOrigImage: ByteArray
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        url = arguments!!.getString(ImagePagerAdapter.BUNDLE_KEY_URL)!!
+        url = requireArguments().getString(ImagePagerAdapter.BUNDLE_KEY_URL)!!
 
-        parentLayout = FrameLayout(context!!)
-        image = ZoomImageView(context!!)
+        parentLayout = FrameLayout(requireContext())
+        image = ZoomImageView(requireContext())
 
-        progressBar = ProgressBar(context!!, null, android.R.attr.progressBarStyleHorizontal).apply {
+        progressBar = ProgressBar(requireContext(), null, android.R.attr.progressBarStyleHorizontal).apply {
             isIndeterminate = true
             scaleY = 1.5f
             visibility = View.VISIBLE
@@ -57,7 +57,7 @@ class ImageFragment : Fragment() {
         val requestListener = object : RequestListener<ByteArray> {
             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<ByteArray>?, isFirstResource: Boolean): Boolean {
                 CoroutineScope(Dispatchers.Main).launch {
-                    ShowToast(context!!.applicationContext, R.string.error_get_image)
+                    ShowToast(requireContext().applicationContext, R.string.error_get_image)
                 }
                 return false
             }

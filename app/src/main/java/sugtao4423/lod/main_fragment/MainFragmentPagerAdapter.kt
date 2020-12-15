@@ -2,13 +2,13 @@ package sugtao4423.lod.main_fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 
-class MainFragmentPagerAdapter(fm: FragmentManager, private val context: Context) : FragmentStatePagerAdapter(fm) {
+class MainFragmentPagerAdapter(fm: FragmentManager, private val context: Context) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private val app = context.applicationContext as App
     val fragmentMention = Fragment_mention()
@@ -32,7 +32,7 @@ class MainFragmentPagerAdapter(fm: FragmentManager, private val context: Context
         return app.getLists(context).size + 2
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         val lists = app.getLists(context)
         return when (position) {
             0 -> context.getString(R.string.page_title_mention)

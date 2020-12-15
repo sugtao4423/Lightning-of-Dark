@@ -2,9 +2,9 @@ package sugtao4423.lod.dialog_onclick
 
 import android.content.Context
 import android.content.Intent
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import sugtao4423.icondialog.IconDialog
 import sugtao4423.icondialog.IconItem
 import sugtao4423.lod.App

@@ -2,8 +2,8 @@ package sugtao4423.lod.dialog_onclick
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AlertDialog
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import sugtao4423.lod.TweetActivity
 import twitter4j.Status
 

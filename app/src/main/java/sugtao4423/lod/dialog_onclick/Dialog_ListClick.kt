@@ -3,11 +3,11 @@ package sugtao4423.lod.dialog_onclick
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.preference.PreferenceManager
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.preference.PreferenceManager
 import sugtao4423.lod.*
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
 import sugtao4423.lod.tweetlistview.TweetListAdapter
@@ -126,7 +126,7 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
             }
             state.find() -> {
                 Intent(context, IntentActivity::class.java).apply {
-                    putExtra(IntentActivity.TWEET_ID, state.group(Regex.statusUrlStatusIdGroup).toLong())
+                    putExtra(IntentActivity.TWEET_ID, state.group(Regex.statusUrlStatusIdGroup)!!.toLong())
                 }
             }
             else -> {

@@ -6,47 +6,47 @@
     android:paddingTop="16dp"
     android:paddingRight="24dp">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutStaticText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/bombStaticText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/layout_static_text" />
 
         <requestFocus />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutLoopText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layoutStaticText"
         android:layout_marginTop="8dp">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/bombLoopText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/layout_repeat_text" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layoutLoopCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layoutLoopText"
         android:layout_marginTop="8dp">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/bombLoopCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/layout_repeat_count"
             android:inputType="number" />
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 </RelativeLayout>

@@ -2,7 +2,6 @@ package sugtao4423.lod.tweetlistview
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import sugtao4423.lod.App
 import sugtao4423.lod.R

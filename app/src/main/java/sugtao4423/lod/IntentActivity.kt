@@ -3,8 +3,8 @@ package sugtao4423.lod
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +53,7 @@ class IntentActivity : AppCompatActivity() {
             val user = Regex.userUrl.matcher(uri)
             when {
                 status.find() -> {
-                    showStatus(status.group(Regex.statusUrlStatusIdGroup).toLong())
+                    showStatus(status.group(Regex.statusUrlStatusIdGroup)!!.toLong())
                 }
                 share.find() -> {
                     val shareUri = Uri.parse(uri)

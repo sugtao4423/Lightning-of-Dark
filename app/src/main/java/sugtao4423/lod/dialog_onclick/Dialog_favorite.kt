@@ -1,8 +1,8 @@
 package sugtao4423.lod.dialog_onclick
 
 import android.content.Context
-import android.support.v7.app.AlertDialog
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

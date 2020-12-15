@@ -3,11 +3,11 @@ package sugtao4423.lod.tweetlistview
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.View
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 

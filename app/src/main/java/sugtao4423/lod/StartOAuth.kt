@@ -8,9 +8,9 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
 import android.text.Html
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.oauth.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -135,7 +135,7 @@ class StartOAuth : AppCompatActivity() {
     }
 
     fun clickOAuthDescription(@Suppress("UNUSED_PARAMETER") v: View) {
-        (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip = ClipData.newPlainText(getString(R.string.app_name), CALLBACK_URL)
+        (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name), CALLBACK_URL))
         ShowToast(applicationContext, R.string.done_copy_clip_board)
     }
 

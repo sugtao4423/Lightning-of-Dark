@@ -7,15 +7,15 @@ import android.graphics.Color
 import android.os.Bundle
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.PermissionChecker
-import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 import com.twitter.twittertext.Extractor
 import com.twitter.twittertext.TwitterTextParser
 import kotlinx.android.synthetic.main.tweet_activity.*
@@ -290,6 +290,7 @@ class TweetActivity : LoDBaseActivity() {
 
         if (requestCode == 1919 && resultCode == RESULT_OK) { // 音声入力
             val results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    ?: arrayListOf("")
             tweetText.setText(tweetText.text.toString() + results[0])
             tweetText.setSelection(tweetText.text.count())
         }

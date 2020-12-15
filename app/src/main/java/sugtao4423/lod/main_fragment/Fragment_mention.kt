@@ -1,11 +1,11 @@
 package sugtao4423.lod.main_fragment
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.widget.SwipeRefreshLayout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,9 +33,9 @@ class Fragment_mention : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        app = activity!!.applicationContext as App
+        app = requireContext().applicationContext as App
 
-        adapter = TweetListAdapter(activity!!)
+        adapter = TweetListAdapter(requireContext())
         listLine.adapter = adapter
 
         val scrollListener = getLoadMoreListener()
@@ -79,7 +79,7 @@ class Fragment_mention : Fragment() {
             if (result != null) {
                 addAll(result)
             } else {
-                ShowToast(activity!!.applicationContext, R.string.error_get_mention)
+                ShowToast(requireContext().applicationContext, R.string.error_get_mention)
             }
             listPull2Refresh.isRefreshing = false
             listPull2Refresh.isEnabled = true

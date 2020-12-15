@@ -1,10 +1,10 @@
 package sugtao4423.lod.userpage_fragment
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.user_1.*
 import sugtao4423.lod.App
 import sugtao4423.lod.R
@@ -34,13 +34,13 @@ abstract class UserPageListBaseFragment(private val fragmentType: FragmentType) 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        app = activity!!.applicationContext as App
+        app = requireContext().applicationContext as App
 
         if (fragmentType == FragmentType.TYPE_TWEET) {
-            tweetListAdapter = TweetListAdapter(activity!!)
+            tweetListAdapter = TweetListAdapter(requireContext())
             userPageList.adapter = tweetListAdapter
         } else {
-            tweetListUserAdapter = TweetListUserAdapter(activity!!)
+            tweetListUserAdapter = TweetListUserAdapter(requireContext())
             userPageList.adapter = tweetListUserAdapter
         }
 

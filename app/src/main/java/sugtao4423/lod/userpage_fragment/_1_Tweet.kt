@@ -32,7 +32,7 @@ class _1_Tweet : UserPageListBaseFragment(FragmentType.TYPE_TWEET) {
                     isAllLoaded = true
                 }
             } else {
-                ShowToast(activity!!.applicationContext, R.string.error_get_timeline)
+                ShowToast(requireContext().applicationContext, R.string.error_get_timeline)
             }
             userPagePull.isRefreshing = false
             userPagePull.isEnabled = true

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
@@ -20,7 +21,7 @@ class AutoLoadTLService : Service() {
     }
 
     private lateinit var autoLoadTimer: Timer
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val app = applicationContext as App

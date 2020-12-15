@@ -5,14 +5,13 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.PermissionChecker
-import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.Window
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -55,7 +54,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
         }
 
-        urls = intent.getStringArrayExtra(INTENT_EXTRA_KEY_URLS)
+        urls = intent.getStringArrayExtra(INTENT_EXTRA_KEY_URLS)!!
         type = intent.getIntExtra(INTENT_EXTRA_KEY_TYPE, -1)
         val pos = intent.getIntExtra(INTENT_EXTRA_KEY_POSITION, 0)
         adapter = ImagePagerAdapter(supportFragmentManager, urls)
@@ -102,7 +101,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
                 return
             }
             val bannerImg = (adapter.getItem(showImagePager.currentItem) as ImageFragment).nonOrigImage
-            save(banner.group(Regex.userBannerUrlFileNameGroup), ".jpg", bannerImg, false)
+            save(banner.group(Regex.userBannerUrlFileNameGroup)!!, ".jpg", bannerImg, false)
             return
         }
 
@@ -134,7 +133,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     progressDialog.dismiss()
                     val isOriginal = (type != TYPE_ICON)
-                    save(pattern.group(Regex.twimgUrlFileNameGroup), pattern.group(Regex.twimgUrlDotExtGroup), resource!!, isOriginal)
+                    save(pattern.group(Regex.twimgUrlFileNameGroup)!!, pattern.group(Regex.twimgUrlDotExtGroup)!!, resource!!, isOriginal)
                 }
                 return false
             }
@@ -145,7 +144,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
     }
 
     private fun save(fileName: String, type: String, byteImage: ByteArray, isOriginal: Boolean) {
-        val saveDir = Environment.getExternalStorageDirectory().absolutePath + "/" + Environment.DIRECTORY_DOWNLOADS
+        val saveDir = "/storage/emulated/0/Download"
         val imgPath = saveDir + "/" + fileName + type.replace(Regex(":orig$"), "")
 
         if (File(imgPath).exists()) {

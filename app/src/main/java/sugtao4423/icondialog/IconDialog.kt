@@ -2,13 +2,13 @@ package sugtao4423.icondialog
 
 import android.content.Context
 import android.content.DialogInterface
-import android.support.v7.app.AlertDialog
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import sugtao4423.lod.App
 
 class IconDialog(private val context: Context) {

@@ -1,15 +1,15 @@
 package sugtao4423.lod
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.preference.CheckBoxPreference
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
 import android.text.InputType
 import android.widget.EditText
 import android.widget.FrameLayout
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.commit
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,9 @@ class Settings : LoDBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager.beginTransaction().replace(android.R.id.content, PreferencesFragment()).commit()
+        supportFragmentManager.commit {
+            replace(android.R.id.content, PreferencesFragment())
+        }
     }
 
     override fun onDestroy() {
@@ -39,19 +41,15 @@ class Settings : LoDBaseActivity() {
         private lateinit var autoLoadTLInterval: Preference
 
         override fun onCreatePreferences(bundle: Bundle?, rootKey: String?) {
-            if (activity == null) {
-                return
-            }
-            val activity = activity!!
             setPreferencesFromResource(R.xml.preference, rootKey)
 
-            app = activity.applicationContext as App
+            app = requireContext().applicationContext as App
 
-            val follow2list = findPreference("follow2list")
-            val listAsTL = findPreference("listAsTL") as CheckBoxPreference
-            autoLoadTLInterval = findPreference("autoLoadTLInterval")
-            val listSetting = findPreference("listSetting")
-            val clearCache = findPreference("clearCache")
+            val follow2list = findPreference<Preference>("follow2list")!!
+            val listAsTL = findPreference<CheckBoxPreference>("listAsTL")!!
+            autoLoadTLInterval = findPreference("autoLoadTLInterval")!!
+            val listSetting = findPreference<Preference>("listSetting")!!
+            val clearCache = findPreference<Preference>("clearCache")!!
             setCacheSize(clearCache)
 
             follow2list.setOnPreferenceClickListener {
@@ -69,7 +67,7 @@ class Settings : LoDBaseActivity() {
 
             setAutoLoadTLIntervalSummary(app.getCurrentAccount().autoLoadTLInterval)
             autoLoadTLInterval.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                clickAutoLoadTLInterval(activity)
+                clickAutoLoadTLInterval()
                 false
             }
 
@@ -81,17 +79,17 @@ class Settings : LoDBaseActivity() {
             clearCache.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 CoroutineScope(Dispatchers.Main).launch {
                     withContext(Dispatchers.IO) {
-                        Glide.get(context!!).clearDiskCache()
+                        Glide.get(requireContext()).clearDiskCache()
                     }
                     setCacheSize(it)
-                    ShowToast(activity.applicationContext, R.string.cache_deleted)
+                    ShowToast(requireContext().applicationContext, R.string.cache_deleted)
                 }
                 false
             }
         }
 
         private fun clickFollow2List() {
-            AlertDialog.Builder(activity!!).also {
+            AlertDialog.Builder(requireContext()).also {
                 it.setTitle(R.string.limit_5000_users)
                 it.setItems(R.array.follow2list_methods) { _, which ->
                     when (which) {
@@ -106,7 +104,7 @@ class Settings : LoDBaseActivity() {
         private fun createFollowSyncList() {
             val listName = "home_timeline"
             CoroutineScope(Dispatchers.Main).launch {
-                val progressDialog = ProgressDialog(activity!!).apply {
+                val progressDialog = ProgressDialog(requireContext()).apply {
                     setMessage(getString(R.string.loading))
                     isIndeterminate = false
                     setProgressStyle(ProgressDialog.STYLE_SPINNER)
@@ -122,7 +120,7 @@ class Settings : LoDBaseActivity() {
                 }
                 progressDialog.dismiss()
                 if (result == null) {
-                    ShowToast(activity!!.applicationContext, R.string.error_create_list)
+                    ShowToast(requireContext().applicationContext, R.string.error_create_list)
                     return@launch
                 }
                 syncFollowList(result.id)
@@ -131,7 +129,7 @@ class Settings : LoDBaseActivity() {
 
         private fun selectFollowSyncList() {
             CoroutineScope(Dispatchers.Main).launch {
-                val progressDialog = ProgressDialog(activity!!).apply {
+                val progressDialog = ProgressDialog(requireContext()).apply {
                     setMessage(getString(R.string.loading))
                     isIndeterminate = false
                     setProgressStyle(ProgressDialog.STYLE_SPINNER)
@@ -147,14 +145,14 @@ class Settings : LoDBaseActivity() {
                 }
                 progressDialog.dismiss()
                 if (result == null) {
-                    ShowToast(activity!!.applicationContext, R.string.error_get_list)
+                    ShowToast(requireContext().applicationContext, R.string.error_get_list)
                     return@launch
                 }
                 val listNames = arrayOfNulls<String>(result.size)
                 result.mapIndexed { index, userList ->
                     listNames[index] = userList.name
                 }
-                AlertDialog.Builder(activity!!).apply {
+                AlertDialog.Builder(requireContext()).apply {
                     setItems(listNames) { _, which ->
                         val selectedListId = result[which].id
                         syncFollowList(selectedListId)
@@ -166,7 +164,7 @@ class Settings : LoDBaseActivity() {
 
         private fun syncFollowList(listId: Long) {
             CoroutineScope(Dispatchers.Main).launch {
-                val progressDialog = ProgressDialog(activity!!).apply {
+                val progressDialog = ProgressDialog(requireContext()).apply {
                     setMessage(getString(R.string.loading))
                     isIndeterminate = false
                     setProgressStyle(ProgressDialog.STYLE_SPINNER)
@@ -199,7 +197,7 @@ class Settings : LoDBaseActivity() {
                 }
                 progressDialog.dismiss()
                 val message = if (result) R.string.success_follow2list else R.string.error_follow2list
-                AlertDialog.Builder(activity!!).apply {
+                AlertDialog.Builder(requireContext()).apply {
                     setMessage(message)
                     setPositiveButton(R.string.ok, null)
                     show()
@@ -210,7 +208,7 @@ class Settings : LoDBaseActivity() {
         private fun selectListAsTL(preference: CheckBoxPreference, isCheck: Boolean): Boolean {
             val dbUtil = app.getAccountDBUtil()
             if (!isCheck) {
-                AlertDialog.Builder(activity!!).apply {
+                AlertDialog.Builder(requireContext()).apply {
                     setTitle(R.string.is_release)
                     setPositiveButton(R.string.ok) { _, _ ->
                         dbUtil.updateListAsTL(-1, app.getCurrentAccount().screenName)
@@ -236,7 +234,7 @@ class Settings : LoDBaseActivity() {
                     }
                 }
                 if (result == null) {
-                    ShowToast(activity!!.applicationContext, R.string.error_get_list)
+                    ShowToast(requireContext().applicationContext, R.string.error_get_list)
                     return@launch
                 }
                 val listMap = HashMap<String, Long>()
@@ -244,7 +242,7 @@ class Settings : LoDBaseActivity() {
                     listMap[it.name] = it.id
                 }
                 val listNames = listMap.keys.toTypedArray()
-                AlertDialog.Builder(activity!!).apply {
+                AlertDialog.Builder(requireContext()).apply {
                     setTitle(R.string.choose_list_as_tl)
                     setCancelable(false)
                     setItems(listNames) { _, which ->
@@ -259,20 +257,20 @@ class Settings : LoDBaseActivity() {
             return true
         }
 
-        private fun clickAutoLoadTLInterval(context: Context) {
-            val editContainer = FrameLayout(context)
+        private fun clickAutoLoadTLInterval() {
+            val editContainer = FrameLayout(requireContext())
             val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-            Utils.convertDpToPx(context, 24).let {
+            Utils.convertDpToPx(requireContext(), 24).let {
                 params.leftMargin = it
                 params.rightMargin = it
             }
-            val intervalEdit = EditText(context).apply {
+            val intervalEdit = EditText(requireContext()).apply {
                 inputType = InputType.TYPE_CLASS_NUMBER
                 layoutParams = params
                 editContainer.addView(this)
             }
 
-            AlertDialog.Builder(context).apply {
+            AlertDialog.Builder(requireContext()).apply {
                 setMessage(R.string.input_auto_load_interval_second)
                 setView(editContainer)
                 setPositiveButton(R.string.ok) { _, _ ->
@@ -316,7 +314,7 @@ class Settings : LoDBaseActivity() {
                     DecimalFormat("#.#").let {
                         it.minimumFractionDigits = 2
                         it.maximumFractionDigits = 2
-                        it.format(getDirSize(context!!.cacheDir).toDouble() / 1024 / 1024)
+                        it.format(getDirSize(requireContext().cacheDir).toDouble() / 1024 / 1024)
                     }
                 }
                 clearCache.summary = getString(R.string.param_cache_num_megabyte, result)

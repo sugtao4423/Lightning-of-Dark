@@ -3,7 +3,6 @@ package sugtao4423.lod.userpage_fragment
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -12,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.user_0.*
 import kotlinx.coroutines.CoroutineScope
@@ -46,7 +46,7 @@ class _0_detail : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        app = activity!!.applicationContext as App
+        app = requireContext().applicationContext as App
         userPageProtected.visibility = View.GONE
 
         app.getFontAwesomeTypeface().let {
@@ -184,13 +184,13 @@ class _0_detail : Fragment() {
                 Glide.with(this@_0_detail).load(result.first).placeholder(R.drawable.icon_loading).into(userPageSourceIcon)
                 Glide.with(this@_0_detail).load(result.second).placeholder(R.drawable.icon_loading).into(userPageTargetIcon)
             } else {
-                ShowToast(activity!!.applicationContext, R.string.error_get_user_icon)
+                ShowToast(requireContext().applicationContext, R.string.error_get_user_icon)
             }
         }
     }
 
     private fun setClick() {
-        val context = activity!!
+        val context = requireContext()
 
         userIcon.setOnClickListener {
             val image = Intent(context, ImageFragmentActivity::class.java).apply {

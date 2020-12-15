@@ -27,7 +27,7 @@ class _3_follow : UserPageListBaseFragment(FragmentType.TYPE_USER) {
                     isAllLoaded = true
                 }
             } else {
-                ShowToast(activity!!.applicationContext, R.string.error_get_follow)
+                ShowToast(requireContext().applicationContext, R.string.error_get_follow)
             }
             userPagePull.isRefreshing = false
             userPagePull.isEnabled = true
