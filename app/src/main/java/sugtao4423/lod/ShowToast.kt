@@ -16,7 +16,6 @@ class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(c
             R.string.error_auto_load_tl_interval,
             R.string.error_create_list,
             R.string.error_favorite,
-            R.string.error_file_is_already_exists,
             R.string.error_follow2list,
             R.string.error_get_access_token,
             R.string.error_get_favorite,
@@ -35,7 +34,6 @@ class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(c
             R.string.error_get_video,
             R.string.error_post_delete,
             R.string.error_retweet,
-            R.string.error_save,
             R.string.error_select_picture,
             R.string.error_tweet,
             R.string.error_unfavorite,
@@ -47,7 +45,6 @@ class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(c
     private val showLongRes = arrayOf(
             R.string.error_auto_load_tl_interval,
             R.string.error_get_image,
-            R.string.error_save,
             R.string.invalid_pattern,
             R.string.param_account_already_exists,
             R.string.param_level_up,

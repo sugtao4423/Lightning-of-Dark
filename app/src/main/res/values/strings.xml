@@ -71,10 +71,6 @@
     <string name="save">保存</string>
     <string name="param_saved">保存しました\n%s</string>
     <string name="param_saved_original">オリジナルを保存しました\n%s</string>
-    <string name="error_save">保存できませんでした</string>
-    <string name="error_file_is_already_exists">エラー: ファイルが既に存在しています</string>
-    <string name="overwrite">上書き</string>
-    <string name="save_as">ファイル名を指定して保存</string>
     <string-array name="image_option">
         <item>@string/open_in_browser</item>
         <item>@string/save</item>
