@@ -15,6 +15,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/content_desc_user_banner"
             android:scaleType="fitXY"
             android:src="@drawable/user_header_empty" />
 
@@ -25,6 +26,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
+            android:contentDescription="@string/content_desc_user_icon"
             android:src="@drawable/icon_loading" />
 
         <TextView
@@ -220,6 +222,7 @@
             android:layout_alignTop="@+id/userPageIsFollow"
             android:layout_marginStart="5dp"
             android:layout_toEndOf="@+id/userPageIsFollow"
+            android:contentDescription="@string/content_desc_friendship_target_icon"
             android:src="@drawable/icon_loading" />
 
         <ImageView
@@ -229,6 +232,7 @@
             android:layout_below="@+id/userBanner"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
+            android:contentDescription="@string/content_desc_friendship_source_icon"
             android:src="@drawable/icon_loading" />
 
         <TextView

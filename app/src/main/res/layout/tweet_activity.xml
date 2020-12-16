@@ -38,7 +38,8 @@
         android:layout_height="70dp"
         android:layout_alignBottom="@+id/tweetText"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="11dp" />
+        android:layout_marginBottom="11dp"
+        android:contentDescription="@string/content_desc_upload_image" />
 
     <Button
         android:id="@+id/tweetClose"

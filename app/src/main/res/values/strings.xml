@@ -146,6 +146,17 @@
     <string name="layout_location">場所</string>
     <string name="layout_link">リンク</string>
 
+    <!-- ImageView content description -->
+    <string name="content_desc_tweet_button">ツイートボタン</string>
+    <string name="content_desc_option_button">オプションボタン</string>
+    <string name="content_desc_tweet_user_icon">ユーザーアイコン</string>
+    <string name="content_desc_retweet_user_icon">リツイートユーザーアイコン</string>
+    <string name="content_desc_upload_image">アップロードする画像</string>
+    <string name="content_desc_user_banner">ユーザーバナー</string>
+    <string name="content_desc_user_icon">ユーザーアイコン</string>
+    <string name="content_desc_friendship_target_icon">関係先ユーザーアイコン</string>
+    <string name="content_desc_friendship_source_icon">関係元ユーザーアイコン</string>
+
     <string name="no_text">null</string>
 
     <string name="icon_bomb">&#xf1e2;</string>
