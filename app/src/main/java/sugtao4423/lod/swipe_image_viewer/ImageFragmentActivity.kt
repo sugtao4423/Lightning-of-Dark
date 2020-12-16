@@ -1,22 +1,18 @@
 package sugtao4423.lod.swipe_image_viewer
 
-import android.Manifest
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ActivityInfo
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.PermissionChecker
 import androidx.core.net.toUri
 import kotlinx.android.synthetic.main.show_image_pager.*
 import sugtao4423.lod.ChromeIntent
@@ -84,10 +80,6 @@ class ImageFragmentActivity : LoDBaseActivity() {
     }
 
     private fun saveImage(imageUrl: String) {
-        if (!hasWriteExternalStoragePermission()) {
-            requestWriteExternalStoragePermission()
-            return
-        }
         if (type == TYPE_BANNER) {
             val banner = Regex.userBannerUrl.matcher(imageUrl)
             if (!banner.find()) {
@@ -128,27 +120,6 @@ class ImageFragmentActivity : LoDBaseActivity() {
             setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
         }
         dlManager.enqueue(dlRequest)
-    }
-
-    private fun hasWriteExternalStoragePermission(): Boolean {
-        val writeExternalStorage = PermissionChecker.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        return writeExternalStorage == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun requestWriteExternalStoragePermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 364)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode != 364) {
-            return
-        }
-        if (permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            saveImage(urls[showImagePager.currentItem])
-        } else {
-            ShowToast(applicationContext, R.string.permission_rejected)
-        }
     }
 
 }
