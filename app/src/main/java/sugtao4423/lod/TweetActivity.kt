@@ -201,8 +201,8 @@ class TweetActivity : LoDBaseActivity() {
     }
 
     fun clickImage(@Suppress("UNUSED_PARAMETER") v: View?) {
-        if (!hasWriteExternalStoragePermission()) {
-            requestWriteExternalStoragePermission()
+        if (!hasReadExternalStoragePermission()) {
+            requestReadExternalStoragePermission()
             return
         }
         val intent = Intent().apply {
@@ -317,13 +317,13 @@ class TweetActivity : LoDBaseActivity() {
         finish()
     }
 
-    private fun hasWriteExternalStoragePermission(): Boolean {
-        val writeExternalStorage = PermissionChecker.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private fun hasReadExternalStoragePermission(): Boolean {
+        val writeExternalStorage = PermissionChecker.checkSelfPermission(applicationContext, Manifest.permission.READ_EXTERNAL_STORAGE)
         return writeExternalStorage == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun requestWriteExternalStoragePermission() {
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 364)
+    private fun requestReadExternalStoragePermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 364)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -331,7 +331,7 @@ class TweetActivity : LoDBaseActivity() {
         if (requestCode != 364) {
             return
         }
-        if (permissions[0] == Manifest.permission.WRITE_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             clickImage(null)
         } else {
             ShowToast(applicationContext, R.string.permission_rejected)
