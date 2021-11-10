@@ -106,6 +106,10 @@ class MainActivity : LoDBaseActivity() {
         finish()
     }
 
+    override fun onBackPressed() {
+        finish()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         stopService(Intent(this, AutoLoadTLService::class.java))
