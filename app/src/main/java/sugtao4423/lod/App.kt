@@ -3,7 +3,7 @@ package sugtao4423.lod
 import android.app.Application
 import android.content.Context
 import android.graphics.Typeface
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

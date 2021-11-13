@@ -1,7 +1,7 @@
 package sugtao4423.lod
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import kotlin.math.ln
 
