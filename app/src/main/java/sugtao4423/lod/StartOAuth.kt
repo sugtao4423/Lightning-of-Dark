@@ -7,15 +7,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.text.Html
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.oauth.*
+import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import sugtao4423.lod.databinding.OauthBinding
 import twitter4j.Twitter
 import twitter4j.TwitterException
 import twitter4j.TwitterFactory
@@ -28,6 +28,7 @@ class StartOAuth : AppCompatActivity() {
         const val CALLBACK_URL = "https://localhost/sugtao4423.lod/oauth"
     }
 
+    private lateinit var binding: OauthBinding
     private lateinit var app: App
     private lateinit var ck: String
     private lateinit var cs: String
@@ -37,11 +38,15 @@ class StartOAuth : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.oauth)
+        binding = OauthBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         app = applicationContext as App
 
+        binding.oauthBtn.setOnClickListener { v -> clickOAuth(v) }
+        binding.oauthDescriptionBtn.setOnClickListener { clickOAuthDescription() }
+
         getString(R.string.param_oauth_description, CALLBACK_URL).let {
-            oauthDescription.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            binding.oauthDescriptionBtn.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(it, Html.FROM_HTML_MODE_LEGACY)
             } else {
                 @Suppress("DEPRECATION")
@@ -49,18 +54,18 @@ class StartOAuth : AppCompatActivity() {
             }
         }
 
-        editConsumerKey.setText(app.getCurrentAccount().consumerKey)
-        editConsumerSecret.setText(app.getCurrentAccount().consumerSecret)
+        binding.ckEdit.setText(app.getCurrentAccount().consumerKey)
+        binding.csEdit.setText(app.getCurrentAccount().consumerSecret)
     }
 
-    fun clickOAuth(v: View) {
+    private fun clickOAuth(v: View) {
         v.isEnabled = false
-        if (editConsumerKey.text.toString().isEmpty()) {
+        if (binding.ckEdit.text.toString().isEmpty()) {
             ck = getString(R.string.CK)
             cs = getString(R.string.CS)
         } else {
-            ck = editConsumerKey.text.toString()
-            cs = editConsumerSecret.text.toString()
+            ck = binding.ckEdit.text.toString()
+            cs = binding.csEdit.text.toString()
         }
 
         val conf = ConfigurationBuilder().run {
@@ -134,7 +139,7 @@ class StartOAuth : AppCompatActivity() {
         }
     }
 
-    fun clickOAuthDescription(@Suppress("UNUSED_PARAMETER") v: View) {
+    private fun clickOAuthDescription() {
         (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name), CALLBACK_URL))
         ShowToast(applicationContext, R.string.done_copy_clip_board)
     }
