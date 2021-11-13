@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.user_0.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +21,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
+import sugtao4423.lod.databinding.User0Binding
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
 import sugtao4423.lod.utils.Regex
 import twitter4j.TwitterException
@@ -33,6 +33,7 @@ import java.util.*
 
 class _0_detail : Fragment() {
 
+    private lateinit var binding: User0Binding
     private lateinit var app: App
     var targetUser: User? = null
 
@@ -40,22 +41,23 @@ class _0_detail : Fragment() {
     private var isPrepared = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.user_0, container, false)
+        binding = User0Binding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         app = requireContext().applicationContext as App
-        userPageProtected.visibility = View.GONE
+        binding.userPageProtected.visibility = View.GONE
 
         app.getFontAwesomeTypeface().let {
-            userPageProtected.typeface = it
-            iconTweetCount.typeface = it
-            iconFavoriteCount.typeface = it
-            iconFollowCount.typeface = it
-            iconFollowerCount.typeface = it
-            iconCreateDate.typeface = it
+            binding.userPageProtected.typeface = it
+            binding.iconTweetCount.typeface = it
+            binding.iconFavoriteCount.typeface = it
+            binding.iconFollowCount.typeface = it
+            binding.iconFollowerCount.typeface = it
+            binding.iconCreateDate.typeface = it
         }
 
         setClick()
@@ -71,35 +73,35 @@ class _0_detail : Fragment() {
 
         targetUser!!.also {
             if (it.isProtected) {
-                userPageProtected.visibility = View.VISIBLE
+                binding.userPageProtected.visibility = View.VISIBLE
             }
-            Glide.with(this).load(it.originalProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(userIcon)
+            Glide.with(this).load(it.originalProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(binding.userIcon)
             if (!it.profileBannerRetinaURL.isNullOrEmpty()) {
-                Glide.with(this).load(it.profileBannerRetinaURL).placeholder(R.drawable.user_header_empty).into(userBanner)
+                Glide.with(this).load(it.profileBannerRetinaURL).placeholder(R.drawable.user_header_empty).into(binding.userBanner)
             }
-            userName.text = it.name
-            userScreenName.text = "@${it.screenName}"
+            binding.userName.text = it.name
+            binding.userScreenName.text = "@${it.screenName}"
 
             if (app.getCurrentAccount().screenName == it.screenName) {
-                userPageSourceIcon.visibility = View.GONE
-                userPageTargetIcon.visibility = View.GONE
-                userPageIsFollow.visibility = View.GONE
+                binding.userPageSourceIcon.visibility = View.GONE
+                binding.userPageTargetIcon.visibility = View.GONE
+                binding.userPageIsFollow.visibility = View.GONE
             } else {
-                userPageSourceIcon.visibility = View.VISIBLE
-                userPageTargetIcon.visibility = View.VISIBLE
-                userPageIsFollow.visibility = View.VISIBLE
+                binding.userPageSourceIcon.visibility = View.VISIBLE
+                binding.userPageTargetIcon.visibility = View.VISIBLE
+                binding.userPageIsFollow.visibility = View.VISIBLE
                 followCheck()
                 setSourceAndTargetIcon()
             }
 
-            setLinkTouch(userBio, replaceUrlEntity2ExUrl(it.description, it.descriptionURLEntities))
-            setLinkTouch(userLocation, it.location)
-            setLinkTouch(userLink, replaceUrlEntity2ExUrl(it.url, it.urlEntity))
-            userTweetCount.text = numberFormat(it.statusesCount)
-            userFavoriteCount.text = numberFormat(it.favouritesCount)
-            userFollowCount.text = numberFormat(it.friendsCount)
-            userFollowerCount.text = numberFormat(it.followersCount)
-            userCreateDate.text = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(it.createdAt)
+            setLinkTouch(binding.userBio, replaceUrlEntity2ExUrl(it.description, it.descriptionURLEntities))
+            setLinkTouch(binding.userLocation, it.location)
+            setLinkTouch(binding.userLink, replaceUrlEntity2ExUrl(it.url, it.urlEntity))
+            binding.userTweetCount.text = numberFormat(it.statusesCount)
+            binding.userFavoriteCount.text = numberFormat(it.favouritesCount)
+            binding.userFollowCount.text = numberFormat(it.friendsCount)
+            binding.userFollowerCount.text = numberFormat(it.followersCount)
+            binding.userCreateDate.text = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(it.createdAt)
         }
     }
 
@@ -158,8 +160,8 @@ class _0_detail : Fragment() {
                 }
             }
             if (result != null) {
-                userPageIsFollow.typeface = app.getFontAwesomeTypeface()
-                userPageIsFollow.text = when {
+                binding.userPageIsFollow.typeface = app.getFontAwesomeTypeface()
+                binding.userPageIsFollow.text = when {
                     result.isSourceFollowingTarget && result.isSourceFollowedByTarget -> getString(R.string.icon_followEach)
                     result.isSourceFollowingTarget -> getString(R.string.icon_followFollow)
                     result.isSourceFollowedByTarget -> getString(R.string.icon_followFollower)
@@ -181,8 +183,8 @@ class _0_detail : Fragment() {
                 }
             }
             if (result != null) {
-                Glide.with(this@_0_detail).load(result.first).placeholder(R.drawable.icon_loading).into(userPageSourceIcon)
-                Glide.with(this@_0_detail).load(result.second).placeholder(R.drawable.icon_loading).into(userPageTargetIcon)
+                Glide.with(this@_0_detail).load(result.first).placeholder(R.drawable.icon_loading).into(binding.userPageSourceIcon)
+                Glide.with(this@_0_detail).load(result.second).placeholder(R.drawable.icon_loading).into(binding.userPageTargetIcon)
             } else {
                 ShowToast(requireContext().applicationContext, R.string.error_get_user_icon)
             }
@@ -192,19 +194,19 @@ class _0_detail : Fragment() {
     private fun setClick() {
         val context = requireContext()
 
-        userIcon.setOnClickListener {
+        binding.userIcon.setOnClickListener {
             val image = Intent(context, ImageFragmentActivity::class.java).apply {
                 putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, arrayOf(targetUser!!.originalProfileImageURLHttps))
                 putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_TYPE, ImageFragmentActivity.TYPE_ICON)
             }
             context.startActivity(image)
         }
-        userIcon.setOnLongClickListener {
+        binding.userIcon.setOnLongClickListener {
             ChromeIntent(context, Uri.parse(targetUser!!.originalProfileImageURLHttps))
             true
         }
 
-        userBanner.setOnClickListener {
+        binding.userBanner.setOnClickListener {
             if (targetUser!!.profileBannerURL != null) {
                 val image = Intent(context, ImageFragmentActivity::class.java).apply {
                     putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, arrayOf(targetUser!!.profileBanner1500x500URL))
@@ -213,7 +215,7 @@ class _0_detail : Fragment() {
                 context.startActivity(image)
             }
         }
-        userBanner.setOnLongClickListener {
+        binding.userBanner.setOnLongClickListener {
             if (targetUser!!.profileBannerURL != null) {
                 ChromeIntent(context, Uri.parse(targetUser!!.profileBanner1500x500URL))
             }
