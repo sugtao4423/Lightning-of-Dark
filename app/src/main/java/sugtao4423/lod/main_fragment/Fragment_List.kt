@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,6 +14,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.TwitterList
+import sugtao4423.lod.databinding.FragmentListBinding
 import sugtao4423.lod.tweetlistview.EndlessScrollListener
 import twitter4j.Paging
 import twitter4j.TwitterException
@@ -25,12 +25,14 @@ class Fragment_List : Fragment() {
         const val LIST_INDEX = "listIndex"
     }
 
+    private lateinit var binding: FragmentListBinding
     private lateinit var app: App
     private lateinit var thisList: TwitterList
     private var listIndex = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        binding = FragmentListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,12 +42,12 @@ class Fragment_List : Fragment() {
         app = requireContext().applicationContext as App
         thisList = app.getLists(requireContext())[listIndex]
         val adapter = thisList.adapter
-        listLine.adapter = adapter
+        binding.listLine.adapter = adapter
 
-        val scrollListener = getLoadMoreListener(listLine.linearLayoutManager)
-        listLine.addOnScrollListener(scrollListener)
+        val scrollListener = getLoadMoreListener(binding.listLine.linearLayoutManager)
+        binding.listLine.addOnScrollListener(scrollListener)
 
-        listPull2Refresh.apply {
+        binding.listPull2Refresh.apply {
             setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                     android.R.color.holo_orange_light, android.R.color.holo_red_light)
             setOnRefreshListener {
@@ -90,8 +92,8 @@ class Fragment_List : Fragment() {
             } else {
                 ShowToast(requireContext().applicationContext, R.string.error_get_list)
             }
-            listPull2Refresh.isRefreshing = false
-            listPull2Refresh.isEnabled = true
+            binding.listPull2Refresh.isRefreshing = false
+            binding.listPull2Refresh.isEnabled = true
         }
     }
 
