@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,6 +13,7 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
+import sugtao4423.lod.databinding.FragmentListBinding
 import sugtao4423.lod.tweetlistview.EndlessScrollListener
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import twitter4j.Paging
@@ -22,12 +22,14 @@ import twitter4j.TwitterException
 
 class Fragment_home : Fragment() {
 
+    private lateinit var binding: FragmentListBinding
     private lateinit var adapter: TweetListAdapter
     private var listAsTL = -1L
     private lateinit var app: App
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,18 +39,18 @@ class Fragment_home : Fragment() {
         listAsTL = app.getCurrentAccount().listAsTL
 
         adapter = TweetListAdapter(requireContext())
-        listLine.adapter = adapter
+        binding.listLine.adapter = adapter
         val scrollListener = getLoadMoreListener()
-        listLine.addOnScrollListener(scrollListener)
+        binding.listLine.addOnScrollListener(scrollListener)
 
-        listPull2Refresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
+        binding.listPull2Refresh.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light,
                 android.R.color.holo_orange_light, android.R.color.holo_red_light)
         val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
             adapter.clear()
             loadTimeLine()
             scrollListener.resetState()
         }
-        listPull2Refresh.setOnRefreshListener(onRefreshListener)
+        binding.listPull2Refresh.setOnRefreshListener(onRefreshListener)
         onRefreshListener.onRefresh()
     }
 
@@ -79,21 +81,21 @@ class Fragment_home : Fragment() {
             } else {
                 ShowToast(requireContext().applicationContext, R.string.error_get_timeline)
             }
-            listPull2Refresh.isRefreshing = false
-            listPull2Refresh.isEnabled = true
+            binding.listPull2Refresh.isRefreshing = false
+            binding.listPull2Refresh.isEnabled = true
         }
     }
 
     fun insert(status: Status) {
         adapter.insertTop(status)
         app.latestTweetId = status.id
-        if (listLine.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
-            listLine.smoothScrollToPosition(0)
+        if (binding.listLine.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
+            binding.listLine.smoothScrollToPosition(0)
         }
     }
 
     private fun getLoadMoreListener(): EndlessScrollListener {
-        return object : EndlessScrollListener(listLine.linearLayoutManager) {
+        return object : EndlessScrollListener(binding.listLine.linearLayoutManager) {
             override fun onLoadMore(currentPage: Int) {
                 if (adapter.itemCount > 30) {
                     loadTimeLine()
