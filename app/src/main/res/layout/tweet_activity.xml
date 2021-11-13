@@ -10,7 +10,7 @@
         android:id="@+id/tweetText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tweetButton"
+        android:layout_above="@+id/closeBtn"
         android:layout_below="@+id/scrollViewForOriginStatus"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/tweetClose"
+        android:layout_toStartOf="@+id/closeBtn"
         android:text="140"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -42,40 +42,37 @@
         android:contentDescription="@string/content_desc_upload_image" />
 
     <Button
-        android:id="@+id/tweetClose"
+        android:id="@+id/closeBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:background="@color/transparent"
-        android:onClick="clickClose"
         android:padding="10dp"
         android:text="@string/icon_close"
         android:textColor="@xml/activity_tweet_btn"
         android:textSize="22sp" />
 
     <Button
-        android:id="@+id/tweetButton"
+        android:id="@+id/tweetBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/imageSelect"
+        android:layout_toStartOf="@+id/imageSelectBtn"
         android:background="@color/transparent"
-        android:onClick="clickTweet"
         android:padding="10dp"
         android:text="@string/icon_tweet"
         android:textColor="@xml/activity_tweet_btn"
         android:textSize="22sp" />
 
     <Button
-        android:id="@+id/imageSelect"
+        android:id="@+id/imageSelectBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="10dp"
         android:layout_toStartOf="@+id/text140"
         android:background="@color/transparent"
-        android:onClick="clickImage"
         android:padding="10dp"
         android:text="@string/icon_image"
         android:textColor="@xml/activity_tweet_btn"
@@ -90,7 +87,7 @@
         android:padding="8dp" />
 
     <Button
-        android:id="@+id/tweetMic"
+        android:id="@+id/micBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -99,39 +96,36 @@
         android:background="@color/transparent"
         android:minWidth="0dp"
         android:minHeight="0dp"
-        android:onClick="clickMic"
         android:padding="8dp"
         android:text="@string/icon_mic"
         android:textColor="@xml/activity_tweet_btn"
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/tweetMusic"
+        android:id="@+id/musicBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="12dp"
-        android:layout_toEndOf="@+id/tweetMic"
+        android:layout_toEndOf="@+id/micBtn"
         android:background="@color/transparent"
         android:minWidth="0dp"
         android:minHeight="0dp"
-        android:onClick="clickMusic"
         android:padding="8dp"
         android:text="@string/icon_music"
         android:textColor="@xml/activity_tweet_btn"
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/tweetTextOption"
+        android:id="@+id/textOptionBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="12dp"
-        android:layout_toEndOf="@+id/tweetMusic"
+        android:layout_toEndOf="@+id/musicBtn"
         android:background="@color/transparent"
         android:minWidth="0dp"
         android:minHeight="0dp"
-        android:onClick="clickTextOption"
         android:padding="8dp"
         android:text="@string/icon_text"
         android:textColor="@xml/activity_tweet_btn"
