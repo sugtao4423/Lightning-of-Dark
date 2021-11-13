@@ -4,7 +4,7 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.widget.MediaController
-import kotlinx.android.synthetic.main.show_video.*
+import sugtao4423.lod.databinding.ShowVideoBinding
 import sugtao4423.support.progressdialog.ProgressDialog
 
 class ShowVideo : LoDBaseActivity() {
@@ -19,7 +19,8 @@ class ShowVideo : LoDBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.show_video)
+        val binding = ShowVideoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         if (app.getOptions().isVideoOrientationSensor) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
         }
@@ -31,7 +32,7 @@ class ShowVideo : LoDBaseActivity() {
             return
         }
 
-        twVideo.setMediaController(MediaController(this))
+        binding.twVideo.setMediaController(MediaController(this))
 
         val progressDialog = ProgressDialog(this).apply {
             setMessage(getString(R.string.loading))
@@ -41,16 +42,16 @@ class ShowVideo : LoDBaseActivity() {
             show()
         }
 
-        twVideo.setVideoURI(Uri.parse(url))
-        twVideo.setOnPreparedListener {
+        binding.twVideo.setVideoURI(Uri.parse(url))
+        binding.twVideo.setOnPreparedListener {
             progressDialog.dismiss()
-            twVideo.start()
+            binding.twVideo.start()
         }
 
-        twVideo.setOnCompletionListener {
+        binding.twVideo.setOnCompletionListener {
             if (type == TYPE_GIF) {
-                twVideo.seekTo(0)
-                twVideo.start()
+                binding.twVideo.seekTo(0)
+                binding.twVideo.start()
             } else {
                 finish()
             }
