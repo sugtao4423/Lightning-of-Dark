@@ -1,6 +1,5 @@
 package sugtao4423.lod.userpage_fragment
 
-import kotlinx.android.synthetic.main.user_1.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,8 +33,8 @@ class _2_favorites : UserPageListBaseFragment(FragmentType.TYPE_TWEET) {
             } else {
                 ShowToast(requireContext().applicationContext, R.string.error_get_favorite)
             }
-            userPagePull.isRefreshing = false
-            userPagePull.isEnabled = true
+            binding.userPagePull.isRefreshing = false
+            binding.userPagePull.isEnabled = true
         }
     }
 
