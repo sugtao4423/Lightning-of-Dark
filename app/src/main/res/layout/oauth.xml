@@ -7,11 +7,11 @@
     tools:context=".StartOAuth">
 
     <Button
+        android:id="@+id/oauthBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:onClick="clickOAuth"
         android:text="@string/layout_oauth_auth" />
 
     <TextView
@@ -31,7 +31,7 @@
         android:layout_marginTop="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editConsumerKey"
+            android:id="@+id/ckEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/layout_consumer_key"
@@ -48,7 +48,7 @@
         android:layout_marginTop="20dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editConsumerSecret"
+            android:id="@+id/csEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/layout_consumer_secret"
@@ -58,14 +58,13 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/oauthDescription"
+        android:id="@+id/oauthDescriptionBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textConsumerSecret"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp"
         android:clickable="true"
-        android:focusable="true"
-        android:onClick="clickOAuthDescription" />
+        android:focusable="true" />
 
 </RelativeLayout>

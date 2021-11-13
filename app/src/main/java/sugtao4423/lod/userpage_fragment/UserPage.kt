@@ -2,7 +2,6 @@ package sugtao4423.lod.userpage_fragment
 
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.userpage.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -10,6 +9,7 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
+import sugtao4423.lod.databinding.UserpageBinding
 import twitter4j.TwitterException
 import twitter4j.User
 
@@ -24,15 +24,16 @@ class UserPage : LoDBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.userpage)
+        val binding = UserpageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         adapter = UserPageFragmentPagerAdapter(supportFragmentManager, this)
-        userPager.let {
+        binding.userPager.let {
             it.adapter = adapter
             it.offscreenPageLimit = 5
         }
 
-        userPagerTabStrip.apply {
+        binding.userPagerTabStrip.apply {
             tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }

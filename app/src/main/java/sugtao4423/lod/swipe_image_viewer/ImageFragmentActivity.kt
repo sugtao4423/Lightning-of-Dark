@@ -9,16 +9,15 @@ import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import kotlinx.android.synthetic.main.show_image_pager.*
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
+import sugtao4423.lod.databinding.ShowImagePagerBinding
 import sugtao4423.lod.utils.Regex
 
 class ImageFragmentActivity : LoDBaseActivity() {
@@ -32,6 +31,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
         const val TYPE_BANNER = 1
     }
 
+    private lateinit var binding: ShowImagePagerBinding
     private lateinit var adapter: ImagePagerAdapter
     private lateinit var urls: Array<String>
     private var type = -1
@@ -39,30 +39,33 @@ class ImageFragmentActivity : LoDBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.show_image_pager)
+        binding = ShowImagePagerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         if (app.getOptions().isImageOrientationSensor) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
         }
+
+        binding.optionBtn.setOnClickListener { clickImageOption() }
 
         urls = intent.getStringArrayExtra(INTENT_EXTRA_KEY_URLS)!!
         type = intent.getIntExtra(INTENT_EXTRA_KEY_TYPE, -1)
         val pos = intent.getIntExtra(INTENT_EXTRA_KEY_POSITION, 0)
         adapter = ImagePagerAdapter(supportFragmentManager, urls)
 
-        showImagePager.also {
+        binding.showImagePager.also {
             it.adapter = adapter
             it.offscreenPageLimit = urls.size - 1
             it.currentItem = pos
         }
 
-        showImagePagerTabStrip.apply {
+        binding.showImagePagerTabStrip.apply {
             tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }
     }
 
-    fun clickImageOption(@Suppress("UNUSED_PARAMETER") v: View) {
-        val imageUrl = urls[showImagePager.currentItem]
+    private fun clickImageOption() {
+        val imageUrl = urls[binding.showImagePager.currentItem]
         val existsOriginal = (type != TYPE_BANNER && type != TYPE_ICON)
         val listItemRes = if (existsOriginal) R.array.image_option_orig else R.array.image_option
         AlertDialog.Builder(this).apply {

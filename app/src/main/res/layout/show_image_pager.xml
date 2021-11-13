@@ -19,13 +19,13 @@
     </com.tenthbit.view.ZoomViewPager>
 
     <ImageButton
+        android:id="@+id/optionBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:background="@color/transparent"
         android:contentDescription="@string/content_desc_option_button"
-        android:onClick="clickImageOption"
         android:src="@drawable/icon_download" />
 
 </RelativeLayout>

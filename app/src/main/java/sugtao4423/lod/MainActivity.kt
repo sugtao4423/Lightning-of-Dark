@@ -3,13 +3,12 @@ package sugtao4423.lod
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_main.*
 import sugtao4423.icondialog.IconDialog
 import sugtao4423.icondialog.IconItem
+import sugtao4423.lod.databinding.ActivityMainBinding
 import sugtao4423.lod.main_fragment.Fragment_home
 import sugtao4423.lod.main_fragment.Fragment_mention
 import sugtao4423.lod.main_fragment.MainFragmentPagerAdapter
@@ -28,17 +27,21 @@ class MainActivity : LoDBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
-        setContentView(R.layout.activity_main)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.tweetBtn.setOnClickListener { clickNewTweet() }
+        binding.optionBtn.setOnClickListener { clickOption() }
 
         val pagerAdapter = MainFragmentPagerAdapter(supportFragmentManager, this)
 
-        pager.apply {
+        binding.pager.apply {
             adapter = pagerAdapter
             currentItem = 1
             offscreenPageLimit = app.getCurrentAccount().selectListIds.size + 1
         }
 
-        mainPagerTabStrip.apply {
+        binding.mainPagerTabStrip.apply {
             tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }
@@ -81,11 +84,11 @@ class MainActivity : LoDBaseActivity() {
         }
     }
 
-    fun clickNewTweet(@Suppress("UNUSED_PARAMETER") v: View) {
+    private fun clickNewTweet() {
         startActivity(Intent(this, TweetActivity::class.java))
     }
 
-    fun clickOption(@Suppress("UNUSED_PARAMETER") v: View) {
+    private fun clickOption() {
         if (iconDialog == null) {
             val black = ContextCompat.getColor(applicationContext, R.color.icon)
             val items = arrayOf(
