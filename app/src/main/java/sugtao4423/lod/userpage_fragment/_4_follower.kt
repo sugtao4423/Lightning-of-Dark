@@ -22,7 +22,7 @@ class _4_follower : UserPageListBaseFragment(FragmentType.TYPE_USER) {
             if (result != null) {
                 tweetListUserAdapter.addAll(result)
                 cursor = result.nextCursor
-                if (targetUser != null && targetUser!!.followersCount <= tweetListUserAdapter.itemCount) {
+                if (targetUser != null && !result.hasNext()) {
                     isAllLoaded = true
                 }
             } else {

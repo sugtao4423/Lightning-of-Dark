@@ -65,7 +65,7 @@ class Fragment_List : Fragment() {
     private fun getLoadMoreListener(llm: LinearLayoutManager): EndlessScrollListener {
         return object : EndlessScrollListener(llm) {
             override fun onLoadMore(currentPage: Int) {
-                if (thisList.adapter.itemCount > 30) {
+                if (thisList.adapter.hasNextPage) {
                     getList()
                 }
             }
@@ -75,18 +75,20 @@ class Fragment_List : Fragment() {
     private fun getList() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
+                val paging = Paging(1, 50).let {
+                    if (thisList.isAlreadyLoad) it.maxId(thisList.adapter.data.last().id - 1) else it
+                }
+
                 try {
-                    if (thisList.isAlreadyLoad) {
-                        val lastTweetId = thisList.adapter.data.last().id
-                        app.getTwitter().getUserListStatuses(thisList.listId, Paging(1, 50).maxId(lastTweetId - 1))
-                    } else {
-                        app.getTwitter().getUserListStatuses(thisList.listId, Paging(1, 50))
-                    }
+                    app.getTwitter().getUserListStatuses(thisList.listId, paging)
                 } catch (e: TwitterException) {
                     null
                 }
             }
             if (result != null) {
+                if (result.isEmpty()) {
+                    thisList.adapter.hasNextPage = false
+                }
                 thisList.adapter.addAll(result)
                 thisList.isAlreadyLoad = true
             } else {

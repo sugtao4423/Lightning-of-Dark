@@ -57,10 +57,8 @@ class Fragment_home : Fragment() {
     private fun loadTimeLine() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                val paging = Paging(1, 50)
-                if (adapter.itemCount > 0) {
-                    val tweetId = adapter.data.last().id
-                    paging.maxId(tweetId - 1)
+                val paging = Paging(1, 50).let {
+                    if (adapter.itemCount > 0) it.maxId(adapter.data.last().id - 1) else it
                 }
 
                 try {
@@ -74,6 +72,9 @@ class Fragment_home : Fragment() {
                 }
             }
             if (result != null) {
+                if (result.isEmpty()) {
+                    adapter.hasNextPage = false
+                }
                 if (adapter.itemCount <= 0) {
                     app.latestTweetId = result[0].id
                 }
@@ -97,7 +98,7 @@ class Fragment_home : Fragment() {
     private fun getLoadMoreListener(): EndlessScrollListener {
         return object : EndlessScrollListener(binding.listLine.linearLayoutManager) {
             override fun onLoadMore(currentPage: Int) {
-                if (adapter.itemCount > 30) {
+                if (adapter.hasNextPage) {
                     loadTimeLine()
                 }
             }

@@ -29,6 +29,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
     private val statusDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (if (app.getOptions().isMillisecond) ".SSS" else ""), Locale.getDefault())
     private val statusClickListener = StatusClickListener()
     val data = arrayListOf<Status>()
+    var hasNextPage = true
     var hideImages = false
 
     interface OnItemClickListener {

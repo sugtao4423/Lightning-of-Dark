@@ -14,20 +14,19 @@ class _2_favorites : UserPageListBaseFragment(FragmentType.TYPE_TWEET) {
     override fun loadList() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
+                val paging = Paging(1, 50).let {
+                    if (tweetListAdapter.itemCount > 0) it.maxId(tweetListAdapter.data.last().id - 1) else it
+                }
+
                 try {
-                    if (tweetListAdapter.itemCount > 0) {
-                        val tweetId = tweetListAdapter.data.last().id
-                        app.getTwitter().getFavorites(targetUser!!.screenName, Paging(1, 50).maxId(tweetId - 1))
-                    } else {
-                        app.getTwitter().getFavorites(targetUser!!.screenName, Paging(1, 50))
-                    }
+                    app.getTwitter().getFavorites(targetUser!!.screenName, paging)
                 } catch (e: TwitterException) {
                     null
                 }
             }
             if (result != null) {
                 tweetListAdapter.addAll(result)
-                if (targetUser != null && targetUser!!.favouritesCount <= tweetListAdapter.itemCount) {
+                if (targetUser != null && result.isEmpty()) {
                     isAllLoaded = true
                 }
             } else {

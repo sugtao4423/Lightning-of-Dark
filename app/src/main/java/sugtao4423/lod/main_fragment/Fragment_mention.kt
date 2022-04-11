@@ -57,7 +57,7 @@ class Fragment_mention : Fragment() {
     private fun getLoadMoreListener(): EndlessScrollListener {
         return object : EndlessScrollListener(binding.listLine.linearLayoutManager) {
             override fun onLoadMore(currentPage: Int) {
-                if (adapter.itemCount > 30) {
+                if (adapter.hasNextPage) {
                     loadMention()
                 }
             }
@@ -67,18 +67,20 @@ class Fragment_mention : Fragment() {
     private fun loadMention() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
+                val paging = Paging(1, 50).let {
+                    if (adapter.itemCount > 0) it.maxId(adapter.data.last().id - 1) else it
+                }
+
                 try {
-                    if (adapter.itemCount > 0) {
-                        val tweetId = adapter.data.last().id
-                        app.getTwitter().getMentionsTimeline(Paging(1, 50).maxId(tweetId - 1))
-                    } else {
-                        app.getTwitter().getMentionsTimeline(Paging(1, 50))
-                    }
+                    app.getTwitter().getMentionsTimeline(paging)
                 } catch (e: TwitterException) {
                     null
                 }
             }
             if (result != null) {
+                if (result.isEmpty()) {
+                    adapter.hasNextPage = false
+                }
                 addAll(result)
             } else {
                 ShowToast(requireContext().applicationContext, R.string.error_get_mention)
