@@ -14,7 +14,7 @@ class _3_follow : UserPageListBaseFragment(FragmentType.TYPE_USER) {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    app.getTwitter().getFriendsList(targetUser!!.screenName, cursor)
+                    app.getTwitter().getFriendsList(targetUser!!.screenName, cursor, 200)
                 } catch (e: TwitterException) {
                     null
                 }
