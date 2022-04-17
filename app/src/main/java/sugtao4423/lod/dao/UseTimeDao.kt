@@ -13,13 +13,13 @@ interface UseTimeDao {
     suspend fun findByDate(unixTime: Long): UseTime?
 
     @Query("SELECT SUM(use) FROM useTime")
-    suspend fun getTotalUseTimeInMillis(): Long
+    suspend fun getTotalUseTimeInMillis(): Long?
 
     @Query("SELECT use FROM useTime WHERE date = :unixTime")
-    suspend fun getOneDayUseTimeInMillis(unixTime: Long): Long
+    suspend fun getOneDayUseTimeInMillis(unixTime: Long): Long?
 
     @Query("SELECT SUM(use) FROM useTime WHERE date BETWEEN :startUnixTime AND :endUnixTime")
-    suspend fun getBetweenUseTimeInMillis(startUnixTime: Long, endUnixTime: Long): Long
+    suspend fun getBetweenUseTimeInMillis(startUnixTime: Long, endUnixTime: Long): Long?
 
     @Query("SELECT date FROM useTime LIMIT 1")
     suspend fun getRecordStartUnixTime(): Long?

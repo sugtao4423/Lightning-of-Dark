@@ -20,18 +20,18 @@ class UseTimeRepository(private val useTimeDao: UseTimeDao) {
         }
     }
 
-    suspend fun getTotalUseTimeInMillis(): Long = useTimeDao.getTotalUseTimeInMillis()
+    suspend fun getTotalUseTimeInMillis(): Long = useTimeDao.getTotalUseTimeInMillis() ?: 0
 
     suspend fun getTodayUseTimeInMillis(): Long =
-        useTimeDao.getOneDayUseTimeInMillis(todayUnixTime())
+        useTimeDao.getOneDayUseTimeInMillis(todayUnixTime()) ?: 0
 
     suspend fun getYesterdayUseTimeInMillis(): Long =
-        useTimeDao.getOneDayUseTimeInMillis(todayUnixTime() - 86400000)
+        useTimeDao.getOneDayUseTimeInMillis(todayUnixTime() - 86400000) ?: 0
 
     suspend fun getLastNDaysUseTimeInMillis(n: Int): Long {
         val end = todayUnixTime()
         val start = end - n * 86400000L
-        return useTimeDao.getBetweenUseTimeInMillis(start, end)
+        return useTimeDao.getBetweenUseTimeInMillis(start, end) ?: 0
     }
 
     suspend fun getRecordStartDate(): String {
