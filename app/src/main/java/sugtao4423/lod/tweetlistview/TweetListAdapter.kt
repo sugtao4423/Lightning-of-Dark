@@ -26,7 +26,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
 
     private val inflater = LayoutInflater.from(context)
     private val app = context.applicationContext as App
-    private val statusDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (if (app.getOptions().isMillisecond) ".SSS" else ""), Locale.getDefault())
+    private val statusDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (if (app.prefRepository.isMillisecond) ".SSS" else ""), Locale.getDefault())
     private val statusClickListener = StatusClickListener()
     val data = arrayListOf<Status>()
     var hasNextPage = true
@@ -55,7 +55,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         // 鍵
         if (origStatus.user.isProtected) {
             holder.protect.typeface = app.getFontAwesomeTypeface()
-            holder.protect.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().userNameFontSize - 3)
+            holder.protect.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.userNameFontSize - 3)
             holder.protect.visibility = View.VISIBLE
         } else {
             holder.protect.visibility = View.GONE
@@ -80,11 +80,11 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         holder.content.text = origStatus.text
         Glide.with(app.applicationContext).load(origStatus.user.biggerProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.icon)
 
-        holder.nameSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().userNameFontSize)
-        holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().contentFontSize)
-        holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().dateFontSize)
+        holder.nameSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.userNameFontSize)
+        holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.contentFontSize)
+        holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.dateFontSize)
         if (item.isRetweet) {
-            holder.rtSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().dateFontSize)
+            holder.rtSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.dateFontSize)
         }
 
         holder.icon.setOnClickListener {

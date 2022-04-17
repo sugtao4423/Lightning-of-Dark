@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.text.Html
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -120,10 +119,7 @@ class StartOAuth : AppCompatActivity() {
                         finish()
                         return@launch
                     }
-                    PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                        .edit()
-                        .putString(Keys.SCREEN_NAME, result.screenName)
-                        .apply()
+                    app.prefRepository.screenName = result.screenName
 
                     if (ck == getString(R.string.CK)) {
                         ck = ""

@@ -21,7 +21,7 @@ class ShowVideo : LoDBaseActivity() {
         super.onCreate(savedInstanceState)
         val binding = ShowVideoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (app.getOptions().isVideoOrientationSensor) {
+        if (app.prefRepository.isVideoOrientationSensor) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
         }
 

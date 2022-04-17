@@ -25,10 +25,10 @@ class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapt
         val app = context.applicationContext as App
 
         val list = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1)
-        if (app.getOptions().isRegex) {
+        if (app.prefRepository.isRegex) {
             list.add(context.getString(R.string.extract_with_regex))
         }
-        if (app.getOptions().isOpenBrowser) {
+        if (app.prefRepository.isOpenBrowser) {
             list.add(context.getString(R.string.open_in_browser))
         }
 

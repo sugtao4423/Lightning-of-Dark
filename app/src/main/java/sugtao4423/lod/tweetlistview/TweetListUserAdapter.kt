@@ -44,7 +44,7 @@ class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<
             holder.protect.apply {
                 visibility = View.VISIBLE
                 typeface = app.getFontAwesomeTypeface()
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().userNameFontSize - 3)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.userNameFontSize - 3)
             }
         } else {
             holder.protect.visibility = View.GONE
@@ -61,9 +61,9 @@ class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<
         )
         holder.date.text = userCountsText
 
-        holder.nameSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().userNameFontSize)
-        holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().contentFontSize)
-        holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().dateFontSize)
+        holder.nameSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.userNameFontSize)
+        holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.contentFontSize)
+        holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.dateFontSize)
 
         holder.itemView.setOnClickListener {
             val i = Intent(context, UserPage::class.java)

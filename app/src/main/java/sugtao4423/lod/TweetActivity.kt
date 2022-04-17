@@ -236,11 +236,10 @@ class TweetActivity : LoDBaseActivity() {
         val title = playingMusicData[MusicDataKey.TITLE]!!
         val artist = playingMusicData[MusicDataKey.ARTIST]!!
         val album = playingMusicData[MusicDataKey.ALBUM]!!
-        var nowplayingFormat = app.getOptions().nowplayingFormat
-        if (nowplayingFormat == "") {
-            nowplayingFormat = "%artist% - %track% #nowplaying"
+        val nowPlayingFormat = app.prefRepository.nowPlayingFormat.ifEmpty {
+            "%artist% - %track% #nowplaying"
         }
-        val str = nowplayingFormat
+        val str = nowPlayingFormat
                 .replace("%track%", title)
                 .replace("%artist%", artist)
                 .replace("%album%", album)

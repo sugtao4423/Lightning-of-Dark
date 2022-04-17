@@ -30,11 +30,6 @@ class Settings : LoDBaseActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        app.loadOption()
-    }
-
     class PreferencesFragment : PreferenceFragmentCompat() {
 
         private lateinit var app: App

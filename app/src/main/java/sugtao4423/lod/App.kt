@@ -3,12 +3,12 @@ package sugtao4423.lod
 import android.app.Application
 import android.content.Context
 import android.graphics.Typeface
-import androidx.preference.PreferenceManager
 import kotlinx.coroutines.*
 import sugtao4423.lod.db.AccountRoomDatabase
 import sugtao4423.lod.db.UseTimeRoomDatabase
 import sugtao4423.lod.entity.Account
 import sugtao4423.lod.model.AccountRepository
+import sugtao4423.lod.model.PrefRepository
 import sugtao4423.lod.model.UseTimeRepository
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import twitter4j.StatusUpdate
@@ -26,6 +26,8 @@ class App : Application() {
     private val useTimeDatabase by lazy { UseTimeRoomDatabase.getDatabase(this) }
     val useTimeRepository by lazy { UseTimeRepository(useTimeDatabase.useTimeDao()) }
 
+    val prefRepository by lazy { PrefRepository(this) }
+
     private var fontAwesomeTypeface: Typeface? = null
     // MainActivity
     var hasAccount = false
@@ -40,7 +42,6 @@ class App : Application() {
     var autoLoadTLListener: AutoLoadTLService.AutoLoadTLListener? = null
     var latestTweetId: Long = -1
     private var lists: Array<TwitterList>? = null
-    private var options: Options? = null
     private var level: Level? = null
 
     override fun onCreate() {
@@ -49,10 +50,8 @@ class App : Application() {
     }
 
     suspend fun reloadAccount() {
-        val pref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        val screenName = pref.getString(Keys.SCREEN_NAME, "")!!
-        if(accountRepository.isExists(screenName)){
-            account = accountRepository.findByScreenName(screenName)!!
+        if(accountRepository.isExists(prefRepository.screenName)){
+            account = accountRepository.findByScreenName(prefRepository.screenName)!!
             twitter = run {
                 val ck = account.consumerKey.ifEmpty { getString(R.string.CK) }
                 val cs = account.consumerSecret.ifEmpty { getString(R.string.CS) }
@@ -125,18 +124,6 @@ class App : Application() {
             lists = result.requireNoNulls()
         }
         return lists!!
-    }
-
-    // options
-    fun loadOption() {
-        options = Options(applicationContext)
-    }
-
-    fun getOptions(): Options {
-        if (options == null) {
-            loadOption()
-        }
-        return options!!
     }
 
     // Level system

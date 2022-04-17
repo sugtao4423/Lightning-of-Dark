@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.preference.PreferenceManager
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -114,10 +113,7 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
                         AlertDialog.Builder(context).also { confirmDialog ->
                             confirmDialog.setTitle(selected)
                             confirmDialog.setPositiveButton(R.string.change_account) { _, _ ->
-                                PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-                                    .edit()
-                                    .putString(Keys.SCREEN_NAME, accounts[which].screenName)
-                                    .apply()
+                                app.prefRepository.screenName = accounts[which].screenName
                                 (context as MainActivity).restart()
                             }
                             confirmDialog.setNegativeButton(R.string.delete) { _, _ ->
