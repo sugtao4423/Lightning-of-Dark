@@ -26,7 +26,7 @@
     <PreferenceCategory android:title="再生中の曲">
         <EditTextPreference
             android:dialogMessage="曲名: %track%\nアーティスト: %artist%\nアルバム: %album%\n\nデフォルト: %artist% - %track% #nowplaying"
-            android:key="nowplayingFormat"
+            android:key="nowPlayingFormat"
             android:negativeButtonText="@string/cancel"
             android:positiveButtonText="@string/ok"
             android:title="フォーマット" />
