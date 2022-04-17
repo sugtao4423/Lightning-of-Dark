@@ -5,53 +5,6 @@ import androidx.preference.PreferenceManager
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import kotlin.math.ln
 
-data class Account(
-        val screenName: String,
-        val consumerKey: String,
-        val consumerSecret: String,
-        val accessToken: String,
-        val accessTokenSecret: String,
-        val listAsTL: Long = -1L,
-        val autoLoadTLInterval: Int = 0,
-        val selectListIds: LongArray = LongArray(0),
-        val selectListNames: Array<String> = arrayOf(),
-        val startAppLoadLists: Array<String> = arrayOf()
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Account
-
-        if (screenName != other.screenName) return false
-        if (consumerKey != other.consumerKey) return false
-        if (consumerSecret != other.consumerSecret) return false
-        if (accessToken != other.accessToken) return false
-        if (accessTokenSecret != other.accessTokenSecret) return false
-        if (listAsTL != other.listAsTL) return false
-        if (autoLoadTLInterval != other.autoLoadTLInterval) return false
-        if (!selectListIds.contentEquals(other.selectListIds)) return false
-        if (!selectListNames.contentEquals(other.selectListNames)) return false
-        if (!startAppLoadLists.contentEquals(other.startAppLoadLists)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = screenName.hashCode()
-        result = 31 * result + consumerKey.hashCode()
-        result = 31 * result + consumerSecret.hashCode()
-        result = 31 * result + accessToken.hashCode()
-        result = 31 * result + accessTokenSecret.hashCode()
-        result = 31 * result + listAsTL.hashCode()
-        result = 31 * result + autoLoadTLInterval
-        result = 31 * result + selectListIds.contentHashCode()
-        result = 31 * result + selectListNames.contentHashCode()
-        result = 31 * result + startAppLoadLists.contentHashCode()
-        return result
-    }
-}
-
 data class TwitterList(
         val adapter: TweetListAdapter,
         var isAlreadyLoad: Boolean,

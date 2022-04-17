@@ -67,7 +67,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
             holder.rtSn.visibility = View.VISIBLE
             val date = statusDateFormat.format(Date((item.retweetedStatus.id shr 22) + 1288834974657L))
             holder.date.text = "$date  Retweeted by "
-            Glide.with(context).load(item.user.profileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.rtIcon)
+            Glide.with(app.applicationContext).load(item.user.profileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.rtIcon)
             holder.rtSn.text = "@" + item.user.screenName
         } else {
             holder.rtIcon.visibility = View.GONE
@@ -78,7 +78,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
 
         holder.nameSn.text = origStatus.user.name + " - @" + origStatus.user.screenName
         holder.content.text = origStatus.text
-        Glide.with(context).load(origStatus.user.biggerProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.icon)
+        Glide.with(app.applicationContext).load(origStatus.user.biggerProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.icon)
 
         holder.nameSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().userNameFontSize)
         holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.getOptions().contentFontSize)
@@ -131,7 +131,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                     holder.tweetImagesLayout.addView(fl)
 
                     val videoUrl = Utils.getHiBitrateVideoUrl(mentitys)
-                    Glide.with(context).load(media.mediaURLHttps + ":small").placeholder(R.drawable.icon_loading).into(child)
+                    Glide.with(app.applicationContext).load(media.mediaURLHttps + ":small").placeholder(R.drawable.icon_loading).into(child)
                     child.setOnClickListener {
                         val intent = Intent(context, ShowVideo::class.java).apply {
                             val videoType = if (Utils.isGif(media)) ShowVideo.TYPE_GIF else ShowVideo.TYPE_VIDEO
@@ -142,7 +142,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                     }
                 } else {
                     holder.tweetImagesLayout.addView(child)
-                    Glide.with(context).load(media.mediaURLHttps + ":small").placeholder(R.drawable.icon_loading).into(child)
+                    Glide.with(app.applicationContext).load(media.mediaURLHttps + ":small").placeholder(R.drawable.icon_loading).into(child)
                     val urls = arrayOfNulls<String>(mentitys.size)
                     mentitys.mapIndexed { j, it ->
                         urls[j] = it.mediaURLHttps

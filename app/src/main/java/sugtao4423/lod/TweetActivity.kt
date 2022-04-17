@@ -59,7 +59,7 @@ class TweetActivity : LoDBaseActivity() {
         setTypeface()
 
         binding.apply {
-            tweetAccount.text = "@" + app.getCurrentAccount().screenName
+            tweetAccount.text = "@" + app.account.screenName
             closeBtn.setOnClickListener { finish() }
             tweetBtn.setOnClickListener { clickTweet() }
             imageSelectBtn.setOnClickListener { clickImageSelect() }
@@ -102,7 +102,7 @@ class TweetActivity : LoDBaseActivity() {
                 val mentionUsers = arrayListOf<String>()
                 mentionUsers.add(status.user.screenName)
                 status.userMentionEntities.map {
-                    if (it.screenName != app.getCurrentAccount().screenName && !mentionUsers.contains(it.screenName)) {
+                    if (it.screenName != app.account.screenName && !mentionUsers.contains(it.screenName)) {
                         mentionUsers.add(it.screenName)
                     }
                 }

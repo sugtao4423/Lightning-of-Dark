@@ -34,7 +34,7 @@ class Dialog_favorite(private val status: Status, private val context: Context, 
     private fun favorite(isFavorite: Boolean) {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                val twitter = (context.applicationContext as App).getTwitter()
+                val twitter = (context.applicationContext as App).twitter
                 try {
                     if (isFavorite) {
                         twitter.createFavorite(this@Dialog_favorite.status.id)

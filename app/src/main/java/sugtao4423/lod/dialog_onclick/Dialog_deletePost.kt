@@ -31,7 +31,7 @@ class Dialog_deletePost(private val status: Status, private val context: Context
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    (context.applicationContext as App).getTwitter().destroyStatus(this@Dialog_deletePost.status.id)
+                    (context.applicationContext as App).twitter.destroyStatus(this@Dialog_deletePost.status.id)
                 } catch (e: TwitterException) {
                     null
                 }

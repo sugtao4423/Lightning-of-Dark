@@ -34,7 +34,7 @@ class Dialog_retweet(private val status: Status, private val context: Context, p
     private fun retweet(isRetweet: Boolean) {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                val twitter = (context.applicationContext as App).getTwitter()
+                val twitter = (context.applicationContext as App).twitter
                 try {
                     if (isRetweet) {
                         twitter.retweetStatus(this@Dialog_retweet.status.id)

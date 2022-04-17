@@ -19,7 +19,7 @@ class _1_Tweet : UserPageListBaseFragment(FragmentType.TYPE_TWEET) {
                 }
 
                 try {
-                    app.getTwitter().getUserTimeline(targetUser!!.screenName, paging)
+                    app.twitter.getUserTimeline(targetUser!!.screenName, paging)
                 } catch (e: TwitterException) {
                     null
                 }

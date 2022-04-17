@@ -49,7 +49,7 @@ class UserPage : LoDBaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    app.getTwitter().showUser(intent.getStringExtra(INTENT_EXTRA_KEY_USER_SCREEN_NAME))
+                    app.twitter.showUser(intent.getStringExtra(INTENT_EXTRA_KEY_USER_SCREEN_NAME))
                 } catch (e: TwitterException) {
                     null
                 }

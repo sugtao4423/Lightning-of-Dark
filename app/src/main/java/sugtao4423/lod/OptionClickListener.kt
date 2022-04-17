@@ -50,7 +50,7 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
                     for (i in 0 until loopCount) {
                         loop += loopText
                         try {
-                            (context.applicationContext as App).getTwitter().updateStatus(staticText + loop)
+                            (context.applicationContext as App).twitter.updateStatus(staticText + loop)
                         } catch (e: TwitterException) {
                         }
                     }
@@ -93,43 +93,46 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
 
     private fun accountSelect() {
         val app = context.applicationContext as App
-        val myScreenName = app.getCurrentAccount().screenName
-        val dbUtil = app.getAccountDBUtil()
-        val accounts = dbUtil.getAccounts()
-        val screenNames = arrayListOf<String>()
-        accounts.map {
-            if (it.screenName == myScreenName) {
-                screenNames.add("@${it.screenName} (now)")
-            } else {
-                screenNames.add("@${it.screenName}")
+        val myScreenName = app.account.screenName
+        CoroutineScope(Dispatchers.Main).launch {
+            val accounts = app.accountRepository.getAll()
+            val screenNames = arrayListOf<String>()
+            accounts.map {
+                if (it.screenName == myScreenName) {
+                    screenNames.add("@${it.screenName} (now)")
+                } else {
+                    screenNames.add("@${it.screenName}")
+                }
             }
-        }
-        screenNames.add(context.getString(R.string.add_account))
-        AlertDialog.Builder(context).also { selectDialog ->
-            selectDialog.setItems(screenNames.toTypedArray()) { _, which ->
-                val selected = screenNames[which]
-                if (selected == context.getString(R.string.add_account)) {
-                    context.startActivity(Intent(context, StartOAuth::class.java))
-                } else if (selected != "@$myScreenName (now)") {
-                    AlertDialog.Builder(context).also { confirmDialog ->
-                        confirmDialog.setTitle(selected)
-                        confirmDialog.setPositiveButton(R.string.change_account) { _, _ ->
-                            PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+            screenNames.add(context.getString(R.string.add_account))
+            AlertDialog.Builder(context).also { selectDialog ->
+                selectDialog.setItems(screenNames.toTypedArray()) { _, which ->
+                    val selected = screenNames[which]
+                    if (selected == context.getString(R.string.add_account)) {
+                        context.startActivity(Intent(context, StartOAuth::class.java))
+                    } else if (selected != "@$myScreenName (now)") {
+                        AlertDialog.Builder(context).also { confirmDialog ->
+                            confirmDialog.setTitle(selected)
+                            confirmDialog.setPositiveButton(R.string.change_account) { _, _ ->
+                                PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
                                     .edit()
                                     .putString(Keys.SCREEN_NAME, accounts[which].screenName)
                                     .apply()
-                            (context as MainActivity).restart()
+                                (context as MainActivity).restart()
+                            }
+                            confirmDialog.setNegativeButton(R.string.delete) { _, _ ->
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    app.accountRepository.delete(accounts[which].screenName)
+                                }
+                                ShowToast(context.applicationContext, R.string.param_success_account_delete, accounts[which].screenName)
+                            }
+                            confirmDialog.setNeutralButton(R.string.cancel, null)
+                            confirmDialog.show()
                         }
-                        confirmDialog.setNegativeButton(R.string.delete) { _, _ ->
-                            dbUtil.deleteAccount(accounts[which])
-                            ShowToast(context.applicationContext, R.string.param_success_account_delete, accounts[which].screenName)
-                        }
-                        confirmDialog.setNeutralButton(R.string.cancel, null)
-                        confirmDialog.show()
                     }
                 }
+                selectDialog.show()
             }
-            selectDialog.show()
         }
     }
 

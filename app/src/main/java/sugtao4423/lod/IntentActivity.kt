@@ -27,7 +27,7 @@ class IntentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         app = applicationContext as App
 
-        if (!app.haveAccount()) {
+        if (!app.hasAccount) {
             startActivity(Intent(this, StartOAuth::class.java))
             finish()
             return
@@ -116,7 +116,7 @@ class IntentActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    app.getTwitter().showStatus(tweetId)
+                    app.twitter.showStatus(tweetId)
                 } catch (e: TwitterException) {
                     null
                 }

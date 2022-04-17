@@ -143,7 +143,7 @@ class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapt
         dialogBtn[5].setOnClickListener(Dialog_deletePost(status, context, dialog!!))
 
         dialogBtn[4].isEnabled = status.inReplyToStatusId > 0
-        dialogBtn[5].isEnabled = (status.user.screenName == (context.applicationContext as App).getCurrentAccount().screenName)
+        dialogBtn[5].isEnabled = (status.user.screenName == (context.applicationContext as App).account.screenName)
     }
 
 }

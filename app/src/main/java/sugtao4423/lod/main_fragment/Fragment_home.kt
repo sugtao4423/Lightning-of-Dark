@@ -36,7 +36,7 @@ class Fragment_home : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         app = requireContext().applicationContext as App
-        listAsTL = app.getCurrentAccount().listAsTL
+        listAsTL = app.account.listAsTL
 
         adapter = TweetListAdapter(requireContext())
         binding.listLine.adapter = adapter
@@ -63,9 +63,9 @@ class Fragment_home : Fragment() {
 
                 try {
                     if (listAsTL > 0) {
-                        app.getTwitter().getUserListStatuses(listAsTL, paging)
+                        app.twitter.getUserListStatuses(listAsTL, paging)
                     } else {
-                        app.getTwitter().getHomeTimeline(paging)
+                        app.twitter.getHomeTimeline(paging)
                     }
                 } catch (e: TwitterException) {
                     null

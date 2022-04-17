@@ -40,8 +40,8 @@ class TweetListView @JvmOverloads constructor(context: Context, attrs: Attribute
                 when {
                     item.isRetweetedByMe -> view.setBackgroundResource(R.xml.retweeted_by_me)
                     item.isRetweet -> view.setBackgroundResource(R.xml.retweet)
-                    item.user.screenName == app.getCurrentAccount().screenName -> view.setBackgroundResource(R.xml.same_my_screenname)
-                    app.getMentionPattern().matcher(item.text).find() -> view.setBackgroundResource(R.xml.mention)
+                    item.user.screenName == app.account.screenName -> view.setBackgroundResource(R.xml.same_my_screenname)
+                    app.mentionPattern.matcher(item.text).find() -> view.setBackgroundResource(R.xml.mention)
                     else -> setAlternately(pos, view)
                 }
             } else if (adapter is TweetListUserAdapter) {

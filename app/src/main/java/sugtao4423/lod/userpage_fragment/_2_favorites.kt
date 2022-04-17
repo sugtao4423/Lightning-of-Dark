@@ -19,7 +19,7 @@ class _2_favorites : UserPageListBaseFragment(FragmentType.TYPE_TWEET) {
                 }
 
                 try {
-                    app.getTwitter().getFavorites(targetUser!!.screenName, paging)
+                    app.twitter.getFavorites(targetUser!!.screenName, paging)
                 } catch (e: TwitterException) {
                     null
                 }
