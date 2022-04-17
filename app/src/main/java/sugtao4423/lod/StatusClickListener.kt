@@ -99,7 +99,7 @@ class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapt
                 content.findViewById(R.id.dialogDelete)
         )
 
-        val tf = (context.applicationContext as App).getFontAwesomeTypeface()
+        val tf = (context.applicationContext as App).fontAwesomeTypeface
         val density = context.resources.displayMetrics.density
         val black = ContextCompat.getColor(context, R.color.icon)
         dialogBtn.map {

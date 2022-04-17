@@ -145,7 +145,7 @@ class TweetActivity : LoDBaseActivity() {
                 binding.musicBtn,
                 binding.textOptionBtn
         )
-        val tf = app.getFontAwesomeTypeface()
+        val tf = app.fontAwesomeTypeface
         buttons.map {
             it.typeface = tf
         }

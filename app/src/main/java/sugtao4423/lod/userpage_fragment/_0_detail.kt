@@ -51,7 +51,7 @@ class _0_detail : Fragment() {
         app = requireContext().applicationContext as App
         binding.userPageProtected.visibility = View.GONE
 
-        app.getFontAwesomeTypeface().let {
+        app.fontAwesomeTypeface.let {
             binding.userPageProtected.typeface = it
             binding.iconTweetCount.typeface = it
             binding.iconFavoriteCount.typeface = it
@@ -160,7 +160,7 @@ class _0_detail : Fragment() {
                 }
             }
             if (result != null) {
-                binding.userPageIsFollow.typeface = app.getFontAwesomeTypeface()
+                binding.userPageIsFollow.typeface = app.fontAwesomeTypeface
                 binding.userPageIsFollow.text = when {
                     result.isSourceFollowingTarget && result.isSourceFollowedByTarget -> getString(R.string.icon_followEach)
                     result.isSourceFollowingTarget -> getString(R.string.icon_followFollow)

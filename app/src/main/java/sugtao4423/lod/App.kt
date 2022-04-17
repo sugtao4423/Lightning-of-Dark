@@ -30,7 +30,10 @@ class App : Application() {
     val prefRepository by lazy { PrefRepository(this) }
     val levelRepository by lazy { LevelRepository(prefRepository) }
 
-    private var fontAwesomeTypeface: Typeface? = null
+    val fontAwesomeTypeface: Typeface by lazy {
+        Typeface.createFromAsset(assets, "fontawesome.ttf")
+    }
+
     // MainActivity
     var hasAccount = false
         private set
@@ -93,13 +96,6 @@ class App : Application() {
                 ShowToast(applicationContext, R.string.error_tweet)
             }
         }
-    }
-
-    fun getFontAwesomeTypeface(): Typeface {
-        if (fontAwesomeTypeface == null) {
-            fontAwesomeTypeface = Typeface.createFromAsset(assets, "fontawesome.ttf")
-        }
-        return fontAwesomeTypeface!!
     }
 
     /*

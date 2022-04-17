@@ -54,7 +54,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
 
         // 鍵
         if (origStatus.user.isProtected) {
-            holder.protect.typeface = app.getFontAwesomeTypeface()
+            holder.protect.typeface = app.fontAwesomeTypeface
             holder.protect.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.userNameFontSize - 3)
             holder.protect.visibility = View.VISIBLE
         } else {
