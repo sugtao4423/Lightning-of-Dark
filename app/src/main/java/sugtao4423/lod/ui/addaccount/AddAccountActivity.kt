@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import sugtao4423.lod.MainActivity
-import sugtao4423.lod.databinding.OauthBinding
+import sugtao4423.lod.databinding.ActivityAddAccountBinding
 
 class AddAccountActivity : AppCompatActivity() {
 
@@ -13,7 +13,7 @@ class AddAccountActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = OauthBinding.inflate(layoutInflater).also {
+        val binding = ActivityAddAccountBinding.inflate(layoutInflater).also {
             it.lifecycleOwner = this
             it.viewModel = viewModel
         }
