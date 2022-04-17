@@ -54,8 +54,10 @@ class StartOAuth : AppCompatActivity() {
             }
         }
 
-        binding.ckEdit.setText(app.account.consumerKey)
-        binding.csEdit.setText(app.account.consumerSecret)
+        if(app.hasAccount) {
+            binding.ckEdit.setText(app.account.consumerKey)
+            binding.csEdit.setText(app.account.consumerSecret)
+        }
     }
 
     private fun clickOAuth(v: View) {

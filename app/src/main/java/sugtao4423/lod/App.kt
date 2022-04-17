@@ -71,8 +71,6 @@ class App : Application() {
             }
             mentionPattern = Pattern.compile(".*@${account.screenName}.*", Pattern.DOTALL)
             hasAccount = true
-        } else {
-            account = Account("", "", "", "", "")
         }
     }
 

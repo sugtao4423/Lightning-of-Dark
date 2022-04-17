@@ -31,6 +31,12 @@ class MainActivity : LoDBaseActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (!app.hasAccount) {
+            startActivity(Intent(this, StartOAuth::class.java))
+            finish()
+            return
+        }
+
         binding.tweetBtn.setOnClickListener { clickNewTweet() }
         binding.optionBtn.setOnClickListener { clickOption() }
 
@@ -50,16 +56,7 @@ class MainActivity : LoDBaseActivity() {
 
         fragmentHome = pagerAdapter.fragmentHome
         fragmentMention = pagerAdapter.fragmentMention
-        logIn()
-    }
-
-    private fun logIn() {
-        if (!app.hasAccount) {
-            startActivity(Intent(this, StartOAuth::class.java))
-            finish()
-        } else {
-            autoLoadTL()
-        }
+        autoLoadTL()
     }
 
     private fun autoLoadTL() {
