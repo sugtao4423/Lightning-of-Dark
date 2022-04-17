@@ -6,10 +6,11 @@ import android.graphics.Typeface
 import androidx.preference.PreferenceManager
 import kotlinx.coroutines.*
 import sugtao4423.lod.db.AccountRoomDatabase
+import sugtao4423.lod.db.UseTimeRoomDatabase
 import sugtao4423.lod.entity.Account
 import sugtao4423.lod.model.AccountRepository
+import sugtao4423.lod.model.UseTimeRepository
 import sugtao4423.lod.tweetlistview.TweetListAdapter
-import sugtao4423.lod.usetime.UseTime
 import twitter4j.StatusUpdate
 import twitter4j.Twitter
 import twitter4j.TwitterException
@@ -22,6 +23,8 @@ class App : Application() {
 
     private val accountDatabase by lazy { AccountRoomDatabase.getDatabase(this) }
     val accountRepository by lazy { AccountRepository(accountDatabase.accountDao()) }
+    private val useTimeDatabase by lazy { UseTimeRoomDatabase.getDatabase(this) }
+    val useTimeRepository by lazy { UseTimeRepository(useTimeDatabase.useTimeDao()) }
 
     private var fontAwesomeTypeface: Typeface? = null
     // MainActivity
@@ -39,8 +42,6 @@ class App : Application() {
     private var lists: Array<TwitterList>? = null
     private var options: Options? = null
     private var level: Level? = null
-    // Database
-    private var useTime: UseTime? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -144,19 +145,6 @@ class App : Application() {
             level = Level(applicationContext)
         }
         return level!!
-    }
-
-    // UseTime
-    fun getUseTime(): UseTime {
-        if (useTime == null) {
-            useTime = UseTime(applicationContext)
-        }
-        return useTime!!
-    }
-
-    fun closeUseTimeDB() {
-        useTime?.dbClose()
-        useTime = null
     }
 
 }

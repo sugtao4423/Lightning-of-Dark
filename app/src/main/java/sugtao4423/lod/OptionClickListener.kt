@@ -148,15 +148,27 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
     }
 
     private fun useInfo() {
-        (context.applicationContext as App).getUseTime().apply {
-            val todayUse = getTodayUseTimeInMillis()
-            val yesterdayUse = getYesterdayUseTimeInMillis()
-            val last30daysUse = getLastNdaysUseTimeInMillis(30)
-            val totalUse = getTotalUseTimeInMillis()
-            val startDate = getRecordStartDate()
-            val message = context.getString(R.string.param_use_info_text,
-                    milliTime2Str(todayUse.toLong()), milliTime2Str(yesterdayUse.toLong()), milliTime2Str(last30daysUse), milliTime2Str(totalUse), startDate)
-            AlertDialog.Builder(context).setTitle(R.string.use_info).setMessage(message).setPositiveButton(R.string.ok, null).show()
+        val repo = (context.applicationContext as App).useTimeRepository
+        CoroutineScope(Dispatchers.Main).launch {
+            val todayUse = repo.getTodayUseTimeInMillis()
+            val yesterdayUse = repo.getYesterdayUseTimeInMillis()
+            val last30daysUse = repo.getLastNDaysUseTimeInMillis(30)
+            val totalUse = repo.getTotalUseTimeInMillis()
+            val startDate = repo.getRecordStartDate()
+            val message = context.getString(
+                R.string.param_use_info_text,
+                milliTime2Str(todayUse),
+                milliTime2Str(yesterdayUse),
+                milliTime2Str(last30daysUse),
+                milliTime2Str(totalUse),
+                startDate
+            )
+            AlertDialog.Builder(context).apply {
+                setTitle(R.string.use_info)
+                setMessage(message)
+                setPositiveButton(R.string.ok, null)
+                show()
+            }
         }
     }
 

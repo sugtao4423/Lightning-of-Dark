@@ -118,7 +118,6 @@ class MainActivity : LoDBaseActivity() {
         super.onDestroy()
         stopService(Intent(this, AutoLoadTLService::class.java))
         runBlocking { app.reloadAccount() }
-        app.closeUseTimeDB()
         if (resetFlag) {
             resetFlag = false
             startActivity(Intent(this, MainActivity::class.java))

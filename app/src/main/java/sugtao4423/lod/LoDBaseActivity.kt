@@ -1,25 +1,25 @@
 package sugtao4423.lod
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 abstract class LoDBaseActivity : AppCompatActivity() {
 
-    protected lateinit var app: App
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        app = applicationContext as App
-    }
+    protected val app by lazy { applicationContext as App }
+    private var useTimeStartTime = System.currentTimeMillis()
 
     override fun onResume() {
         super.onResume()
-        app.getUseTime().start()
+        useTimeStartTime = System.currentTimeMillis()
     }
 
     override fun onPause() {
         super.onPause()
-        app.getUseTime().stop()
+        val useTimeInMillis = System.currentTimeMillis() - useTimeStartTime
+        CoroutineScope(Dispatchers.Main).launch {
+            app.useTimeRepository.save(useTimeInMillis)
+        }
     }
-
 }
