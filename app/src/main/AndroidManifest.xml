@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="StartOAuth"
+            android:name=".ui.addaccount.AddAccountActivity"
             android:configChanges="orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTask">

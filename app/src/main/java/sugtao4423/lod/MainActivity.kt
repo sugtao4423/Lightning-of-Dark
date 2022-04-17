@@ -13,6 +13,7 @@ import sugtao4423.lod.databinding.ActivityMainBinding
 import sugtao4423.lod.main_fragment.Fragment_home
 import sugtao4423.lod.main_fragment.Fragment_mention
 import sugtao4423.lod.main_fragment.MainFragmentPagerAdapter
+import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import twitter4j.ResponseList
 import twitter4j.Status
 
@@ -32,7 +33,7 @@ class MainActivity : LoDBaseActivity() {
         setContentView(binding.root)
 
         if (!app.hasAccount) {
-            startActivity(Intent(this, StartOAuth::class.java))
+            startActivity(Intent(this, AddAccountActivity::class.java))
             finish()
             return
         }

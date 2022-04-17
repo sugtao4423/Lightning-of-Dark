@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.userpage_fragment.UserPage
 import sugtao4423.lod.utils.Utils
 import twitter4j.TwitterException
@@ -108,7 +109,7 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
                 selectDialog.setItems(screenNames.toTypedArray()) { _, which ->
                     val selected = screenNames[which]
                     if (selected == context.getString(R.string.add_account)) {
-                        context.startActivity(Intent(context, StartOAuth::class.java))
+                        context.startActivity(Intent(context, AddAccountActivity::class.java))
                     } else if (selected != "@$myScreenName (now)") {
                         AlertDialog.Builder(context).also { confirmDialog ->
                             confirmDialog.setTitle(selected)

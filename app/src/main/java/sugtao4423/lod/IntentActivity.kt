@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.tweetlistview.TweetListView
+import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.userpage_fragment.UserPage
 import sugtao4423.lod.utils.Regex
 import twitter4j.TwitterException
@@ -28,7 +29,7 @@ class IntentActivity : AppCompatActivity() {
         app = applicationContext as App
 
         if (!app.hasAccount) {
-            startActivity(Intent(this, StartOAuth::class.java))
+            startActivity(Intent(this, AddAccountActivity::class.java))
             finish()
             return
         }
