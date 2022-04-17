@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.preference.PreferenceManager
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +49,7 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
                     for (i in 0 until loopCount) {
                         loop += loopText
                         try {
-                            (context.applicationContext as App).getTwitter().updateStatus(staticText + loop)
+                            (context.applicationContext as App).twitter.updateStatus(staticText + loop)
                         } catch (e: TwitterException) {
                         }
                     }
@@ -93,48 +92,48 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
 
     private fun accountSelect() {
         val app = context.applicationContext as App
-        val myScreenName = app.getCurrentAccount().screenName
-        val dbUtil = app.getAccountDBUtil()
-        val accounts = dbUtil.getAccounts()
-        val screenNames = arrayListOf<String>()
-        accounts.map {
-            if (it.screenName == myScreenName) {
-                screenNames.add("@${it.screenName} (now)")
-            } else {
-                screenNames.add("@${it.screenName}")
-            }
-        }
-        screenNames.add(context.getString(R.string.add_account))
-        AlertDialog.Builder(context).also { selectDialog ->
-            selectDialog.setItems(screenNames.toTypedArray()) { _, which ->
-                val selected = screenNames[which]
-                if (selected == context.getString(R.string.add_account)) {
-                    context.startActivity(Intent(context, StartOAuth::class.java))
-                } else if (selected != "@$myScreenName (now)") {
-                    AlertDialog.Builder(context).also { confirmDialog ->
-                        confirmDialog.setTitle(selected)
-                        confirmDialog.setPositiveButton(R.string.change_account) { _, _ ->
-                            PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-                                    .edit()
-                                    .putString(Keys.SCREEN_NAME, accounts[which].screenName)
-                                    .apply()
-                            (context as MainActivity).restart()
-                        }
-                        confirmDialog.setNegativeButton(R.string.delete) { _, _ ->
-                            dbUtil.deleteAccount(accounts[which])
-                            ShowToast(context.applicationContext, R.string.param_success_account_delete, accounts[which].screenName)
-                        }
-                        confirmDialog.setNeutralButton(R.string.cancel, null)
-                        confirmDialog.show()
-                    }
+        val myScreenName = app.account.screenName
+        CoroutineScope(Dispatchers.Main).launch {
+            val accounts = app.accountRepository.getAll()
+            val screenNames = arrayListOf<String>()
+            accounts.map {
+                if (it.screenName == myScreenName) {
+                    screenNames.add("@${it.screenName} (now)")
+                } else {
+                    screenNames.add("@${it.screenName}")
                 }
             }
-            selectDialog.show()
+            screenNames.add(context.getString(R.string.add_account))
+            AlertDialog.Builder(context).also { selectDialog ->
+                selectDialog.setItems(screenNames.toTypedArray()) { _, which ->
+                    val selected = screenNames[which]
+                    if (selected == context.getString(R.string.add_account)) {
+                        context.startActivity(Intent(context, StartOAuth::class.java))
+                    } else if (selected != "@$myScreenName (now)") {
+                        AlertDialog.Builder(context).also { confirmDialog ->
+                            confirmDialog.setTitle(selected)
+                            confirmDialog.setPositiveButton(R.string.change_account) { _, _ ->
+                                app.prefRepository.screenName = accounts[which].screenName
+                                (context as MainActivity).restart()
+                            }
+                            confirmDialog.setNegativeButton(R.string.delete) { _, _ ->
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    app.accountRepository.delete(accounts[which].screenName)
+                                }
+                                ShowToast(context.applicationContext, R.string.param_success_account_delete, accounts[which].screenName)
+                            }
+                            confirmDialog.setNeutralButton(R.string.cancel, null)
+                            confirmDialog.show()
+                        }
+                    }
+                }
+                selectDialog.show()
+            }
         }
     }
 
     private fun levelInfo() {
-        val lv = (context.applicationContext as App).getLevel()
+        val lv = (context.applicationContext as App).levelRepository
         NumberFormat.getInstance().apply {
             val level = format(lv.getLevel())
             val nextExp = format(lv.getNextExp())
@@ -145,15 +144,27 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
     }
 
     private fun useInfo() {
-        (context.applicationContext as App).getUseTime().apply {
-            val todayUse = getTodayUseTimeInMillis()
-            val yesterdayUse = getYesterdayUseTimeInMillis()
-            val last30daysUse = getLastNdaysUseTimeInMillis(30)
-            val totalUse = getTotalUseTimeInMillis()
-            val startDate = getRecordStartDate()
-            val message = context.getString(R.string.param_use_info_text,
-                    milliTime2Str(todayUse.toLong()), milliTime2Str(yesterdayUse.toLong()), milliTime2Str(last30daysUse), milliTime2Str(totalUse), startDate)
-            AlertDialog.Builder(context).setTitle(R.string.use_info).setMessage(message).setPositiveButton(R.string.ok, null).show()
+        val repo = (context.applicationContext as App).useTimeRepository
+        CoroutineScope(Dispatchers.Main).launch {
+            val todayUse = repo.getTodayUseTimeInMillis()
+            val yesterdayUse = repo.getYesterdayUseTimeInMillis()
+            val last30daysUse = repo.getLastNDaysUseTimeInMillis(30)
+            val totalUse = repo.getTotalUseTimeInMillis()
+            val startDate = repo.getRecordStartDate()
+            val message = context.getString(
+                R.string.param_use_info_text,
+                milliTime2Str(todayUse),
+                milliTime2Str(yesterdayUse),
+                milliTime2Str(last30daysUse),
+                milliTime2Str(totalUse),
+                startDate
+            )
+            AlertDialog.Builder(context).apply {
+                setTitle(R.string.use_info)
+                setMessage(message)
+                setPositiveButton(R.string.ok, null)
+                show()
+            }
         }
     }
 

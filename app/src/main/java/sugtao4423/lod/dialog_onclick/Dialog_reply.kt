@@ -14,7 +14,7 @@ import twitter4j.Status
 
 class Dialog_reply(private val status: Status, private val context: Context, private val dialog: AlertDialog) : View.OnClickListener {
 
-    private val myScreenName = (context.applicationContext as App).getCurrentAccount().screenName
+    private val myScreenName = (context.applicationContext as App).account.screenName
 
     override fun onClick(v: View?) {
         dialog.dismiss()

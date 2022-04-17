@@ -10,12 +10,12 @@ import android.os.Bundle
 import android.text.Html
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.databinding.OauthBinding
+import sugtao4423.lod.entity.Account
 import twitter4j.Twitter
 import twitter4j.TwitterException
 import twitter4j.TwitterFactory
@@ -54,8 +54,10 @@ class StartOAuth : AppCompatActivity() {
             }
         }
 
-        binding.ckEdit.setText(app.getCurrentAccount().consumerKey)
-        binding.csEdit.setText(app.getCurrentAccount().consumerSecret)
+        if(app.hasAccount) {
+            binding.ckEdit.setText(app.account.consumerKey)
+            binding.csEdit.setText(app.account.consumerSecret)
+        }
     }
 
     private fun clickOAuth(v: View) {
@@ -109,29 +111,31 @@ class StartOAuth : AppCompatActivity() {
                 }
             }
             if (result != null) {
-                val dbUtil = app.getAccountDBUtil()
-                if (dbUtil.existsAccount(result.screenName)) {
-                    ShowToast(applicationContext, R.string.param_account_already_exists, result.screenName)
-                    finish()
-                    return@launch
-                }
-                PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                        .edit()
-                        .putString(Keys.SCREEN_NAME, result.screenName)
-                        .apply()
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (app.accountRepository.isExists(result.screenName)) {
+                        ShowToast(
+                            applicationContext,
+                            R.string.param_account_already_exists,
+                            result.screenName
+                        )
+                        finish()
+                        return@launch
+                    }
+                    app.prefRepository.screenName = result.screenName
 
-                if (ck == getString(R.string.CK)) {
-                    ck = ""
-                }
-                if (cs == getString(R.string.CS)) {
-                    cs = ""
-                }
+                    if (ck == getString(R.string.CK)) {
+                        ck = ""
+                    }
+                    if (cs == getString(R.string.CS)) {
+                        cs = ""
+                    }
 
-                val account = Account(result.screenName, ck, cs, result.token, result.tokenSecret)
-                dbUtil.addAccount(account)
-                app.resetAccount()
-                ShowToast(applicationContext, R.string.success_add_account)
-                startActivity(Intent(applicationContext, MainActivity::class.java))
+                    val account = Account(result.screenName, ck, cs, result.token, result.tokenSecret)
+                    app.accountRepository.insert(account)
+                    app.reloadAccount()
+                    ShowToast(applicationContext, R.string.success_add_account)
+                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                }
             } else {
                 ShowToast(applicationContext, R.string.error_get_access_token)
             }

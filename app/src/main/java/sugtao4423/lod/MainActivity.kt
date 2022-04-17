@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.runBlocking
 import sugtao4423.icondialog.IconDialog
 import sugtao4423.icondialog.IconItem
 import sugtao4423.lod.databinding.ActivityMainBinding
@@ -30,6 +31,12 @@ class MainActivity : LoDBaseActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (!app.hasAccount) {
+            startActivity(Intent(this, StartOAuth::class.java))
+            finish()
+            return
+        }
+
         binding.tweetBtn.setOnClickListener { clickNewTweet() }
         binding.optionBtn.setOnClickListener { clickOption() }
 
@@ -38,7 +45,7 @@ class MainActivity : LoDBaseActivity() {
         binding.pager.apply {
             adapter = pagerAdapter
             currentItem = 1
-            offscreenPageLimit = app.getCurrentAccount().selectListIds.size + 1
+            offscreenPageLimit = app.account.selectListIds.size + 1
         }
 
         binding.mainPagerTabStrip.apply {
@@ -49,27 +56,18 @@ class MainActivity : LoDBaseActivity() {
 
         fragmentHome = pagerAdapter.fragmentHome
         fragmentMention = pagerAdapter.fragmentMention
-        logIn()
-    }
-
-    private fun logIn() {
-        if (!app.haveAccount()) {
-            startActivity(Intent(this, StartOAuth::class.java))
-            finish()
-        } else {
-            autoLoadTL()
-        }
+        autoLoadTL()
     }
 
     private fun autoLoadTL() {
-        if (app.getCurrentAccount().autoLoadTLInterval == 0) {
+        if (app.account.autoLoadTLInterval == 0) {
             return
         }
         val listener = object : AutoLoadTLService.AutoLoadTLListener {
             override fun onStatus(statuses: ResponseList<Status>) {
                 statuses.map {
                     fragmentHome.insert(it)
-                    if (app.getMentionPattern().matcher(it.text).find() && !it.isRetweet) {
+                    if (app.mentionPattern.matcher(it.text).find() && !it.isRetweet) {
                         fragmentMention.insert(it)
                     }
                 }
@@ -116,9 +114,7 @@ class MainActivity : LoDBaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         stopService(Intent(this, AutoLoadTLService::class.java))
-        app.resetAccount()
-        app.closeAccountDB()
-        app.closeUseTimeDB()
+        runBlocking { app.reloadAccount() }
         if (resetFlag) {
             resetFlag = false
             startActivity(Intent(this, MainActivity::class.java))

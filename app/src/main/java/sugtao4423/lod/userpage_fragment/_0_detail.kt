@@ -51,7 +51,7 @@ class _0_detail : Fragment() {
         app = requireContext().applicationContext as App
         binding.userPageProtected.visibility = View.GONE
 
-        app.getFontAwesomeTypeface().let {
+        app.fontAwesomeTypeface.let {
             binding.userPageProtected.typeface = it
             binding.iconTweetCount.typeface = it
             binding.iconFavoriteCount.typeface = it
@@ -82,7 +82,7 @@ class _0_detail : Fragment() {
             binding.userName.text = it.name
             binding.userScreenName.text = "@${it.screenName}"
 
-            if (app.getCurrentAccount().screenName == it.screenName) {
+            if (app.account.screenName == it.screenName) {
                 binding.userPageSourceIcon.visibility = View.GONE
                 binding.userPageTargetIcon.visibility = View.GONE
                 binding.userPageIsFollow.visibility = View.GONE
@@ -154,13 +154,13 @@ class _0_detail : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    app.getTwitter().showFriendship(app.getCurrentAccount().screenName, targetUser!!.screenName)
+                    app.twitter.showFriendship(app.account.screenName, targetUser!!.screenName)
                 } catch (e: TwitterException) {
                     null
                 }
             }
             if (result != null) {
-                binding.userPageIsFollow.typeface = app.getFontAwesomeTypeface()
+                binding.userPageIsFollow.typeface = app.fontAwesomeTypeface
                 binding.userPageIsFollow.text = when {
                     result.isSourceFollowingTarget && result.isSourceFollowedByTarget -> getString(R.string.icon_followEach)
                     result.isSourceFollowingTarget -> getString(R.string.icon_followFollow)
@@ -176,7 +176,7 @@ class _0_detail : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    Pair(app.getTwitter().verifyCredentials().biggerProfileImageURLHttps,
+                    Pair(app.twitter.verifyCredentials().biggerProfileImageURLHttps,
                             targetUser!!.biggerProfileImageURLHttps)
                 } catch (e: TwitterException) {
                     null

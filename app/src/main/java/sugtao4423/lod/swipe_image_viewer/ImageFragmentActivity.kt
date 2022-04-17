@@ -41,7 +41,7 @@ class ImageFragmentActivity : LoDBaseActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         binding = ShowImagePagerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (app.getOptions().isImageOrientationSensor) {
+        if (app.prefRepository.isImageOrientationSensor) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
         }
 

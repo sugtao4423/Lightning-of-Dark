@@ -25,10 +25,10 @@ class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapt
         val app = context.applicationContext as App
 
         val list = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1)
-        if (app.getOptions().isRegex) {
+        if (app.prefRepository.isRegex) {
             list.add(context.getString(R.string.extract_with_regex))
         }
-        if (app.getOptions().isOpenBrowser) {
+        if (app.prefRepository.isOpenBrowser) {
             list.add(context.getString(R.string.open_in_browser))
         }
 
@@ -99,7 +99,7 @@ class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapt
                 content.findViewById(R.id.dialogDelete)
         )
 
-        val tf = (context.applicationContext as App).getFontAwesomeTypeface()
+        val tf = (context.applicationContext as App).fontAwesomeTypeface
         val density = context.resources.displayMetrics.density
         val black = ContextCompat.getColor(context, R.color.icon)
         dialogBtn.map {
@@ -143,7 +143,7 @@ class StatusClickListener : TweetListAdapter.OnItemClickListener, TweetListAdapt
         dialogBtn[5].setOnClickListener(Dialog_deletePost(status, context, dialog!!))
 
         dialogBtn[4].isEnabled = status.inReplyToStatusId > 0
-        dialogBtn[5].isEnabled = (status.user.screenName == (context.applicationContext as App).getCurrentAccount().screenName)
+        dialogBtn[5].isEnabled = (status.user.screenName == (context.applicationContext as App).account.screenName)
     }
 
 }

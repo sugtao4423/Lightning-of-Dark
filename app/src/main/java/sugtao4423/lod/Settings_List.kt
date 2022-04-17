@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import sugtao4423.lod.utils.DBUtil
 import twitter4j.TwitterException
 
 class Settings_List : LoDBaseActivity() {
@@ -25,9 +24,8 @@ class Settings_List : LoDBaseActivity() {
 
         private lateinit var selectList: Preference
         private lateinit var startAppLoadList: Preference
-        private lateinit var dbUtil: DBUtil
-        private lateinit var myScreenName: String
-        private lateinit var app: App
+        private val app by lazy { requireContext().applicationContext as App }
+        private val myScreenName by lazy { app.account.screenName }
 
         override fun onCreatePreferences(bundle: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.preference_list, rootKey)
@@ -35,14 +33,10 @@ class Settings_List : LoDBaseActivity() {
             selectList = findPreference("select_List")!!
             startAppLoadList = findPreference("startApp_loadList")!!
 
-            app = requireContext().applicationContext as App
-            dbUtil = app.getAccountDBUtil()
-            myScreenName = app.getCurrentAccount().screenName
-
             setSummary()
 
             startAppLoadList.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val selectedListNames = dbUtil.getSelectListNames(myScreenName)
+                val selectedListNames = app.account.selectListNames.toTypedArray()
                 val selectedLoadList = BooleanArray(selectedListNames.size)
                 val selectLoadList = arrayListOf<String>()
                 val builder = AlertDialog.Builder(requireContext()).apply {
@@ -55,9 +49,11 @@ class Settings_List : LoDBaseActivity() {
                         }
                     }
                     setPositiveButton(R.string.ok) { _, _ ->
-                        dbUtil.updateStartAppLoadLists(selectLoadList.joinToString(), myScreenName)
-                        app.resetAccount()
-                        setSummary()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            app.accountRepository.updateStartAppLoadLists(selectLoadList.toList(), myScreenName)
+                            app.reloadAccount()
+                            setSummary()
+                        }
                     }
                     setNegativeButton(R.string.cancel, null)
                 }
@@ -73,7 +69,7 @@ class Settings_List : LoDBaseActivity() {
                 CoroutineScope(Dispatchers.Main).launch {
                     val result = withContext(Dispatchers.IO) {
                         try {
-                            app.getTwitter().getUserLists(myScreenName)
+                            app.twitter.getUserLists(myScreenName)
                         } catch (e: TwitterException) {
                             null
                         }
@@ -103,10 +99,14 @@ class Settings_List : LoDBaseActivity() {
                             val checkedListNames = checkedList.keys.toTypedArray()
                             val checkedListIds = checkedList.values.toTypedArray()
 
-                            dbUtil.updateSelectListNames(checkedListNames.joinToString(), myScreenName)
-                            dbUtil.updateSelectListIds(checkedListIds.joinToString(), myScreenName)
-                            app.resetAccount()
-                            setSummary()
+                            CoroutineScope(Dispatchers.Main).launch {
+                                app.accountRepository.apply {
+                                    updateSelectListNames(checkedListNames.toList(), myScreenName)
+                                    updateSelectListIds(checkedListIds.toList(), myScreenName)
+                                }
+                                app.reloadAccount()
+                                setSummary()
+                            }
                         }
                         show()
                     }
@@ -116,11 +116,11 @@ class Settings_List : LoDBaseActivity() {
         }
 
         private fun setSummary() {
-            dbUtil.getSelectListNames(myScreenName).let {
-                selectList.summary = getString(R.string.param_setting_value_str, it.joinToString())
+            selectList.summary = app.account.selectListNames.joinToString().let {
+                getString(R.string.param_setting_value_str, it)
             }
-            dbUtil.getNowStartAppLoadList(myScreenName).let {
-                startAppLoadList.summary = getString(R.string.param_setting_value_str, it.joinToString())
+            startAppLoadList.summary = app.account.startAppLoadLists.joinToString().let {
+                getString(R.string.param_setting_value_str, it)
             }
         }
 

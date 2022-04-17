@@ -3,14 +3,15 @@ package sugtao4423.lod
 import android.app.Application
 import android.content.Context
 import android.graphics.Typeface
-import androidx.preference.PreferenceManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import sugtao4423.lod.db.AccountRoomDatabase
+import sugtao4423.lod.db.UseTimeRoomDatabase
+import sugtao4423.lod.entity.Account
+import sugtao4423.lod.model.AccountRepository
+import sugtao4423.lod.model.LevelRepository
+import sugtao4423.lod.model.PrefRepository
+import sugtao4423.lod.model.UseTimeRepository
 import sugtao4423.lod.tweetlistview.TweetListAdapter
-import sugtao4423.lod.usetime.UseTime
-import sugtao4423.lod.utils.DBUtil
 import twitter4j.StatusUpdate
 import twitter4j.Twitter
 import twitter4j.TwitterException
@@ -21,95 +22,78 @@ import java.util.regex.Pattern
 
 class App : Application() {
 
-    private var account: Account? = null
-    private var fontAwesomeTypeface: Typeface? = null
+    private val accountDatabase by lazy { AccountRoomDatabase.getDatabase(this) }
+    val accountRepository by lazy { AccountRepository(accountDatabase.accountDao()) }
+    private val useTimeDatabase by lazy { UseTimeRoomDatabase.getDatabase(this) }
+    val useTimeRepository by lazy { UseTimeRepository(useTimeDatabase.useTimeDao()) }
+
+    val prefRepository by lazy { PrefRepository(this) }
+    val levelRepository by lazy { LevelRepository(prefRepository) }
+
+    val fontAwesomeTypeface: Typeface by lazy {
+        Typeface.createFromAsset(assets, "fontawesome.ttf")
+    }
+
     // MainActivity
-    private var twitter: Twitter? = null
-    private var mentionPattern: Pattern? = null
+    var hasAccount = false
+        private set
+    lateinit var account: Account
+        private set
+    lateinit var twitter: Twitter
+        private set
+    lateinit var mentionPattern: Pattern
+        private set
+
     var autoLoadTLListener: AutoLoadTLService.AutoLoadTLListener? = null
     var latestTweetId: Long = -1
     private var lists: Array<TwitterList>? = null
-    private var options: Options? = null
-    private var level: Level? = null
-    // Database
-    private var accountDBUtil: DBUtil? = null
-    private var useTime: UseTime? = null
 
-    fun resetAccount() {
-        this.account = null
-        this.twitter = null
-        this.mentionPattern = null
-        this.lists = null
+    override fun onCreate() {
+        super.onCreate()
+        runBlocking { reloadAccount() }
     }
 
-    fun reloadAccountFromDB() {
-        this.account = null
-    }
+    suspend fun reloadAccount() {
+        if(accountRepository.isExists(prefRepository.screenName)){
+            account = accountRepository.findByScreenName(prefRepository.screenName)!!
+            twitter = run {
+                val ck = account.consumerKey.ifEmpty { getString(R.string.CK) }
+                val cs = account.consumerSecret.ifEmpty { getString(R.string.CS) }
+                val accessToken = AccessToken(account.accessToken, account.accessTokenSecret)
 
-    fun getCurrentAccount(): Account {
-        if (account == null) {
-            val pref = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            account = getAccountDBUtil().getAccount(pref.getString(Keys.SCREEN_NAME, "") ?: "")
-            if (account == null) {
-                account = Account("", "", "", "", "")
+                val conf = ConfigurationBuilder().let {
+                    it.setOAuthConsumerKey(ck)
+                    it.setOAuthConsumerSecret(cs)
+                    it.setTweetModeExtended(true)
+                    it.build()
+                }
+                TwitterFactory(conf).getInstance(accessToken)
             }
+            mentionPattern = Pattern.compile(".*@${account.screenName}.*", Pattern.DOTALL)
+            hasAccount = true
         }
-        return account!!
-    }
-
-    fun haveAccount(): Boolean {
-        return !(getCurrentAccount().screenName == "" || getCurrentAccount().accessToken == "" || getCurrentAccount().accessTokenSecret == "")
-    }
-
-    private fun twitterLogin() {
-        val ck: String
-        val cs: String
-        if (getCurrentAccount().consumerKey == "") {
-            ck = getString(R.string.CK)
-            cs = getString(R.string.CS)
-        } else {
-            ck = getCurrentAccount().consumerKey
-            cs = getCurrentAccount().consumerSecret
-        }
-        val accessToken = AccessToken(getCurrentAccount().accessToken, getCurrentAccount().accessTokenSecret)
-
-        val conf = ConfigurationBuilder().run {
-            setOAuthConsumerKey(ck)
-            setOAuthConsumerSecret(cs)
-            setTweetModeExtended(true)
-            build()
-        }
-        this.twitter = TwitterFactory(conf).getInstance(accessToken)
-        this.mentionPattern = Pattern.compile(".*@${getCurrentAccount().screenName}.*", Pattern.DOTALL)
     }
 
     fun updateStatus(status: StatusUpdate) {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    getTwitter().updateStatus(status)
+                    twitter.updateStatus(status)
                 } catch (e: TwitterException) {
                     null
                 }
             }
             if (result != null) {
-                val exp = getLevel().getRandomExp()
-                val isLvUp = getLevel().addExp(exp)
+                val exp = levelRepository.getRandomExp()
+                val isLvUp = levelRepository.addExp(exp)
                 ShowToast(applicationContext, R.string.param_success_tweet, exp)
                 if (isLvUp) {
-                    ShowToast(applicationContext, R.string.param_level_up, getLevel().getLevel())
+                    ShowToast(applicationContext, R.string.param_level_up, levelRepository.getLevel())
                 }
             } else {
                 ShowToast(applicationContext, R.string.error_tweet)
             }
         }
-    }
-
-    fun getFontAwesomeTypeface(): Typeface {
-        if (fontAwesomeTypeface == null) {
-            fontAwesomeTypeface = Typeface.createFromAsset(assets, "fontawesome.ttf")
-        }
-        return fontAwesomeTypeface!!
     }
 
     /*
@@ -118,28 +102,12 @@ class App : Application() {
      * +-+-+-+-+-+-+-+-+-+-+-+-+
      */
 
-    // Twitter
-    fun getTwitter(): Twitter {
-        if (twitter == null) {
-            twitterLogin()
-        }
-        return twitter!!
-    }
-
-    // mentionPattern
-    fun getMentionPattern(): Pattern {
-        if (mentionPattern == null) {
-            twitterLogin()
-        }
-        return mentionPattern!!
-    }
-
     // lists
     fun getLists(context: Context): Array<TwitterList> {
         if (lists == null) {
-            val listNames = getCurrentAccount().selectListNames
-            val listIds = getCurrentAccount().selectListIds
-            val appStartLoadListNames = getCurrentAccount().startAppLoadLists
+            val listNames = account.selectListNames
+            val listIds = account.selectListIds
+            val appStartLoadListNames = account.startAppLoadLists
             val result = arrayOfNulls<TwitterList>(listNames.size)
             for (i in listNames.indices) {
                 val adapter = TweetListAdapter(context)
@@ -152,51 +120,4 @@ class App : Application() {
         }
         return lists!!
     }
-
-    // options
-    fun loadOption() {
-        options = Options(applicationContext)
-    }
-
-    fun getOptions(): Options {
-        if (options == null) {
-            loadOption()
-        }
-        return options!!
-    }
-
-    // Level system
-    fun getLevel(): Level {
-        if (level == null) {
-            level = Level(applicationContext)
-        }
-        return level!!
-    }
-
-    // DBUtil
-    fun getAccountDBUtil(): DBUtil {
-        if (accountDBUtil == null) {
-            accountDBUtil = DBUtil(applicationContext)
-        }
-        return accountDBUtil!!
-    }
-
-    fun closeAccountDB() {
-        accountDBUtil?.dbClose()
-        accountDBUtil = null
-    }
-
-    // UseTime
-    fun getUseTime(): UseTime {
-        if (useTime == null) {
-            useTime = UseTime(applicationContext)
-        }
-        return useTime!!
-    }
-
-    fun closeUseTimeDB() {
-        useTime?.dbClose()
-        useTime = null
-    }
-
 }

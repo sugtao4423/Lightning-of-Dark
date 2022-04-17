@@ -30,11 +30,6 @@ class Settings : LoDBaseActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        app.loadOption()
-    }
-
     class PreferencesFragment : PreferenceFragmentCompat() {
 
         private lateinit var app: App
@@ -58,14 +53,14 @@ class Settings : LoDBaseActivity() {
             }
 
             listAsTL.apply {
-                isChecked = (app.getCurrentAccount().listAsTL > 0)
-                summary = if (isChecked) app.getCurrentAccount().listAsTL.toString() else null
+                isChecked = (app.account.listAsTL > 0)
+                summary = if (isChecked) app.account.listAsTL.toString() else null
                 onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
                     selectListAsTL(preference as CheckBoxPreference, newValue as Boolean)
                 }
             }
 
-            setAutoLoadTLIntervalSummary(app.getCurrentAccount().autoLoadTLInterval)
+            setAutoLoadTLIntervalSummary(app.account.autoLoadTLInterval)
             autoLoadTLInterval.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 clickAutoLoadTLInterval()
                 false
@@ -113,7 +108,7 @@ class Settings : LoDBaseActivity() {
                 }
                 val result = withContext(Dispatchers.IO) {
                     try {
-                        app.getTwitter().createUserList(listName, false, "user count = follow + me")
+                        app.twitter.createUserList(listName, false, "user count = follow + me")
                     } catch (e: TwitterException) {
                         null
                     }
@@ -138,7 +133,7 @@ class Settings : LoDBaseActivity() {
                 }
                 val result = withContext(Dispatchers.IO) {
                     try {
-                        app.getTwitter().getUserLists(app.getTwitter().screenName)
+                        app.twitter.getUserLists(app.twitter.screenName)
                     } catch (e: TwitterException) {
                         null
                     }
@@ -172,9 +167,8 @@ class Settings : LoDBaseActivity() {
                     show()
                 }
                 val result = withContext(Dispatchers.IO) {
-                    val twitter = app.getTwitter()
                     try {
-                        val usersInList = twitter.getUserListMembers(listId, 5000, -1).let {
+                        val usersInList = app.twitter.getUserListMembers(listId, 5000, -1).let {
                             val userIds = LongArray(it.size)
                             it.mapIndexed { index, user ->
                                 userIds[index] = user.id
@@ -183,12 +177,12 @@ class Settings : LoDBaseActivity() {
                         }
 
                         if (usersInList.isNotEmpty()) {
-                            twitter.destroyUserListMembers(listId, usersInList)
+                            app.twitter.destroyUserListMembers(listId, usersInList)
                         }
 
-                        val friendIds = twitter.getFriendsIDs(-1).iDs + twitter.verifyCredentials().id
+                        val friendIds = app.twitter.getFriendsIDs(-1).iDs + app.twitter.verifyCredentials().id
                         friendIds.toList().chunked(100).map {
-                            twitter.createUserListMembers(listId, *it.toLongArray())
+                            app.twitter.createUserListMembers(listId, *it.toLongArray())
                         }
                         true
                     } catch (e: TwitterException) {
@@ -206,16 +200,17 @@ class Settings : LoDBaseActivity() {
         }
 
         private fun selectListAsTL(preference: CheckBoxPreference, isCheck: Boolean): Boolean {
-            val dbUtil = app.getAccountDBUtil()
             if (!isCheck) {
                 AlertDialog.Builder(requireContext()).apply {
                     setTitle(R.string.is_release)
                     setPositiveButton(R.string.ok) { _, _ ->
-                        dbUtil.updateListAsTL(-1, app.getCurrentAccount().screenName)
-                        dbUtil.updateAutoLoadTLInterval(0, app.getCurrentAccount().screenName)
-                        preference.summary = null
-                        setAutoLoadTLIntervalSummary(0)
-                        app.reloadAccountFromDB()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            app.accountRepository.updateListAsTL(-1, app.account.screenName)
+                            app.accountRepository.updateAutoLoadTLInterval(0, app.account.screenName)
+                            preference.summary = null
+                            setAutoLoadTLIntervalSummary(0)
+                            app.reloadAccount()
+                        }
                     }
                     setNegativeButton(R.string.cancel) { _, _ ->
                         preference.isChecked = true
@@ -228,7 +223,7 @@ class Settings : LoDBaseActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 val result = withContext(Dispatchers.IO) {
                     try {
-                        app.getTwitter().getUserLists(app.getTwitter().screenName)
+                        app.twitter.getUserLists(app.twitter.screenName)
                     } catch (e: Exception) {
                         null
                     }
@@ -247,9 +242,11 @@ class Settings : LoDBaseActivity() {
                     setCancelable(false)
                     setItems(listNames) { _, which ->
                         val selectedListId = listMap[listNames[which]]!!
-                        dbUtil.updateListAsTL(selectedListId, app.getCurrentAccount().screenName)
-                        preference.summary = selectedListId.toString()
-                        app.reloadAccountFromDB()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            app.accountRepository.updateListAsTL(selectedListId, app.account.screenName)
+                            preference.summary = selectedListId.toString()
+                            app.reloadAccount()
+                        }
                     }
                     show()
                 }
@@ -277,15 +274,17 @@ class Settings : LoDBaseActivity() {
                     if (intervalEdit.text.toString().isEmpty()) {
                         return@setPositiveButton
                     }
-                    val isListAsTL = app.getCurrentAccount().listAsTL > 0
+                    val isListAsTL = app.account.listAsTL > 0
                     val interval = intervalEdit.text.toString().toInt()
                     if (!isListAsTL && interval > 0 && interval < 60) {
                         ShowToast(context, R.string.error_auto_load_tl_interval)
                         return@setPositiveButton
                     }
-                    app.getAccountDBUtil().updateAutoLoadTLInterval(interval, app.getCurrentAccount().screenName)
-                    setAutoLoadTLIntervalSummary(interval)
-                    app.reloadAccountFromDB()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        app.accountRepository.updateAutoLoadTLInterval(interval, app.account.screenName)
+                        setAutoLoadTLIntervalSummary(interval)
+                        app.reloadAccount()
+                    }
                 }
                 show()
             }

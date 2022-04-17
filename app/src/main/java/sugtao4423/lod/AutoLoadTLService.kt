@@ -26,8 +26,8 @@ class AutoLoadTLService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val app = applicationContext as App
         val listener = app.autoLoadTLListener
-        val interval = app.getCurrentAccount().autoLoadTLInterval
-        val listAsTL = app.getCurrentAccount().listAsTL
+        val interval = app.account.autoLoadTLInterval
+        val listAsTL = app.account.listAsTL
 
         val task = AutoLoadTLTask(app, listener, listAsTL)
         autoLoadTimer = Timer(true)
@@ -77,9 +77,9 @@ class AutoLoadTLService : Service() {
         override fun run() {
             try {
                 val statuses = if (listAsTL > 0) {
-                    app.getTwitter().getUserListStatuses(listAsTL, Paging(1, 50).sinceId(app.latestTweetId))
+                    app.twitter.getUserListStatuses(listAsTL, Paging(1, 50).sinceId(app.latestTweetId))
                 } else {
-                    app.getTwitter().getHomeTimeline(Paging(1, 50).sinceId(app.latestTweetId))
+                    app.twitter.getHomeTimeline(Paging(1, 50).sinceId(app.latestTweetId))
                 }
                 statuses.reverse()
                 listener?.let {

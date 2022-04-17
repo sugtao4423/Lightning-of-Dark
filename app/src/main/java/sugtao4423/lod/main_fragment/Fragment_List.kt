@@ -80,7 +80,7 @@ class Fragment_List : Fragment() {
                 }
 
                 try {
-                    app.getTwitter().getUserListStatuses(thisList.listId, paging)
+                    app.twitter.getUserListStatuses(thisList.listId, paging)
                 } catch (e: TwitterException) {
                     null
                 }

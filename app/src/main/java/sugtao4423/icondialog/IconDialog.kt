@@ -33,7 +33,7 @@ class IconDialog(private val context: Context) {
 class IconDialogAdapter(context: Context, items: Array<IconItem>) :
         ArrayAdapter<IconItem>(context, android.R.layout.select_dialog_item, android.R.id.text1, items) {
 
-    private val tf = (context.applicationContext as App).getFontAwesomeTypeface()
+    private val tf = (context.applicationContext as App).fontAwesomeTypeface
     private val density = context.resources.displayMetrics.density
 
     data class ViewHolder(

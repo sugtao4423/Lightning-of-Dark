@@ -35,7 +35,7 @@ class Dialog_talk(status: Status, private val context: Context, private val dial
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 try {
-                    reply = (context.applicationContext as App).getTwitter().showStatus(reply.inReplyToStatusId)
+                    reply = (context.applicationContext as App).twitter.showStatus(reply.inReplyToStatusId)
                     reply
                 } catch (e: TwitterException) {
                     null

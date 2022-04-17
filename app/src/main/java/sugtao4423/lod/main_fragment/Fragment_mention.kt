@@ -72,7 +72,7 @@ class Fragment_mention : Fragment() {
                 }
 
                 try {
-                    app.getTwitter().getMentionsTimeline(paging)
+                    app.twitter.getMentionsTimeline(paging)
                 } catch (e: TwitterException) {
                     null
                 }

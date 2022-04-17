@@ -7,7 +7,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.preference.PreferenceManager
 import sugtao4423.lod.*
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
 import sugtao4423.lod.tweetlistview.TweetListAdapter
@@ -56,8 +55,8 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
             gridLayout.addView(btn)
         }
 
-        val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        regEdit.setText(pref.getString(Keys.REGULAR_EXPRESSION, ""))
+        val prefRepo = (context.applicationContext as App).prefRepository
+        regEdit.setText(prefRepo.regularExpression)
         AlertDialog.Builder(context).also {
             it.setTitle(R.string.input_regex)
             it.setView(regView)
@@ -67,7 +66,7 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                 imm.hideSoftInputFromWindow(regEdit.windowToken, 0)
 
                 val editReg = regEdit.text.toString()
-                pref.edit().putString(Keys.REGULAR_EXPRESSION, editReg).apply()
+                prefRepo.regularExpression = editReg
                 val pattern: Pattern
                 try {
                     pattern = Pattern.compile(editReg, Pattern.DOTALL)
