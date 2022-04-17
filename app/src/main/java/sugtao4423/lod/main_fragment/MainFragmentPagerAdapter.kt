@@ -36,7 +36,7 @@ class MainFragmentPagerAdapter(fm: FragmentManager, private val context: Context
         val lists = app.getLists(context)
         return when (position) {
             0 -> context.getString(R.string.page_title_mention)
-            1 -> context.getString(R.string.param_page_title_home, app.getLevel().getLevel())
+            1 -> context.getString(R.string.param_page_title_home, app.levelRepository.getLevel())
             else -> lists[position - 2].listName
         }
     }

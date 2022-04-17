@@ -133,7 +133,7 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
     }
 
     private fun levelInfo() {
-        val lv = (context.applicationContext as App).getLevel()
+        val lv = (context.applicationContext as App).levelRepository
         NumberFormat.getInstance().apply {
             val level = format(lv.getLevel())
             val nextExp = format(lv.getNextExp())

@@ -8,6 +8,7 @@ import sugtao4423.lod.db.AccountRoomDatabase
 import sugtao4423.lod.db.UseTimeRoomDatabase
 import sugtao4423.lod.entity.Account
 import sugtao4423.lod.model.AccountRepository
+import sugtao4423.lod.model.LevelRepository
 import sugtao4423.lod.model.PrefRepository
 import sugtao4423.lod.model.UseTimeRepository
 import sugtao4423.lod.tweetlistview.TweetListAdapter
@@ -27,6 +28,7 @@ class App : Application() {
     val useTimeRepository by lazy { UseTimeRepository(useTimeDatabase.useTimeDao()) }
 
     val prefRepository by lazy { PrefRepository(this) }
+    val levelRepository by lazy { LevelRepository(prefRepository) }
 
     private var fontAwesomeTypeface: Typeface? = null
     // MainActivity
@@ -42,7 +44,6 @@ class App : Application() {
     var autoLoadTLListener: AutoLoadTLService.AutoLoadTLListener? = null
     var latestTweetId: Long = -1
     private var lists: Array<TwitterList>? = null
-    private var level: Level? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -82,11 +83,11 @@ class App : Application() {
                 }
             }
             if (result != null) {
-                val exp = getLevel().getRandomExp()
-                val isLvUp = getLevel().addExp(exp)
+                val exp = levelRepository.getRandomExp()
+                val isLvUp = levelRepository.addExp(exp)
                 ShowToast(applicationContext, R.string.param_success_tweet, exp)
                 if (isLvUp) {
-                    ShowToast(applicationContext, R.string.param_level_up, getLevel().getLevel())
+                    ShowToast(applicationContext, R.string.param_level_up, levelRepository.getLevel())
                 }
             } else {
                 ShowToast(applicationContext, R.string.error_tweet)
@@ -125,13 +126,4 @@ class App : Application() {
         }
         return lists!!
     }
-
-    // Level system
-    fun getLevel(): Level {
-        if (level == null) {
-            level = Level(applicationContext)
-        }
-        return level!!
-    }
-
 }
