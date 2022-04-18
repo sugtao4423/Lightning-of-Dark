@@ -26,7 +26,7 @@ abstract class BaseTweetListViewModel(application: Application) : AndroidViewMod
     fun getLoadMoreListener(llm: LinearLayoutManager): EndlessScrollListener {
         return object : EndlessScrollListener(llm) {
             override fun onLoadMore(currentPage: Int) {
-                if (hasNextPage) loadList()
+                if (hasNextPage) loadList(false)
             }
         }
     }
@@ -36,11 +36,11 @@ abstract class BaseTweetListViewModel(application: Application) : AndroidViewMod
         onResetList.value = Unit
         hasNextPage = true
         maxId = -1L
-        loadList().invokeOnCompletion {
+        loadList(true).invokeOnCompletion {
             isRefreshing.set(false)
         }
     }
 
-    abstract fun loadList(): Job
+    abstract fun loadList(isRefresh: Boolean = false): Job
 
 }

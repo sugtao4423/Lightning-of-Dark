@@ -12,7 +12,7 @@ import twitter4j.Paging
 
 class MentionFragmentViewModel(application: Application) : BaseTweetListViewModel(application) {
 
-    override fun loadList() = viewModelScope.launch {
+    override fun loadList(isRefresh: Boolean) = viewModelScope.launch {
         val paging = Paging(1, 50).let {
             if (maxId > 0) it.maxId(maxId) else it
         }
