@@ -32,7 +32,9 @@ class HomeFragmentViewModel(application: Application) : BaseTweetListViewModel(a
 
         if (result.isNotEmpty()) {
             maxId = result.last().id - 1
-            app.latestTweetId = result.first().id
+            if (isRefresh) {
+                app.latestTweetId = result.first().id
+            }
         }
         hasNextPage = result.isNotEmpty()
         addStatuses.value = result

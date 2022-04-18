@@ -52,7 +52,7 @@ class HomeFragment : Fragment() {
             adapter.clear()
             scrollListener.resetState()
         }
-        viewModel.loadList()
+        viewModel.loadList(true)
     }
 
 }
