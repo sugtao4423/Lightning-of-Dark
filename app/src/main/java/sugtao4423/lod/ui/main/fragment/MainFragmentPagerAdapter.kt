@@ -17,11 +17,11 @@ class MainFragmentPagerAdapter(
 
     override fun getItem(i: Int): Fragment {
         return when (i) {
-            0 -> Fragment_mention()
-            1 -> Fragment_home()
-            else -> Fragment_List().apply {
+            0 -> MentionFragment()
+            1 -> HomeFragment()
+            else -> ListFragment().apply {
                 arguments = Bundle().also {
-                    it.putInt(Fragment_List.LIST_INDEX, i - 2)
+                    it.putInt(ListFragment.LIST_INDEX, i - 2)
                 }
             }
         }

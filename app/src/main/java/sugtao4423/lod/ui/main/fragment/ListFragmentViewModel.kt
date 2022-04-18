@@ -19,7 +19,7 @@ import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
 
-class Fragment_ListViewModel(application: Application) : AndroidViewModel(application) {
+class ListFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app = getApplication<App>()
 

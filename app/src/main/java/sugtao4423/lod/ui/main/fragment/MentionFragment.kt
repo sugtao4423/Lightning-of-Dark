@@ -17,14 +17,14 @@ import sugtao4423.lod.databinding.FragmentListBinding
 import sugtao4423.lod.tweetlistview.EndlessScrollListener
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import twitter4j.Paging
+import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.TwitterException
 
-class Fragment_home : Fragment() {
+class MentionFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
     private lateinit var adapter: TweetListAdapter
-    private var listAsTL = -1L
     private lateinit var app: App
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -36,10 +36,10 @@ class Fragment_home : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         app = requireContext().applicationContext as App
-        listAsTL = app.account.listAsTL
 
         adapter = TweetListAdapter(requireContext())
         binding.listLine.adapter = adapter
+
         val scrollListener = getLoadMoreListener()
         binding.listLine.addOnScrollListener(scrollListener)
 
@@ -47,14 +47,24 @@ class Fragment_home : Fragment() {
                 android.R.color.holo_orange_light, android.R.color.holo_red_light)
         val onRefreshListener = SwipeRefreshLayout.OnRefreshListener {
             adapter.clear()
-            loadTimeLine()
+            loadMention()
             scrollListener.resetState()
         }
         binding.listPull2Refresh.setOnRefreshListener(onRefreshListener)
         onRefreshListener.onRefresh()
     }
 
-    private fun loadTimeLine() {
+    private fun getLoadMoreListener(): EndlessScrollListener {
+        return object : EndlessScrollListener(binding.listLine.linearLayoutManager) {
+            override fun onLoadMore(currentPage: Int) {
+                if (adapter.hasNextPage) {
+                    loadMention()
+                }
+            }
+        }
+    }
+
+    private fun loadMention() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 val paging = Paging(1, 50).let {
@@ -62,11 +72,7 @@ class Fragment_home : Fragment() {
                 }
 
                 try {
-                    if (listAsTL > 0) {
-                        app.twitter.getUserListStatuses(listAsTL, paging)
-                    } else {
-                        app.twitter.getHomeTimeline(paging)
-                    }
+                    app.twitter.getMentionsTimeline(paging)
                 } catch (e: TwitterException) {
                     null
                 }
@@ -75,12 +81,9 @@ class Fragment_home : Fragment() {
                 if (result.isEmpty()) {
                     adapter.hasNextPage = false
                 }
-                if (adapter.itemCount <= 0) {
-                    app.latestTweetId = result[0].id
-                }
-                adapter.addAll(result)
+                addAll(result)
             } else {
-                ShowToast(requireContext().applicationContext, R.string.error_get_timeline)
+                ShowToast(requireContext().applicationContext, R.string.error_get_mention)
             }
             binding.listPull2Refresh.isRefreshing = false
             binding.listPull2Refresh.isEnabled = true
@@ -89,20 +92,13 @@ class Fragment_home : Fragment() {
 
     fun insert(status: Status) {
         adapter.insertTop(status)
-        app.latestTweetId = status.id
         if (binding.listLine.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
             binding.listLine.smoothScrollToPosition(0)
         }
     }
 
-    private fun getLoadMoreListener(): EndlessScrollListener {
-        return object : EndlessScrollListener(binding.listLine.linearLayoutManager) {
-            override fun onLoadMore(currentPage: Int) {
-                if (adapter.hasNextPage) {
-                    loadTimeLine()
-                }
-            }
-        }
+    private fun addAll(statuses: ResponseList<Status>) {
+        adapter.addAll(statuses)
     }
 
 }

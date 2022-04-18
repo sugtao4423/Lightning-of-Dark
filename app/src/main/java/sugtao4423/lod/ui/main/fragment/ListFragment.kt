@@ -11,7 +11,7 @@ import sugtao4423.lod.databinding.FragmentListBinding
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.ui.main.MainActivityViewModel
 
-class Fragment_List : Fragment() {
+class ListFragment : Fragment() {
 
     companion object {
         const val LIST_INDEX = "listIndex"
@@ -20,7 +20,7 @@ class Fragment_List : Fragment() {
     private lateinit var binding: FragmentListBinding
 
     private val mainViewModel: MainActivityViewModel by activityViewModels()
-    private val viewModel: Fragment_ListViewModel by viewModels()
+    private val viewModel: ListFragmentViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
