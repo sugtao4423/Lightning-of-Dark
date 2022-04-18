@@ -7,14 +7,14 @@
             type="sugtao4423.lod.ui.main.MainActivityViewModel" />
     </data>
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.viewpager.widget.PagerTabStrip
                 android:id="@+id/mainPagerTabStrip"
@@ -27,26 +27,22 @@
         </androidx.viewpager.widget.ViewPager>
 
         <ImageButton
-            android:id="@+id/tweetBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|end"
             android:background="@color/transparent"
             android:contentDescription="@string/content_desc_tweet_button"
             android:onClick="@{() -> viewModel.clickNewTweet()}"
             android:src="@drawable/icon_edit" />
 
         <ImageButton
-            android:id="@+id/optionBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|start"
             android:background="@color/transparent"
             android:contentDescription="@string/content_desc_option_button"
             android:onClick="@{() -> viewModel.clickOption()}"
             android:src="@drawable/icon_option" />
 
-    </RelativeLayout>
+    </FrameLayout>
 </layout>
