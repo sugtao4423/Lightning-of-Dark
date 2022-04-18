@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="sugtao4423.lod.ui.main.fragment.ListFragmentViewModel" />
+            type="sugtao4423.lod.ui.BaseTweetListViewModel" />
     </data>
 
     <RelativeLayout
