@@ -82,7 +82,6 @@ class AutoLoadTLService : Service() {
                 } else {
                     app.twitter.getHomeTimeline(Paging(1, 50).sinceId(app.latestTweetId))
                 }
-                statuses.reverse()
                 listener?.let {
                     handler.post {
                         it.onStatus(statuses)

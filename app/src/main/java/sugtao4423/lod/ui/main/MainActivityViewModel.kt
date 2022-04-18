@@ -58,6 +58,8 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
         app.autoLoadTLListener = object : AutoLoadTLService.AutoLoadTLListener {
             override fun onStatus(statuses: ResponseList<Status>) {
+                if(statuses.isEmpty()) return
+                app.latestTweetId = statuses.first().id
                 _onNewStatuses.value = statuses
                 statuses.filter {
                     app.mentionPattern.matcher(it.text).find() && !it.isRetweet
