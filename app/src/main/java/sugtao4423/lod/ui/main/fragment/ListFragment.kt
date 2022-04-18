@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import sugtao4423.lod.databinding.FragmentListBinding
+import sugtao4423.lod.databinding.SwipeTweetListBinding
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.ui.main.MainActivityViewModel
 
@@ -17,7 +17,7 @@ class ListFragment : Fragment() {
         const val LIST_INDEX = "listIndex"
     }
 
-    private lateinit var binding: FragmentListBinding
+    private lateinit var binding: SwipeTweetListBinding
 
     private val mainViewModel: MainActivityViewModel by activityViewModels()
     private val viewModel: ListFragmentViewModel by viewModels()
@@ -27,7 +27,7 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentListBinding.inflate(inflater, container, false).also {
+        binding = SwipeTweetListBinding.inflate(inflater, container, false).also {
             it.viewModel = viewModel
         }
         return binding.root

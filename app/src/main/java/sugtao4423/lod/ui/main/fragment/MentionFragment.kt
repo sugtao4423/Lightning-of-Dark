@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import sugtao4423.lod.databinding.FragmentListBinding
+import sugtao4423.lod.databinding.SwipeTweetListBinding
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.ui.main.MainActivityViewModel
 
 class MentionFragment : Fragment() {
 
-    private lateinit var binding: FragmentListBinding
+    private lateinit var binding: SwipeTweetListBinding
 
     private val mainViewModel: MainActivityViewModel by activityViewModels()
     private val viewModel: MentionFragmentViewModel by viewModels()
@@ -23,7 +23,7 @@ class MentionFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentListBinding.inflate(inflater, container, false).also {
+        binding = SwipeTweetListBinding.inflate(inflater, container, false).also {
             it.viewModel = viewModel
         }
         return binding.root
