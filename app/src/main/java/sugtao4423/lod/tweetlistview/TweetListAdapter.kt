@@ -184,11 +184,6 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         notifyItemRangeInserted(pos, statuses.size)
     }
 
-    fun insertTop(item: Status) {
-        data.add(0, item)
-        notifyItemInserted(0)
-    }
-
     fun insertTop(item: List<Status>) {
         data.addAll(0, item)
         notifyItemRangeInserted(0, item.size)
