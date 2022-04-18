@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
         <activity
-            android:name="sugtao4423.lod.MainActivity"
+            android:name="sugtao4423.lod.ui.main.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout"
             android:exported="true"
             android:label="@string/app_name">

@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
+import sugtao4423.lod.ui.main.MainActivity
 import sugtao4423.lod.userpage_fragment.UserPage
 import sugtao4423.lod.utils.Utils
 import twitter4j.TwitterException

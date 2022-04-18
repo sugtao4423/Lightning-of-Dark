@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import sugtao4423.lod.ui.main.MainActivity
 import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status

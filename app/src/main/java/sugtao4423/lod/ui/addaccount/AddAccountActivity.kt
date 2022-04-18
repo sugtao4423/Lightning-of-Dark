@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import sugtao4423.lod.MainActivity
+import sugtao4423.lod.ui.main.MainActivity
 import sugtao4423.lod.databinding.ActivityAddAccountBinding
 
 class AddAccountActivity : AppCompatActivity() {

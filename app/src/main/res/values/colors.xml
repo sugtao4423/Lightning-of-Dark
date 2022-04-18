@@ -38,4 +38,11 @@
 
     <color name="userpageTextBackground">#f0f0f0f0</color>
 
+    <integer-array name="pull2RefreshScheme">
+        <item>@android:color/holo_blue_bright</item>
+        <item>@android:color/holo_green_light</item>
+        <item>@android:color/holo_orange_light</item>
+        <item>@android:color/holo_red_light</item>
+    </integer-array>
+
 </resources>

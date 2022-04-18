@@ -1,80 +1,71 @@
-package sugtao4423.lod
+package sugtao4423.lod.ui.main
 
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.runBlocking
 import sugtao4423.icondialog.IconDialog
 import sugtao4423.icondialog.IconItem
+import sugtao4423.lod.*
 import sugtao4423.lod.databinding.ActivityMainBinding
-import sugtao4423.lod.main_fragment.Fragment_home
-import sugtao4423.lod.main_fragment.Fragment_mention
-import sugtao4423.lod.main_fragment.MainFragmentPagerAdapter
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
-import twitter4j.ResponseList
-import twitter4j.Status
+import sugtao4423.lod.ui.main.fragment.MainFragmentPagerAdapter
 
 class MainActivity : LoDBaseActivity() {
 
     private var resetFlag = false
-
-    private lateinit var fragmentMention: Fragment_mention
-    private lateinit var fragmentHome: Fragment_home
-
     private var iconDialog: AlertDialog.Builder? = null
+
+    private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        supportActionBar?.apply {
+            hide()
+            setDisplayShowHomeEnabled(false)
+        }
+        val binding = ActivityMainBinding.inflate(layoutInflater).also {
+            it.lifecycleOwner = this
+            it.viewModel = viewModel
+        }
         setContentView(binding.root)
 
-        if (!app.hasAccount) {
+        if (!viewModel.hasAccount) {
             startActivity(Intent(this, AddAccountActivity::class.java))
             finish()
             return
         }
 
-        binding.tweetBtn.setOnClickListener { clickNewTweet() }
-        binding.optionBtn.setOnClickListener { clickOption() }
+        viewModel.onStartTweetActivity.observe(this) {
+            clickNewTweet()
+        }
+        viewModel.showOptionDialog.observe(this) {
+            clickOption()
+        }
+        viewModel.onStartAutoLoadTLService.observe(this) {
+            startAutoLoadTLService()
+        }
 
-        val pagerAdapter = MainFragmentPagerAdapter(supportFragmentManager, this)
-
+        val listData = viewModel.listData
         binding.pager.apply {
-            adapter = pagerAdapter
+            adapter = MainFragmentPagerAdapter(supportFragmentManager, this@MainActivity, listData)
             currentItem = 1
-            offscreenPageLimit = app.account.selectListIds.size + 1
+            offscreenPageLimit = listData.size + 1
         }
 
         binding.mainPagerTabStrip.apply {
             tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
             drawFullUnderline = true
         }
-        supportActionBar?.setDisplayShowHomeEnabled(false)
 
-        fragmentHome = pagerAdapter.fragmentHome
-        fragmentMention = pagerAdapter.fragmentMention
-        autoLoadTL()
+        viewModel.viewInitialized()
     }
 
-    private fun autoLoadTL() {
-        if (app.account.autoLoadTLInterval == 0) {
-            return
-        }
-        val listener = object : AutoLoadTLService.AutoLoadTLListener {
-            override fun onStatus(statuses: ResponseList<Status>) {
-                statuses.map {
-                    fragmentHome.insert(it)
-                    if (app.mentionPattern.matcher(it.text).find() && !it.isRetweet) {
-                        fragmentMention.insert(it)
-                    }
-                }
-            }
-        }
-        app.autoLoadTLListener = listener
+    private fun startAutoLoadTLService() {
         val intent = Intent(this, AutoLoadTLService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent)
@@ -91,12 +82,20 @@ class MainActivity : LoDBaseActivity() {
         if (iconDialog == null) {
             val black = ContextCompat.getColor(applicationContext, R.color.icon)
             val items = arrayOf(
-                    IconItem(getString(R.string.icon_bomb)[0], black, getString(R.string.tweet_bomb)),
-                    IconItem(getString(R.string.icon_search)[0], black, getString(R.string.search_user)),
-                    IconItem(getString(R.string.icon_user)[0], black, getString(R.string.account)),
-                    IconItem(getString(R.string.icon_experience)[0], black, getString(R.string.level_info)),
-                    IconItem(getString(R.string.icon_clock)[0], black, getString(R.string.use_info)),
-                    IconItem(getString(R.string.icon_cog)[0], black, getString(R.string.settings))
+                IconItem(getString(R.string.icon_bomb)[0], black, getString(R.string.tweet_bomb)),
+                IconItem(
+                    getString(R.string.icon_search)[0],
+                    black,
+                    getString(R.string.search_user)
+                ),
+                IconItem(getString(R.string.icon_user)[0], black, getString(R.string.account)),
+                IconItem(
+                    getString(R.string.icon_experience)[0],
+                    black,
+                    getString(R.string.level_info)
+                ),
+                IconItem(getString(R.string.icon_clock)[0], black, getString(R.string.use_info)),
+                IconItem(getString(R.string.icon_cog)[0], black, getString(R.string.settings))
             )
             iconDialog = IconDialog(this).setItems(items, OptionClickListener(this))
         }

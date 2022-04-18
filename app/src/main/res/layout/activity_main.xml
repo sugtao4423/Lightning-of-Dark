@@ -1,40 +1,52 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="sugtao4423.lod.ui.main.MainActivityViewModel" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.viewpager.widget.PagerTabStrip
-            android:id="@+id/mainPagerTabStrip"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_gravity="top"
-            android:background="@color/pagerTabBackground"
-            android:paddingTop="2dp"
-            android:textColor="@color/pagerTabText" />
-    </androidx.viewpager.widget.ViewPager>
+            android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/tweetBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
-        android:contentDescription="@string/content_desc_tweet_button"
-        android:src="@drawable/icon_edit" />
+            <androidx.viewpager.widget.PagerTabStrip
+                android:id="@+id/mainPagerTabStrip"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="top"
+                android:background="@color/pagerTabBackground"
+                android:paddingTop="2dp"
+                android:textColor="@color/pagerTabText" />
+        </androidx.viewpager.widget.ViewPager>
 
-    <ImageButton
-        android:id="@+id/optionBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
-        android:contentDescription="@string/content_desc_option_button"
-        android:src="@drawable/icon_option" />
+        <ImageButton
+            android:id="@+id/tweetBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/transparent"
+            android:contentDescription="@string/content_desc_tweet_button"
+            android:onClick="@{() -> viewModel.clickNewTweet()}"
+            android:src="@drawable/icon_edit" />
 
-</RelativeLayout>
+        <ImageButton
+            android:id="@+id/optionBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/transparent"
+            android:contentDescription="@string/content_desc_option_button"
+            android:onClick="@{() -> viewModel.clickOption()}"
+            android:src="@drawable/icon_option" />
+
+    </RelativeLayout>
+</layout>

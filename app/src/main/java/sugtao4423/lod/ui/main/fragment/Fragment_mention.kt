@@ -1,4 +1,4 @@
-package sugtao4423.lod.main_fragment
+package sugtao4423.lod.ui.main.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
