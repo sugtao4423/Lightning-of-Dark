@@ -30,13 +30,14 @@ class ListFragmentViewModel(application: Application) : BaseTweetListViewModel(a
         }
         if (result == null) {
             ShowToast(app, R.string.error_get_list)
-        } else {
-            if (result.isNotEmpty()) {
-                maxId = result.last().id - 1
-            }
-            hasNextPage = result.isNotEmpty()
-            result.let { addStatuses.value = it }
+            return@launch
         }
+
+        if (result.isNotEmpty()) {
+            maxId = result.last().id - 1
+        }
+        hasNextPage = result.isNotEmpty()
+        addStatuses.value = result
     }
 
 }

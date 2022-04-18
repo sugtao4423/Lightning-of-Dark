@@ -27,14 +27,15 @@ class HomeFragmentViewModel(application: Application) : BaseTweetListViewModel(a
         }
         if (result == null) {
             ShowToast(app, R.string.error_get_timeline)
-        } else {
-            if (result.isNotEmpty()) {
-                maxId = result.last().id - 1
-                app.latestTweetId = result.first().id
-            }
-            hasNextPage = result.isNotEmpty()
-            addStatuses.value = result
+            return@launch
         }
+
+        if (result.isNotEmpty()) {
+            maxId = result.last().id - 1
+            app.latestTweetId = result.first().id
+        }
+        hasNextPage = result.isNotEmpty()
+        addStatuses.value = result
     }
 
 }
