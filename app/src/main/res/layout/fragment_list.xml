@@ -9,12 +9,11 @@
             type="sugtao4423.lod.ui.BaseTweetListViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/listPull2Refresh"
             colorSchemeResources="@{@intArray/pull2RefreshScheme}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,5 +27,5 @@
                 android:scrollbars="vertical" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 </layout>
