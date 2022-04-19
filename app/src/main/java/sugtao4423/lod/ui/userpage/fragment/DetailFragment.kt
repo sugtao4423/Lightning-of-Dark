@@ -29,6 +29,11 @@ class DetailFragment : Fragment() {
         binding = FragmentUserDetailBinding.inflate(inflater, container, false).also {
             it.viewModel = viewModel
         }
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         userPageViewModel.user.observe(viewLifecycleOwner) {
             binding.user = it
@@ -65,7 +70,5 @@ class DetailFragment : Fragment() {
         viewModel.onStartChromeUrl.observe(viewLifecycleOwner) {
             ChromeIntent(requireContext(), Uri.parse(it))
         }
-
-        return binding.root
     }
 }
