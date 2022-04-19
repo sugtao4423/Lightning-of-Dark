@@ -5,9 +5,7 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import sugtao4423.lod.ui.main.MainActivity
 import twitter4j.Paging
 import twitter4j.ResponseList
@@ -22,15 +20,12 @@ class AutoLoadTLService : Service() {
     }
 
     private lateinit var autoLoadTimer: Timer
-    private val handler = Handler(Looper.getMainLooper())
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val app = applicationContext as App
-        val listener = app.autoLoadTLListener
         val interval = app.account.autoLoadTLInterval
-        val listAsTL = app.account.listAsTL
 
-        val task = AutoLoadTLTask(app, listener, listAsTL)
+        val task = AutoLoadTLTask(app)
         autoLoadTimer = Timer(true)
         autoLoadTimer.schedule(task, interval * 1000L, interval * 1000L)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -46,12 +41,19 @@ class AutoLoadTLService : Service() {
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
 
-        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val channelId = "default"
         val title = "Running AutoLoadTL Service"
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel = NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT)
-        notificationManager.createNotificationChannel(channel)
+        NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT).let {
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(it)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            applicationContext,
+            0,
+            appIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         val notification = Notification.Builder(applicationContext, channelId).run {
             setContentTitle(title)
             setSmallIcon(R.drawable.icon_notification)
@@ -73,16 +75,17 @@ class AutoLoadTLService : Service() {
         super.onDestroy()
     }
 
-    inner class AutoLoadTLTask(private val app: App, private val listener: AutoLoadTLListener?, private val listAsTL: Long) : TimerTask() {
+    inner class AutoLoadTLTask(private val app: App) : TimerTask() {
 
         override fun run() {
             try {
-                val statuses = if (listAsTL > 0) {
-                    app.twitter.getUserListStatuses(listAsTL, Paging(1, 50).sinceId(app.latestTweetId))
+                val paging = Paging(1, 50).sinceId(app.latestTweetId)
+                val statuses = if (app.account.listAsTL > 0) {
+                    app.twitter.getUserListStatuses(app.account.listAsTL, paging)
                 } else {
-                    app.twitter.getHomeTimeline(Paging(1, 50).sinceId(app.latestTweetId))
+                    app.twitter.getHomeTimeline(paging)
                 }
-                listener?.onStatus(statuses)
+                app.autoLoadTLListener?.onStatus(statuses)
             } catch (e: TwitterException) {
             }
         }
