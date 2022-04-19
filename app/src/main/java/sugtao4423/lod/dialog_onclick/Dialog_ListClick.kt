@@ -11,7 +11,7 @@ import sugtao4423.lod.*
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.tweetlistview.TweetListView
-import sugtao4423.lod.userpage_fragment.UserPage
+import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.Regex
 import sugtao4423.lod.utils.Utils
 import twitter4j.Status
@@ -145,11 +145,11 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
     }
 
     private fun openUserPage(userScreenName: String) {
-        val intent = Intent(context, UserPage::class.java)
+        val intent = Intent(context, UserPageActivity::class.java)
         if (status.user.screenName == userScreenName) {
-            intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_OBJECT, status.user)
+            intent.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_OBJECT, status.user)
         } else {
-            intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, userScreenName)
+            intent.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, userScreenName)
         }
         context.startActivity(intent)
     }

@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.ui.main.MainActivity
-import sugtao4423.lod.userpage_fragment.UserPage
+import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.Utils
 import twitter4j.TwitterException
 import java.text.NumberFormat
@@ -83,8 +83,8 @@ class OptionClickListener(private val context: Context) : DialogInterface.OnClic
                 if (userScreenName.isEmpty()) {
                     ShowToast(context.applicationContext, R.string.edittext_empty)
                 } else {
-                    val userPage = Intent(context, UserPage::class.java)
-                    userPage.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, userScreenName.replace("@", ""))
+                    val userPage = Intent(context, UserPageActivity::class.java)
+                    userPage.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, userScreenName.replace("@", ""))
                     context.startActivity(userPage)
                 }
             }

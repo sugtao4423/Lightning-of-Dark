@@ -16,7 +16,7 @@ import sugtao4423.lod.R
 import sugtao4423.lod.ShowVideo
 import sugtao4423.lod.StatusClickListener
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
-import sugtao4423.lod.userpage_fragment.UserPage
+import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.Utils
 import twitter4j.Status
 import java.text.SimpleDateFormat
@@ -88,8 +88,8 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         }
 
         holder.icon.setOnClickListener {
-            val intent = Intent(context, UserPage::class.java)
-            intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_OBJECT, origStatus.user)
+            val intent = Intent(context, UserPageActivity::class.java)
+            intent.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_OBJECT, origStatus.user)
             context.startActivity(intent)
         }
 

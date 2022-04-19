@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.userpage_fragment.UserPage
+import sugtao4423.lod.ui.userpage.UserPageActivity
 import twitter4j.PagableResponseList
 import twitter4j.User
 import java.text.NumberFormat
@@ -66,8 +66,8 @@ class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<
         holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.dateFontSize)
 
         holder.itemView.setOnClickListener {
-            val i = Intent(context, UserPage::class.java)
-            i.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, item.screenName)
+            val i = Intent(context, UserPageActivity::class.java)
+            i.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, item.screenName)
             context.startActivity(i)
         }
     }

@@ -1,4 +1,4 @@
-package sugtao4423.lod.userpage_fragment
+package sugtao4423.lod.ui.userpage.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

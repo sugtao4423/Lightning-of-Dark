@@ -1,4 +1,4 @@
-package sugtao4423.lod.userpage_fragment
+package sugtao4423.lod.ui.userpage.fragment
 
 import android.content.Intent
 import android.net.Uri
@@ -23,6 +23,7 @@ import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 import sugtao4423.lod.databinding.User0Binding
 import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
+import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.Regex
 import twitter4j.TwitterException
 import twitter4j.URLEntity
@@ -130,8 +131,8 @@ class _0_detail : Fragment() {
                 ss.setSpan(object : URLSpan(t) {
                     override fun onClick(widget: View) {
                         if (t.startsWith("@")) {
-                            val intent = Intent(context, UserPage::class.java)
-                            intent.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, this.url.replace("@", ""))
+                            val intent = Intent(context, UserPageActivity::class.java)
+                            intent.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, this.url.replace("@", ""))
                             activity!!.startActivity(intent)
                         } else if (t.startsWith("http")) {
                             ChromeIntent(activity!!, Uri.parse(t))

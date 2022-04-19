@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.tweetlistview.TweetListView
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
-import sugtao4423.lod.userpage_fragment.UserPage
+import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.Regex
 import twitter4j.TwitterException
 
@@ -86,8 +86,8 @@ class IntentActivity : AppCompatActivity() {
                     finish()
                 }
                 user.find() -> {
-                    val i = Intent(this, UserPage::class.java)
-                    i.putExtra(UserPage.INTENT_EXTRA_KEY_USER_SCREEN_NAME, user.group(Regex.userUrlScreenNameGroup))
+                    val i = Intent(this, UserPageActivity::class.java)
+                    i.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, user.group(Regex.userUrlScreenNameGroup))
                     startActivity(i)
                     finish()
                 }

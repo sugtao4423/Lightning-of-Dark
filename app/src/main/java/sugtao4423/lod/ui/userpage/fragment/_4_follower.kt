@@ -1,4 +1,4 @@
-package sugtao4423.lod.userpage_fragment
+package sugtao4423.lod.ui.userpage.fragment
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -6,31 +6,27 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
-import twitter4j.Paging
 import twitter4j.TwitterException
 
-class _1_Tweet : UserPageListBaseFragment(FragmentType.TYPE_TWEET) {
+class _4_follower : UserPageListBaseFragment(FragmentType.TYPE_USER) {
 
     override fun loadList() {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                val paging = Paging(1, 50).let {
-                    if (tweetListAdapter.itemCount > 0) it.maxId(tweetListAdapter.data.last().id - 1) else it
-                }
-
                 try {
-                    app.twitter.getUserTimeline(targetUser!!.screenName, paging)
+                    app.twitter.getFollowersList(targetUser!!.screenName, cursor, 200)
                 } catch (e: TwitterException) {
                     null
                 }
             }
             if (result != null) {
-                tweetListAdapter.addAll(result)
-                if (targetUser != null && result.isEmpty()) {
+                tweetListUserAdapter.addAll(result)
+                cursor = result.nextCursor
+                if (targetUser != null && !result.hasNext()) {
                     isAllLoaded = true
                 }
             } else {
-                ShowToast(requireContext().applicationContext, R.string.error_get_timeline)
+                ShowToast(requireContext().applicationContext, R.string.error_get_follower)
             }
             binding.userPagePull.isRefreshing = false
             binding.userPagePull.isEnabled = true

@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="sugtao4423.lod.userpage_fragment.UserPage"
+            android:name="sugtao4423.lod.ui.userpage.UserPageActivity"
             android:configChanges="orientation|screenSize|screenLayout" />
         <activity
             android:name="TweetActivity"
