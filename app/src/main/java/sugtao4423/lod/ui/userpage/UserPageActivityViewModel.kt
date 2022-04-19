@@ -28,13 +28,13 @@ class UserPageActivityViewModel(application: Application) : AndroidViewModel(app
     val onFinish: LiveData<Unit> = _onFinish
 
     fun setUser(user: User) {
-        if (_user.value != null) {
+        if (_user.value == null) {
             _user.value = user
         }
     }
 
     fun setUser(screenName: String) {
-        if (_user.value != null) {
+        if (_user.value == null) {
             loadUser(screenName)
         }
     }
