@@ -16,7 +16,7 @@ class UserPageFragmentPagerAdapter(fm: FragmentManager, private val context: Con
             2 -> _2_favorites()
             3 -> _3_follow()
             4 -> _4_follower()
-            else -> _0_detail()
+            else -> DetailFragment()
         }
     }
 
