@@ -1,4 +1,5 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -12,18 +13,19 @@
         android:layout_height="match_parent">
 
         <androidx.viewpager.widget.ViewPager
-            android:id="@+id/pager"
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <androidx.viewpager.widget.PagerTabStrip
-                android:id="@+id/mainPagerTabStrip"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:layout_gravity="top"
                 android:background="@color/pagerTabBackground"
                 android:paddingTop="2dp"
-                android:textColor="@color/pagerTabText" />
+                android:textColor="@color/pagerTabText"
+                app:drawFullUnderline="@{true}"
+                app:tabIndicatorColor="@color/pagerTabText" />
         </androidx.viewpager.widget.ViewPager>
 
         <ImageButton

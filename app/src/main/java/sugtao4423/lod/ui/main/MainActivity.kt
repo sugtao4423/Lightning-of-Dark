@@ -50,15 +50,10 @@ class MainActivity : LoDBaseActivity() {
         }
 
         val listData = viewModel.listData
-        binding.pager.apply {
+        binding.viewPager.apply {
             adapter = MainFragmentPagerAdapter(supportFragmentManager, this@MainActivity, listData)
             currentItem = 1
             offscreenPageLimit = listData.size + 1
-        }
-
-        binding.mainPagerTabStrip.apply {
-            tabIndicatorColor = ContextCompat.getColor(applicationContext, R.color.pagerTabText)
-            drawFullUnderline = true
         }
 
         viewModel.viewInitialized()
