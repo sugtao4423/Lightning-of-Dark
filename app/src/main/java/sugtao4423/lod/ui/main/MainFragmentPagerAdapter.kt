@@ -1,4 +1,4 @@
-package sugtao4423.lod.ui.main.fragment
+package sugtao4423.lod.ui.main
 
 import android.content.Context
 import android.os.Bundle
@@ -7,7 +7,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.main.MainActivityViewModel
+import sugtao4423.lod.ui.main.fragment.HomeFragment
+import sugtao4423.lod.ui.main.fragment.ListFragment
+import sugtao4423.lod.ui.main.fragment.MentionFragment
 
 class MainFragmentPagerAdapter(
     fm: FragmentManager,

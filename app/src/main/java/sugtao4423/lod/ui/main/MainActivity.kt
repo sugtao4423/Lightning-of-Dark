@@ -13,7 +13,6 @@ import sugtao4423.icondialog.IconItem
 import sugtao4423.lod.*
 import sugtao4423.lod.databinding.ActivityMainBinding
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
-import sugtao4423.lod.ui.main.fragment.MainFragmentPagerAdapter
 
 class MainActivity : LoDBaseActivity() {
 
