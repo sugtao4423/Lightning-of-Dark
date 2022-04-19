@@ -41,10 +41,10 @@ class MainActivity : LoDBaseActivity() {
         }
 
         viewModel.onStartTweetActivity.observe(this) {
-            clickNewTweet()
+            startNewTweetActivity()
         }
         viewModel.showOptionDialog.observe(this) {
-            clickOption()
+            showOptionDialog()
         }
         viewModel.onStartAutoLoadTLService.observe(this) {
             startAutoLoadTLService()
@@ -74,30 +74,26 @@ class MainActivity : LoDBaseActivity() {
         }
     }
 
-    private fun clickNewTweet() {
+    private fun startNewTweetActivity() {
         startActivity(Intent(this, TweetActivity::class.java))
     }
 
-    private fun clickOption() {
+    private fun createOptionDialog() {
+        val black = ContextCompat.getColor(applicationContext, R.color.icon)
+        val items = arrayOf(
+            IconItem(getString(R.string.icon_bomb)[0], black, getString(R.string.tweet_bomb)),
+            IconItem(getString(R.string.icon_search)[0], black, getString(R.string.search_user)),
+            IconItem(getString(R.string.icon_user)[0], black, getString(R.string.account)),
+            IconItem(getString(R.string.icon_experience)[0], black, getString(R.string.level_info)),
+            IconItem(getString(R.string.icon_clock)[0], black, getString(R.string.use_info)),
+            IconItem(getString(R.string.icon_cog)[0], black, getString(R.string.settings))
+        )
+        iconDialog = IconDialog(this).setItems(items, OptionClickListener(this))
+    }
+
+    private fun showOptionDialog() {
         if (iconDialog == null) {
-            val black = ContextCompat.getColor(applicationContext, R.color.icon)
-            val items = arrayOf(
-                IconItem(getString(R.string.icon_bomb)[0], black, getString(R.string.tweet_bomb)),
-                IconItem(
-                    getString(R.string.icon_search)[0],
-                    black,
-                    getString(R.string.search_user)
-                ),
-                IconItem(getString(R.string.icon_user)[0], black, getString(R.string.account)),
-                IconItem(
-                    getString(R.string.icon_experience)[0],
-                    black,
-                    getString(R.string.level_info)
-                ),
-                IconItem(getString(R.string.icon_clock)[0], black, getString(R.string.use_info)),
-                IconItem(getString(R.string.icon_cog)[0], black, getString(R.string.settings))
-            )
-            iconDialog = IconDialog(this).setItems(items, OptionClickListener(this))
+            createOptionDialog()
         }
         iconDialog!!.show()
     }
