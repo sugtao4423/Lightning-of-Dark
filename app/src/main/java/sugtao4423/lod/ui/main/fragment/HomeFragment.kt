@@ -37,8 +37,8 @@ class HomeFragment : Fragment() {
         val scrollListener = viewModel.getLoadMoreListener(binding.listLine.linearLayoutManager)
         binding.listLine.addOnScrollListener(scrollListener)
 
-        mainViewModel.onNewStatuses.observe(viewLifecycleOwner) {
-            if (it.isEmpty()) return@observe
+        mainViewModel.onNewStatuses.observeForever {
+            if (it.isEmpty()) return@observeForever
             adapter.insertTop(it)
             if (binding.listLine.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
                 binding.listLine.smoothScrollToPosition(0)

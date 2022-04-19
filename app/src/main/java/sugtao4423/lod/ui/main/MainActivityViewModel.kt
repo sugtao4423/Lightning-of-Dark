@@ -60,10 +60,11 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             override fun onStatus(statuses: ResponseList<Status>) {
                 if (statuses.isEmpty()) return
                 app.latestTweetId = statuses.first().id
-                _onNewStatuses.value = statuses
-                _onNewMention.value = statuses.filter {
+                _onNewStatuses.postValue(statuses)
+                _onNewMention.postValue(statuses.filter {
                     app.mentionPattern.matcher(it.text).find() && !it.isRetweet
-                }
+                })
+
             }
         }
         _onStartAutoLoadTLService.value = Unit

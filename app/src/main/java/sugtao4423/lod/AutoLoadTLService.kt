@@ -82,11 +82,7 @@ class AutoLoadTLService : Service() {
                 } else {
                     app.twitter.getHomeTimeline(Paging(1, 50).sinceId(app.latestTweetId))
                 }
-                listener?.let {
-                    handler.post {
-                        it.onStatus(statuses)
-                    }
-                }
+                listener?.onStatus(statuses)
             } catch (e: TwitterException) {
             }
         }
