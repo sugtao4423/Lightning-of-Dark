@@ -31,7 +31,7 @@ abstract class BaseTweetListViewModel(application: Application) : AndroidViewMod
         }
     }
 
-    fun pull2Refresh() {
+    open fun pull2Refresh() {
         isRefreshing.set(true)
         onResetList.value = Unit
         hasNextPage = true

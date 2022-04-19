@@ -5,17 +5,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.userpage.fragment.*
+import sugtao4423.lod.ui.userpage.fragment.DetailFragment
+import sugtao4423.lod.ui.userpage.fragment.StatusFragment
+import sugtao4423.lod.ui.userpage.fragment.UserFragment
 
 class UserPageFragmentPagerAdapter(fm: FragmentManager, private val context: Context) :
     FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(i: Int): Fragment {
         return when (i) {
-            1 -> _1_Tweet()
-            2 -> _2_favorites()
-            3 -> _3_follow()
-            4 -> _4_follower()
+            1 -> StatusFragment(StatusFragment.TYPE_TWEET)
+            2 -> StatusFragment(StatusFragment.TYPE_FAVORITE)
+            3 -> UserFragment(UserFragment.TYPE_FOLLOW)
+            4 -> UserFragment(UserFragment.TYPE_FOLLOWER)
             else -> DetailFragment()
         }
     }
