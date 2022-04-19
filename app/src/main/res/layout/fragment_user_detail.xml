@@ -192,9 +192,8 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="34sp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="3dp"
                         android:text="@string/icon_tweetCount"
                         android:typeface="@{viewModel.fontAwesomeTypeface()}" />
 
@@ -211,7 +210,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="34sp"
                         android:layout_height="wrap_content"
                         android:text="@string/icon_favCount"
                         android:typeface="@{viewModel.fontAwesomeTypeface()}" />
@@ -219,7 +218,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
                         android:text="@{UserConverter.favoriteCount(user)}" />
                 </LinearLayout>
 
@@ -230,7 +228,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="34sp"
                         android:layout_height="wrap_content"
                         android:text="@string/icon_followCount"
                         android:typeface="@{viewModel.fontAwesomeTypeface()}" />
@@ -238,7 +236,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
                         android:text="@{UserConverter.followCount(user)}" />
                 </LinearLayout>
 
@@ -249,7 +246,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="34sp"
                         android:layout_height="wrap_content"
                         android:text="@string/icon_followerCount"
                         android:typeface="@{viewModel.fontAwesomeTypeface()}" />
@@ -257,7 +254,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
                         android:text="@{UserConverter.followerCount(user)}" />
                 </LinearLayout>
 
