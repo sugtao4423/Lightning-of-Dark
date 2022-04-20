@@ -10,9 +10,13 @@ import com.bumptech.glide.Glide
 import kotlinx.coroutines.runBlocking
 import sugtao4423.icondialog.IconDialog
 import sugtao4423.icondialog.IconItem
-import sugtao4423.lod.*
+import sugtao4423.lod.AutoLoadTLService
+import sugtao4423.lod.LoDBaseActivity
+import sugtao4423.lod.R
+import sugtao4423.lod.TweetActivity
 import sugtao4423.lod.databinding.ActivityMainBinding
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
+import sugtao4423.lod.ui.main.listener.OptionClickListener
 
 class MainActivity : LoDBaseActivity() {
 
@@ -20,6 +24,7 @@ class MainActivity : LoDBaseActivity() {
     private var iconDialog: AlertDialog.Builder? = null
 
     private val viewModel: MainActivityViewModel by viewModels()
+    private val optionViewModel: OptionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +87,7 @@ class MainActivity : LoDBaseActivity() {
             IconItem(getString(R.string.icon_clock)[0], black, getString(R.string.use_info)),
             IconItem(getString(R.string.icon_cog)[0], black, getString(R.string.settings))
         )
-        iconDialog = IconDialog(this).setItems(items, OptionClickListener(this))
+        iconDialog = IconDialog(this).setItems(items, OptionClickListener(this, optionViewModel))
     }
 
     private fun showOptionDialog() {
