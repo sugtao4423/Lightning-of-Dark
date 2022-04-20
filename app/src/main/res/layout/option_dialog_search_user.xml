@@ -2,6 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="screenName"
+            type="androidx.lifecycle.MutableLiveData&lt;String&gt;" />
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,11 +23,11 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/searchUserScreenName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
             android:inputType="text"
+            android:text="@={screenName}"
             tools:ignore="LabelFor" />
 
     </LinearLayout>
