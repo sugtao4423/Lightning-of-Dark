@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout
+    <data>
+
+        <variable
+            name="staticText"
+            type="androidx.lifecycle.MutableLiveData&lt;String&gt;" />
+
+        <variable
+            name="loopText"
+            type="androidx.lifecycle.MutableLiveData&lt;String&gt;" />
+
+        <variable
+            name="loopCount"
+            type="androidx.lifecycle.MutableLiveData&lt;String&gt;" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingLeft="24dp"
         android:paddingTop="16dp"
         android:paddingRight="24dp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutStaticText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bombStaticText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/layout_static_text" />
+                android:hint="@string/layout_static_text"
+                android:text="@={staticText}" />
 
             <requestFocus />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutLoopText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layoutStaticText"
             android:layout_marginTop="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bombLoopText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/layout_repeat_text" />
+                android:hint="@string/layout_repeat_text"
+                android:text="@={loopText}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutLoopCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layoutLoopText"
             android:layout_marginTop="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/bombLoopCount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/layout_repeat_count"
-                android:inputType="number" />
+                android:inputType="number"
+                android:text="@={loopCount}" />
         </com.google.android.material.textfield.TextInputLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 </layout>

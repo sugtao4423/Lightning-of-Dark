@@ -58,15 +58,19 @@ class OptionClickListener(
     }
 
     private fun tweetBomb() {
-        val binding = OptionDialogTweetBombBinding.inflate(activity.layoutInflater)
+        val staticText = MutableLiveData("")
+        val loopText = MutableLiveData("")
+        val loopCount = MutableLiveData("")
+        val binding = OptionDialogTweetBombBinding.inflate(activity.layoutInflater).also {
+            it.staticText = staticText
+            it.loopText = loopText
+            it.loopCount = loopCount
+        }
         AlertDialog.Builder(activity).apply {
             setView(binding.root)
             setNegativeButton(R.string.cancel, null)
             setPositiveButton(R.string.ok) { _, _ ->
-                val staticText = binding.bombStaticText.text.toString()
-                val loopText = binding.bombLoopText.text.toString()
-                val loopCountStr = binding.bombLoopCount.text.toString()
-                viewModel.doBombTweet(staticText, loopText, loopCountStr)
+                viewModel.doBombTweet(staticText.value!!, loopText.value!!, loopCount.value!!)
             }
             show()
         }
