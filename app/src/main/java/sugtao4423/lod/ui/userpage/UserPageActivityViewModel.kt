@@ -30,6 +30,7 @@ class UserPageActivityViewModel(application: Application) : AndroidViewModel(app
     fun setUser(user: User) {
         if (_user.value == null) {
             _user.value = user
+            _actionBarTitle.value = user.name
         }
     }
 
@@ -50,6 +51,7 @@ class UserPageActivityViewModel(application: Application) : AndroidViewModel(app
         }
 
         result.let { _user.value = it }
+        _actionBarTitle.value = result.name
     }
 
 }
