@@ -11,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.databinding.FragmentUserDetailBinding
-import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
+import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
 
 class DetailFragment : Fragment() {
@@ -48,22 +48,16 @@ class DetailFragment : Fragment() {
             binding.relationshipIcons = it
         }
         viewModel.onStartIconImageUrl.observe(viewLifecycleOwner) {
-            val image = Intent(context, ImageFragmentActivity::class.java).apply {
-                putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, arrayOf(it))
-                putExtra(
-                    ImageFragmentActivity.INTENT_EXTRA_KEY_TYPE,
-                    ImageFragmentActivity.TYPE_ICON
-                )
+            val image = Intent(context, ShowImageActivity::class.java).apply {
+                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, arrayOf(it))
+                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_TYPE, ShowImageActivity.TYPE_ICON)
             }
             startActivity(image)
         }
         viewModel.onStartBannerImageUrl.observe(viewLifecycleOwner) {
-            val image = Intent(context, ImageFragmentActivity::class.java).apply {
-                putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, arrayOf(it))
-                putExtra(
-                    ImageFragmentActivity.INTENT_EXTRA_KEY_TYPE,
-                    ImageFragmentActivity.TYPE_BANNER
-                )
+            val image = Intent(context, ShowImageActivity::class.java).apply {
+                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, arrayOf(it))
+                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_TYPE, ShowImageActivity.TYPE_BANNER)
             }
             startActivity(image)
         }

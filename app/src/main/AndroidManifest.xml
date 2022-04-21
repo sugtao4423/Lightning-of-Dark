@@ -91,7 +91,7 @@
             android:name="Settings_List"
             android:label="@string/settings_list" />
         <activity
-            android:name="sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity"
+            android:name="sugtao4423.lod.ui.showimage.ShowImageActivity"
             android:configChanges="orientation|screenSize|screenLayout"
             android:theme="@style/Theme.TranslucentBackground" />
         <activity

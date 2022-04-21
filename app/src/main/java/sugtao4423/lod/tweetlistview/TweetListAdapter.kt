@@ -15,7 +15,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowVideo
 import sugtao4423.lod.StatusClickListener
-import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
+import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.Utils
 import twitter4j.Status
@@ -148,9 +148,9 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                         urls[j] = it.mediaURLHttps
                     }
                     child.setOnClickListener {
-                        val intent = Intent(context, ImageFragmentActivity::class.java).apply {
-                            putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, urls)
-                            putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_POSITION, index)
+                        val intent = Intent(context, ShowImageActivity::class.java).apply {
+                            putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, urls)
+                            putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, index)
                         }
                         context.startActivity(intent)
                     }

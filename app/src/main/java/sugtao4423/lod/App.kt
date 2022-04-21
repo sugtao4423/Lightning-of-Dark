@@ -6,10 +6,7 @@ import kotlinx.coroutines.*
 import sugtao4423.lod.db.AccountRoomDatabase
 import sugtao4423.lod.db.UseTimeRoomDatabase
 import sugtao4423.lod.entity.Account
-import sugtao4423.lod.model.AccountRepository
-import sugtao4423.lod.model.LevelRepository
-import sugtao4423.lod.model.PrefRepository
-import sugtao4423.lod.model.UseTimeRepository
+import sugtao4423.lod.model.*
 import twitter4j.StatusUpdate
 import twitter4j.Twitter
 import twitter4j.TwitterException
@@ -27,6 +24,8 @@ class App : Application() {
 
     val prefRepository by lazy { PrefRepository(this) }
     val levelRepository by lazy { LevelRepository(prefRepository) }
+
+    val fileDownloader by lazy { FileDownloader(this) }
 
     val fontAwesomeTypeface: Typeface by lazy {
         Typeface.createFromAsset(assets, "fontawesome.ttf")

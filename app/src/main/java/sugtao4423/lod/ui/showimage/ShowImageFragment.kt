@@ -1,4 +1,4 @@
-package sugtao4423.lod.swipe_image_viewer
+package sugtao4423.lod.ui.showimage
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 
-class ImageFragment : Fragment() {
+class ShowImageFragment : Fragment() {
 
     private lateinit var parentLayout: FrameLayout
     private lateinit var image: ZoomImageView
@@ -29,7 +29,7 @@ class ImageFragment : Fragment() {
     private lateinit var url: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        url = requireArguments().getString(ImagePagerAdapter.BUNDLE_KEY_URL)!!
+        url = requireArguments().getString(ShowImageFragmentPagerAdapter.BUNDLE_KEY_URL)!!
 
         parentLayout = FrameLayout(requireContext())
         image = ZoomImageView(requireContext())
@@ -70,7 +70,7 @@ class ImageFragment : Fragment() {
             }
         }
         CoroutineScope(Dispatchers.IO).launch {
-            Glide.with(this@ImageFragment).asBitmap().load(url).listener(requestListener).submit().get()
+            Glide.with(this@ShowImageFragment).asBitmap().load(url).listener(requestListener).submit().get()
         }
     }
 

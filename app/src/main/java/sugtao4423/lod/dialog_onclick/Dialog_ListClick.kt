@@ -8,7 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import sugtao4423.lod.*
-import sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity
+import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.tweetlistview.TweetListView
 import sugtao4423.lod.ui.userpage.UserPageActivity
@@ -106,9 +106,9 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                     }
                 }
                 val pos = urls.indexOf(urlText)
-                Intent(context, ImageFragmentActivity::class.java).apply {
-                    putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_URLS, urls.toTypedArray())
-                    putExtra(ImageFragmentActivity.INTENT_EXTRA_KEY_POSITION, pos)
+                Intent(context, ShowImageActivity::class.java).apply {
+                    putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, urls.toTypedArray())
+                    putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, pos)
                 }
             }
             video.find() -> {
