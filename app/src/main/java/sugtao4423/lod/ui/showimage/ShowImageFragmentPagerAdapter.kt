@@ -4,18 +4,15 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import sugtao4423.lod.ui.showimage.fragment.ShowImageFragment
 
 class ShowImageFragmentPagerAdapter(fm: FragmentManager, imageUrls: Array<String>) :
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    companion object {
-        const val BUNDLE_KEY_URL = "url"
-    }
-
     private val fragments: List<ShowImageFragment> = imageUrls.map { url ->
         ShowImageFragment().apply {
             arguments = Bundle().also {
-                it.putString(BUNDLE_KEY_URL, url)
+                it.putString(ShowImageFragment.BUNDLE_KEY_URL, url)
             }
         }
     }

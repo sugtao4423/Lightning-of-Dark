@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="sugtao4423.lod.ui.showimage.fragment.ShowImageFragmentViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.tenthbit.view.ZoomImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:imageListener="@{viewModel.requestListener}"
+            app:imageUrl="@{viewModel.imageUrl}" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            android:paddingHorizontal="64dp"
+            android:scaleY="1.5"
+            android:visibility="@{viewModel.visibilityProgressBar}" />
+    </FrameLayout>
+</layout>

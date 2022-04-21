@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestListener
 import sugtao4423.lod.ChromeIntent
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.userpage.UserPageActivity
@@ -41,6 +42,11 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable?) {
             it.placeholder(placeholder)
         }
     }.into(this)
+}
+
+@BindingAdapter("imageUrl", "imageListener")
+fun ImageView.imageUrl(url: String?, imageListener: RequestListener<Drawable>) {
+    Glide.with(this).load(url).listener(imageListener).into(this)
 }
 
 @BindingAdapter("lodLinkMovementString")
