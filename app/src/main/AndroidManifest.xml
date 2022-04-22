@@ -50,7 +50,7 @@
             android:configChanges="orientation|screenSize|screenLayout"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="IntentActivity"
+            android:name=".ui.intent.IntentActivity"
             android:exported="true"
             android:theme="@style/Theme.TranslucentBackground">
             <intent-filter>
