@@ -19,6 +19,11 @@ import sugtao4423.lod.R
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.Regex
 
+@BindingAdapter("android:visibility")
+fun View.visibility(isVisible: Boolean) {
+    visibility = if (isVisible) View.VISIBLE else View.GONE
+}
+
 @BindingAdapter("colorSchemeResources")
 fun SwipeRefreshLayout.colorSchemeColors(colorResIds: IntArray) {
     setColorSchemeColors(*colorResIds)

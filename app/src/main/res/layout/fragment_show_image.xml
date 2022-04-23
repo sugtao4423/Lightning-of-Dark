@@ -27,6 +27,6 @@
             android:indeterminate="true"
             android:paddingHorizontal="64dp"
             android:scaleY="1.5"
-            android:visibility="@{viewModel.visibilityProgressBar}" />
+            android:visibility="@{viewModel.isShowProgressBar}" />
     </FrameLayout>
 </layout>

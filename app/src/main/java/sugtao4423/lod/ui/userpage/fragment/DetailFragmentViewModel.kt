@@ -2,7 +2,6 @@ package sugtao4423.lod.ui.userpage.fragment
 
 import android.app.Application
 import android.graphics.Typeface
-import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,8 +19,7 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
 
     private val app = getApplication<App>()
 
-    fun visibilityRelationship(user: User?): Int =
-        if (user?.screenName == app.account.screenName) View.GONE else View.VISIBLE
+    fun isShowRelationship(user: User?): Boolean = user?.screenName != app.account.screenName
 
     fun fontAwesomeTypeface(): Typeface = app.fontAwesomeTypeface
 

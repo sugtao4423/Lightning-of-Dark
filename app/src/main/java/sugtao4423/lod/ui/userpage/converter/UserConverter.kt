@@ -1,6 +1,5 @@
 package sugtao4423.lod.ui.userpage.converter
 
-import android.view.View
 import twitter4j.URLEntity
 import twitter4j.User
 import java.text.NumberFormat
@@ -22,8 +21,7 @@ object UserConverter {
     fun screenName(user: User?): String = user?.let { "@${it.screenName}" } ?: "null"
 
     @JvmStatic
-    fun visibilityProtected(user: User?): Int =
-        if (user?.isProtected == true) View.VISIBLE else View.GONE
+    fun isShowProtected(user: User?): Boolean = user?.isProtected == true
 
     @JvmStatic
     private fun replaceUrlEntities(target: String?, entity: URLEntity): String =

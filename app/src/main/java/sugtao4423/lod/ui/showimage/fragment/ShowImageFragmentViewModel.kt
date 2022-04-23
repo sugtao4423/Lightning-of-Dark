@@ -2,7 +2,6 @@ package sugtao4423.lod.ui.showimage.fragment
 
 import android.app.Application
 import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import com.bumptech.glide.load.DataSource
@@ -16,7 +15,7 @@ class ShowImageFragmentViewModel(application: Application) : AndroidViewModel(ap
 
     private val app = getApplication<App>()
 
-    val visibilityProgressBar = ObservableField(View.VISIBLE)
+    val isShowProgressBar = ObservableField(true)
 
     var imageUrl: String? = null
 
@@ -29,7 +28,7 @@ class ShowImageFragmentViewModel(application: Application) : AndroidViewModel(ap
             isFirstResource: Boolean
         ): Boolean {
             ShowToast(app, R.string.error_get_image)
-            visibilityProgressBar.set(View.GONE)
+            isShowProgressBar.set(false)
             return false
         }
 
@@ -40,7 +39,7 @@ class ShowImageFragmentViewModel(application: Application) : AndroidViewModel(ap
             dataSource: DataSource?,
             isFirstResource: Boolean
         ): Boolean {
-            visibilityProgressBar.set(View.GONE)
+            isShowProgressBar.set(false)
             return false
         }
     }

@@ -86,7 +86,7 @@
                             android:textColor="@color/icon"
                             android:textSize="20sp"
                             android:typeface="@{viewModel.fontAwesomeTypeface()}"
-                            android:visibility="@{UserConverter.visibilityProtected(user)}" />
+                            android:visibility="@{UserConverter.isShowProtected(user)}" />
                     </LinearLayout>
 
                     <TextView
@@ -104,13 +104,12 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal"
-                android:visibility="@{viewModel.visibilityRelationship(user)}">
+                android:visibility="@{viewModel.isShowRelationship(user)}">
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:contentDescription="@string/content_desc_friendship_source_icon"
-                    android:visibility="@{viewModel.visibilityRelationship(user)}"
                     app:imageUrl="@{relationshipIcons.me}" />
 
                 <TextView
@@ -121,15 +120,13 @@
                     android:text="@{relationshipText}"
                     android:textColor="@color/icon"
                     android:textSize="34sp"
-                    android:typeface="@{viewModel.fontAwesomeTypeface()}"
-                    android:visibility="@{viewModel.visibilityRelationship(user)}" />
+                    android:typeface="@{viewModel.fontAwesomeTypeface()}" />
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="5dp"
                     android:contentDescription="@string/content_desc_friendship_target_icon"
-                    android:visibility="@{viewModel.visibilityRelationship(user)}"
                     app:imageUrl="@{relationshipIcons.target}" />
             </LinearLayout>
 
