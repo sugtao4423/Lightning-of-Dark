@@ -98,7 +98,7 @@ class TweetActivity : LoDBaseActivity() {
         viewModel.toStatus = intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS).let {
             if (it == null) null else (it as Status)
         }
-        viewModel.tweetType = intent.getIntExtra(INTENT_EXTRA_KEY_TYPE, 0)
+        viewModel.tweetType = intent.getIntExtra(INTENT_EXTRA_KEY_TYPE, TYPE_NEWTWEET)
     }
 
     private fun showTextOptionDialog() {
