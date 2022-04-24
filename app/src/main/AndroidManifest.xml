@@ -46,7 +46,7 @@
             android:name="sugtao4423.lod.ui.userpage.UserPageActivity"
             android:configChanges="orientation|screenSize|screenLayout" />
         <activity
-            android:name="TweetActivity"
+            android:name=".ui.tweet.TweetActivity"
             android:configChanges="orientation|screenSize|screenLayout"
             android:windowSoftInputMode="adjustResize" />
         <activity

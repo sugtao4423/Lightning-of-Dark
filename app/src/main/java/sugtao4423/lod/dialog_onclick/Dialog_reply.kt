@@ -9,7 +9,7 @@ import sugtao4423.icondialog.IconDialog
 import sugtao4423.icondialog.IconItem
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.TweetActivity
+import sugtao4423.lod.ui.tweet.TweetActivity
 import twitter4j.Status
 
 class Dialog_reply(private val status: Status, private val context: Context, private val dialog: AlertDialog) : View.OnClickListener {

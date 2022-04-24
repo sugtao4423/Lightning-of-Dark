@@ -8,6 +8,7 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -52,6 +53,13 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable?) {
 @BindingAdapter("imageUrl", "imageListener")
 fun ImageView.imageUrl(url: String?, imageListener: RequestListener<Drawable>) {
     Glide.with(this).load(url).listener(imageListener).into(this)
+}
+
+@BindingAdapter("isSelectionEnd")
+fun EditText.isSelectionEnd(isSelectionEnd: Boolean?) {
+    if (isSelectionEnd == true) {
+        setSelection(text.length)
+    }
 }
 
 @BindingAdapter("lodLinkMovementString")

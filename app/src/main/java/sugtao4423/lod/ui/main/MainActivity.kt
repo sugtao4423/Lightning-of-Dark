@@ -13,7 +13,7 @@ import sugtao4423.icondialog.IconItem
 import sugtao4423.lod.AutoLoadTLService
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
-import sugtao4423.lod.TweetActivity
+import sugtao4423.lod.ui.tweet.TweetActivity
 import sugtao4423.lod.databinding.ActivityMainBinding
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.ui.main.listener.OptionClickListener

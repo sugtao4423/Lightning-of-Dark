@@ -1,5 +1,6 @@
 package sugtao4423.lod.playing_music_data
 
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -13,9 +14,10 @@ import androidx.core.app.NotificationManagerCompat
 import sugtao4423.lod.R
 import sugtao4423.lod.ShowToast
 
-class PlayingMusicData(private val context: Context) {
+class PlayingMusicData(private val activity: Activity) {
 
-    private val mediaSessionManager = context.getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
+    private val mediaSessionManager =
+        activity.getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
 
     fun getPlayingMusicData(): HashMap<MusicDataKey, String>? {
         if (!hasNotificationAccessPermission()) {
@@ -24,11 +26,12 @@ class PlayingMusicData(private val context: Context) {
         }
 
         val musicMap = HashMap<MusicDataKey, String>()
-        val controllers = mediaSessionManager.getActiveSessions(ComponentName(context, MusicNotificationListener::class.java))
-        controllers.map {
-            if (it == null || it.playbackState == null || it.metadata == null) {
-                return@map
-            }
+        val controllers = mediaSessionManager.getActiveSessions(
+            ComponentName(activity, MusicNotificationListener::class.java)
+        )
+        controllers.filter {
+            it != null && it.playbackState != null && it.metadata != null
+        }.forEach {
             val playing = (PlaybackState.STATE_PLAYING == it.playbackState!!.state)
             if (playing) {
                 val title = it.metadata!!.getString(MediaMetadata.METADATA_KEY_TITLE)
@@ -44,11 +47,13 @@ class PlayingMusicData(private val context: Context) {
     }
 
     private fun hasNotificationAccessPermission(): Boolean {
-        return NotificationManagerCompat.getEnabledListenerPackages(context).contains(context.packageName)
+        return NotificationManagerCompat
+            .getEnabledListenerPackages(activity)
+            .contains(activity.packageName)
     }
 
     private fun requestNotificationAccessPermission() {
-        AlertDialog.Builder(context).apply {
+        AlertDialog.Builder(activity).apply {
             setMessage(R.string.permission_notification_access_message)
             setNegativeButton(R.string.cancel) { _, _ ->
                 ShowToast(context.applicationContext, R.string.permission_rejected)

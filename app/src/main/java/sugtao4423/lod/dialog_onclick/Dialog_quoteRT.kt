@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import sugtao4423.lod.TweetActivity
+import sugtao4423.lod.ui.tweet.TweetActivity
 import twitter4j.Status
 
 class Dialog_quoteRT(private val status: Status, private val context: Context, private val dialog: AlertDialog) : View.OnLongClickListener {
