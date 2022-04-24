@@ -12,177 +12,165 @@
             type="sugtao4423.lod.ui.tweet.TweetActivityViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/activityBackgroundGray">
+        android:background="@color/activityBackgroundGray"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/tweetText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/closeBtn"
-            android:layout_below="@+id/scrollViewForOriginStatus"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:afterTextChanged="@{(s) -> viewModel.afterChangeTweetText(s)}"
-            android:ems="10"
-            android:gravity="top|start"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine"
-            android:onTextChanged="@{(s, start, before, count) -> viewModel.onChangeTweetText(s)}"
-            android:text="@={viewModel.tweetText}"
-            app:isSelectionEnd="@{viewModel.textSelectionEnd}"
-            tools:ignore="LabelFor">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="100"
+            android:orientation="vertical">
 
-            <requestFocus />
-        </EditText>
+            <sugtao4423.lod.tweetlistview.TweetListView
+                android:id="@+id/originStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:visibility="@{viewModel.isShowOriginStatus}" />
 
-        <TextView
-            android:id="@+id/text140"
-            android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:afterTextChanged="@{(s) -> viewModel.afterChangeTweetText(s)}"
+                    android:gravity="top|start"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:onTextChanged="@{(s, start, before, count) -> viewModel.onChangeTweetText(s)}"
+                    android:text="@={viewModel.tweetText}"
+                    app:isSelectionEnd="@{viewModel.textSelectionEnd}"
+                    tools:ignore="LabelFor">
+
+                    <requestFocus />
+                </EditText>
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginBottom="11dp"
+                    android:contentDescription="@string/content_desc_upload_image"
+                    app:imageURI="@{viewModel.selectedImage}" />
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/closeBtn"
-            android:text="@{viewModel.remainingTextCount.toString()}"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@{viewModel.isValidTextCount ? Color.parseColor(`#89000000`) : Color.RED}" />
+            android:gravity="bottom"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/selectedImage"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignBottom="@+id/tweetText"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="11dp"
-            android:contentDescription="@string/content_desc_upload_image"
-            app:imageURI="@{viewModel.selectedImage}" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/closeBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:background="@color/transparent"
-            android:onClick="@{() -> viewModel.clickClose()}"
-            android:padding="10dp"
-            android:text="@string/icon_close"
-            android:textColor="@xml/activity_tweet_btn"
-            android:textSize="22sp"
-            android:typeface="@{viewModel.fontAwesomeTypeface}" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{viewModel.accountScreenName}"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
 
-        <Button
-            android:id="@+id/tweetBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/imageSelectBtn"
-            android:background="@color/transparent"
-            android:onClick="@{() -> viewModel.clickTweet()}"
-            android:padding="10dp"
-            android:text="@string/icon_tweet"
-            android:textColor="@xml/activity_tweet_btn"
-            android:textSize="22sp"
-            android:typeface="@{viewModel.fontAwesomeTypeface}" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@color/transparent"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="@{() -> viewModel.clickMic()}"
+                    android:padding="8dp"
+                    android:text="@string/icon_mic"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="18sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
 
-        <Button
-            android:id="@+id/imageSelectBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@+id/text140"
-            android:background="@color/transparent"
-            android:onClick="@{() -> viewModel.clickImageSelect()}"
-            android:padding="10dp"
-            android:text="@string/icon_image"
-            android:textColor="@xml/activity_tweet_btn"
-            android:textSize="22sp"
-            android:typeface="@{viewModel.fontAwesomeTypeface}" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@color/transparent"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="@{() -> viewModel.clickMusic()}"
+                    android:padding="8dp"
+                    android:text="@string/icon_music"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="18sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
 
-        <TextView
-            android:id="@+id/tweetAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:padding="8dp"
-            android:text="@{viewModel.accountScreenName}"
-            android:typeface="@{viewModel.fontAwesomeTypeface}" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@color/transparent"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="@{() -> viewModel.clickTextOption()}"
+                    android:padding="8dp"
+                    android:text="@string/icon_text"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="18sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/micBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="12dp"
-            android:layout_toEndOf="@+id/tweetAccount"
-            android:background="@color/transparent"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:onClick="@{() -> viewModel.clickMic()}"
-            android:padding="8dp"
-            android:text="@string/icon_mic"
-            android:textColor="@xml/activity_tweet_btn"
-            android:textSize="18sp"
-            android:typeface="@{viewModel.fontAwesomeTypeface}" />
-
-        <Button
-            android:id="@+id/musicBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="12dp"
-            android:layout_toEndOf="@+id/micBtn"
-            android:background="@color/transparent"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:onClick="@{() -> viewModel.clickMusic()}"
-            android:padding="8dp"
-            android:text="@string/icon_music"
-            android:textColor="@xml/activity_tweet_btn"
-            android:textSize="18sp"
-            android:typeface="@{viewModel.fontAwesomeTypeface}" />
-
-        <Button
-            android:id="@+id/textOptionBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="12dp"
-            android:layout_toEndOf="@+id/musicBtn"
-            android:background="@color/transparent"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:onClick="@{() -> viewModel.clickTextOption()}"
-            android:padding="8dp"
-            android:text="@string/icon_text"
-            android:textColor="@xml/activity_tweet_btn"
-            android:textSize="18sp"
-            android:typeface="@{viewModel.fontAwesomeTypeface}" />
-
-        <ScrollView
-            android:id="@+id/scrollViewForOriginStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:visibility="@{viewModel.isShowOriginStatus}">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:gravity="end"
+                android:orientation="horizontal">
 
-                <sugtao4423.lod.tweetlistview.TweetListView
-                    android:id="@+id/originStatus"
-                    android:layout_width="match_parent"
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/transparent"
+                    android:onClick="@{() -> viewModel.clickTweet()}"
+                    android:padding="10dp"
+                    android:text="@string/icon_tweet"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="22sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/transparent"
+                    android:onClick="@{() -> viewModel.clickImageSelect()}"
+                    android:padding="10dp"
+                    android:text="@string/icon_image"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="22sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scrollbars="vertical" />
-            </LinearLayout>
-        </ScrollView>
+                    android:layout_gravity="bottom"
+                    android:text="@{viewModel.remainingTextCount.toString()}"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@{viewModel.isValidTextCount ? Color.parseColor(`#89000000`) : Color.RED}" />
 
-    </RelativeLayout>
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/transparent"
+                    android:onClick="@{() -> viewModel.clickClose()}"
+                    android:padding="10dp"
+                    android:text="@string/icon_close"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="22sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 </layout>
