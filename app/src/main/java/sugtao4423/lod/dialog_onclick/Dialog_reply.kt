@@ -5,10 +5,10 @@ import android.content.Intent
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import sugtao4423.icondialog.IconDialog
-import sugtao4423.icondialog.IconItem
 import sugtao4423.lod.App
 import sugtao4423.lod.R
+import sugtao4423.lod.ui.icondialog.IconDialog
+import sugtao4423.lod.ui.icondialog.IconItem
 import sugtao4423.lod.ui.tweet.TweetActivity
 import twitter4j.Status
 
@@ -38,7 +38,7 @@ class Dialog_reply(private val status: Status, private val context: Context, pri
 
     private fun selectReplyDialog() {
         val black = ContextCompat.getColor(context, R.color.icon)
-        val items = arrayOf(
+        val items = listOf(
                 IconItem(context.getString(R.string.icon_reply)[0], black, context.getString(R.string.reply)),
                 IconItem(context.getString(R.string.icon_replyAll)[0], black, context.getString(R.string.reply_all))
         )

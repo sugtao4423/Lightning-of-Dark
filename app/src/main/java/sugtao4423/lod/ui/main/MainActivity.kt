@@ -8,15 +8,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.runBlocking
-import sugtao4423.icondialog.IconDialog
-import sugtao4423.icondialog.IconItem
 import sugtao4423.lod.AutoLoadTLService
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.tweet.TweetActivity
 import sugtao4423.lod.databinding.ActivityMainBinding
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
+import sugtao4423.lod.ui.icondialog.IconDialog
+import sugtao4423.lod.ui.icondialog.IconItem
 import sugtao4423.lod.ui.main.listener.OptionClickListener
+import sugtao4423.lod.ui.tweet.TweetActivity
 
 class MainActivity : LoDBaseActivity() {
 
@@ -79,7 +79,7 @@ class MainActivity : LoDBaseActivity() {
 
     private fun createOptionDialog() {
         val black = ContextCompat.getColor(applicationContext, R.color.icon)
-        val items = arrayOf(
+        val items = listOf(
             IconItem(getString(R.string.icon_bomb)[0], black, getString(R.string.tweet_bomb)),
             IconItem(getString(R.string.icon_search)[0], black, getString(R.string.search_user)),
             IconItem(getString(R.string.icon_user)[0], black, getString(R.string.account)),
