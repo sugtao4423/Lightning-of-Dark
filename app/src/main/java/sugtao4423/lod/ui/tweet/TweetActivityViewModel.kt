@@ -12,9 +12,9 @@ import android.text.style.ForegroundColorSpan
 import androidx.activity.result.ActivityResult
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
-import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.hadilq.liveevent.LiveEvent
 import com.twitter.twittertext.Extractor
 import com.twitter.twittertext.TwitterTextParser
@@ -50,14 +50,14 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     private val _actionBarTitle = LiveEvent<Int?>()
     val actionBarTitle: LiveData<Int?> = _actionBarTitle
 
-    val isShowOriginStatus = ObservableField<Boolean>()
+    val isShowOriginStatus = MutableLiveData<Boolean>()
 
-    val tweetText = ObservableField("")
-    val textSelectionEnd = ObservableField(true)
-    val remainingTextCount = ObservableField(140)
-    val isValidTextCount = ObservableField(true)
+    val tweetText = MutableLiveData("")
+    val textSelectionEnd = MutableLiveData(true)
+    val remainingTextCount = MutableLiveData(140)
+    val isValidTextCount = MutableLiveData(true)
 
-    val selectedImage = ObservableField<Uri?>()
+    val selectedImage = MutableLiveData<Uri?>()
 
     private val _onSetTweetListAdapter = LiveEvent<Unit>()
     val onSetTweetListAdapter: LiveData<Unit> = _onSetTweetListAdapter
@@ -90,15 +90,15 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
         when (tweetType) {
             TweetActivity.TYPE_REPLY, TweetActivity.TYPE_REPLYALL, TweetActivity.TYPE_QUOTERT -> {
-                isShowOriginStatus.set(true)
+                isShowOriginStatus.value = true
                 _onSetTweetListAdapter.value = Unit
             }
-            else -> isShowOriginStatus.set(false)
+            else -> isShowOriginStatus.value = false
         }
 
         when (tweetType) {
             TweetActivity.TYPE_REPLY -> {
-                tweetText.set("@${toStatus!!.user.screenName} ")
+                tweetText.value = "@${toStatus!!.user.screenName} "
             }
             TweetActivity.TYPE_REPLYALL -> {
                 val mentionUsers = arrayListOf(toStatus!!.user.screenName)
@@ -106,24 +106,24 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
                     it.screenName != app.account.screenName && !mentionUsers.contains(it.screenName)
                 }.map { it.screenName }.let { mentionUsers.addAll(it) }
                 val replyUserScreenNames = mentionUsers.joinToString(" @", "@") + " "
-                tweetText.set(replyUserScreenNames)
+                tweetText.value = replyUserScreenNames
             }
             TweetActivity.TYPE_QUOTERT -> {
                 val quote =
                     " https://twitter.com/${toStatus!!.user.screenName}/status/${toStatus!!.id}"
-                tweetText.set(quote)
-                textSelectionEnd.set(false)
+                tweetText.value = quote
+                textSelectionEnd.value = false
             }
             TweetActivity.TYPE_UNOFFICIALRT -> {
                 val unOfficial = " RT @${toStatus!!.user.screenName}: ${toStatus!!.text}"
-                tweetText.set(unOfficial)
-                textSelectionEnd.set(false)
+                tweetText.value = unOfficial
+                textSelectionEnd.value = false
             }
             TweetActivity.TYPE_PAKUTSUI -> {
-                tweetText.set(toStatus!!.text)
+                tweetText.value = toStatus!!.text
             }
             TweetActivity.TYPE_EXTERNALTEXT -> {
-                tweetText.set(externalText)
+                tweetText.value = externalText
             }
         }
     }
@@ -133,8 +133,8 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         val length140 = parseResult.weightedLength.let {
             if (it % 2 == 0) it / 2 else (it + 1) / 2
         }
-        remainingTextCount.set(140 - length140)
-        isValidTextCount.set(parseResult.isValid || length140 == 0)
+        remainingTextCount.value = 140 - length140
+        isValidTextCount.value = parseResult.isValid || length140 == 0
     }
 
     fun afterChangeTweetText(editable: Editable) {
@@ -152,10 +152,10 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun clickTweet() {
-        val statusUpdate = StatusUpdate(tweetText.get()!!)
+        val statusUpdate = StatusUpdate(tweetText.value!!)
 
-        if (selectedImage.get() != null) {
-            val cursor = app.contentResolver.query(selectedImage.get()!!, null, null, null, null)
+        if (selectedImage.value != null) {
+            val cursor = app.contentResolver.query(selectedImage.value!!, null, null, null, null)
             if (cursor == null || !cursor.moveToFirst()) {
                 ShowToast(app, R.string.error_select_picture)
                 return
@@ -167,7 +167,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
                 it.close()
                 fileName
             }
-            val inputStream = app.contentResolver.openInputStream(selectedImage.get()!!)
+            val inputStream = app.contentResolver.openInputStream(selectedImage.value!!)
             statusUpdate.media(fileName, inputStream!!)
         }
         if (tweetType == TweetActivity.TYPE_REPLY || tweetType == TweetActivity.TYPE_REPLYALL) {
@@ -192,7 +192,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
         val imageUri = result.data!!.data
         if (imageUri != null) {
-            imageUri.let { selectedImage.set(it) }
+            imageUri.let { selectedImage.value = it }
             ShowToast(app, R.string.success_select_picture)
         } else {
             ShowToast(app, R.string.error_select_picture)
@@ -208,11 +208,8 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
         val results =
             result.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) ?: arrayListOf("")
-        tweetText.set(tweetText.get() + results[0])
-        textSelectionEnd.apply {
-            set(true)
-            notifyChange()
-        }
+        tweetText.value = tweetText.value + results[0]
+        textSelectionEnd.value = true
     }
 
     fun clickMusic() {
@@ -233,11 +230,8 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             .replace("%artist%", artist)
             .replace("%album%", album)
 
-        tweetText.set(tweetText.get() + str)
-        textSelectionEnd.apply {
-            set(true)
-            notifyChange()
-        }
+        tweetText.value = tweetText.value + str
+        textSelectionEnd.value = true
     }
 
     fun clickTextOption() {
@@ -245,13 +239,10 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun textOptionOmatase() {
-        val chars = tweetText.get()!!.toCharArray()
+        val chars = tweetText.value!!.toCharArray()
         val joined = chars.joinToString("　")
-        tweetText.set(joined)
-        textSelectionEnd.apply {
-            set(true)
-            notifyChange()
-        }
+        tweetText.value = joined
+        textSelectionEnd.value = true
     }
 
     fun textOptionTotsuzenNoShi() {
@@ -259,7 +250,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             buf + if (value.toString().toByteArray().size <= 1) .5 else 1.0
         }
 
-        val lines = tweetText.get()!!.split("\n")
+        val lines = tweetText.value!!.split("\n")
         val maxWidthLength = lines.maxOf { stringSize(it) }
         val repeatCount = round(maxWidthLength).toInt()
 
@@ -274,11 +265,8 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         }
         dead += "￣" + "Y^".repeat(repeatCount) + "￣"
 
-        tweetText.set(dead)
-        textSelectionEnd.apply {
-            set(true)
-            notifyChange()
-        }
+        tweetText.value = dead
+        textSelectionEnd.value = true
     }
 
     private fun hasReadExternalStoragePermission(): Boolean {

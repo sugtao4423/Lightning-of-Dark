@@ -52,6 +52,7 @@ class TweetActivity : LoDBaseActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(false)
 
         val binding = TweetActivityBinding.inflate(layoutInflater).also {
+            it.lifecycleOwner = this
             it.viewModel = viewModel
         }
         setContentView(binding.root)

@@ -22,6 +22,7 @@ class ShowImageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentShowImageBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = this
             it.viewModel = viewModel
         }
         viewModel.imageUrl = requireArguments().getString(BUNDLE_KEY_URL)!!

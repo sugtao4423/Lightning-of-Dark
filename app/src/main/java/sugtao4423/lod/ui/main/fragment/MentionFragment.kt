@@ -24,6 +24,7 @@ class MentionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = SwipeTweetListBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = this
             it.viewModel = viewModel
         }
         return binding.root

@@ -28,6 +28,7 @@ class ShowImageActivity : LoDBaseActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         val binding = ActivityShowImageBinding.inflate(layoutInflater).also {
+            it.lifecycleOwner = this
             it.viewModel = viewModel
         }
         setContentView(binding.root)

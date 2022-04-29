@@ -27,6 +27,7 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentUserDetailBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = this
             it.viewModel = viewModel
         }
         return binding.root

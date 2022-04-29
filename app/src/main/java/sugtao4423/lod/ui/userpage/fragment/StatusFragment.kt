@@ -29,6 +29,7 @@ class StatusFragment(private val fragmentType: String) : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = SwipeTweetListBinding.inflate(inflater, container, false).also {
+            it.lifecycleOwner = this
             it.viewModel = viewModel
         }
         viewModel.fragmentType = fragmentType

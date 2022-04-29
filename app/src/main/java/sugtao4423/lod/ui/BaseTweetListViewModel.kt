@@ -1,8 +1,8 @@
 package sugtao4423.lod.ui
 
 import android.app.Application
-import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Job
@@ -15,7 +15,7 @@ abstract class BaseTweetListViewModel(application: Application) : AndroidViewMod
 
     protected val app by lazy { getApplication<App>() }
 
-    val isRefreshing = ObservableField(false)
+    val isRefreshing = MutableLiveData(false)
 
     val addStatuses = LiveEvent<ResponseList<Status>>()
     val onResetList = LiveEvent<Unit>()
@@ -32,12 +32,12 @@ abstract class BaseTweetListViewModel(application: Application) : AndroidViewMod
     }
 
     open fun pull2Refresh() {
-        isRefreshing.set(true)
+        isRefreshing.value = true
         onResetList.value = Unit
         hasNextPage = true
         maxId = -1L
         loadList(true).invokeOnCompletion {
-            isRefreshing.set(false)
+            isRefreshing.value = false
         }
     }
 
