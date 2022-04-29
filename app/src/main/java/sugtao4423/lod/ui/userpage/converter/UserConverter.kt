@@ -30,7 +30,7 @@ object UserConverter {
     @JvmStatic
     private fun replaceUrlEntities(target: String?, entity: Array<URLEntity>): String {
         var result = target ?: ""
-        entity.map {
+        entity.forEach {
             result = replaceUrlEntities(target, it)
         }
         return result
@@ -62,7 +62,6 @@ object UserConverter {
     @JvmStatic
     fun followCount(user: User?): String = user?.let {
         NumberFormat.getInstance().format(it.friendsCount)
-
     } ?: "Loading…"
 
     @JvmStatic
