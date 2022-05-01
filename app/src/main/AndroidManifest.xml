@@ -85,7 +85,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="Settings"
+            android:name=".ui.settings.SettingsActivity"
             android:label="@string/settings" />
         <activity
             android:name="Settings_List"

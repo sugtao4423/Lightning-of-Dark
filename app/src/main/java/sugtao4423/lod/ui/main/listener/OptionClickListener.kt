@@ -6,7 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.Settings
+import sugtao4423.lod.ui.settings.SettingsActivity
 import sugtao4423.lod.databinding.OptionDialogSearchUserBinding
 import sugtao4423.lod.databinding.OptionDialogTweetBombBinding
 import sugtao4423.lod.entity.Account
@@ -53,7 +53,7 @@ class OptionClickListener(
             2 -> viewModel.doGetAllAccounts()
             3 -> viewModel.showLevelInfo()
             4 -> viewModel.showUseTimeInfo()
-            5 -> activity.startActivity(Intent(activity, Settings::class.java))
+            5 -> activity.startActivity(Intent(activity, SettingsActivity::class.java))
         }
     }
 

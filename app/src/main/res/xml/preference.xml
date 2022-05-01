@@ -39,7 +39,8 @@
             android:key="listAsTL"
             android:title="リストをTLとして読み込む" />
 
-        <Preference
+        <sugtao4423.lod.view.IntegerEditTextPreference
+            android:dialogMessage="@string/input_auto_load_interval_second"
             android:key="autoLoadTLInterval"
             android:title="TLを自動で取得する秒間隔 (要再起動)" />
     </PreferenceCategory>
