@@ -15,7 +15,7 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
     private val selectList: Preference by lazy { findPreference("selectList")!! }
     private val startAppLoadList: Preference by lazy { findPreference("startAppLoadList")!! }
 
-    private val viewModel: ListSettingsViewModel by viewModels()
+    private val viewModel: ListSettingsFragmentViewModel by viewModels()
 
     override fun onCreatePreferences(bundle: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference_list, rootKey)

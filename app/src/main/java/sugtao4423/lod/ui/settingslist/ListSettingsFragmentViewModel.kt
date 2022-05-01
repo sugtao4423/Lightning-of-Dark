@@ -15,7 +15,7 @@ import sugtao4423.lod.ShowToast
 import twitter4j.ResponseList
 import twitter4j.UserList
 
-class ListSettingsViewModel(application: Application) : AndroidViewModel(application) {
+class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app = getApplication<App>()
     private val myScreenName = app.account.screenName
