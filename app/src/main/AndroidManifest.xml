@@ -88,7 +88,7 @@
             android:name=".ui.settings.SettingsActivity"
             android:label="@string/settings" />
         <activity
-            android:name="Settings_List"
+            android:name=".ui.settingslist.ListSettingsActivity"
             android:label="@string/settings_list" />
         <activity
             android:name="sugtao4423.lod.ui.showimage.ShowImageActivity"

@@ -2,10 +2,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Preference
-        android:key="select_List"
+        android:key="selectList"
         android:title="リストを選択 (チェック順)" />
     <Preference
-        android:key="startApp_loadList"
+        android:key="startAppLoadList"
         android:title="起動時に取得するリストを選択" />
 
 </PreferenceScreen>

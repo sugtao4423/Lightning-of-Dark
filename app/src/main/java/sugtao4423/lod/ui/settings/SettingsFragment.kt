@@ -9,7 +9,7 @@ import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import sugtao4423.lod.R
-import sugtao4423.lod.Settings_List
+import sugtao4423.lod.ui.settingslist.ListSettingsActivity
 import sugtao4423.lod.view.IntegerEditTextPreference
 import sugtao4423.support.progressdialog.ProgressDialog
 import twitter4j.ResponseList
@@ -89,7 +89,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             viewModel.changeAutoLoadTLInterval(newValue.toString().toInt())
         }
         listSetting.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            startActivity(Intent(activity, Settings_List::class.java))
+            startActivity(Intent(activity, ListSettingsActivity::class.java))
             false
         }
         clearCache.onPreferenceClickListener = Preference.OnPreferenceClickListener {
