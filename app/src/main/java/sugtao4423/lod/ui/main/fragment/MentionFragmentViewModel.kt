@@ -6,8 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.ui.BaseTweetListViewModel
+import sugtao4423.lod.utils.showToast
 import twitter4j.Paging
 
 class MentionFragmentViewModel(application: Application) : BaseTweetListViewModel(application) {
@@ -20,7 +20,7 @@ class MentionFragmentViewModel(application: Application) : BaseTweetListViewMode
             runCatching { app.twitter.getMentionsTimeline(paging) }.getOrNull()
         }
         if (result == null) {
-            ShowToast(app, R.string.error_get_mention)
+            app.showToast(R.string.error_get_mention)
             return@launch
         }
 

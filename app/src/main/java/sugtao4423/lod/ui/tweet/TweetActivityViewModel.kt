@@ -20,8 +20,8 @@ import com.twitter.twittertext.Extractor
 import com.twitter.twittertext.TwitterTextParser
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.playing_music_data.MusicDataKey
+import sugtao4423.lod.utils.showToast
 import twitter4j.Status
 import twitter4j.StatusUpdate
 import kotlin.math.round
@@ -157,7 +157,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         if (selectedImage.value != null) {
             val cursor = app.contentResolver.query(selectedImage.value!!, null, null, null, null)
             if (cursor == null || !cursor.moveToFirst()) {
-                ShowToast(app, R.string.error_select_picture)
+                app.showToast(R.string.error_select_picture)
                 return
             }
             val fileName = cursor.let {
@@ -193,9 +193,9 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         val imageUri = result.data!!.data
         if (imageUri != null) {
             imageUri.let { selectedImage.value = it }
-            ShowToast(app, R.string.success_select_picture)
+            app.showToast(R.string.success_select_picture)
         } else {
-            ShowToast(app, R.string.error_select_picture)
+            app.showToast(R.string.error_select_picture)
         }
     }
 
@@ -287,7 +287,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         ) {
             clickImageSelect()
         } else {
-            ShowToast(app, R.string.permission_rejected)
+            app.showToast(R.string.permission_rejected)
         }
     }
 

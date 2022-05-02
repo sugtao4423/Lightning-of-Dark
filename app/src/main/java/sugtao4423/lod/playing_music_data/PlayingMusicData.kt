@@ -12,7 +12,7 @@ import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 
 class PlayingMusicData(private val activity: Activity) {
 
@@ -56,7 +56,7 @@ class PlayingMusicData(private val activity: Activity) {
         AlertDialog.Builder(activity).apply {
             setMessage(R.string.permission_notification_access_message)
             setNegativeButton(R.string.cancel) { _, _ ->
-                ShowToast(context.applicationContext, R.string.permission_rejected)
+                context.showToast(R.string.permission_rejected)
             }
             setPositiveButton(R.string.ok) { _, _ ->
                 val action = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {

@@ -9,9 +9,11 @@ import android.widget.TextView
 import android.widget.Toast
 import sugtao4423.lod.R
 
-class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(context) {
+fun Context.showToast(resId: Int, vararg formatArgs: Any?) {
+    ShowToast(this, resId, formatArgs)
+}
 
-    constructor(context: Context, resId: Int) : this(context, resId, null)
+private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(context) {
 
     private val errorMessageRes = arrayOf(
         R.string.error_auto_load_tl_interval,

@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 import twitter4j.ResponseList
 import twitter4j.UserList
 
@@ -46,7 +46,7 @@ class Follow2ListViewModel(application: Application) : AndroidViewModel(applicat
             }
             _toggleLoadingDialog.value = Unit
             if (result == null) {
-                ShowToast(app, R.string.error_create_list)
+                app.showToast(R.string.error_create_list)
                 return@launch
             }
 
@@ -62,7 +62,7 @@ class Follow2ListViewModel(application: Application) : AndroidViewModel(applicat
         }
         _toggleLoadingDialog.value = Unit
         if (result == null) {
-            ShowToast(app, R.string.error_get_list)
+            app.showToast(R.string.error_get_list)
             return@launch
         }
 

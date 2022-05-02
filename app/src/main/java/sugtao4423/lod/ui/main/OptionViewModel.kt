@@ -10,8 +10,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.entity.Account
+import sugtao4423.lod.utils.showToast
 import java.text.NumberFormat
 
 class OptionViewModel(application: Application) : AndroidViewModel(application) {
@@ -44,13 +44,13 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
                     runCatching { app.twitter.updateStatus(staticText + loop) }
                 }
             }
-            ShowToast(app, R.string.param_success_tweet, 0)
+            app.showToast(R.string.param_success_tweet, 0)
         }
     }
 
     fun doSearchUser(screenName: String) {
         if (screenName.isEmpty()) {
-            ShowToast(app, R.string.edittext_empty)
+            app.showToast(R.string.edittext_empty)
             return
         }
 
@@ -68,7 +68,7 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
 
     fun doDeleteUser(deleteUserScreenName: String) = viewModelScope.launch {
         app.accountRepository.delete(deleteUserScreenName)
-        ShowToast(app, R.string.param_success_account_delete, deleteUserScreenName)
+        app.showToast(R.string.param_success_account_delete, deleteUserScreenName)
     }
 
     fun showLevelInfo() {

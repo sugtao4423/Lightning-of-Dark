@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 import twitter4j.ResponseList
 import twitter4j.UserList
 
@@ -85,7 +85,7 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
         if (selectedListNames.isNotEmpty()) {
             builder.show()
         } else {
-            ShowToast(requireContext().applicationContext, R.string.list_not_selected)
+            requireContext().showToast(R.string.list_not_selected)
         }
     }
 

@@ -8,7 +8,7 @@ import sugtao4423.lod.db.UseTimeRoomDatabase
 import sugtao4423.lod.entity.Account
 import sugtao4423.lod.model.*
 import sugtao4423.lod.service.AutoLoadTLService
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 import twitter4j.StatusUpdate
 import twitter4j.Twitter
 import twitter4j.TwitterException
@@ -83,16 +83,12 @@ class App : Application() {
             if (result != null) {
                 val exp = levelRepository.getRandomExp()
                 val isLvUp = levelRepository.addExp(exp)
-                ShowToast(applicationContext, R.string.param_success_tweet, exp)
+                showToast(R.string.param_success_tweet, exp)
                 if (isLvUp) {
-                    ShowToast(
-                        applicationContext,
-                        R.string.param_level_up,
-                        levelRepository.getLevel()
-                    )
+                    showToast(R.string.param_level_up, levelRepository.getLevel())
                 }
             } else {
-                ShowToast(applicationContext, R.string.error_tweet)
+                showToast(R.string.error_tweet)
             }
         }
     }

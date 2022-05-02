@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 import twitter4j.Status
 import twitter4j.TwitterException
 
@@ -52,7 +52,7 @@ class Dialog_favorite(private val status: Status, private val context: Context, 
                 result == null && !isFavorite -> R.string.error_unfavorite
                 else -> -1
             }
-            ShowToast(context.applicationContext, toastMessage)
+            context.showToast(toastMessage)
         }
     }
 

@@ -9,9 +9,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.tweetlistview.TweetListView
+import sugtao4423.lod.utils.showToast
 import twitter4j.Status
 import twitter4j.TwitterException
 
@@ -46,10 +46,10 @@ class Dialog_talk(status: Status, private val context: Context, private val dial
                 if (result.inReplyToStatusId > 0) {
                     loadConversation()
                 } else {
-                    ShowToast(context.applicationContext, R.string.success_get_talk_list)
+                    context.showToast(R.string.success_get_talk_list)
                 }
             } else {
-                ShowToast(context.applicationContext, R.string.error_get_talk_list)
+                context.showToast(R.string.error_get_talk_list)
             }
         }
     }

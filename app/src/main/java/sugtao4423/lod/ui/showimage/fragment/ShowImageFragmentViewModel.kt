@@ -9,7 +9,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 
 class ShowImageFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -27,7 +27,7 @@ class ShowImageFragmentViewModel(application: Application) : AndroidViewModel(ap
             target: com.bumptech.glide.request.target.Target<Drawable>?,
             isFirstResource: Boolean
         ): Boolean {
-            ShowToast(app, R.string.error_get_image)
+            app.showToast(R.string.error_get_image)
             isShowProgressBar.value = false
             return false
         }

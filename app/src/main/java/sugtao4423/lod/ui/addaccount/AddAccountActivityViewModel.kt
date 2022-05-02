@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.entity.Account
+import sugtao4423.lod.utils.showToast
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.auth.RequestToken
@@ -46,7 +46,7 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
         ClipData.newPlainText(app.resources.getString(R.string.app_name), CALLBACK_URL).let {
             clipboardManager.setPrimaryClip(it)
         }
-        ShowToast(app, R.string.done_copy_clip_board)
+        app.showToast(R.string.done_copy_clip_board)
     }
 
     val isOauthButtonEnable = MutableLiveData(true)
@@ -81,7 +81,7 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
                 runCatching { twitter!!.getOAuthRequestToken(CALLBACK_URL) }.getOrNull()
             }
             if (result == null) {
-                ShowToast(app, R.string.error_get_request_token)
+                app.showToast(R.string.error_get_request_token)
                 isOauthButtonEnable.value = true
                 return@launch
             }
@@ -102,12 +102,12 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
                 runCatching { twitter!!.getOAuthAccessToken(requestToken!!, verifier) }.getOrNull()
             }
             if (result == null) {
-                ShowToast(app, R.string.error_get_access_token)
+                app.showToast(R.string.error_get_access_token)
                 _onFinishEvent.value = Unit
                 return@launch
             }
             if (app.accountRepository.isExists(result.screenName)) {
-                ShowToast(app, R.string.param_account_already_exists, result.screenName)
+                app.showToast(R.string.param_account_already_exists, result.screenName)
                 _onFinishEvent.value = Unit
                 return@launch
             }
@@ -119,7 +119,7 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
             val account = Account(result.screenName, ck, cs, result.token, result.tokenSecret)
             app.accountRepository.insert(account)
             app.reloadAccount()
-            ShowToast(app, R.string.success_add_account)
+            app.showToast(R.string.success_add_account)
             _onStartMainActivityEvent.value = Unit
             _onFinishEvent.value = Unit
         }

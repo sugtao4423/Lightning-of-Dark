@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.utils.Regex
+import sugtao4423.lod.utils.showToast
 import twitter4j.Status
 
 class IntentActivityViewModel(application: Application) : AndroidViewModel(application) {
@@ -90,7 +90,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
             runCatching { app.twitter.showStatus(tweetId) }.getOrNull()
         }
         if (result == null) {
-            ShowToast(app, R.string.error_get_status)
+            app.showToast(R.string.error_get_status)
             return@launch
         }
 

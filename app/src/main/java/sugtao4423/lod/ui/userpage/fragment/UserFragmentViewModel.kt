@@ -7,8 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.ui.BaseTweetListViewModel
+import sugtao4423.lod.utils.showToast
 import twitter4j.PagableResponseList
 import twitter4j.User
 
@@ -32,7 +32,7 @@ class UserFragmentViewModel(application: Application) : BaseTweetListViewModel(a
             runCatching { getUsers() }.getOrNull()
         }
         if (result == null) {
-            ShowToast(app, getErrorToastStringRes())
+            app.showToast(getErrorToastStringRes())
             return@launch
         }
 

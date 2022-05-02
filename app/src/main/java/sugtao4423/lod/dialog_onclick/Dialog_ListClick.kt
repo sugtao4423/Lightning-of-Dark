@@ -14,10 +14,7 @@ import sugtao4423.lod.tweetlistview.TweetListView
 import sugtao4423.lod.ui.intent.IntentActivity
 import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
-import sugtao4423.lod.utils.ChromeIntent
-import sugtao4423.lod.utils.Regex
-import sugtao4423.lod.utils.ShowToast
-import sugtao4423.lod.utils.Utils
+import sugtao4423.lod.utils.*
 import twitter4j.Status
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
@@ -75,7 +72,7 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                 try {
                     pattern = Pattern.compile(editReg, Pattern.DOTALL)
                 } catch (e: PatternSyntaxException) {
-                    ShowToast(context.applicationContext, R.string.invalid_pattern)
+                    context.showToast(R.string.invalid_pattern)
                     return@setPositiveButton
                 }
                 val adapter = TweetListAdapter(context)
@@ -84,12 +81,12 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                             (regIncludeRT.isChecked || (!regIncludeRT.isChecked && !status.isRetweet))
                 })
                 if (adapter.itemCount == 0) {
-                    ShowToast(context.applicationContext, R.string.nothing)
+                    context.showToast(R.string.nothing)
                 } else {
                     val l = TweetListView(context)
                     l.adapter = adapter
                     AlertDialog.Builder(context).setView(l).show()
-                    ShowToast(context.applicationContext, R.string.param_regex_result_count, listData.size, adapter.itemCount)
+                    context.showToast(R.string.param_regex_result_count, listData.size, adapter.itemCount)
                 }
             }
             it.show()

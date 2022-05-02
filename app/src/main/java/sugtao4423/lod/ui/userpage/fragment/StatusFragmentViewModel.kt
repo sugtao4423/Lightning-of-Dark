@@ -6,8 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.ui.BaseTweetListViewModel
+import sugtao4423.lod.utils.showToast
 import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
@@ -28,7 +28,7 @@ class StatusFragmentViewModel(application: Application) : BaseTweetListViewModel
             runCatching { getStatuses(paging) }.getOrNull()
         }
         if (result == null) {
-            ShowToast(app, getErrorToastStringRes())
+            app.showToast(getErrorToastStringRes())
             return@launch
         }
 

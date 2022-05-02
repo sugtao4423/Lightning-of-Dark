@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 import twitter4j.User
 
 class DetailFragmentViewModel(application: Application) : AndroidViewModel(application) {
@@ -70,7 +70,7 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
             }.getOrNull()
         }
         if (result == null) {
-            ShowToast(app, R.string.error_get_user_icon)
+            app.showToast(R.string.error_get_user_icon)
             return@launch
         }
 

@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 import twitter4j.User
 
 class UserPageActivityViewModel(application: Application) : AndroidViewModel(application) {
@@ -45,7 +45,7 @@ class UserPageActivityViewModel(application: Application) : AndroidViewModel(app
             runCatching { app.twitter.showUser(screenName) }.getOrNull()
         }
         if (result == null) {
-            ShowToast(app, R.string.error_get_user_detail)
+            app.showToast(R.string.error_get_user_detail)
             _onFinish.value = Unit
             return@launch
         }

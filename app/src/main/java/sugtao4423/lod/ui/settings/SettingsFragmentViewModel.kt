@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 import twitter4j.ResponseList
 import twitter4j.UserList
 import java.io.File
@@ -50,7 +50,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
             runCatching { app.twitter.getUserLists(app.twitter.screenName) }.getOrNull()
         }
         if (result == null) {
-            ShowToast(app, R.string.error_get_list)
+            app.showToast(R.string.error_get_list)
             return@launch
         }
 
@@ -77,7 +77,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     fun changeAutoLoadTLInterval(interval: Int): Boolean {
         val isListAsTL = app.account.listAsTL > 0
         if (!isListAsTL && interval > 0 && interval < 60) {
-            ShowToast(app, R.string.error_auto_load_tl_interval)
+            app.showToast(R.string.error_auto_load_tl_interval)
             return false
         }
 
@@ -94,7 +94,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
             Glide.get(app.applicationContext).clearDiskCache()
         }
         setCacheSize()
-        ShowToast(app, R.string.cache_deleted)
+        app.showToast(R.string.cache_deleted)
     }
 
     private fun setListAsTLData() {

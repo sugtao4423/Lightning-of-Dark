@@ -6,8 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.ui.BaseTweetListViewModel
+import sugtao4423.lod.utils.showToast
 import twitter4j.Paging
 
 class HomeFragmentViewModel(application: Application) : BaseTweetListViewModel(application) {
@@ -26,7 +26,7 @@ class HomeFragmentViewModel(application: Application) : BaseTweetListViewModel(a
             }.getOrNull()
         }
         if (result == null) {
-            ShowToast(app, R.string.error_get_timeline)
+            app.showToast(R.string.error_get_timeline)
             return@launch
         }
 

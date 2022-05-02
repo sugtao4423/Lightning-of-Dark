@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.ShowToast
+import sugtao4423.lod.utils.showToast
 import twitter4j.Status
 import twitter4j.TwitterException
 
@@ -37,9 +37,9 @@ class Dialog_deletePost(private val status: Status, private val context: Context
                 }
             }
             if (result != null) {
-                ShowToast(context.applicationContext, R.string.success_post_delete)
+                context.showToast(R.string.success_post_delete)
             } else {
-                ShowToast(context.applicationContext, R.string.error_post_delete)
+                context.showToast(R.string.error_post_delete)
             }
         }
     }
