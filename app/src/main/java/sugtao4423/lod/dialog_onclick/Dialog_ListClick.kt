@@ -12,6 +12,7 @@ import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.tweetlistview.TweetListView
 import sugtao4423.lod.ui.intent.IntentActivity
+import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.Regex
 import sugtao4423.lod.utils.Utils
@@ -113,15 +114,15 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
                 }
             }
             video.find() -> {
-                Intent(context, ShowVideo::class.java).apply {
-                    putExtra(ShowVideo.INTENT_EXTRA_KEY_URL, urlText)
-                    putExtra(ShowVideo.INTENT_EXTRA_KEY_TYPE, ShowVideo.TYPE_VIDEO)
+                Intent(context, ShowVideoActivity::class.java).apply {
+                    putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, urlText)
+                    putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, ShowVideoActivity.TYPE_VIDEO)
                 }
             }
             gif.find() -> {
-                Intent(context, ShowVideo::class.java).apply {
-                    putExtra(ShowVideo.INTENT_EXTRA_KEY_URL, urlText)
-                    putExtra(ShowVideo.INTENT_EXTRA_KEY_TYPE, ShowVideo.TYPE_GIF)
+                Intent(context, ShowVideoActivity::class.java).apply {
+                    putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, urlText)
+                    putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, ShowVideoActivity.TYPE_GIF)
                 }
             }
             state.find() -> {

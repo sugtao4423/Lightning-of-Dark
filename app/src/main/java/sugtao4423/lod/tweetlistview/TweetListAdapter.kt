@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.ShowVideo
+import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.StatusClickListener
 import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
@@ -133,10 +133,10 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                     val videoUrl = Utils.getHiBitrateVideoUrl(mentitys)
                     Glide.with(app.applicationContext).load(media.mediaURLHttps + ":small").placeholder(R.drawable.icon_loading).into(child)
                     child.setOnClickListener {
-                        val intent = Intent(context, ShowVideo::class.java).apply {
-                            val videoType = if (Utils.isGif(media)) ShowVideo.TYPE_GIF else ShowVideo.TYPE_VIDEO
-                            putExtra(ShowVideo.INTENT_EXTRA_KEY_URL, videoUrl)
-                            putExtra(ShowVideo.INTENT_EXTRA_KEY_TYPE, videoType)
+                        val intent = Intent(context, ShowVideoActivity::class.java).apply {
+                            val videoType = if (Utils.isGif(media)) ShowVideoActivity.TYPE_GIF else ShowVideoActivity.TYPE_VIDEO
+                            putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, videoUrl)
+                            putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, videoType)
                         }
                         context.startActivity(intent)
                     }
