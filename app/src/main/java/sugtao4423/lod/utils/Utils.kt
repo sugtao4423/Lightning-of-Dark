@@ -1,6 +1,5 @@
 package sugtao4423.lod.utils
 
-import android.content.Context
 import twitter4j.MediaEntity
 
 class Utils {
@@ -44,11 +43,6 @@ class Utils {
 
         fun isGif(ex: MediaEntity): Boolean {
             return ex.type == "animated_gif"
-        }
-
-        fun convertDpToPx(context: Context, dp: Int): Int {
-            val d = context.resources.displayMetrics.density
-            return ((dp * d) + 0.5).toInt()
         }
 
     }
