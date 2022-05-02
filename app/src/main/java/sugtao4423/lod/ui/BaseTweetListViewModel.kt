@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Job
 import sugtao4423.lod.App
-import sugtao4423.lod.tweetlistview.EndlessScrollListener
 import twitter4j.ResponseList
 import twitter4j.Status
 

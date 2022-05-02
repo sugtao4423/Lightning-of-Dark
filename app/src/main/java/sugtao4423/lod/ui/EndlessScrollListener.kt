@@ -1,9 +1,11 @@
-package sugtao4423.lod.tweetlistview
+package sugtao4423.lod.ui
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class EndlessScrollListener(private val linearLayoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
+abstract class EndlessScrollListener(
+    private val linearLayoutManager: LinearLayoutManager
+) : RecyclerView.OnScrollListener() {
 
     var visibleThreshold = 5
     var visibleItemCount = -1
