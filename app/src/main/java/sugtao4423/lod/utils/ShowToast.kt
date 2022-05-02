@@ -10,7 +10,7 @@ import android.widget.Toast
 import sugtao4423.lod.R
 
 fun Context.showToast(resId: Int, vararg formatArgs: Any?) {
-    ShowToast(this, resId, formatArgs)
+    ShowToast(applicationContext, resId, *formatArgs)
 }
 
 private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(context) {
