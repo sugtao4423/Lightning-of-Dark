@@ -1,4 +1,4 @@
-package sugtao4423.lod
+package sugtao4423.lod.service
 
 import android.annotation.TargetApi
 import android.app.*
@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import sugtao4423.lod.App
+import sugtao4423.lod.R
 import sugtao4423.lod.ui.main.MainActivity
 import twitter4j.Paging
 import twitter4j.ResponseList

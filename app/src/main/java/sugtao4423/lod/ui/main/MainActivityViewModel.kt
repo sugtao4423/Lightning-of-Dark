@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.hadilq.liveevent.LiveEvent
 import sugtao4423.lod.App
-import sugtao4423.lod.AutoLoadTLService
+import sugtao4423.lod.service.AutoLoadTLService
 import twitter4j.ResponseList
 import twitter4j.Status
 

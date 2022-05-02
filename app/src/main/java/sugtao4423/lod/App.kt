@@ -7,6 +7,7 @@ import sugtao4423.lod.db.AccountRoomDatabase
 import sugtao4423.lod.db.UseTimeRoomDatabase
 import sugtao4423.lod.entity.Account
 import sugtao4423.lod.model.*
+import sugtao4423.lod.service.AutoLoadTLService
 import twitter4j.StatusUpdate
 import twitter4j.Twitter
 import twitter4j.TwitterException
