@@ -6,7 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.ShowToast
+import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.ui.BaseTweetListViewModel
 import twitter4j.Paging
 

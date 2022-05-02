@@ -16,6 +16,7 @@ import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.Regex
+import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.utils.Utils
 import twitter4j.Status
 import java.util.regex.Pattern

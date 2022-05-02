@@ -12,7 +12,7 @@ import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
 import sugtao4423.lod.R
-import sugtao4423.lod.ShowToast
+import sugtao4423.lod.utils.ShowToast
 
 class PlayingMusicData(private val activity: Activity) {
 

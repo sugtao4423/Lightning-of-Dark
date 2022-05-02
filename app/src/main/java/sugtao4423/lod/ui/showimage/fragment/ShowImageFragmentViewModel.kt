@@ -9,7 +9,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.ShowToast
+import sugtao4423.lod.utils.ShowToast
 
 class ShowImageFragmentViewModel(application: Application) : AndroidViewModel(application) {
 

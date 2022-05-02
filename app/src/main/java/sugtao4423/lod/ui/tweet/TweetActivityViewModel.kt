@@ -20,7 +20,7 @@ import com.twitter.twittertext.Extractor
 import com.twitter.twittertext.TwitterTextParser
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.ShowToast
+import sugtao4423.lod.utils.ShowToast
 import sugtao4423.lod.playing_music_data.MusicDataKey
 import twitter4j.Status
 import twitter4j.StatusUpdate

@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import sugtao4423.lod.R
-import sugtao4423.lod.ShowToast
+import sugtao4423.lod.utils.ShowToast
 import twitter4j.ResponseList
 import twitter4j.UserList
 
