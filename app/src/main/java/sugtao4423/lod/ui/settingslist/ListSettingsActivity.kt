@@ -2,7 +2,7 @@ package sugtao4423.lod.ui.settingslist
 
 import android.os.Bundle
 import androidx.fragment.app.commit
-import sugtao4423.lod.LoDBaseActivity
+import sugtao4423.lod.ui.LoDBaseActivity
 
 class ListSettingsActivity : LoDBaseActivity() {
 

@@ -2,7 +2,7 @@ package sugtao4423.lod.ui.userpage
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import sugtao4423.lod.LoDBaseActivity
+import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.databinding.ActivityUserPageBinding
 import twitter4j.User
 

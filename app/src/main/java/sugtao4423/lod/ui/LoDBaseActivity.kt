@@ -1,9 +1,10 @@
-package sugtao4423.lod
+package sugtao4423.lod.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import sugtao4423.lod.App
 
 abstract class LoDBaseActivity : AppCompatActivity() {
 

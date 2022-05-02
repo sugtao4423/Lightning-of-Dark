@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.viewpager.widget.ViewPager
 import sugtao4423.lod.ChromeIntent
-import sugtao4423.lod.LoDBaseActivity
+import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.databinding.ActivityShowImageBinding
 
 class ShowImageActivity : LoDBaseActivity() {
