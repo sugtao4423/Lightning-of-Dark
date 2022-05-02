@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.runBlocking
+import sugtao4423.lod.App
 import sugtao4423.lod.AutoLoadTLService
 import sugtao4423.lod.LoDBaseActivity
 import sugtao4423.lod.R
@@ -109,7 +110,7 @@ class MainActivity : LoDBaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         stopService(Intent(this, AutoLoadTLService::class.java))
-        runBlocking { app.reloadAccount() }
+        runBlocking { (applicationContext as App).reloadAccount() }
         if (resetFlag) {
             resetFlag = false
             startActivity(Intent(this, MainActivity::class.java))

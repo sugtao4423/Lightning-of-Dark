@@ -7,7 +7,6 @@ import kotlinx.coroutines.launch
 
 abstract class LoDBaseActivity : AppCompatActivity() {
 
-    protected val app by lazy { applicationContext as App }
     private var useTimeStartTime = System.currentTimeMillis()
 
     override fun onResume() {
@@ -19,7 +18,7 @@ abstract class LoDBaseActivity : AppCompatActivity() {
         super.onPause()
         val useTimeInMillis = System.currentTimeMillis() - useTimeStartTime
         CoroutineScope(Dispatchers.Main).launch {
-            app.useTimeRepository.save(useTimeInMillis)
+            (applicationContext as App).useTimeRepository.save(useTimeInMillis)
         }
     }
 }
