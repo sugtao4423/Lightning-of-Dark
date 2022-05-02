@@ -9,7 +9,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import sugtao4423.lod.*
 import sugtao4423.lod.ui.showimage.ShowImageActivity
-import sugtao4423.lod.tweetlistview.TweetListAdapter
+import sugtao4423.lod.ui.adapter.TweetListAdapter
 import sugtao4423.lod.view.TweetListView
 import sugtao4423.lod.ui.intent.IntentActivity
 import sugtao4423.lod.ui.showvideo.ShowVideoActivity

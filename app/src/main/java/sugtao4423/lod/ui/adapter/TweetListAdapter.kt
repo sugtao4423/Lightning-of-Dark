@@ -1,4 +1,4 @@
-package sugtao4423.lod.tweetlistview
+package sugtao4423.lod.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context

@@ -1,4 +1,4 @@
-package sugtao4423.lod.tweetlistview
+package sugtao4423.lod.ui.adapter
 
 import android.content.Context
 import android.content.Intent

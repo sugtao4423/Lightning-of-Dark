@@ -14,7 +14,7 @@ import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.TweetActivityBinding
 import sugtao4423.lod.playing_music_data.PlayingMusicData
-import sugtao4423.lod.tweetlistview.TweetListAdapter
+import sugtao4423.lod.ui.adapter.TweetListAdapter
 import twitter4j.Status
 
 class TweetActivity : LoDBaseActivity() {

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.tweetlistview.TweetListAdapter
+import sugtao4423.lod.ui.adapter.TweetListAdapter
 
 class TweetListView @JvmOverloads constructor(
     context: Context,
