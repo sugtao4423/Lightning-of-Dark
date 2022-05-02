@@ -1,4 +1,4 @@
-package sugtao4423.lod
+package sugtao4423.lod.utils
 
 import android.content.Context
 import android.net.Uri
@@ -6,6 +6,7 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsIntent.SHARE_STATE_ON
 import androidx.core.content.ContextCompat
+import sugtao4423.lod.R
 
 class ChromeIntent(context: Context, uri: Uri) {
 

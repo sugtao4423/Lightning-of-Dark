@@ -15,7 +15,7 @@ import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestListener
-import sugtao4423.lod.ChromeIntent
+import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.Regex

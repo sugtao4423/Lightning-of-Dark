@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.dialog_onclick.*
 import sugtao4423.lod.tweetlistview.TweetListAdapter
 import sugtao4423.lod.ui.tweet.TweetActivity
+import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.Utils
 import twitter4j.Status
 

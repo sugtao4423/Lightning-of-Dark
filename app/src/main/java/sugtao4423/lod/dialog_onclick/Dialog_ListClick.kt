@@ -14,6 +14,7 @@ import sugtao4423.lod.tweetlistview.TweetListView
 import sugtao4423.lod.ui.intent.IntentActivity
 import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
+import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.Regex
 import sugtao4423.lod.utils.Utils
 import twitter4j.Status
