@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.tweetlistview.TweetListAdapter
-import sugtao4423.lod.tweetlistview.TweetListView
+import sugtao4423.lod.view.TweetListView
 import sugtao4423.lod.utils.showToast
 import twitter4j.Status
 import twitter4j.TwitterException

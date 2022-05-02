@@ -24,7 +24,7 @@
             android:layout_weight="100"
             android:orientation="vertical">
 
-            <sugtao4423.lod.tweetlistview.TweetListView
+            <sugtao4423.lod.view.TweetListView
                 android:id="@+id/originStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -20,7 +20,7 @@
             app:onRefreshListener="@{() -> viewModel.pull2Refresh()}"
             app:refreshing="@{viewModel.isRefreshing}">
 
-            <sugtao4423.lod.tweetlistview.TweetListView
+            <sugtao4423.lod.view.TweetListView
                 android:id="@+id/listLine"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

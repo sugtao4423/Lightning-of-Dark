@@ -1,6 +1,5 @@
-package sugtao4423.lod.tweetlistview
+package sugtao4423.lod.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
@@ -10,8 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
 import sugtao4423.lod.R
+import sugtao4423.lod.tweetlistview.TweetListAdapter
 
-class TweetListView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : RecyclerView(context, attrs, defStyle) {
+class TweetListView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : RecyclerView(context, attrs, defStyle) {
 
     val linearLayoutManager: LinearLayoutManager
 
@@ -27,7 +31,6 @@ class TweetListView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         private val app = context.applicationContext as App
 
-        @SuppressLint("ResourceType")
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
             super.getItemOffsets(outRect, view, parent, state)
             val pos = parent.getChildAdapterPosition(view)
@@ -35,24 +38,23 @@ class TweetListView @JvmOverloads constructor(context: Context, attrs: Attribute
                 return
             }
             val adapter = parent.adapter
-            if (adapter is TweetListAdapter) {
+            val backgroundResource = if (adapter is TweetListAdapter) {
                 val item = adapter.data[pos]
                 when {
-                    item.isRetweetedByMe -> view.setBackgroundResource(R.xml.retweeted_by_me)
-                    item.isRetweet -> view.setBackgroundResource(R.xml.retweet)
-                    item.user.screenName == app.account.screenName -> view.setBackgroundResource(R.xml.same_my_screenname)
-                    app.mentionPattern.matcher(item.text).find() -> view.setBackgroundResource(R.xml.mention)
-                    else -> setAlternately(pos, view)
+                    item.isRetweetedByMe -> R.xml.retweeted_by_me
+                    item.isRetweet -> R.xml.retweet
+                    item.user.screenName == app.account.screenName -> R.xml.same_my_screenname
+                    app.mentionPattern.matcher(item.text).find() -> R.xml.mention
+                    else -> alternatelyResource(pos)
                 }
-            } else if (adapter is TweetListUserAdapter) {
-                setAlternately(pos, view)
+            } else {
+                alternatelyResource(pos)
             }
+            view.setBackgroundResource(backgroundResource)
         }
 
-        @SuppressLint("ResourceType")
-        private fun setAlternately(pos: Int, view: View) {
-            view.setBackgroundResource(if (pos % 2 == 0) R.xml.position0 else R.xml.position1)
-        }
+        private fun alternatelyResource(pos: Int): Int =
+            if (pos % 2 == 0) R.xml.position0 else R.xml.position1
 
     }
 
