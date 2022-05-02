@@ -1,90 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-        android:id="@+id/tweetIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/content_desc_tweet_user_icon"
-        android:src="@drawable/icon_loading" />
+    <data>
 
-    <TextView
-        android:id="@+id/tweetNameScreenName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="@+id/tweetIcon"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@+id/tweetIcon"
-        android:textColor="@color/tweetName"
-        android:textStyle="bold" />
+        <variable
+            name="status"
+            type="twitter4j.Status" />
 
-    <TextView
-        android:id="@+id/tweetText"
+        <variable
+            name="viewModel"
+            type="sugtao4423.lod.ui.adapter.TweetViewModel" />
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tweetNameScreenName"
-        android:layout_alignStart="@+id/tweetNameScreenName"
-        android:layout_alignParentEnd="true"
-        android:textColor="@color/textDarkPrimary" />
+        android:descendantFocusability="blocksDescendants">
 
-    <TextView
-        android:id="@+id/tweetDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tweetText"
-        android:layout_alignStart="@+id/tweetText"
-        android:layout_marginTop="2sp"
-        android:textColor="@color/tweetDate" />
+        <ImageView
+            android:id="@+id/tweetIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/content_desc_tweet_user_icon"
+            android:src="@drawable/icon_loading" />
 
-    <ImageView
-        android:id="@+id/retweetedUserIcon"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_alignBottom="@+id/tweetDate"
-        android:layout_toEndOf="@+id/tweetDate"
-        android:contentDescription="@string/content_desc_retweet_user_icon" />
-
-    <TextView
-        android:id="@+id/retweetedUserScreenName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tweetDate"
-        android:layout_alignBottom="@+id/tweetDate"
-        android:layout_toEndOf="@+id/retweetedUserIcon"
-        android:textColor="@color/tweetRetweetedUserName" />
-
-    <TextView
-        android:id="@+id/tweetUserProtected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tweetNameScreenName"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/tweetNameScreenName"
-        android:gravity="center"
-        android:text="@string/icon_protect"
-        android:textColor="@color/icon" />
-
-    <HorizontalScrollView
-        android:id="@+id/tweetImagesScroll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tweetDate"
-        android:layout_alignStart="@+id/tweetDate"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="4dp">
-
-        <LinearLayout
-            android:id="@+id/tweetImagesLayout"
+        <TextView
+            android:id="@+id/tweetNameScreenName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
+            android:layout_alignParentTop="@+id/tweetIcon"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/tweetIcon"
+            android:textColor="@color/tweetName"
+            android:textStyle="bold" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tweetText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tweetNameScreenName"
+            android:layout_alignStart="@+id/tweetNameScreenName"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/textDarkPrimary" />
+
+        <TextView
+            android:id="@+id/tweetDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tweetText"
+            android:layout_alignStart="@+id/tweetText"
+            android:layout_marginTop="2sp"
+            android:textColor="@color/tweetDate" />
+
+        <ImageView
+            android:id="@+id/retweetedUserIcon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignBottom="@+id/tweetDate"
+            android:layout_toEndOf="@+id/tweetDate"
+            android:contentDescription="@string/content_desc_retweet_user_icon" />
+
+        <TextView
+            android:id="@+id/retweetedUserScreenName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tweetDate"
+            android:layout_alignBottom="@+id/tweetDate"
+            android:layout_toEndOf="@+id/retweetedUserIcon"
+            android:textColor="@color/tweetRetweetedUserName" />
+
+        <TextView
+            android:id="@+id/tweetUserProtected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tweetNameScreenName"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_toEndOf="@+id/tweetNameScreenName"
+            android:gravity="center"
+            android:text="@string/icon_protect"
+            android:textColor="@color/icon" />
+
+        <HorizontalScrollView
+            android:id="@+id/tweetImagesScroll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tweetDate"
+            android:layout_alignStart="@+id/tweetDate"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="4dp">
+
+            <LinearLayout
+                android:id="@+id/tweetImagesLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+    </RelativeLayout>
+</layout>
