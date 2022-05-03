@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="sugtao4423.lod.ui.adapter.TweetListViewModel" />
+
+        <variable
+            name="thumbnailUrl"
+            type="String" />
+
+        <variable
+            name="videoUrl"
+            type="String" />
+
+        <variable
+            name="isGif"
+            type="Boolean" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="@{(v) -> viewModel.onClickMediaVideo(v, videoUrl, isGif)}">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_desc_tweet_video"
+            app:imageUrl="@{thumbnailUrl}" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/content_desc_tweet_video"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon_video_play" />
+
+    </FrameLayout>
+
+</layout>

@@ -156,6 +156,8 @@
     <string name="content_desc_user_icon">ユーザーアイコン</string>
     <string name="content_desc_friendship_target_icon">関係先ユーザーアイコン</string>
     <string name="content_desc_friendship_source_icon">関係元ユーザーアイコン</string>
+    <string name="content_desc_tweet_image">ツイートの画像</string>
+    <string name="content_desc_tweet_video">ツイートの動画</string>
 
     <string name="no_text">null</string>
 

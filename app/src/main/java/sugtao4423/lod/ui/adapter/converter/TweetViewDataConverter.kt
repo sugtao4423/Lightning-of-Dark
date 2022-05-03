@@ -1,5 +1,6 @@
 package sugtao4423.lod.ui.adapter.converter
 
+import twitter4j.MediaEntity
 import twitter4j.Status
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,6 +53,37 @@ object TweetViewDataConverter {
         if (status?.isRetweet == true) "@${status.user.screenName}" else null
 
     @JvmStatic
-    fun text(s: Status?): String? = originalStatus(s)?.text
+    fun text(status: Status?): String? = originalStatus(status)?.text
+
+    @JvmStatic
+    fun isShowMediaList(status: Status?) = status?.mediaEntities?.isNotEmpty() ?: false
+
+    @JvmStatic
+    fun allImageUrls(mediaEntities: List<MediaEntity>): List<String> =
+        mediaEntities.map { it.mediaURLHttps }
+
+    @JvmStatic
+    fun mediaIsVideoOrGif(mediaEntity: MediaEntity): Boolean =
+        mediaEntity.type == "video" || mediaEntity.type == "animated_gif"
+
+    @JvmStatic
+    fun mediaIsGif(mediaEntity: MediaEntity): Boolean = mediaEntity.type == "animated_gif"
+
+    @JvmStatic
+    fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = mediaEntity.mediaURLHttps + ":small"
+
+    @JvmStatic
+    fun videoMediaUrl(mediaEntity: MediaEntity): String {
+        if (!mediaIsVideoOrGif(mediaEntity)) {
+            throw UnsupportedOperationException()
+        }
+
+        val videoVariants = mediaEntity.videoVariants.map { Pair(it.bitrate, it.url) }
+        if (videoVariants.isEmpty()) {
+            throw Error()
+        }
+
+        return videoVariants.maxByOrNull { it.first }!!.second
+    }
 
 }

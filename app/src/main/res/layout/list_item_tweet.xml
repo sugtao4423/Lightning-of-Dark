@@ -7,12 +7,16 @@
         <import type="sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter" />
 
         <variable
+            name="hideImages"
+            type="Boolean" />
+
+        <variable
             name="status"
             type="twitter4j.Status" />
 
         <variable
             name="viewModel"
-            type="sugtao4423.lod.ui.adapter.TweetViewModel" />
+            type="sugtao4423.lod.ui.adapter.TweetListViewModel" />
     </data>
 
     <LinearLayout
@@ -101,19 +105,14 @@
                     app:textSizeSp="@{viewModel.dateTextSize}" />
             </LinearLayout>
 
-            <HorizontalScrollView
-                android:id="@+id/tweetImagesScroll"
-                android:layout_width="match_parent"
+            <sugtao4423.lod.view.TweetMediaRecyclerView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="4dp">
-
-                <LinearLayout
-                    android:id="@+id/tweetImagesLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
+                android:layout_marginBottom="4dp"
+                android:adapter="@{viewModel.tweetMediaAdapter(status)}"
+                android:scrollbars="horizontal"
+                android:visibility="@{!hideImages &amp;&amp; TweetViewDataConverter.isShowMediaList(status)}" />
 
         </LinearLayout>
     </LinearLayout>

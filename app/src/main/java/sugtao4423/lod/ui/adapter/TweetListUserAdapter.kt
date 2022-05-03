@@ -6,9 +6,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.HorizontalScrollView
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -37,8 +35,6 @@ class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<
 
         holder.rtIcon.visibility = View.GONE
         holder.rtSn.visibility = View.GONE
-        holder.tweetImagesScroll.visibility = View.GONE
-        holder.tweetImagesLayout.visibility = View.GONE
 
         if (item.isProtected) {
             holder.protect.apply {
@@ -100,8 +96,6 @@ class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<
         val date: TextView = itemView.findViewById(R.id.tweetDate)
         val rtSn: TextView = itemView.findViewById(R.id.retweetedUserScreenName)
         val protect: TextView = itemView.findViewById(R.id.tweetUserProtected)
-        val tweetImagesScroll: HorizontalScrollView = itemView.findViewById(R.id.tweetImagesScroll)
-        val tweetImagesLayout: LinearLayout = itemView.findViewById(R.id.tweetImagesLayout)
     }
 
 }
