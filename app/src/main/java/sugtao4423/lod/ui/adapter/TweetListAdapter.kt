@@ -1,6 +1,5 @@
 package sugtao4423.lod.ui.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.Gravity
@@ -8,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.HorizontalScrollView
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -44,7 +42,6 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         return ViewHolder(binding)
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (data.size <= position) {
             return
@@ -115,14 +112,6 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
                         }
                         context.startActivity(intent)
                     }
-                }
-            }
-            holder.tweetImagesScroll.setOnTouchListener { v, event ->
-                val sv = v as HorizontalScrollView
-                if (sv.getChildAt(0).width > sv.width) {
-                    v.onTouchEvent(event)
-                } else {
-                    holder.itemView.onTouchEvent(event)
                 }
             }
         } else {
