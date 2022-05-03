@@ -6,7 +6,7 @@ import android.widget.MediaController
 import androidx.activity.viewModels
 import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.R
-import sugtao4423.lod.databinding.ShowVideoBinding
+import sugtao4423.lod.databinding.ActivityShowVideoBinding
 import sugtao4423.support.progressdialog.ProgressDialog
 
 class ShowVideoActivity : LoDBaseActivity() {
@@ -25,7 +25,7 @@ class ShowVideoActivity : LoDBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ShowVideoBinding.inflate(layoutInflater).also {
+        val binding = ActivityShowVideoBinding.inflate(layoutInflater).also {
             it.lifecycleOwner = this
             it.viewModel = viewModel
             it.mediaController = MediaController(this)
