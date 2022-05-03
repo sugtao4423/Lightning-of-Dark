@@ -16,7 +16,7 @@ class UserListViewModel(app: App) {
 
     fun onClickUser(view: View, user: User) {
         val intent = Intent(view.context, UserPageActivity::class.java).apply {
-            putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, user.screenName)
+            putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_OBJECT, user)
         }
         view.context.startActivity(intent)
     }
