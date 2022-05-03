@@ -15,107 +15,106 @@
             type="sugtao4423.lod.ui.adapter.TweetViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/tweetIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:contentDescription="@string/content_desc_tweet_user_icon"
             android:onClick="@{(v) -> viewModel.onClickUserIcon(v, status)}"
             app:imageUrl="@{TweetViewDataConverter.userIconUrl(status)}" />
 
-        <TextView
-            android:id="@+id/tweetNameScreenName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="@+id/tweetIcon"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@+id/tweetIcon"
-            android:text="@{TweetViewDataConverter.userNameAndScreenName(status)}"
-            android:textColor="@color/tweetName"
-            android:textStyle="bold"
-            app:textSizeSp="@{viewModel.nameTextSize}" />
-
-        <TextView
-            android:id="@+id/tweetText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tweetNameScreenName"
-            android:layout_alignStart="@+id/tweetNameScreenName"
-            android:layout_alignParentEnd="true"
-            android:text="@{TweetViewDataConverter.text(status)}"
-            android:textColor="@color/textDarkPrimary"
-            app:textSizeSp="@{viewModel.textSize}" />
-
-        <TextView
-            android:id="@+id/tweetDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tweetText"
-            android:layout_alignStart="@+id/tweetText"
-            android:layout_marginTop="2sp"
-            android:text="@{TweetViewDataConverter.date(status, viewModel.showMilliSeconds)}"
-            android:textColor="@color/tweetDate"
-            app:textSizeSp="@{viewModel.dateTextSize}" />
-
-        <ImageView
-            android:id="@+id/retweetedUserIcon"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_alignBottom="@+id/tweetDate"
-            android:layout_toEndOf="@+id/tweetDate"
-            android:contentDescription="@string/content_desc_retweet_user_icon"
-            android:visibility="@{TweetViewDataConverter.isShowRetweetUser(status)}"
-            app:imageUrl="@{TweetViewDataConverter.retweetedUserIconUrl(status)}" />
-
-        <TextView
-            android:id="@+id/retweetedUserScreenName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tweetDate"
-            android:layout_alignBottom="@+id/tweetDate"
-            android:layout_toEndOf="@+id/retweetedUserIcon"
-            android:text="@{TweetViewDataConverter.retweetedUserScreenName(status)}"
-            android:textColor="@color/tweetRetweetedUserName"
-            android:visibility="@{TweetViewDataConverter.isShowRetweetUser(status)}"
-            app:textSizeSp="@{viewModel.dateTextSize}" />
-
-        <TextView
-            android:id="@+id/tweetUserProtected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tweetNameScreenName"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
-            android:layout_toEndOf="@+id/tweetNameScreenName"
-            android:gravity="center"
-            android:text="@string/icon_protect"
-            android:textColor="@color/icon"
-            android:typeface="@{viewModel.fontAwesomeTypeface}"
-            android:visibility="@{TweetViewDataConverter.isShowProtected(status)}"
-            app:textSizeSp="@{viewModel.protectIconSize}" />
-
-        <HorizontalScrollView
-            android:id="@+id/tweetImagesScroll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tweetDate"
-            android:layout_alignStart="@+id/tweetDate"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="4dp">
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/tweetImagesLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/tweetNameScreenName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{TweetViewDataConverter.userNameAndScreenName(status)}"
+                    android:textColor="@color/tweetName"
+                    android:textStyle="bold"
+                    app:textSizeSp="@{viewModel.nameTextSize}" />
+
+                <TextView
+                    android:id="@+id/tweetUserProtected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center"
+                    android:text="@string/icon_protect"
+                    android:textColor="@color/icon"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}"
+                    android:visibility="@{TweetViewDataConverter.isShowProtected(status)}"
+                    app:textSizeSp="@{viewModel.protectIconSize}" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tweetText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{TweetViewDataConverter.text(status)}"
+                android:textColor="@color/textDarkPrimary"
+                app:textSizeSp="@{viewModel.textSize}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2sp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tweetDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{TweetViewDataConverter.date(status, viewModel.showMilliSeconds)}"
+                    android:textColor="@color/tweetDate"
+                    app:textSizeSp="@{viewModel.dateTextSize}" />
+
+                <ImageView
+                    android:id="@+id/retweetedUserIcon"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:contentDescription="@string/content_desc_retweet_user_icon"
+                    android:visibility="@{TweetViewDataConverter.isShowRetweetUser(status)}"
+                    app:imageUrl="@{TweetViewDataConverter.retweetedUserIconUrl(status)}" />
+
+                <TextView
+                    android:id="@+id/retweetedUserScreenName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{TweetViewDataConverter.retweetedUserScreenName(status)}"
+                    android:textColor="@color/tweetRetweetedUserName"
+                    android:visibility="@{TweetViewDataConverter.isShowRetweetUser(status)}"
+                    app:textSizeSp="@{viewModel.dateTextSize}" />
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:id="@+id/tweetImagesScroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp">
+
+                <LinearLayout
+                    android:id="@+id/tweetImagesLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+        </LinearLayout>
+    </LinearLayout>
 </layout>
