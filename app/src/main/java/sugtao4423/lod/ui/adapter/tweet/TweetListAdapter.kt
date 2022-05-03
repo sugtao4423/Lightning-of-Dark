@@ -5,24 +5,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
-import sugtao4423.lod.StatusClickListener
 import sugtao4423.lod.databinding.ListItemTweetBinding
+import sugtao4423.lod.ui.adapter.tweet.click.OnTweetItemClicked
+import sugtao4423.lod.ui.adapter.tweet.click.OnTweetItemLongClicked
 import twitter4j.Status
 
 class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
 
     private val tweetListViewModel = TweetListViewModel(context.applicationContext as App)
-    private val statusClickListener = StatusClickListener()
+    private val onTweetItemClicked = OnTweetItemClicked(this)
+    private val onTweetItemLongClicked = OnTweetItemLongClicked(this)
     val data = arrayListOf<Status>()
     var hideImages = false
-
-    interface OnItemClickListener {
-        fun onItemClicked(tweetListAdapter: TweetListAdapter, position: Int)
-    }
-
-    interface OnItemLongClickListener {
-        fun onItemLongClicked(tweetListAdapter: TweetListAdapter, position: Int): Boolean
-    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -37,10 +31,11 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         holder.bind(data[position])
 
         holder.itemView.setOnClickListener {
-            statusClickListener.onItemClicked(this, holder.layoutPosition)
+            onTweetItemClicked.onItemClicked(position)
         }
         holder.itemView.setOnLongClickListener {
-            statusClickListener.onItemLongClicked(this, holder.layoutPosition)
+            onTweetItemLongClicked.onItemLongClicked(position)
+            true
         }
     }
 
