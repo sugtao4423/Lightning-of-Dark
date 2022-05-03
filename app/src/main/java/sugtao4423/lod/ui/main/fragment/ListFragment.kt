@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import sugtao4423.lod.databinding.SwipeTweetListBinding
-import sugtao4423.lod.ui.adapter.TweetListAdapter
+import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.main.MainActivityViewModel
 
 class ListFragment : Fragment() {

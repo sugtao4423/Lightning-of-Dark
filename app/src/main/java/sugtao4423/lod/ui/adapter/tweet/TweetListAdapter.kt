@@ -1,4 +1,4 @@
-package sugtao4423.lod.ui.adapter
+package sugtao4423.lod.ui.adapter.tweet
 
 import android.content.Context
 import android.view.LayoutInflater

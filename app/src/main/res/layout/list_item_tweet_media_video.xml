@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="sugtao4423.lod.ui.adapter.TweetListViewModel" />
+            type="sugtao4423.lod.ui.adapter.tweet.TweetListViewModel" />
 
         <variable
             name="thumbnailUrl"

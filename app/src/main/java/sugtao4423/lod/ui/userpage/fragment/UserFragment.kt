@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import sugtao4423.lod.databinding.SwipeTweetListBinding
-import sugtao4423.lod.ui.adapter.TweetListUserAdapter
+import sugtao4423.lod.ui.adapter.user.UserListAdapter
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
 
 class UserFragment(private val fragmentType: String) : Fragment() {
@@ -38,7 +38,7 @@ class UserFragment(private val fragmentType: String) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = TweetListUserAdapter(requireContext())
+        val adapter = UserListAdapter(requireContext())
         binding.listLine.adapter = adapter
 
         val scrollListener = viewModel.getLoadMoreListener(binding.listLine.linearLayoutManager)

@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.dialog_onclick.*
-import sugtao4423.lod.ui.adapter.TweetListAdapter
+import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.tweet.TweetActivity
 import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.Utils

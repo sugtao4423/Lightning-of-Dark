@@ -1,4 +1,4 @@
-package sugtao4423.lod.ui.adapter
+package sugtao4423.lod.ui.adapter.user
 
 import android.content.Context
 import android.content.Intent
@@ -17,7 +17,7 @@ import twitter4j.PagableResponseList
 import twitter4j.User
 import java.text.NumberFormat
 
-class TweetListUserAdapter(private val context: Context) : RecyclerView.Adapter<TweetListUserAdapter.ViewHolder>() {
+class UserListAdapter(private val context: Context) : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
     private val data = ArrayList<User>()

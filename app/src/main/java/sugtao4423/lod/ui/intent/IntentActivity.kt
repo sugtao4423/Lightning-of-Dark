@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import sugtao4423.lod.ui.tweet.TweetActivity
-import sugtao4423.lod.ui.adapter.TweetListAdapter
+import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.view.TweetListView
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
