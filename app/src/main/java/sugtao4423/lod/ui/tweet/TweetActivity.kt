@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.R
-import sugtao4423.lod.databinding.TweetActivityBinding
+import sugtao4423.lod.databinding.ActivityTweetBinding
 import sugtao4423.lod.playing_music_data.PlayingMusicData
 import sugtao4423.lod.ui.adapter.TweetListAdapter
 import twitter4j.Status
@@ -51,7 +51,7 @@ class TweetActivity : LoDBaseActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayShowHomeEnabled(false)
 
-        val binding = TweetActivityBinding.inflate(layoutInflater).also {
+        val binding = ActivityTweetBinding.inflate(layoutInflater).also {
             it.lifecycleOwner = this
             it.viewModel = viewModel
         }
