@@ -14,6 +14,8 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
 
     fun onItemClicked(position: Int) {
         val status = tweetListAdapter.data[position]
+        val originalStatus = TweetViewDataConverter.originalStatus(status)!!
+
         val dialogList = arrayListOf<String>()
 
         if (app.prefRepository.isRegex) {
@@ -28,9 +30,9 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
                 ).distinct()
         dialogList.addAll(users.map { "@${it}" })
 
-        dialogList.addAll(status.urlEntities.map { it.expandedURL })
+        dialogList.addAll(originalStatus.urlEntities.map { it.expandedURL })
 
-        val mediaUrls = status.mediaEntities.map {
+        val mediaUrls = originalStatus.mediaEntities.map {
             if (TweetViewDataConverter.mediaIsVideoOrGif(it)) {
                 TweetViewDataConverter.videoMediaUrl(it)
             } else {
@@ -39,7 +41,6 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
         }
         dialogList.addAll(mediaUrls)
 
-        val original = TweetViewDataConverter.originalStatus(status)!!
-        tweetItemDialog.show(context, original, tweetListAdapter.data, dialogList)
+        tweetItemDialog.show(context, originalStatus, tweetListAdapter.data, dialogList)
     }
 }
