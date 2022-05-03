@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter" />
 
         <variable
             name="status"
@@ -24,7 +27,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:contentDescription="@string/content_desc_tweet_user_icon"
-            android:src="@drawable/icon_loading" />
+            android:onClick="@{(v) -> viewModel.onClickUserIcon(v, status)}"
+            app:imageUrl="@{TweetViewDataConverter.userIconUrl(status)}" />
 
         <TextView
             android:id="@+id/tweetNameScreenName"
@@ -33,8 +37,10 @@
             android:layout_alignParentTop="@+id/tweetIcon"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@+id/tweetIcon"
+            android:text="@{TweetViewDataConverter.userNameAndScreenName(status)}"
             android:textColor="@color/tweetName"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:textSizeSp="@{viewModel.nameTextSize}" />
 
         <TextView
             android:id="@+id/tweetText"
@@ -43,7 +49,9 @@
             android:layout_below="@+id/tweetNameScreenName"
             android:layout_alignStart="@+id/tweetNameScreenName"
             android:layout_alignParentEnd="true"
-            android:textColor="@color/textDarkPrimary" />
+            android:text="@{TweetViewDataConverter.text(status)}"
+            android:textColor="@color/textDarkPrimary"
+            app:textSizeSp="@{viewModel.textSize}" />
 
         <TextView
             android:id="@+id/tweetDate"
@@ -52,7 +60,9 @@
             android:layout_below="@+id/tweetText"
             android:layout_alignStart="@+id/tweetText"
             android:layout_marginTop="2sp"
-            android:textColor="@color/tweetDate" />
+            android:text="@{TweetViewDataConverter.date(status, viewModel.showMilliSeconds)}"
+            android:textColor="@color/tweetDate"
+            app:textSizeSp="@{viewModel.dateTextSize}" />
 
         <ImageView
             android:id="@+id/retweetedUserIcon"
@@ -60,7 +70,9 @@
             android:layout_height="15dp"
             android:layout_alignBottom="@+id/tweetDate"
             android:layout_toEndOf="@+id/tweetDate"
-            android:contentDescription="@string/content_desc_retweet_user_icon" />
+            android:contentDescription="@string/content_desc_retweet_user_icon"
+            android:visibility="@{TweetViewDataConverter.isShowRetweetUser(status)}"
+            app:imageUrl="@{TweetViewDataConverter.retweetedUserIconUrl(status)}" />
 
         <TextView
             android:id="@+id/retweetedUserScreenName"
@@ -69,7 +81,10 @@
             android:layout_alignBaseline="@+id/tweetDate"
             android:layout_alignBottom="@+id/tweetDate"
             android:layout_toEndOf="@+id/retweetedUserIcon"
-            android:textColor="@color/tweetRetweetedUserName" />
+            android:text="@{TweetViewDataConverter.retweetedUserScreenName(status)}"
+            android:textColor="@color/tweetRetweetedUserName"
+            android:visibility="@{TweetViewDataConverter.isShowRetweetUser(status)}"
+            app:textSizeSp="@{viewModel.dateTextSize}" />
 
         <TextView
             android:id="@+id/tweetUserProtected"
@@ -81,7 +96,10 @@
             android:layout_toEndOf="@+id/tweetNameScreenName"
             android:gravity="center"
             android:text="@string/icon_protect"
-            android:textColor="@color/icon" />
+            android:textColor="@color/icon"
+            android:typeface="@{viewModel.fontAwesomeTypeface}"
+            android:visibility="@{TweetViewDataConverter.isShowProtected(status)}"
+            app:textSizeSp="@{viewModel.protectIconSize}" />
 
         <HorizontalScrollView
             android:id="@+id/tweetImagesScroll"

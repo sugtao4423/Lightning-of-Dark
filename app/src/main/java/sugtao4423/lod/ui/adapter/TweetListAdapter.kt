@@ -3,33 +3,31 @@ package sugtao4423.lod.ui.adapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.HorizontalScrollView
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.StatusClickListener
+import sugtao4423.lod.databinding.ListItemTweetBinding
 import sugtao4423.lod.ui.showimage.ShowImageActivity
-import sugtao4423.lod.ui.userpage.UserPageActivity
+import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.utils.Utils
 import twitter4j.Status
-import java.text.SimpleDateFormat
-import java.util.*
 
 class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
 
-    private val inflater = LayoutInflater.from(context)
     private val app = context.applicationContext as App
-    private val statusDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss" + (if (app.prefRepository.isMillisecond) ".SSS" else ""), Locale.getDefault())
+    private val tweetViewModel = TweetViewModel(app)
     private val statusClickListener = StatusClickListener()
     val data = arrayListOf<Status>()
-    var hasNextPage = true
     var hideImages = false
 
     interface OnItemClickListener {
@@ -41,7 +39,9 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
-        return ViewHolder(inflater.inflate(R.layout.list_item_tweet, viewGroup, false))
+        val inflater = LayoutInflater.from(context)
+        val binding = ListItemTweetBinding.inflate(inflater, viewGroup, false)
+        return ViewHolder(binding)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -52,46 +52,7 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         val item = data[position]
         val origStatus = if (item.isRetweet) item.retweetedStatus else item
 
-        // 鍵
-        if (origStatus.user.isProtected) {
-            holder.protect.typeface = app.fontAwesomeTypeface
-            holder.protect.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.userNameFontSize - 3)
-            holder.protect.visibility = View.VISIBLE
-        } else {
-            holder.protect.visibility = View.GONE
-        }
-
-        // アイコン、名前、スクリーンネーム、タイムスタンプ、クライアント
-        if (item.isRetweet) {
-            holder.rtIcon.visibility = View.VISIBLE
-            holder.rtSn.visibility = View.VISIBLE
-            val date = statusDateFormat.format(Date((item.retweetedStatus.id shr 22) + 1288834974657L))
-            holder.date.text = "$date  Retweeted by "
-            Glide.with(app.applicationContext).load(item.user.profileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.rtIcon)
-            holder.rtSn.text = "@" + item.user.screenName
-        } else {
-            holder.rtIcon.visibility = View.GONE
-            holder.rtSn.visibility = View.GONE
-            val date = statusDateFormat.format(Date((item.id shr 22) + 1288834974657L))
-            holder.date.text = "$date  via " + item.source.replace(Regex("<.+?>"), "")
-        }
-
-        holder.nameSn.text = origStatus.user.name + " - @" + origStatus.user.screenName
-        holder.content.text = origStatus.text
-        Glide.with(app.applicationContext).load(origStatus.user.biggerProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.icon)
-
-        holder.nameSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.userNameFontSize)
-        holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.contentFontSize)
-        holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.dateFontSize)
-        if (item.isRetweet) {
-            holder.rtSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.dateFontSize)
-        }
-
-        holder.icon.setOnClickListener {
-            val intent = Intent(context, UserPageActivity::class.java)
-            intent.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_OBJECT, origStatus.user)
-            context.startActivity(intent)
-        }
+        holder.bind(tweetViewModel, item)
 
         holder.itemView.setOnClickListener {
             statusClickListener.onItemClicked(this, holder.layoutPosition)
@@ -195,16 +156,18 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         notifyItemRangeRemoved(0, size)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView = itemView.findViewById(R.id.tweetIcon)
-        val rtIcon: ImageView = itemView.findViewById(R.id.retweetedUserIcon)
-        val nameSn: TextView = itemView.findViewById(R.id.tweetNameScreenName)
-        val content: TextView = itemView.findViewById(R.id.tweetText)
-        val date: TextView = itemView.findViewById(R.id.tweetDate)
-        val rtSn: TextView = itemView.findViewById(R.id.retweetedUserScreenName)
-        val protect: TextView = itemView.findViewById(R.id.tweetUserProtected)
-        val tweetImagesScroll: HorizontalScrollView = itemView.findViewById(R.id.tweetImagesScroll)
-        val tweetImagesLayout: LinearLayout = itemView.findViewById(R.id.tweetImagesLayout)
+    inner class ViewHolder(private val binding: ListItemTweetBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        val tweetImagesScroll = binding.tweetImagesScroll
+        val tweetImagesLayout = binding.tweetImagesLayout
+
+        fun bind(viewModel: TweetViewModel, status: Status) {
+            binding.also {
+                it.viewModel = viewModel
+                it.status = status
+                it.executePendingBindings()
+            }
+        }
     }
 
 }

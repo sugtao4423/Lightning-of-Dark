@@ -7,6 +7,7 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
+import android.util.TypedValue
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -15,9 +16,9 @@ import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestListener
-import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.userpage.UserPageActivity
+import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.Regex
 
 @BindingAdapter("android:visibility")
@@ -59,6 +60,13 @@ fun ImageView.imageUrl(url: String?, imageListener: RequestListener<Drawable>) {
 fun EditText.isSelectionEnd(isSelectionEnd: Boolean?) {
     if (isSelectionEnd == true) {
         setSelection(text.length)
+    }
+}
+
+@BindingAdapter("textSizeSp")
+fun TextView.textSizeSp(sp: Float?) {
+    sp?.also {
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
     }
 }
 
