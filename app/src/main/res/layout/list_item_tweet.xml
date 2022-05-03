@@ -25,7 +25,6 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/tweetIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription="@string/content_desc_tweet_user_icon"
@@ -43,7 +42,6 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tweetNameScreenName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{TweetViewDataConverter.userNameAndScreenName(status)}"
@@ -52,7 +50,6 @@
                     app:textSizeSp="@{viewModel.nameTextSize}" />
 
                 <TextView
-                    android:id="@+id/tweetUserProtected"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -66,7 +63,6 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tweetText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{TweetViewDataConverter.text(status)}"
@@ -80,7 +76,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tweetDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{TweetViewDataConverter.date(status, viewModel.showMilliSeconds)}"
@@ -88,7 +83,6 @@
                     app:textSizeSp="@{viewModel.dateTextSize}" />
 
                 <ImageView
-                    android:id="@+id/retweetedUserIcon"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:contentDescription="@string/content_desc_retweet_user_icon"
@@ -96,7 +90,6 @@
                     app:imageUrl="@{TweetViewDataConverter.retweetedUserIconUrl(status)}" />
 
                 <TextView
-                    android:id="@+id/retweetedUserScreenName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{TweetViewDataConverter.retweetedUserScreenName(status)}"
