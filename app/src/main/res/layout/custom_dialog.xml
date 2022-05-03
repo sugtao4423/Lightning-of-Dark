@@ -1,93 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".StatusClickListener">
-
-    <ListView
-        android:id="@+id/dialog_List"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/dialogReply"
-            style="?android:attr/buttonBarButtonStyle"
+        <ListView
+            android:id="@+id/dialog_List"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="2dp"
-            android:text="@string/icon_reply" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/dialogRetweet"
-            style="?android:attr/buttonBarButtonStyle"
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="2dp"
-            android:text="@string/icon_retweet" />
+            android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/dialogUnofficialRT"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="2dp"
-            android:text="@string/icon_quote" />
+            <Button
+                android:id="@+id/dialogReply"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="2dp"
+                android:text="@string/icon_reply" />
 
-        <Button
-            android:id="@+id/dialogFavorite"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="2dp"
-            android:text="@string/icon_star" />
+            <Button
+                android:id="@+id/dialogRetweet"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="2dp"
+                android:text="@string/icon_retweet" />
 
-        <Button
-            android:id="@+id/dialogTalk"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="2dp"
-            android:text="@string/icon_comment" />
+            <Button
+                android:id="@+id/dialogUnofficialRT"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="2dp"
+                android:text="@string/icon_quote" />
 
-        <Button
-            android:id="@+id/dialogDelete"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@xml/dialog_background"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:padding="2dp"
-            android:text="@string/icon_trash" />
+            <Button
+                android:id="@+id/dialogFavorite"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="2dp"
+                android:text="@string/icon_star" />
+
+            <Button
+                android:id="@+id/dialogTalk"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="2dp"
+                android:text="@string/icon_comment" />
+
+            <Button
+                android:id="@+id/dialogDelete"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="2dp"
+                android:text="@string/icon_trash" />
+        </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
+</layout>
