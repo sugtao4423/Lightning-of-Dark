@@ -1,80 +1,34 @@
 package sugtao4423.lod.ui.adapter.user
 
 import android.content.Context
-import android.content.Intent
-import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import sugtao4423.lod.App
-import sugtao4423.lod.R
-import sugtao4423.lod.ui.userpage.UserPageActivity
+import sugtao4423.lod.databinding.ListItemUserBinding
 import twitter4j.PagableResponseList
 import twitter4j.User
-import java.text.NumberFormat
 
-class UserListAdapter(private val context: Context) : RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
+class UserListAdapter(private val context: Context) :
+    RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
 
-    private val inflater = LayoutInflater.from(context)
+    private val userListViewModel = UserListViewModel(context.applicationContext as App)
     private val data = ArrayList<User>()
-    private val app = context.applicationContext as App
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
-        return ViewHolder(inflater.inflate(R.layout.list_item_tweet, viewGroup, false))
+        val inflater = LayoutInflater.from(context)
+        val binding = ListItemUserBinding.inflate(inflater, viewGroup, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (data.size <= position) {
             return
         }
-        val item = data[position]
-
-        holder.rtIcon.visibility = View.GONE
-        holder.rtSn.visibility = View.GONE
-
-        if (item.isProtected) {
-            holder.protect.apply {
-                visibility = View.VISIBLE
-                typeface = app.fontAwesomeTypeface
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.userNameFontSize - 3)
-            }
-        } else {
-            holder.protect.visibility = View.GONE
-        }
-
-        Glide.with(context).load(item.biggerProfileImageURLHttps).placeholder(R.drawable.icon_loading).into(holder.icon)
-        holder.nameSn.text = item.name + " - @" + item.screenName
-        holder.content.text = item.description
-        val userCountsText = context.getString(R.string.param_user_count_detail,
-                numberFormat(item.statusesCount),
-                numberFormat(item.favouritesCount),
-                numberFormat(item.friendsCount),
-                numberFormat(item.followersCount)
-        )
-        holder.date.text = userCountsText
-
-        holder.nameSn.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.userNameFontSize)
-        holder.content.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.contentFontSize)
-        holder.date.setTextSize(TypedValue.COMPLEX_UNIT_SP, app.prefRepository.dateFontSize)
-
-        holder.itemView.setOnClickListener {
-            val i = Intent(context, UserPageActivity::class.java)
-            i.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, item.screenName)
-            context.startActivity(i)
-        }
+        holder.bind(data[position])
     }
 
-    private fun numberFormat(num: Int): String {
-        return NumberFormat.getInstance().format(num)
-    }
-
-    override fun getItemCount(): Int {
-        return data.size
-    }
+    override fun getItemCount(): Int = data.size
 
     fun addAll(users: PagableResponseList<User>) {
         val pos = data.size
@@ -88,14 +42,16 @@ class UserListAdapter(private val context: Context) : RecyclerView.Adapter<UserL
         notifyItemRangeRemoved(0, size)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val icon: ImageView = itemView.findViewById(R.id.tweetIcon)
-        val rtIcon: ImageView = itemView.findViewById(R.id.retweetedUserIcon)
-        val nameSn: TextView = itemView.findViewById(R.id.tweetNameScreenName)
-        val content: TextView = itemView.findViewById(R.id.tweetText)
-        val date: TextView = itemView.findViewById(R.id.tweetDate)
-        val rtSn: TextView = itemView.findViewById(R.id.retweetedUserScreenName)
-        val protect: TextView = itemView.findViewById(R.id.tweetUserProtected)
+    inner class ViewHolder(private val binding: ListItemUserBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(user: User) {
+            binding.also {
+                it.viewModel = userListViewModel
+                it.user = user
+                it.executePendingBindings()
+            }
+        }
     }
 
 }

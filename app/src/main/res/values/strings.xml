@@ -123,7 +123,6 @@
     <string name="permission_notification_access_message">楽曲情報を取得するため通知へのアクセスを許可してください。</string>
     <string name="permission_rejected">(๑•﹏•๑*)</string>
 
-    <string name="param_user_count_detail">Tweet: %1$s  Fav: %2$s  Follow: %3$s  Follower: %4$s</string>
     <string name="page_title_detail">Detail</string>
     <string name="page_title_tweet">Tweet</string>
     <string name="page_title_favorite">Favorite</string>
