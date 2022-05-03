@@ -10,7 +10,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
-import sugtao4423.lod.databinding.CustomDialogBinding
+import sugtao4423.lod.databinding.DialogTweetBinding
 import sugtao4423.lod.dialog_onclick.*
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.utils.ChromeIntent
@@ -22,7 +22,7 @@ class TweetItemDialog(context: Context, fontAwesomeTypeface: Typeface) {
 
     private val titleAdapter: TweetListAdapter
     private val listAdapter: ArrayAdapter<String>
-    private val binding: CustomDialogBinding
+    private val binding: DialogTweetBinding
 
     init {
         val tweetListView = RecyclerView(context).apply {
@@ -34,7 +34,7 @@ class TweetItemDialog(context: Context, fontAwesomeTypeface: Typeface) {
         }
         listAdapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1)
 
-        binding = CustomDialogBinding.inflate(LayoutInflater.from(context)).also {
+        binding = DialogTweetBinding.inflate(LayoutInflater.from(context)).also {
             it.fontAwesomeTypeface = fontAwesomeTypeface
             it.listAdapter = listAdapter
         }
