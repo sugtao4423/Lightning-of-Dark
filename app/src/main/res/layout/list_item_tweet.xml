@@ -1,90 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/tweetIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/content_desc_tweet_user_icon"
-        android:src="@drawable/icon_loading" />
+    <data>
 
-    <TextView
-        android:id="@+id/tweetNameScreenName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="@+id/tweetIcon"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@+id/tweetIcon"
-        android:textColor="@color/tweetName"
-        android:textStyle="bold" />
+        <import type="sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter" />
 
-    <TextView
-        android:id="@+id/tweetText"
+        <variable
+            name="hideImages"
+            type="Boolean" />
+
+        <variable
+            name="status"
+            type="twitter4j.Status" />
+
+        <variable
+            name="viewModel"
+            type="sugtao4423.lod.ui.adapter.tweet.TweetListViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tweetNameScreenName"
-        android:layout_alignStart="@+id/tweetNameScreenName"
-        android:layout_alignParentEnd="true"
-        android:textColor="@color/textDarkPrimary" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tweetDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tweetText"
-        android:layout_alignStart="@+id/tweetText"
-        android:layout_marginTop="2sp"
-        android:textColor="@color/tweetDate" />
-
-    <ImageView
-        android:id="@+id/retweetedUserIcon"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_alignBottom="@+id/tweetDate"
-        android:layout_toEndOf="@+id/tweetDate"
-        android:contentDescription="@string/content_desc_retweet_user_icon" />
-
-    <TextView
-        android:id="@+id/retweetedUserScreenName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tweetDate"
-        android:layout_alignBottom="@+id/tweetDate"
-        android:layout_toEndOf="@+id/retweetedUserIcon"
-        android:textColor="@color/tweetRetweetedUserName" />
-
-    <TextView
-        android:id="@+id/tweetUserProtected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tweetNameScreenName"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/tweetNameScreenName"
-        android:gravity="center"
-        android:text="@string/icon_protect"
-        android:textColor="@color/icon" />
-
-    <HorizontalScrollView
-        android:id="@+id/tweetImagesScroll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tweetDate"
-        android:layout_alignStart="@+id/tweetDate"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="4dp">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/content_desc_tweet_user_icon"
+            android:onClick="@{(v) -> viewModel.onClickUserIcon(v, status)}"
+            app:imageUrl="@{TweetViewDataConverter.userIconUrl(status)}" />
 
         <LinearLayout
-            android:id="@+id/tweetImagesLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
 
-</RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{TweetViewDataConverter.userNameAndScreenName(status)}"
+                    android:textColor="@color/tweetName"
+                    android:textStyle="bold"
+                    app:textSizeSp="@{viewModel.nameTextSize}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center"
+                    android:text="@string/icon_protect"
+                    android:textColor="@color/icon"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}"
+                    android:visibility="@{TweetViewDataConverter.isShowProtected(status)}"
+                    app:textSizeSp="@{viewModel.protectIconSize}" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{TweetViewDataConverter.text(status)}"
+                android:textColor="@color/textDarkPrimary"
+                app:textSizeSp="@{viewModel.textSize}" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2sp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{TweetViewDataConverter.date(status, viewModel.showMilliSeconds)}"
+                    android:textColor="@color/tweetDate"
+                    app:textSizeSp="@{viewModel.dateTextSize}" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:contentDescription="@string/content_desc_retweet_user_icon"
+                    android:visibility="@{TweetViewDataConverter.isShowRetweetUser(status)}"
+                    app:imageUrl="@{TweetViewDataConverter.retweetedUserIconUrl(status)}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{TweetViewDataConverter.retweetedUserScreenName(status)}"
+                    android:textColor="@color/tweetRetweetedUserName"
+                    android:visibility="@{TweetViewDataConverter.isShowRetweetUser(status)}"
+                    app:textSizeSp="@{viewModel.dateTextSize}" />
+            </LinearLayout>
+
+            <sugtao4423.lod.view.TweetMediaRecyclerView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="4dp"
+                android:adapter="@{viewModel.tweetMediaAdapter(status)}"
+                android:scrollbars="horizontal"
+                android:visibility="@{!hideImages &amp;&amp; TweetViewDataConverter.isShowMediaList(status)}" />
+
+        </LinearLayout>
+    </LinearLayout>
+</layout>

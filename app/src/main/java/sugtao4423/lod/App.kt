@@ -1,17 +1,14 @@
 package sugtao4423.lod
 
 import android.app.Application
-import android.content.Context
 import android.graphics.Typeface
 import kotlinx.coroutines.*
 import sugtao4423.lod.db.AccountRoomDatabase
 import sugtao4423.lod.db.UseTimeRoomDatabase
 import sugtao4423.lod.entity.Account
-import sugtao4423.lod.model.AccountRepository
-import sugtao4423.lod.model.LevelRepository
-import sugtao4423.lod.model.PrefRepository
-import sugtao4423.lod.model.UseTimeRepository
-import sugtao4423.lod.tweetlistview.TweetListAdapter
+import sugtao4423.lod.model.*
+import sugtao4423.lod.service.AutoLoadTLService
+import sugtao4423.lod.utils.showToast
 import twitter4j.StatusUpdate
 import twitter4j.Twitter
 import twitter4j.TwitterException
@@ -30,11 +27,12 @@ class App : Application() {
     val prefRepository by lazy { PrefRepository(this) }
     val levelRepository by lazy { LevelRepository(prefRepository) }
 
+    val fileDownloader by lazy { FileDownloader(this) }
+
     val fontAwesomeTypeface: Typeface by lazy {
         Typeface.createFromAsset(assets, "fontawesome.ttf")
     }
 
-    // MainActivity
     var hasAccount = false
         private set
     lateinit var account: Account
@@ -46,7 +44,6 @@ class App : Application() {
 
     var autoLoadTLListener: AutoLoadTLService.AutoLoadTLListener? = null
     var latestTweetId: Long = -1
-    private var lists: Array<TwitterList>? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -54,7 +51,7 @@ class App : Application() {
     }
 
     suspend fun reloadAccount() {
-        if(accountRepository.isExists(prefRepository.screenName)){
+        if (accountRepository.isExists(prefRepository.screenName)) {
             account = accountRepository.findByScreenName(prefRepository.screenName)!!
             twitter = run {
                 val ck = account.consumerKey.ifEmpty { getString(R.string.CK) }
@@ -86,38 +83,13 @@ class App : Application() {
             if (result != null) {
                 val exp = levelRepository.getRandomExp()
                 val isLvUp = levelRepository.addExp(exp)
-                ShowToast(applicationContext, R.string.param_success_tweet, exp)
+                showToast(R.string.param_success_tweet, exp)
                 if (isLvUp) {
-                    ShowToast(applicationContext, R.string.param_level_up, levelRepository.getLevel())
+                    showToast(R.string.param_level_up, levelRepository.getLevel())
                 }
             } else {
-                ShowToast(applicationContext, R.string.error_tweet)
+                showToast(R.string.error_tweet)
             }
         }
-    }
-
-    /*
-     * +-+-+-+-+-+-+-+-+-+-+-+-+
-     * |M|a|i|n|A|c|t|i|v|i|t|y|
-     * +-+-+-+-+-+-+-+-+-+-+-+-+
-     */
-
-    // lists
-    fun getLists(context: Context): Array<TwitterList> {
-        if (lists == null) {
-            val listNames = account.selectListNames
-            val listIds = account.selectListIds
-            val appStartLoadListNames = account.startAppLoadLists
-            val result = arrayOfNulls<TwitterList>(listNames.size)
-            for (i in listNames.indices) {
-                val adapter = TweetListAdapter(context)
-                val listName = listNames[i]
-                val listId = listIds[i]
-                val isAppStartLoad = appStartLoadListNames.contains(listName)
-                result[i] = TwitterList(adapter, false, listName, listId, isAppStartLoad)
-            }
-            lists = result.requireNoNulls()
-        }
-        return lists!!
     }
 }

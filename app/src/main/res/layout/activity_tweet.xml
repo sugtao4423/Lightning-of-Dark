@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.graphics.Color" />
+
+        <variable
+            name="viewModel"
+            type="sugtao4423.lod.ui.tweet.TweetActivityViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/activityBackgroundGray"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="100"
+            android:orientation="vertical">
+
+            <sugtao4423.lod.view.TweetListView
+                android:id="@+id/originStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:visibility="@{viewModel.isShowOriginStatus}" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:afterTextChanged="@{(s) -> viewModel.afterChangeTweetText(s)}"
+                    android:gravity="top|start"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:onTextChanged="@{(s, start, before, count) -> viewModel.onChangeTweetText(s)}"
+                    android:text="@={viewModel.tweetText}"
+                    app:isSelectionEnd="@{viewModel.textSelectionEnd}"
+                    tools:ignore="LabelFor">
+
+                    <requestFocus />
+                </EditText>
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="end|bottom"
+                    android:layout_marginBottom="11dp"
+                    android:contentDescription="@string/content_desc_upload_image"
+                    app:imageURI="@{viewModel.selectedImage}" />
+
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@{viewModel.accountScreenName}"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@color/transparent"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="@{() -> viewModel.clickMic()}"
+                    android:padding="8dp"
+                    android:text="@string/icon_mic"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="18sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@color/transparent"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="@{() -> viewModel.clickMusic()}"
+                    android:padding="8dp"
+                    android:text="@string/icon_music"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="18sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:background="@color/transparent"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="@{() -> viewModel.clickTextOption()}"
+                    android:padding="8dp"
+                    android:text="@string/icon_text"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="18sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/transparent"
+                    android:onClick="@{() -> viewModel.clickTweet()}"
+                    android:padding="10dp"
+                    android:text="@string/icon_tweet"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="22sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/transparent"
+                    android:onClick="@{() -> viewModel.clickImageSelect()}"
+                    android:padding="10dp"
+                    android:text="@string/icon_image"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="22sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@{viewModel.remainingTextCount.toString()}"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@{viewModel.isValidTextCount ? Color.parseColor(`#89000000`) : Color.RED}" />
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@color/transparent"
+                    android:onClick="@{() -> viewModel.clickClose()}"
+                    android:padding="10dp"
+                    android:text="@string/icon_close"
+                    android:textColor="@xml/activity_tweet_btn"
+                    android:textSize="22sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

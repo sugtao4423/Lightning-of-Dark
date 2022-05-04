@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="sugtao4423.lod.ui.userpage.converter.UserConverter" />
+
+        <variable
+            name="user"
+            type="twitter4j.User" />
+
+        <variable
+            name="viewModel"
+            type="sugtao4423.lod.ui.userpage.fragment.DetailFragmentViewModel" />
+
+        <variable
+            name="relationshipText"
+            type="String" />
+
+        <variable
+            name="relationshipIcons"
+            type="sugtao4423.lod.ui.userpage.fragment.DetailFragmentViewModel.RelationshipIconUrls" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/content_desc_user_banner"
+                    android:onClick="@{() -> viewModel.onClickBanner(user)}"
+                    android:onLongClick="@{() -> viewModel.onLongClickBanner(user)}"
+                    android:scaleType="fitXY"
+                    app:imageUrl="@{UserConverter.bannerUrl(user)}"
+                    app:placeholder="@{@drawable/user_header_empty}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="30dp"
+                        android:contentDescription="@string/content_desc_user_icon"
+                        android:onClick="@{() -> viewModel.onClickIcon(user)}"
+                        android:onLongClick="@{() -> viewModel.onLongClickIcon(user)}"
+                        app:imageUrl="@{UserConverter.iconUrl(user)}" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/userpageTextBackground"
+                            android:text="@{UserConverter.name(user)}"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/userpageTextBackground"
+                            android:padding="4dp"
+                            android:text="@string/icon_protect"
+                            android:textColor="@color/icon"
+                            android:textSize="20sp"
+                            android:typeface="@{viewModel.fontAwesomeTypeface()}"
+                            android:visibility="@{UserConverter.isShowProtected(user)}" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/userpageTextBackground"
+                        android:text="@{UserConverter.screenName(user)}" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:visibility="@{viewModel.isShowRelationship(user)}">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/content_desc_friendship_source_icon"
+                    app:imageUrl="@{relationshipIcons.me}" />
+
+                <TextView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:gravity="center"
+                    android:text="@{relationshipText}"
+                    android:textColor="@color/icon"
+                    android:textSize="34sp"
+                    android:typeface="@{viewModel.fontAwesomeTypeface()}" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:contentDescription="@string/content_desc_friendship_target_icon"
+                    app:imageUrl="@{relationshipIcons.target}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/layout_bio"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    app:lodLinkMovementString="@{UserConverter.bio(user)}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/layout_location"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    app:lodLinkMovementString="@{UserConverter.location(user)}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/layout_link"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    app:lodLinkMovementString="@{UserConverter.link(user)}" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="34sp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/icon_tweetCount"
+                        android:typeface="@{viewModel.fontAwesomeTypeface()}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{UserConverter.tweetCount(user)}" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="34sp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/icon_favCount"
+                        android:typeface="@{viewModel.fontAwesomeTypeface()}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{UserConverter.favoriteCount(user)}" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="34sp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/icon_followCount"
+                        android:typeface="@{viewModel.fontAwesomeTypeface()}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{UserConverter.followCount(user)}" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="34sp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/icon_followerCount"
+                        android:typeface="@{viewModel.fontAwesomeTypeface()}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{UserConverter.followerCount(user)}" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/icon_userCreate"
+                        android:typeface="@{viewModel.fontAwesomeTypeface()}" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="@{UserConverter.createDate(user)}" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>

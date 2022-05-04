@@ -4,7 +4,7 @@
     <string name="app_name">Lightning of Dark</string>
     <string name="settings">設定</string>
     <string name="settings_list">リスト設定 (要再起動)</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="ok">OK</string>
     <string name="cancel">キャンセル</string>
     <string name="yes">Yes</string>
@@ -123,25 +123,24 @@
     <string name="permission_notification_access_message">楽曲情報を取得するため通知へのアクセスを許可してください。</string>
     <string name="permission_rejected">(๑•﹏•๑*)</string>
 
-    <string name="param_user_count_detail">Tweet: %1$s  Fav: %2$s  Follow: %3$s  Follower: %4$s</string>
     <string name="page_title_detail">Detail</string>
     <string name="page_title_tweet">Tweet</string>
     <string name="page_title_favorite">Favorite</string>
     <string name="page_title_follow">Follow</string>
     <string name="page_title_follower">Follower</string>
 
-    <!-- oauth.xml -->
+    <!-- activity_add_account.xml -->
     <string name="layout_oauth_auth">OAuth認証</string>
     <string name="layout_oauth_description">Custom CK/CS\n使いたい場合は入力してください。使わなくても認証できます</string>
     <string name="layout_consumer_key">Consumer Key</string>
     <string name="layout_consumer_secret">Consumer Secret</string>
 
-    <!-- tweet_bomb.xml -->
+    <!-- option_dialog_tweet_bomb.xml -->
     <string name="layout_static_text">固定テキスト</string>
     <string name="layout_repeat_text">繰り返しテキスト</string>
     <string name="layout_repeat_count">繰り返し回数</string>
 
-    <!-- user_0.xml -->
+    <!-- fragment_user_detail.xml -->
     <string name="layout_bio">bio</string>
     <string name="layout_location">場所</string>
     <string name="layout_link">リンク</string>
@@ -156,8 +155,8 @@
     <string name="content_desc_user_icon">ユーザーアイコン</string>
     <string name="content_desc_friendship_target_icon">関係先ユーザーアイコン</string>
     <string name="content_desc_friendship_source_icon">関係元ユーザーアイコン</string>
-
-    <string name="no_text">null</string>
+    <string name="content_desc_tweet_image">ツイートの画像</string>
+    <string name="content_desc_tweet_video">ツイートの動画</string>
 
     <string name="icon_bomb">&#xf1e2;</string>
     <string name="icon_search">&#xf002;</string>

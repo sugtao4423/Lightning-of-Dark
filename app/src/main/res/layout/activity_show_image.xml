@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="sugtao4423.lod.ui.showimage.ShowImageActivityViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.tenthbit.view.ZoomViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.viewpager.widget.PagerTabStrip
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="top"
+                android:background="@color/pagerTabBackground"
+                android:paddingTop="2dp"
+                android:textColor="@color/pagerTabText"
+                app:drawFullUnderline="@{true}"
+                app:tabIndicatorColor="@color/pagerTabText" />
+        </com.tenthbit.view.ZoomViewPager>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/transparent"
+            android:contentDescription="@string/content_desc_option_button"
+            android:onClick="@{() -> viewModel.clickImageOptionButton()}"
+            android:src="@drawable/icon_download" />
+
+    </RelativeLayout>
+</layout>

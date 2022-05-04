@@ -1,0 +1,37 @@
+name: AndroidLint
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - master
+  pull_request:
+    paths:
+      - .github/workflows/android-lint.yml
+      - '*/src/**'
+      - gradle/**
+      - '**.gradle'
+      - gradle.properties
+      - gradlew*
+
+jobs:
+  android-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - name: Create CKCS.xml
+        run: echo '<?xml version="1.0" encoding="utf-8"?><resources><string name="CK"></string><string name="CS"></string></resources>' > app/src/main/res/values/CKCS.xml
+      - name: set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+          cache: gradle
+      - run: ./gradlew lint
+      - uses: yutailang0119/action-android-lint@v3
+        with:
+          report-path: build/reports/*.xml
+        continue-on-error: false

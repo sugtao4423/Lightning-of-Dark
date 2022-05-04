@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="sugtao4423.lod.ui.adapter.tweet.TweetListViewModel" />
+
+        <variable
+            name="thumbnailUrl"
+            type="String" />
+
+        <variable
+            name="allImages"
+            type="java.util.List&lt;String&gt;" />
+
+        <variable
+            name="tappedIndex"
+            type="Integer" />
+    </data>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="72dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/content_desc_tweet_image"
+        android:onClick="@{(v) -> viewModel.onClickMediaImage(v, allImages, tappedIndex)}"
+        app:imageUrl="@{thumbnailUrl}" />
+</layout>

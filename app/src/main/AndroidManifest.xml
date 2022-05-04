@@ -13,12 +13,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="sugtao4423.lod.MainActivity"
+            android:name="sugtao4423.lod.ui.main.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout"
-            android:exported="true"
-            android:label="@string/app_name">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,8 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="StartOAuth"
-            android:configChanges="orientation|screenSize|screenLayout"
+            android:name=".ui.addaccount.AddAccountActivity"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
@@ -42,15 +41,12 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
+        <activity android:name="sugtao4423.lod.ui.userpage.UserPageActivity" />
         <activity
-            android:name="sugtao4423.lod.userpage_fragment.UserPage"
-            android:configChanges="orientation|screenSize|screenLayout" />
-        <activity
-            android:name="TweetActivity"
-            android:configChanges="orientation|screenSize|screenLayout"
+            android:name=".ui.tweet.TweetActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="IntentActivity"
+            android:name=".ui.intent.IntentActivity"
             android:exported="true"
             android:theme="@style/Theme.TranslucentBackground">
             <intent-filter>
@@ -59,22 +55,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="twitter.com"
-                    android:pathPattern="/..*"
-                    android:scheme="http" />
-                <data
-                    android:host="twitter.com"
-                    android:pathPattern="/..*"
-                    android:scheme="https" />
-                <data
-                    android:host="mobile.twitter.com"
-                    android:pathPattern="/..*"
-                    android:scheme="http" />
-                <data
-                    android:host="mobile.twitter.com"
-                    android:pathPattern="/..*"
-                    android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="twitter.com" />
+                <data android:host="mobile.twitter.com" />
+                <data android:pathPattern="/..*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -85,21 +70,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="Settings"
+            android:name=".ui.settings.SettingsActivity"
             android:label="@string/settings" />
         <activity
-            android:name="Settings_List"
+            android:name=".ui.settingslist.ListSettingsActivity"
             android:label="@string/settings_list" />
         <activity
-            android:name="sugtao4423.lod.swipe_image_viewer.ImageFragmentActivity"
-            android:configChanges="orientation|screenSize|screenLayout"
+            android:name="sugtao4423.lod.ui.showimage.ShowImageActivity"
             android:theme="@style/Theme.TranslucentBackground" />
         <activity
-            android:name="ShowVideo"
-            android:configChanges="orientation|screenSize|screenLayout"
+            android:name=".ui.showvideo.ShowVideoActivity"
             android:theme="@style/Theme.TranslucentBackground" />
 
-        <service android:name="AutoLoadTLService" />
+        <service android:name=".service.AutoLoadTLService" />
         <service
             android:name=".playing_music_data.MusicNotificationListener"
             android:enabled="true"

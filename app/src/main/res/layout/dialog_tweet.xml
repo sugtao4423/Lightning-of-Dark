@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="fontAwesomeTypeface"
+            type="android.graphics.Typeface" />
+
+        <variable
+            name="listAdapter"
+            type="android.widget.ArrayAdapter&lt;String&gt;" />
+
+        <variable
+            name="clickListeners"
+            type="sugtao4423.lod.ui.adapter.tweet.click.listener.TweetDialogClickListeners" />
+
+        <variable
+            name="talkButtonEnabled"
+            type="Boolean" />
+
+        <variable
+            name="deleteButtonEnabled"
+            type="Boolean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:adapter="@{listAdapter}"
+            app:onItemClickListener="@{clickListeners.listItemClickListener}"
+            app:onItemLongClickListener="@{clickListeners.listItemClickListener}" />
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClickListener="@{clickListeners.replyListener}"
+                android:padding="2dp"
+                android:text="@string/icon_reply"
+                android:textColor="@color/icon"
+                android:textSize="24sp"
+                android:typeface="@{fontAwesomeTypeface}" />
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClickListener="@{clickListeners.retweetListener}"
+                android:onLongClickListener="@{clickListeners.quoteRTListener}"
+                android:padding="2dp"
+                android:text="@string/icon_retweet"
+                android:textColor="@color/icon"
+                android:textSize="24sp"
+                android:typeface="@{fontAwesomeTypeface}" />
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClickListener="@{clickListeners.unOfficialRTListener}"
+                android:padding="2dp"
+                android:text="@string/icon_quote"
+                android:textColor="@color/icon"
+                android:textSize="24sp"
+                android:typeface="@{fontAwesomeTypeface}" />
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClickListener="@{clickListeners.favoriteListener}"
+                android:padding="2dp"
+                android:text="@string/icon_star"
+                android:textColor="@color/icon"
+                android:textSize="24sp"
+                android:typeface="@{fontAwesomeTypeface}" />
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:enabled="@{talkButtonEnabled}"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClickListener="@{clickListeners.talkListener}"
+                android:padding="2dp"
+                android:text="@string/icon_comment"
+                android:textColor="@color/icon"
+                android:textSize="24sp"
+                android:typeface="@{fontAwesomeTypeface}" />
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@xml/dialog_background"
+                android:enabled="@{deleteButtonEnabled}"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClickListener="@{clickListeners.deleteTweetListener}"
+                android:padding="2dp"
+                android:text="@string/icon_trash"
+                android:textColor="@color/icon"
+                android:textSize="24sp"
+                android:typeface="@{fontAwesomeTypeface}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>
