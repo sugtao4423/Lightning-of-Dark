@@ -9,10 +9,10 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.runBlocking
 import sugtao4423.lod.App
-import sugtao4423.lod.service.AutoLoadTLService
-import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.ActivityMainBinding
+import sugtao4423.lod.service.AutoLoadTLService
+import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.ui.icondialog.IconDialog
 import sugtao4423.lod.ui.icondialog.IconItem

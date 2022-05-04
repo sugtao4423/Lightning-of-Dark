@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.databinding.FragmentUserDetailBinding
 import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
+import sugtao4423.lod.utils.ChromeIntent
 
 class DetailFragment : Fragment() {
 

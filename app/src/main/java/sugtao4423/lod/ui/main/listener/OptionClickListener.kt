@@ -6,13 +6,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.MutableLiveData
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.settings.SettingsActivity
 import sugtao4423.lod.databinding.OptionDialogSearchUserBinding
 import sugtao4423.lod.databinding.OptionDialogTweetBombBinding
 import sugtao4423.lod.entity.Account
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.ui.main.MainActivity
 import sugtao4423.lod.ui.main.OptionViewModel
+import sugtao4423.lod.ui.settings.SettingsActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 
 class OptionClickListener(

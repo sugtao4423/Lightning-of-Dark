@@ -4,9 +4,9 @@ import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.MediaController
 import androidx.activity.viewModels
-import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.ActivityShowVideoBinding
+import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.support.progressdialog.ProgressDialog
 
 class ShowVideoActivity : LoDBaseActivity() {
