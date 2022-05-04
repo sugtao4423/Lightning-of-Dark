@@ -36,7 +36,7 @@ class StatusFragmentViewModel(application: Application) : BaseTweetListViewModel
             maxId = result.last().id - 1
         }
         hasNextPage = result.isNotEmpty()
-        addStatuses.value = result
+        result.let { addStatuses.value = it }
     }
 
     private fun getStatuses(paging: Paging): ResponseList<Status> = when (fragmentType) {
