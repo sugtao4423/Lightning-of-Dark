@@ -17,8 +17,7 @@
         <activity
             android:name="sugtao4423.lod.ui.main.MainActivity"
             android:configChanges="orientation|screenSize|screenLayout"
-            android:exported="true"
-            android:label="@string/app_name">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,7 +26,6 @@
         </activity>
         <activity
             android:name=".ui.addaccount.AddAccountActivity"
-            android:configChanges="orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTask">
             <intent-filter>
@@ -42,12 +40,9 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="sugtao4423.lod.ui.userpage.UserPageActivity"
-            android:configChanges="orientation|screenSize|screenLayout" />
+        <activity android:name="sugtao4423.lod.ui.userpage.UserPageActivity" />
         <activity
             android:name=".ui.tweet.TweetActivity"
-            android:configChanges="orientation|screenSize|screenLayout"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.intent.IntentActivity"
@@ -92,11 +87,9 @@
             android:label="@string/settings_list" />
         <activity
             android:name="sugtao4423.lod.ui.showimage.ShowImageActivity"
-            android:configChanges="orientation|screenSize|screenLayout"
             android:theme="@style/Theme.TranslucentBackground" />
         <activity
             android:name=".ui.showvideo.ShowVideoActivity"
-            android:configChanges="orientation|screenSize|screenLayout"
             android:theme="@style/Theme.TranslucentBackground" />
 
         <service android:name=".service.AutoLoadTLService" />
