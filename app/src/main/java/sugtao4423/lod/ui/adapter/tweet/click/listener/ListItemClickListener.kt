@@ -55,10 +55,10 @@ class ListItemClickListener(
     ): Boolean {
         if (parent == null) return true
 
-        onClicked()
         context = parent.context
         val clickedText = parent.getItemAtPosition(position) as String
         if (clickedText.startsWith("http")) {
+            onClicked()
             ChromeIntent(context, Uri.parse(clickedText))
         }
         return true
