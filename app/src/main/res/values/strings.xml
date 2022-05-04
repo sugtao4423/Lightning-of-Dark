@@ -129,18 +129,18 @@
     <string name="page_title_follow">Follow</string>
     <string name="page_title_follower">Follower</string>
 
-    <!-- oauth.xml -->
+    <!-- activity_add_account.xml -->
     <string name="layout_oauth_auth">OAuth認証</string>
     <string name="layout_oauth_description">Custom CK/CS\n使いたい場合は入力してください。使わなくても認証できます</string>
     <string name="layout_consumer_key">Consumer Key</string>
     <string name="layout_consumer_secret">Consumer Secret</string>
 
-    <!-- tweet_bomb.xml -->
+    <!-- option_dialog_tweet_bomb.xml -->
     <string name="layout_static_text">固定テキスト</string>
     <string name="layout_repeat_text">繰り返しテキスト</string>
     <string name="layout_repeat_count">繰り返し回数</string>
 
-    <!-- user_0.xml -->
+    <!-- fragment_user_detail.xml -->
     <string name="layout_bio">bio</string>
     <string name="layout_location">場所</string>
     <string name="layout_link">リンク</string>
@@ -157,8 +157,6 @@
     <string name="content_desc_friendship_source_icon">関係元ユーザーアイコン</string>
     <string name="content_desc_tweet_image">ツイートの画像</string>
     <string name="content_desc_tweet_video">ツイートの動画</string>
-
-    <string name="no_text">null</string>
 
     <string name="icon_bomb">&#xf1e2;</string>
     <string name="icon_search">&#xf002;</string>
