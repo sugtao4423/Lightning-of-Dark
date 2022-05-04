@@ -41,7 +41,7 @@ class Dialog_ListClick(private val status: Status, private val listData: ArrayLi
     }
 
     private fun extractTweetsWithRegex() {
-        val regView = View.inflate(context, R.layout.reg_dialog, null)
+        val regView = View.inflate(context, R.layout.dialog_regex, null)
         val regEdit = regView.findViewById<EditText>(R.id.regDialogEdit)
         val regIncludeRT = regView.findViewById<CheckBox>(R.id.regDialogIncludeRetweet)
         val gridLayout = regView.findViewById<GridLayout>(R.id.regDialogGrid)
