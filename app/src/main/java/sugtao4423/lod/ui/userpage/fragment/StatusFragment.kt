@@ -11,9 +11,11 @@ import sugtao4423.lod.databinding.SwipeTweetListBinding
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
 
-class StatusFragment(private val fragmentType: String) : Fragment() {
+class StatusFragment : Fragment() {
 
     companion object {
+        const val KEY_FRAGMENT_TYPE = "fragmentType"
+
         const val TYPE_TWEET = "tweet"
         const val TYPE_FAVORITE = "favorite"
     }
@@ -32,7 +34,7 @@ class StatusFragment(private val fragmentType: String) : Fragment() {
             it.lifecycleOwner = this
             it.viewModel = viewModel
         }
-        viewModel.fragmentType = fragmentType
+        viewModel.fragmentType = requireArguments().getString(KEY_FRAGMENT_TYPE)!!
         return binding.root
     }
 

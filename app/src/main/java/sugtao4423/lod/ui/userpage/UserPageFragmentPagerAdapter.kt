@@ -1,6 +1,7 @@
 package sugtao4423.lod.ui.userpage
 
 import android.content.Context
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -14,10 +15,26 @@ class UserPageFragmentPagerAdapter(fm: FragmentManager, private val context: Con
 
     override fun getItem(i: Int): Fragment {
         return when (i) {
-            1 -> StatusFragment(StatusFragment.TYPE_TWEET)
-            2 -> StatusFragment(StatusFragment.TYPE_FAVORITE)
-            3 -> UserFragment(UserFragment.TYPE_FOLLOW)
-            4 -> UserFragment(UserFragment.TYPE_FOLLOWER)
+            1 -> StatusFragment().also {
+                it.arguments = Bundle().apply {
+                    putString(StatusFragment.KEY_FRAGMENT_TYPE, StatusFragment.TYPE_TWEET)
+                }
+            }
+            2 -> StatusFragment().also {
+                it.arguments = Bundle().apply {
+                    putString(StatusFragment.KEY_FRAGMENT_TYPE, StatusFragment.TYPE_FAVORITE)
+                }
+            }
+            3 -> UserFragment().also {
+                it.arguments = Bundle().apply {
+                    putString(UserFragment.KEY_FRAGMENT_TYPE, UserFragment.TYPE_FOLLOW)
+                }
+            }
+            4 -> UserFragment().also {
+                it.arguments = Bundle().apply {
+                    putString(UserFragment.KEY_FRAGMENT_TYPE, UserFragment.TYPE_FOLLOWER)
+                }
+            }
             else -> DetailFragment()
         }
     }
