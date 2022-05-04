@@ -1,4 +1,4 @@
-package sugtao4423.lod.dialog_onclick
+package sugtao4423.lod.ui.adapter.tweet.click.listener
 
 import android.content.Context
 import android.view.View
@@ -11,36 +11,36 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
 import twitter4j.Status
-import twitter4j.TwitterException
 
-class Dialog_deletePost(private val status: Status, private val context: Context, private val dialog: AlertDialog) : View.OnClickListener {
+class DeleteTweetListener(
+    private val status: Status,
+    private val context: Context,
+    private val onClicked: () -> Unit,
+) : View.OnClickListener {
 
     override fun onClick(v: View?) {
-        dialog.dismiss()
+        onClicked()
+
         AlertDialog.Builder(context).apply {
             setMessage(R.string.is_post_delete)
             setNegativeButton(R.string.no, null)
-            setPositiveButton(R.string.yes) { _, _ ->
-                deletePost()
-            }
+            setPositiveButton(R.string.yes) { _, _ -> deleteTweet() }
             show()
         }
     }
 
-    private fun deletePost() {
+    private fun deleteTweet() {
+        val twitter = (context.applicationContext as App).twitter
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                try {
-                    (context.applicationContext as App).twitter.destroyStatus(this@Dialog_deletePost.status.id)
-                } catch (e: TwitterException) {
-                    null
-                }
+                runCatching { twitter.destroyStatus(status.id) }.getOrNull()
             }
-            if (result != null) {
-                context.showToast(R.string.success_post_delete)
+            val message = if (result == null) {
+                R.string.error_post_delete
             } else {
-                context.showToast(R.string.error_post_delete)
+                R.string.success_post_delete
             }
+            context.showToast(message)
         }
     }
 

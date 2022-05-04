@@ -60,7 +60,7 @@ object TweetViewDataConverter {
 
     @JvmStatic
     fun allImageUrls(mediaEntities: List<MediaEntity>): List<String> =
-        mediaEntities.map { it.mediaURLHttps }
+        mediaEntities.filter { !mediaIsVideoOrGif(it) }.map { it.mediaURLHttps }
 
     @JvmStatic
     fun mediaIsVideoOrGif(mediaEntity: MediaEntity): Boolean =

@@ -1,9 +1,8 @@
-package sugtao4423.lod.dialog_onclick
+package sugtao4423.lod.ui.adapter.tweet.click.listener
 
 import android.content.Context
 import android.content.Intent
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import sugtao4423.lod.App
 import sugtao4423.lod.R
@@ -12,18 +11,19 @@ import sugtao4423.lod.ui.icondialog.IconItem
 import sugtao4423.lod.ui.tweet.TweetActivity
 import twitter4j.Status
 
-class Dialog_reply(private val status: Status, private val context: Context, private val dialog: AlertDialog) : View.OnClickListener {
-
-    private val myScreenName = (context.applicationContext as App).account.screenName
+class ReplyListener(
+    private val status: Status,
+    private val context: Context,
+    private val onClicked: () -> Unit,
+) : View.OnClickListener {
 
     override fun onClick(v: View?) {
-        dialog.dismiss()
+        onClicked()
 
-        val item = if (status.isRetweet) status.retweetedStatus else status
+        val myScreenName = (context.applicationContext as App).account.screenName
 
-        val mentions = arrayListOf<String>()
-        mentions.add(item.user.screenName)
-        item.userMentionEntities.map {
+        val mentions = arrayListOf(status.user.screenName)
+        status.userMentionEntities.forEach {
             if (it.screenName != myScreenName && !mentions.contains(it.screenName)) {
                 mentions.add(it.screenName)
             }
@@ -39,8 +39,16 @@ class Dialog_reply(private val status: Status, private val context: Context, pri
     private fun selectReplyDialog() {
         val black = ContextCompat.getColor(context, R.color.icon)
         val items = listOf(
-                IconItem(context.getString(R.string.icon_reply)[0], black, context.getString(R.string.reply)),
-                IconItem(context.getString(R.string.icon_replyAll)[0], black, context.getString(R.string.reply_all))
+            IconItem(
+                context.getString(R.string.icon_reply)[0],
+                black,
+                context.getString(R.string.reply)
+            ),
+            IconItem(
+                context.getString(R.string.icon_replyAll)[0],
+                black,
+                context.getString(R.string.reply_all)
+            )
         )
         IconDialog(context).apply {
             setItems(items) { _, which ->
