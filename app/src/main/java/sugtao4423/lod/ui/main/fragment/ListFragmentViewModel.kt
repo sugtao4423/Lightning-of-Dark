@@ -37,7 +37,7 @@ class ListFragmentViewModel(application: Application) : BaseTweetListViewModel(a
             maxId = result.last().id - 1
         }
         hasNextPage = result.isNotEmpty()
-        addStatuses.value = result
+        result.let { addStatuses.value = it }
     }
 
 }
