@@ -55,22 +55,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="twitter.com"
-                    android:pathPattern="/..*"
-                    android:scheme="http" />
-                <data
-                    android:host="twitter.com"
-                    android:pathPattern="/..*"
-                    android:scheme="https" />
-                <data
-                    android:host="mobile.twitter.com"
-                    android:pathPattern="/..*"
-                    android:scheme="http" />
-                <data
-                    android:host="mobile.twitter.com"
-                    android:pathPattern="/..*"
-                    android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="twitter.com" />
+                <data android:host="mobile.twitter.com" />
+                <data android:pathPattern="/..*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
