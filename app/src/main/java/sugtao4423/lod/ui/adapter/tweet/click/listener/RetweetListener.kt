@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
@@ -36,13 +37,15 @@ class RetweetListener(
     private fun retweet(isUnRetweet: Boolean) {
         val twitter = (context.applicationContext as App).twitter
         CoroutineScope(Dispatchers.Main).launch {
-            val result = runCatching {
-                if (isUnRetweet) {
-                    twitter.unRetweetStatus(status.id)
-                } else {
-                    twitter.retweetStatus(status.id)
-                }
-            }.getOrNull()
+            val result = withContext(Dispatchers.IO) {
+                runCatching {
+                    if (isUnRetweet) {
+                        twitter.unRetweetStatus(status.id)
+                    } else {
+                        twitter.retweetStatus(status.id)
+                    }
+                }.getOrNull()
+            }
             val toastMessage = when {
                 result != null && !isUnRetweet -> R.string.success_retweet
                 result != null && isUnRetweet -> R.string.success_unretweet
