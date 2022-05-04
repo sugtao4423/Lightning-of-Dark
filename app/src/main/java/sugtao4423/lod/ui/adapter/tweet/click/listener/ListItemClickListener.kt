@@ -56,6 +56,7 @@ class ListItemClickListener(
         if (parent == null) return true
 
         onClicked()
+        context = parent.context
         val clickedText = parent.getItemAtPosition(position) as String
         if (clickedText.startsWith("http")) {
             ChromeIntent(context, Uri.parse(clickedText))
