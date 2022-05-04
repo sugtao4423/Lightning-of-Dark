@@ -31,10 +31,10 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
         holder.bind(data[position])
 
         holder.itemView.setOnClickListener {
-            onTweetItemClicked.onItemClicked(position)
+            onTweetItemClicked.onItemClicked(holder.layoutPosition)
         }
         holder.itemView.setOnLongClickListener {
-            onTweetItemLongClicked.onItemLongClicked(position)
+            onTweetItemLongClicked.onItemLongClicked(holder.layoutPosition)
             true
         }
     }
