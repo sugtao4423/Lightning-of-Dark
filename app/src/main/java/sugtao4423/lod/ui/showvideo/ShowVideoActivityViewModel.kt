@@ -24,12 +24,23 @@ class ShowVideoActivityViewModel(application: Application) : AndroidViewModel(ap
     var videoUrl: String? = null
     var videoType: Int = -1
 
+    private var isVideoError = false
+
     fun onVideoPrepared(mediaPlayer: MediaPlayer) {
         _onStopProgressDialog.value = Unit
         mediaPlayer.start()
     }
 
+    fun onVideoError(): Boolean {
+        isVideoError = true
+        return false
+    }
+
     fun onVideoComplete(mediaPlayer: MediaPlayer) {
+        if (isVideoError) {
+            _onFinish.value = Unit
+            return
+        }
         if (videoType == ShowVideoActivity.TYPE_GIF) {
             mediaPlayer.apply {
                 seekTo(0)

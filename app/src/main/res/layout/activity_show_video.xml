@@ -25,6 +25,7 @@
             android:layout_height="match_parent"
             app:mediaController="@{mediaController}"
             app:onCompletionListener="@{(mp) -> viewModel.onVideoComplete(mp)}"
+            app:onErrorListener="@{(mp, i, i2) -> viewModel.onVideoError()}"
             app:onPreparedListener="@{(mp) -> viewModel.onVideoPrepared(mp)}"
             app:videoURI="@{Uri.parse(viewModel.videoUrl)}" />
 
