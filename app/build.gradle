@@ -70,6 +70,7 @@ dependencies {
     implementation 'org.twitter4j:twitter4j-core:4.0.7'
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
     implementation 'com.github.sugtao4423:android-ProgressDialog:1.0.0'
-    implementation 'com.github.sugtao4423:ZoomImageView:1.0.0'
 }
