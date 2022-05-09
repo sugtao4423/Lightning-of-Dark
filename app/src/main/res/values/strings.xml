@@ -66,7 +66,7 @@
     <string name="url_not_match_pattern_and_dont_save">URLがパターンにマッチしません\n保存できませんでした</string>
     <string name="error_get_image">画像の取得失敗</string>
     <string name="error_get_original_image">オリジナル画像の取得に失敗しました</string>
-    <string name="error_get_video">ビデオの取得失敗</string>
+    <string name="error_play_video">動画の再生に失敗しました</string>
     <string name="error_get_user_detail">ユーザー情報を取得できませんでした</string>
     <string name="save">保存</string>
     <string name="param_saved">保存しました\n%s</string>
