@@ -2,12 +2,9 @@ package sugtao4423.lod.ui.showvideo
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.widget.MediaController
 import androidx.activity.viewModels
-import sugtao4423.lod.R
 import sugtao4423.lod.databinding.ActivityShowVideoBinding
 import sugtao4423.lod.ui.LoDBaseActivity
-import sugtao4423.support.progressdialog.ProgressDialog
 
 class ShowVideoActivity : LoDBaseActivity() {
 
@@ -19,8 +16,6 @@ class ShowVideoActivity : LoDBaseActivity() {
         const val TYPE_GIF = 1
     }
 
-    private var progressDialog: ProgressDialog? = null
-
     private val viewModel: ShowVideoActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +23,6 @@ class ShowVideoActivity : LoDBaseActivity() {
         val binding = ActivityShowVideoBinding.inflate(layoutInflater).also {
             it.lifecycleOwner = this
             it.viewModel = viewModel
-            it.mediaController = MediaController(this)
         }
         setContentView(binding.root)
 
@@ -43,24 +37,14 @@ class ShowVideoActivity : LoDBaseActivity() {
             return
         }
 
-        viewModel.onStopProgressDialog.observe(this) {
-            if (progressDialog != null) progressDialog!!.dismiss()
-        }
         viewModel.onFinish.observe(this) {
             finish()
         }
-
-        showProgressDialog()
     }
 
-    private fun showProgressDialog() {
-        progressDialog = ProgressDialog(this).apply {
-            setMessage(getString(R.string.loading))
-            isIndeterminate = false
-            setProgressStyle(ProgressDialog.STYLE_SPINNER)
-            setCancelable(true)
-            show()
-        }
+    override fun onStop() {
+        super.onStop()
+        viewModel.pauseVideo()
     }
 
 }
