@@ -56,7 +56,8 @@ object TweetViewDataConverter {
     fun text(status: Status?): String? = originalStatus(status)?.text
 
     @JvmStatic
-    fun isShowMediaList(status: Status?) = status?.mediaEntities?.isNotEmpty() ?: false
+    fun isShowMediaList(status: Status?) =
+        originalStatus(status)?.mediaEntities?.isNotEmpty() ?: false
 
     @JvmStatic
     fun allImageUrls(mediaEntities: List<MediaEntity>): List<String> =
