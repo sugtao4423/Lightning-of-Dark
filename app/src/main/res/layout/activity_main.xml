@@ -35,6 +35,7 @@
             android:background="@color/transparent"
             android:contentDescription="@string/content_desc_tweet_button"
             android:onClick="@{() -> viewModel.clickNewTweet()}"
+            android:onLongClick="@{() -> viewModel.clickOption()}"
             android:src="@drawable/icon_edit" />
 
         <ImageButton
@@ -44,6 +45,7 @@
             android:background="@color/transparent"
             android:contentDescription="@string/content_desc_option_button"
             android:onClick="@{() -> viewModel.clickOption()}"
+            android:onLongClick="@{() -> viewModel.clickNewTweet()}"
             android:src="@drawable/icon_option" />
 
     </FrameLayout>

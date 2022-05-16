@@ -42,12 +42,14 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     private val _onNewMention = LiveEvent<List<Status>>()
     val onNewMention: LiveData<List<Status>> = _onNewMention
 
-    fun clickNewTweet() {
+    fun clickNewTweet(): Boolean {
         _onStartTweetActivity.value = Unit
+        return true
     }
 
-    fun clickOption() {
+    fun clickOption(): Boolean {
         _showOptionDialog.value = Unit
+        return true
     }
 
     private var kickedInitialized = false
