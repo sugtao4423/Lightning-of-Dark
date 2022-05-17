@@ -70,58 +70,64 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginStart="8dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="@{viewModel.accountScreenName}"
-                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+                    android:text="@{viewModel.accountScreenName}" />
 
-                <Button
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:background="@color/transparent"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:onClick="@{() -> viewModel.clickMic()}"
-                    android:padding="8dp"
-                    android:text="@string/icon_mic"
-                    android:textColor="@xml/activity_tweet_btn"
-                    android:textSize="18sp"
-                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+                    android:orientation="horizontal">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:background="@color/transparent"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:onClick="@{() -> viewModel.clickMusic()}"
-                    android:padding="8dp"
-                    android:text="@string/icon_music"
-                    android:textColor="@xml/activity_tweet_btn"
-                    android:textSize="18sp"
-                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+                    <Button
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:onClick="@{() -> viewModel.clickMic()}"
+                        android:padding="8dp"
+                        android:text="@string/icon_mic"
+                        android:textColor="@xml/activity_tweet_btn"
+                        android:textSize="18sp"
+                        android:typeface="@{viewModel.fontAwesomeTypeface}" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:background="@color/transparent"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:onClick="@{() -> viewModel.clickTextOption()}"
-                    android:padding="8dp"
-                    android:text="@string/icon_text"
-                    android:textColor="@xml/activity_tweet_btn"
-                    android:textSize="18sp"
-                    android:typeface="@{viewModel.fontAwesomeTypeface}" />
+                    <Button
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:background="@color/transparent"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:onClick="@{() -> viewModel.clickMusic()}"
+                        android:padding="8dp"
+                        android:text="@string/icon_music"
+                        android:textColor="@xml/activity_tweet_btn"
+                        android:textSize="18sp"
+                        android:typeface="@{viewModel.fontAwesomeTypeface}" />
+
+                    <Button
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:background="@color/transparent"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:onClick="@{() -> viewModel.clickTextOption()}"
+                        android:padding="8dp"
+                        android:text="@string/icon_text"
+                        android:textColor="@xml/activity_tweet_btn"
+                        android:textSize="18sp"
+                        android:typeface="@{viewModel.fontAwesomeTypeface}" />
+                </LinearLayout>
             </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
