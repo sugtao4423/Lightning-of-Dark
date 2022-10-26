@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    namespace 'sugtao4423.lod'
     compileSdkVersion 33
 
     defaultConfig {
