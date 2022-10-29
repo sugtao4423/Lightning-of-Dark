@@ -4,6 +4,7 @@
         <item name="actionBarStyle">@style/actionBarStyle</item>
         <item name="colorPrimaryDark">@color/statusBar</item>
         <item name="android:textColorTertiary">@color/textDarkPrimary</item>
+        <item name="android:windowBackground">@color/activityBackgroundGray</item>
     </style>
 
     <style name="actionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
