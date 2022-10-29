@@ -32,7 +32,7 @@
     <color name="pagerTabBackground">#ececec</color>
     <color name="pagerTabText">#33b5e5</color>
 
-    <color name="tweetName">#6687a6</color>
+    <color name="tweetName">#668899</color>
     <color name="tweetDate">#9b9e98</color>
     <color name="tweetRetweetedUserName">#9b9e98</color>
 
