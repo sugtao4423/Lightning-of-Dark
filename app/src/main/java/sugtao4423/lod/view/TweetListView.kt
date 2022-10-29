@@ -41,10 +41,14 @@ class TweetListView @JvmOverloads constructor(
             val backgroundResource = if (adapter is TweetListAdapter) {
                 val item = adapter.data[pos]
                 when {
-                    item.isRetweetedByMe -> R.xml.retweeted_by_me
-                    item.isRetweet -> R.xml.retweet
-                    item.user.screenName == app.account.screenName -> R.xml.same_my_screenname
-                    app.mentionPattern.matcher(item.text).find() -> R.xml.mention
+                    item.isRetweetedByMe ->
+                        R.drawable.selector_list_retweeted_by_me_bg
+                    item.isRetweet ->
+                        R.drawable.selector_list_retweet_bg
+                    item.user.screenName == app.account.screenName ->
+                        R.drawable.selector_list_same_my_screenname_bg
+                    app.mentionPattern.matcher(item.text).find() ->
+                        R.drawable.selector_list_mention_bg
                     else -> alternatelyResource(pos)
                 }
             } else {
@@ -54,7 +58,7 @@ class TweetListView @JvmOverloads constructor(
         }
 
         private fun alternatelyResource(pos: Int): Int =
-            if (pos % 2 == 0) R.xml.position0 else R.xml.position1
+            if (pos % 2 == 0) R.drawable.selector_list_position0_bg else R.drawable.selector_list_position1_bg
 
     }
 
