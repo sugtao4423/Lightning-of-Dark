@@ -9,12 +9,12 @@
     <color name="icon">#757575</color>
     <color name="icon_press">#424242</color>
 
-    <color name="retweetedByMe">#c9f999</color>
-    <color name="retweet">#c9d9f9</color>
-    <color name="sameMyScreenName">#c9f999</color>
-    <color name="mention">#f9c9c9</color>
-    <color name="position0">#f9f9f9</color>
-    <color name="position1">#e9e9e9</color>
+    <color name="retweetedByMe">#c8f69a</color>
+    <color name="retweet">#c9d8f8</color>
+    <color name="sameMyScreenName">#c8f69a</color>
+    <color name="mention">#f8c9c9</color>
+    <color name="position0">#f6f6f6</color>
+    <color name="position1">#eaeaea</color>
 
     <color name="press">#6699cc</color>
 
