@@ -3,7 +3,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="actionBarStyle">@style/actionBarStyle</item>
         <item name="colorPrimaryDark">@color/statusBar</item>
-        <item name="android:textColorTertiary">@color/textDarkPrimary</item>
+        <item name="android:textColorTertiary">@color/tweetText</item>
         <item name="android:windowBackground">@color/activityBackgroundGray</item>
     </style>
 
@@ -14,7 +14,7 @@
     </style>
 
     <style name="actionBarTitleStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/textDarkPrimary</item>
+        <item name="android:textColor">@color/tweetText</item>
     </style>
 
     <drawable name="transparameter">#bb000000</drawable>

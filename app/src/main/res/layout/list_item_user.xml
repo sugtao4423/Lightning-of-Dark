@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{UserViewDataConverter.userDescription(user)}"
-                android:textColor="@color/textDarkPrimary"
+                android:textColor="@color/tweetText"
                 app:textSizeSp="@{viewModel.textSize}" />
 
             <TextView
