@@ -37,7 +37,7 @@
     <color name="tweetDate">#999999</color>
     <color name="tweetRetweetedUserName">#999999</color>
 
-    <color name="userpageTextBackground">#f0f0f0f0</color>
+    <color name="userPageTextBackground">#f0f0f0f0</color>
 
     <integer-array name="pull2RefreshScheme">
         <item>@android:color/holo_blue_bright</item>
