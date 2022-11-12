@@ -3,7 +3,7 @@
 
     <color name="twitterBrand">#1da1f2</color>
 
-    <color name="activityBackgroundGray">#e9e9e9</color>
+    <color name="activityBackground">#e9e9e9</color>
     <color name="actionBarBackground">#e0e0e0</color>
 
     <color name="icon">#757575</color>
