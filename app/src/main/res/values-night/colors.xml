@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="activityBackground">#303030</color>
+    <color name="actionBarBackground">#373737</color>
+
+    <color name="icon">#c7c7c7</color>
+    <color name="icon_press">#757575</color>
+
+    <color name="retweetedByMe">#333333</color>
+    <color name="retweet">#141433</color>
+    <color name="sameMyScreenName">#333333</color>
+    <color name="mention">#341414</color>
+    <color name="position0">#222222</color>
+    <color name="position1">#222222</color>
+
+    <color name="press">#1b2a48</color>
+
+    <color name="statusBar">#28362b</color>
+
+    <color name="pagerTabBackground">#333333</color>
+    <color name="pagerTabText">#ffffff</color>
+
+    <color name="tweetName">#99cc00</color>
+    <color name="tweetText">#ffffff</color>
+
+    <color name="userPageTextBackground">#f0222222</color>
+
+</resources>

@@ -1,0 +1,15 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="actionBarStyle">@style/actionBarStyle</item>
+        <item name="colorPrimaryDark">@color/statusBar</item>
+        <item name="android:textColorTertiary">@color/tweetText</item>
+        <item name="android:windowBackground">@color/activityBackground</item>
+    </style>
+
+    <style name="actionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="height">40dip</item>
+        <item name="background">@color/actionBarBackground</item>
+    </style>
+
+</resources>
