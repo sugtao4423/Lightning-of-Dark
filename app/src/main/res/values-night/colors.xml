@@ -17,6 +17,8 @@
 
     <color name="press">#1b2a48</color>
 
+    <color name="tweetDialogButtonPress">#407555</color>
+
     <color name="pagerTabBackground">#333333</color>
     <color name="pagerTabText">#ffffff</color>
 
