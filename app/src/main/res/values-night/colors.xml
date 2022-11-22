@@ -7,7 +7,7 @@
     <color name="pull2RefreshBackground">#3d3d3d</color>
 
     <color name="icon">#c7c7c7</color>
-    <color name="icon_press">#757575</color>
+    <color name="iconPress">#757575</color>
 
     <color name="retweetedByMe">#333333</color>
     <color name="retweet">#141433</color>
