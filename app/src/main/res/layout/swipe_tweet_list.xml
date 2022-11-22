@@ -16,6 +16,7 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:backgroundColorScheme="@{@color/pull2RefreshBackground}"
             app:colorSchemeResources="@{@intArray/pull2RefreshScheme}"
             app:onRefreshListener="@{() -> viewModel.pull2Refresh()}"
             app:refreshing="@{viewModel.isRefreshing}">

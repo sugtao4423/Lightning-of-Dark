@@ -4,6 +4,7 @@
     <color name="statusBar">#28362b</color>
     <color name="activityBackground">#303030</color>
     <color name="actionBarBackground">#373737</color>
+    <color name="pull2RefreshBackground">#3d3d3d</color>
 
     <color name="icon">#c7c7c7</color>
     <color name="icon_press">#757575</color>

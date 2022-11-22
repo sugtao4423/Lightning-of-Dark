@@ -31,6 +31,11 @@ fun SwipeRefreshLayout.colorSchemeColors(colorResIds: IntArray) {
     setColorSchemeColors(*colorResIds)
 }
 
+@BindingAdapter("backgroundColorScheme")
+fun SwipeRefreshLayout.backgroundColorScheme(color: Int) {
+    setProgressBackgroundColorSchemeColor(color)
+}
+
 @BindingAdapter("imageUrl", "placeholder", requireAll = false)
 fun ImageView.imageUrl(url: String?, placeholder: Drawable?) {
     if (url.isNullOrEmpty()) {
