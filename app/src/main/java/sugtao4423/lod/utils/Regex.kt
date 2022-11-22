@@ -34,4 +34,8 @@ object Regex {
     val userAndAnyUrl: Pattern =
         Pattern.compile("@[0-9a-zA-Z_]+|https?://[\\w.\\-/:#?=&;%~+]+", Pattern.DOTALL)
 
+    val youtubeShareSubject: Pattern =
+        Pattern.compile("\"(.+)\" を YouTube で見る")
+    const val youtubeVideoNameGroup = 1
+
 }

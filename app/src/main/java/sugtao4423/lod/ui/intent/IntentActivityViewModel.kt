@@ -79,9 +79,17 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
     }
 
     private fun onActionSend(intentExtra: Bundle) {
-        val subject = intentExtra.getString(Intent.EXTRA_SUBJECT)
-        val text = intentExtra.getString(Intent.EXTRA_TEXT)
-        val tweetText = if (subject.isNullOrBlank()) text!! else "$subject $text"
+        val subject = intentExtra.getString(Intent.EXTRA_SUBJECT) ?: ""
+        val text = intentExtra.getString(Intent.EXTRA_TEXT) ?: ""
+
+        val youtubeShareMatcher = Regex.youtubeShareSubject.matcher(subject)
+        val tweetText = when {
+            youtubeShareMatcher.find() -> {
+                "${youtubeShareMatcher.group(Regex.youtubeVideoNameGroup)} $text @YouTubeより"
+            }
+            subject.isEmpty() -> text
+            else -> "$subject $text"
+        }
         _onStartTweetActivity.value = tweetText
     }
 
