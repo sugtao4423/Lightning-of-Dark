@@ -47,5 +47,6 @@
     <color name="toastErrorSolid">#ddcc6666</color>
 
     <color name="transparent">#00000000</color>
+    <color name="thinTransparent">#bb000000</color>
 
 </resources>

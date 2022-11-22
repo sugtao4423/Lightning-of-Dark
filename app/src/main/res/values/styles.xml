@@ -17,14 +17,12 @@
         <item name="android:textColor">@color/tweetText</item>
     </style>
 
-    <drawable name="transparameter">#bb000000</drawable>
-
     <style name="Theme.TranslucentBackground" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBarOverlay">true</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowBackground">@drawable/transparameter</item>
+        <item name="android:windowBackground">@color/thinTransparent</item>
     </style>
 
 </resources>
