@@ -12,4 +12,12 @@
         <item name="background">@color/actionBarBackground</item>
     </style>
 
+    <style name="Theme.TranslucentBackground" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowBackground">@color/thinTransparent</item>
+    </style>
+
 </resources>
