@@ -24,6 +24,7 @@
     <color name="tweetName">#99cc00</color>
     <color name="tweetText">#ffffff</color>
 
+    <color name="tweetTextRemainCount">#b3ffffff</color>
     <color name="userPageTextBackground">#f0222222</color>
 
 </resources>

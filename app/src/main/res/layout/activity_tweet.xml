@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="android.graphics.Color" />
-
         <variable
             name="viewModel"
             type="sugtao4423.lod.ui.tweet.TweetActivityViewModel" />
@@ -163,7 +161,7 @@
                     android:layout_gravity="bottom"
                     android:text="@{viewModel.remainingTextCount.toString()}"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@{viewModel.isValidTextCount ? Color.parseColor(`#89000000`) : Color.RED}" />
+                    android:textColor="@{viewModel.isValidTextCount ? @color/tweetTextRemainCount : @color/tweetTextRemainCountError}" />
 
                 <Button
                     android:layout_width="50dp"
