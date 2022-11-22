@@ -73,6 +73,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@color/userPageTextBackground"
+                            android:paddingHorizontal="4dp"
                             android:text="@{UserConverter.name(user)}"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -94,6 +95,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:background="@color/userPageTextBackground"
+                        android:paddingHorizontal="2dp"
                         android:text="@{UserConverter.screenName(user)}" />
                 </LinearLayout>
             </FrameLayout>
