@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="android.graphics.Color" />
-
         <variable
             name="viewModel"
             type="sugtao4423.lod.ui.tweet.TweetActivityViewModel" />
@@ -15,7 +13,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/activityBackgroundGray"
         android:orientation="vertical">
 
         <LinearLayout
@@ -93,7 +90,7 @@
                         android:onClick="@{() -> viewModel.clickMic()}"
                         android:padding="8dp"
                         android:text="@string/icon_mic"
-                        android:textColor="@xml/activity_tweet_btn"
+                        android:textColor="@drawable/selector_activity_tweet_button"
                         android:textSize="18sp"
                         android:typeface="@{viewModel.fontAwesomeTypeface}" />
 
@@ -108,7 +105,7 @@
                         android:onClick="@{() -> viewModel.clickMusic()}"
                         android:padding="8dp"
                         android:text="@string/icon_music"
-                        android:textColor="@xml/activity_tweet_btn"
+                        android:textColor="@drawable/selector_activity_tweet_button"
                         android:textSize="18sp"
                         android:typeface="@{viewModel.fontAwesomeTypeface}" />
 
@@ -123,7 +120,7 @@
                         android:onClick="@{() -> viewModel.clickTextOption()}"
                         android:padding="8dp"
                         android:text="@string/icon_text"
-                        android:textColor="@xml/activity_tweet_btn"
+                        android:textColor="@drawable/selector_activity_tweet_button"
                         android:textSize="18sp"
                         android:typeface="@{viewModel.fontAwesomeTypeface}" />
                 </LinearLayout>
@@ -142,7 +139,7 @@
                     android:onClick="@{() -> viewModel.clickTweet()}"
                     android:padding="10dp"
                     android:text="@string/icon_tweet"
-                    android:textColor="@xml/activity_tweet_btn"
+                    android:textColor="@drawable/selector_activity_tweet_button"
                     android:textSize="22sp"
                     android:typeface="@{viewModel.fontAwesomeTypeface}" />
 
@@ -154,7 +151,7 @@
                     android:onClick="@{() -> viewModel.clickImageSelect()}"
                     android:padding="10dp"
                     android:text="@string/icon_image"
-                    android:textColor="@xml/activity_tweet_btn"
+                    android:textColor="@drawable/selector_activity_tweet_button"
                     android:textSize="22sp"
                     android:typeface="@{viewModel.fontAwesomeTypeface}" />
 
@@ -164,7 +161,7 @@
                     android:layout_gravity="bottom"
                     android:text="@{viewModel.remainingTextCount.toString()}"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@{viewModel.isValidTextCount ? Color.parseColor(`#89000000`) : Color.RED}" />
+                    android:textColor="@{viewModel.isValidTextCount ? @color/tweetTextRemainCount : @color/tweetTextRemainCountError}" />
 
                 <Button
                     android:layout_width="50dp"
@@ -173,7 +170,7 @@
                     android:onClick="@{() -> viewModel.clickClose()}"
                     android:padding="10dp"
                     android:text="@string/icon_close"
-                    android:textColor="@xml/activity_tweet_btn"
+                    android:textColor="@drawable/selector_activity_tweet_button"
                     android:textSize="22sp"
                     android:typeface="@{viewModel.fontAwesomeTypeface}" />
             </LinearLayout>

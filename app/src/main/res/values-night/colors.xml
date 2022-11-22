@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="statusBar">#28362b</color>
+    <color name="activityBackground">#303030</color>
+    <color name="actionBarBackground">#373737</color>
+    <color name="pull2RefreshBackground">#3d3d3d</color>
+
+    <color name="icon">#c7c7c7</color>
+    <color name="iconPress">#757575</color>
+
+    <color name="retweetedByMe">#333333</color>
+    <color name="retweet">#141433</color>
+    <color name="sameMyScreenName">#333333</color>
+    <color name="mention">#341414</color>
+    <color name="position0">#222222</color>
+    <color name="position1">#222222</color>
+
+    <color name="press">#1b2a48</color>
+
+    <color name="tweetDialogButtonPress">#407555</color>
+
+    <color name="pagerTabBackground">#333333</color>
+    <color name="pagerTabText">#ffffff</color>
+
+    <color name="tweetName">#99cc00</color>
+    <color name="tweetText">#ffffff</color>
+
+    <color name="tweetTextRemainCount">#b3ffffff</color>
+    <color name="userPageTextBackground">#f0222222</color>
+
+    <integer-array name="pull2RefreshScheme">
+        <item>@android:color/holo_blue_dark</item>
+        <item>@android:color/holo_green_dark</item>
+        <item>@android:color/holo_orange_dark</item>
+        <item>@android:color/holo_red_dark</item>
+    </integer-array>
+
+</resources>
