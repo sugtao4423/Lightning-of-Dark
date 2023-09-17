@@ -4,6 +4,7 @@ import sugtao4423.twitterweb4j.body.CreateRetweetBody
 import sugtao4423.twitterweb4j.body.CreateTweetBody
 import sugtao4423.twitterweb4j.body.DeleteRetweetBody
 import sugtao4423.twitterweb4j.body.DeleteTweetBody
+import sugtao4423.twitterweb4j.body.FavoriteTweetBody
 import sugtao4423.twitterweb4j.parser.JsonParserGraphQL
 import sugtao4423.twitterweb4j.parser.JsonParserV1
 import sugtao4423.twitterweb4j.url.UrlGraphQL
@@ -67,6 +68,13 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     fun deleteRetweet(tweetId: Long) {
         val url = UrlGraphQL.deleteRetweet
         val body = DeleteRetweetBody(url).get(tweetId)
+        post(url, body)
+    }
+
+    @Throws(IOException::class, JSONException::class)
+    fun favoriteTweet(tweetId: Long) {
+        val url = UrlGraphQL.favoriteTweet
+        val body = FavoriteTweetBody(url).get(tweetId)
         post(url, body)
     }
 

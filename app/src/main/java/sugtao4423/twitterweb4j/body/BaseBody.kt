@@ -9,7 +9,7 @@ abstract class BaseBody(requestUrl: String) {
 
     protected open val features: Map<String, Any>? = null
 
-    protected abstract val variables: Map<String, Any>
+    protected open val variables: Map<String, Any>? = null
 
     @Throws(JSONException::class)
     protected fun buildJsonString(variables: Map<String, Any>): String {
