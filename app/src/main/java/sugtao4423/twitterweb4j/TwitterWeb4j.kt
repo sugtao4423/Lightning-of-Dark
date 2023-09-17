@@ -113,10 +113,11 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
             Connection.setBaseHeaders(this)
             setSession(this)
             if (method == "POST" && body != null) {
+                val bodyBytes = body.toByteArray()
                 setRequestProperty("Content-Type", contentType)
-                setRequestProperty("Content-Length", body.length.toString())
+                setRequestProperty("Content-Length", bodyBytes.size.toString())
                 doOutput = true
-                outputStream.use { it.write(body.toByteArray()) }
+                outputStream.use { it.write(bodyBytes) }
             }
         }
 
