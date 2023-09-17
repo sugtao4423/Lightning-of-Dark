@@ -2,9 +2,7 @@ package sugtao4423.twitterweb4j.body
 
 import org.json.JSONException
 
-object CreateTweetBody : BaseBody() {
-
-    override val queryId = "PIZtQLRIYtSa9AtW_fI2Mw"
+class CreateTweetBody(requestUrl: String) : BaseBody(requestUrl) {
 
     override val features = mapOf(
         "tweetypie_unmention_optimization_enabled" to true,

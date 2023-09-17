@@ -43,7 +43,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     @Throws(IOException::class, JSONException::class)
     fun createTweet(tweetText: String): StatusV2 {
         val url = UrlGraphQL.createTweet
-        val body = CreateTweetBody.get(tweetText)
+        val body = CreateTweetBody(url).get(tweetText)
         val response = post(url, body)
         return JsonParserGraphQL.parseCreateTweet(response)
     }
@@ -51,14 +51,14 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     @Throws(IOException::class, JSONException::class)
     fun deleteTweet(tweetId: Long) {
         val url = UrlGraphQL.deleteTweet
-        val body = DeleteTweetBody.get(tweetId)
+        val body = DeleteTweetBody(url).get(tweetId)
         post(url, body)
     }
 
     @Throws(IOException::class, JSONException::class)
     fun createRetweet(tweetId: Long) {
         val url = UrlGraphQL.createRetweet
-        val body = CreateRetweetBody.get(tweetId)
+        val body = CreateRetweetBody(url).get(tweetId)
         post(url, body)
     }
 

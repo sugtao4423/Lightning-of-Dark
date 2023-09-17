@@ -3,9 +3,9 @@ package sugtao4423.twitterweb4j.body
 import org.json.JSONException
 import org.json.JSONObject
 
-abstract class BaseBody {
+abstract class BaseBody(requestUrl: String) {
 
-    protected abstract val queryId: String
+    protected val queryId = requestUrl.split("/").takeLast(2).first()
 
     protected open val features: Map<String, Any>? = null
 

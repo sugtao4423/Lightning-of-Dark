@@ -2,9 +2,7 @@ package sugtao4423.twitterweb4j.body
 
 import org.json.JSONException
 
-object DeleteTweetBody : BaseBody() {
-
-    override val queryId = "VaenaVgh5q5ih7kvyVjgtg"
+class DeleteTweetBody(requestUrl: String) : BaseBody(requestUrl) {
 
     override val variables = mapOf(
         "dark_request" to false,

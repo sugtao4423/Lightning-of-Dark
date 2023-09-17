@@ -2,9 +2,7 @@ package sugtao4423.twitterweb4j.body
 
 import org.json.JSONException
 
-object CreateRetweetBody : BaseBody() {
-
-    override val queryId = "ojPdsZsimiJrUGLR1sjUtA"
+class CreateRetweetBody(requestUrl: String) : BaseBody(requestUrl) {
 
     override val variables = mapOf(
         "dark_request" to false
