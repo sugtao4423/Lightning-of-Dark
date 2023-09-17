@@ -10,6 +10,9 @@ abstract class UrlBase {
         protected val v1ApiBaseUrl = "https://api.twitter.com/1.1"
 
         @JvmStatic
+        protected val graphQLApiBaseUrl = "https://twitter.com/i/api/graphql"
+
+        @JvmStatic
         protected val DEFAULT_PAGE_COUNT = 40
 
         @JvmStatic
