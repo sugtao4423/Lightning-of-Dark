@@ -18,5 +18,8 @@ class UrlGraphQL : UrlBase() {
         @JvmStatic
         val favoriteTweet = "$graphQLApiBaseUrl/lI07N6Otwv1PhnEgXILM7A/FavoriteTweet"
 
+        @JvmStatic
+        val unfavoriteTweet = "$graphQLApiBaseUrl/ZYKSe-w7KEslx3JhSIk5LA/UnfavoriteTweet"
+
     }
 }
