@@ -12,5 +12,8 @@ class UrlGraphQL : UrlBase() {
         @JvmStatic
         val createRetweet = "$graphQLApiBaseUrl/ojPdsZsimiJrUGLR1sjUtA/CreateRetweet"
 
+        @JvmStatic
+        val deleteRetweet = "$graphQLApiBaseUrl/iQtK4dl5hBmXewYZuEOKVw/DeleteRetweet"
+
     }
 }
