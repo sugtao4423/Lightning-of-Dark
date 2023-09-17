@@ -1,6 +1,7 @@
 package sugtao4423.twitterweb4j
 
 import sugtao4423.twitterweb4j.body.CreateTweetBody
+import sugtao4423.twitterweb4j.body.DeleteTweetBody
 import sugtao4423.twitterweb4j.parser.JsonParserGraphQL
 import sugtao4423.twitterweb4j.parser.JsonParserV1
 import sugtao4423.twitterweb4j.url.UrlGraphQL
@@ -44,6 +45,13 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         val body = CreateTweetBody.get(tweetText)
         val response = post(url, body)
         return JsonParserGraphQL.parseCreateTweet(response)
+    }
+
+    @Throws(IOException::class, JSONException::class)
+    fun deleteTweet(tweetId: Long) {
+        val url = UrlGraphQL.deleteTweet
+        val body = DeleteTweetBody.get(tweetId)
+        post(url, body)
     }
 
     private fun setSession(conn: HttpURLConnection) {
