@@ -8,9 +8,15 @@ import twitter4j.TwitterObjectFactory
 
 object JsonParserV1 {
 
-    @Throws(JSONException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun parseStatusesArray(response: String): List<Status> {
-        val json = JSONArray(response)
+        val json: JSONArray
+        try {
+            json = JSONArray(response)
+        } catch (e: JSONException) {
+            throw TwitterException(e)
+        }
+
         val statuses = mutableListOf<Status>()
         for (i in 0 until json.length()) {
             val tweet = TwitterObjectFactory.createStatus(json.getJSONObject(i).toString())

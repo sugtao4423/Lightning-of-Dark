@@ -22,21 +22,21 @@ import sugtao4423.twitterweb4j.model.Status as StatusV2
 
 class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
 
-    @Throws(IOException::class, JSONException::class, TwitterException::class)
+    @Throws(IOException::class, TwitterException::class)
     fun getHomeTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.homeTimeline(paging)
         val response = get(url)
         return JsonParserV1.parseStatusesArray(response)
     }
 
-    @Throws(IOException::class, JSONException::class, TwitterException::class)
+    @Throws(IOException::class, TwitterException::class)
     fun getMentionsTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.mentionsTimeline(paging)
         val response = get(url)
         return JsonParserV1.parseStatusesArray(response)
     }
 
-    @Throws(IOException::class, JSONException::class, TwitterException::class)
+    @Throws(IOException::class, TwitterException::class)
     fun getUserListStatuses(listId: Long, paging: Paging? = null): List<Status> {
         val url = UrlV1.userListStatuses(listId, paging)
         val response = get(url)
@@ -51,35 +51,35 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         return JsonParserGraphQL.parseCreateTweet(response)
     }
 
-    @Throws(IOException::class, JSONException::class)
+    @Throws(IOException::class)
     fun deleteTweet(tweetId: Long) {
         val url = UrlGraphQL.deleteTweet
         val body = DeleteTweetBody(url).get(tweetId)
         post(url, body)
     }
 
-    @Throws(IOException::class, JSONException::class)
+    @Throws(IOException::class)
     fun createRetweet(tweetId: Long) {
         val url = UrlGraphQL.createRetweet
         val body = CreateRetweetBody(url).get(tweetId)
         post(url, body)
     }
 
-    @Throws(IOException::class, JSONException::class)
+    @Throws(IOException::class)
     fun deleteRetweet(tweetId: Long) {
         val url = UrlGraphQL.deleteRetweet
         val body = DeleteRetweetBody(url).get(tweetId)
         post(url, body)
     }
 
-    @Throws(IOException::class, JSONException::class)
+    @Throws(IOException::class)
     fun favoriteTweet(tweetId: Long) {
         val url = UrlGraphQL.favoriteTweet
         val body = FavoriteTweetBody(url).get(tweetId)
         post(url, body)
     }
 
-    @Throws(IOException::class, JSONException::class)
+    @Throws(IOException::class)
     fun unfavoriteTweet(tweetId: Long) {
         val url = UrlGraphQL.unfavoriteTweet
         val body = UnfavoriteTweetBody(url).get(tweetId)

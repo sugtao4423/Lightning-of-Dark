@@ -1,6 +1,5 @@
 package sugtao4423.twitterweb4j.body
 
-import org.json.JSONException
 import org.json.JSONObject
 
 abstract class BaseBody(requestUrl: String) {
@@ -11,7 +10,6 @@ abstract class BaseBody(requestUrl: String) {
 
     protected open val variables: Map<String, Any>? = null
 
-    @Throws(JSONException::class)
     protected fun buildJsonString(variables: Map<String, Any>): String {
         return JSONObject().apply {
             put("queryId", queryId)

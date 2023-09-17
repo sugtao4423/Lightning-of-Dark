@@ -1,7 +1,5 @@
 package sugtao4423.twitterweb4j.body
 
-import org.json.JSONException
-
 class CreateTweetBody(requestUrl: String) : BaseBody(requestUrl) {
 
     override val features = mapOf(
@@ -34,7 +32,6 @@ class CreateTweetBody(requestUrl: String) : BaseBody(requestUrl) {
         ),
     )
 
-    @Throws(JSONException::class)
     fun get(tweetText: String): String {
         val variables = this.variables + mapOf("tweet_text" to tweetText)
         return buildJsonString(variables)
