@@ -5,6 +5,7 @@ import twitter4j.JSONException
 import twitter4j.Status
 import twitter4j.TwitterException
 import twitter4j.TwitterObjectFactory
+import twitter4j.User
 
 object JsonParserV1 {
 
@@ -23,6 +24,11 @@ object JsonParserV1 {
             statuses.add(tweet)
         }
         return statuses.toList()
+    }
+
+    @Throws(TwitterException::class)
+    fun parseUser(response: String): User {
+        return TwitterObjectFactory.createUser(response)
     }
 
 }

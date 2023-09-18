@@ -15,6 +15,9 @@ class UrlV1 : UrlBase() {
         private val userListStatuses = "$v1ApiBaseUrl/lists/statuses.json"
 
         @JvmStatic
+        private val showUser = "$v1ApiBaseUrl/users/show.json"
+
+        @JvmStatic
         fun homeTimeline(paging: Paging? = null): String {
             val params = buildPaginatedQueryParams(v1ApiBaseQueryParams, paging)
             return "$homeTimeline?$params"
@@ -33,6 +36,20 @@ class UrlV1 : UrlBase() {
             )
             val params = buildPaginatedQueryParams(query, paging)
             return "$userListStatuses?$params"
+        }
+
+        @JvmStatic
+        fun showUser(id: Long): String {
+            val query = mapOf("user_id" to id.toString(), "include_entities" to "true")
+            val params = buildQueryParams(query)
+            return "$showUser?$params"
+        }
+
+        @JvmStatic
+        fun showUser(screenName: String): String {
+            val query = mapOf("screen_name" to screenName, "include_entities" to "true")
+            val params = buildQueryParams(query)
+            return "$showUser?$params"
         }
 
     }
