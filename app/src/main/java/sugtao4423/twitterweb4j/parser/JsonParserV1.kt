@@ -2,6 +2,7 @@ package sugtao4423.twitterweb4j.parser
 
 import twitter4j.JSONArray
 import twitter4j.JSONException
+import twitter4j.Relationship
 import twitter4j.Status
 import twitter4j.TwitterException
 import twitter4j.TwitterObjectFactory
@@ -29,6 +30,11 @@ object JsonParserV1 {
     @Throws(TwitterException::class)
     fun parseUser(response: String): User {
         return TwitterObjectFactory.createUser(response)
+    }
+
+    @Throws(TwitterException::class)
+    fun parseRelationship(response: String): Relationship {
+        return TwitterObjectFactory.createRelationship(response)
     }
 
 }

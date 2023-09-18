@@ -18,6 +18,9 @@ class UrlV1 : UrlBase() {
         private val showUser = "$v1ApiBaseUrl/users/show.json"
 
         @JvmStatic
+        private val showFriendship = "$v1ApiBaseUrl/friendships/show.json"
+
+        @JvmStatic
         fun homeTimeline(paging: Paging? = null): String {
             val params = buildPaginatedQueryParams(v1ApiBaseQueryParams, paging)
             return "$homeTimeline?$params"
@@ -50,6 +53,26 @@ class UrlV1 : UrlBase() {
             val query = mapOf("screen_name" to screenName, "include_entities" to "true")
             val params = buildQueryParams(query)
             return "$showUser?$params"
+        }
+
+        @JvmStatic
+        fun showFriendship(sourceId: Long, targetId: Long): String {
+            val query = mapOf(
+                "source_id" to sourceId.toString(),
+                "target_id" to targetId.toString(),
+            )
+            val params = buildQueryParams(query)
+            return "$showFriendship?$params"
+        }
+
+        @JvmStatic
+        fun showFriendship(sourceScreenName: String, targetScreenName: String): String {
+            val query = mapOf(
+                "source_screen_name" to sourceScreenName,
+                "target_screen_name" to targetScreenName,
+            )
+            val params = buildQueryParams(query)
+            return "$showFriendship?$params"
         }
 
     }

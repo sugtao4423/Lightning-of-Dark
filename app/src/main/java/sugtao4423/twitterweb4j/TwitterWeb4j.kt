@@ -11,6 +11,7 @@ import sugtao4423.twitterweb4j.parser.JsonParserV1
 import sugtao4423.twitterweb4j.url.UrlGraphQL
 import sugtao4423.twitterweb4j.url.UrlV1
 import twitter4j.Paging
+import twitter4j.Relationship
 import twitter4j.Status
 import twitter4j.TwitterException
 import twitter4j.User
@@ -55,6 +56,20 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         val url = UrlV1.showUser(screenName)
         val response = get(url)
         return JsonParserV1.parseUser(response)
+    }
+
+    @Throws(IOException::class, TwitterException::class)
+    fun showFriendship(sourceId: Long, targetId: Long): Relationship {
+        val url = UrlV1.showFriendship(sourceId, targetId)
+        val response = get(url)
+        return JsonParserV1.parseRelationship(response)
+    }
+
+    @Throws(IOException::class, TwitterException::class)
+    fun showFriendship(sourceScreenName: String, targetScreenName: String): Relationship {
+        val url = UrlV1.showFriendship(sourceScreenName, targetScreenName)
+        val response = get(url)
+        return JsonParserV1.parseRelationship(response)
     }
 
     @Throws(IOException::class, TwitterException::class)
