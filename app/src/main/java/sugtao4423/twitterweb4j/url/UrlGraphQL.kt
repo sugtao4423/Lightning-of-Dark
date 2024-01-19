@@ -1,25 +1,26 @@
 package sugtao4423.twitterweb4j.url
 
-class UrlGraphQL : UrlBase() {
-    companion object {
+object UrlGraphQL {
 
-        @JvmStatic
-        val createTweet = "$graphQLApiBaseUrl/PIZtQLRIYtSa9AtW_fI2Mw/CreateTweet"
+    @JvmStatic
+    private val apiBaseUrl = "https://twitter.com/i/api/graphql"
 
-        @JvmStatic
-        val deleteTweet = "$graphQLApiBaseUrl/VaenaVgh5q5ih7kvyVjgtg/DeleteTweet"
+    @JvmStatic
+    val createTweet = "$apiBaseUrl/PIZtQLRIYtSa9AtW_fI2Mw/CreateTweet"
 
-        @JvmStatic
-        val createRetweet = "$graphQLApiBaseUrl/ojPdsZsimiJrUGLR1sjUtA/CreateRetweet"
+    @JvmStatic
+    val deleteTweet = "$apiBaseUrl/VaenaVgh5q5ih7kvyVjgtg/DeleteTweet"
 
-        @JvmStatic
-        val deleteRetweet = "$graphQLApiBaseUrl/iQtK4dl5hBmXewYZuEOKVw/DeleteRetweet"
+    @JvmStatic
+    val createRetweet = "$apiBaseUrl/ojPdsZsimiJrUGLR1sjUtA/CreateRetweet"
 
-        @JvmStatic
-        val favoriteTweet = "$graphQLApiBaseUrl/lI07N6Otwv1PhnEgXILM7A/FavoriteTweet"
+    @JvmStatic
+    val deleteRetweet = "$apiBaseUrl/iQtK4dl5hBmXewYZuEOKVw/DeleteRetweet"
 
-        @JvmStatic
-        val unfavoriteTweet = "$graphQLApiBaseUrl/ZYKSe-w7KEslx3JhSIk5LA/UnfavoriteTweet"
+    @JvmStatic
+    val favoriteTweet = "$apiBaseUrl/lI07N6Otwv1PhnEgXILM7A/FavoriteTweet"
 
-    }
+    @JvmStatic
+    val unfavoriteTweet = "$apiBaseUrl/ZYKSe-w7KEslx3JhSIk5LA/UnfavoriteTweet"
+
 }

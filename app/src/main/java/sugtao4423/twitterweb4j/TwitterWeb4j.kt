@@ -23,6 +23,11 @@ import sugtao4423.twitterweb4j.model.Status as StatusV2
 
 class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
 
+    companion object {
+        @JvmStatic
+        val DEFAULT_PAGE_COUNT = 40
+    }
+
     @Throws(IOException::class, TwitterException::class)
     fun getHomeTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.homeTimeline(paging)
