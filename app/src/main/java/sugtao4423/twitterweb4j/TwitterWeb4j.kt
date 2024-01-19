@@ -31,21 +31,21 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     @Throws(IOException::class, TwitterException::class)
     fun getHomeTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.homeTimeline(paging)
-        val response = get(url)
+        val response = get(url, true)
         return JsonParserV1.parseStatusesArray(response)
     }
 
     @Throws(IOException::class, TwitterException::class)
     fun getMentionsTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.mentionsTimeline(paging)
-        val response = get(url)
+        val response = get(url, true)
         return JsonParserV1.parseStatusesArray(response)
     }
 
     @Throws(IOException::class, TwitterException::class)
     fun getUserListStatuses(listId: Long, paging: Paging? = null): List<Status> {
         val url = UrlV1.userListStatuses(listId, paging)
-        val response = get(url)
+        val response = get(url, true)
         return JsonParserV1.parseStatusesArray(response)
     }
 
@@ -131,25 +131,34 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     @Throws(IOException::class)
-    private fun get(url: String): String {
-        return access("GET", url)
+    private fun get(url: String, isTweetDeck: Boolean = false): String {
+        return access("GET", url, null, null, isTweetDeck)
     }
 
     @Throws(IOException::class)
-    private fun post(url: String, body: String, contentType: String = "application/json"): String {
-        return access("POST", url, body, contentType)
+    private fun post(
+        url: String,
+        body: String,
+        contentType: String = "application/json",
+        isTweetDeck: Boolean = false
+    ): String {
+        return access("POST", url, body, contentType, isTweetDeck)
     }
 
     @Throws(IOException::class)
     private fun access(
-        method: String, url: String, body: String? = null, contentType: String? = null
+        method: String,
+        url: String,
+        body: String? = null,
+        contentType: String? = null,
+        isTweetDeck: Boolean
     ): String {
         val u = URL(url)
         val conn = u.openConnection() as HttpsURLConnection
 
         conn.apply {
             requestMethod = method
-            Connection.setBaseHeaders(this)
+            Connection.setBaseHeaders(this, isTweetDeck)
             setSession(this)
             if (method == "POST" && body != null) {
                 val bodyBytes = body.toByteArray()
