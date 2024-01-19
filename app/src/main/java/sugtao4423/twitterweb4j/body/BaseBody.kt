@@ -11,12 +11,10 @@ abstract class BaseBody(requestUrl: String) {
     protected open val variables: Map<String, Any>? = null
 
     protected fun buildJsonString(variables: Map<String, Any>): String {
-        return JSONObject().apply {
-            put("queryId", queryId)
-            features?.let {
-                put("features", JSONObject(it))
-            }
-            put("variables", JSONObject(variables))
+        return JSONObject().also { json ->
+            json.put("queryId", queryId)
+            features?.let { json.put("features", JSONObject(it)) }
+            json.put("variables", JSONObject(variables))
         }.toString()
     }
 
