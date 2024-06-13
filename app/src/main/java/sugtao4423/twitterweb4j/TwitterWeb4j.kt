@@ -78,6 +78,20 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     @Throws(IOException::class, TwitterException::class)
+    fun getFavorites(userId: Long, paging: Paging? = null): List<Status> {
+        val url = UrlV1.getFavorites(userId, paging)
+        val response = get(url, true)
+        return JsonParserV1.parseStatusesArray(response)
+    }
+
+    @Throws(IOException::class, TwitterException::class)
+    fun getFavorites(screenName: String, paging: Paging? = null): List<Status> {
+        val url = UrlV1.getFavorites(screenName, paging)
+        val response = get(url, true)
+        return JsonParserV1.parseStatusesArray(response)
+    }
+
+    @Throws(IOException::class, TwitterException::class)
     fun createTweet(tweetText: String): StatusV2 {
         val url = UrlGraphQL.createTweet
         val body = CreateTweetBody(url).get(tweetText)

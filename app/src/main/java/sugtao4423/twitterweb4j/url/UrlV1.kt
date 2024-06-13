@@ -45,6 +45,9 @@ object UrlV1 {
     private val showFriendship = "$apiBaseUrl/friendships/show.json"
 
     @JvmStatic
+    private val getFavorites = "$apiBaseUrl/favorites/list.json"
+
+    @JvmStatic
     fun homeTimeline(paging: Paging? = null): String {
         val params = buildPaginatedQueryParams(baseQueryParams, paging)
         return "$homeTimeline?$params"
@@ -97,6 +100,20 @@ object UrlV1 {
         )
         val params = buildQueryParams(query)
         return "$showFriendship?$params"
+    }
+
+    @JvmStatic
+    fun getFavorites(userId: Long, paging: Paging?): String {
+        val query = baseQueryParams + mapOf("user_id" to userId.toString())
+        val params = buildPaginatedQueryParams(query, paging)
+        return "$getFavorites?$params"
+    }
+
+    @JvmStatic
+    fun getFavorites(screenName: String, paging: Paging?): String {
+        val query = baseQueryParams + mapOf("screen_name" to screenName)
+        val params = buildPaginatedQueryParams(query, paging)
+        return "$getFavorites?$params"
     }
 
     @JvmStatic
