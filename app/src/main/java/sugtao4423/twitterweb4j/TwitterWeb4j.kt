@@ -19,7 +19,6 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
-import sugtao4423.twitterweb4j.model.Status as StatusV2
 
 class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
 
@@ -92,7 +91,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     @Throws(IOException::class, TwitterException::class)
-    fun createTweet(tweetText: String): StatusV2 {
+    fun createTweet(tweetText: String): Status {
         val url = UrlGraphQL.createTweet
         val body = CreateTweetBody(url).get(tweetText)
         val response = post(url, body)

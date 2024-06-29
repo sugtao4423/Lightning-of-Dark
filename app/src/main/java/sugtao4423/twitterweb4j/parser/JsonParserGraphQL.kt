@@ -1,8 +1,9 @@
 package sugtao4423.twitterweb4j.parser
 
-import org.json.JSONException
-import org.json.JSONObject
-import sugtao4423.twitterweb4j.model.Status
+import sugtao4423.twitterweb4j.impl.StatusJSONImpl
+import twitter4j.JSONException
+import twitter4j.JSONObject
+import twitter4j.Status
 import twitter4j.TwitterException
 
 object JsonParserGraphQL {
@@ -20,7 +21,7 @@ object JsonParserGraphQL {
             val statusJson = nestedJsonObject(
                 response, "data", "create_tweet", "tweet_results", "result"
             )
-            return Status(statusJson)
+            return StatusJSONImpl(statusJson)
         } catch (e: JSONException) {
             throw TwitterException(e)
         }
