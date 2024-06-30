@@ -97,4 +97,22 @@ object JsonParserGraphQLTimeline {
         return result
     }
 
+    @Throws(TwitterException::class)
+    fun parseUserTweetsAndReplies(response: String, userId: Long): CursorList<Status> {
+        val entry = "TimelineAddEntries"
+        val convPrefix = "profile-conversation-"
+        try {
+            val instructions = JSONObject(response).nestedJSONObject(
+                "data", "user", "result", "timeline_v2", "timeline"
+            ).getJSONArray("instructions")
+            val userTimeline = parse(instructions, entry, convPrefix)
+
+            return userTimeline.filterTo(CursorList.newWithCursor(userTimeline)) {
+                it.isRetweeted || it.user.id == userId
+            }
+        } catch (e: JSONException) {
+            throw TwitterException(e)
+        }
+    }
+
 }

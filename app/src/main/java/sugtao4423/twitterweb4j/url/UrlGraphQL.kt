@@ -1,9 +1,32 @@
 package sugtao4423.twitterweb4j.url
 
+import android.net.Uri
+import org.json.JSONObject
+
 object UrlGraphQL {
 
     @JvmStatic
     private val apiBaseUrl = "https://twitter.com/i/api/graphql"
+
+    @JvmStatic
+    fun userTweetsAndReplies(userId: Long, count: Int, cursor: String? = null): String {
+        val url = "$apiBaseUrl/wxoVeDnl0mP7VLhe6mTOdg/UserTweetsAndReplies"
+
+        val variables = JSONObject().also { json ->
+            json.put("userId", userId.toString())
+            json.put("count", count)
+            json.put("includePromotedContent", false)
+            json.put("withQuickPromoteEligibilityTweetFields", false)
+            json.put("withVoice", true)
+            json.put("withV2Timeline", true)
+            cursor?.let { json.put("cursor", it) }
+        }.toString()
+
+        return Uri.parse(url).buildUpon().apply {
+            appendQueryParameter("variables", variables)
+            appendQueryParameter("features", UrlGraphQLFeatures.userTweetsAndReplies)
+        }.build().toString()
+    }
 
     @JvmStatic
     val createTweet = "$apiBaseUrl/PIZtQLRIYtSa9AtW_fI2Mw/CreateTweet"

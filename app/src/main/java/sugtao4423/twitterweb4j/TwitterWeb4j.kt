@@ -6,7 +6,9 @@ import sugtao4423.twitterweb4j.body.DeleteRetweetBody
 import sugtao4423.twitterweb4j.body.DeleteTweetBody
 import sugtao4423.twitterweb4j.body.FavoriteTweetBody
 import sugtao4423.twitterweb4j.body.UnfavoriteTweetBody
+import sugtao4423.twitterweb4j.model.CursorList
 import sugtao4423.twitterweb4j.parser.JsonParserGraphQL
+import sugtao4423.twitterweb4j.parser.JsonParserGraphQLTimeline
 import sugtao4423.twitterweb4j.parser.JsonParserV1
 import sugtao4423.twitterweb4j.url.UrlGraphQL
 import sugtao4423.twitterweb4j.url.UrlV1
@@ -88,6 +90,15 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         val url = UrlV1.getFavorites(screenName, paging)
         val response = get(url, true)
         return JsonParserV1.parseStatusesArray(response)
+    }
+
+    @Throws(IOException::class, TwitterException::class)
+    fun userTweetsAndReplies(
+        userId: Long, count: Int? = null, cursor: String? = null
+    ): CursorList<Status> {
+        val url = UrlGraphQL.userTweetsAndReplies(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
+        val response = get(url)
+        return JsonParserGraphQLTimeline.parseUserTweetsAndReplies(response, userId)
     }
 
     @Throws(IOException::class, TwitterException::class)
