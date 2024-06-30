@@ -29,6 +29,27 @@ object UrlGraphQL {
     }
 
     @JvmStatic
+    fun likes(userId: Long, count: Int, cursor: String? = null): String {
+        val url = "$apiBaseUrl/ayhH-V7xvuv4nPZpkpuhFA/Likes"
+
+        val variables = JSONObject().also { json ->
+            json.put("userId", userId.toString())
+            json.put("count", count)
+            json.put("includePromotedContent", false)
+            json.put("withClientEventToken", false)
+            json.put("withBirdwatchNotes", false)
+            json.put("withVoice", true)
+            json.put("withV2Timeline", true)
+            cursor?.let { json.put("cursor", it) }
+        }.toString()
+
+        return Uri.parse(url).buildUpon().apply {
+            appendQueryParameter("variables", variables)
+            appendQueryParameter("features", UrlGraphQLFeatures.likes)
+        }.build().toString()
+    }
+
+    @JvmStatic
     val createTweet = "$apiBaseUrl/PIZtQLRIYtSa9AtW_fI2Mw/CreateTweet"
 
     @JvmStatic
