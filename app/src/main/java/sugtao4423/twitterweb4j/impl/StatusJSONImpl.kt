@@ -19,7 +19,14 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-data class StatusJSONImpl(private val json: JSONObject) : Status, java.io.Serializable {
+data class StatusJSONImpl(private val result: JSONObject) : Status, java.io.Serializable {
+
+    private val json = result.getString("__typename").let { typename ->
+        when (typename) {
+            "TweetWithVisibilityResults" -> result.getJSONObject("tweet")
+            else -> result
+        }
+    }
 
     private val legacy = json.getJSONObject("legacy")
 
