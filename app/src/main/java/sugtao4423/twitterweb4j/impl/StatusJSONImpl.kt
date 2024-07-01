@@ -80,7 +80,10 @@ data class StatusJSONImpl(private val result: JSONObject) : Status, java.io.Seri
 
     private val quotedStatus =
         json.optJSONObject("quoted_status_result")?.optJSONObject("result")?.let {
-            StatusJSONImpl(it)
+            when (it.nullString("__typename")) {
+                "TweetTombstone" -> null
+                else -> StatusJSONImpl(it)
+            }
         }
     private val quotedStatusId = legacy.optString("quoted_status_id_str", "-1").toLong()
     private val quotedStatusPermalink = legacy.optJSONObject("quoted_status_permalink")?.let {
