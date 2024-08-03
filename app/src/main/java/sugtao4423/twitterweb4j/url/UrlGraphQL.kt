@@ -50,7 +50,7 @@ object UrlGraphQL {
     }
 
     @JvmStatic
-    val createTweet = "$apiBaseUrl/PIZtQLRIYtSa9AtW_fI2Mw/CreateTweet"
+    val createTweet = "$apiBaseUrl/xT36w0XM3A8jDynpkram2A/CreateTweet"
 
     @JvmStatic
     val deleteTweet = "$apiBaseUrl/VaenaVgh5q5ih7kvyVjgtg/DeleteTweet"
