@@ -20,6 +20,7 @@ import twitter4j.User
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.zip.GZIPInputStream
 import javax.net.ssl.HttpsURLConnection
 
 class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
@@ -177,6 +178,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
             requestMethod = method
             Connection.setBaseHeaders(this, isTweetDeck)
             setSession(this)
+            conn.setRequestProperty("Accept-Encoding", "gzip")
             if (method == "POST" && body != null) {
                 val bodyBytes = body.toByteArray()
                 setRequestProperty("Content-Type", contentType)
@@ -186,7 +188,9 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
             }
         }
 
-        val data = conn.inputStream.bufferedReader().readText()
+        val data = conn.let {
+            if (it.contentEncoding == "gzip") GZIPInputStream(it.inputStream) else it.inputStream
+        }.reader().use { it.readText() }
         conn.disconnect()
         return data
     }
