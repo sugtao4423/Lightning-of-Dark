@@ -54,14 +54,14 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     @Throws(IOException::class, TwitterException::class)
     fun showUser(id: Long): User {
         val url = UrlV1.showUser(id)
-        val response = get(url)
+        val response = get(url, true)
         return JsonParserV1.parseUser(response)
     }
 
     @Throws(IOException::class, TwitterException::class)
     fun showUser(screenName: String): User {
         val url = UrlV1.showUser(screenName)
-        val response = get(url)
+        val response = get(url, true)
         return JsonParserV1.parseUser(response)
     }
 
