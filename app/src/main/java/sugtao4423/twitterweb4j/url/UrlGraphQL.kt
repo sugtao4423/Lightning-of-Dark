@@ -6,7 +6,7 @@ import org.json.JSONObject
 object UrlGraphQL {
 
     @JvmStatic
-    private val apiBaseUrl = "https://twitter.com/i/api/graphql"
+    private val apiBaseUrl = "https://twitter.com/i/api/graphql".replace("twitter", "x")
 
     @JvmStatic
     fun userTweetsAndReplies(userId: Long, count: Int, cursor: String? = null): String {

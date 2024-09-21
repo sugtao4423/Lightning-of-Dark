@@ -7,7 +7,7 @@ import java.net.URLEncoder
 object UrlV1 {
 
     @JvmStatic
-    private val apiBaseUrl = "https://api.twitter.com/1.1"
+    private val apiBaseUrl = "https://api.twitter.com/1.1".replace("twitter", "x")
 
     @JvmStatic
     private val baseQueryParams = mapOf(
