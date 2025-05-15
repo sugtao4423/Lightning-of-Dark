@@ -84,7 +84,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         userId: Long, count: Int? = null, cursor: String? = null
     ): CursorList<Status> {
         val url = UrlGraphQL.userTweetsAndReplies(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
-        val response = get(url)
+        val response = get(url, true)
         return JsonParserGraphQLTimeline.parseUserTweetsAndReplies(response, userId)
     }
 
