@@ -45,13 +45,6 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     @Throws(IOException::class, TwitterException::class)
-    fun getUserListStatuses(listId: Long, paging: Paging? = null): List<Status> {
-        val url = UrlV1.userListStatuses(listId, paging)
-        val response = get(url, true)
-        return JsonParserV1.parseStatusesArray(response)
-    }
-
-    @Throws(IOException::class, TwitterException::class)
     fun showUser(id: Long): User {
         val url = UrlV1.showUser(id)
         val response = get(url, true)
@@ -77,6 +70,15 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         val url = UrlV1.showFriendship(sourceScreenName, targetScreenName)
         val response = get(url)
         return JsonParserV1.parseRelationship(response)
+    }
+
+    @Throws(IOException::class, TwitterException::class)
+    fun listTweetsTimeline(
+        listId: Long, count: Int? = null, cursor: String? = null
+    ): CursorList<Status> {
+        val url = UrlGraphQL.listTweetsTimeline(listId, count ?: DEFAULT_PAGE_COUNT, cursor)
+        val response = get(url, true)
+        return JsonParserGraphQLTimeline.parseListTweetsTimeline(response)
     }
 
     @Throws(IOException::class, TwitterException::class)

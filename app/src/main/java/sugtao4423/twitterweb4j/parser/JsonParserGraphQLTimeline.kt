@@ -98,6 +98,20 @@ object JsonParserGraphQLTimeline {
     }
 
     @Throws(TwitterException::class)
+    fun parseListTweetsTimeline(response: String): CursorList<Status> {
+        val entry = "TimelineAddEntries"
+        val convPrefix = "list-conversation-"
+        try {
+            val instructions = JSONObject(response).nestedJSONObject(
+                "data", "list", "tweets_timeline", "timeline"
+            ).getJSONArray("instructions")
+            return parse(instructions, entry, convPrefix)
+        } catch (e: JSONException) {
+            throw TwitterException(e)
+        }
+    }
+
+    @Throws(TwitterException::class)
     fun parseUserTweetsAndReplies(response: String, userId: Long): CursorList<Status> {
         val entry = "TimelineAddEntries"
         val convPrefix = "profile-conversation-"

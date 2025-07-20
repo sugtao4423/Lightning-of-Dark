@@ -9,6 +9,23 @@ object UrlGraphQL {
     private val apiBaseUrl = "https://twitter.com/i/api/graphql".replace("twitter", "x")
 
     @JvmStatic
+    fun listTweetsTimeline(listId: Long, count: Int, cursor: String? = null): String {
+        val url = "$apiBaseUrl/l411pL-GRg-AKo_a2rmYjg/ListLatestTweetsTimeline"
+
+        val variables = JSONObject().also { json ->
+            json.put("listId", listId.toString())
+            json.put("count", count)
+            json.put("includePromotedContent", false)
+            cursor?.let { json.put("cursor", it) }
+        }.toString()
+
+        return Uri.parse(url).buildUpon().apply {
+            appendQueryParameter("variables", variables)
+            appendQueryParameter("features", UrlGraphQLFeatures.listTweetsTimeline)
+        }.build().toString()
+    }
+
+    @JvmStatic
     fun userTweetsAndReplies(userId: Long, count: Int, cursor: String? = null): String {
         val url = "$apiBaseUrl/wxoVeDnl0mP7VLhe6mTOdg/UserTweetsAndReplies"
 

@@ -36,9 +36,6 @@ object UrlV1 {
     private val mentionsTimeline = "$apiBaseUrl/statuses/mentions_timeline.json"
 
     @JvmStatic
-    private val userListStatuses = "$apiBaseUrl/lists/statuses.json"
-
-    @JvmStatic
     private val showUser = "$apiBaseUrl/users/show.json"
 
     @JvmStatic
@@ -54,15 +51,6 @@ object UrlV1 {
     fun mentionsTimeline(paging: Paging? = null): String {
         val params = buildPaginatedQueryParams(baseQueryParams, paging)
         return "$mentionsTimeline?$params"
-    }
-
-    @JvmStatic
-    fun userListStatuses(listId: Long, paging: Paging? = null): String {
-        val query = baseQueryParams + mapOf(
-            "list_id" to listId.toString(), "include_rts" to "1"
-        )
-        val params = buildPaginatedQueryParams(query, paging)
-        return "$userListStatuses?$params"
     }
 
     @JvmStatic

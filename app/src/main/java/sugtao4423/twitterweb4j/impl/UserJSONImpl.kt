@@ -5,6 +5,7 @@ import sugtao4423.twitterweb4j.nullString
 import twitter4j.JSONObject
 import twitter4j.RateLimitStatus
 import twitter4j.Status
+import twitter4j.TwitterException
 import twitter4j.URLEntity
 import twitter4j.User
 import java.text.SimpleDateFormat
@@ -13,21 +14,40 @@ import java.util.Locale
 
 data class UserJSONImpl(private val json: JSONObject) : User, java.io.Serializable {
 
+    private val avatar = json.optJSONObject("avatar") ?: null
+    private val core = json.optJSONObject("core") ?: null
     private val legacy = json.getJSONObject("legacy")
+    private val loc = json.optJSONObject("location") ?: null
 
     private val id = json.getString("rest_id").toLong()
 
-    private val name = legacy.getString("name")
+    private val name = when {
+        legacy.has("name") -> legacy.getString("name")
+        core != null && core.has("name") -> core.getString("name")
+        else -> "null"
+    }
     private val email = legacy.nullString("email")
-    private val screenName = legacy.getString("screen_name")
-    private val location = legacy.getString("location")
+    private val screenName = when {
+        legacy.has("screen_name") -> legacy.getString("screen_name")
+        core != null && core.has("screen_name") -> core.getString("screen_name")
+        else -> "null"
+    }
+    private val location = when {
+        legacy.has("location") -> legacy.getString("location")
+        loc != null && loc.has("location") -> loc.getString("location")
+        else -> "null"
+    }
 
     private val descriptionURLEntities = getURLEntities("description")
     private val urlEntities = getURLEntities("url")
     private val description = legacy.getString("description")
 
     private val isContributorsEnabled = legacy.falseBoolean("contributors_enabled")
-    private val profileImageUrlHttps = legacy.getString("profile_image_url_https")
+    private val profileImageUrlHttps = when {
+        legacy.has("profile_image_url_https") -> legacy.getString("profile_image_url_https")
+        avatar != null && avatar.has("image_url") -> avatar.getString("image_url")
+        else -> throw TwitterException("Profile image URL not found")
+    }
     private val isDefaultProfileImage = legacy.falseBoolean("default_profile_image")
     private val url = legacy.nullString("url")
     private val isProtected = legacy.falseBoolean("protected")
@@ -45,9 +65,11 @@ data class UserJSONImpl(private val json: JSONObject) : User, java.io.Serializab
     private val isDefaultProfile = legacy.falseBoolean("default_profile")
     private val showAllInlineMedia = legacy.falseBoolean("show_all_inline_media")
     private val friendsCount = legacy.getInt("friends_count")
-    private val createdAt = SimpleDateFormat(
-        "EEE MMM dd HH:mm:ss Z yyyy", Locale.US
-    ).parse(legacy.getString("created_at"))!!
+    private val createdAt = when {
+        legacy.has("created_at") -> legacy.getString("created_at")
+        core != null && core.has("created_at") -> core.getString("created_at")
+        else -> throw TwitterException("Created at date not found")
+    }.let { SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.US).parse(it) }
     private val favouritesCount = legacy.getInt("favourites_count")
     private val utcOffset = legacy.optInt("utc_offset", 0)
     private val timeZone = legacy.nullString("time_zone")
