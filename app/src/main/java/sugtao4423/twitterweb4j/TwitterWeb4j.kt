@@ -30,49 +30,49 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         val DEFAULT_PAGE_COUNT = 40
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun getHomeTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.homeTimeline(paging)
         val response = get(url, true)
         return JsonParserV1.parseStatusesArray(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun getMentionsTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.mentionsTimeline(paging)
         val response = get(url, true)
         return JsonParserV1.parseStatusesArray(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun showUser(id: Long): User {
         val url = UrlV1.showUser(id)
         val response = get(url, true)
         return JsonParserV1.parseUser(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun showUser(screenName: String): User {
         val url = UrlV1.showUser(screenName)
         val response = get(url, true)
         return JsonParserV1.parseUser(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun showFriendship(sourceId: Long, targetId: Long): Relationship {
         val url = UrlV1.showFriendship(sourceId, targetId)
         val response = get(url)
         return JsonParserV1.parseRelationship(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun showFriendship(sourceScreenName: String, targetScreenName: String): Relationship {
         val url = UrlV1.showFriendship(sourceScreenName, targetScreenName)
         val response = get(url)
         return JsonParserV1.parseRelationship(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun listTweetsTimeline(
         listId: Long, count: Int? = null, cursor: String? = null
     ): CursorList<Status> {
@@ -81,7 +81,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         return JsonParserGraphQLTimeline.parseListTweetsTimeline(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun userTweetsAndReplies(
         userId: Long, count: Int? = null, cursor: String? = null
     ): CursorList<Status> {
@@ -90,14 +90,14 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         return JsonParserGraphQLTimeline.parseUserTweetsAndReplies(response, userId)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun getFavorites(userId: Long, count: Int? = null, cursor: String? = null): CursorList<Status> {
         val url = UrlGraphQL.likes(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
         val response = get(url)
         return JsonParserGraphQLTimeline.parseLikes(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun createTweet(tweetText: String): Status {
         val url = UrlGraphQL.createTweet
         val body = CreateTweetBody(url).get(tweetText)
@@ -105,7 +105,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         return JsonParserGraphQL.parseCreateTweet(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun deleteTweet(tweetId: Long) {
         val url = UrlGraphQL.deleteTweet
         val body = DeleteTweetBody(url).get(tweetId)
@@ -113,7 +113,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         JsonParserGraphQL.parseDeleteTweet(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun createRetweet(tweetId: Long) {
         val url = UrlGraphQL.createRetweet
         val body = CreateRetweetBody(url).get(tweetId)
@@ -121,7 +121,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         JsonParserGraphQL.parseCreateRetweet(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun deleteRetweet(tweetId: Long) {
         val url = UrlGraphQL.deleteRetweet
         val body = DeleteRetweetBody(url).get(tweetId)
@@ -129,7 +129,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         JsonParserGraphQL.parseDeleteRetweet(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun favoriteTweet(tweetId: Long) {
         val url = UrlGraphQL.favoriteTweet
         val body = FavoriteTweetBody(url).get(tweetId)
@@ -137,7 +137,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         JsonParserGraphQL.parseFavoriteTweet(response)
     }
 
-    @Throws(IOException::class, TwitterException::class)
+    @Throws(TwitterException::class)
     fun unfavoriteTweet(tweetId: Long) {
         val url = UrlGraphQL.unfavoriteTweet
         val body = UnfavoriteTweetBody(url).get(tweetId)
@@ -150,12 +150,12 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         conn.setRequestProperty("X-Csrf-Token", csrfToken)
     }
 
-    @Throws(IOException::class)
+    @Throws(TwitterException::class)
     private fun get(url: String, isTweetDeck: Boolean = false): String {
         return access("GET", url, null, null, isTweetDeck)
     }
 
-    @Throws(IOException::class)
+    @Throws(TwitterException::class)
     private fun post(
         url: String,
         body: String,
@@ -165,7 +165,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         return access("POST", url, body, contentType, isTweetDeck)
     }
 
-    @Throws(IOException::class)
+    @Throws(TwitterException::class)
     private fun access(
         method: String,
         url: String,
@@ -174,27 +174,34 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         isTweetDeck: Boolean
     ): String {
         val u = URL(url)
-        val conn = u.openConnection() as HttpsURLConnection
+        var conn: HttpsURLConnection? = null
 
-        conn.apply {
-            requestMethod = method
-            Connection.setBaseHeaders(this, isTweetDeck)
-            setSession(this)
-            conn.setRequestProperty("Accept-Encoding", "gzip")
-            if (method == "POST" && body != null) {
-                val bodyBytes = body.toByteArray()
-                setRequestProperty("Content-Type", contentType)
-                setRequestProperty("Content-Length", bodyBytes.size.toString())
-                doOutput = true
-                outputStream.use { it.write(bodyBytes) }
+        try {
+            conn = u.openConnection() as HttpsURLConnection
+            conn.apply {
+                requestMethod = method
+                Connection.setBaseHeaders(this, isTweetDeck)
+                setSession(this)
+                conn.setRequestProperty("Accept-Encoding", "gzip")
+                if (method == "POST" && body != null) {
+                    val bodyBytes = body.toByteArray()
+                    setRequestProperty("Content-Type", contentType)
+                    setRequestProperty("Content-Length", bodyBytes.size.toString())
+                    doOutput = true
+                    outputStream.use { it.write(bodyBytes) }
+                }
             }
-        }
 
-        val data = conn.let {
-            if (it.contentEncoding == "gzip") GZIPInputStream(it.inputStream) else it.inputStream
-        }.reader().use { it.readText() }
-        conn.disconnect()
-        return data
+            val data = conn.let {
+                if (it.contentEncoding == "gzip") GZIPInputStream(it.inputStream) else it.inputStream
+            }.reader().use { it.readText() }
+            return data
+        } catch (e: IOException) {
+            val statusCode = conn?.responseCode ?: -1
+            throw TwitterException(e.message, e, statusCode)
+        } finally {
+            conn?.disconnect()
+        }
     }
 
 }
