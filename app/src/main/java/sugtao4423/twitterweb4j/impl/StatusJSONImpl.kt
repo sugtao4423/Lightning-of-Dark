@@ -4,7 +4,6 @@ import sugtao4423.twitterweb4j.falseBoolean
 import sugtao4423.twitterweb4j.nullString
 import twitter4j.GeoLocation
 import twitter4j.HashtagEntity
-import twitter4j.JSONArray
 import twitter4j.JSONObject
 import twitter4j.MediaEntity
 import twitter4j.Place
@@ -19,8 +18,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-data class StatusJSONImpl(private val result: JSONObject) : Status, java.io.Serializable {
+data class StatusJSONImpl(@Transient val result: JSONObject) : Status, java.io.Serializable {
 
+    @Transient
     private val json = result.nullString("__typename").let { typename ->
         when (typename) {
             "TweetWithVisibilityResults" -> result.getJSONObject("tweet")
@@ -28,7 +28,18 @@ data class StatusJSONImpl(private val result: JSONObject) : Status, java.io.Seri
         }
     }
 
+    @Transient
     private val legacy = json.getJSONObject("legacy")
+
+    @Transient
+    private val entities = legacy.getJSONObject("entities")
+
+    @Transient
+    private val extendedEntities = legacy.optJSONObject("extended_entities")?.optJSONArray("media")
+        ?: entities.optJSONArray("media")
+
+    @Transient
+    private val displayTextRange = legacy.optJSONArray("display_text_range")
 
     private val id = json.getString("rest_id").toLong()
     private val source = json.getString("source")
@@ -56,7 +67,6 @@ data class StatusJSONImpl(private val result: JSONObject) : Status, java.io.Seri
             StatusJSONImpl(it)
         }
 
-    private val entities = legacy.getJSONObject("entities")
     private val userMentionEntities: Array<UserMentionEntity> =
         entities.optJSONArray("user_mentions")?.let {
             (0 until it.length()).map { i -> UserMentionEntityJSONImpl(it.getJSONObject(i)) }
@@ -72,9 +82,7 @@ data class StatusJSONImpl(private val result: JSONObject) : Status, java.io.Seri
         (0 until it.length()).map { i -> HashtagEntityJSONImpl(it.getJSONObject(i)) }.toTypedArray()
     } ?: emptyArray()
 
-    private val mediaArray = legacy.optJSONObject("extended_entities")?.optJSONArray("media")
-        ?: entities.optJSONArray("media")
-    private val mediaEntities: Array<MediaEntity> = mediaArray?.let {
+    private val mediaEntities: Array<MediaEntity> = extendedEntities?.let {
         (0 until it.length()).map { i -> MediaEntityJSONImpl(it.getJSONObject(i)) }.toTypedArray()
     } ?: emptyArray()
 
@@ -90,7 +98,8 @@ data class StatusJSONImpl(private val result: JSONObject) : Status, java.io.Seri
         QuotedStatusPermalinkJSONImpl(it)
     }
 
-    private val displayTextRange = legacy.optJSONArray("display_text_range") ?: JSONArray()
+    private val displayTextRangeStart = displayTextRange?.optInt(0, -1) ?: -1
+    private val displayTextRangeEnd = displayTextRange?.optInt(1, -1) ?: -1
 
     private val text = legacy.getString("full_text")
     private val currentUserRetweetId = -1L
@@ -103,8 +112,8 @@ data class StatusJSONImpl(private val result: JSONObject) : Status, java.io.Seri
     override fun getCreatedAt(): Date = createdAt
     override fun getId(): Long = id
     override fun getText(): String = text
-    override fun getDisplayTextRangeStart(): Int = displayTextRange.optInt(0, -1)
-    override fun getDisplayTextRangeEnd(): Int = displayTextRange.optInt(1, -1)
+    override fun getDisplayTextRangeStart(): Int = displayTextRangeStart
+    override fun getDisplayTextRangeEnd(): Int = displayTextRangeEnd
     override fun getSource(): String = source
     override fun isTruncated(): Boolean = isTruncated
     override fun getInReplyToStatusId(): Long = inReplyToStatusId

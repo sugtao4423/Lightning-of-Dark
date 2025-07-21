@@ -4,7 +4,7 @@ import sugtao4423.twitterweb4j.model.EntityIndex
 import twitter4j.JSONObject
 import twitter4j.URLEntity
 
-data class QuotedStatusPermalinkJSONImpl(private val json: JSONObject) : URLEntity,
+data class QuotedStatusPermalinkJSONImpl(@Transient private val json: JSONObject) : URLEntity,
     EntityIndex(json), java.io.Serializable {
 
     private val url = json.getString("url")

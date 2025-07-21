@@ -2,11 +2,11 @@ package sugtao4423.twitterweb4j.impl
 
 import sugtao4423.twitterweb4j.model.EntityIndex
 import sugtao4423.twitterweb4j.nullString
-import twitter4j.JSONArray
 import twitter4j.JSONObject
 import twitter4j.MediaEntity
 
-data class SizeJSONImpl(private val json: JSONObject) : MediaEntity.Size, java.io.Serializable {
+data class SizeJSONImpl(@Transient private val json: JSONObject) : MediaEntity.Size,
+    java.io.Serializable {
 
     private val width = json.getInt("w")
     private val height = json.getInt("h")
@@ -19,7 +19,7 @@ data class SizeJSONImpl(private val json: JSONObject) : MediaEntity.Size, java.i
 
 }
 
-data class VideoInfoJSONImpl(private val json: JSONObject) : MediaEntity.Variant,
+data class VideoInfoJSONImpl(@Transient private val json: JSONObject) : MediaEntity.Variant,
     java.io.Serializable {
 
     private val bitrate = json.optInt("bitrate", 0)
@@ -32,8 +32,14 @@ data class VideoInfoJSONImpl(private val json: JSONObject) : MediaEntity.Variant
 
 }
 
-data class MediaEntityJSONImpl(private val json: JSONObject) : MediaEntity, EntityIndex(json),
-    java.io.Serializable {
+data class MediaEntityJSONImpl(@Transient private val json: JSONObject) : MediaEntity,
+    EntityIndex(json), java.io.Serializable {
+
+    @Transient
+    private val videoInfo = json.optJSONObject("video_info")
+
+    @Transient
+    private val videoAspectRatio = videoInfo?.optJSONArray("aspect_ratio")
 
     private val id = json.getString("id_str").toLong()
 
@@ -59,8 +65,8 @@ data class MediaEntityJSONImpl(private val json: JSONObject) : MediaEntity, Enti
 
     private val type = json.getString("type")
 
-    private val videoInfo = json.optJSONObject("video_info")
-    private val aspectRatio = videoInfo?.getJSONArray("aspect_ratio") ?: JSONArray()
+    private val aspectRatioWidth = videoAspectRatio?.optInt(0, 0) ?: 0
+    private val aspectRatioHeight = videoAspectRatio?.optInt(1, 0) ?: 0
     private val videoDurationMillis = videoInfo?.optLong("duration_millis", 0) ?: 0
     private val videoVariants: Array<MediaEntity.Variant> =
         videoInfo?.optJSONArray("variants")?.let {
@@ -79,8 +85,8 @@ data class MediaEntityJSONImpl(private val json: JSONObject) : MediaEntity, Enti
     override fun getSizes(): MutableMap<Int, MediaEntity.Size> = sizes
     override fun getType(): String = type
 
-    override fun getVideoAspectRatioWidth(): Int = aspectRatio.optInt(0, 0)
-    override fun getVideoAspectRatioHeight(): Int = aspectRatio.optInt(1, 0)
+    override fun getVideoAspectRatioWidth(): Int = aspectRatioWidth
+    override fun getVideoAspectRatioHeight(): Int = aspectRatioHeight
     override fun getVideoDurationMillis(): Long = videoDurationMillis
     override fun getVideoVariants(): Array<MediaEntity.Variant> = videoVariants
 

@@ -6,8 +6,8 @@ import twitter4j.HashtagEntity
 import twitter4j.JSONObject
 import twitter4j.SymbolEntity
 
-data class HashtagEntityJSONImpl(private val json: JSONObject) : HashtagEntity, SymbolEntity,
-    EntityIndex(json), java.io.Serializable {
+data class HashtagEntityJSONImpl(@Transient private val json: JSONObject) : HashtagEntity,
+    SymbolEntity, EntityIndex(json), java.io.Serializable {
 
     private val text = json.nullString("text")
 

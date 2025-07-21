@@ -13,11 +13,18 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-data class UserJSONImpl(private val json: JSONObject) : User, java.io.Serializable {
+data class UserJSONImpl(@Transient private val json: JSONObject) : User, java.io.Serializable {
 
+    @Transient
     private val avatar = json.optJSONObject("avatar") ?: null
+
+    @Transient
     private val core = json.optJSONObject("core") ?: null
+
+    @Transient
     private val legacy = json.getJSONObject("legacy")
+
+    @Transient
     private val loc = json.optJSONObject("location") ?: null
 
     private val id = json.getString("rest_id").toLong()
