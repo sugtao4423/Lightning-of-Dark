@@ -2,6 +2,7 @@ package sugtao4423.twitterweb4j.impl
 
 import sugtao4423.twitterweb4j.falseBoolean
 import sugtao4423.twitterweb4j.nullString
+import twitter4j.JSONArray
 import twitter4j.JSONObject
 import twitter4j.RateLimitStatus
 import twitter4j.Status
@@ -87,11 +88,11 @@ data class UserJSONImpl(private val json: JSONObject) : User, java.io.Serializab
     } ?: emptyArray()
 
     private fun getURLEntities(category: String): Array<URLEntity> {
-        val entities = json.optJSONObject("entities")
-        if (entities == null || !entities.has(category)) {
-            return emptyArray()
-        }
-        val urls = entities.getJSONArray(category)
+        val urls =
+            json.optJSONObject("entities")?.optJSONArray(category) ?: json.optJSONObject("legacy")
+                ?.optJSONObject("entities")?.optJSONObject(category)?.optJSONArray("urls")
+            ?: JSONArray()
+
         return (0 until urls.length()).map {
             URLEntityJSONImpl(urls.getJSONObject(it))
         }.toTypedArray()

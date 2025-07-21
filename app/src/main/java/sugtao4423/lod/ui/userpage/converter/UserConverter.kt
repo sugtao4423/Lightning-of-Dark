@@ -24,8 +24,11 @@ object UserConverter {
     fun isShowProtected(user: User?): Boolean = user?.isProtected == true
 
     @JvmStatic
-    private fun replaceUrlEntities(target: String?, entity: URLEntity): String =
-        target?.replace(entity.url, entity.expandedURL) ?: ""
+    private fun replaceUrlEntities(target: String?, entity: URLEntity?): String = when {
+        target == null -> ""
+        entity == null -> target
+        else -> target.replace(entity.url, entity.expandedURL)
+    }
 
     @JvmStatic
     private fun replaceUrlEntities(target: String?, entity: Array<URLEntity>): String {
