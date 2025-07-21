@@ -21,6 +21,18 @@ abstract class EntityIndex : Comparable<EntityIndex>, java.io.Serializable {
 
     override fun compareTo(other: EntityIndex): Int = start - other.start
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is EntityIndex) return false
+        return start == other.start && end == other.end
+    }
+
+    override fun hashCode(): Int {
+        var result = start
+        result = 31 * result + end
+        return result
+    }
+
     fun getStart(): Int = start
     fun getEnd(): Int = end
 
