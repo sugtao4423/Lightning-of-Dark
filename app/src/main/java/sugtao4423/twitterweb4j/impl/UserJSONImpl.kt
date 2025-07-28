@@ -27,6 +27,9 @@ data class UserJSONImpl(@Transient private val json: JSONObject) : User, java.io
     @Transient
     private val loc = json.optJSONObject("location") ?: null
 
+    @Transient
+    private val verification = json.optJSONObject("verification") ?: null
+
     private val id = json.getString("rest_id").toLong()
 
     private val name = when {
@@ -60,7 +63,11 @@ data class UserJSONImpl(@Transient private val json: JSONObject) : User, java.io
     private val url = legacy.nullString("url")
     private val isProtected = legacy.falseBoolean("protected")
     private val isGeoEnabled = legacy.falseBoolean("geo_enabled")
-    private val isVerified = legacy.falseBoolean("verified")
+    private val isVerified = when {
+        legacy.has("verified") -> legacy.getBoolean("verified")
+        verification != null && verification.has("verified") -> verification.getBoolean("verified")
+        else -> false
+    }
     private val translator = legacy.falseBoolean("is_translator")
     private val followersCount = legacy.getInt("followers_count")
 
