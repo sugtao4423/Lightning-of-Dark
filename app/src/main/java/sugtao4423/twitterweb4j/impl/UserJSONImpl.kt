@@ -28,6 +28,9 @@ data class UserJSONImpl(@Transient private val json: JSONObject) : User, java.io
     private val loc = json.optJSONObject("location") ?: null
 
     @Transient
+    private val privacy = json.optJSONObject("privacy") ?: null
+
+    @Transient
     private val verification = json.optJSONObject("verification") ?: null
 
     private val id = json.getString("rest_id").toLong()
@@ -61,7 +64,11 @@ data class UserJSONImpl(@Transient private val json: JSONObject) : User, java.io
     }
     private val isDefaultProfileImage = legacy.falseBoolean("default_profile_image")
     private val url = legacy.nullString("url")
-    private val isProtected = legacy.falseBoolean("protected")
+    private val isProtected = when {
+        legacy.has("protected") -> legacy.getBoolean("protected")
+        privacy != null && privacy.has("protected") -> privacy.getBoolean("protected")
+        else -> false
+    }
     private val isGeoEnabled = legacy.falseBoolean("geo_enabled")
     private val isVerified = when {
         legacy.has("verified") -> legacy.getBoolean("verified")
