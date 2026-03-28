@@ -47,7 +47,7 @@ object UrlGraphQL {
 
     @JvmStatic
     fun likes(userId: Long, count: Int, cursor: String? = null): String {
-        val url = "$apiBaseUrl/ayhH-V7xvuv4nPZpkpuhFA/Likes"
+        val url = "$apiBaseUrl/vni8vUvtZvJoIsl49VPudg/Likes"
 
         val variables = JSONObject().also { json ->
             json.put("userId", userId.toString())
@@ -67,7 +67,7 @@ object UrlGraphQL {
     }
 
     @JvmStatic
-    val createTweet = "$apiBaseUrl/xT36w0XM3A8jDynpkram2A/CreateTweet"
+    val createTweet = "$apiBaseUrl/oB-5XsHNAbjvARJEc8CZFw/CreateTweet"
 
     @JvmStatic
     val deleteTweet = "$apiBaseUrl/VaenaVgh5q5ih7kvyVjgtg/DeleteTweet"
