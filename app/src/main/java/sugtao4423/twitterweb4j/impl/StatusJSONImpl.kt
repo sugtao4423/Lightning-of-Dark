@@ -159,15 +159,7 @@ data class StatusJSONImpl(@Transient val result: JSONObject) : Status, java.io.S
     override fun getQuotedStatus(): Status? = quotedStatus
     override fun getQuotedStatusPermalink(): URLEntity? = quotedStatusPermalink
 
-    override fun compareTo(other: Status): Int {
-        val delta = id - other.id
-        if (delta < Integer.MIN_VALUE) {
-            return Integer.MIN_VALUE
-        } else if (delta > Integer.MAX_VALUE) {
-            return Integer.MAX_VALUE
-        }
-        return delta.toInt()
-    }
+    override fun compareTo(other: Status): Int = id.compareTo(other.id)
 
     /** **Not implemented** */
     override fun getRateLimitStatus(): RateLimitStatus? = null

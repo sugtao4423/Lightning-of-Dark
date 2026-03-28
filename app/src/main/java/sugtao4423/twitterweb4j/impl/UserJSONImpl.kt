@@ -204,7 +204,7 @@ data class UserJSONImpl(@Transient private val json: JSONObject) : User, java.io
     override fun getURLEntity(): URLEntity? = urlEntities.firstOrNull()
     override fun getWithheldInCountries(): Array<String> = withheldInCountries
 
-    override fun compareTo(other: User): Int = (id - other.id).toInt()
+    override fun compareTo(other: User): Int = id.compareTo(other.id)
 
     /** **Not implemented** */
     override fun getRateLimitStatus(): RateLimitStatus? = null

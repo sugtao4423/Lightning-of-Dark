@@ -19,7 +19,7 @@ abstract class EntityIndex : Comparable<EntityIndex>, java.io.Serializable {
         end = indices.optInt(1, -1)
     }
 
-    override fun compareTo(other: EntityIndex): Int = start - other.start
+    override fun compareTo(other: EntityIndex): Int = start.compareTo(other.start)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
