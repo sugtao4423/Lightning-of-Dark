@@ -31,13 +31,6 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     @Throws(TwitterException::class)
-    fun getHomeTimeline(paging: Paging? = null): List<Status> {
-        val url = UrlV1.homeTimeline(paging)
-        val response = get(url)
-        return JsonParserV1.parseStatusesArray(response)
-    }
-
-    @Throws(TwitterException::class)
     fun getMentionsTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.mentionsTimeline(paging)
         val response = get(url)
@@ -70,6 +63,13 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         val url = UrlV1.showFriendship(sourceScreenName, targetScreenName)
         val response = get(url)
         return JsonParserV1.parseRelationship(response)
+    }
+
+    @Throws(TwitterException::class)
+    fun homeLatestTimeline(count: Int? = null, cursor: String? = null): CursorList<Status> {
+        val url = UrlGraphQL.homeLatestTimeline(count ?: DEFAULT_PAGE_COUNT, cursor)
+        val response = get(url)
+        return JsonParserGraphQLTimeline.parseHomeLatestTimeline(response)
     }
 
     @Throws(TwitterException::class)

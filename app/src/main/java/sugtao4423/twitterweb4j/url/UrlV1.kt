@@ -30,9 +30,6 @@ object UrlV1 {
     )
 
     @JvmStatic
-    private val homeTimeline = "$apiBaseUrl/statuses/home_timeline.json"
-
-    @JvmStatic
     private val mentionsTimeline = "$apiBaseUrl/statuses/mentions_timeline.json"
 
     @JvmStatic
@@ -40,12 +37,6 @@ object UrlV1 {
 
     @JvmStatic
     private val showFriendship = "$apiBaseUrl/friendships/show.json"
-
-    @JvmStatic
-    fun homeTimeline(paging: Paging? = null): String {
-        val params = buildPaginatedQueryParams(baseQueryParams, paging)
-        return "$homeTimeline?$params"
-    }
 
     @JvmStatic
     fun mentionsTimeline(paging: Paging? = null): String {
