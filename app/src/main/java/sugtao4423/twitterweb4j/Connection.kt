@@ -10,17 +10,18 @@ object Connection {
     private const val userAgent =
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
 
-    private const val twitterActiveUser =
-        "yes"
+    private const val twitterActiveUser = "yes"
 
-    private const val twitterAuthType =
-        "OAuth2Session"
+    private const val twitterAuthType = "OAuth2Session"
+
+    private const val twitterClientLanguage = "en"
 
     fun setBaseHeaders(conn: HttpURLConnection) {
         conn.setRequestProperty("Authorization", "Bearer $twitterWebBearer")
         conn.setRequestProperty("User-Agent", userAgent)
         conn.setRequestProperty("X-Twitter-Active-User", twitterActiveUser)
         conn.setRequestProperty("X-Twitter-Auth-Type", twitterAuthType)
+        conn.setRequestProperty("X-Twitter-Client-Language", twitterClientLanguage)
     }
 
 }
