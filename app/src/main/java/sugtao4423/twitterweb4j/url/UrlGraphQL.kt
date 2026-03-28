@@ -1,6 +1,6 @@
 package sugtao4423.twitterweb4j.url
 
-import android.net.Uri
+import androidx.core.net.toUri
 import org.json.JSONObject
 
 object UrlGraphQL {
@@ -19,7 +19,7 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return Uri.parse(url).buildUpon().apply {
+        return url.toUri().buildUpon().apply {
             appendQueryParameter("variables", variables)
             appendQueryParameter("features", UrlGraphQLFeatures.listTweetsTimeline)
         }.build().toString()
@@ -39,7 +39,7 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return Uri.parse(url).buildUpon().apply {
+        return url.toUri().buildUpon().apply {
             appendQueryParameter("variables", variables)
             appendQueryParameter("features", UrlGraphQLFeatures.userTweetsAndReplies)
         }.build().toString()
@@ -60,7 +60,7 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return Uri.parse(url).buildUpon().apply {
+        return url.toUri().buildUpon().apply {
             appendQueryParameter("variables", variables)
             appendQueryParameter("features", UrlGraphQLFeatures.likes)
         }.build().toString()
