@@ -33,28 +33,28 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     @Throws(TwitterException::class)
     fun getHomeTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.homeTimeline(paging)
-        val response = get(url, true)
+        val response = get(url)
         return JsonParserV1.parseStatusesArray(response)
     }
 
     @Throws(TwitterException::class)
     fun getMentionsTimeline(paging: Paging? = null): List<Status> {
         val url = UrlV1.mentionsTimeline(paging)
-        val response = get(url, true)
+        val response = get(url)
         return JsonParserV1.parseStatusesArray(response)
     }
 
     @Throws(TwitterException::class)
     fun showUser(id: Long): User {
         val url = UrlV1.showUser(id)
-        val response = get(url, true)
+        val response = get(url)
         return JsonParserV1.parseUser(response)
     }
 
     @Throws(TwitterException::class)
     fun showUser(screenName: String): User {
         val url = UrlV1.showUser(screenName)
-        val response = get(url, true)
+        val response = get(url)
         return JsonParserV1.parseUser(response)
     }
 
@@ -77,7 +77,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         listId: Long, count: Int? = null, cursor: String? = null
     ): CursorList<Status> {
         val url = UrlGraphQL.listTweetsTimeline(listId, count ?: DEFAULT_PAGE_COUNT, cursor)
-        val response = get(url, true)
+        val response = get(url)
         return JsonParserGraphQLTimeline.parseListTweetsTimeline(response)
     }
 
@@ -86,7 +86,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         userId: Long, count: Int? = null, cursor: String? = null
     ): CursorList<Status> {
         val url = UrlGraphQL.userTweetsAndReplies(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
-        val response = get(url, true)
+        val response = get(url)
         return JsonParserGraphQLTimeline.parseUserTweetsAndReplies(response, userId)
     }
 
@@ -151,27 +151,18 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     @Throws(TwitterException::class)
-    private fun get(url: String, isTweetDeck: Boolean = false): String {
-        return access("GET", url, null, null, isTweetDeck)
+    private fun get(url: String): String {
+        return access("GET", url)
     }
 
     @Throws(TwitterException::class)
-    private fun post(
-        url: String,
-        body: String,
-        contentType: String = "application/json",
-        isTweetDeck: Boolean = false
-    ): String {
-        return access("POST", url, body, contentType, isTweetDeck)
+    private fun post(url: String, body: String, contentType: String = "application/json"): String {
+        return access("POST", url, body, contentType)
     }
 
     @Throws(TwitterException::class)
     private fun access(
-        method: String,
-        url: String,
-        body: String? = null,
-        contentType: String? = null,
-        isTweetDeck: Boolean
+        method: String, url: String, body: String? = null, contentType: String? = null
     ): String {
         val u = URL(url)
         var conn: HttpsURLConnection? = null
@@ -180,7 +171,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
             conn = u.openConnection() as HttpsURLConnection
             conn.apply {
                 requestMethod = method
-                Connection.setBaseHeaders(this, isTweetDeck)
+                Connection.setBaseHeaders(this)
                 setSession(this)
                 conn.setRequestProperty("Accept-Encoding", "gzip")
                 if (method == "POST" && body != null) {
