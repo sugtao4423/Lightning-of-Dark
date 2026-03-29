@@ -1,7 +1,7 @@
 package sugtao4423.twitterweb4j.url
 
 import androidx.core.net.toUri
-import org.json.JSONObject
+import twitter4j.JSONObject
 
 object UrlGraphQL {
 

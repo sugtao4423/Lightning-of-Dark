@@ -1,6 +1,6 @@
 package sugtao4423.twitterweb4j.url
 
-import org.json.JSONObject
+import twitter4j.JSONObject
 
 object UrlGraphQLFeatures {
 

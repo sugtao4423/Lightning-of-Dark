@@ -1,6 +1,6 @@
 package sugtao4423.twitterweb4j.body
 
-import org.json.JSONObject
+import twitter4j.JSONObject
 
 abstract class BaseBody(requestUrl: String) {
 
