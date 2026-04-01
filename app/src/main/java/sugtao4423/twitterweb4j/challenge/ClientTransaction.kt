@@ -67,25 +67,16 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         val animationKey = computeAnimationKey()
 
         val timeNow = ((System.currentTimeMillis() - EPOCH_OFFSET_MS) / 1_000L).toInt()
+        val timeNowBytes = IntArray(4) { i -> (timeNow ushr (i * 8)) and 0xFF }
 
         val hashInput = "$method!$path!$timeNow$DEFAULT_KEYWORD$animationKey"
         val hashBytes = hashInput.toByteArray(Charsets.UTF_8).let {
             MessageDigest.getInstance("SHA-256").digest(it)
         }
 
-        val timeNowBytes = intArrayOf(
-            timeNow and 0xFF,
-            (timeNow ushr 8) and 0xFF,
-            (timeNow ushr 16) and 0xFF,
-            (timeNow ushr 24) and 0xFF
-        )
-
-        val plaintext = buildList {
-            keyBytes.forEach(::add)
-            timeNowBytes.forEach(::add)
-            hashBytes.take(16).forEach { add(it.toInt() and 0xFF) }
-            add(ADDITIONAL_RANDOM_NUMBER)
-        }
+        val plaintext = keyBytes.toList() + timeNowBytes.toList() + hashBytes.take(16).map {
+            it.toInt() and 0xFF
+        } + ADDITIONAL_RANDOM_NUMBER
 
         val xorKey = (0..255).random()
         val obfuscatedBytes =
@@ -134,12 +125,8 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
             throw IllegalArgumentException("Expected at least 7 parameters for the curve, but got ${curveParams.size}.")
         }
 
-        val fromColor = listOf(
-            curveParams[0].toDouble(), curveParams[1].toDouble(), curveParams[2].toDouble(), 1.0
-        )
-        val toColor = listOf(
-            curveParams[3].toDouble(), curveParams[4].toDouble(), curveParams[5].toDouble(), 1.0
-        )
+        val fromColor = curveParams.take(3).map { it.toDouble() } + 1.0
+        val toColor = curveParams.subList(3, 6).map { it.toDouble() } + 1.0
 
         val fromRotation = listOf(0.0)
         val toRotation = listOf(remapToRange(curveParams[6].toDouble(), 60.0, 360.0, true))
@@ -154,23 +141,19 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         val rotation = interpolate(fromRotation, toRotation, easedProgress)
         val matrix = convertRotationToMatrix(rotation[0])
 
-        val hexParts = mutableListOf<String>()
-
-        color.take(3).forEach {
-            hexParts += bankersRound(it).toString(16)
-        }
-
-        for (value in matrix) {
-            val absVal = abs(bankersRoundToTwo(value))
-            val hex = floatToHex(absVal)
-            hexParts += if (hex.startsWith(".")) {
-                "0$hex".lowercase()
-            } else {
-                hex.ifEmpty { "0" }
+        val hexParts = buildList {
+            color.take(3).forEach {
+                add(bankersRound(it).toString(16))
             }
+            matrix.forEach { value ->
+                val absVal = abs(bankersRoundToTwo(value))
+                val hex = floatToHex(absVal)
+                val format = if (hex.startsWith(".")) "0$hex".lowercase() else hex.ifEmpty { "0" }
+                add(format)
+            }
+            add("0")
+            add("0")
         }
-        hexParts += "0"
-        hexParts += "0"
 
         return hexParts.joinToString("").replace(Regex("[.-]"), "")
     }
@@ -209,32 +192,24 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
     }
 
     private fun floatToHex(input: Double): String {
-        val result = mutableListOf<Char>()
-        var x = input
-        var quotient = floor(x).toInt()
-        val fraction = x - quotient
-        var frac = fraction
+        val intPart = floor(input).toInt()
+        val fraction = input - intPart
 
-        while (quotient > 0) {
-            quotient = floor(x / 16.0).toInt()
-            val remainder = floor(x - quotient * 16.0).toInt()
-            result.add(0, if (remainder > 9) ('A' + (remainder - 10)) else ('0' + remainder))
-            x = quotient.toDouble()
+        val intHex = if (intPart > 0) intPart.toString(16).uppercase() else ""
+
+        if (fraction == 0.0) return intHex
+
+        return buildString {
+            append(intHex)
+            append('.')
+            var frac = fraction
+            while (frac > 0) {
+                frac *= 16.0
+                val digit = floor(frac).toInt()
+                frac -= digit
+                append(if (digit > 9) ('A' + (digit - 10)) else ('0' + digit))
+            }
         }
-
-        if (fraction == 0.0) {
-            return result.joinToString("")
-        }
-
-        result.add('.')
-        while (frac > 0) {
-            frac *= 16.0
-            val intPart = floor(frac).toInt()
-            frac -= intPart
-            result.add(if (intPart > 9) ('A' + (intPart - 10)) else ('0' + intPart))
-        }
-
-        return result.joinToString("")
     }
 
 }
