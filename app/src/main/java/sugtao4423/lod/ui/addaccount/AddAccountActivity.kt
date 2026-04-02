@@ -30,7 +30,7 @@ class AddAccountActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         viewModel.onNewIntent(intent)
     }

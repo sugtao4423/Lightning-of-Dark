@@ -1,5 +1,6 @@
 package sugtao4423.lod.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -103,6 +104,7 @@ class MainActivity : LoDBaseActivity() {
         finish()
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         finish()
     }
