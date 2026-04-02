@@ -4,9 +4,12 @@ import twitter4j.URLEntity
 import twitter4j.User
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 object UserConverter {
+
+    private const val NULL = "null"
+    private const val LOADING = "Loading…"
 
     @JvmStatic
     fun iconUrl(user: User?): String? = user?.originalProfileImageURLHttps
@@ -15,10 +18,10 @@ object UserConverter {
     fun bannerUrl(user: User?): String? = user?.profileBannerRetinaURL
 
     @JvmStatic
-    fun name(user: User?): String = user?.name ?: "null"
+    fun name(user: User?): String = user?.name ?: NULL
 
     @JvmStatic
-    fun screenName(user: User?): String = user?.let { "@${it.screenName}" } ?: "null"
+    fun screenName(user: User?): String = user?.let { "@${it.screenName}" } ?: NULL
 
     @JvmStatic
     fun isShowProtected(user: User?): Boolean = user?.isProtected == true
@@ -39,39 +42,39 @@ object UserConverter {
     @JvmStatic
     fun bio(user: User?): String = user?.let {
         replaceUrlEntities(it.description, it.descriptionURLEntities)
-    } ?: "Loading…"
+    } ?: LOADING
 
     @JvmStatic
-    fun location(user: User?): String = user?.location ?: "Loading…"
+    fun location(user: User?): String = user?.location ?: LOADING
 
     @JvmStatic
     fun link(user: User?): String = user?.let {
         replaceUrlEntities(it.url, it.urlEntity)
-    } ?: "Loading…"
+    } ?: LOADING
 
     @JvmStatic
     fun tweetCount(user: User?): String = user?.let {
         NumberFormat.getInstance().format(it.statusesCount)
-    } ?: "Loading…"
+    } ?: LOADING
 
     @JvmStatic
     fun favoriteCount(user: User?): String = user?.let {
         NumberFormat.getInstance().format(it.favouritesCount)
-    } ?: "Loading…"
+    } ?: LOADING
 
     @JvmStatic
     fun followCount(user: User?): String = user?.let {
         NumberFormat.getInstance().format(it.friendsCount)
-    } ?: "Loading…"
+    } ?: LOADING
 
     @JvmStatic
     fun followerCount(user: User?): String = user?.let {
         NumberFormat.getInstance().format(it.followersCount)
-    } ?: "Loading…"
+    } ?: LOADING
 
     @JvmStatic
     fun createDate(user: User?): String = user?.let {
         SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(it.createdAt)
-    } ?: "Loading…"
+    } ?: LOADING
 
 }
