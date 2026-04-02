@@ -25,10 +25,12 @@ class IconDialogAdapter(
             convertView.tag as DialogIconBinding
         }
 
-        return binding.also {
-            it.iconItem = getItem(position) as IconItem
-            it.typeface = typeface
-            it.executePendingBindings()
+        return binding.apply {
+            val iconItem = getItem(position) as IconItem
+            iconText.text = iconItem.icon.toString()
+            iconText.setTextColor(iconItem.iconColor)
+            iconText.typeface = typeface
+            titleText.text = iconItem.title
         }.root
     }
 
