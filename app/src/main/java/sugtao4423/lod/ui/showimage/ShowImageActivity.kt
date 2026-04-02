@@ -27,11 +27,13 @@ class ShowImageActivity : LoDBaseActivity() {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        val binding = ActivityShowImageBinding.inflate(layoutInflater).also {
-            it.lifecycleOwner = this
-            it.viewModel = viewModel
-        }
+        val binding = ActivityShowImageBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.apply {
+            pagerTabStrip.drawFullUnderline = true
+            optionButton.setOnClickListener { viewModel.clickImageOptionButton() }
+        }
 
         if (viewModel.isImageOrientationSensor) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
@@ -64,9 +66,7 @@ class ShowImageActivity : LoDBaseActivity() {
 
     private val viewPagerOnPageChangeListener = object : ViewPager.OnPageChangeListener {
         override fun onPageScrolled(
-            position: Int,
-            positionOffset: Float,
-            positionOffsetPixels: Int
+            position: Int, positionOffset: Float, positionOffsetPixels: Int
         ) {
         }
 
@@ -74,8 +74,7 @@ class ShowImageActivity : LoDBaseActivity() {
             viewModel.currentPageIndex = position
         }
 
-        override fun onPageScrollStateChanged(state: Int) {
-        }
+        override fun onPageScrollStateChanged(state: Int) {}
     }
 
 }
