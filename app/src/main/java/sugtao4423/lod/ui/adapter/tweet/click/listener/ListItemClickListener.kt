@@ -8,7 +8,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.MutableLiveData
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.DialogRegexBinding
@@ -72,12 +71,12 @@ class ListItemClickListener(
     private fun extractTweetsWithRegex() {
         val pref = (context.applicationContext as App).prefRepository
 
-        val regexText = MutableLiveData(pref.regularExpression)
-        val isIncludeRetweet = MutableLiveData(true)
-        val binding = DialogRegexBinding.inflate(LayoutInflater.from(context)).also {
-            it.regexText = regexText
-            it.isIncludeRetweet = isIncludeRetweet
-            it.regButtonListener = RegButtonClickListener(it.regDialogEdit)
+        val binding = DialogRegexBinding.inflate(LayoutInflater.from(context))
+        binding.regEdit.setText(pref.regularExpression)
+
+        val regButtonListener = RegButtonClickListener(binding.regEdit)
+        for (i in 0 until binding.regButtonGrid.childCount) {
+            binding.regButtonGrid.getChildAt(i).setOnClickListener(regButtonListener)
         }
 
         AlertDialog.Builder(context).also {
@@ -86,8 +85,10 @@ class ListItemClickListener(
             it.setNegativeButton(R.string.cancel, null)
             it.setPositiveButton(R.string.ok) { _, _ ->
                 closeKeyboard(binding.root)
-                pref.regularExpression = regexText.value!!
-                showRegexFilterResult(regexText.value!!, isIncludeRetweet.value!!)
+                val regexText = binding.regEdit.text.toString()
+                val isIncludeRetweet = binding.includeRetweetCheckBox.isChecked
+                pref.regularExpression = regexText
+                showRegexFilterResult(regexText, isIncludeRetweet)
             }
             it.show()
         }
@@ -133,20 +134,24 @@ class ListItemClickListener(
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, urls.toTypedArray())
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, pos)
             }
+
             video.find() -> Intent(context, ShowVideoActivity::class.java).apply {
                 putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, urlText)
                 putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, ShowVideoActivity.TYPE_VIDEO)
             }
+
             gif.find() -> Intent(context, ShowVideoActivity::class.java).apply {
                 putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, urlText)
                 putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, ShowVideoActivity.TYPE_GIF)
             }
+
             state.find() -> Intent(context, IntentActivity::class.java).apply {
                 putExtra(
                     IntentActivity.TWEET_ID,
                     state.group(sugtao4423.lod.utils.Regex.statusUrlStatusIdGroup)!!.toLong()
                 )
             }
+
             else -> {
                 ChromeIntent(context, Uri.parse(urlText))
                 return
