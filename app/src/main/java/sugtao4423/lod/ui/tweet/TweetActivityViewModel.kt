@@ -72,15 +72,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     private val _onPickImage = LiveEvent<Unit>()
     val onPickImage: LiveData<Unit> = _onPickImage
 
-    private val _onSpeechInput = LiveEvent<Unit>()
-    val onSpeechInput: LiveData<Unit> = _onSpeechInput
-
-    private val _onRequestPlayingMusicData = LiveEvent<Unit>()
-    val onRequestPlayingMusicData: LiveData<Unit> = _onRequestPlayingMusicData
-
-    private val _showTextOptionDialog = LiveEvent<Unit>()
-    val showTextOptionDialog: LiveData<Unit> = _showTextOptionDialog
-
     private fun onSetTweetType() {
         _actionBarTitle.value = when (tweetType) {
             TweetActivity.TYPE_REPLY, TweetActivity.TYPE_REPLYALL, TweetActivity.TYPE_QUOTERT -> null
@@ -93,6 +84,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
                 isShowOriginStatus.value = true
                 _onSetTweetListAdapter.value = Unit
             }
+
             else -> isShowOriginStatus.value = false
         }
 
@@ -100,6 +92,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             TweetActivity.TYPE_REPLY -> {
                 tweetText.value = "@${toStatus!!.user.screenName} "
             }
+
             TweetActivity.TYPE_REPLYALL -> {
                 val mentionUsers = arrayListOf(toStatus!!.user.screenName)
                 toStatus!!.userMentionEntities.filter {
@@ -108,20 +101,24 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
                 val replyUserScreenNames = mentionUsers.joinToString(" @", "@") + " "
                 tweetText.value = replyUserScreenNames
             }
+
             TweetActivity.TYPE_QUOTERT -> {
                 val quote =
                     " https://twitter.com/${toStatus!!.user.screenName}/status/${toStatus!!.id}"
                 tweetText.value = quote
                 textSelectionEnd.value = false
             }
+
             TweetActivity.TYPE_UNOFFICIALRT -> {
                 val unOfficial = " RT @${toStatus!!.user.screenName}: ${toStatus!!.text}"
                 tweetText.value = unOfficial
                 textSelectionEnd.value = false
             }
+
             TweetActivity.TYPE_PAKUTSUI -> {
                 tweetText.value = toStatus!!.text
             }
+
             TweetActivity.TYPE_EXTERNALTEXT -> {
                 tweetText.value = externalText
             }
@@ -199,21 +196,13 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun clickMic() {
-        _onSpeechInput.value = Unit
-    }
-
     fun onSpeeched(result: ActivityResult?) {
         if (result?.resultCode != Activity.RESULT_OK || result.data == null) return
 
         val results =
             result.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) ?: arrayListOf("")
-        tweetText.value = tweetText.value + results[0]
+        tweetText.value += results[0]
         textSelectionEnd.value = true
-    }
-
-    fun clickMusic() {
-        _onRequestPlayingMusicData.value = Unit
     }
 
     fun onGotPlayingMusicData(playingMusicData: HashMap<MusicDataKey, String>?) {
@@ -225,17 +214,11 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         val nowPlayingFormat = app.prefRepository.nowPlayingFormat.ifEmpty {
             "%artist% - %track% #nowplaying"
         }
-        val str = nowPlayingFormat
-            .replace("%track%", title)
-            .replace("%artist%", artist)
+        val str = nowPlayingFormat.replace("%track%", title).replace("%artist%", artist)
             .replace("%album%", album)
 
-        tweetText.value = tweetText.value + str
+        tweetText.value += str
         textSelectionEnd.value = true
-    }
-
-    fun clickTextOption() {
-        _showTextOptionDialog.value = Unit
     }
 
     fun textOptionOmatase() {
@@ -277,14 +260,9 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
-        if (requestCode == TweetActivity.FILE_PERMISSION_REQUEST_CODE &&
-            permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (requestCode == TweetActivity.FILE_PERMISSION_REQUEST_CODE && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             clickImageSelect()
         } else {
             app.showToast(R.string.permission_rejected)
