@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/viewPager"
+        <androidx.viewpager.widget.PagerTabStrip
+            android:id="@+id/pagerTabStrip"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="25dp"
+            android:background="@color/pagerTabBackground"
+            android:paddingTop="2dp"
+            android:textColor="@color/pagerTabText"
+            app:tabIndicatorColor="@color/pagerTabText" />
+    </androidx.viewpager.widget.ViewPager>
 
-            <androidx.viewpager.widget.PagerTabStrip
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:background="@color/pagerTabBackground"
-                android:paddingTop="2dp"
-                android:textColor="@color/pagerTabText"
-                app:drawFullUnderline="@{true}"
-                app:tabIndicatorColor="@color/pagerTabText" />
-        </androidx.viewpager.widget.ViewPager>
-
-    </LinearLayout>
-</layout>
+</LinearLayout>
