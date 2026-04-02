@@ -31,9 +31,15 @@ class TweetItemDialog(context: Context, fontAwesomeTypeface: Typeface) {
         }
         listAdapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1)
 
-        binding = DialogTweetBinding.inflate(LayoutInflater.from(context)).also {
-            it.fontAwesomeTypeface = fontAwesomeTypeface
-            it.listAdapter = listAdapter
+        binding = DialogTweetBinding.inflate(LayoutInflater.from(context))
+        binding.apply {
+            listView.adapter = listAdapter
+            replyButton.typeface = fontAwesomeTypeface
+            retweetButton.typeface = fontAwesomeTypeface
+            quoteButton.typeface = fontAwesomeTypeface
+            favoriteButton.typeface = fontAwesomeTypeface
+            talkButton.typeface = fontAwesomeTypeface
+            deleteButton.typeface = fontAwesomeTypeface
         }
 
         dialog = AlertDialog.Builder(context).run {
@@ -59,13 +65,24 @@ class TweetItemDialog(context: Context, fontAwesomeTypeface: Typeface) {
         }
 
         binding.apply {
-            clickListeners = TweetDialogClickListeners(context, status, allStatusData) {
+            val clickListeners = TweetDialogClickListeners(context, status, allStatusData) {
                 dialog.dismiss()
             }
-            talkButtonEnabled = status.inReplyToStatusId > 0
-            deleteButtonEnabled =
+
+            listView.onItemClickListener = clickListeners.listItemClickListener
+            listView.onItemLongClickListener = clickListeners.listItemClickListener
+            replyButton.setOnClickListener(clickListeners.replyListener)
+            retweetButton.setOnClickListener(clickListeners.retweetListener)
+            retweetButton.setOnLongClickListener(clickListeners.quoteRTListener)
+            quoteButton.setOnClickListener(clickListeners.unOfficialRTListener)
+            favoriteButton.setOnClickListener(clickListeners.favoriteListener)
+            talkButton.isEnabled = status.inReplyToStatusId > 0
+            talkButton.setOnClickListener(clickListeners.talkListener)
+            deleteButton.isEnabled =
                 (status.user.screenName == (context.applicationContext as App).account.screenName)
+            deleteButton.setOnClickListener(clickListeners.deleteTweetListener)
         }
+
         dialog.show()
     }
 
