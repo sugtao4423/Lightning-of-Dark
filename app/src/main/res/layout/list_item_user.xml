@@ -1,79 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-    <data>
-
-        <import type="sugtao4423.lod.ui.adapter.converter.UserViewDataConverter" />
-
-        <variable
-            name="user"
-            type="twitter4j.User" />
-
-        <variable
-            name="viewModel"
-            type="sugtao4423.lod.ui.adapter.user.UserListViewModel" />
-    </data>
+    <ImageView
+        android:id="@+id/userIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/content_desc_tweet_user_icon" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{(v) -> viewModel.onClickUser(v, user)}"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:contentDescription="@string/content_desc_tweet_user_icon"
-            app:imageUrl="@{UserViewDataConverter.userIconUrl(user)}" />
+        android:layout_marginStart="8dp"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{UserViewDataConverter.userNameAndScreenName(user)}"
-                    android:textColor="@color/tweetName"
-                    android:textStyle="bold"
-                    app:textSizeSp="@{viewModel.nameTextSize}" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="5dp"
-                    android:gravity="center"
-                    android:text="@string/icon_protect"
-                    android:textColor="@color/icon"
-                    android:typeface="@{viewModel.fontAwesomeTypeface}"
-                    android:visibility="@{UserViewDataConverter.isShowProtected(user)}"
-                    app:textSizeSp="@{viewModel.protectIconSize}" />
-            </LinearLayout>
+            android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{UserViewDataConverter.userDescription(user)}"
-                android:textColor="@color/tweetText"
-                app:textSizeSp="@{viewModel.textSize}" />
-
-            <TextView
+                android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2sp"
-                android:text="@{UserViewDataConverter.userCountDetail(user)}"
-                android:textColor="@color/tweetDate"
-                app:textSizeSp="@{viewModel.dateTextSize}" />
+                android:textColor="@color/tweetName"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/protectIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                android:gravity="center"
+                android:text="@string/icon_protect"
+                android:textColor="@color/icon"
+                android:visibility="gone" />
         </LinearLayout>
-    </LinearLayout>
 
-</layout>
+        <TextView
+            android:id="@+id/userDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/tweetText" />
+
+        <TextView
+            android:id="@+id/userCountDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2sp"
+            android:textColor="@color/tweetDate" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,11 +1,15 @@
 package sugtao4423.lod.ui.adapter.user
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
 import sugtao4423.lod.databinding.ListItemUserBinding
+import sugtao4423.lod.ui.adapter.converter.UserViewDataConverter
+import sugtao4423.lod.ui.loadUrl
 import twitter4j.PagableResponseList
 import twitter4j.User
 
@@ -45,12 +49,26 @@ class UserListAdapter(private val context: Context) :
     inner class ViewHolder(private val binding: ListItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(user: User) {
-            binding.also {
-                it.viewModel = userListViewModel
-                it.user = user
-                it.executePendingBindings()
-            }
+        fun bind(user: User) = binding.apply {
+            val vm = userListViewModel
+
+            root.setOnClickListener { vm.onClickUser(it, user) }
+
+            userIcon.loadUrl(UserViewDataConverter.userIconUrl(user))
+
+            userName.text = UserViewDataConverter.userNameAndScreenName(user)
+            userName.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.nameTextSize)
+
+            val isShowProtected = UserViewDataConverter.isShowProtected(user)
+            protectIcon.visibility = if (isShowProtected) View.VISIBLE else View.GONE
+            protectIcon.typeface = vm.fontAwesomeTypeface
+            protectIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.protectIconSize)
+
+            userDescription.text = UserViewDataConverter.userDescription(user)
+            userDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.textSize)
+
+            userCountDetail.text = UserViewDataConverter.userCountDetail(user)
+            userCountDetail.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.dateTextSize)
         }
     }
 
