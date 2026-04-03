@@ -6,6 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -86,7 +87,7 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
                 return@launch
             }
             requestToken = result
-            _onActionViewUri.value = Uri.parse(requestToken!!.authenticationURL)
+            _onActionViewUri.value = requestToken!!.authenticationURL.toUri()
         }
     }
 

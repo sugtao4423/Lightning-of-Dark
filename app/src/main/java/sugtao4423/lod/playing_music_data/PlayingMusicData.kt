@@ -7,7 +7,6 @@ import android.content.Intent
 import android.media.MediaMetadata
 import android.media.session.MediaSessionManager
 import android.media.session.PlaybackState
-import android.os.Build
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
@@ -59,12 +58,7 @@ class PlayingMusicData(private val activity: Activity) {
                 context.showToast(R.string.permission_rejected)
             }
             setPositiveButton(R.string.ok) { _, _ ->
-                val action = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-                    "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
-                } else {
-                    Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
-                }
-                context.startActivity(Intent(action))
+                context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
             }
             show()
         }
