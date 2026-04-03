@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.databinding.ListItemTweetMediaImageBinding
 import sugtao4423.lod.databinding.ListItemTweetMediaVideoBinding
 import sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter
+import sugtao4423.lod.ui.loadUrl
 import twitter4j.MediaEntity
 
 private object MediaEntityDiffCallback : DiffUtil.ItemCallback<MediaEntity>() {
@@ -33,9 +34,11 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
             VIEW_TYPE_IMAGE -> {
                 ImageViewHolder(ListItemTweetMediaImageBinding.inflate(inflater, parent, false))
             }
+
             VIEW_TYPE_VIDEO -> {
                 VideoViewHolder(ListItemTweetMediaVideoBinding.inflate(inflater, parent, false))
             }
+
             else -> throw UnsupportedOperationException()
         }
     }
@@ -59,12 +62,13 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
     inner class ImageViewHolder(private val binding: ListItemTweetMediaImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(mediaEntity: MediaEntity, position: Int) {
-            binding.also {
-                it.viewModel = tweetListViewModel
-                it.thumbnailUrl = TweetViewDataConverter.mediaThumbnailUrl(mediaEntity)
-                it.allImages = TweetViewDataConverter.allImageUrls(currentList)
-                it.tappedIndex = position
-                it.executePendingBindings()
+            val thumbnailUrl = TweetViewDataConverter.mediaThumbnailUrl(mediaEntity)
+
+            binding.thumbnailImage.apply {
+                loadUrl(thumbnailUrl)
+                setOnClickListener {
+                    tweetListViewModel.onClickMediaImage(it, currentList, position)
+                }
             }
         }
     }
@@ -72,12 +76,13 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
     inner class VideoViewHolder(private val binding: ListItemTweetMediaVideoBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(mediaEntity: MediaEntity) {
-            binding.also {
-                it.viewModel = tweetListViewModel
-                it.thumbnailUrl = TweetViewDataConverter.mediaThumbnailUrl(mediaEntity)
-                it.videoUrl = TweetViewDataConverter.videoMediaUrl(mediaEntity)
-                it.isGif = TweetViewDataConverter.mediaIsGif(mediaEntity)
-                it.executePendingBindings()
+            val thumbnailUrl = TweetViewDataConverter.mediaThumbnailUrl(mediaEntity)
+
+            binding.apply {
+                thumbnailImage.loadUrl(thumbnailUrl)
+                videoContainer.setOnClickListener {
+                    tweetListViewModel.onClickMediaVideo(it, mediaEntity)
+                }
             }
         }
     }
