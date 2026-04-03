@@ -1,6 +1,5 @@
 package sugtao4423.lod.service
 
-import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,6 +8,7 @@ import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import androidx.annotation.RequiresApi
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.main.MainActivity
@@ -40,7 +40,7 @@ class AutoLoadTLService : Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    @TargetApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun startNotification() {
         val appIntent = Intent(this, MainActivity::class.java).apply {
             action = Intent.ACTION_MAIN
