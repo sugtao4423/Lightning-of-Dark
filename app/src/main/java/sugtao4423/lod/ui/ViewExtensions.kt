@@ -7,12 +7,9 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
-import android.util.TypedValue
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestListener
@@ -31,23 +28,7 @@ fun SwipeRefreshLayout.setup(onRefresh: () -> Unit) {
     setOnRefreshListener { onRefresh() }
 }
 
-@BindingAdapter("android:visibility")
-fun View.visibility(isVisible: Boolean) {
-    visibility = if (isVisible) View.VISIBLE else View.GONE
-}
-
-@BindingAdapter("colorSchemeResources")
-fun SwipeRefreshLayout.colorSchemeColors(colorResIds: IntArray) {
-    setColorSchemeColors(*colorResIds)
-}
-
-@BindingAdapter("backgroundColorScheme")
-fun SwipeRefreshLayout.backgroundColorScheme(color: Int) {
-    setProgressBackgroundColorSchemeColor(color)
-}
-
-@BindingAdapter("imageUrl", "placeholder", requireAll = false)
-fun ImageView.imageUrl(url: String?, placeholder: Drawable?) {
+fun ImageView.loadUrl(url: String?, placeholder: Drawable? = null) {
     if (url.isNullOrEmpty()) {
         if (placeholder == null) {
             setImageResource(R.drawable.icon_loading)
@@ -66,27 +47,11 @@ fun ImageView.imageUrl(url: String?, placeholder: Drawable?) {
     }.into(this)
 }
 
-@BindingAdapter("imageUrl", "imageListener")
-fun ImageView.imageUrl(url: String?, imageListener: RequestListener<Drawable>) {
+fun ImageView.loadUrl(url: String?, imageListener: RequestListener<Drawable>) {
     Glide.with(this).load(url).listener(imageListener).into(this)
 }
 
-@BindingAdapter("isSelectionEnd")
-fun EditText.isSelectionEnd(isSelectionEnd: Boolean?) {
-    if (isSelectionEnd == true) {
-        setSelection(text.length)
-    }
-}
-
-@BindingAdapter("textSizeSp")
-fun TextView.textSizeSp(sp: Float?) {
-    sp?.also {
-        setTextSize(TypedValue.COMPLEX_UNIT_SP, sp)
-    }
-}
-
-@BindingAdapter("lodLinkMovementString")
-fun TextView.lodLinkMovementString(string: String?) {
+fun TextView.setLodLinkMovementString(string: String?) {
     if (string.isNullOrEmpty()) {
         text = ""
         return
