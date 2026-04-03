@@ -214,7 +214,9 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         val nowPlayingFormat = app.prefRepository.nowPlayingFormat.ifEmpty {
             "%artist% - %track% #nowplaying"
         }
-        val str = nowPlayingFormat.replace("%track%", title).replace("%artist%", artist)
+        val str = nowPlayingFormat
+            .replace("%track%", title)
+            .replace("%artist%", artist)
             .replace("%album%", album)
 
         tweetText.value += str
@@ -260,9 +262,14 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
-        if (requestCode == TweetActivity.FILE_PERMISSION_REQUEST_CODE && permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == TweetActivity.FILE_PERMISSION_REQUEST_CODE &&
+            permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
             clickImageSelect()
         } else {
             app.showToast(R.string.permission_rejected)

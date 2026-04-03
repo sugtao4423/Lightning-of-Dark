@@ -18,7 +18,9 @@ class ShowImageFragment : Fragment() {
     private val viewModel: ShowImageFragmentViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         val binding = FragmentShowImageBinding.inflate(inflater, container, false)
         viewModel.imageUrl = requireArguments().getString(BUNDLE_KEY_URL)!!

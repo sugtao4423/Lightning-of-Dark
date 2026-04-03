@@ -28,7 +28,9 @@ class DetailFragment : Fragment() {
     private val viewModel: DetailFragmentViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentUserDetailBinding.inflate(inflater, container, false)
         return binding.apply {
