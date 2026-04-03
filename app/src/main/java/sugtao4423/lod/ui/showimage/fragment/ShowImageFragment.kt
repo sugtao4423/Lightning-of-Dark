@@ -22,8 +22,9 @@ class ShowImageFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentShowImageBinding.inflate(inflater, container, false)
         viewModel.imageUrl = requireArguments().getString(BUNDLE_KEY_URL)!!
+
+        val binding = FragmentShowImageBinding.inflate(inflater, container, false)
         binding.imageView.loadUrl(viewModel.imageUrl, viewModel.requestListener)
         viewModel.isShowProgressBar.observe(viewLifecycleOwner) {
             binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
