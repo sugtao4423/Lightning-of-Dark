@@ -1,13 +1,17 @@
 package sugtao4423.lod.ui.adapter.tweet
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
 import sugtao4423.lod.databinding.ListItemTweetBinding
+import sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter
 import sugtao4423.lod.ui.adapter.tweet.click.OnTweetItemClicked
 import sugtao4423.lod.ui.adapter.tweet.click.OnTweetItemLongClicked
+import sugtao4423.lod.ui.loadUrl
 import twitter4j.Status
 
 class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
@@ -68,12 +72,39 @@ class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAda
     inner class ViewHolder(private val binding: ListItemTweetBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(status: Status) {
-            binding.also {
-                it.viewModel = tweetListViewModel
-                it.status = status
-                it.hideImages = hideImages
-                it.executePendingBindings()
+        fun bind(status: Status) = binding.apply {
+            val vm = tweetListViewModel
+
+            userIcon.loadUrl(TweetViewDataConverter.userIconUrl(status))
+            userIcon.setOnClickListener { vm.onClickUserIcon(it, status) }
+
+            userName.text = TweetViewDataConverter.userNameAndScreenName(status)
+            userName.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.nameTextSize)
+
+            val isShowProtected = TweetViewDataConverter.isShowProtected(status)
+            protectIcon.visibility = if (isShowProtected) View.VISIBLE else View.GONE
+            protectIcon.typeface = vm.fontAwesomeTypeface
+            protectIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.protectIconSize)
+
+            tweetText.text = TweetViewDataConverter.text(status)
+            tweetText.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.textSize)
+
+            tweetDate.text = TweetViewDataConverter.date(status, vm.isShowMilliSeconds)
+            tweetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.dateTextSize)
+
+            val isShowRetweet = TweetViewDataConverter.isShowRetweetUser(status)
+            retweetUserIcon.visibility = if (isShowRetweet) View.VISIBLE else View.GONE
+            retweetUserName.visibility = if (isShowRetweet) View.VISIBLE else View.GONE
+            if (isShowRetweet) {
+                retweetUserIcon.loadUrl(TweetViewDataConverter.retweetedUserIconUrl(status))
+                retweetUserName.text = TweetViewDataConverter.retweetedUserScreenName(status)
+                retweetUserName.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.dateTextSize)
+            }
+
+            val isShowMedias = !hideImages && TweetViewDataConverter.isShowMediaList(status)
+            mediaRecyclerView.visibility = if (isShowMedias) View.VISIBLE else View.GONE
+            if (isShowMedias) {
+                mediaRecyclerView.adapter = vm.tweetMediaAdapter(status)
             }
         }
     }
