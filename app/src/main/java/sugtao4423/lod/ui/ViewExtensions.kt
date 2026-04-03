@@ -10,6 +10,7 @@ import android.text.style.URLSpan
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestListener
@@ -75,7 +76,7 @@ fun TextView.setLodLinkMovementString(string: String?) {
                     if (t.startsWith("@")) {
                         startUserPage(url.replace("@", ""))
                     } else if (t.startsWith("http")) {
-                        startChrome(Uri.parse(t))
+                        startChrome(t.toUri())
                     }
                 }
             }

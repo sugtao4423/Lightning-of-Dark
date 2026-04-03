@@ -2,12 +2,12 @@ package sugtao4423.lod.ui.adapter.tweet.click.listener
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.DialogRegexBinding
@@ -58,7 +58,7 @@ class ListItemClickListener(
         val clickedText = parent.getItemAtPosition(position) as String
         if (clickedText.startsWith("http")) {
             onClicked()
-            ChromeIntent(context, Uri.parse(clickedText))
+            ChromeIntent(context, clickedText.toUri())
         }
         return true
     }
@@ -153,7 +153,7 @@ class ListItemClickListener(
             }
 
             else -> {
-                ChromeIntent(context, Uri.parse(urlText))
+                ChromeIntent(context, urlText.toUri())
                 return
             }
         }
@@ -164,7 +164,7 @@ class ListItemClickListener(
         val tweetSn = status.user.screenName
         val tweetId = status.id.toString()
         val url = "https://twitter.com/$tweetSn/status/$tweetId"
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
     }
 
     private fun openUserPage(userScreenName: String) {

@@ -1,12 +1,12 @@
 package sugtao4423.lod.ui.userpage.fragment
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -76,7 +76,7 @@ class DetailFragment : Fragment() {
             startActivity(image)
         }
         viewModel.onStartChromeUrl.observe(viewLifecycleOwner) {
-            ChromeIntent(requireContext(), Uri.parse(it))
+            ChromeIntent(requireContext(), it.toUri())
         }
     }
 
