@@ -60,9 +60,8 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
     }
 
     private fun onActionViewShare(shareUri: Uri) {
-        val map = HashMap<String, String>()
-        shareUri.queryParameterNames.map {
-            map.put(it, shareUri.getQueryParameter(it) ?: "")
+        val map = shareUri.queryParameterNames.associateWith {
+            shareUri.getQueryParameter(it) ?: ""
         }
         val text = arrayListOf<String>().apply {
             map["text"]?.let { add(it) }
