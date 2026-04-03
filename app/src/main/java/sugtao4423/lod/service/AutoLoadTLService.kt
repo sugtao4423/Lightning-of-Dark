@@ -6,7 +6,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -51,7 +50,7 @@ class AutoLoadTLService : Service() {
         val channelId = "default"
         val title = "Running AutoLoadTL Service"
         NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT).let {
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(it)
         }
 
@@ -82,7 +81,7 @@ class AutoLoadTLService : Service() {
         super.onDestroy()
     }
 
-    inner class AutoLoadTLTask(private val app: App) : TimerTask() {
+    class AutoLoadTLTask(private val app: App) : TimerTask() {
 
         override fun run() {
             try {
