@@ -3,7 +3,8 @@ package sugtao4423.lod.model
 import sugtao4423.lod.dao.UseTimeDao
 import sugtao4423.lod.entity.UseTime
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class UseTimeRepository(private val useTimeDao: UseTimeDao) {
 

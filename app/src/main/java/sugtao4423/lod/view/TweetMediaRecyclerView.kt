@@ -19,7 +19,7 @@ class TweetMediaRecyclerView @JvmOverloads constructor(
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
-    inner class RightMarginDecoration : ItemDecoration() {
+    class RightMarginDecoration : ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
             super.getItemOffsets(outRect, view, parent, state)
             outRect.right = 8

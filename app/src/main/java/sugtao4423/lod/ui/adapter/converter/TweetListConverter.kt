@@ -3,7 +3,8 @@ package sugtao4423.lod.ui.adapter.converter
 import twitter4j.MediaEntity
 import twitter4j.Status
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 object TweetListConverter {
 

@@ -1,8 +1,11 @@
 package sugtao4423.lod.service
 
 import android.annotation.TargetApi
-import android.app.*
-import android.content.Context
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -13,7 +16,8 @@ import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.TwitterException
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 class AutoLoadTLService : Service() {
 
@@ -46,7 +50,7 @@ class AutoLoadTLService : Service() {
         val channelId = "default"
         val title = "Running AutoLoadTL Service"
         NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT).let {
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(it)
         }
 
@@ -77,7 +81,7 @@ class AutoLoadTLService : Service() {
         super.onDestroy()
     }
 
-    inner class AutoLoadTLTask(private val app: App) : TimerTask() {
+    class AutoLoadTLTask(private val app: App) : TimerTask() {
 
         override fun run() {
             try {

@@ -44,7 +44,7 @@ class UserFragmentViewModel(application: Application) : BaseTweetListViewModel(a
     private fun getUsers() = when (fragmentType) {
         UserFragment.TYPE_FOLLOW -> app.twitter.getFriendsList(user!!.id, cursor, 200)
         UserFragment.TYPE_FOLLOWER -> app.twitter.getFollowersList(user!!.id, cursor, 200)
-        else -> throw  UnsupportedOperationException()
+        else -> throw UnsupportedOperationException()
     }
 
     private fun getErrorToastStringRes(): Int = when (fragmentType) {
