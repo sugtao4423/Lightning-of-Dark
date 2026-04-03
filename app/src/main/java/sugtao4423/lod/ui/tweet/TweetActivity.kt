@@ -92,7 +92,9 @@ class TweetActivity : LoDBaseActivity() {
             binding.originStatus.visibility = if (it) View.VISIBLE else View.GONE
         }
         viewModel.tweetText.observe(this) {
-            binding.tweetEdit.setText(it)
+            if (it != binding.tweetEdit.text.toString()) {
+                binding.tweetEdit.setText(it)
+            }
         }
         viewModel.textSelectionEnd.observe(this) {
             if (it == true) {
