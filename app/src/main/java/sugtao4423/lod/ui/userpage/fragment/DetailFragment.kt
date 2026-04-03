@@ -80,36 +80,34 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun bindUser(user: User?) {
-        binding.apply {
-            bannerImage.loadUrl(
-                UserConverter.bannerUrl(user),
-                ContextCompat.getDrawable(requireContext(), R.drawable.user_header_empty)
-            )
-            bannerImage.setOnClickListener { viewModel.onClickBanner(user) }
-            bannerImage.setOnLongClickListener { viewModel.onLongClickBanner(user) }
+    private fun bindUser(user: User?) = binding.apply {
+        bannerImage.loadUrl(
+            UserConverter.bannerUrl(user),
+            ContextCompat.getDrawable(requireContext(), R.drawable.user_header_empty)
+        )
+        bannerImage.setOnClickListener { viewModel.onClickBanner(user) }
+        bannerImage.setOnLongClickListener { viewModel.onLongClickBanner(user) }
 
-            iconImage.loadUrl(UserConverter.iconUrl(user))
-            iconImage.setOnClickListener { viewModel.onClickIcon(user) }
-            iconImage.setOnLongClickListener { viewModel.onLongClickIcon(user) }
+        iconImage.loadUrl(UserConverter.iconUrl(user))
+        iconImage.setOnClickListener { viewModel.onClickIcon(user) }
+        iconImage.setOnLongClickListener { viewModel.onLongClickIcon(user) }
 
-            userName.text = UserConverter.name(user)
-            protectIcon.visibility = if (user?.isProtected == true) View.VISIBLE else View.GONE
-            screenName.text = UserConverter.screenName(user)
+        userName.text = UserConverter.name(user)
+        protectIcon.visibility = if (user?.isProtected == true) View.VISIBLE else View.GONE
+        screenName.text = UserConverter.screenName(user)
 
-            relationshipLayout.visibility =
-                if (viewModel.isShowRelationship(user)) View.VISIBLE else View.GONE
+        relationshipLayout.visibility =
+            if (viewModel.isShowRelationship(user)) View.VISIBLE else View.GONE
 
-            bioText.setLodLinkMovementString(UserConverter.bio(user))
-            locationText.setLodLinkMovementString(UserConverter.location(user))
-            linkText.setLodLinkMovementString(UserConverter.link(user))
+        bioText.setLodLinkMovementString(UserConverter.bio(user))
+        locationText.setLodLinkMovementString(UserConverter.location(user))
+        linkText.setLodLinkMovementString(UserConverter.link(user))
 
-            tweetCount.text = UserConverter.tweetCount(user)
-            favCount.text = UserConverter.favoriteCount(user)
-            followCount.text = UserConverter.followCount(user)
-            followerCount.text = UserConverter.followerCount(user)
-            createDate.text = UserConverter.createDate(user)
-        }
+        tweetCount.text = UserConverter.tweetCount(user)
+        favCount.text = UserConverter.favoriteCount(user)
+        followCount.text = UserConverter.followCount(user)
+        followerCount.text = UserConverter.followerCount(user)
+        createDate.text = UserConverter.createDate(user)
     }
 
 }
