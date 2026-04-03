@@ -93,7 +93,8 @@ class DetailFragment : Fragment() {
         iconImage.setOnLongClickListener { viewModel.onLongClickIcon(user) }
 
         userName.text = UserConverter.name(user)
-        protectIcon.visibility = if (user?.isProtected == true) View.VISIBLE else View.GONE
+        protectIcon.visibility =
+            if (UserConverter.isShowProtected(user)) View.VISIBLE else View.GONE
         screenName.text = UserConverter.screenName(user)
 
         relationshipLayout.visibility =
