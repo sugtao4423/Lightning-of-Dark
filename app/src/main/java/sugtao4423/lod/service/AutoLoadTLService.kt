@@ -1,7 +1,11 @@
 package sugtao4423.lod.service
 
 import android.annotation.TargetApi
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -13,7 +17,8 @@ import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.TwitterException
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 
 class AutoLoadTLService : Service() {
 

@@ -4,7 +4,7 @@ import twitter4j.URLEntity
 import twitter4j.User
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 object UserConverter {
 
