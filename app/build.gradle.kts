@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
-    id("com.android.legacy-kapt")
-//    id("com.google.devtools.ksp")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -42,7 +41,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
-    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
+    ksp("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
 
     implementation("androidx.activity:activity-ktx:1.13.0")
     implementation("androidx.fragment:fragment-ktx:1.8.9")
@@ -57,11 +56,11 @@ dependencies {
 
     val roomVersion = "2.8.4"
     implementation("androidx.room:room-ktx:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 
     val glideVersion = "5.0.5"
     implementation("com.github.bumptech.glide:glide:$glideVersion")
-    kapt("com.github.bumptech.glide:compiler:$glideVersion")
+    ksp("com.github.bumptech.glide:compiler:$glideVersion")
 
     implementation("org.twitter4j:twitter4j-core:4.0.7")
     implementation("com.twitter.twittertext:twitter-text:3.1.0")
