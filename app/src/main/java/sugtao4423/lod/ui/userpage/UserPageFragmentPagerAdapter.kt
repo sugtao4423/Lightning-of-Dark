@@ -20,21 +20,25 @@ class UserPageFragmentPagerAdapter(fm: FragmentManager, private val context: Con
                     putString(StatusFragment.KEY_FRAGMENT_TYPE, StatusFragment.TYPE_TWEET)
                 }
             }
+
             2 -> StatusFragment().also {
                 it.arguments = Bundle().apply {
                     putString(StatusFragment.KEY_FRAGMENT_TYPE, StatusFragment.TYPE_FAVORITE)
                 }
             }
+
             3 -> UserFragment().also {
                 it.arguments = Bundle().apply {
                     putString(UserFragment.KEY_FRAGMENT_TYPE, UserFragment.TYPE_FOLLOW)
                 }
             }
+
             4 -> UserFragment().also {
                 it.arguments = Bundle().apply {
                     putString(UserFragment.KEY_FRAGMENT_TYPE, UserFragment.TYPE_FOLLOWER)
                 }
             }
+
             else -> DetailFragment()
         }
     }

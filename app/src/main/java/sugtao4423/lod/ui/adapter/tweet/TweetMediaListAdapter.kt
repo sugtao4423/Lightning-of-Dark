@@ -33,9 +33,11 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
             VIEW_TYPE_IMAGE -> {
                 ImageViewHolder(ListItemTweetMediaImageBinding.inflate(inflater, parent, false))
             }
+
             VIEW_TYPE_VIDEO -> {
                 VideoViewHolder(ListItemTweetMediaVideoBinding.inflate(inflater, parent, false))
             }
+
             else -> throw UnsupportedOperationException()
         }
     }

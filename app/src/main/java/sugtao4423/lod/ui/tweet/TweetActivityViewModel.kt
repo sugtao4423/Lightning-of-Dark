@@ -93,6 +93,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
                 isShowOriginStatus.value = true
                 _onSetTweetListAdapter.value = Unit
             }
+
             else -> isShowOriginStatus.value = false
         }
 
@@ -100,6 +101,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             TweetActivity.TYPE_REPLY -> {
                 tweetText.value = "@${toStatus!!.user.screenName} "
             }
+
             TweetActivity.TYPE_REPLYALL -> {
                 val mentionUsers = arrayListOf(toStatus!!.user.screenName)
                 toStatus!!.userMentionEntities.filter {
@@ -108,20 +110,24 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
                 val replyUserScreenNames = mentionUsers.joinToString(" @", "@") + " "
                 tweetText.value = replyUserScreenNames
             }
+
             TweetActivity.TYPE_QUOTERT -> {
                 val quote =
                     " https://twitter.com/${toStatus!!.user.screenName}/status/${toStatus!!.id}"
                 tweetText.value = quote
                 textSelectionEnd.value = false
             }
+
             TweetActivity.TYPE_UNOFFICIALRT -> {
                 val unOfficial = " RT @${toStatus!!.user.screenName}: ${toStatus!!.text}"
                 tweetText.value = unOfficial
                 textSelectionEnd.value = false
             }
+
             TweetActivity.TYPE_PAKUTSUI -> {
                 tweetText.value = toStatus!!.text
             }
+
             TweetActivity.TYPE_EXTERNALTEXT -> {
                 tweetText.value = externalText
             }

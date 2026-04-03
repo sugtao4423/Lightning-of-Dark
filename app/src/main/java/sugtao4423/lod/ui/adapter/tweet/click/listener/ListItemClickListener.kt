@@ -133,20 +133,24 @@ class ListItemClickListener(
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, urls.toTypedArray())
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, pos)
             }
+
             video.find() -> Intent(context, ShowVideoActivity::class.java).apply {
                 putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, urlText)
                 putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, ShowVideoActivity.TYPE_VIDEO)
             }
+
             gif.find() -> Intent(context, ShowVideoActivity::class.java).apply {
                 putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, urlText)
                 putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, ShowVideoActivity.TYPE_GIF)
             }
+
             state.find() -> Intent(context, IntentActivity::class.java).apply {
                 putExtra(
                     IntentActivity.TWEET_ID,
                     state.group(sugtao4423.lod.utils.Regex.statusUrlStatusIdGroup)!!.toLong()
                 )
             }
+
             else -> {
                 ChromeIntent(context, Uri.parse(urlText))
                 return

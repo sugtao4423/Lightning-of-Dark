@@ -50,6 +50,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
                 val id = matchStatus.group(Regex.statusUrlStatusIdGroup)!!.toLong()
                 showStatus(id)
             }
+
             matchShare.find() -> onActionViewShare(intentData)
             matchUser.find() -> {
                 val screenName = matchUser.group(Regex.userUrlScreenNameGroup)!!
@@ -87,6 +88,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
             youtubeShareMatcher.find() -> {
                 "${youtubeShareMatcher.group(Regex.youtubeVideoNameGroup)} $text @YouTubeより"
             }
+
             subject.isEmpty() -> text
             else -> "$subject $text"
         }
