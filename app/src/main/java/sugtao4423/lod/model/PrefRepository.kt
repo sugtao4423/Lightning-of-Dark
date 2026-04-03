@@ -1,6 +1,7 @@
 package sugtao4423.lod.model
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 
 class PrefRepository(context: Context) {
@@ -9,19 +10,19 @@ class PrefRepository(context: Context) {
 
     var screenName: String
         get() = pref.getString("screenName", "") ?: ""
-        set(value) = pref.edit().putString("screenName", value).apply()
+        set(value) = pref.edit { putString("screenName", value) }
 
     var regularExpression: String
         get() = pref.getString("regularExpression", "") ?: ""
-        set(value) = pref.edit().putString("regularExpression", value).apply()
+        set(value) = pref.edit { putString("regularExpression", value) }
 
     var experience: Int
         get() = pref.getInt("experience", 0)
-        set(value) = pref.edit().putInt("experience", value).apply()
+        set(value) = pref.edit { putInt("experience", value) }
 
     var autoLoadTLInterval: Int
         get() = pref.getInt("autoLoadTLInterval", 0)
-        set(value) = pref.edit().putInt("autoLoadTLInterval", value).apply()
+        set(value) = pref.edit { putInt("autoLoadTLInterval", value) }
 
     val isOpenBrowser: Boolean
         get() = pref.getBoolean("menu_openBrowser", false)
