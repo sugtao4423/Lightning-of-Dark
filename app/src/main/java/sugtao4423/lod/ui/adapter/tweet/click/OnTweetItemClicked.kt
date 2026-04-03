@@ -2,7 +2,7 @@ package sugtao4423.lod.ui.adapter.tweet.click
 
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter
+import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 
 class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
@@ -14,7 +14,7 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
 
     fun onItemClicked(position: Int) {
         val status = tweetListAdapter.data[position]
-        val originalStatus = TweetViewDataConverter.originalStatus(status)!!
+        val originalStatus = TweetListConverter.originalStatus(status)!!
 
         val dialogList = arrayListOf<String>()
 
@@ -33,8 +33,8 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
         dialogList.addAll(originalStatus.urlEntities.map { it.expandedURL })
 
         val mediaUrls = originalStatus.mediaEntities.map {
-            if (TweetViewDataConverter.mediaIsVideoOrGif(it)) {
-                TweetViewDataConverter.videoMediaUrl(it)
+            if (TweetListConverter.mediaIsVideoOrGif(it)) {
+                TweetListConverter.videoMediaUrl(it)
             } else {
                 it.mediaURLHttps
             }

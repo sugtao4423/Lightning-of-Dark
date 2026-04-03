@@ -5,7 +5,7 @@ import twitter4j.Status
 import java.text.SimpleDateFormat
 import java.util.*
 
-object TweetViewDataConverter {
+object TweetListConverter {
 
     @JvmStatic
     fun originalStatus(status: Status?): Status? = status?.let {

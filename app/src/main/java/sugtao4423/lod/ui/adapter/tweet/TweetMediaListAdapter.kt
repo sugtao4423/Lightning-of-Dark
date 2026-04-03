@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.databinding.ListItemTweetMediaImageBinding
 import sugtao4423.lod.databinding.ListItemTweetMediaVideoBinding
-import sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter
+import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.loadUrl
 import twitter4j.MediaEntity
 
@@ -53,7 +53,7 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
-        if (TweetViewDataConverter.mediaIsVideoOrGif(item)) {
+        if (TweetListConverter.mediaIsVideoOrGif(item)) {
             return VIEW_TYPE_VIDEO
         }
         return VIEW_TYPE_IMAGE
@@ -62,7 +62,7 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
     inner class ImageViewHolder(private val binding: ListItemTweetMediaImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(mediaEntity: MediaEntity, position: Int) {
-            val thumbnailUrl = TweetViewDataConverter.mediaThumbnailUrl(mediaEntity)
+            val thumbnailUrl = TweetListConverter.mediaThumbnailUrl(mediaEntity)
 
             binding.thumbnailImage.apply {
                 loadUrl(thumbnailUrl)
@@ -76,7 +76,7 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
     inner class VideoViewHolder(private val binding: ListItemTweetMediaVideoBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(mediaEntity: MediaEntity) {
-            val thumbnailUrl = TweetViewDataConverter.mediaThumbnailUrl(mediaEntity)
+            val thumbnailUrl = TweetListConverter.mediaThumbnailUrl(mediaEntity)
 
             binding.apply {
                 thumbnailImage.loadUrl(thumbnailUrl)

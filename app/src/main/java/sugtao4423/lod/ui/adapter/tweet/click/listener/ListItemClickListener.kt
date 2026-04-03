@@ -11,7 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.DialogRegexBinding
-import sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter
+import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.intent.IntentActivity
 import sugtao4423.lod.ui.showimage.ShowImageActivity
@@ -129,7 +129,7 @@ class ListItemClickListener(
         val state = sugtao4423.lod.utils.Regex.statusUrl.matcher(urlText)
         val intent = when {
             image.find() -> Intent(context, ShowImageActivity::class.java).apply {
-                val urls = TweetViewDataConverter.allImageUrls(status.mediaEntities.toList())
+                val urls = TweetListConverter.allImageUrls(status.mediaEntities.toList())
                 val pos = urls.indexOf(urlText)
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, urls.toTypedArray())
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, pos)

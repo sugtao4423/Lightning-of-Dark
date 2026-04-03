@@ -3,7 +3,7 @@ package sugtao4423.lod.ui.adapter.tweet
 import android.content.Intent
 import android.view.View
 import sugtao4423.lod.App
-import sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter
+import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
@@ -20,7 +20,7 @@ class TweetListViewModel(app: App) {
     val isShowMilliSeconds = app.prefRepository.isMillisecond
 
     fun tweetMediaAdapter(status: Status) = TweetMediaListAdapter(this).apply {
-        val original = TweetViewDataConverter.originalStatus(status)
+        val original = TweetListConverter.originalStatus(status)
         submitList(original!!.mediaEntities.toList())
     }
 
@@ -28,14 +28,14 @@ class TweetListViewModel(app: App) {
         val intent = Intent(view.context, UserPageActivity::class.java).apply {
             putExtra(
                 UserPageActivity.INTENT_EXTRA_KEY_USER_OBJECT,
-                TweetViewDataConverter.originalStatus(status)!!.user
+                TweetListConverter.originalStatus(status)!!.user
             )
         }
         view.context.startActivity(intent)
     }
 
     fun onClickMediaImage(view: View, mediaEntities: List<MediaEntity>, tappedIndex: Int) {
-        val allImages = TweetViewDataConverter.allImageUrls(mediaEntities)
+        val allImages = TweetListConverter.allImageUrls(mediaEntities)
 
         val intent = Intent(view.context, ShowImageActivity::class.java).apply {
             putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, allImages.toTypedArray())
@@ -45,8 +45,8 @@ class TweetListViewModel(app: App) {
     }
 
     fun onClickMediaVideo(view: View, mediaEntity: MediaEntity) {
-        val videoUrl = TweetViewDataConverter.videoMediaUrl(mediaEntity)
-        val isGif = TweetViewDataConverter.mediaIsGif(mediaEntity)
+        val videoUrl = TweetListConverter.videoMediaUrl(mediaEntity)
+        val isGif = TweetListConverter.mediaIsGif(mediaEntity)
 
         val intent = Intent(view.context, ShowVideoActivity::class.java).apply {
             val videoType = if (isGif) ShowVideoActivity.TYPE_GIF else ShowVideoActivity.TYPE_VIDEO
