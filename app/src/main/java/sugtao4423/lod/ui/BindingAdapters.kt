@@ -21,6 +21,16 @@ import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.Regex
 
+fun SwipeRefreshLayout.setup(onRefresh: () -> Unit) {
+    val color = resources.getIntArray(R.array.pull2RefreshScheme)
+    setColorSchemeColors(*color)
+
+    val backgroundColor = context.getColor(R.color.pull2RefreshBackground)
+    setProgressBackgroundColorSchemeColor(backgroundColor)
+
+    setOnRefreshListener { onRefresh() }
+}
+
 @BindingAdapter("android:visibility")
 fun View.visibility(isVisible: Boolean) {
     visibility = if (isVisible) View.VISIBLE else View.GONE
