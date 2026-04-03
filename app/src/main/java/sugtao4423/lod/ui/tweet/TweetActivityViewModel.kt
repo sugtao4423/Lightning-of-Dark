@@ -72,15 +72,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     private val _onPickImage = LiveEvent<Unit>()
     val onPickImage: LiveData<Unit> = _onPickImage
 
-    private val _onSpeechInput = LiveEvent<Unit>()
-    val onSpeechInput: LiveData<Unit> = _onSpeechInput
-
-    private val _onRequestPlayingMusicData = LiveEvent<Unit>()
-    val onRequestPlayingMusicData: LiveData<Unit> = _onRequestPlayingMusicData
-
-    private val _showTextOptionDialog = LiveEvent<Unit>()
-    val showTextOptionDialog: LiveData<Unit> = _showTextOptionDialog
-
     private fun onSetTweetType() {
         _actionBarTitle.value = when (tweetType) {
             TweetActivity.TYPE_REPLY, TweetActivity.TYPE_REPLYALL, TweetActivity.TYPE_QUOTERT -> null
@@ -205,21 +196,13 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun clickMic() {
-        _onSpeechInput.value = Unit
-    }
-
     fun onSpeeched(result: ActivityResult?) {
         if (result?.resultCode != Activity.RESULT_OK || result.data == null) return
 
         val results =
             result.data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) ?: arrayListOf("")
-        tweetText.value = tweetText.value + results[0]
+        tweetText.value += results[0]
         textSelectionEnd.value = true
-    }
-
-    fun clickMusic() {
-        _onRequestPlayingMusicData.value = Unit
     }
 
     fun onGotPlayingMusicData(playingMusicData: HashMap<MusicDataKey, String>?) {
@@ -236,12 +219,8 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             .replace("%artist%", artist)
             .replace("%album%", album)
 
-        tweetText.value = tweetText.value + str
+        tweetText.value += str
         textSelectionEnd.value = true
-    }
-
-    fun clickTextOption() {
-        _showTextOptionDialog.value = Unit
     }
 
     fun textOptionOmatase() {

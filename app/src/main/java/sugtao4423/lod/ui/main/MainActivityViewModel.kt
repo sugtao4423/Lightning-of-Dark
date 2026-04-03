@@ -27,12 +27,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             return result.toList()
         }
 
-    private val _onStartTweetActivity = LiveEvent<Unit>()
-    val onStartTweetActivity: LiveData<Unit> = _onStartTweetActivity
-
-    private val _showOptionDialog = LiveEvent<Unit>()
-    val showOptionDialog: LiveData<Unit> = _showOptionDialog
-
     private val _onStartAutoLoadTLService = LiveEvent<Unit>()
     val onStartAutoLoadTLService = _onStartAutoLoadTLService
 
@@ -41,16 +35,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     private val _onNewMention = LiveEvent<List<Status>>()
     val onNewMention: LiveData<List<Status>> = _onNewMention
-
-    fun clickNewTweet(): Boolean {
-        _onStartTweetActivity.value = Unit
-        return true
-    }
-
-    fun clickOption(): Boolean {
-        _showOptionDialog.value = Unit
-        return true
-    }
 
     private var kickedInitialized = false
     fun viewInitialized() {

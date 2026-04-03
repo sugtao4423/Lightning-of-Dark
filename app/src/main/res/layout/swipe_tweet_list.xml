@@ -1,32 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="sugtao4423.lod.ui.BaseTweetListViewModel" />
-    </data>
-
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:layout_width="match_parent"
+        <sugtao4423.lod.view.TweetListView
+            android:id="@+id/listLine"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:backgroundColorScheme="@{@color/pull2RefreshBackground}"
-            app:colorSchemeResources="@{@intArray/pull2RefreshScheme}"
-            app:onRefreshListener="@{() -> viewModel.pull2Refresh()}"
-            app:refreshing="@{viewModel.isRefreshing}">
+            android:scrollbars="vertical" />
 
-            <sugtao4423.lod.view.TweetListView
-                android:id="@+id/listLine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scrollbars="vertical" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </LinearLayout>
-</layout>
+</LinearLayout>

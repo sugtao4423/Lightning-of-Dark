@@ -8,11 +8,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.MutableLiveData
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.DialogRegexBinding
-import sugtao4423.lod.ui.adapter.converter.TweetViewDataConverter
+import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.intent.IntentActivity
 import sugtao4423.lod.ui.showimage.ShowImageActivity
@@ -72,12 +71,12 @@ class ListItemClickListener(
     private fun extractTweetsWithRegex() {
         val pref = (context.applicationContext as App).prefRepository
 
-        val regexText = MutableLiveData(pref.regularExpression)
-        val isIncludeRetweet = MutableLiveData(true)
-        val binding = DialogRegexBinding.inflate(LayoutInflater.from(context)).also {
-            it.regexText = regexText
-            it.isIncludeRetweet = isIncludeRetweet
-            it.regButtonListener = RegButtonClickListener(it.regDialogEdit)
+        val binding = DialogRegexBinding.inflate(LayoutInflater.from(context))
+        binding.regEdit.setText(pref.regularExpression)
+
+        val regButtonListener = RegButtonClickListener(binding.regEdit)
+        for (i in 0 until binding.regButtonGrid.childCount) {
+            binding.regButtonGrid.getChildAt(i).setOnClickListener(regButtonListener)
         }
 
         AlertDialog.Builder(context).also {
@@ -86,8 +85,10 @@ class ListItemClickListener(
             it.setNegativeButton(R.string.cancel, null)
             it.setPositiveButton(R.string.ok) { _, _ ->
                 closeKeyboard(binding.root)
-                pref.regularExpression = regexText.value!!
-                showRegexFilterResult(regexText.value!!, isIncludeRetweet.value!!)
+                val regexText = binding.regEdit.text.toString()
+                val isIncludeRetweet = binding.includeRetweetCheckBox.isChecked
+                pref.regularExpression = regexText
+                showRegexFilterResult(regexText, isIncludeRetweet)
             }
             it.show()
         }
@@ -128,7 +129,7 @@ class ListItemClickListener(
         val state = sugtao4423.lod.utils.Regex.statusUrl.matcher(urlText)
         val intent = when {
             image.find() -> Intent(context, ShowImageActivity::class.java).apply {
-                val urls = TweetViewDataConverter.allImageUrls(status.mediaEntities.toList())
+                val urls = TweetListConverter.allImageUrls(status.mediaEntities.toList())
                 val pos = urls.indexOf(urlText)
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, urls.toTypedArray())
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, pos)

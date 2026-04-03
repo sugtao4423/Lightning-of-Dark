@@ -18,8 +18,10 @@ class UserPageActivity : LoDBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayShowHomeEnabled(false)
+
         val binding = ActivityUserPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.pagerTabStrip.drawFullUnderline = true
 
         val adapter = UserPageFragmentPagerAdapter(supportFragmentManager, this)
         binding.viewPager.let {

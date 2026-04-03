@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-object TweetViewDataConverter {
+object TweetListConverter {
 
     @JvmStatic
     fun originalStatus(status: Status?): Status? = status?.let {

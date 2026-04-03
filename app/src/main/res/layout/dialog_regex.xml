@@ -1,153 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="24dp">
 
-    <data>
-
-        <variable
-            name="regexText"
-            type="androidx.lifecycle.MutableLiveData&lt;String&gt;" />
-
-        <variable
-            name="isIncludeRetweet"
-            type="androidx.lifecycle.MutableLiveData&lt;Boolean&gt;" />
-
-        <variable
-            name="regButtonListener"
-            type="sugtao4423.lod.ui.adapter.tweet.click.listener.RegButtonClickListener" />
-    </data>
-
-    <LinearLayout
+    <EditText
+        android:id="@+id/regEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="24dp">
+        android:importantForAutofill="no"
+        android:inputType="text"
+        tools:ignore="LabelFor">
 
-        <EditText
-            android:id="@+id/regDialogEdit"
-            android:layout_width="match_parent"
+        <requestFocus />
+    </EditText>
+
+    <GridLayout
+        android:id="@+id/regButtonGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:columnCount="6"
+        tools:ignore="HardcodedText">
+
+        <Button
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:text="@={regexText}"
-            tools:ignore="LabelFor">
+            android:layout_columnWeight="1"
+            android:text="." />
 
-            <requestFocus />
-        </EditText>
-
-        <GridLayout
-            android:layout_width="match_parent"
+        <Button
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:columnCount="6"
-            tools:ignore="HardcodedText">
+            android:layout_columnWeight="1"
+            android:text="*" />
 
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="." />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="*" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="|" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="+" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="\?" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="\\" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="^" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="$" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="(" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text=")" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="[" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="]" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="{" />
-
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:onClickListener="@{regButtonListener}"
-                android:text="}" />
-
-        </GridLayout>
-
-        <CheckBox
-            android:layout_width="wrap_content"
+        <Button
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:checked="@={isIncludeRetweet}"
-            android:text="@string/include_retweet" />
+            android:layout_columnWeight="1"
+            android:text="|" />
 
-    </LinearLayout>
-</layout>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="+" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="\?" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="\\" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="^" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="$" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="(" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text=")" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="[" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="]" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="{" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:text="}" />
+
+    </GridLayout>
+
+    <CheckBox
+        android:id="@+id/includeRetweetCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:checked="true"
+        android:text="@string/include_retweet" />
+
+</LinearLayout>
