@@ -43,14 +43,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
     ksp("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
 
+    implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("androidx.activity:activity-ktx:1.13.0")
     implementation("androidx.fragment:fragment-ktx:1.8.9")
-    implementation("com.github.hadilq:live-event:1.3.0")
-
-    implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
     implementation("androidx.recyclerview:recyclerview:1.4.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
     implementation("androidx.browser:browser:1.10.0")
     implementation("com.google.android.material:material:1.13.0")
 
@@ -61,13 +59,13 @@ dependencies {
     val glideVersion = "5.0.5"
     implementation("com.github.bumptech.glide:glide:$glideVersion")
     ksp("com.github.bumptech.glide:compiler:$glideVersion")
-
-    implementation("org.twitter4j:twitter4j-core:4.0.7")
-    implementation("com.twitter.twittertext:twitter-text:3.1.0")
-
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     implementation("androidx.media3:media3-exoplayer:1.10.0")
     implementation("androidx.media3:media3-ui:1.10.0")
 
+    implementation("org.twitter4j:twitter4j-core:4.0.7")
+    implementation("com.twitter.twittertext:twitter-text:3.1.0")
+
+    implementation("com.github.hadilq:live-event:1.3.0")
     implementation("com.github.sugtao4423:android-ProgressDialog:1.0.0")
 }
