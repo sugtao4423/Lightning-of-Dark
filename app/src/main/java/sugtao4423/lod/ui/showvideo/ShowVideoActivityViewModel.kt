@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.PlaybackException
-import com.google.android.exoplayer2.Player
+import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import com.hadilq.liveevent.LiveEvent
 import sugtao4423.lod.App
 import sugtao4423.lod.R
@@ -23,7 +23,7 @@ class ShowVideoActivityViewModel(application: Application) : AndroidViewModel(ap
     private val _onFinish = LiveEvent<Unit>()
     val onFinish: LiveData<Unit> = _onFinish
 
-    val exoPlayer = ExoPlayer.Builder(application).build().also {
+    val exoPlayer: ExoPlayer = ExoPlayer.Builder(application).build().also {
         it.addListener(object : Player.Listener {
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_ENDED) _onFinish.value = Unit

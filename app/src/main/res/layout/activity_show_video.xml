@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="sugtao4423.lod.ui.showvideo.ShowVideoActivityViewModel" />
-    </data>
-
-    <LinearLayout
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/playerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+        android:layout_height="match_parent" />
 
-        <com.google.android.exoplayer2.ui.StyledPlayerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:player="@{viewModel.exoPlayer}" />
-
-    </LinearLayout>
-</layout>
+</LinearLayout>

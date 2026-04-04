@@ -109,17 +109,14 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     }
 
     private fun setCacheSize() {
-        fun getDirSize(dir: File): Long {
-            var size = 0L
-            dir.listFiles()?.map {
-                when {
-                    it == null -> return@map
-                    it.isDirectory -> size += getDirSize(it)
-                    it.isFile -> size += it.length()
-                }
+        fun getDirSize(dir: File): Long = dir.listFiles()?.sumOf {
+            when {
+                it == null -> 0L
+                it.isDirectory -> getDirSize(it)
+                it.isFile -> it.length()
+                else -> 0L
             }
-            return size
-        }
+        } ?: 0L
 
         val cacheDir = app.applicationContext.cacheDir
         val cacheSize = DecimalFormat("#.#").let {

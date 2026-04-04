@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import sugtao4423.lod.databinding.SwipeTweetListBinding
 import sugtao4423.lod.ui.adapter.user.UserListAdapter
+import sugtao4423.lod.ui.setup
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
 
 class UserFragment : Fragment() {
@@ -30,11 +31,15 @@ class UserFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = SwipeTweetListBinding.inflate(inflater, container, false).also {
-            it.lifecycleOwner = this
-            it.viewModel = viewModel
-        }
         viewModel.fragmentType = requireArguments().getString(KEY_FRAGMENT_TYPE)!!
+
+        binding = SwipeTweetListBinding.inflate(inflater, container, false)
+        binding.swipeRefresh.setup {
+            viewModel.pull2Refresh()
+        }
+        viewModel.isRefreshing.observe(viewLifecycleOwner) {
+            binding.swipeRefresh.isRefreshing = it
+        }
         return binding.root
     }
 

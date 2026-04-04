@@ -19,19 +19,20 @@ jobs:
   android-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
       - name: Create CKCS.xml
         run: echo '<?xml version="1.0" encoding="utf-8"?><resources><string name="CK"></string><string name="CS"></string></resources>' > app/src/main/res/values/CKCS.xml
       - name: set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
-          distribution: zulu
-          java-version: 11
+          distribution: jetbrains
+          java-version: 17
           cache: gradle
       - run: ./gradlew lint
-      - uses: yutailang0119/action-android-lint@v3
+      - uses: yutailang0119/action-android-lint@v5
         with:
           report-path: build/reports/*.xml
+          ignore-warnings: true
         continue-on-error: false

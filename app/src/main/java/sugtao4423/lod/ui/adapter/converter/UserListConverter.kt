@@ -3,7 +3,7 @@ package sugtao4423.lod.ui.adapter.converter
 import twitter4j.User
 import java.text.NumberFormat
 
-object UserViewDataConverter {
+object UserListConverter {
 
     @JvmStatic
     fun isShowProtected(user: User?): Boolean = user?.isProtected ?: false

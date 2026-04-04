@@ -3,7 +3,6 @@ package sugtao4423.lod.ui.main.listener
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.MutableLiveData
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.OptionDialogSearchUserBinding
@@ -58,33 +57,27 @@ class OptionClickListener(
     }
 
     private fun tweetBomb() {
-        val staticText = MutableLiveData("")
-        val loopText = MutableLiveData("")
-        val loopCount = MutableLiveData("")
-        val binding = OptionDialogTweetBombBinding.inflate(activity.layoutInflater).also {
-            it.staticText = staticText
-            it.loopText = loopText
-            it.loopCount = loopCount
-        }
+        val binding = OptionDialogTweetBombBinding.inflate(activity.layoutInflater)
         AlertDialog.Builder(activity).apply {
             setView(binding.root)
             setNegativeButton(R.string.cancel, null)
             setPositiveButton(R.string.ok) { _, _ ->
-                viewModel.doBombTweet(staticText.value!!, loopText.value!!, loopCount.value!!)
+                viewModel.doBombTweet(
+                    binding.staticTextEdit.text.toString(),
+                    binding.loopTextEdit.text.toString(),
+                    binding.loopCountEdit.text.toString()
+                )
             }
             show()
         }
     }
 
     private fun searchUser() {
-        val screenName = MutableLiveData("")
-        val binding = OptionDialogSearchUserBinding.inflate(activity.layoutInflater).also {
-            it.screenName = screenName
-        }
+        val binding = OptionDialogSearchUserBinding.inflate(activity.layoutInflater)
         AlertDialog.Builder(activity).apply {
             setView(binding.root)
             setPositiveButton(R.string.ok) { _, _ ->
-                viewModel.doSearchUser(screenName.value!!)
+                viewModel.doSearchUser(binding.screenNameEdit.text.toString())
             }
             show()
         }

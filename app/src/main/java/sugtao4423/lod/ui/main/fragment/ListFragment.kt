@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import sugtao4423.lod.databinding.SwipeTweetListBinding
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.main.MainActivityViewModel
+import sugtao4423.lod.ui.setup
 
 class ListFragment : Fragment() {
 
@@ -27,9 +28,12 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = SwipeTweetListBinding.inflate(inflater, container, false).also {
-            it.lifecycleOwner = this
-            it.viewModel = viewModel
+        binding = SwipeTweetListBinding.inflate(inflater, container, false)
+        binding.swipeRefresh.setup {
+            viewModel.pull2Refresh()
+        }
+        viewModel.isRefreshing.observe(viewLifecycleOwner) {
+            binding.swipeRefresh.isRefreshing = it
         }
         return binding.root
     }
@@ -52,4 +56,5 @@ class ListFragment : Fragment() {
             scrollListener.resetState()
         }
     }
+
 }

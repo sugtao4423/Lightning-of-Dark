@@ -20,11 +20,10 @@ class ShowVideoActivity : LoDBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityShowVideoBinding.inflate(layoutInflater).also {
-            it.lifecycleOwner = this
-            it.viewModel = viewModel
-        }
+        val binding = ActivityShowVideoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.playerView.player = viewModel.exoPlayer
 
         if (viewModel.isVideoOrientationSensor) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR

@@ -50,6 +50,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
                 val id = matchStatus.group(Regex.statusUrlStatusIdGroup)!!.toLong()
                 showStatus(id)
             }
+
             matchShare.find() -> onActionViewShare(intentData)
             matchUser.find() -> {
                 val screenName = matchUser.group(Regex.userUrlScreenNameGroup)!!
@@ -59,9 +60,8 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
     }
 
     private fun onActionViewShare(shareUri: Uri) {
-        val map = HashMap<String, String>()
-        shareUri.queryParameterNames.map {
-            map.put(it, shareUri.getQueryParameter(it) ?: "")
+        val map = shareUri.queryParameterNames.associateWith {
+            shareUri.getQueryParameter(it) ?: ""
         }
         val text = arrayListOf<String>().apply {
             map["text"]?.let { add(it) }
@@ -87,6 +87,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
             youtubeShareMatcher.find() -> {
                 "${youtubeShareMatcher.group(Regex.youtubeVideoNameGroup)} $text @YouTubeより"
             }
+
             subject.isEmpty() -> text
             else -> "$subject $text"
         }

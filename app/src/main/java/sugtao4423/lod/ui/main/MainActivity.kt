@@ -1,5 +1,6 @@
 package sugtao4423.lod.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -33,10 +34,7 @@ class MainActivity : LoDBaseActivity() {
             hide()
             setDisplayShowHomeEnabled(false)
         }
-        val binding = ActivityMainBinding.inflate(layoutInflater).also {
-            it.lifecycleOwner = this
-            it.viewModel = viewModel
-        }
+        val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         if (!viewModel.hasAccount) {
@@ -45,12 +43,14 @@ class MainActivity : LoDBaseActivity() {
             return
         }
 
-        viewModel.onStartTweetActivity.observe(this) {
-            startNewTweetActivity()
+        binding.apply {
+            pagerTabStrip.drawFullUnderline = true
+            tweetButton.setOnClickListener { startNewTweetActivity() }
+            tweetButton.setOnLongClickListener { showOptionDialog(); true }
+            optionButton.setOnClickListener { showOptionDialog() }
+            optionButton.setOnLongClickListener { startNewTweetActivity(); true }
         }
-        viewModel.showOptionDialog.observe(this) {
-            showOptionDialog()
-        }
+
         viewModel.onStartAutoLoadTLService.observe(this) {
             startAutoLoadTLService()
         }
@@ -103,6 +103,7 @@ class MainActivity : LoDBaseActivity() {
         finish()
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         finish()
     }
