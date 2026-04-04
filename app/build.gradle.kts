@@ -66,8 +66,8 @@ dependencies {
     implementation("com.twitter.twittertext:twitter-text:3.1.0")
 
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
-    implementation("com.google.android.exoplayer:exoplayer-core:2.18.1")
-    implementation("com.google.android.exoplayer:exoplayer-ui:2.18.1")
+    implementation("androidx.media3:media3-exoplayer:1.10.0")
+    implementation("androidx.media3:media3-ui:1.10.0")
 
     implementation("com.github.sugtao4423:android-ProgressDialog:1.0.0")
 }
