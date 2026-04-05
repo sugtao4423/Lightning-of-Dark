@@ -12,6 +12,8 @@ import sugtao4423.twitterweb4j.body.DeleteRetweetBody
 import sugtao4423.twitterweb4j.body.DeleteTweetBody
 import sugtao4423.twitterweb4j.body.FavoriteTweetBody
 import sugtao4423.twitterweb4j.body.UnfavoriteTweetBody
+import sugtao4423.twitterweb4j.challenge.ClientTransaction
+import sugtao4423.twitterweb4j.challenge.ClientTransactionUtils
 import sugtao4423.twitterweb4j.model.CursorList
 import sugtao4423.twitterweb4j.parser.JsonParserGraphQL
 import sugtao4423.twitterweb4j.parser.JsonParserGraphQLTimeline
@@ -24,6 +26,7 @@ import twitter4j.Status
 import twitter4j.TwitterException
 import twitter4j.User
 import java.io.IOException
+import java.net.URL
 
 class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
 
@@ -36,6 +39,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     private val client = OkHttpClient()
+    private var clientTransaction: ClientTransaction? = null
 
     @Throws(TwitterException::class)
     fun getMentionsTimeline(paging: Paging? = null): List<Status> {
@@ -152,10 +156,30 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         JsonParserGraphQL.parseUnfavoriteTweet(response)
     }
 
-    private fun buildRequestHeaders(): Headers =
+    @Throws(TwitterException::class)
+    fun loadClientTransaction() {
+        val h = Connection.defaultHeaders
+        try {
+            val homePageHtml = access("GET", ClientTransactionUtils.homePageUrl, headers = h)
+            val ondemandFileUrl = ClientTransactionUtils.getOndemandFileUrl(homePageHtml)
+            val ondemandFileContent = access("GET", ondemandFileUrl, headers = h)
+
+            clientTransaction = ClientTransaction(homePageHtml, ondemandFileContent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw TwitterException("Failed to load client transaction data.", e)
+        }
+    }
+
+    private fun buildRequestHeaders(method: String, urlPath: String): Headers =
         Connection.authorizedHeaders.newBuilder().apply {
             add("Cookie", cookie)
             add("X-Csrf-Token", csrfToken)
+
+            clientTransaction?.let {
+                val transactionId = it.generateTransactionId(method, urlPath)
+                add("X-Client-Transaction-Id", transactionId)
+            }
         }.build()
 
     @Throws(TwitterException::class)
@@ -172,7 +196,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         url: String,
         body: String? = null,
         contentType: MediaType? = null,
-        headers: Headers = buildRequestHeaders()
+        headers: Headers = buildRequestHeaders(method, URL(url).path)
     ): String {
         val requestBody = if (method == "POST" && body != null) {
             body.toRequestBody(contentType ?: CONTENT_TYPE_JSON)
