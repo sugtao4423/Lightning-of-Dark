@@ -1,5 +1,11 @@
 package sugtao4423.twitterweb4j
 
+import okhttp3.Headers
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import sugtao4423.twitterweb4j.body.CreateRetweetBody
 import sugtao4423.twitterweb4j.body.CreateTweetBody
 import sugtao4423.twitterweb4j.body.DeleteRetweetBody
@@ -18,17 +24,18 @@ import twitter4j.Status
 import twitter4j.TwitterException
 import twitter4j.User
 import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
-import java.util.zip.GZIPInputStream
-import javax.net.ssl.HttpsURLConnection
 
 class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
 
     companion object {
         @JvmStatic
         val DEFAULT_PAGE_COUNT = 40
+
+        @JvmStatic
+        val CONTENT_TYPE_JSON = "application/json".toMediaType()
     }
+
+    private val client = OkHttpClient()
 
     @Throws(TwitterException::class)
     fun getMentionsTimeline(paging: Paging? = null): List<Status> {
@@ -145,53 +152,49 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         JsonParserGraphQL.parseUnfavoriteTweet(response)
     }
 
-    private fun setSession(conn: HttpURLConnection) {
-        conn.setRequestProperty("Cookie", cookie)
-        conn.setRequestProperty("X-Csrf-Token", csrfToken)
-    }
+    private fun buildRequestHeaders(): Headers =
+        Connection.authorizedHeaders.newBuilder().apply {
+            add("Cookie", cookie)
+            add("X-Csrf-Token", csrfToken)
+        }.build()
 
     @Throws(TwitterException::class)
-    private fun get(url: String): String {
-        return access("GET", url)
-    }
+    private fun get(url: String): String = access("GET", url)
 
     @Throws(TwitterException::class)
-    private fun post(url: String, body: String, contentType: String = "application/json"): String {
-        return access("POST", url, body, contentType)
-    }
+    private fun post(
+        url: String, body: String, contentType: MediaType = CONTENT_TYPE_JSON
+    ): String = access("POST", url, body, contentType)
 
     @Throws(TwitterException::class)
     private fun access(
-        method: String, url: String, body: String? = null, contentType: String? = null
+        method: String,
+        url: String,
+        body: String? = null,
+        contentType: MediaType? = null,
+        headers: Headers = buildRequestHeaders()
     ): String {
-        val u = URL(url)
-        var conn: HttpsURLConnection? = null
+        val requestBody = if (method == "POST" && body != null) {
+            body.toRequestBody(contentType ?: CONTENT_TYPE_JSON)
+        } else {
+            null
+        }
+
+        val request = Request.Builder().apply {
+            url(url)
+            method(method, requestBody)
+            headers(headers)
+        }.build()
 
         try {
-            conn = u.openConnection() as HttpsURLConnection
-            conn.apply {
-                requestMethod = method
-                Connection.setBaseHeaders(this)
-                setSession(this)
-                conn.setRequestProperty("Accept-Encoding", "gzip")
-                if (method == "POST" && body != null) {
-                    val bodyBytes = body.toByteArray()
-                    setRequestProperty("Content-Type", contentType)
-                    setRequestProperty("Content-Length", bodyBytes.size.toString())
-                    doOutput = true
-                    outputStream.use { it.write(bodyBytes) }
-                }
+            val response = client.newCall(request).execute()
+            if (!response.isSuccessful) {
+                throw IOException("HTTP ${response.code}")
             }
-
-            val data = conn.let {
-                if (it.contentEncoding == "gzip") GZIPInputStream(it.inputStream) else it.inputStream
-            }.reader().use { it.readText() }
-            return data
+            return response.body.string()
         } catch (e: IOException) {
-            val statusCode = conn?.responseCode ?: -1
-            throw TwitterException(e.message, e, statusCode)
-        } finally {
-            conn?.disconnect()
+            e.printStackTrace()
+            throw TwitterException(e)
         }
     }
 
