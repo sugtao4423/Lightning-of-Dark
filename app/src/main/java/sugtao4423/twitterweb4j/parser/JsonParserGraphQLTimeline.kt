@@ -149,7 +149,7 @@ object JsonParserGraphQLTimeline {
         val convPrefix = null
         try {
             val instructions = JSONObject(response).nestedJSONObject(
-                "data", "user", "result", "timeline_v2", "timeline"
+                "data", "user", "result", "timeline", "timeline"
             ).getJSONArray("instructions")
             return parse(instructions, entry, convPrefix)
         } catch (e: JSONException) {

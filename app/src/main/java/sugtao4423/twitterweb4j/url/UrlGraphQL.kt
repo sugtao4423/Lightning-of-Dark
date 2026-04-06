@@ -64,21 +64,15 @@ object UrlGraphQL {
 
     @JvmStatic
     fun likes(userId: Long, count: Int, cursor: String? = null): String {
-        val url = "$apiBaseUrl/vni8vUvtZvJoIsl49VPudg/Likes"
+        val url = "$apiBaseUrl/KPuet6dGbC8LB2sOLx7tZQ/Likes"
 
         val variables = JSONObject().also { json ->
             json.put("userId", userId.toString())
             json.put("count", count)
             json.put("includePromotedContent", false)
-            json.put("withSuperFollowsUserFields", true)
-            json.put("withDownvotePerspective", false)
-            json.put("withReactionsMetadata", false)
-            json.put("withReactionsPerspective", false)
-            json.put("withSuperFollowsTweetFields", true)
             json.put("withClientEventToken", false)
             json.put("withBirdwatchNotes", false)
             json.put("withVoice", true)
-            json.put("withV2Timeline", true)
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
