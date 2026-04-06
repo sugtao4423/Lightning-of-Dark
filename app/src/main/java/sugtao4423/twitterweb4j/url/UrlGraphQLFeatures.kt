@@ -5,113 +5,79 @@ import twitter4j.JSONObject
 object UrlGraphQLFeatures {
 
     @JvmStatic
-    val homeLatestTimeline = JSONObject().apply {
-        put("rweb_video_screen_enabled", false)
-        put("profile_label_improvements_pcf_label_in_post_enabled", true)
-        put("responsive_web_profile_redirect_enabled", false)
-        put("rweb_tipjar_consumption_enabled", true)
-        put("verified_phone_label_enabled", false)
-        put("creator_subscriptions_tweet_preview_api_enabled", true)
-        put("responsive_web_graphql_timeline_navigation_enabled", true)
-        put("responsive_web_graphql_skip_user_profile_image_extensions_enabled", false)
-        put("premium_content_api_read_enabled", false)
-        put("communities_web_enable_tweet_community_results_fetch", true)
-        put("c9s_tweet_anatomy_moderator_badge_enabled", true)
-        put("responsive_web_grok_analyze_button_fetch_trends_enabled", false)
-        put("responsive_web_grok_analyze_post_followups_enabled", true)
-        put("responsive_web_jetfuel_frame", true)
-        put("responsive_web_grok_share_attachment_enabled", true)
-        put("articles_preview_enabled", true)
-        put("responsive_web_edit_tweet_api_enabled", true)
-        put("graphql_is_translatable_rweb_tweet_is_translatable_enabled", true)
-        put("view_counts_everywhere_api_enabled", true)
-        put("longform_notetweets_consumption_enabled", true)
-        put("responsive_web_twitter_article_tweet_consumption_enabled", true)
-        put("tweet_awards_web_tipping_enabled", false)
-        put("responsive_web_grok_show_grok_translated_post", false)
-        put("responsive_web_grok_analysis_button_from_backend", true)
-        put("creator_subscriptions_quote_tweet_preview_enabled", false)
-        put("freedom_of_speech_not_reach_fetch_enabled", true)
-        put("standardized_nudges_misinfo", true)
-        put("tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled", true)
-        put("longform_notetweets_rich_text_read_enabled", true)
-        put("longform_notetweets_inline_media_enabled", true)
-        put("responsive_web_grok_image_annotation_enabled", true)
-        put("responsive_web_grok_imagine_annotation_enabled", true)
-        put("responsive_web_grok_community_note_auto_translation_is_enabled", false)
-        put("responsive_web_enhance_cards_enabled", false)
-    }.toString()
+    private val defaultFeatures: Map<String, Boolean> = mapOf(
+        "responsive_web_graphql_exclude_directive_enabled" to true,
+        "verified_phone_label_enabled" to true,
+        "responsive_web_graphql_skip_user_profile_image_extensions_enabled" to false,
+        "responsive_web_graphql_timeline_navigation_enabled" to true,
+    )
 
     @JvmStatic
-    val listTweetsTimeline = JSONObject().apply {
-        put("rweb_video_screen_enabled", false)
-        put("payments_enabled", false)
-        put("profile_label_improvements_pcf_label_in_post_enabled", true)
-        put("rweb_tipjar_consumption_enabled", true)
-        put("verified_phone_label_enabled", false)
-        put("creator_subscriptions_tweet_preview_api_enabled", true)
-        put("responsive_web_graphql_timeline_navigation_enabled", true)
-        put("responsive_web_graphql_skip_user_profile_image_extensions_enabled", false)
-        put("premium_content_api_read_enabled", false)
-        put("communities_web_enable_tweet_community_results_fetch", true)
-        put("c9s_tweet_anatomy_moderator_badge_enabled", true)
-        put("responsive_web_grok_analyze_button_fetch_trends_enabled", false)
-        put("responsive_web_grok_analyze_post_followups_enabled", true)
-        put("responsive_web_jetfuel_frame", true)
-        put("responsive_web_grok_share_attachment_enabled", true)
-        put("articles_preview_enabled", true)
-        put("responsive_web_edit_tweet_api_enabled", true)
-        put("graphql_is_translatable_rweb_tweet_is_translatable_enabled", true)
-        put("view_counts_everywhere_api_enabled", true)
-        put("longform_notetweets_consumption_enabled", true)
-        put("responsive_web_twitter_article_tweet_consumption_enabled", true)
-        put("tweet_awards_web_tipping_enabled", false)
-        put("responsive_web_grok_show_grok_translated_post", false)
-        put("responsive_web_grok_analysis_button_from_backend", false)
-        put("creator_subscriptions_quote_tweet_preview_enabled", false)
-        put("freedom_of_speech_not_reach_fetch_enabled", true)
-        put("standardized_nudges_misinfo", true)
-        put("tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled", true)
-        put("longform_notetweets_rich_text_read_enabled", true)
-        put("longform_notetweets_inline_media_enabled", true)
-        put("responsive_web_grok_image_annotation_enabled", true)
-        put("responsive_web_grok_community_note_auto_translation_is_enabled", false)
-        put("responsive_web_enhance_cards_enabled", false)
-    }.toString()
+    private val userDataFeatures: Map<String, Boolean> = mapOf(
+        "hidden_profile_likes_enabled" to false,
+        "hidden_profile_subscriptions_enabled" to true,
+        "highlights_tweets_tab_ui_enabled" to true,
+        "responsive_web_twitter_article_notes_tab_enabled" to false,
+        "creator_subscriptions_tweet_preview_api_enabled" to true,
+    )
 
     @JvmStatic
-    val userTweetsAndReplies = JSONObject().apply {
-        put("rweb_lists_timeline_redesign_enabled", false)
-        put("responsive_web_graphql_exclude_directive_enabled", true)
-        put("verified_phone_label_enabled", false)
-        put("creator_subscriptions_tweet_preview_api_enabled", true)
-        put("responsive_web_graphql_timeline_navigation_enabled", true)
-        put("responsive_web_graphql_skip_user_profile_image_extensions_enabled", false)
-        put("tweetypie_unmention_optimization_enabled", true)
-        put("responsive_web_edit_tweet_api_enabled", true)
-        put("graphql_is_translatable_rweb_tweet_is_translatable_enabled", true)
-        put("view_counts_everywhere_api_enabled", true)
-        put("longform_notetweets_consumption_enabled", true)
-        put("responsive_web_twitter_article_tweet_consumption_enabled", false)
-        put("tweet_awards_web_tipping_enabled", false)
-        put("freedom_of_speech_not_reach_fetch_enabled", true)
-        put("standardized_nudges_misinfo", true)
-        put("tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled", true)
-        put("longform_notetweets_rich_text_read_enabled", true)
-        put("longform_notetweets_inline_media_enabled", true)
-        put("responsive_web_media_download_video_enabled", false)
-        put("responsive_web_enhance_cards_enabled", false)
-    }.toString()
+    private val userInfoFeatures: Map<String, Boolean> = mapOf(
+        "subscriptions_verification_info_is_identity_verified_enabled" to true,
+        "subscriptions_verification_info_verified_since_enabled" to true,
+    )
 
     @JvmStatic
-    val likes = JSONObject().apply {
-        put("dont_mention_me_view_api_enabled", true)
-        put("interactive_text_enabled", true)
-        put("responsive_web_uc_gql_enabled", false)
-        put("vibe_tweet_context_enabled", false)
-        put("responsive_web_edit_tweet_api_enabled", false)
-        put("standardized_nudges_misinfo", false)
-        put("responsive_web_enhance_cards_enabled", false)
-    }.toString()
+    private val additionalFeatures: Map<String, Boolean> = mapOf(
+        "rweb_lists_timeline_redesign_enabled" to true,
+        "creator_subscriptions_tweet_preview_api_enabled" to true,
+        "c9s_tweet_anatomy_moderator_badge_enabled" to true,
+        "tweetypie_unmention_optimization_enabled" to true,
+        "responsive_web_edit_tweet_api_enabled" to true,
+        "graphql_is_translatable_rweb_tweet_is_translatable_enabled" to true,
+        "view_counts_everywhere_api_enabled" to true,
+        "longform_notetweets_consumption_enabled" to true,
+        "responsive_web_twitter_article_tweet_consumption_enabled" to false,
+        "tweet_awards_web_tipping_enabled" to false,
+        "freedom_of_speech_not_reach_fetch_enabled" to true,
+        "standardized_nudges_misinfo" to true,
+        "tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled" to false,
+        "rweb_video_timestamps_enabled" to true,
+        "longform_notetweets_rich_text_read_enabled" to true,
+        "longform_notetweets_inline_media_enabled" to false,
+        "responsive_web_media_download_video_enabled" to false,
+        "responsive_web_enhance_cards_enabled" to false,
+    )
+
+    @JvmStatic
+    fun generateMap(
+        default: Boolean = true,
+        userData: Boolean = false,
+        userInfo: Boolean = false,
+        additional: Boolean = false,
+    ): Map<String, Boolean> {
+        val features = mutableMapOf<String, Boolean>()
+        if (default) {
+            features += defaultFeatures
+        }
+        if (userData || userInfo) {
+            features += userDataFeatures
+        }
+        if (userInfo) {
+            features += userInfoFeatures
+        }
+        if (additional) {
+            features += additionalFeatures
+        }
+        return features.toMap()
+    }
+
+    @JvmStatic
+    fun generate(
+        default: Boolean = true,
+        userData: Boolean = false,
+        userInfo: Boolean = false,
+        additional: Boolean = false,
+    ): String = JSONObject(generateMap(default, userData, userInfo, additional)).toString()
 
 }

@@ -21,7 +21,7 @@ object UrlGraphQL {
 
         return url.toUri().buildUpon().apply {
             appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.homeLatestTimeline)
+            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -38,7 +38,7 @@ object UrlGraphQL {
 
         return url.toUri().buildUpon().apply {
             appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.listTweetsTimeline)
+            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -58,7 +58,7 @@ object UrlGraphQL {
 
         return url.toUri().buildUpon().apply {
             appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.userTweetsAndReplies)
+            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -84,7 +84,7 @@ object UrlGraphQL {
 
         return url.toUri().buildUpon().apply {
             appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.likes)
+            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
