@@ -115,7 +115,7 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     @Throws(TwitterException::class)
-    fun getFavorites(userId: Long, count: Int? = null, cursor: String? = null): CursorList<Status> {
+    fun favorites(userId: Long, count: Int? = null, cursor: String? = null): CursorList<Status> {
         val url = UrlGraphQL.likes(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
         val response = get(url)
         return JsonParserGraphQLTimeline.parseLikes(response)
