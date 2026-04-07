@@ -59,6 +59,26 @@ object UrlGraphQL {
     }
 
     @JvmStatic
+    fun tweetDetail(tweetId: Long): String {
+        val url = "$apiBaseUrl/rU08O-YiXdr0IZfE7qaUMg/TweetDetail"
+
+        val variables = JSONObject().also { json ->
+            json.put("focalTweetId", tweetId.toString())
+            json.put("with_rux_injections", false)
+            json.put("includePromotedContent", false)
+            json.put("withCommunity", true)
+            json.put("withQuickPromoteEligibilityTweetFields", true)
+            json.put("withBirdwatchNotes", true)
+            json.put("withVoice", true)
+        }.toString()
+
+        return url.toUri().buildUpon().apply {
+            appendQueryParameter("variables", variables)
+            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        }.build().toString()
+    }
+
+    @JvmStatic
     fun userTweetsAndReplies(userId: Long, count: Int, cursor: String? = null): String {
         val url = "$apiBaseUrl/wxoVeDnl0mP7VLhe6mTOdg/UserTweetsAndReplies"
 

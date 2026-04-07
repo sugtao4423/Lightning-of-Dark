@@ -138,6 +138,23 @@ object JsonParserGraphQLTimeline {
     }
 
     @Throws(TwitterException::class)
+    fun parseTweetDetail(response: String, tweetId: Long): Status {
+        try {
+            val instructions = JSONObject(response).nestedJSONObject(
+                "data", "threaded_conversation_with_injections_v2"
+            ).getJSONArray("instructions")
+            val conversations = parse(
+                instructions, convPrefix = "conversationthread-", ignoreMissingCursorTop = true
+            )
+
+            return conversations.find { it.id == tweetId }
+                ?: throw TwitterException("Tweet with ID $tweetId not found in the conversation")
+        } catch (e: JSONException) {
+            throw TwitterException(e)
+        }
+    }
+
+    @Throws(TwitterException::class)
     fun parseUserTweetsAndReplies(response: String, userId: Long): CursorList<Status> {
         try {
             val instructions = JSONObject(response).nestedJSONObject(

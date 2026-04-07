@@ -99,6 +99,13 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     @Throws(TwitterException::class)
+    fun tweetDetail(tweetId: Long): Status {
+        val url = UrlGraphQL.tweetDetail(tweetId)
+        val response = get(url)
+        return JsonParserGraphQLTimeline.parseTweetDetail(response, tweetId)
+    }
+
+    @Throws(TwitterException::class)
     fun userTweetsAndReplies(
         userId: Long, count: Int? = null, cursor: String? = null
     ): CursorList<Status> {
