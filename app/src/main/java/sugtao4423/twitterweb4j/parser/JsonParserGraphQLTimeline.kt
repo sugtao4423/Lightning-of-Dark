@@ -21,7 +21,11 @@ object JsonParserGraphQLTimeline {
 
     @Throws(JSONException::class, TwitterException::class)
     private fun parse(
-        instructions: JSONArray, entry: String = "TimelineAddEntries", convPrefix: String? = null
+        instructions: JSONArray,
+        entry: String = "TimelineAddEntries",
+        convPrefix: String? = null,
+        ignoreMissingCursorTop: Boolean = false,
+        ignoreMissingCursorBottom: Boolean = false,
     ): CursorList<Status> {
         val instructionObjects = (0 until instructions.length()).map {
             instructions.getJSONObject(it)
@@ -85,10 +89,10 @@ object JsonParserGraphQLTimeline {
             }
         }
 
-        if (result.cursorTop == null) {
+        if (!ignoreMissingCursorTop && result.cursorTop == null) {
             throw TwitterException("cursor-top is not set")
         }
-        if (result.cursorBottom == null) {
+        if (!ignoreMissingCursorBottom && result.cursorBottom == null) {
             throw TwitterException("cursor-bottom is not set")
         }
 
