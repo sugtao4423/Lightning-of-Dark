@@ -20,7 +20,6 @@ import sugtao4423.twitterweb4j.parser.JsonParserGraphQLTimeline
 import sugtao4423.twitterweb4j.parser.JsonParserV1
 import sugtao4423.twitterweb4j.url.UrlGraphQL
 import sugtao4423.twitterweb4j.url.UrlV1
-import twitter4j.Paging
 import twitter4j.Relationship
 import twitter4j.Status
 import twitter4j.TwitterException
@@ -40,13 +39,6 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
 
     private val client = OkHttpClient()
     private var clientTransaction: ClientTransaction? = null
-
-    @Throws(TwitterException::class)
-    fun getMentionsTimeline(paging: Paging? = null): List<Status> {
-        val url = UrlV1.mentionsTimeline(paging)
-        val response = get(url)
-        return JsonParserV1.parseStatusesArray(response)
-    }
 
     @Throws(TwitterException::class)
     fun showUser(id: Long): User {
@@ -81,6 +73,13 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         val url = UrlGraphQL.homeLatestTimeline(count ?: DEFAULT_PAGE_COUNT, cursor)
         val response = get(url)
         return JsonParserGraphQLTimeline.parseHomeLatestTimeline(response)
+    }
+
+    @Throws(TwitterException::class)
+    fun mentionsTimeline(count: Int? = null, cursor: String? = null): CursorList<Status> {
+        val url = UrlGraphQL.mentionsTimeline(count ?: DEFAULT_PAGE_COUNT, cursor)
+        val response = get(url)
+        return JsonParserGraphQLTimeline.parseMentionsTimeline(response)
     }
 
     @Throws(TwitterException::class)

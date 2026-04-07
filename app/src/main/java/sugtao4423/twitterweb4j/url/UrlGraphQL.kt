@@ -26,6 +26,22 @@ object UrlGraphQL {
     }
 
     @JvmStatic
+    fun mentionsTimeline(count: Int, cursor: String? = null): String {
+        val url = "$apiBaseUrl/8bj3MP0KXWKlpfC1yvGfbQ/NotificationsTimeline"
+
+        val variables = JSONObject().also { json ->
+            json.put("timeline_type", "Mentions")
+            json.put("count", count)
+            cursor?.let { json.put("cursor", it) }
+        }.toString()
+
+        return url.toUri().buildUpon().apply {
+            appendQueryParameter("variables", variables)
+            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        }.build().toString()
+    }
+
+    @JvmStatic
     fun listTweetsTimeline(listId: Long, count: Int, cursor: String? = null): String {
         val url = "$apiBaseUrl/l411pL-GRg-AKo_a2rmYjg/ListLatestTweetsTimeline"
 

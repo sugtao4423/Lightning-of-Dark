@@ -1,7 +1,5 @@
 package sugtao4423.twitterweb4j.url
 
-import sugtao4423.twitterweb4j.TwitterWeb4j
-import twitter4j.Paging
 import java.net.URLEncoder
 
 object UrlV1 {
@@ -10,39 +8,10 @@ object UrlV1 {
     private val apiBaseUrl = "https://api.twitter.com/1.1".replace("twitter", "x")
 
     @JvmStatic
-    private val baseQueryParams = mapOf(
-        "count" to TwitterWeb4j.DEFAULT_PAGE_COUNT.toString(),
-        "include_my_retweet" to "1",
-        "cards_platform" to "Web-13",
-        "include_entities" to "1",
-        "include_user_entities" to "1",
-        "include_cards" to "1",
-        "send_error_codes" to "1",
-        "tweet_mode" to "extended",
-        "include_ext_alt_text" to "true",
-        "include_reply_count" to "true",
-        "ext" to "mediaStats,highlightedLabel,voiceInfo,superFollowMetadata",
-        "include_ext_has_nft_avatar" to "true",
-        "include_ext_is_blue_verified" to "true",
-        "include_ext_verified_type" to "true",
-        "include_ext_sensitive_media_warning" to "true",
-        "include_ext_media_color" to "true",
-    )
-
-    @JvmStatic
-    private val mentionsTimeline = "$apiBaseUrl/statuses/mentions_timeline.json"
-
-    @JvmStatic
     private val showUser = "$apiBaseUrl/users/show.json"
 
     @JvmStatic
     private val showFriendship = "$apiBaseUrl/friendships/show.json"
-
-    @JvmStatic
-    fun mentionsTimeline(paging: Paging? = null): String {
-        val params = buildPaginatedQueryParams(baseQueryParams, paging)
-        return "$mentionsTimeline?$params"
-    }
 
     @JvmStatic
     fun showUser(id: Long): String {
@@ -86,25 +55,6 @@ object UrlV1 {
             sb.append("&$key=$encodedValue")
         }
         return sb.toString().substring(1)
-    }
-
-    @JvmStatic
-    private fun buildPaginatedQueryParams(params: Map<String, String>, paging: Paging?): String {
-        if (paging == null) {
-            return buildQueryParams(params)
-        }
-
-        val newParams = params.toMutableMap()
-        if (paging.count > 0) {
-            newParams["count"] = paging.count.toString()
-        }
-        if (paging.sinceId > 0) {
-            newParams["since_id"] = paging.sinceId.toString()
-        }
-        if (paging.maxId > 0) {
-            newParams["max_id"] = paging.maxId.toString()
-        }
-        return buildQueryParams(newParams)
     }
 
 }

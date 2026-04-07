@@ -36,7 +36,7 @@ object JsonParserGraphQLTimeline {
             val entry = entries.getJSONObject(i)
             val entryId = entry.getString("entryId")
 
-            if (entryId.startsWith("tweet-")) {
+            if (entryId.startsWith("tweet-") || entryId.startsWith("notification-")) {
                 val tweet = StatusJSONImpl(
                     entry.nestedJSONObject(
                         "content", "itemContent", "tweet_results", "result"
@@ -104,6 +104,18 @@ object JsonParserGraphQLTimeline {
                 "data", "home", "home_timeline_urt"
             ).getJSONArray("instructions")
             return parse(instructions, convPrefix = "home-conversation-")
+        } catch (e: JSONException) {
+            throw TwitterException(e)
+        }
+    }
+
+    @Throws(TwitterException::class)
+    fun parseMentionsTimeline(response: String): CursorList<Status> {
+        try {
+            val instructions = JSONObject(response).nestedJSONObject(
+                "data", "viewer_v2", "user_results", "result", "notification_timeline", "timeline"
+            ).getJSONArray("instructions")
+            return parse(instructions)
         } catch (e: JSONException) {
             throw TwitterException(e)
         }
