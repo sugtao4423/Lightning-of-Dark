@@ -2,6 +2,7 @@ package sugtao4423.twitterweb4j.parser
 
 import sugtao4423.twitterweb4j.impl.UserJSONImpl
 import sugtao4423.twitterweb4j.model.PagableCursorList
+import sugtao4423.twitterweb4j.nestedJSONObject
 import twitter4j.JSONArray
 import twitter4j.JSONException
 import twitter4j.JSONObject
@@ -9,13 +10,6 @@ import twitter4j.TwitterException
 import twitter4j.User
 
 object JsonParserGraphQLUser {
-
-    @Throws(JSONException::class)
-    private fun JSONObject.nestedJSONObject(vararg nests: String): JSONObject {
-        var json = this
-        nests.forEach { json = json.getJSONObject(it) }
-        return json
-    }
 
     @Throws(JSONException::class, TwitterException::class)
     private fun parse(

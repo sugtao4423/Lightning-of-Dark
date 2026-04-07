@@ -2,6 +2,7 @@ package sugtao4423.twitterweb4j.parser
 
 import sugtao4423.twitterweb4j.impl.StatusJSONImpl
 import sugtao4423.twitterweb4j.model.CursorList
+import sugtao4423.twitterweb4j.nestedJSONObject
 import twitter4j.JSONArray
 import twitter4j.JSONException
 import twitter4j.JSONObject
@@ -9,13 +10,6 @@ import twitter4j.Status
 import twitter4j.TwitterException
 
 object JsonParserGraphQLTimeline {
-
-    @Throws(JSONException::class)
-    private fun JSONObject.nestedJSONObject(vararg nests: String): JSONObject {
-        var json = this
-        nests.forEach { json = json.getJSONObject(it) }
-        return json
-    }
 
     private val ignoreSource = Regex("Twitter for Advertisers|advertiser-interface")
 
