@@ -80,4 +80,7 @@ object JsonParserGraphQLUser {
         }
     }
 
+    @Throws(TwitterException::class)
+    fun parseFollowers(response: String): PagableCursorList<User> = parseFollowing(response)
+
 }

@@ -133,6 +133,15 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     }
 
     @Throws(TwitterException::class)
+    fun followers(
+        userId: Long, count: Int? = null, cursor: String? = null
+    ): PagableCursorList<User> {
+        val url = UrlGraphQL.followers(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
+        val response = get(url)
+        return JsonParserGraphQLUser.parseFollowers(response)
+    }
+
+    @Throws(TwitterException::class)
     fun createTweet(tweetText: String): Status {
         val url = UrlGraphQL.createTweet
         val body = CreateTweetBody(url).get(tweetText)

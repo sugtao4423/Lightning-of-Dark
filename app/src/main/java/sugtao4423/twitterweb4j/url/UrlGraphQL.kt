@@ -136,6 +136,23 @@ object UrlGraphQL {
     }
 
     @JvmStatic
+    fun followers(userId: Long, count: Int, cursor: String? = null): String {
+        val url = "$apiBaseUrl/-WcGoRt8IQuPm-l1ymgy6g/Followers"
+
+        val variables = JSONObject().also { json ->
+            json.put("userId", userId.toString())
+            json.put("count", count)
+            json.put("includePromotedContent", false)
+            cursor?.let { json.put("cursor", it) }
+        }.toString()
+
+        return url.toUri().buildUpon().apply {
+            appendQueryParameter("variables", variables)
+            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        }.build().toString()
+    }
+
+    @JvmStatic
     val createTweet = "$apiBaseUrl/oB-5XsHNAbjvARJEc8CZFw/CreateTweet"
 
     @JvmStatic
