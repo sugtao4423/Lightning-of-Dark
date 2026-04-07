@@ -41,6 +41,13 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
     private var clientTransaction: ClientTransaction? = null
 
     @Throws(TwitterException::class)
+    fun verifyCredentials(): User {
+        val url = UrlV1.verifyCredentials
+        val response = get(url)
+        return JsonParserV1.parseUser(response)
+    }
+
+    @Throws(TwitterException::class)
     fun showUser(id: Long): User {
         val url = UrlV1.showUser(id)
         val response = get(url)

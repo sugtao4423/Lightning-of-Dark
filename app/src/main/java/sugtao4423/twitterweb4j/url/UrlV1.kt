@@ -8,6 +8,9 @@ object UrlV1 {
     private val apiBaseUrl = "https://api.twitter.com/1.1".replace("twitter", "x")
 
     @JvmStatic
+    val verifyCredentials = "$apiBaseUrl/account/verify_credentials.json"
+
+    @JvmStatic
     private val showUser = "$apiBaseUrl/users/show.json"
 
     @JvmStatic
