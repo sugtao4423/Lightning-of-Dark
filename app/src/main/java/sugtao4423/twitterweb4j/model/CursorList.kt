@@ -1,6 +1,6 @@
 package sugtao4423.twitterweb4j.model
 
-class CursorList<T> : ArrayList<T>() {
+open class CursorList<T> : ArrayList<T>() {
 
     var cursorTop: String? = null
     var cursorBottom: String? = null

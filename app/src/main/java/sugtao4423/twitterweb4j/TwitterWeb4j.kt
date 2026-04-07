@@ -15,8 +15,10 @@ import sugtao4423.twitterweb4j.body.UnfavoriteTweetBody
 import sugtao4423.twitterweb4j.challenge.ClientTransaction
 import sugtao4423.twitterweb4j.challenge.ClientTransactionUtils
 import sugtao4423.twitterweb4j.model.CursorList
+import sugtao4423.twitterweb4j.model.PagableCursorList
 import sugtao4423.twitterweb4j.parser.JsonParserGraphQL
 import sugtao4423.twitterweb4j.parser.JsonParserGraphQLTimeline
+import sugtao4423.twitterweb4j.parser.JsonParserGraphQLUser
 import sugtao4423.twitterweb4j.parser.JsonParserV1
 import sugtao4423.twitterweb4j.url.UrlGraphQL
 import sugtao4423.twitterweb4j.url.UrlV1
@@ -119,6 +121,15 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         val url = UrlGraphQL.likes(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
         val response = get(url)
         return JsonParserGraphQLTimeline.parseLikes(response)
+    }
+
+    @Throws(TwitterException::class)
+    fun following(
+        userId: Long, count: Int? = null, cursor: String? = null
+    ): PagableCursorList<User> {
+        val url = UrlGraphQL.following(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
+        val response = get(url)
+        return JsonParserGraphQLUser.parseFollowing(response)
     }
 
     @Throws(TwitterException::class)
