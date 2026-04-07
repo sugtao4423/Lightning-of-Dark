@@ -119,7 +119,7 @@ object JsonParserGraphQLTimeline {
             val instructions = JSONObject(response).nestedJSONObject(
                 "data", "viewer_v2", "user_results", "result", "notification_timeline", "timeline"
             ).getJSONArray("instructions")
-            return parse(instructions)
+            return parse(instructions, ignoreMissingCursorBottom = true)
         } catch (e: JSONException) {
             throw TwitterException(e)
         }
