@@ -26,6 +26,7 @@ import twitter4j.Relationship
 import twitter4j.Status
 import twitter4j.TwitterException
 import twitter4j.User
+import twitter4j.UserList
 import java.io.IOException
 import java.net.URL
 
@@ -47,6 +48,20 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
         val url = UrlV1.verifyCredentials
         val response = get(url)
         return JsonParserV1.parseUser(response)
+    }
+
+    @Throws(TwitterException::class)
+    fun getUserLists(id: Long, reverse: Boolean = false): List<UserList> {
+        val url = UrlV1.getUserLists(id, reverse)
+        val response = get(url)
+        return JsonParserV1.parseUserListsArray(response)
+    }
+
+    @Throws(TwitterException::class)
+    fun getUserLists(screenName: String, reverse: Boolean = false): List<UserList> {
+        val url = UrlV1.getUserLists(screenName, reverse)
+        val response = get(url)
+        return JsonParserV1.parseUserListsArray(response)
     }
 
     @Throws(TwitterException::class)

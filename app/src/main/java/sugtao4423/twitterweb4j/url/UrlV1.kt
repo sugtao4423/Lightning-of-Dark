@@ -11,10 +11,27 @@ object UrlV1 {
     val verifyCredentials = "$apiBaseUrl/account/verify_credentials.json"
 
     @JvmStatic
+    private val getUserLists = "$apiBaseUrl/lists/list.json"
+
+    @JvmStatic
     private val showUser = "$apiBaseUrl/users/show.json"
 
     @JvmStatic
     private val showFriendship = "$apiBaseUrl/friendships/show.json"
+
+    @JvmStatic
+    fun getUserLists(id: Long, reverse: Boolean): String {
+        val query = mapOf("user_id" to id.toString(), "reverse" to reverse.toString())
+        val params = buildQueryParams(query)
+        return "$getUserLists?$params"
+    }
+
+    @JvmStatic
+    fun getUserLists(screenName: String, reverse: Boolean): String {
+        val query = mapOf("screen_name" to screenName, "reverse" to reverse.toString())
+        val params = buildQueryParams(query)
+        return "$getUserLists?$params"
+    }
 
     @JvmStatic
     fun showUser(id: Long): String {
