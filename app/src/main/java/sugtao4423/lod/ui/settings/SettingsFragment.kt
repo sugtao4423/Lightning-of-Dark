@@ -2,7 +2,6 @@ package sugtao4423.lod.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.preference.CheckBoxPreference
@@ -11,22 +10,17 @@ import androidx.preference.PreferenceFragmentCompat
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.settingslist.ListSettingsActivity
 import sugtao4423.lod.view.IntegerEditTextPreference
-import sugtao4423.support.progressdialog.ProgressDialog
 import twitter4j.ResponseList
 import twitter4j.UserList
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    private val follow2list: Preference by lazy { findPreference("follow2list")!! }
     private val listAsTL: CheckBoxPreference by lazy { findPreference("listAsTL")!! }
     private val autoLoadTLInterval: IntegerEditTextPreference by lazy { findPreference("autoLoadTLInterval")!! }
     private val listSetting: Preference by lazy { findPreference("listSetting")!! }
     private val clearCache: Preference by lazy { findPreference("clearCache")!! }
 
     private val viewModel: SettingsFragmentViewModel by viewModels()
-    private val follow2ListViewModel: Follow2ListViewModel by viewModels()
-
-    private var progressDialog: ProgressDialog? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference, rootKey)
@@ -35,27 +29,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun initObservers() {
-        follow2ListViewModel.toggleLoadingDialog.observe(this) {
-            if (progressDialog != null) {
-                progressDialog!!.dismiss()
-                progressDialog = null
-                return@observe
-            }
-            progressDialog = ProgressDialog(requireActivity()).apply {
-                setMessage(getString(R.string.loading))
-                isIndeterminate = false
-                setProgressStyle(ProgressDialog.STYLE_SPINNER)
-                setCancelable(false)
-                show()
-            }
-        }
-        follow2ListViewModel.showSelectSyncList.observe(this) {
-            showFollowSyncListSelectDialog(it)
-        }
-        follow2ListViewModel.showSyncListResultMessage.observe(this) {
-            showFollowSyncListResult(it)
-        }
-
         viewModel.listAsTLData.observe(this) {
             listAsTL.isChecked = it.isChecked
             listAsTL.summary = it.summary
@@ -73,10 +46,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun initViews() {
-        follow2list.setOnPreferenceClickListener {
-            showFollow2ListSelectDialog()
-            true
-        }
         listAsTL.setOnPreferenceChangeListener { _, newValue ->
             if (newValue as Boolean) {
                 viewModel.showSelectListAsTLDialog()
@@ -95,38 +64,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         clearCache.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             viewModel.clearCache()
             false
-        }
-    }
-
-    private fun showFollow2ListSelectDialog() {
-        AlertDialog.Builder(requireActivity()).apply {
-            setTitle(R.string.limit_5000_users)
-            setItems(R.array.follow2list_methods) { _, which ->
-                when (which) {
-                    0 -> follow2ListViewModel.createFollowSyncList()
-                    1 -> follow2ListViewModel.selectFollowSyncList()
-                }
-            }
-            show()
-        }
-    }
-
-    private fun showFollowSyncListSelectDialog(lists: ResponseList<UserList>) {
-        val listNames = lists.map { it.name }.toTypedArray()
-        AlertDialog.Builder(requireActivity()).apply {
-            setItems(listNames) { _, which ->
-                val selectedList = lists[which]
-                follow2ListViewModel.followSyncListSelected(selectedList)
-            }
-            show()
-        }
-    }
-
-    private fun showFollowSyncListResult(@StringRes message: Int) {
-        AlertDialog.Builder(requireContext()).apply {
-            setMessage(message)
-            setPositiveButton(R.string.ok, null)
-            show()
         }
     }
 

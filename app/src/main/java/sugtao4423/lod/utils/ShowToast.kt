@@ -17,9 +17,7 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
 
     private val errorMessageRes = arrayOf(
         R.string.error_auto_load_tl_interval,
-        R.string.error_create_list,
         R.string.error_favorite,
-        R.string.error_follow2list,
         R.string.error_get_access_token,
         R.string.error_get_favorite,
         R.string.error_get_follow,
