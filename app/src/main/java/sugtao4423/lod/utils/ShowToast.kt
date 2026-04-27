@@ -25,7 +25,6 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
         R.string.error_get_image,
         R.string.error_get_list,
         R.string.error_get_mention,
-        R.string.error_get_original_image,
         R.string.error_get_request_token,
         R.string.error_get_status,
         R.string.error_get_talk_list,
