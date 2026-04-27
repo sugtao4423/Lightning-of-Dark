@@ -29,20 +29,7 @@
         </activity>
         <activity
             android:name=".ui.addaccount.AddAccountActivity"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="localhost"
-                    android:pathPattern="/sugtao4423.lod/oauth.*"
-                    android:scheme="https" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity android:name="sugtao4423.lod.ui.userpage.UserPageActivity" />
         <activity
             android:name=".ui.tweet.TweetActivity"

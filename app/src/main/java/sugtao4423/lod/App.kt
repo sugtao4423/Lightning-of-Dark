@@ -2,6 +2,7 @@ package sugtao4423.lod
 
 import android.app.Application
 import android.graphics.Typeface
+import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,12 +18,9 @@ import sugtao4423.lod.model.PrefRepository
 import sugtao4423.lod.model.UseTimeRepository
 import sugtao4423.lod.service.AutoLoadTLService
 import sugtao4423.lod.utils.showToast
+import sugtao4423.twitterweb4j.TwitterWeb4j
 import twitter4j.StatusUpdate
-import twitter4j.Twitter
 import twitter4j.TwitterException
-import twitter4j.TwitterFactory
-import twitter4j.auth.AccessToken
-import twitter4j.conf.ConfigurationBuilder
 import java.util.regex.Pattern
 
 class App : Application() {
@@ -45,7 +43,7 @@ class App : Application() {
         private set
     lateinit var account: Account
         private set
-    lateinit var twitter: Twitter
+    lateinit var twitter: TwitterWeb4j
         private set
     lateinit var mentionPattern: Pattern
         private set
@@ -61,21 +59,20 @@ class App : Application() {
     suspend fun reloadAccount() {
         if (accountRepository.isExists(prefRepository.screenName)) {
             account = accountRepository.findByScreenName(prefRepository.screenName)!!
-            twitter = run {
-                val ck = account.consumerKey.ifEmpty { getString(R.string.CK) }
-                val cs = account.consumerSecret.ifEmpty { getString(R.string.CS) }
-                val accessToken = AccessToken(account.accessToken, account.accessTokenSecret)
-
-                val conf = ConfigurationBuilder().let {
-                    it.setOAuthConsumerKey(ck)
-                    it.setOAuthConsumerSecret(cs)
-                    it.setTweetModeExtended(true)
-                    it.build()
-                }
-                TwitterFactory(conf).getInstance(accessToken)
-            }
+            twitter = TwitterWeb4j(account.cookie)
+            loadClientTransaction()
             mentionPattern = Pattern.compile(".*@${account.screenName}.*", Pattern.DOTALL)
             hasAccount = true
+        }
+    }
+
+    private fun loadClientTransaction() = CoroutineScope(Dispatchers.Main).launch {
+        withContext(Dispatchers.IO) {
+            runCatching { twitter.loadClientTransaction() }
+        }.onFailure {
+            Toast.makeText(
+                applicationContext, "Failed to load client transaction data.", Toast.LENGTH_LONG
+            ).show()
         }
     }
 

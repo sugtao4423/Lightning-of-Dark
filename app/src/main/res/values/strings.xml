@@ -56,12 +56,9 @@
     <string name="edittext_empty">なにも入力されていません</string>
     <string name="param_success_account_delete">\@%s を削除しました</string>
     <string name="list_not_selected">リストが選択されていません</string>
-    <string name="param_oauth_description"><![CDATA[Custom CK/CSを使う場合、CallbackURLを<br><font color=blue><u>%s</u></font><br>に設定してください。<br>（タップでコピー）]]></string>
-    <string name="error_get_request_token">RequestTokenの取得に失敗しました</string>
+    <string name="error_get_user_info">ユーザー情報の取得に失敗しました</string>
     <string name="param_account_already_exists">\@%1$s はすでに登録されています</string>
     <string name="success_add_account">アカウントを追加しました</string>
-    <string name="error_get_access_token">アクセストークンの取得に失敗しました</string>
-    <string name="done_copy_clip_board">クリップボードにコピーしました</string>
     <string name="url_not_match_pattern_and_dont_save">URLがパターンにマッチしません\n保存できませんでした</string>
     <string name="error_get_image">画像の取得失敗</string>
     <string name="error_play_video">動画の再生に失敗しました</string>
@@ -120,10 +117,14 @@
     <string name="page_title_follower">Follower</string>
 
     <!-- activity_add_account.xml -->
-    <string name="layout_oauth_auth">OAuth認証</string>
-    <string name="layout_oauth_description">Custom CK/CS\n使いたい場合は入力してください。使わなくても認証できます</string>
-    <string name="layout_consumer_key">Consumer Key</string>
-    <string name="layout_consumer_secret">Consumer Secret</string>
+    <string name="layout_cookie">Cookie</string>
+    <string name="layout_ct0">ct0</string>
+    <string name="layout_auth_token">auth_token</string>
+    <string name="layout_user_get">ユーザー取得</string>
+    <string name="layout_user_id">ユーザーID</string>
+    <string name="layout_screen_name">スクリーンネーム</string>
+    <string name="layout_profile_image">アイコン</string>
+    <string name="layout_save">保存</string>
 
     <!-- option_dialog_tweet_bomb.xml -->
     <string name="layout_static_text">固定テキスト</string>

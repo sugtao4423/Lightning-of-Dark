@@ -30,7 +30,7 @@ import twitter4j.UserList
 import java.io.IOException
 import java.net.URL
 
-class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
+class TwitterWeb4j {
 
     companion object {
         @JvmStatic
@@ -38,6 +38,21 @@ class TwitterWeb4j(private val csrfToken: String, private val cookie: String) {
 
         @JvmStatic
         val CONTENT_TYPE_JSON = "application/json".toMediaType()
+    }
+
+    private val cookie: String
+    private val csrfToken: String
+
+    @Throws(TwitterException::class)
+    constructor(cookie: String) {
+        val ct0 = cookie.split(";").find {
+            it.trim().startsWith("ct0=")
+        }?.substringAfter("ct0=")
+        if (ct0.isNullOrEmpty()) {
+            throw TwitterException("Invalid cookie: ct0 token not found.")
+        }
+        this.cookie = cookie
+        this.csrfToken = ct0
     }
 
     private val client = OkHttpClient()
