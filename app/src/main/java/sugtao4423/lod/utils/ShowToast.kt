@@ -28,7 +28,6 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
         R.string.error_get_talk_list,
         R.string.error_get_timeline,
         R.string.error_get_user_detail,
-        R.string.error_get_user_icon,
         R.string.error_get_user_info,
         R.string.error_play_video,
         R.string.error_post_delete,

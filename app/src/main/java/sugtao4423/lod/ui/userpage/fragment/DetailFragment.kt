@@ -51,15 +51,10 @@ class DetailFragment : Fragment() {
         userPageViewModel.user.observe(viewLifecycleOwner) {
             bindUser(it)
             viewModel.checkRelationShip(it)
-            viewModel.getRelationshipIconUrls(it)
         }
 
         viewModel.relationshipIcon.observe(viewLifecycleOwner) {
             binding.relationshipText.text = it
-        }
-        viewModel.relationShipIconUrls.observe(viewLifecycleOwner) {
-            binding.relationshipMeIcon.loadUrl(it.me)
-            binding.relationshipTargetIcon.loadUrl(it.target)
         }
         viewModel.onStartIconImageUrl.observe(viewLifecycleOwner) {
             val image = Intent(context, ShowImageActivity::class.java).apply {
@@ -97,8 +92,12 @@ class DetailFragment : Fragment() {
             if (UserConverter.isShowProtected(user)) View.VISIBLE else View.GONE
         screenName.text = UserConverter.screenName(user)
 
-        relationshipLayout.visibility =
-            if (viewModel.isShowRelationship(user)) View.VISIBLE else View.GONE
+        val isShowRelationship = viewModel.isShowRelationship(user)
+        relationshipLayout.visibility = if (isShowRelationship) View.VISIBLE else View.GONE
+        if (isShowRelationship) {
+            relationshipMeIcon.loadUrl(viewModel.myIconUrl)
+            relationshipTargetIcon.loadUrl(UserConverter.iconUrl(user))
+        }
 
         bioText.setLodLinkMovementString(UserConverter.bio(user))
         locationText.setLodLinkMovementString(UserConverter.location(user))

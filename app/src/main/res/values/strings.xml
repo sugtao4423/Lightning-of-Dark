@@ -41,8 +41,6 @@
     <string name="error_get_follower">フォロワー取得エラー</string>
     <string name="error_get_list">リスト取得エラー</string>
 
-    <string name="error_get_user_icon">ユーザーアイコンの取得に失敗しました</string>
-
     <string name="success_get_talk_list">会話取得完了</string>
     <string name="error_get_talk_list">会話取得エラー</string>
 

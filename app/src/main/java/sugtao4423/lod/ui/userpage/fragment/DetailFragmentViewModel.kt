@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.utils.showToast
 import twitter4j.User
 
 class DetailFragmentViewModel(application: Application) : AndroidViewModel(application) {
@@ -21,18 +20,12 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
 
     fun isShowRelationship(user: User?): Boolean = user?.screenName != app.account.screenName
 
+    val myIconUrl = app.account.profileImageUrl
+
     fun fontAwesomeTypeface(): Typeface = app.fontAwesomeTypeface
 
     private val _relationshipIcon = MutableLiveData<String>()
     val relationshipIcon: LiveData<String> = _relationshipIcon
-
-    data class RelationshipIconUrls(
-        val me: String,
-        val target: String,
-    )
-
-    private val _relationShipIconUrls = MutableLiveData<RelationshipIconUrls>()
-    val relationShipIconUrls: LiveData<RelationshipIconUrls> = _relationShipIconUrls
 
     private val _onStartIconImageUrl = LiveEvent<String>()
     val onStartIconImageUrl: LiveData<String> = _onStartIconImageUrl
@@ -58,23 +51,6 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
                 else -> ""
             }
         }
-    }
-
-    fun getRelationshipIconUrls(user: User) = viewModelScope.launch {
-        val result = withContext(Dispatchers.IO) {
-            runCatching {
-                Pair(
-                    app.twitter.verifyCredentials().biggerProfileImageURLHttps,
-                    user.biggerProfileImageURLHttps
-                )
-            }.getOrNull()
-        }
-        if (result == null) {
-            app.showToast(R.string.error_get_user_icon)
-            return@launch
-        }
-
-        _relationShipIconUrls.value = RelationshipIconUrls(result.first, result.second)
     }
 
     fun onClickIcon(user: User?): Boolean = user?.originalProfileImageURLHttps.let {
