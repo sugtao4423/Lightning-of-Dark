@@ -84,9 +84,9 @@ class OptionClickListener(
     }
 
     private fun showAccountsDialog(accounts: List<Account>) {
-        val myScreenName = (activity.applicationContext as App).account.screenName
+        val myId = (activity.applicationContext as App).account.id
         val screenNames = accounts.map {
-            if (it.screenName == myScreenName) "@${it.screenName} (now)" else "@${it.screenName}"
+            if (it.id == myId) "@${it.screenName} (now)" else "@${it.screenName}"
         }.toMutableList()
         screenNames.add(activity.getString(R.string.add_account))
 
@@ -97,18 +97,18 @@ class OptionClickListener(
                 return@setItems
             }
 
-            showChangeAccountDialog(accounts[which].screenName)
+            showChangeAccountDialog(accounts[which])
         }.show()
     }
 
-    private fun showChangeAccountDialog(changeScreenName: String) {
+    private fun showChangeAccountDialog(account: Account) {
         AlertDialog.Builder(activity).apply {
-            setTitle("@${changeScreenName}")
+            setTitle("@${account.screenName}")
             setPositiveButton(R.string.change_account) { _, _ ->
-                viewModel.doChangeUser(changeScreenName)
+                viewModel.doChangeUser(account.id)
             }
             setNegativeButton(R.string.delete) { _, _ ->
-                viewModel.doDeleteUser(changeScreenName)
+                viewModel.doDeleteUser(account.id, account.screenName)
             }
             setNeutralButton(R.string.cancel, null)
             show()

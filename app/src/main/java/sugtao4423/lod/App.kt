@@ -57,8 +57,8 @@ class App : Application() {
     }
 
     suspend fun reloadAccount() {
-        if (accountRepository.isExists(prefRepository.screenName)) {
-            account = accountRepository.findByScreenName(prefRepository.screenName)!!
+        if (accountRepository.isExists(prefRepository.accountId)) {
+            account = accountRepository.findById(prefRepository.accountId)!!
             twitter = TwitterWeb4j(account.cookie)
             loadClientTransaction()
             mentionPattern = Pattern.compile(".*@${account.screenName}.*", Pattern.DOTALL)

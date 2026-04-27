@@ -47,7 +47,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
 
     fun showSelectListAsTLDialog() = viewModelScope.launch {
         val result = withContext(Dispatchers.IO) {
-            runCatching { app.twitter.getUserLists(app.twitter.screenName) }.getOrNull()
+            runCatching { app.twitter.getUserLists(app.account.id) }.getOrNull()
         }
         if (result == null) {
             app.showToast(R.string.error_get_list)
@@ -58,15 +58,15 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun setListAsTL(userList: UserList) = viewModelScope.launch {
-        app.accountRepository.updateListAsTL(userList.id, app.account.screenName)
+        app.accountRepository.updateListAsTL(userList.id, app.account.id)
         app.reloadAccount()
         setListAsTLData()
     }
 
     fun cancelListAsTL() = viewModelScope.launch {
         app.prefRepository.autoLoadTLInterval = 0
-        app.accountRepository.updateListAsTL(-1, app.account.screenName)
-        app.accountRepository.updateAutoLoadTLInterval(0, app.account.screenName)
+        app.accountRepository.updateListAsTL(-1, app.account.id)
+        app.accountRepository.updateAutoLoadTLInterval(0, app.account.id)
         app.reloadAccount()
         setListAsTLData()
         setAutoLoadTLIntervalSummary()
@@ -82,7 +82,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
         }
 
         viewModelScope.launch {
-            app.accountRepository.updateAutoLoadTLInterval(interval, app.account.screenName)
+            app.accountRepository.updateAutoLoadTLInterval(interval, app.account.id)
             app.reloadAccount()
             setAutoLoadTLIntervalSummary()
         }

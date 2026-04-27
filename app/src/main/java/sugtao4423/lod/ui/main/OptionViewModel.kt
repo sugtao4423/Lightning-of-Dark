@@ -61,14 +61,14 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
         _onGetAllAccounts.value = app.accountRepository.getAll()
     }
 
-    fun doChangeUser(changedUserScreenName: String) {
-        app.prefRepository.screenName = changedUserScreenName
+    fun doChangeUser(id: Long) {
+        app.prefRepository.accountId = id
         _onRestartMainActivity.value = Unit
     }
 
-    fun doDeleteUser(deleteUserScreenName: String) = viewModelScope.launch {
-        app.accountRepository.delete(deleteUserScreenName)
-        app.showToast(R.string.param_success_account_delete, deleteUserScreenName)
+    fun doDeleteUser(id: Long, screenName: String) = viewModelScope.launch {
+        app.accountRepository.delete(id)
+        app.showToast(R.string.param_success_account_delete, screenName)
     }
 
     fun showLevelInfo() {

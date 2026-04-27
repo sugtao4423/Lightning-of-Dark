@@ -83,7 +83,7 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
         val screenName = screenNameText.value!!
         val profileImage = profileImageUrl.value!!
 
-        if (app.accountRepository.isExists(screenName)) {
+        if (app.accountRepository.isExists(userId)) {
             app.showToast(R.string.param_account_already_exists, screenName)
             _onFinishEvent.value = Unit
             return@launch
@@ -92,7 +92,7 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
         val account = Account(userId, screenName, profileImage, generateCookie())
         app.accountRepository.insert(account)
 
-        app.prefRepository.screenName = screenName
+        app.prefRepository.accountId = userId
         app.reloadAccount()
         app.showToast(R.string.success_add_account)
         _onStartMainActivityEvent.value = Unit

@@ -18,7 +18,6 @@ import twitter4j.UserList
 class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app = getApplication<App>()
-    private val myScreenName = app.account.screenName
 
     val selectedListNames: List<String>
         get() = app.account.selectListNames
@@ -40,7 +39,7 @@ class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel
 
     fun getChooseListDialogData() = viewModelScope.launch {
         val result = withContext(Dispatchers.IO) {
-            runCatching { app.twitter.getUserLists(myScreenName) }.getOrNull()
+            runCatching { app.twitter.getUserLists(app.account.id) }.getOrNull()
         }
         if (result == null) {
             app.showToast(R.string.error_get_list)
@@ -54,15 +53,15 @@ class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel
         val listNames = lists.map { it.name }
         val listIds = lists.map { it.id }
         app.accountRepository.also {
-            it.updateSelectListNames(listNames, myScreenName)
-            it.updateSelectListIds(listIds, myScreenName)
+            it.updateSelectListNames(listNames, app.account.id)
+            it.updateSelectListIds(listIds, app.account.id)
         }
         app.reloadAccount()
         setPreferenceSummary()
     }
 
     fun saveStartAppLoadLists(listNames: List<String>) = viewModelScope.launch {
-        app.accountRepository.updateStartAppLoadLists(listNames, myScreenName)
+        app.accountRepository.updateStartAppLoadLists(listNames, app.account.id)
         app.reloadAccount()
         setPreferenceSummary()
     }
