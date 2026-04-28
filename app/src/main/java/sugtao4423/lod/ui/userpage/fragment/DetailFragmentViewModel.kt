@@ -18,7 +18,7 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
 
     private val app = getApplication<App>()
 
-    fun isShowRelationship(user: User?): Boolean = user?.screenName != app.account.screenName
+    fun isShowRelationship(user: User?): Boolean = user?.id != app.account.id
 
     val myIconUrl = app.account.profileImageUrl
 
@@ -39,7 +39,7 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
     fun checkRelationShip(user: User) = viewModelScope.launch {
         val result = withContext(Dispatchers.IO) {
             runCatching {
-                app.twitter.showFriendship(app.account.screenName, user.screenName)
+                app.twitter.showFriendship(app.account.id, user.id)
             }.getOrNull()
         }
         if (result != null) {

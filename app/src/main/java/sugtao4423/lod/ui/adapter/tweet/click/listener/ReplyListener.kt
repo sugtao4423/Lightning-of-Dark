@@ -20,14 +20,9 @@ class ReplyListener(
     override fun onClick(v: View?) {
         onClicked()
 
-        val myScreenName = (context.applicationContext as App).account.screenName
-
-        val mentions = arrayListOf(status.user.screenName)
-        status.userMentionEntities.forEach {
-            if (it.screenName != myScreenName && !mentions.contains(it.screenName)) {
-                mentions.add(it.screenName)
-            }
-        }
+        val myId = (context.applicationContext as App).account.id
+        val mentions = setOf(status.user.screenName) +
+                status.userMentionEntities.filter { it.id != myId }.map { it.screenName }.toSet()
 
         if (mentions.size > 1) {
             selectReplyDialog()

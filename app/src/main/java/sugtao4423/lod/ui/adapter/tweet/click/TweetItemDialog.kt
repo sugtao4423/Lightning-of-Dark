@@ -79,7 +79,7 @@ class TweetItemDialog(context: Context, fontAwesomeTypeface: Typeface) {
             talkButton.isEnabled = status.inReplyToStatusId > 0
             talkButton.setOnClickListener(clickListeners.talkListener)
             deleteButton.isEnabled =
-                (status.user.screenName == (context.applicationContext as App).account.screenName)
+                (status.user.id == (context.applicationContext as App).account.id)
             deleteButton.setOnClickListener(clickListeners.deleteTweetListener)
         }
 

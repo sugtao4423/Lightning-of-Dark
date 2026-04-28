@@ -43,7 +43,7 @@ class TweetListView @JvmOverloads constructor(
                 when {
                     item.isRetweetedByMe -> R.drawable.selector_list_retweeted_by_me_bg
                     item.isRetweet -> R.drawable.selector_list_retweet_bg
-                    item.user.screenName == app.account.screenName -> R.drawable.selector_list_same_my_screenname_bg
+                    item.user.id == app.account.id -> R.drawable.selector_list_same_my_screenname_bg
 
                     app.mentionPattern.matcher(item.text).find() ->
                         R.drawable.selector_list_mention_bg

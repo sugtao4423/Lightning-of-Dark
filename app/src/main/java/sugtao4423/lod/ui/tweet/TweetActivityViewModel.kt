@@ -94,10 +94,10 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             }
 
             TweetActivity.TYPE_REPLYALL -> {
-                val mentionUsers = arrayListOf(toStatus!!.user.screenName)
-                toStatus!!.userMentionEntities.filter {
-                    it.screenName != app.account.screenName && !mentionUsers.contains(it.screenName)
-                }.map { it.screenName }.let { mentionUsers.addAll(it) }
+                val mentionUsers =
+                    setOf(toStatus!!.user.screenName) + toStatus!!.userMentionEntities.filter {
+                        it.id != app.account.id
+                    }.map { it.screenName }.toSet()
                 val replyUserScreenNames = mentionUsers.joinToString(" @", "@") + " "
                 tweetText.value = replyUserScreenNames
             }
