@@ -12,7 +12,5 @@ data class Account(
     val cookie: String,
     @ColumnInfo(name = "list_as_tl") val listAsTL: Long = -1L,
     @ColumnInfo(name = "auto_load_tl_interval") val autoLoadTLInterval: Int = 0,
-    @ColumnInfo(name = "select_list_ids") val selectListIds: List<Long> = listOf(),
-    @ColumnInfo(name = "select_list_names") val selectListNames: List<String> = listOf(),
-    @ColumnInfo(name = "start_app_load_lists") val startAppLoadLists: List<String> = listOf()
+    @ColumnInfo(name = "list_settings") val listSettings: List<ListSetting> = listOf(),
 )

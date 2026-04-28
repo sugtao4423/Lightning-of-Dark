@@ -5,27 +5,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.hadilq.liveevent.LiveEvent
 import sugtao4423.lod.App
+import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.service.AutoLoadTLService
 import twitter4j.ResponseList
 import twitter4j.Status
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
-    data class ListData(val id: Long, val name: String, val isAppStartLoad: Boolean)
-
     private val app = getApplication<App>()
     val hasAccount = app.hasAccount
-    val listData: List<ListData>
-        get() {
-            val result = arrayListOf<ListData>()
-            for (i in app.account.selectListNames.indices) {
-                val id = app.account.selectListIds[i]
-                val name = app.account.selectListNames[i]
-                val isAppStartLoad = app.account.startAppLoadLists.contains(name)
-                result.add(ListData(id, name, isAppStartLoad))
-            }
-            return result.toList()
-        }
+    val listSettings: List<ListSetting>
+        get() = app.account.listSettings
 
     private val _onStartAutoLoadTLService = LiveEvent<Unit>()
     val onStartAutoLoadTLService = _onStartAutoLoadTLService

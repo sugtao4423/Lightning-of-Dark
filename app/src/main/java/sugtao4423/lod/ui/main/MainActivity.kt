@@ -55,11 +55,12 @@ class MainActivity : LoDBaseActivity() {
             startAutoLoadTLService()
         }
 
-        val listData = viewModel.listData
         binding.viewPager.apply {
-            adapter = MainFragmentPagerAdapter(supportFragmentManager, this@MainActivity, listData)
+            val listSettings = viewModel.listSettings
+            adapter =
+                MainFragmentPagerAdapter(supportFragmentManager, this@MainActivity, listSettings)
             currentItem = 1
-            offscreenPageLimit = listData.size + 1
+            offscreenPageLimit = listSettings.size + 1
         }
 
         viewModel.viewInitialized()

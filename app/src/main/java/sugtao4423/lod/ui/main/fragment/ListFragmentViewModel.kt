@@ -6,18 +6,23 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
+import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.ui.BaseTweetListViewModel
-import sugtao4423.lod.ui.main.MainActivityViewModel
 import sugtao4423.lod.utils.showToast
 import twitter4j.Paging
 
 class ListFragmentViewModel(application: Application) : BaseTweetListViewModel(application) {
 
-    var listData: MainActivityViewModel.ListData? = null
+    private lateinit var listSetting: ListSetting
+
+    var listIndex: Int = -1
         set(value) {
             if (field != value) {
                 field = value
-                if (value!!.isAppStartLoad) loadList()
+                listSetting = app.account.listSettings[value]
+                if (listSetting.loadOnAppStart) {
+                    loadList()
+                }
             }
         }
 
@@ -26,7 +31,7 @@ class ListFragmentViewModel(application: Application) : BaseTweetListViewModel(a
             if (maxId > 0) it.maxId(maxId) else it
         }
         val result = withContext(Dispatchers.IO) {
-            runCatching { app.twitter.getUserListStatuses(listData!!.id, paging) }.getOrNull()
+            runCatching { app.twitter.getUserListStatuses(listSetting.id, paging) }.getOrNull()
         }
         if (result == null) {
             app.showToast(R.string.error_get_list)

@@ -13,7 +13,7 @@ import twitter4j.UserList
 class ListSettingsFragment : PreferenceFragmentCompat() {
 
     private val selectList: Preference by lazy { findPreference("selectList")!! }
-    private val startAppLoadList: Preference by lazy { findPreference("startAppLoadList")!! }
+    private val loadOnAppStartList: Preference by lazy { findPreference("loadOnAppStartList")!! }
 
     private val viewModel: ListSettingsFragmentViewModel by viewModels()
 
@@ -22,7 +22,7 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
 
         viewModel.preferenceSummary.observe(this) {
             selectList.summary = it.selectListSummary
-            startAppLoadList.summary = it.startAppLoadListSummary
+            loadOnAppStartList.summary = it.loadOnAppStartListSummary
         }
         viewModel.showChooseListDialog.observe(this) {
             showChooseListDialog(it)
@@ -32,8 +32,8 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
             viewModel.getChooseListDialogData()
             true
         }
-        startAppLoadList.setOnPreferenceClickListener {
-            showStartAppLoadChooseListDialog()
+        loadOnAppStartList.setOnPreferenceClickListener {
+            showLoadOnAppStartListDialog()
             true
         }
     }
@@ -59,30 +59,23 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun showStartAppLoadChooseListDialog() {
-        val selectedListNames = viewModel.selectedListNames.toTypedArray()
-        val selectedStartAppLoadLists = arrayListOf<String>()
+    private fun showLoadOnAppStartListDialog() {
+        val newListSettings =
+            viewModel.listSettings.map { it.copy(loadOnAppStart = false) }.toMutableList()
+        val listNames = newListSettings.map { it.name }.toTypedArray()
 
         val builder = AlertDialog.Builder(requireActivity()).apply {
             setTitle(R.string.choose_app_start_load_list)
-            setMultiChoiceItems(
-                selectedListNames,
-                BooleanArray(selectedListNames.size)
-            ) { _, which, isChecked ->
-                val thisListName = selectedListNames[which]
-                if (isChecked) {
-                    selectedStartAppLoadLists.add(thisListName)
-                } else {
-                    selectedStartAppLoadLists.remove(thisListName)
-                }
+            setMultiChoiceItems(listNames, BooleanArray(listNames.size)) { _, which, isChecked ->
+                newListSettings[which] = newListSettings[which].copy(loadOnAppStart = isChecked)
             }
             setPositiveButton(R.string.ok) { _, _ ->
-                viewModel.saveStartAppLoadLists(selectedStartAppLoadLists)
+                viewModel.saveNewListSettings(newListSettings)
             }
             setNegativeButton(R.string.cancel, null)
         }
 
-        if (selectedListNames.isNotEmpty()) {
+        if (listNames.isNotEmpty()) {
             builder.show()
         } else {
             requireContext().showToast(R.string.list_not_selected)

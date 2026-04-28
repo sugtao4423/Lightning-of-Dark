@@ -40,7 +40,7 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.listData = mainViewModel.listData[requireArguments().getInt(LIST_INDEX)]
+        viewModel.listIndex = requireArguments().getInt(LIST_INDEX)
 
         val adapter = TweetListAdapter(requireContext())
         binding.listLine.adapter = adapter

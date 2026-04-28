@@ -2,6 +2,7 @@ package sugtao4423.lod.model
 
 import sugtao4423.lod.dao.AccountDao
 import sugtao4423.lod.entity.Account
+import sugtao4423.lod.entity.ListSetting
 
 class AccountRepository(private val accountDao: AccountDao) {
 
@@ -21,17 +22,13 @@ class AccountRepository(private val accountDao: AccountDao) {
         id: Long,
         listAsTL: Long? = null,
         autoLoadTLInterval: Int? = null,
-        selectListIds: List<Long>? = null,
-        selectListNames: List<String>? = null,
-        startAppLoadLists: List<String>? = null,
+        listSettings: List<ListSetting>? = null,
     ) {
         findById(id)?.let {
             val newAccount = it.copy(
                 listAsTL = listAsTL ?: it.listAsTL,
                 autoLoadTLInterval = autoLoadTLInterval ?: it.autoLoadTLInterval,
-                selectListIds = selectListIds ?: it.selectListIds,
-                selectListNames = selectListNames ?: it.selectListNames,
-                startAppLoadLists = startAppLoadLists ?: it.startAppLoadLists,
+                listSettings = listSettings ?: it.listSettings,
             )
             update(newAccount)
         }
@@ -43,13 +40,7 @@ class AccountRepository(private val accountDao: AccountDao) {
     suspend fun updateAutoLoadTLInterval(newValue: Int, id: Long) =
         updateColumn(id, autoLoadTLInterval = newValue)
 
-    suspend fun updateSelectListIds(newValue: List<Long>, id: Long) =
-        updateColumn(id, selectListIds = newValue)
-
-    suspend fun updateSelectListNames(newValue: List<String>, id: Long) =
-        updateColumn(id, selectListNames = newValue)
-
-    suspend fun updateStartAppLoadLists(newValue: List<String>, id: Long) =
-        updateColumn(id, startAppLoadLists = newValue)
+    suspend fun updateListSettings(newValue: List<ListSetting>, id: Long) =
+        updateColumn(id, listSettings = newValue)
 
 }
