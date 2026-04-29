@@ -44,7 +44,7 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
 
         AlertDialog.Builder(requireActivity()).apply {
             setTitle(R.string.choose_list)
-            setMultiChoiceItems(listNames, BooleanArray(lists.size)) { _, which, isChecked ->
+            setMultiChoiceItems(listNames, null) { _, which, isChecked ->
                 val thisList = lists[which]
                 if (isChecked) {
                     selectedLists.add(thisList)
@@ -60,13 +60,13 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun showLoadOnAppStartListDialog() {
-        val newListSettings =
-            viewModel.listSettings.map { it.copy(loadOnAppStart = false) }.toMutableList()
+        val newListSettings = viewModel.listSettings.map { it.copy() }.toMutableList()
+        val currentStates = newListSettings.map { it.loadOnAppStart }.toBooleanArray()
         val listNames = newListSettings.map { it.name }.toTypedArray()
 
         val builder = AlertDialog.Builder(requireActivity()).apply {
             setTitle(R.string.choose_app_start_load_list)
-            setMultiChoiceItems(listNames, BooleanArray(listNames.size)) { _, which, isChecked ->
+            setMultiChoiceItems(listNames, currentStates) { _, which, isChecked ->
                 newListSettings[which] = newListSettings[which].copy(loadOnAppStart = isChecked)
             }
             setPositiveButton(R.string.ok) { _, _ ->
