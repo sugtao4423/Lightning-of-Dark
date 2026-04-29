@@ -84,21 +84,22 @@ class OptionClickListener(
     }
 
     private fun showAccountsDialog(accounts: List<Account>) {
+        val screenNames =
+            accounts.map { "@${it.screenName}" } + activity.getString(R.string.add_account)
         val myId = (activity.applicationContext as App).account.id
-        val screenNames = accounts.map {
-            if (it.id == myId) "@${it.screenName} (now)" else "@${it.screenName}"
-        }.toMutableList()
-        screenNames.add(activity.getString(R.string.add_account))
+        val currentIndex = accounts.indexOfFirst { it.id == myId }
 
-        AlertDialog.Builder(activity).setItems(screenNames.toTypedArray()) { _, which ->
-            if (screenNames[which].endsWith("(now)")) return@setItems
-            if (which == screenNames.lastIndex) {
-                activity.startActivity(Intent(activity, AddAccountActivity::class.java))
-                return@setItems
-            }
+        AlertDialog.Builder(activity)
+            .setSingleChoiceItems(screenNames.toTypedArray(), currentIndex) { dialog, which ->
+                if (which == currentIndex) return@setSingleChoiceItems
+                if (which == screenNames.lastIndex) {
+                    activity.startActivity(Intent(activity, AddAccountActivity::class.java))
+                    return@setSingleChoiceItems
+                }
 
-            showChangeAccountDialog(accounts[which])
-        }.show()
+                showChangeAccountDialog(accounts[which])
+                dialog.dismiss()
+            }.show()
     }
 
     private fun showChangeAccountDialog(account: Account) {
