@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import sugtao4423.lod.databinding.SwipeTweetListBinding
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
-import sugtao4423.lod.ui.main.MainActivityViewModel
 import sugtao4423.lod.ui.setup
 
 class ListFragment : Fragment() {
@@ -20,7 +18,6 @@ class ListFragment : Fragment() {
 
     private lateinit var binding: SwipeTweetListBinding
 
-    private val mainViewModel: MainActivityViewModel by activityViewModels()
     private val viewModel: ListFragmentViewModel by viewModels()
 
     override fun onCreateView(
