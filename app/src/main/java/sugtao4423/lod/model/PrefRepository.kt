@@ -20,10 +20,6 @@ class PrefRepository(context: Context) {
         get() = pref.getInt("experience", 0)
         set(value) = pref.edit { putInt("experience", value) }
 
-    var autoLoadTLInterval: Int
-        get() = pref.getInt("autoLoadTLInterval", 0)
-        set(value) = pref.edit { putInt("autoLoadTLInterval", value) }
-
     val isOpenBrowser: Boolean
         get() = pref.getBoolean("menu_openBrowser", false)
     val isRegex: Boolean

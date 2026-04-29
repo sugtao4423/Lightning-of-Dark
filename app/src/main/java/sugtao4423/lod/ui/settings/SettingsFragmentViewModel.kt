@@ -64,9 +64,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun cancelListAsTL() = viewModelScope.launch {
-        app.prefRepository.autoLoadTLInterval = 0
         app.accountRepository.updateListAsTL(-1, app.account.id)
-        app.accountRepository.updateAutoLoadTLInterval(0, app.account.id)
         app.reloadAccount()
         setListAsTLData()
         setAutoLoadTLIntervalSummary()
@@ -75,12 +73,6 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     fun cancelListAsTLCancel() = setListAsTLData()
 
     fun changeAutoLoadTLInterval(interval: Int): Boolean {
-        val isListAsTL = app.account.listAsTL > 0
-        if (!isListAsTL && interval > 0 && interval < 60) {
-            app.showToast(R.string.error_auto_load_tl_interval)
-            return false
-        }
-
         viewModelScope.launch {
             app.accountRepository.updateAutoLoadTLInterval(interval, app.account.id)
             app.reloadAccount()

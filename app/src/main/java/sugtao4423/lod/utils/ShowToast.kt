@@ -16,7 +16,6 @@ fun Context.showToast(resId: Int, vararg formatArgs: Any?) {
 private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) : Toast(context) {
 
     private val errorMessageRes = arrayOf(
-        R.string.error_auto_load_tl_interval,
         R.string.error_favorite,
         R.string.error_get_favorite,
         R.string.error_get_follow,
@@ -41,7 +40,6 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
     )
 
     private val showLongRes = arrayOf(
-        R.string.error_auto_load_tl_interval,
         R.string.error_get_image,
         R.string.invalid_pattern,
         R.string.param_account_already_exists,
