@@ -62,6 +62,7 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun doChangeUser(id: Long) {
+        if (app.account.id == id) return
         app.prefRepository.accountId = id
         _onRestartMainActivity.value = Unit
     }

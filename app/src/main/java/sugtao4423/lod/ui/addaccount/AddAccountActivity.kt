@@ -11,6 +11,10 @@ import sugtao4423.lod.ui.main.MainActivity
 
 class AddAccountActivity : AppCompatActivity() {
 
+    companion object {
+        const val INTENT_KEY_EDIT_ACCOUNT_ID = "edit_account_id"
+    }
+
     private val viewModel: AddAccountActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,9 +22,14 @@ class AddAccountActivity : AppCompatActivity() {
         val binding = ActivityAddAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val editAccountId = intent.getLongExtra(INTENT_KEY_EDIT_ACCOUNT_ID, -1)
+        if (editAccountId != -1L) {
+            viewModel.setEditAccount(editAccountId)
+        }
+
         binding.apply {
             cookieEdit.doAfterTextChanged {
-                viewModel.afterChangeCookie(it)
+                viewModel.afterChangeCookie(it?.toString() ?: "")
             }
             getUserButton.setOnClickListener {
                 viewModel.getUserInfo()

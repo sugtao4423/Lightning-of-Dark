@@ -91,7 +91,6 @@ class OptionClickListener(
 
         AlertDialog.Builder(activity)
             .setSingleChoiceItems(screenNames.toTypedArray(), currentIndex) { dialog, which ->
-                if (which == currentIndex) return@setSingleChoiceItems
                 if (which == screenNames.lastIndex) {
                     activity.startActivity(Intent(activity, AddAccountActivity::class.java))
                     return@setSingleChoiceItems
@@ -108,10 +107,15 @@ class OptionClickListener(
             setPositiveButton(R.string.change_account) { _, _ ->
                 viewModel.doChangeUser(account.id)
             }
-            setNegativeButton(R.string.delete) { _, _ ->
+            setNegativeButton(R.string.edit) { _, _ ->
+                val intent = Intent(activity, AddAccountActivity::class.java).apply {
+                    putExtra(AddAccountActivity.INTENT_KEY_EDIT_ACCOUNT_ID, account.id)
+                }
+                activity.startActivity(intent)
+            }
+            setNeutralButton(R.string.delete) { _, _ ->
                 viewModel.doDeleteUser(account.id, account.screenName)
             }
-            setNeutralButton(R.string.cancel, null)
             show()
         }
     }

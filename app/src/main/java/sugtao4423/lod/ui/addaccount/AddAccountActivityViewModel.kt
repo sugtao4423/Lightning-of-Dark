@@ -1,7 +1,6 @@
 package sugtao4423.lod.ui.addaccount
 
 import android.app.Application
-import android.text.Editable
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,6 +19,8 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
 
     private val app = getApplication<App>()
 
+    private var editMode = false
+
     val isLoading = MutableLiveData(false)
     val enableSaveButton = MutableLiveData(false)
 
@@ -35,9 +36,17 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
     private val _onStartMainActivityEvent = LiveEvent<Unit>()
     val onStartMainActivityEvent: LiveData<Unit> = _onStartMainActivityEvent
 
-    fun afterChangeCookie(editable: Editable?) {
-        val cookieStr = editable?.toString() ?: ""
-        val cookie = cookieStr.split(';').mapNotNull {
+    fun setEditAccount(id: Long) = viewModelScope.launch {
+        val account = app.accountRepository.findById(id)!!
+        afterChangeCookie(account.cookie)
+        userIdText.value = account.id.toString()
+        screenNameText.value = account.screenName
+        profileImageUrl.value = account.profileImageUrl
+        editMode = true
+    }
+
+    fun afterChangeCookie(cookieString: String) {
+        val cookie = cookieString.split(';').mapNotNull {
             val (k, v) = it.trim().split('=', limit = 2).takeIf { p -> p.size == 2 }
                 ?: return@mapNotNull null
             k to v
@@ -69,6 +78,11 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
         val id = result?.id
         val screenName = result?.screenName
         val profileImage = result?.originalProfileImageURLHttps
+
+        if (editMode && id != userIdText.value!!.toLong()) {
+            app.showToast(R.string.error_user_id_mismatch)
+            return@launch
+        }
         if (id != null && !screenName.isNullOrBlank() && !profileImage.isNullOrBlank()) {
             enableSaveButton.value = true
         }
@@ -83,19 +97,33 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
         val screenName = screenNameText.value!!
         val profileImage = profileImageUrl.value!!
 
-        if (app.accountRepository.isExists(userId)) {
+        if (!editMode && app.accountRepository.isExists(userId)) {
             app.showToast(R.string.param_account_already_exists, screenName)
             _onFinishEvent.value = Unit
             return@launch
         }
 
-        val account = Account(userId, screenName, profileImage, generateCookie())
-        app.accountRepository.insert(account)
+        if (editMode) {
+            val oldAccount = app.accountRepository.findById(userId)!!
+            val account = oldAccount.copy(
+                screenName = screenName,
+                profileImageUrl = profileImage,
+                cookie = generateCookie(),
+            )
+            app.accountRepository.update(account)
+        } else {
+            val account = Account(userId, screenName, profileImage, generateCookie())
+            app.accountRepository.insert(account)
+            app.prefRepository.accountId = userId
+        }
 
-        app.prefRepository.accountId = userId
-        app.reloadAccount()
-        app.showToast(R.string.success_add_account)
-        _onStartMainActivityEvent.value = Unit
+        val message = if (editMode) R.string.success_edit_account else R.string.success_add_account
+        app.showToast(message)
+
+        if (!app.hasAccount || app.account.id == userId) {
+            app.reloadAccount()
+            _onStartMainActivityEvent.value = Unit
+        }
         _onFinishEvent.value = Unit
     }
 

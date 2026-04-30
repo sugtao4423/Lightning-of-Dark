@@ -35,12 +35,14 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
         R.string.error_tweet,
         R.string.error_unfavorite,
         R.string.error_unretweet,
+        R.string.error_user_id_mismatch,
         R.string.invalid_pattern,
         R.string.param_account_already_exists
     )
 
     private val showLongRes = arrayOf(
         R.string.error_get_image,
+        R.string.error_user_id_mismatch,
         R.string.invalid_pattern,
         R.string.param_account_already_exists,
         R.string.param_level_up,
