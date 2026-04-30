@@ -27,6 +27,7 @@ class App : Application() {
 
     companion object {
         const val DEFAULT_TWEET_COUNT = 50
+        const val DEFAULT_USER_COUNT = 200
     }
 
     private val accountDatabase by lazy { AccountRoomDatabase.getDatabase(this) }
