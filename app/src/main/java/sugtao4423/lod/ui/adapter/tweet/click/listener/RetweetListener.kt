@@ -40,9 +40,9 @@ class RetweetListener(
             val result = withContext(Dispatchers.IO) {
                 runCatching {
                     if (isUnRetweet) {
-                        twitter.unRetweetStatus(status.id)
+                        twitter.deleteRetweet(status.id)
                     } else {
-                        twitter.retweetStatus(status.id)
+                        twitter.createRetweet(status.id)
                     }
                 }.getOrNull()
             }

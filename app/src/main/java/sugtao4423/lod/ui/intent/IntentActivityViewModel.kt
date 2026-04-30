@@ -96,7 +96,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
 
     fun showStatus(tweetId: Long) = viewModelScope.launch {
         val result = withContext(Dispatchers.IO) {
-            runCatching { app.twitter.showStatus(tweetId) }.getOrNull()
+            runCatching { app.twitter.tweetDetail(tweetId) }.getOrNull()
         }
         if (result == null) {
             app.showToast(R.string.error_get_status)

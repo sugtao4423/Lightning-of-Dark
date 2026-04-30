@@ -38,7 +38,7 @@ class TalkListener(
     private fun loadConversation(toLoadTalkStatus: Status) {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                runCatching { twitter.showStatus(toLoadTalkStatus.inReplyToStatusId) }.getOrNull()
+                runCatching { twitter.tweetDetail(toLoadTalkStatus.inReplyToStatusId) }.getOrNull()
             }
             if (result == null) {
                 context.showToast(R.string.error_get_talk_list)

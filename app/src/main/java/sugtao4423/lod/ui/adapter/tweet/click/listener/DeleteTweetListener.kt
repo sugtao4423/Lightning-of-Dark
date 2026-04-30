@@ -33,7 +33,7 @@ class DeleteTweetListener(
         val twitter = (context.applicationContext as App).twitter
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                runCatching { twitter.destroyStatus(status.id) }.getOrNull()
+                runCatching { twitter.deleteTweet(status.id) }.getOrNull()
             }
             val message = if (result == null) {
                 R.string.error_post_delete

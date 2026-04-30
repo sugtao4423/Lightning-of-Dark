@@ -40,9 +40,9 @@ class FavoriteListener(
             val result = withContext(Dispatchers.IO) {
                 runCatching {
                     if (isUnFav) {
-                        twitter.destroyFavorite(status.id)
+                        twitter.unfavoriteTweet(status.id)
                     } else {
-                        twitter.createFavorite(status.id)
+                        twitter.favoriteTweet(status.id)
                     }
                 }.getOrNull()
             }
