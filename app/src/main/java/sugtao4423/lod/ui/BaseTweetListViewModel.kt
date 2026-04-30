@@ -7,20 +7,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Job
 import sugtao4423.lod.App
-import twitter4j.ResponseList
+import sugtao4423.twitterweb4j.model.CursorList
 import twitter4j.Status
 
 abstract class BaseTweetListViewModel(application: Application) : AndroidViewModel(application) {
 
     protected val app by lazy { getApplication<App>() }
+    protected val tweetCount = App.DEFAULT_TWEET_COUNT
 
     val isRefreshing = MutableLiveData(false)
 
-    val addStatuses = LiveEvent<ResponseList<Status>>()
+    val addStatuses = LiveEvent<CursorList<Status>>()
     val onResetList = LiveEvent<Unit>()
 
     protected var hasNextPage = true
-    protected var maxId = -1L
+    protected var bottomCursor: String? = null
 
     fun getLoadMoreListener(llm: LinearLayoutManager): EndlessScrollListener {
         return object : EndlessScrollListener(llm) {
@@ -34,7 +35,7 @@ abstract class BaseTweetListViewModel(application: Application) : AndroidViewMod
         isRefreshing.value = true
         onResetList.value = Unit
         hasNextPage = true
-        maxId = -1L
+        bottomCursor = null
         loadList(true).invokeOnCompletion {
             isRefreshing.value = false
         }

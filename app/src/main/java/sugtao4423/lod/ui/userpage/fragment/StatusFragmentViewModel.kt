@@ -8,8 +8,7 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.BaseTweetListViewModel
 import sugtao4423.lod.utils.showToast
-import twitter4j.Paging
-import twitter4j.ResponseList
+import sugtao4423.twitterweb4j.model.CursorList
 import twitter4j.Status
 import twitter4j.User
 
@@ -21,11 +20,8 @@ class StatusFragmentViewModel(application: Application) : BaseTweetListViewModel
     override fun loadList(isRefresh: Boolean) = viewModelScope.launch {
         if (user == null) return@launch
 
-        val paging = Paging(1, 50).let {
-            if (maxId > 0) it.maxId(maxId) else it
-        }
         val result = withContext(Dispatchers.IO) {
-            runCatching { getStatuses(paging) }.getOrNull()
+            runCatching { getStatuses() }.getOrNull()
         }
         if (result == null) {
             app.showToast(getErrorToastStringRes())
@@ -33,15 +29,19 @@ class StatusFragmentViewModel(application: Application) : BaseTweetListViewModel
         }
 
         if (result.isNotEmpty()) {
-            maxId = result.last().id - 1
+            bottomCursor = result.cursorBottom
         }
         hasNextPage = result.isNotEmpty()
-        result.let { addStatuses.value = it }
+        addStatuses.value = result
     }
 
-    private fun getStatuses(paging: Paging): ResponseList<Status> = when (fragmentType) {
-        StatusFragment.TYPE_TWEET -> app.twitter.getUserTimeline(user!!.id, paging)
-        StatusFragment.TYPE_FAVORITE -> app.twitter.getFavorites(user!!.id, paging)
+    private fun getStatuses(): CursorList<Status> = when (fragmentType) {
+        StatusFragment.TYPE_TWEET -> app.twitter.userTweetsAndReplies(
+            user!!.id, tweetCount, bottomCursor
+        )
+
+        StatusFragment.TYPE_FAVORITE -> app.twitter.favorites(user!!.id, tweetCount, bottomCursor)
+
         else -> throw UnsupportedOperationException()
     }
 

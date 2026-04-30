@@ -12,8 +12,7 @@ import androidx.annotation.RequiresApi
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.main.MainActivity
-import twitter4j.Paging
-import twitter4j.ResponseList
+import sugtao4423.twitterweb4j.model.CursorList
 import twitter4j.Status
 import twitter4j.TwitterException
 import java.util.Timer
@@ -22,7 +21,7 @@ import java.util.TimerTask
 class AutoLoadTLService : Service() {
 
     interface AutoLoadTLListener {
-        fun onStatus(statuses: ResponseList<Status>)
+        fun onStatus(statuses: CursorList<Status>)
     }
 
     private lateinit var autoLoadTimer: Timer
@@ -83,13 +82,14 @@ class AutoLoadTLService : Service() {
 
     class AutoLoadTLTask(private val app: App) : TimerTask() {
 
+        private val count = App.DEFAULT_TWEET_COUNT
+
         override fun run() {
             try {
-                val paging = Paging(1, 50).sinceId(app.latestTweetId)
                 val statuses = if (app.account.listAsTL > 0) {
-                    app.twitter.getUserListStatuses(app.account.listAsTL, paging)
+                    app.twitter.listTweetsTimeline(app.account.listAsTL, count, app.cursorTop)
                 } else {
-                    app.twitter.getHomeTimeline(paging)
+                    app.twitter.homeLatestTimeline(count, app.cursorTop)
                 }
                 app.autoLoadTLListener?.onStatus(statuses)
             } catch (e: TwitterException) {

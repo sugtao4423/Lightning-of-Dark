@@ -25,6 +25,10 @@ import java.util.regex.Pattern
 
 class App : Application() {
 
+    companion object {
+        const val DEFAULT_TWEET_COUNT = 50
+    }
+
     private val accountDatabase by lazy { AccountRoomDatabase.getDatabase(this) }
     val accountRepository by lazy { AccountRepository(accountDatabase.accountDao()) }
     private val useTimeDatabase by lazy { UseTimeRoomDatabase.getDatabase(this) }
@@ -49,7 +53,7 @@ class App : Application() {
         private set
 
     var autoLoadTLListener: AutoLoadTLService.AutoLoadTLListener? = null
-    var latestTweetId: Long = -1
+    var cursorTop: String? = null
 
     override fun onCreate() {
         super.onCreate()

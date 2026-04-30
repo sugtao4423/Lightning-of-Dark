@@ -9,7 +9,6 @@ import sugtao4423.lod.R
 import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.ui.BaseTweetListViewModel
 import sugtao4423.lod.utils.showToast
-import twitter4j.Paging
 
 class ListFragmentViewModel(application: Application) : BaseTweetListViewModel(application) {
 
@@ -27,11 +26,10 @@ class ListFragmentViewModel(application: Application) : BaseTweetListViewModel(a
         }
 
     override fun loadList(isRefresh: Boolean) = viewModelScope.launch {
-        val paging = Paging(1, 50).let {
-            if (maxId > 0) it.maxId(maxId) else it
-        }
         val result = withContext(Dispatchers.IO) {
-            runCatching { app.twitter.getUserListStatuses(listSetting.id, paging) }.getOrNull()
+            runCatching {
+                app.twitter.listTweetsTimeline(listSetting.id, tweetCount, bottomCursor)
+            }.getOrNull()
         }
         if (result == null) {
             app.showToast(R.string.error_get_list)
@@ -39,7 +37,7 @@ class ListFragmentViewModel(application: Application) : BaseTweetListViewModel(a
         }
 
         if (result.isNotEmpty()) {
-            maxId = result.last().id - 1
+            bottomCursor = result.cursorBottom
         }
         hasNextPage = result.isNotEmpty()
         result.let { addStatuses.value = it }
