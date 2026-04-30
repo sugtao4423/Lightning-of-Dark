@@ -13,7 +13,6 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.utils.showToast
-import twitter4j.ResponseList
 import twitter4j.UserList
 
 class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel(application) {
@@ -31,8 +30,8 @@ class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel
     private val _preferenceSummary = MutableLiveData<PreferenceSummaryData>()
     val preferenceSummary: LiveData<PreferenceSummaryData> = _preferenceSummary
 
-    private val _showChooseListDialog = LiveEvent<ResponseList<UserList>>()
-    val showChooseListDialog: LiveData<ResponseList<UserList>> = _showChooseListDialog
+    private val _showChooseListDialog = LiveEvent<List<UserList>>()
+    val showChooseListDialog: LiveData<List<UserList>> = _showChooseListDialog
 
     init {
         setPreferenceSummary()

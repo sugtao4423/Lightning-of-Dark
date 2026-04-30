@@ -7,7 +7,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
-import twitter4j.ResponseList
 import twitter4j.UserList
 
 class ListSettingsFragment : PreferenceFragmentCompat() {
@@ -38,7 +37,7 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun showChooseListDialog(lists: ResponseList<UserList>) {
+    private fun showChooseListDialog(lists: List<UserList>) {
         val listNames = lists.map { it.name }.toTypedArray()
         val selectedLists = arrayListOf<UserList>()
 

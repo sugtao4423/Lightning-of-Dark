@@ -13,7 +13,6 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
-import twitter4j.ResponseList
 import twitter4j.UserList
 import java.io.File
 import java.text.DecimalFormat
@@ -30,8 +29,8 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     private val _listAsTLData = MutableLiveData<ListAsTLData>()
     val listAsTLData: LiveData<ListAsTLData> = _listAsTLData
 
-    private val _onShowSelectListAsTLDialog = LiveEvent<ResponseList<UserList>>()
-    val onShowSelectListAsTLDialog: LiveData<ResponseList<UserList>> = _onShowSelectListAsTLDialog
+    private val _onShowSelectListAsTLDialog = LiveEvent<List<UserList>>()
+    val onShowSelectListAsTLDialog: LiveData<List<UserList>> = _onShowSelectListAsTLDialog
 
     private val _autoLoadTLInterval = MutableLiveData<Int>()
     val autoLoadTLInterval: LiveData<Int> = _autoLoadTLInterval

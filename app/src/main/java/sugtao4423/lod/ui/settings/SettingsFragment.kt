@@ -10,7 +10,6 @@ import androidx.preference.PreferenceFragmentCompat
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.settingslist.ListSettingsActivity
 import sugtao4423.lod.view.IntegerEditTextPreference
-import twitter4j.ResponseList
 import twitter4j.UserList
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -67,7 +66,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun showSelectListAsTLDialog(list: ResponseList<UserList>) {
+    private fun showSelectListAsTLDialog(list: List<UserList>) {
         val listNames = list.map { it.name }.toTypedArray()
         AlertDialog.Builder(requireActivity()).apply {
             setTitle(R.string.choose_list_as_tl)
