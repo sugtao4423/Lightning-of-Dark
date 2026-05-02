@@ -1,11 +1,10 @@
 package sugtao4423.twitterweb4j.parser
 
+import sugtao4423.twitterweb4j.Json
 import sugtao4423.twitterweb4j.impl.StatusJSONImpl
 import sugtao4423.twitterweb4j.model.CursorList
-import sugtao4423.twitterweb4j.nestedJSONObject
-import twitter4j.JSONArray
+import sugtao4423.twitterweb4j.parseJson
 import twitter4j.JSONException
-import twitter4j.JSONObject
 import twitter4j.Status
 import twitter4j.TwitterException
 
@@ -15,53 +14,36 @@ object JsonParserGraphQLTimeline {
 
     @Throws(JSONException::class, TwitterException::class)
     private fun parse(
-        instructions: JSONArray,
+        instructions: Json,
         entry: String = "TimelineAddEntries",
         convPrefix: String? = null,
         ignoreMissingCursorTop: Boolean = false,
         ignoreMissingCursorBottom: Boolean = false,
     ): CursorList<Status> {
-        val instructionObjects = (0 until instructions.length()).map {
-            instructions.getJSONObject(it)
-        }
-        val entries = instructionObjects.find {
-            it.getString("type") == entry
-        }?.getJSONArray("entries") ?: throw TwitterException("$entry instruction not found")
+        val entries = instructions.iterator().asSequence().find {
+            it["type"].string == entry
+        }?.get("entries") ?: throw TwitterException("$entry instruction not found")
 
         val result = CursorList<Status>()
 
-        for (i in 0 until entries.length()) {
-            val entry = entries.getJSONObject(i)
-            val entryId = entry.getString("entryId")
+        for (entry in entries) {
+            val entryId = entry["entryId"].string
 
             if (entryId.startsWith("tweet-") || entryId.startsWith("notification-")) {
-                val tweet = StatusJSONImpl(
-                    entry.nestedJSONObject(
-                        "content", "itemContent", "tweet_results", "result"
-                    )
-                )
-
+                val tweet =
+                    StatusJSONImpl(entry["content"]["itemContent"]["tweet_results"]["result"])
                 if (!tweet.source.contains(ignoreSource)) {
                     result.add(tweet)
                 }
             } else if (convPrefix != null && entryId.startsWith(convPrefix)) {
-                val content = entry.getJSONObject("content")
-                val items = content.getJSONArray("items")
-
-                for (j in 0 until items.length()) {
-                    val item = items.getJSONObject(j)
-                    val itemEntryId = item.getString("entryId")
-
+                for (item in entry["content"]["items"]) {
+                    val itemEntryId = item["entryId"].string
                     if (!itemEntryId.contains("-tweet-") || itemEntryId.contains("promoted")) {
                         continue
                     }
 
-                    val tweet = StatusJSONImpl(
-                        item.nestedJSONObject(
-                            "item", "itemContent", "tweet_results", "result"
-                        )
-                    )
-
+                    val tweet =
+                        StatusJSONImpl(item["item"]["itemContent"]["tweet_results"]["result"])
                     if (!tweet.source.contains(ignoreSource)) {
                         result.add(tweet)
                     }
@@ -70,16 +52,12 @@ object JsonParserGraphQLTimeline {
                 if (result.cursorTop != null) {
                     throw TwitterException("cursor-top is already set")
                 }
-
-                val value = entry.getJSONObject("content").getString("value")
-                result.cursorTop = value
+                result.cursorTop = entry["content"]["value"].string
             } else if (entryId.startsWith("cursor-bottom-")) {
                 if (result.cursorBottom != null) {
                     throw TwitterException("cursor-bottom is already set")
                 }
-
-                val value = entry.getJSONObject("content").getString("value")
-                result.cursorBottom = value
+                result.cursorBottom = entry["content"]["value"].string
             }
         }
 
@@ -98,9 +76,8 @@ object JsonParserGraphQLTimeline {
     @Throws(TwitterException::class)
     fun parseHomeLatestTimeline(response: String): CursorList<Status> {
         try {
-            val instructions = JSONObject(response).nestedJSONObject(
-                "data", "home", "home_timeline_urt"
-            ).getJSONArray("instructions")
+            val instructions =
+                response.parseJson()["data"]["home"]["home_timeline_urt"]["instructions"]
             return parse(instructions, convPrefix = "home-conversation-")
         } catch (e: JSONException) {
             throw TwitterException(e)
@@ -110,9 +87,8 @@ object JsonParserGraphQLTimeline {
     @Throws(TwitterException::class)
     fun parseMentionsTimeline(response: String): CursorList<Status> {
         try {
-            val instructions = JSONObject(response).nestedJSONObject(
-                "data", "viewer_v2", "user_results", "result", "notification_timeline", "timeline"
-            ).getJSONArray("instructions")
+            val instructions =
+                response.parseJson()["data"]["viewer_v2"]["user_results"]["result"]["notification_timeline"]["timeline"]["instructions"]
             return parse(instructions, ignoreMissingCursorBottom = true)
         } catch (e: JSONException) {
             throw TwitterException(e)
@@ -122,9 +98,8 @@ object JsonParserGraphQLTimeline {
     @Throws(TwitterException::class)
     fun parseListTweetsTimeline(response: String): CursorList<Status> {
         try {
-            val instructions = JSONObject(response).nestedJSONObject(
-                "data", "list", "tweets_timeline", "timeline"
-            ).getJSONArray("instructions")
+            val instructions =
+                response.parseJson()["data"]["list"]["tweets_timeline"]["timeline"]["instructions"]
             return parse(instructions, convPrefix = "list-conversation-")
         } catch (e: JSONException) {
             throw TwitterException(e)
@@ -134,9 +109,8 @@ object JsonParserGraphQLTimeline {
     @Throws(TwitterException::class)
     fun parseTweetDetail(response: String, tweetId: Long): Status {
         try {
-            val instructions = JSONObject(response).nestedJSONObject(
-                "data", "threaded_conversation_with_injections_v2"
-            ).getJSONArray("instructions")
+            val instructions =
+                response.parseJson()["data"]["threaded_conversation_with_injections_v2"]["instructions"]
             val conversations = parse(
                 instructions, convPrefix = "conversationthread-", ignoreMissingCursorTop = true
             )
@@ -151,9 +125,8 @@ object JsonParserGraphQLTimeline {
     @Throws(TwitterException::class)
     fun parseUserTweetsAndReplies(response: String, userId: Long): CursorList<Status> {
         try {
-            val instructions = JSONObject(response).nestedJSONObject(
-                "data", "user", "result", "timeline_v2", "timeline"
-            ).getJSONArray("instructions")
+            val instructions =
+                response.parseJson()["data"]["user"]["result"]["timeline_v2"]["timeline"]["instructions"]
             val userTimeline = parse(instructions, convPrefix = "profile-conversation-")
 
             return userTimeline.filterTo(CursorList.newWithCursor(userTimeline)) {
@@ -167,9 +140,8 @@ object JsonParserGraphQLTimeline {
     @Throws(TwitterException::class)
     fun parseLikes(response: String): CursorList<Status> {
         try {
-            val instructions = JSONObject(response).nestedJSONObject(
-                "data", "user", "result", "timeline", "timeline"
-            ).getJSONArray("instructions")
+            val instructions =
+                response.parseJson()["data"]["user"]["result"]["timeline"]["timeline"]["instructions"]
             return parse(instructions)
         } catch (e: JSONException) {
             throw TwitterException(e)

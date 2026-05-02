@@ -1,10 +1,8 @@
 package sugtao4423.twitterweb4j.impl
 
-import sugtao4423.twitterweb4j.falseBoolean
-import sugtao4423.twitterweb4j.nullString
+import sugtao4423.twitterweb4j.Json
 import twitter4j.GeoLocation
 import twitter4j.HashtagEntity
-import twitter4j.JSONObject
 import twitter4j.MediaEntity
 import twitter4j.Place
 import twitter4j.RateLimitStatus
@@ -18,96 +16,86 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-data class StatusJSONImpl(@Transient val result: JSONObject) : Status, java.io.Serializable {
+data class StatusJSONImpl(@Transient val result: Json) : Status, java.io.Serializable {
 
     @Transient
-    private val json = result.nullString("__typename").let { typename ->
+    private val json = result["__typename"].stringOrNull.let { typename ->
         when (typename) {
-            "TweetWithVisibilityResults" -> result.getJSONObject("tweet")
+            "TweetWithVisibilityResults" -> result["tweet"]
             else -> result
         }
     }
 
     @Transient
-    private val legacy = json.getJSONObject("legacy")
+    private val legacy = json["legacy"]
 
     @Transient
-    private val entities = legacy.getJSONObject("entities")
+    private val extendedEntities = legacy["extended_entities"]["media"].orNull()
+        ?: legacy["entities"]["media"].orNull()
+        ?: Json(emptyArray<Any>())
 
-    @Transient
-    private val extendedEntities = legacy.optJSONObject("extended_entities")?.optJSONArray("media")
-        ?: entities.optJSONArray("media")
-
-    @Transient
-    private val displayTextRange = legacy.optJSONArray("display_text_range")
-
-    private val id = json.getString("rest_id").toLong()
-    private val source = json.getString("source")
+    private val id = json["rest_id"].string.toLong()
+    private val source = json["source"].string
     private val createdAt = SimpleDateFormat(
         "EEE MMM dd HH:mm:ss Z yyyy", Locale.US
-    ).parse(legacy.getString("created_at"))!!
+    ).parse(legacy["created_at"].string)
 
-    private val isTruncated = legacy.falseBoolean("truncated")
-    private val inReplyToStatusId = legacy.optString("in_reply_to_status_id_str", "-1").toLong()
-    private val inReplyToUserId = legacy.optString("in_reply_to_user_id_str", "-1").toLong()
-    private val inReplyToScreenName = legacy.nullString("in_reply_to_screen_name")
-    private val isFavorited = legacy.falseBoolean("favorited")
-    private val isRetweeted = legacy.falseBoolean("retweeted")
-    private val retweetCount = legacy.getInt("retweet_count")
-    private val favoriteCount = legacy.getInt("favorite_count")
-    private val isPossiblySensitive = legacy.falseBoolean("possibly_sensitive")
+    private val isTruncated = legacy["truncated"].boolOrFalse
+    private val inReplyToStatusId =
+        legacy["in_reply_to_status_id_str"].stringOrNull?.toLong() ?: -1L
+    private val inReplyToUserId = legacy["in_reply_to_user_id_str"].stringOrNull?.toLong() ?: -1L
+    private val inReplyToScreenName = legacy["in_reply_to_screen_name"].stringOrNull
+    private val isFavorited = legacy["favorited"].boolOrFalse
+    private val isRetweeted = legacy["retweeted"].boolOrFalse
+    private val retweetCount = legacy["retweet_count"].int
+    private val favoriteCount = legacy["favorite_count"].int
+    private val isPossiblySensitive = legacy["possibly_sensitive"].boolOrFalse
 
-    private val user =
-        json.getJSONObject("core").getJSONObject("user_results").getJSONObject("result").let {
-            UserJSONImpl(it)
-        }
+    private val user = UserJSONImpl(json["core"]["user_results"]["result"])
 
-    private val retweetedStatus =
-        legacy.optJSONObject("retweeted_status_result")?.optJSONObject("result")?.let {
-            StatusJSONImpl(it)
-        }
+    private val retweetedStatus = legacy["retweeted_status_result"]["result"].orNull()?.let {
+        StatusJSONImpl(it)
+    }
 
     private val userMentionEntities: Array<UserMentionEntity> =
-        entities.optJSONArray("user_mentions")?.let {
-            (0 until it.length()).map { i -> UserMentionEntityJSONImpl(it.getJSONObject(i)) }
-                .toTypedArray()
-        } ?: emptyArray()
-    private val urlEntities: Array<URLEntity> = entities.optJSONArray("urls")?.let {
-        (0 until it.length()).map { i -> URLEntityJSONImpl(it.getJSONObject(i)) }.toTypedArray()
-    } ?: emptyArray()
-    private val hashtagEntities: Array<HashtagEntity> = entities.optJSONArray("hashtags")?.let {
-        (0 until it.length()).map { i -> HashtagEntityJSONImpl(it.getJSONObject(i)) }.toTypedArray()
-    } ?: emptyArray()
-    private val symbolEntities: Array<SymbolEntity> = entities.optJSONArray("symbols")?.let {
-        (0 until it.length()).map { i -> HashtagEntityJSONImpl(it.getJSONObject(i)) }.toTypedArray()
-    } ?: emptyArray()
-
-    private val mediaEntities: Array<MediaEntity> = extendedEntities?.let {
-        (0 until it.length()).map { i -> MediaEntityJSONImpl(it.getJSONObject(i)) }.toTypedArray()
-    } ?: emptyArray()
-
-    private val quotedStatus =
-        json.optJSONObject("quoted_status_result")?.optJSONObject("result")?.let {
-            when (it.nullString("__typename")) {
-                "TweetTombstone" -> null
-                else -> StatusJSONImpl(it)
-            }
+        legacy["entities"]["user_mentions"].let {
+            Array(it.size) { i -> UserMentionEntityJSONImpl(it[i]) }
         }
-    private val quotedStatusId = legacy.optString("quoted_status_id_str", "-1").toLong()
-    private val quotedStatusPermalink = legacy.optJSONObject("quoted_status_permalink")?.let {
+    private val urlEntities: Array<URLEntity> = legacy["entities"]["urls"].let {
+        Array(it.size) { i -> URLEntityJSONImpl(it[i]) }
+    }
+    private val hashtagEntities: Array<HashtagEntity> = legacy["entities"]["hashtags"].let {
+        Array(it.size) { i -> HashtagEntityJSONImpl(it[i]) }
+    }
+    private val symbolEntities: Array<SymbolEntity> = legacy["entities"]["symbols"].let {
+        Array(it.size) { i -> HashtagEntityJSONImpl(it[i]) }
+    }
+
+    private val mediaEntities: Array<MediaEntity> = extendedEntities.let {
+        Array(it.size) { i -> MediaEntityJSONImpl(it[i]) }
+    }
+
+    private val quotedStatus = json["quoted_status_result"]["result"].orNull()?.let {
+        when (it["__typename"].stringOrNull) {
+            "TweetTombstone" -> null
+            else -> StatusJSONImpl(it)
+        }
+    }
+    private val quotedStatusId = legacy["quoted_status_id_str"].stringOrNull?.toLong() ?: -1L
+    private val quotedStatusPermalink = legacy["quoted_status_permalink"].orNull()?.let {
         QuotedStatusPermalinkJSONImpl(it)
     }
 
-    private val displayTextRangeStart = displayTextRange?.optInt(0, -1) ?: -1
-    private val displayTextRangeEnd = displayTextRange?.optInt(1, -1) ?: -1
+    private val displayTextRangeStart = legacy["display_text_range"][0].intOrNull ?: -1
+    private val displayTextRangeEnd = legacy["display_text_range"][1].intOrNull ?: -1
 
-    private val text = legacy.getString("full_text")
+    private val text = legacy["full_text"].string
     private val currentUserRetweetId = -1L
-    private val lang = legacy.nullString("lang")
+    private val lang = legacy["lang"].stringOrNull
 
-    private val withheldInCountries = legacy.optJSONArray("withheld_in_countries")?.let {
-        (0 until it.length()).map { i -> it.getString(i) }.toTypedArray()
-    } ?: emptyArray()
+    private val withheldInCountries = legacy["withheld_in_countries"].let {
+        Array(it.size) { i -> it[i].string }
+    }
 
     override fun getCreatedAt(): Date = createdAt
     override fun getId(): Long = id

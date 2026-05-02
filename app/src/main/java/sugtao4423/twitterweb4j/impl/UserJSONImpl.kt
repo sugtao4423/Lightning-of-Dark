@@ -1,9 +1,6 @@
 package sugtao4423.twitterweb4j.impl
 
-import sugtao4423.twitterweb4j.falseBoolean
-import sugtao4423.twitterweb4j.nullString
-import twitter4j.JSONArray
-import twitter4j.JSONObject
+import sugtao4423.twitterweb4j.Json
 import twitter4j.RateLimitStatus
 import twitter4j.Status
 import twitter4j.TwitterException
@@ -13,110 +10,81 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-data class UserJSONImpl(@Transient private val json: JSONObject) : User, java.io.Serializable {
+data class UserJSONImpl(@Transient private val json: Json) : User, java.io.Serializable {
+    @Transient
+    private val core = json["core"]
 
     @Transient
-    private val avatar = json.optJSONObject("avatar") ?: null
+    private val legacy = json["legacy"]
 
-    @Transient
-    private val core = json.optJSONObject("core") ?: null
+    private val id = json["rest_id"].string.toLong()
 
-    @Transient
-    private val legacy = json.getJSONObject("legacy")
-
-    @Transient
-    private val loc = json.optJSONObject("location") ?: null
-
-    @Transient
-    private val privacy = json.optJSONObject("privacy") ?: null
-
-    @Transient
-    private val verification = json.optJSONObject("verification") ?: null
-
-    private val id = json.getString("rest_id").toLong()
-
-    private val name = when {
-        legacy.has("name") -> legacy.getString("name")
-        core != null && core.has("name") -> core.getString("name")
-        else -> "null"
-    }
-    private val email = legacy.nullString("email")
-    private val screenName = when {
-        legacy.has("screen_name") -> legacy.getString("screen_name")
-        core != null && core.has("screen_name") -> core.getString("screen_name")
-        else -> "null"
-    }
-    private val location = when {
-        legacy.has("location") -> legacy.getString("location")
-        loc != null && loc.has("location") -> loc.getString("location")
-        else -> "null"
-    }
+    private val name = legacy["name"].orNull()?.string
+        ?: core["name"].orNull()?.string
+        ?: "null"
+    private val email = legacy["email"].stringOrNull
+    private val screenName = legacy["screen_name"].orNull()?.string
+        ?: core["screen_name"].orNull()?.string
+        ?: "null"
+    private val location = legacy["location"].orNull()?.string
+        ?: json["location"]["location"].orNull()?.string
+        ?: "null"
 
     private val descriptionURLEntities = getURLEntities("description")
     private val urlEntities = getURLEntities("url")
-    private val description = legacy.getString("description")
+    private val description = legacy["description"].string
 
-    private val isContributorsEnabled = legacy.falseBoolean("contributors_enabled")
-    private val profileImageUrlHttps = when {
-        legacy.has("profile_image_url_https") -> legacy.getString("profile_image_url_https")
-        avatar != null && avatar.has("image_url") -> avatar.getString("image_url")
-        else -> throw TwitterException("Profile image URL not found")
-    }
-    private val isDefaultProfileImage = legacy.falseBoolean("default_profile_image")
-    private val url = legacy.nullString("url")
-    private val isProtected = when {
-        legacy.has("protected") -> legacy.getBoolean("protected")
-        privacy != null && privacy.has("protected") -> privacy.getBoolean("protected")
-        else -> false
-    }
-    private val isGeoEnabled = legacy.falseBoolean("geo_enabled")
-    private val isVerified = when {
-        legacy.has("verified") -> legacy.getBoolean("verified")
-        verification != null && verification.has("verified") -> verification.getBoolean("verified")
-        else -> false
-    }
-    private val translator = legacy.falseBoolean("is_translator")
-    private val followersCount = legacy.getInt("followers_count")
+    private val isContributorsEnabled = legacy["contributors_enabled"].boolOrFalse
+    private val profileImageUrlHttps = legacy["profile_image_url_https"].orNull()?.string
+        ?: json["avatar"]["image_url"].orNull()?.string
+        ?: throw TwitterException("Profile image URL not found")
+    private val isDefaultProfileImage = legacy["default_profile_image"].boolOrFalse
+    private val url = legacy["url"].stringOrNull
+    private val isProtected = legacy["protected"].orNull()?.bool
+        ?: json["privacy"]["protected"].orNull()?.bool
+        ?: false
+    private val isGeoEnabled = legacy["geo_enabled"].boolOrFalse
+    private val isVerified = legacy["verified"].orNull()?.bool
+        ?: json["verification"]["verified"].orNull()?.bool
+        ?: false
+    private val translator = legacy["is_translator"].boolOrFalse
+    private val followersCount = legacy["followers_count"].int
 
-    private val profileBackgroundColor = legacy.nullString("profile_background_color")
-    private val profileTextColor = legacy.nullString("profile_text_color")
-    private val profileLinkColor = legacy.nullString("profile_link_color")
-    private val profileSidebarFillColor = legacy.nullString("profile_sidebar_fill_color")
-    private val profileSidebarBorderColor = legacy.nullString("profile_sidebar_border_color")
-    private val profileUseBackgroundImage = legacy.falseBoolean("profile_use_background_image")
-    private val isDefaultProfile = legacy.falseBoolean("default_profile")
-    private val showAllInlineMedia = legacy.falseBoolean("show_all_inline_media")
-    private val friendsCount = legacy.getInt("friends_count")
-    private val createdAt = when {
-        legacy.has("created_at") -> legacy.getString("created_at")
-        core != null && core.has("created_at") -> core.getString("created_at")
-        else -> throw TwitterException("Created at date not found")
-    }.let { SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.US).parse(it) }
-    private val favouritesCount = legacy.getInt("favourites_count")
-    private val utcOffset = legacy.optInt("utc_offset", 0)
-    private val timeZone = legacy.nullString("time_zone")
+    private val profileBackgroundColor = legacy["profile_background_color"].stringOrNull
+    private val profileTextColor = legacy["profile_text_color"].stringOrNull
+    private val profileLinkColor = legacy["profile_link_color"].stringOrNull
+    private val profileSidebarFillColor = legacy["profile_sidebar_fill_color"].stringOrNull
+    private val profileSidebarBorderColor = legacy["profile_sidebar_border_color"].stringOrNull
+    private val profileUseBackgroundImage = legacy["profile_use_background_image"].boolOrFalse
+    private val isDefaultProfile = legacy["default_profile"].boolOrFalse
+    private val showAllInlineMedia = legacy["show_all_inline_media"].boolOrFalse
+    private val friendsCount = legacy["friends_count"].int
+    private val createdAt = (
+            legacy["created_at"].orNull()?.string
+                ?: core["created_at"].orNull()?.string
+            )?.let { SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.US).parse(it) }
+        ?: throw TwitterException("Created at date not found")
+    private val favouritesCount = legacy["favourites_count"].int
+    private val utcOffset = legacy["utc_offset"].intOrNull ?: 0
+    private val timeZone = legacy["time_zone"].stringOrNull
     private val profileBackgroundImageUrlHttps =
-        legacy.nullString("profile_background_image_url_https")
-    private val profileBannerImageUrl = legacy.nullString("profile_banner_url")
-    private val profileBackgroundTiled = legacy.falseBoolean("profile_background_tile")
-    private val lang = legacy.nullString("lang")
-    private val statusesCount = legacy.getInt("statuses_count")
-    private val listedCount = legacy.getInt("listed_count")
-    private val isFollowRequestSent = legacy.falseBoolean("follow_request_sent")
+        legacy["profile_background_image_url_https"].stringOrNull
+    private val profileBannerImageUrl = legacy["profile_banner_url"].stringOrNull
+    private val profileBackgroundTiled = legacy["profile_background_tile"].boolOrFalse
+    private val lang = legacy["lang"].stringOrNull
+    private val statusesCount = legacy["statuses_count"].int
+    private val listedCount = legacy["listed_count"].int
+    private val isFollowRequestSent = legacy["follow_request_sent"].boolOrFalse
 
-    private val withheldInCountries = json.optJSONArray("withheld_in_countries")?.let {
-        (0 until it.length()).map { i -> it.getString(i) }.toTypedArray()
-    } ?: emptyArray()
+    private val withheldInCountries = json["withheld_in_countries"].let {
+        Array(it.size) { i -> it[i].string }
+    }
 
     private fun getURLEntities(category: String): Array<URLEntity> {
-        val urls =
-            json.optJSONObject("entities")?.optJSONArray(category) ?: json.optJSONObject("legacy")
-                ?.optJSONObject("entities")?.optJSONObject(category)?.optJSONArray("urls")
-            ?: JSONArray()
-
-        return (0 until urls.length()).map {
-            URLEntityJSONImpl(urls.getJSONObject(it))
-        }.toTypedArray()
+        val urls = json["entities"][category].orNull()
+            ?: legacy["entities"][category]["urls"].orNull()
+            ?: Json(emptyArray<Any>())
+        return Array(urls.size) { URLEntityJSONImpl(urls[it]) }
     }
 
     private fun toResizedURL(originalURL: String, sizeSuffix: String): String {

@@ -1,15 +1,15 @@
 package sugtao4423.twitterweb4j.impl
 
+import sugtao4423.twitterweb4j.Json
 import sugtao4423.twitterweb4j.model.EntityIndex
-import twitter4j.JSONObject
 import twitter4j.URLEntity
 
-data class QuotedStatusPermalinkJSONImpl(@Transient private val json: JSONObject) : URLEntity,
+data class QuotedStatusPermalinkJSONImpl(@Transient private val json: Json) : URLEntity,
     EntityIndex(json), java.io.Serializable {
 
-    private val url = json.getString("url")
-    private val expandedURL = json.getString("expanded")
-    private val displayURL = json.getString("display")
+    private val url = json["url"].string
+    private val expandedURL = json["expanded"].string
+    private val displayURL = json["display"].string
 
     override fun getText(): String = url
     override fun getURL(): String = url

@@ -1,7 +1,6 @@
 package sugtao4423.twitterweb4j.model
 
-import twitter4j.JSONArray
-import twitter4j.JSONObject
+import sugtao4423.twitterweb4j.Json
 
 abstract class EntityIndex : Comparable<EntityIndex>, java.io.Serializable {
 
@@ -13,10 +12,9 @@ abstract class EntityIndex : Comparable<EntityIndex>, java.io.Serializable {
         this.end = end
     }
 
-    constructor(json: JSONObject, key: String = "indices") {
-        val indices = json.optJSONArray(key) ?: JSONArray()
-        start = indices.optInt(0, -1)
-        end = indices.optInt(1, -1)
+    constructor(json: Json, key: String = "indices") {
+        start = json[key][0].intOrNull ?: -1
+        end = json[key][1].intOrNull ?: -1
     }
 
     override fun compareTo(other: EntityIndex): Int = start.compareTo(other.start)

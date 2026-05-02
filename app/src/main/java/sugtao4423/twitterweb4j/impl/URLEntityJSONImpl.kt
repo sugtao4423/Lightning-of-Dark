@@ -1,16 +1,15 @@
 package sugtao4423.twitterweb4j.impl
 
+import sugtao4423.twitterweb4j.Json
 import sugtao4423.twitterweb4j.model.EntityIndex
-import sugtao4423.twitterweb4j.nullString
-import twitter4j.JSONObject
 import twitter4j.URLEntity
 
-data class URLEntityJSONImpl(@Transient private val json: JSONObject) : URLEntity,
-    EntityIndex(json), java.io.Serializable {
+data class URLEntityJSONImpl(@Transient private val json: Json) : URLEntity, EntityIndex(json),
+    java.io.Serializable {
 
-    private val url = json.getString("url")
-    private val expandedURL = json.nullString("expanded_url")
-    private val displayURL = json.nullString("display_url")
+    private val url = json["url"].string
+    private val expandedURL = json["expanded_url"].stringOrNull
+    private val displayURL = json["display_url"].stringOrNull
 
     override fun getText(): String = url
     override fun getURL(): String = url
