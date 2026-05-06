@@ -2,7 +2,7 @@ package sugtao4423.twitterweb4j.model
 
 import sugtao4423.twitterweb4j.Json
 
-abstract class EntityIndex : Comparable<EntityIndex>, java.io.Serializable {
+open class EntityIndex : Comparable<EntityIndex>, java.io.Serializable {
 
     private val start: Int
     private val end: Int
@@ -12,9 +12,9 @@ abstract class EntityIndex : Comparable<EntityIndex>, java.io.Serializable {
         this.end = end
     }
 
-    constructor(json: Json, key: String = "indices") {
-        start = json[key][0].intOrNull ?: -1
-        end = json[key][1].intOrNull ?: -1
+    constructor(json: Json, override: EntityIndex?) {
+        start = override?.start ?: json["indices"][0].intOrNull ?: -1
+        end = override?.end ?: json["indices"][1].intOrNull ?: -1
     }
 
     override fun compareTo(other: EntityIndex): Int = start.compareTo(other.start)

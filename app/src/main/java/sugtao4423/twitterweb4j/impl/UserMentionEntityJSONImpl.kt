@@ -4,8 +4,10 @@ import sugtao4423.twitterweb4j.Json
 import sugtao4423.twitterweb4j.model.EntityIndex
 import twitter4j.UserMentionEntity
 
-data class UserMentionEntityJSONImpl(@Transient private val json: Json) : UserMentionEntity,
-    EntityIndex(json), java.io.Serializable {
+data class UserMentionEntityJSONImpl(
+    @Transient private val json: Json,
+    @Transient private val overrideIndices: EntityIndex? = null,
+) : UserMentionEntity, EntityIndex(json, overrideIndices), java.io.Serializable {
 
     private val id = json["id_str"].string.toLong()
     private val name = json["name"].string

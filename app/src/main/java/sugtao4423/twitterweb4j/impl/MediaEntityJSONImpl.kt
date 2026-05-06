@@ -31,8 +31,10 @@ data class VideoInfoJSONImpl(@Transient private val json: Json) : MediaEntity.Va
 
 }
 
-data class MediaEntityJSONImpl(@Transient private val json: Json) : MediaEntity, EntityIndex(json),
-    java.io.Serializable {
+data class MediaEntityJSONImpl(
+    @Transient private val json: Json,
+    @Transient private val overrideIndices: EntityIndex? = null,
+) : MediaEntity, EntityIndex(json, overrideIndices), java.io.Serializable {
 
     private val id = json["id_str"].string.toLong()
 

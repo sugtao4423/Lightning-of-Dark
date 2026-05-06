@@ -1,6 +1,7 @@
 package sugtao4423.twitterweb4j.impl
 
 import sugtao4423.twitterweb4j.Json
+import sugtao4423.twitterweb4j.parser.HtmlEntity
 import twitter4j.GeoLocation
 import twitter4j.HashtagEntity
 import twitter4j.MediaEntity
@@ -57,22 +58,27 @@ data class StatusJSONImpl(@Transient val result: Json) : Status, java.io.Seriali
         StatusJSONImpl(it)
     }
 
-    private val userMentionEntities: Array<UserMentionEntity> =
-        legacy["entities"]["user_mentions"].let {
+    private val unescaped = let {
+        val text = legacy["full_text"].string
+        val userMentionEntities = legacy["entities"]["user_mentions"].let {
             Array(it.size) { i -> UserMentionEntityJSONImpl(it[i]) }
         }
-    private val urlEntities: Array<URLEntity> = legacy["entities"]["urls"].let {
-        Array(it.size) { i -> URLEntityJSONImpl(it[i]) }
-    }
-    private val hashtagEntities: Array<HashtagEntity> = legacy["entities"]["hashtags"].let {
-        Array(it.size) { i -> HashtagEntityJSONImpl(it[i]) }
+        val urlEntities = legacy["entities"]["urls"].let {
+            Array(it.size) { i -> URLEntityJSONImpl(it[i]) }
+        }
+        val hashtagEntities = legacy["entities"]["hashtags"].let {
+            Array(it.size) { i -> HashtagEntityJSONImpl(it[i]) }
+        }
+        val mediaEntities = extendedEntities.let {
+            Array(it.size) { i -> MediaEntityJSONImpl(it[i]) }
+        }
+
+        HtmlEntity.unescapeAndSlideEntityIndices(
+            text, userMentionEntities, urlEntities, hashtagEntities, mediaEntities
+        )
     }
     private val symbolEntities: Array<SymbolEntity> = legacy["entities"]["symbols"].let {
         Array(it.size) { i -> HashtagEntityJSONImpl(it[i]) }
-    }
-
-    private val mediaEntities: Array<MediaEntity> = extendedEntities.let {
-        Array(it.size) { i -> MediaEntityJSONImpl(it[i]) }
     }
 
     private val quotedStatus = json["quoted_status_result"]["result"].orNull()?.let {
@@ -89,7 +95,7 @@ data class StatusJSONImpl(@Transient val result: Json) : Status, java.io.Seriali
     private val displayTextRangeStart = legacy["display_text_range"][0].intOrNull ?: -1
     private val displayTextRangeEnd = legacy["display_text_range"][1].intOrNull ?: -1
 
-    private val text = legacy["full_text"].string
+    private val text = unescaped.text
     private val currentUserRetweetId = -1L
     private val lang = legacy["lang"].stringOrNull
 
@@ -134,11 +140,11 @@ data class StatusJSONImpl(@Transient val result: Json) : Status, java.io.Seriali
 
     override fun isPossiblySensitive(): Boolean = isPossiblySensitive
 
-    override fun getUserMentionEntities(): Array<UserMentionEntity> = userMentionEntities
-    override fun getURLEntities(): Array<URLEntity> = urlEntities
-    override fun getHashtagEntities(): Array<HashtagEntity> = hashtagEntities
+    override fun getUserMentionEntities(): Array<UserMentionEntity> = unescaped.userMentions
+    override fun getURLEntities(): Array<URLEntity> = unescaped.urls
+    override fun getHashtagEntities(): Array<HashtagEntity> = unescaped.hashtags
     override fun getSymbolEntities(): Array<SymbolEntity> = symbolEntities
-    override fun getMediaEntities(): Array<MediaEntity> = mediaEntities
+    override fun getMediaEntities(): Array<MediaEntity> = unescaped.media
 
     override fun getLang(): String? = lang
     override fun getScopes(): Scopes? = null
