@@ -17,13 +17,13 @@ value class Json(val raw: Any?) {
     val longOrNull: Long? get() = (raw as? Number)?.toLong()
     val doubleOrNull: Double? get() = (raw as? Number)?.toDouble()
     val boolOrNull: Boolean? get() = raw as? Boolean
-    val boolOrFalse: Boolean get() = boolOrNull ?: false
 
     val string: String get() = stringOrNull ?: typeError("String")
     val int: Int get() = intOrNull ?: typeError("Int")
     val long: Long get() = longOrNull ?: typeError("Long")
     val double: Double get() = doubleOrNull ?: typeError("Double")
     val bool: Boolean get() = boolOrNull ?: typeError("Boolean")
+    val boolOrFalse: Boolean get() = boolOrNull ?: false
 
     val isNull: Boolean get() = raw == null || raw === JSONObject.NULL
     fun orNull(): Json? = if (isNull) null else this
@@ -53,6 +53,7 @@ value class Json(val raw: Any?) {
     private fun typeError(expected: String): Nothing = throw JSONException(
         "Expected $expected but was ${raw?.javaClass?.simpleName ?: "null"}"
     )
+
 }
 
 fun String.parseJson(): Json = Json(JSONTokener(this).nextValue())
