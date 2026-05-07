@@ -22,8 +22,8 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.playing_music_data.MusicDataKey
 import sugtao4423.lod.utils.showToast
+import sugtao4423.twitterweb4j.model.CreateTweet
 import twitter4j.Status
-import twitter4j.StatusUpdate
 import kotlin.math.round
 
 class TweetActivityViewModel(application: Application) : AndroidViewModel(application) {
@@ -53,6 +53,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     val isShowOriginStatus = MutableLiveData<Boolean>()
 
     val tweetText = MutableLiveData("")
+    val prefixLength = MutableLiveData(0)
     val textSelectionEnd = MutableLiveData(true)
     val remainingTextCount = MutableLiveData(140)
     val isValidTextCount = MutableLiveData(true)
@@ -90,7 +91,10 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
         when (tweetType) {
             TweetActivity.TYPE_REPLY -> {
-                tweetText.value = "@${toStatus!!.user.screenName} "
+                "@${toStatus!!.user.screenName} ".also {
+                    tweetText.value = it
+                    prefixLength.value = it.length
+                }
             }
 
             TweetActivity.TYPE_REPLYALL -> {
@@ -99,7 +103,10 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
                         it.id != app.account.id
                     }.map { it.screenName }.toSet()
                 val replyUserScreenNames = mentionUsers.joinToString(" @", "@") + " "
-                tweetText.value = replyUserScreenNames
+                replyUserScreenNames.also {
+                    tweetText.value = it
+                    prefixLength.value = it.length
+                }
             }
 
             TweetActivity.TYPE_QUOTERT -> {
@@ -149,9 +156,12 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun clickTweet() {
-        val statusUpdate = StatusUpdate(tweetText.value!!)
+        val text = tweetText.value!!.substring(prefixLength.value!!)
+        val createTweet = CreateTweet(text)
 
         if (selectedImage.value != null) {
+            throw UnsupportedOperationException("Image upload is currently not supported.")
+            /*
             val cursor = app.contentResolver.query(selectedImage.value!!, null, null, null, null)
             if (cursor == null || !cursor.moveToFirst()) {
                 app.showToast(R.string.error_select_picture)
@@ -165,12 +175,13 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
                 fileName
             }
             val inputStream = app.contentResolver.openInputStream(selectedImage.value!!)
-            statusUpdate.media(fileName, inputStream!!)
+            createTweet.media(fileName, inputStream!!)
+            */
         }
         if (tweetType == TweetActivity.TYPE_REPLY || tweetType == TweetActivity.TYPE_REPLYALL) {
-            app.updateStatus(statusUpdate.inReplyToStatusId(toStatus!!.id))
+            app.updateStatus(createTweet.apply { inReplyToStatusId = toStatus!!.id })
         } else {
-            app.updateStatus(statusUpdate)
+            app.updateStatus(createTweet)
         }
 
         _onFinish.value = Unit

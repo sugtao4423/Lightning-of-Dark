@@ -14,6 +14,7 @@ import sugtao4423.twitterweb4j.body.FavoriteTweetBody
 import sugtao4423.twitterweb4j.body.UnfavoriteTweetBody
 import sugtao4423.twitterweb4j.challenge.ClientTransaction
 import sugtao4423.twitterweb4j.challenge.ClientTransactionUtils
+import sugtao4423.twitterweb4j.model.CreateTweet
 import sugtao4423.twitterweb4j.model.CursorList
 import sugtao4423.twitterweb4j.model.PagableCursorList
 import sugtao4423.twitterweb4j.parser.JsonParserGraphQL
@@ -172,9 +173,9 @@ class TwitterWeb4j {
     }
 
     @Throws(TwitterException::class)
-    fun createTweet(tweetText: String): Status {
+    fun createTweet(tweet: CreateTweet): Status {
         val url = UrlGraphQL.createTweet
-        val body = CreateTweetBody(url).get(tweetText)
+        val body = CreateTweetBody(url).get(tweet)
         val response = post(url, body)
         return JsonParserGraphQL.parseCreateTweet(response)
     }

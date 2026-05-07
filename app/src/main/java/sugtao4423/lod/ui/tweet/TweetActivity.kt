@@ -96,6 +96,9 @@ class TweetActivity : LoDBaseActivity() {
                 binding.tweetEdit.setText(it)
             }
         }
+        viewModel.prefixLength.observe(this) {
+            binding.tweetEdit.prefixLength = it
+        }
         viewModel.textSelectionEnd.observe(this) {
             if (it == true) {
                 binding.tweetEdit.setSelection(binding.tweetEdit.text.length)

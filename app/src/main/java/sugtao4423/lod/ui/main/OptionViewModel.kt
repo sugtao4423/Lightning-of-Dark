@@ -12,6 +12,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.entity.Account
 import sugtao4423.lod.utils.showToast
+import sugtao4423.twitterweb4j.model.CreateTweet
 import java.text.NumberFormat
 
 class OptionViewModel(application: Application) : AndroidViewModel(application) {
@@ -41,7 +42,8 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
                 var loop = ""
                 for (i in 0 until loopCount.toInt()) {
                     loop += loopText
-                    runCatching { app.twitter.updateStatus(staticText + loop) }
+                    val createTweet = CreateTweet(staticText + loop)
+                    runCatching { app.twitter.createTweet(createTweet) }
                 }
             }
             app.showToast(R.string.param_success_tweet, 0)

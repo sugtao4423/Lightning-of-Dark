@@ -1,5 +1,6 @@
 package sugtao4423.twitterweb4j.body
 
+import sugtao4423.twitterweb4j.model.CreateTweet
 import sugtao4423.twitterweb4j.url.UrlGraphQLFeatures
 
 class CreateTweetBody(requestUrl: String) : BaseBody(requestUrl) {
@@ -15,8 +16,14 @@ class CreateTweetBody(requestUrl: String) : BaseBody(requestUrl) {
         ),
     )
 
-    fun get(tweetText: String): String {
-        val variables = this.variables + mapOf("tweet_text" to tweetText)
+    fun get(tweet: CreateTweet): String {
+        val variables = (this.variables + mapOf("tweet_text" to tweet.text)).toMutableMap()
+        tweet.inReplyToStatusId?.let {
+            variables["reply"] = mapOf(
+                "in_reply_to_tweet_id" to it.toString(),
+                "exclude_reply_user_ids" to emptyList<Any>(),
+            )
+        }
         return buildJsonString(variables)
     }
 

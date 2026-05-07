@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
+            <sugtao4423.lod.view.TweetEditText
                 android:id="@+id/tweetEdit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -32,7 +32,7 @@
                 tools:ignore="LabelFor">
 
                 <requestFocus />
-            </EditText>
+            </sugtao4423.lod.view.TweetEditText>
 
             <ImageView
                 android:id="@+id/selectedImageView"
