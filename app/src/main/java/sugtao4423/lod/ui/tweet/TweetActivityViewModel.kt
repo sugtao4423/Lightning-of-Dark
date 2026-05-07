@@ -75,13 +75,13 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
     private fun onSetTweetType() {
         _actionBarTitle.value = when (tweetType) {
-            TweetActivity.TYPE_REPLY, TweetActivity.TYPE_REPLYALL, TweetActivity.TYPE_QUOTERT -> null
+            TweetActivity.TYPE_REPLY, TweetActivity.TYPE_QUOTERT -> null
             TweetActivity.TYPE_UNOFFICIALRT -> R.string.unofficial_rt
             else -> R.string.new_tweet
         }
 
         when (tweetType) {
-            TweetActivity.TYPE_REPLY, TweetActivity.TYPE_REPLYALL, TweetActivity.TYPE_QUOTERT -> {
+            TweetActivity.TYPE_REPLY, TweetActivity.TYPE_QUOTERT -> {
                 isShowOriginStatus.value = true
                 _onSetTweetListAdapter.value = Unit
             }
@@ -91,13 +91,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
         when (tweetType) {
             TweetActivity.TYPE_REPLY -> {
-                "@${toStatus!!.user.screenName} ".also {
-                    tweetText.value = it
-                    prefixLength.value = it.length
-                }
-            }
-
-            TweetActivity.TYPE_REPLYALL -> {
                 val mentionUsers =
                     setOf(toStatus!!.user.screenName) + toStatus!!.userMentionEntities.filter {
                         it.id != app.account.id
@@ -178,7 +171,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             createTweet.media(fileName, inputStream!!)
             */
         }
-        if (tweetType == TweetActivity.TYPE_REPLY || tweetType == TweetActivity.TYPE_REPLYALL) {
+        if (tweetType == TweetActivity.TYPE_REPLY) {
             app.updateStatus(createTweet.apply { inReplyToStatusId = toStatus!!.id })
         } else {
             app.updateStatus(createTweet)

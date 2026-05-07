@@ -31,8 +31,6 @@
     <string name="include_retweet">リツイートを含める</string>
     <string name="invalid_pattern">正規表現が不正です</string>
     <string name="open_in_browser">ブラウザで開く</string>
-    <string name="reply">Reply</string>
-    <string name="reply_all">ReplyAll</string>
 
     <string name="error_get_timeline">タイムライン取得エラー</string>
     <string name="error_get_mention">メンション取得エラー</string>
@@ -157,7 +155,6 @@
     <string name="icon_cog">&#xf013;</string>
 
     <string name="icon_reply">&#xf3e5;</string>
-    <string name="icon_replyAll">&#xf122;</string>
     <string name="icon_retweet">&#xf079;</string>
     <string name="icon_quote">&#xf10e;</string>
     <string name="icon_star">&#xf005;</string>

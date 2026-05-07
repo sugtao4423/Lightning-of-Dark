@@ -30,11 +30,10 @@ class TweetActivity : LoDBaseActivity() {
 
         const val TYPE_NEWTWEET = 0
         const val TYPE_REPLY = 1
-        const val TYPE_REPLYALL = 2
-        const val TYPE_QUOTERT = 3
-        const val TYPE_UNOFFICIALRT = 4
-        const val TYPE_PAKUTSUI = 5
-        const val TYPE_EXTERNALTEXT = 6
+        const val TYPE_QUOTERT = 2
+        const val TYPE_UNOFFICIALRT = 3
+        const val TYPE_PAKUTSUI = 4
+        const val TYPE_EXTERNALTEXT = 5
 
         const val FILE_PERMISSION_REQUEST_CODE = 364364
     }
