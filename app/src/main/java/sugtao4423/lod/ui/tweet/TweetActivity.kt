@@ -80,7 +80,6 @@ class TweetActivity : LoDBaseActivity() {
             }
             tweetEdit.doAfterTextChanged {
                 viewModel.tweetText.value = it?.toString() ?: ""
-                viewModel.afterChangeTweetText(it ?: return@doAfterTextChanged)
             }
         }
 

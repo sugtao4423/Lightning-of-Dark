@@ -1,16 +1,25 @@
 package sugtao4423.lod.view
 
 import android.content.Context
+import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
+import com.twitter.twittertext.Extractor
+import sugtao4423.lod.R
 
 class TweetEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = android.R.attr.editTextStyle,
 ) : AppCompatEditText(context, attrs, defStyleAttr) {
+
+    private val extractor = Extractor()
+    private val entityColor = ContextCompat.getColor(context, R.color.twitterBrand)
 
     var prefixLength: Int = 0
         set(value) {
@@ -21,7 +30,19 @@ class TweetEditText @JvmOverloads constructor(
         }
 
     init {
+        doAfterTextChanged {
+            applyEntityColor(it ?: return@doAfterTextChanged)
+        }
         filters = arrayOf(FixedPrefixFilter())
+    }
+
+    private fun applyEntityColor(editable: Editable) {
+        editable.getSpans(0, editable.length, ForegroundColorSpan::class.java).forEach {
+            editable.removeSpan(it)
+        }
+        extractor.extractEntitiesWithIndices(editable.toString()).forEach {
+            editable.setSpan(ForegroundColorSpan(entityColor), it.start, it.end, 0)
+        }
     }
 
     override fun onSelectionChanged(selStart: Int, selEnd: Int) {

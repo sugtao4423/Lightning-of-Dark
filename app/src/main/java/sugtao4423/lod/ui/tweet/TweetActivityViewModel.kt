@@ -7,16 +7,12 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
 import android.speech.RecognizerIntent
-import android.text.Editable
-import android.text.style.ForegroundColorSpan
 import androidx.activity.result.ActivityResult
-import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hadilq.liveevent.LiveEvent
-import com.twitter.twittertext.Extractor
 import com.twitter.twittertext.TwitterTextParser
 import sugtao4423.lod.App
 import sugtao4423.lod.R
@@ -132,16 +128,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         }
         remainingTextCount.value = 140 - length140
         isValidTextCount.value = parseResult.isValid || length140 == 0
-    }
-
-    fun afterChangeTweetText(editable: Editable) {
-        val entityColor = ContextCompat.getColor(app, R.color.twitterBrand)
-        editable.getSpans(0, editable.length, ForegroundColorSpan::class.java).forEach {
-            editable.removeSpan(it)
-        }
-        Extractor().extractEntitiesWithIndices(editable.toString()).forEach {
-            editable.setSpan(ForegroundColorSpan(entityColor), it.start, it.end, 0)
-        }
     }
 
     fun clickClose() {
