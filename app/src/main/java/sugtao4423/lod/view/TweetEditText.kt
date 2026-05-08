@@ -4,13 +4,13 @@ import android.content.Context
 import android.text.InputFilter
 import android.text.Spanned
 import android.util.AttributeSet
-import android.widget.EditText
+import androidx.appcompat.widget.AppCompatEditText
 
 class TweetEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = android.R.attr.editTextStyle,
-) : EditText(context, attrs, defStyleAttr) {
+) : AppCompatEditText(context, attrs, defStyleAttr) {
 
     var prefixLength: Int = 0
         set(value) {

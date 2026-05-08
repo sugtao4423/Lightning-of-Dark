@@ -100,7 +100,7 @@ class TweetActivity : LoDBaseActivity() {
         }
         viewModel.textSelectionEnd.observe(this) {
             if (it == true) {
-                binding.tweetEdit.setSelection(binding.tweetEdit.text.length)
+                binding.tweetEdit.setSelection(binding.tweetEdit.text!!.length)
             }
         }
         viewModel.remainingTextCount.observe(this) {
