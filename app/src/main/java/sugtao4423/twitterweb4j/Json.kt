@@ -1,9 +1,9 @@
 package sugtao4423.twitterweb4j
 
-import twitter4j.JSONArray
-import twitter4j.JSONException
-import twitter4j.JSONObject
-import twitter4j.JSONTokener
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import org.json.JSONTokener
 
 @JvmInline
 value class Json(val raw: Any?) {

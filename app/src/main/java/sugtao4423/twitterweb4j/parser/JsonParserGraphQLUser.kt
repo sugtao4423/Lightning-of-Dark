@@ -1,10 +1,10 @@
 package sugtao4423.twitterweb4j.parser
 
+import org.json.JSONException
 import sugtao4423.twitterweb4j.Json
 import sugtao4423.twitterweb4j.impl.UserJSONImpl
 import sugtao4423.twitterweb4j.model.PagableCursorList
 import sugtao4423.twitterweb4j.parseJson
-import twitter4j.JSONException
 import twitter4j.TwitterException
 import twitter4j.User
 
