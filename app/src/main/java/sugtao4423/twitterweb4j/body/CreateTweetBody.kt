@@ -24,6 +24,9 @@ class CreateTweetBody(requestUrl: String) : BaseBody(requestUrl) {
                 "exclude_reply_user_ids" to emptyList<Any>(),
             )
         }
+        tweet.attachmentUrl?.let {
+            variables["attachment_url"] = it
+        }
         return buildJsonString(variables)
     }
 

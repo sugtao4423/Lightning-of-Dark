@@ -19,6 +19,7 @@ import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.showToast
+import sugtao4423.lod.utils.toStatusUrl
 import sugtao4423.lod.view.TweetListView
 import twitter4j.Status
 import java.util.regex.Pattern
@@ -161,10 +162,7 @@ class ListItemClickListener(
     }
 
     private fun openInBrowser() {
-        val tweetSn = status.user.screenName
-        val tweetId = status.id.toString()
-        val url = "https://twitter.com/$tweetSn/status/$tweetId"
-        context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
+        context.startActivity(Intent(Intent.ACTION_VIEW, status.toStatusUrl().toUri()))
     }
 
     private fun openUserPage(userScreenName: String) {
