@@ -18,9 +18,9 @@ import sugtao4423.lod.model.PrefRepository
 import sugtao4423.lod.model.UseTimeRepository
 import sugtao4423.lod.service.AutoLoadTLService
 import sugtao4423.lod.utils.showToast
+import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.TwitterWeb4j
 import sugtao4423.twitterweb4j.model.CreateTweet
-import twitter4j.TwitterException
 import java.util.regex.Pattern
 
 class App : Application() {

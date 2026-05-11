@@ -1,11 +1,11 @@
 package sugtao4423.twitterweb4j.parser
 
 import org.json.JSONException
+import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.Json
 import sugtao4423.twitterweb4j.impl.StatusJSONImpl
 import sugtao4423.twitterweb4j.parseJson
 import twitter4j.Status
-import twitter4j.TwitterException
 
 object JsonParserGraphQL {
 

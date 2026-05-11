@@ -12,9 +12,9 @@ import androidx.annotation.RequiresApi
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.main.MainActivity
+import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.model.CursorList
 import twitter4j.Status
-import twitter4j.TwitterException
 import java.util.Timer
 import java.util.TimerTask
 

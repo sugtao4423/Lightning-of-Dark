@@ -1,8 +1,8 @@
 package sugtao4423.twitterweb4j.parser
 
+import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.parseJson
 import twitter4j.Relationship
-import twitter4j.TwitterException
 import twitter4j.TwitterObjectFactory
 import twitter4j.User
 import twitter4j.UserList

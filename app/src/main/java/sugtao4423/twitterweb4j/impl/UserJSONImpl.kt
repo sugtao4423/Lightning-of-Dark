@@ -1,9 +1,9 @@
 package sugtao4423.twitterweb4j.impl
 
+import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.Json
 import twitter4j.RateLimitStatus
 import twitter4j.Status
-import twitter4j.TwitterException
 import twitter4j.URLEntity
 import twitter4j.User
 import java.text.SimpleDateFormat
