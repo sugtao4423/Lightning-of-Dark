@@ -23,7 +23,6 @@ import sugtao4423.lod.utils.toStatusUrl
 import sugtao4423.lod.view.TweetListView
 import twitter4j.Status
 import java.util.regex.Pattern
-import java.util.regex.PatternSyntaxException
 import sugtao4423.lod.utils.Regex as LodRegex
 
 class ListItemClickListener(
@@ -97,10 +96,7 @@ class ListItemClickListener(
     }
 
     private fun showRegexFilterResult(regexText: String, isIncludeRetweet: Boolean) {
-        val pattern: Pattern
-        try {
-            pattern = Pattern.compile(regexText, Pattern.DOTALL)
-        } catch (e: PatternSyntaxException) {
+        val pattern = runCatching { Pattern.compile(regexText, Pattern.DOTALL) }.getOrElse {
             context.showToast(R.string.invalid_pattern)
             return
         }
