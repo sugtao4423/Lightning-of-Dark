@@ -7,7 +7,7 @@ object Regex {
     val mediaImage: Pattern =
         Pattern.compile("https?://pbs.twimg.com/media/")
     val mediaVideo: Pattern =
-        Pattern.compile("https?://video.twimg.com/ext_tw_video/[0-9]+/(pu|pr)/vid/.+/.+(.mp4|.webm)")
+        Pattern.compile("https?://video.twimg.com/(ext_tw|amplify)_video/[0-9]+/(p[ur]/)?vid/.+/.+(.mp4|.webm)")
     val mediaGif: Pattern =
         Pattern.compile("https?://pbs.twimg.com/tweet_video/")
 
