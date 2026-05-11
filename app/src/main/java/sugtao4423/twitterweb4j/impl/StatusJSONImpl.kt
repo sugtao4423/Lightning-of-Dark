@@ -132,8 +132,7 @@ data class StatusJSONImpl(@Transient val result: Json) : Status, java.io.Seriali
 
     override fun getRetweetCount(): Int = retweetCount
 
-    /** **Not implemented** */
-    override fun isRetweetedByMe(): Boolean = currentUserRetweetId != -1L
+    override fun isRetweetedByMe(): Boolean = isRetweeted && !isRetweet
 
     /** **Not implemented** */
     override fun getCurrentUserRetweetId(): Long = currentUserRetweetId
