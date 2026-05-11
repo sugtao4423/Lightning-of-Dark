@@ -12,15 +12,15 @@ object Regex {
         Pattern.compile("https?://pbs.twimg.com/tweet_video/")
 
     val statusUrl: Pattern =
-        Pattern.compile("https?://(mobile.)?twitter.com/(i/web|[0-9a-zA-Z_]+)/status/([0-9]+)")
-    const val statusUrlStatusIdGroup = 3
+        Pattern.compile("https?://(mobile\\.)?(twitter|x)\\.com/(i/web|[0-9a-zA-Z_]+)/status/([0-9]+)")
+    const val statusUrlStatusIdGroup = 4
 
     val shareUrl: Pattern =
-        Pattern.compile("https?://(mobile.)?twitter.com/(intent/tweet|share)\\?.+")
+        Pattern.compile("https?://(mobile\\.)?(twitter|x)\\.com/(intent/tweet|share)\\?.+")
 
     val userUrl: Pattern =
-        Pattern.compile("https?://(mobile.)?twitter.com/([0-9a-zA-Z_]+)")
-    const val userUrlScreenNameGroup = 2
+        Pattern.compile("https?://(mobile\\.)?(twitter|x)\\.com/([0-9a-zA-Z_]+)")
+    const val userUrlScreenNameGroup = 3
 
     val twimgUrl: Pattern =
         Pattern.compile("^https?://pbs.twimg.com/.+/+(.+)(\\..+)$")
