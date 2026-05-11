@@ -46,6 +46,12 @@ data class StatusJSONImpl(@Transient val result: Json) : Status, java.io.Seriali
         legacy["in_reply_to_status_id_str"].stringOrNull?.toLong() ?: -1L
     private val inReplyToUserId = legacy["in_reply_to_user_id_str"].stringOrNull?.toLong() ?: -1L
     private val inReplyToScreenName = legacy["in_reply_to_screen_name"].stringOrNull
+
+    private val geoLocation = legacy["geo"]["coordinates"].orNull()?.let {
+        GeoLocation(it[0].double, it[1].double)
+    }
+    private val place = legacy["place"].orNull()?.let { PlaceJSONImpl(it) }
+
     private val isFavorited = legacy["favorited"].boolOrFalse
     private val isRetweeted = legacy["retweeted"].boolOrFalse
     private val retweetCount = legacy["retweet_count"].int
@@ -114,11 +120,8 @@ data class StatusJSONImpl(@Transient val result: Json) : Status, java.io.Seriali
     override fun getInReplyToUserId(): Long = inReplyToUserId
     override fun getInReplyToScreenName(): String? = inReplyToScreenName
 
-    /** **Not implemented** */
-    override fun getGeoLocation(): GeoLocation? = null
-
-    /** **Not implemented** */
-    override fun getPlace(): Place? = null
+    override fun getGeoLocation(): GeoLocation? = geoLocation
+    override fun getPlace(): Place? = place
 
     override fun isFavorited(): Boolean = isFavorited
     override fun isRetweeted(): Boolean = isRetweeted
