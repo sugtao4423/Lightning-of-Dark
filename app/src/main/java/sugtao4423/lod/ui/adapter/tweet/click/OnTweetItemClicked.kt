@@ -4,6 +4,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
+import sugtao4423.lod.utils.toStatusUrl
 
 class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
 
@@ -40,6 +41,10 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
             }
         }
         dialogList.addAll(mediaUrls)
+
+        originalStatus.quotedStatus?.let {
+            dialogList.add(it.toStatusUrl())
+        }
 
         tweetItemDialog.show(context, originalStatus, tweetListAdapter.data, dialogList)
     }

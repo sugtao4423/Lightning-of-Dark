@@ -24,6 +24,7 @@ import sugtao4423.lod.view.TweetListView
 import twitter4j.Status
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
+import sugtao4423.lod.utils.Regex as LodRegex
 
 class ListItemClickListener(
     private val status: Status,
@@ -124,10 +125,10 @@ class ListItemClickListener(
     }
 
     private fun openUrl(urlText: String) {
-        val image = sugtao4423.lod.utils.Regex.mediaImage.matcher(urlText)
-        val video = sugtao4423.lod.utils.Regex.mediaVideo.matcher(urlText)
-        val gif = sugtao4423.lod.utils.Regex.mediaGif.matcher(urlText)
-        val state = sugtao4423.lod.utils.Regex.statusUrl.matcher(urlText)
+        val image = LodRegex.mediaImage.matcher(urlText)
+        val video = LodRegex.mediaVideo.matcher(urlText)
+        val gif = LodRegex.mediaGif.matcher(urlText)
+        val state = LodRegex.statusUrl.matcher(urlText)
         val intent = when {
             image.find() -> Intent(context, ShowImageActivity::class.java).apply {
                 val urls = TweetListConverter.allImageUrls(status.mediaEntities.toList())
@@ -147,10 +148,12 @@ class ListItemClickListener(
             }
 
             state.find() -> Intent(context, IntentActivity::class.java).apply {
-                putExtra(
-                    IntentActivity.TWEET_ID,
-                    state.group(sugtao4423.lod.utils.Regex.statusUrlStatusIdGroup)!!.toLong()
-                )
+                val statusId = state.group(LodRegex.statusUrlStatusIdGroup)!!.toLong()
+                if (statusId == status.quotedStatus?.id) {
+                    putExtra(IntentActivity.INTENT_EXTRA_KEY_STATUS, status.quotedStatus)
+                } else {
+                    putExtra(IntentActivity.INTENT_EXTRA_KEY_STATUS_ID, statusId)
+                }
             }
 
             else -> {

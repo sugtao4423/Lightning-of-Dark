@@ -15,7 +15,8 @@ import twitter4j.Status
 class IntentActivity : AppCompatActivity() {
 
     companion object {
-        const val TWEET_ID = "tweetId"
+        const val INTENT_EXTRA_KEY_STATUS = "status"
+        const val INTENT_EXTRA_KEY_STATUS_ID = "statusId"
     }
 
     private val viewModel: IntentActivityViewModel by viewModels()
@@ -47,11 +48,12 @@ class IntentActivity : AppCompatActivity() {
             showStatusDialog(it)
         }
 
-        val tweetId = intent.getLongExtra(TWEET_ID, -1)
-        if (tweetId == -1L) {
-            viewModel.doIntentAction(intent)
-        } else {
-            viewModel.showStatus(tweetId)
+        val status = intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) as? Status
+        val statusId = intent.getLongExtra(INTENT_EXTRA_KEY_STATUS_ID, -1)
+        when {
+            status != null -> viewModel.showStatus(status)
+            statusId != -1L -> viewModel.showStatus(statusId)
+            else -> viewModel.doIntentAction(intent)
         }
     }
 
