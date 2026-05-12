@@ -33,14 +33,14 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
         }
 
         originalStatus.urlEntities.forEach {
-            dialogList.add(it.expandedURL)
+            dialogList.add(it.expandedUrl ?: it.url)
         }
 
         originalStatus.mediaEntities.forEach {
             val url = if (TweetListConverter.mediaIsVideoOrGif(it)) {
                 TweetListConverter.videoMediaUrl(it)
             } else {
-                it.mediaURLHttps
+                it.mediaUrl
             }
             dialogList.add(url)
         }

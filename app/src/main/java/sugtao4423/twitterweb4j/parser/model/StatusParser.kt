@@ -4,11 +4,6 @@ import org.json.JSONException
 import sugtao4423.twitter4j.GeoLocation
 import sugtao4423.twitter4j.Status
 import sugtao4423.twitterweb4j.Json
-import sugtao4423.twitterweb4j.impl.HashtagEntityJSONImpl
-import sugtao4423.twitterweb4j.impl.MediaEntityJSONImpl
-import sugtao4423.twitterweb4j.impl.QuotedStatusPermalinkJSONImpl
-import sugtao4423.twitterweb4j.impl.URLEntityJSONImpl
-import sugtao4423.twitterweb4j.impl.UserMentionEntityJSONImpl
 import sugtao4423.twitterweb4j.parser.HtmlEntity
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -63,7 +58,7 @@ fun parseStatus(result: Json): Status {
         }
     }
     val quotedStatusPermalink = legacy["quoted_status_permalink"].orNull()?.let {
-        QuotedStatusPermalinkJSONImpl(it)
+        parseQuotedStatusPermalinkEntity(it)
     }
 
     val user = parseUser(json["core"]["user_results"]["result"])
@@ -71,16 +66,16 @@ fun parseStatus(result: Json): Status {
     val unescaped = null.let {
         val text = legacy["full_text"].string
         val userMentionEntities = legacy["entities"]["user_mentions"].let {
-            List(it.size) { i -> UserMentionEntityJSONImpl(it[i]) }
+            List(it.size) { i -> parseUserMentionEntity(it[i]) }
         }
         val urlEntities = legacy["entities"]["urls"].let {
-            List(it.size) { i -> URLEntityJSONImpl(it[i]) }
+            List(it.size) { i -> parseUrlEntity(it[i]) }
         }
         val hashtagEntities = legacy["entities"]["hashtags"].let {
-            List(it.size) { i -> HashtagEntityJSONImpl(it[i]) }
+            List(it.size) { i -> parseHashtagEntity(it[i]) }
         }
         val mediaEntities = extendedEntities.let {
-            List(it.size) { i -> MediaEntityJSONImpl(it[i]) }
+            List(it.size) { i -> parseMediaEntity(it[i]) }
         }
 
         HtmlEntity.unescapeAndSlideEntityIndices(
@@ -88,7 +83,7 @@ fun parseStatus(result: Json): Status {
         )
     }
     val symbolEntities = legacy["entities"]["symbols"].let {
-        List(it.size) { i -> HashtagEntityJSONImpl(it[i]) }
+        List(it.size) { i -> parseSymbolEntity(it[i]) }
     }
 
     val lang = legacy["lang"].stringOrNull

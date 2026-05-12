@@ -127,7 +127,7 @@ class ListItemClickListener(
         val state = LodRegex.statusUrl.matcher(urlText)
         val intent = when {
             image.find() -> Intent(context, ShowImageActivity::class.java).apply {
-                val urls = TweetListConverter.allImageUrls(status.mediaEntities.toList())
+                val urls = TweetListConverter.allImageUrls(status.mediaEntities)
                 val pos = urls.indexOf(urlText)
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, urls.toTypedArray())
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, pos)

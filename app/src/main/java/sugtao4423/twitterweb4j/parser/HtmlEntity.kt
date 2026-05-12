@@ -1,15 +1,10 @@
 package sugtao4423.twitterweb4j.parser
 
 import com.twitter.twittertext.Extractor
-import sugtao4423.twitterweb4j.impl.HashtagEntityJSONImpl
-import sugtao4423.twitterweb4j.impl.MediaEntityJSONImpl
-import sugtao4423.twitterweb4j.impl.URLEntityJSONImpl
-import sugtao4423.twitterweb4j.impl.UserMentionEntityJSONImpl
-import sugtao4423.twitterweb4j.model.EntityIndex
-import twitter4j.HashtagEntity
-import twitter4j.MediaEntity
-import twitter4j.URLEntity
-import twitter4j.UserMentionEntity
+import sugtao4423.twitter4j.HashtagEntity
+import sugtao4423.twitter4j.MediaEntity
+import sugtao4423.twitter4j.UrlEntity
+import sugtao4423.twitter4j.UserMentionEntity
 
 object HtmlEntity {
 
@@ -21,27 +16,47 @@ object HtmlEntity {
     data class UnescapedTweet(
         val text: String,
         val userMentions: List<UserMentionEntity>,
-        val urls: List<URLEntity>,
+        val urls: List<UrlEntity>,
         val hashtags: List<HashtagEntity>,
         val media: List<MediaEntity>,
     ) : java.io.Serializable
 
     fun unescapeAndSlideEntityIndices(
         text: String,
-        userMentionEntities: List<UserMentionEntityJSONImpl>,
-        urlEntities: List<URLEntityJSONImpl>,
-        hashtagEntities: List<HashtagEntityJSONImpl>,
-        mediaEntities: List<MediaEntityJSONImpl>,
+        userMentionEntities: List<UserMentionEntity>,
+        urlEntities: List<UrlEntity>,
+        hashtagEntities: List<HashtagEntity>,
+        mediaEntities: List<MediaEntity>,
     ): UnescapedTweet {
         val unescapedText = unescape(text)
         val entities = Extractor().extractEntitiesWithIndices(unescapedText).associate {
-            it.value to EntityIndex(it.start, it.end)
+            it.value to Pair(it.start, it.end)
         }
 
-        val userMentions = userMentionEntities.map { it.copy(overrideIndices = entities[it.text]) }
-        val urls = urlEntities.map { it.copy(overrideIndices = entities[it.text]) }
-        val hashtags = hashtagEntities.map { it.copy(overrideIndices = entities[it.text]) }
-        val media = mediaEntities.map { it.copy(overrideIndices = entities[it.text]) }
+        val userMentions = userMentionEntities.map {
+            it.copy(
+                start = entities[it.screenName]?.first ?: it.start,
+                end = entities[it.screenName]?.second ?: it.end,
+            )
+        }
+        val urls = urlEntities.map {
+            it.copy(
+                start = entities[it.url]?.first ?: it.start,
+                end = entities[it.url]?.second ?: it.end,
+            )
+        }
+        val hashtags = hashtagEntities.map {
+            it.copy(
+                start = entities[it.text]?.first ?: it.start,
+                end = entities[it.text]?.second ?: it.end,
+            )
+        }
+        val media = mediaEntities.map {
+            it.copy(
+                start = entities[it.url]?.first ?: it.start,
+                end = entities[it.url]?.second ?: it.end,
+            )
+        }
 
         return UnescapedTweet(unescapedText, userMentions, urls, hashtags, media)
     }

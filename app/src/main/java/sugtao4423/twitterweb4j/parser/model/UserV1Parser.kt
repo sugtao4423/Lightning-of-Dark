@@ -3,10 +3,9 @@ package sugtao4423.twitterweb4j.parser.model
 import org.json.JSONException
 import sugtao4423.twitter4j.ProfileBanner
 import sugtao4423.twitter4j.ProfileImage
+import sugtao4423.twitter4j.UrlEntity
 import sugtao4423.twitter4j.User
 import sugtao4423.twitterweb4j.Json
-import sugtao4423.twitterweb4j.impl.URLEntityJSONImpl
-import twitter4j.URLEntity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -128,9 +127,9 @@ fun parseUserV1(json: Json): User {
     )
 }
 
-private fun getUrlEntities(json: Json, category: String): List<URLEntity> {
+private fun getUrlEntities(json: Json, category: String): List<UrlEntity> {
     val urls = json["entities"][category]["urls"].orNull() ?: Json(emptyList<Any>())
-    return List(urls.size) { URLEntityJSONImpl(urls[it]) }
+    return List(urls.size) { parseUrlEntity(urls[it]) }
 }
 
 private fun toResizedUrl(originalURL: String, sizeSuffix: String): String {

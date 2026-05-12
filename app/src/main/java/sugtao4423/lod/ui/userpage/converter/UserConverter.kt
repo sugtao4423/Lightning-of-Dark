@@ -1,7 +1,7 @@
 package sugtao4423.lod.ui.userpage.converter
 
+import sugtao4423.twitter4j.UrlEntity
 import sugtao4423.twitter4j.User
-import twitter4j.URLEntity
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -27,14 +27,14 @@ object UserConverter {
     fun isShowProtected(user: User?): Boolean = user?.isProtected == true
 
     @JvmStatic
-    private fun replaceUrlEntities(target: String?, entity: URLEntity?): String = when {
+    private fun replaceUrlEntities(target: String?, entity: UrlEntity?): String = when {
         target == null -> ""
-        entity == null -> target
-        else -> target.replace(entity.url, entity.expandedURL)
+        entity == null || entity.expandedUrl == null -> target
+        else -> target.replace(entity.url, entity.expandedUrl)
     }
 
     @JvmStatic
-    private fun replaceUrlEntities(target: String?, entity: List<URLEntity>): String {
+    private fun replaceUrlEntities(target: String?, entity: List<UrlEntity>): String {
         var result = target ?: ""
         entity.forEach {
             result = replaceUrlEntities(target, it)

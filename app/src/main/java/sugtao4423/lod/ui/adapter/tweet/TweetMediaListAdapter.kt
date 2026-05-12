@@ -9,7 +9,7 @@ import sugtao4423.lod.databinding.ListItemTweetMediaImageBinding
 import sugtao4423.lod.databinding.ListItemTweetMediaVideoBinding
 import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.loadUrl
-import twitter4j.MediaEntity
+import sugtao4423.twitter4j.MediaEntity
 
 private object MediaEntityDiffCallback : DiffUtil.ItemCallback<MediaEntity>() {
 

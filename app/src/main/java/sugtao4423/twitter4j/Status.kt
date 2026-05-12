@@ -1,10 +1,5 @@
 package sugtao4423.twitter4j
 
-import twitter4j.HashtagEntity
-import twitter4j.MediaEntity
-import twitter4j.SymbolEntity
-import twitter4j.URLEntity
-import twitter4j.UserMentionEntity
 import java.util.Date
 
 data class Status(
@@ -34,12 +29,12 @@ data class Status(
 
     val quotedStatusId: Long?,
     val quotedStatus: Status?,
-    val quotedStatusPermalink: URLEntity?,
+    val quotedStatusPermalink: QuotedStatusPermalinkEntity?,
 
     val user: User,
 
     val userMentionEntities: List<UserMentionEntity>,
-    val urlEntities: List<URLEntity>,
+    val urlEntities: List<UrlEntity>,
     val hashtagEntities: List<HashtagEntity>,
     val mediaEntities: List<MediaEntity>,
     val symbolEntities: List<SymbolEntity>,

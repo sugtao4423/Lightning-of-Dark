@@ -1,6 +1,5 @@
 package sugtao4423.twitter4j
 
-import twitter4j.URLEntity
 import java.util.Date
 
 data class ProfileImage(
@@ -33,8 +32,8 @@ data class User(
     val url: String?,
     val createdAt: Date,
 
-    val descriptionUrlEntities: List<URLEntity>,
-    val urlEntity: URLEntity?,
+    val descriptionUrlEntities: List<UrlEntity>,
+    val urlEntity: UrlEntity?,
 
     val profileImage: ProfileImage?,
     val profileBanner: ProfileBanner?,

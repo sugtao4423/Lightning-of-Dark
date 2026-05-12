@@ -1,7 +1,7 @@
 package sugtao4423.lod.ui.adapter.converter
 
+import sugtao4423.twitter4j.MediaEntity
 import sugtao4423.twitter4j.Status
-import twitter4j.MediaEntity
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -62,7 +62,7 @@ object TweetListConverter {
 
     @JvmStatic
     fun allImageUrls(mediaEntities: List<MediaEntity>): List<String> =
-        mediaEntities.filter { !mediaIsVideoOrGif(it) }.map { it.mediaURLHttps }
+        mediaEntities.filter { !mediaIsVideoOrGif(it) }.map { it.mediaUrl }
 
     @JvmStatic
     fun mediaIsVideoOrGif(mediaEntity: MediaEntity): Boolean =
@@ -72,20 +72,18 @@ object TweetListConverter {
     fun mediaIsGif(mediaEntity: MediaEntity): Boolean = mediaEntity.type == "animated_gif"
 
     @JvmStatic
-    fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = mediaEntity.mediaURLHttps + ":small"
+    fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = mediaEntity.mediaUrl + ":small"
 
     @JvmStatic
     fun videoMediaUrl(mediaEntity: MediaEntity): String {
         if (!mediaIsVideoOrGif(mediaEntity)) {
-            throw UnsupportedOperationException()
+            throw UnsupportedOperationException("Media is not video or gif.")
+        }
+        if (mediaEntity.videoInfo == null || mediaEntity.videoInfo.variants.isEmpty()) {
+            throw UnsupportedOperationException("Video info is not available.")
         }
 
-        val videoVariants = mediaEntity.videoVariants.map { Pair(it.bitrate, it.url) }
-        if (videoVariants.isEmpty()) {
-            throw Error()
-        }
-
-        return videoVariants.maxByOrNull { it.first }!!.second
+        return mediaEntity.videoInfo.variants.maxBy { it.bitrate }.url
     }
 
 }
