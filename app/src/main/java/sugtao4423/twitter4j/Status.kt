@@ -4,7 +4,6 @@ import twitter4j.HashtagEntity
 import twitter4j.MediaEntity
 import twitter4j.SymbolEntity
 import twitter4j.URLEntity
-import twitter4j.User
 import twitter4j.UserMentionEntity
 import java.util.Date
 

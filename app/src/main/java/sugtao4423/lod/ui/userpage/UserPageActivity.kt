@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import sugtao4423.lod.databinding.ActivityUserPageBinding
 import sugtao4423.lod.ui.LoDBaseActivity
-import twitter4j.User
+import sugtao4423.twitter4j.User
 
 class UserPageActivity : LoDBaseActivity() {
 

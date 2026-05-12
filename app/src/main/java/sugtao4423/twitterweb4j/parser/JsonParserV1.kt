@@ -1,10 +1,11 @@
 package sugtao4423.twitterweb4j.parser
 
 import sugtao4423.twitter4j.TwitterException
+import sugtao4423.twitter4j.User
 import sugtao4423.twitterweb4j.parseJson
+import sugtao4423.twitterweb4j.parser.model.parseUserV1
 import twitter4j.Relationship
 import twitter4j.TwitterObjectFactory
-import twitter4j.User
 import twitter4j.UserList
 
 object JsonParserV1 {
@@ -20,8 +21,10 @@ object JsonParserV1 {
     }
 
     @Throws(TwitterException::class)
-    fun parseUser(response: String): User {
-        return TwitterObjectFactory.createUser(response)
+    fun parseUser(response: String): User = runCatching {
+        parseUserV1(response.parseJson())
+    }.getOrElse {
+        throw TwitterException(it.message, it.cause)
     }
 
     @Throws(TwitterException::class)

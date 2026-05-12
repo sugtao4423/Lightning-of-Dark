@@ -4,7 +4,7 @@ import android.content.Intent
 import android.view.View
 import sugtao4423.lod.App
 import sugtao4423.lod.ui.userpage.UserPageActivity
-import twitter4j.User
+import sugtao4423.twitter4j.User
 
 class UserListViewModel(app: App) {
 

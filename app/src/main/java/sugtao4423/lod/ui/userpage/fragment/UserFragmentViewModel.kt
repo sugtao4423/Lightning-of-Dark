@@ -10,8 +10,8 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.BaseTweetListViewModel
 import sugtao4423.lod.utils.showToast
+import sugtao4423.twitter4j.User
 import sugtao4423.twitterweb4j.model.PagableCursorList
-import twitter4j.User
 
 class UserFragmentViewModel(application: Application) : BaseTweetListViewModel(application) {
 

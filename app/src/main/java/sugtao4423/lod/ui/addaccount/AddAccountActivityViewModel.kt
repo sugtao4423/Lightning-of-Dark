@@ -77,7 +77,7 @@ class AddAccountActivityViewModel(application: Application) : AndroidViewModel(a
 
         val id = result?.id
         val screenName = result?.screenName
-        val profileImage = result?.originalProfileImageURLHttps
+        val profileImage = result?.profileImage?.originalUrl
 
         if (editMode && id != userIdText.value!!.toLong()) {
             app.showToast(R.string.error_user_id_mismatch)

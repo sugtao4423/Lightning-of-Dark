@@ -1,7 +1,7 @@
 package sugtao4423.lod.ui.userpage.converter
 
+import sugtao4423.twitter4j.User
 import twitter4j.URLEntity
-import twitter4j.User
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -12,10 +12,10 @@ object UserConverter {
     private const val LOADING = "Loading…"
 
     @JvmStatic
-    fun iconUrl(user: User?): String? = user?.originalProfileImageURLHttps
+    fun iconUrl(user: User?): String? = user?.profileImage?.originalUrl
 
     @JvmStatic
-    fun bannerUrl(user: User?): String? = user?.profileBannerRetinaURL
+    fun bannerUrl(user: User?): String? = user?.profileBanner?.retinaUrl
 
     @JvmStatic
     fun name(user: User?): String = user?.name ?: NULL
@@ -34,7 +34,7 @@ object UserConverter {
     }
 
     @JvmStatic
-    private fun replaceUrlEntities(target: String?, entity: Array<URLEntity>): String {
+    private fun replaceUrlEntities(target: String?, entity: List<URLEntity>): String {
         var result = target ?: ""
         entity.forEach {
             result = replaceUrlEntities(target, it)
@@ -44,7 +44,7 @@ object UserConverter {
 
     @JvmStatic
     fun bio(user: User?): String = user?.let {
-        replaceUrlEntities(it.description, it.descriptionURLEntities)
+        replaceUrlEntities(it.description, it.descriptionUrlEntities)
     } ?: LOADING
 
     @JvmStatic

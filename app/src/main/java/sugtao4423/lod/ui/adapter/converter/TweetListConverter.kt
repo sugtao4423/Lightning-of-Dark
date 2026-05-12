@@ -22,7 +22,7 @@ object TweetListConverter {
 
     @JvmStatic
     fun userIconUrl(status: Status?): String? =
-        originalStatus(status)?.user?.biggerProfileImageURLHttps
+        originalStatus(status)?.user?.profileImage?.biggerUrl
 
     @JvmStatic
     fun userNameAndScreenName(status: Status?): String? = originalStatus(status)?.let {
@@ -47,7 +47,7 @@ object TweetListConverter {
 
     @JvmStatic
     fun retweetedUserIconUrl(status: Status?): String? =
-        if (status?.isRetweet == true) status.user.biggerProfileImageURLHttps else null
+        if (status?.isRetweet == true) status.user.profileImage?.biggerUrl else null
 
     @JvmStatic
     fun retweetedUserScreenName(status: Status?): String? =

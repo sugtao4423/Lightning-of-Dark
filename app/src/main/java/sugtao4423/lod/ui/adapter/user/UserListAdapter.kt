@@ -10,7 +10,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.databinding.ListItemUserBinding
 import sugtao4423.lod.ui.adapter.converter.UserListConverter
 import sugtao4423.lod.ui.loadUrl
-import twitter4j.User
+import sugtao4423.twitter4j.User
 
 class UserListAdapter(private val context: Context) :
     RecyclerView.Adapter<UserListAdapter.ViewHolder>() {

@@ -8,7 +8,6 @@ import sugtao4423.twitterweb4j.impl.HashtagEntityJSONImpl
 import sugtao4423.twitterweb4j.impl.MediaEntityJSONImpl
 import sugtao4423.twitterweb4j.impl.QuotedStatusPermalinkJSONImpl
 import sugtao4423.twitterweb4j.impl.URLEntityJSONImpl
-import sugtao4423.twitterweb4j.impl.UserJSONImpl
 import sugtao4423.twitterweb4j.impl.UserMentionEntityJSONImpl
 import sugtao4423.twitterweb4j.parser.HtmlEntity
 import java.text.SimpleDateFormat
@@ -67,7 +66,7 @@ fun parseStatus(result: Json): Status {
         QuotedStatusPermalinkJSONImpl(it)
     }
 
-    val user = UserJSONImpl(json["core"]["user_results"]["result"])
+    val user = parseUser(json["core"]["user_results"]["result"])
 
     val unescaped = null.let {
         val text = legacy["full_text"].string

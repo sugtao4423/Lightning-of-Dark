@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import twitter4j.User
+import sugtao4423.twitter4j.User
 
 class DetailFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -53,24 +53,24 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
-    fun onClickIcon(user: User?): Boolean = user?.originalProfileImageURLHttps.let {
-        it?.let { url -> _onStartIconImageUrl.value = url }
-        true
+    fun onClickIcon(user: User?): Boolean {
+        user?.profileImage?.originalUrl?.let { _onStartIconImageUrl.value = it }
+        return true
     }
 
-    fun onLongClickIcon(user: User?): Boolean = user?.originalProfileImageURLHttps.let {
-        it?.let { url -> _onStartChromeUrl.value = url }
-        true
+    fun onLongClickIcon(user: User?): Boolean {
+        user?.profileImage?.originalUrl?.let { _onStartChromeUrl.value = it }
+        return true
     }
 
-    fun onClickBanner(user: User?): Boolean = user?.profileBanner1500x500URL.let {
-        it?.let { url -> _onStartBannerImageUrl.value = url }
-        true
+    fun onClickBanner(user: User?): Boolean {
+        user?.profileBanner?.size1500x500Url?.let { _onStartBannerImageUrl.value = it }
+        return true
     }
 
-    fun onLongClickBanner(user: User?): Boolean = user?.profileBanner1500x500URL.let {
-        it?.let { url -> _onStartChromeUrl.value = url }
-        true
+    fun onLongClickBanner(user: User?): Boolean {
+        user?.profileBanner?.size1500x500Url?.let { _onStartChromeUrl.value = it }
+        return true
     }
 
 }

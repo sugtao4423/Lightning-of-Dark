@@ -1,6 +1,6 @@
 package sugtao4423.lod.ui.adapter.converter
 
-import twitter4j.User
+import sugtao4423.twitter4j.User
 import java.text.NumberFormat
 
 object UserListConverter {
@@ -9,7 +9,7 @@ object UserListConverter {
     fun isShowProtected(user: User?): Boolean = user?.isProtected ?: false
 
     @JvmStatic
-    fun userIconUrl(user: User?): String? = user?.biggerProfileImageURLHttps
+    fun userIconUrl(user: User?): String? = user?.profileImage?.biggerUrl
 
     @JvmStatic
     fun userNameAndScreenName(user: User?): String? = user?.let {

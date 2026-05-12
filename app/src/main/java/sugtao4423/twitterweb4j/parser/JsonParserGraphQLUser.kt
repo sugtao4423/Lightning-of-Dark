@@ -2,11 +2,11 @@ package sugtao4423.twitterweb4j.parser
 
 import org.json.JSONException
 import sugtao4423.twitter4j.TwitterException
+import sugtao4423.twitter4j.User
 import sugtao4423.twitterweb4j.Json
-import sugtao4423.twitterweb4j.impl.UserJSONImpl
 import sugtao4423.twitterweb4j.model.PagableCursorList
 import sugtao4423.twitterweb4j.parseJson
-import twitter4j.User
+import sugtao4423.twitterweb4j.parser.model.parseUser
 
 object JsonParserGraphQLUser {
 
@@ -24,7 +24,7 @@ object JsonParserGraphQLUser {
             val entryId = entry["entryId"].string
 
             if (entryId.startsWith("user-")) {
-                val user = UserJSONImpl(entry["content"]["itemContent"]["user_results"]["result"])
+                val user = parseUser(entry["content"]["itemContent"]["user_results"]["result"])
                 result.add(user)
             } else if (entryId.startsWith("cursor-top-")) {
                 if (result.cursorTop != null) {

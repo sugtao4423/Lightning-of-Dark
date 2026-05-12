@@ -18,7 +18,7 @@ import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
 import sugtao4423.lod.ui.userpage.converter.UserConverter
 import sugtao4423.lod.utils.ChromeIntent
-import twitter4j.User
+import sugtao4423.twitter4j.User
 
 class DetailFragment : Fragment() {
 
