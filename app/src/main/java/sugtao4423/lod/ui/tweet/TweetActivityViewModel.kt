@@ -19,8 +19,8 @@ import sugtao4423.lod.R
 import sugtao4423.lod.playing_music_data.MusicDataKey
 import sugtao4423.lod.utils.showToast
 import sugtao4423.lod.utils.toStatusUrl
+import sugtao4423.twitter4j.Status
 import sugtao4423.twitterweb4j.model.CreateTweet
-import twitter4j.Status
 import kotlin.math.round
 
 class TweetActivityViewModel(application: Application) : AndroidViewModel(application) {

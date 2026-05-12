@@ -7,8 +7,8 @@ import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
+import sugtao4423.twitter4j.Status
 import twitter4j.MediaEntity
-import twitter4j.Status
 
 class TweetListViewModel(app: App) {
 

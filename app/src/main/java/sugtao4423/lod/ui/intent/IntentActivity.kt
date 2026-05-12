@@ -10,7 +10,7 @@ import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.ui.tweet.TweetActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.view.TweetListView
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 
 class IntentActivity : AppCompatActivity() {
 

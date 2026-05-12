@@ -15,39 +15,18 @@ object HtmlEntity {
 
     data class UnescapedTweet(
         val text: String,
-        val userMentions: Array<UserMentionEntity>,
-        val urls: Array<URLEntity>,
-        val hashtags: Array<HashtagEntity>,
-        val media: Array<MediaEntity>,
-    ) : java.io.Serializable {
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as UnescapedTweet
-            return text == other.text &&
-                    userMentions.contentEquals(other.userMentions) &&
-                    urls.contentEquals(other.urls) &&
-                    hashtags.contentEquals(other.hashtags) &&
-                    media.contentEquals(other.media)
-        }
-
-        override fun hashCode(): Int {
-            var result = text.hashCode()
-            result = 31 * result + userMentions.contentHashCode()
-            result = 31 * result + urls.contentHashCode()
-            result = 31 * result + hashtags.contentHashCode()
-            result = 31 * result + media.contentHashCode()
-            return result
-        }
-    }
+        val userMentions: List<UserMentionEntity>,
+        val urls: List<URLEntity>,
+        val hashtags: List<HashtagEntity>,
+        val media: List<MediaEntity>,
+    ) : java.io.Serializable
 
     fun unescapeAndSlideEntityIndices(
         text: String,
-        userMentionEntities: Array<UserMentionEntityJSONImpl>,
-        urlEntities: Array<URLEntityJSONImpl>,
-        hashtagEntities: Array<HashtagEntityJSONImpl>,
-        mediaEntities: Array<MediaEntityJSONImpl>,
+        userMentionEntities: List<UserMentionEntityJSONImpl>,
+        urlEntities: List<URLEntityJSONImpl>,
+        hashtagEntities: List<HashtagEntityJSONImpl>,
+        mediaEntities: List<MediaEntityJSONImpl>,
     ): UnescapedTweet {
         val unescapedText = text
             .replace("&lt;", "<")
@@ -63,13 +42,7 @@ object HtmlEntity {
         val hashtags = hashtagEntities.map { it.copy(overrideIndices = entities[it.text]) }
         val media = mediaEntities.map { it.copy(overrideIndices = entities[it.text]) }
 
-        return UnescapedTweet(
-            unescapedText,
-            userMentions.toTypedArray(),
-            urls.toTypedArray(),
-            hashtags.toTypedArray(),
-            media.toTypedArray(),
-        )
+        return UnescapedTweet(unescapedText, userMentions, urls, hashtags, media)
     }
 
 }

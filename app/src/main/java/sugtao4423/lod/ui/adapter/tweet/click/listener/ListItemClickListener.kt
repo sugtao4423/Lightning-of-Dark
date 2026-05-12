@@ -21,7 +21,7 @@ import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.showToast
 import sugtao4423.lod.utils.toStatusUrl
 import sugtao4423.lod.view.TweetListView
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 import java.util.regex.Pattern
 import sugtao4423.lod.utils.Regex as LodRegex
 

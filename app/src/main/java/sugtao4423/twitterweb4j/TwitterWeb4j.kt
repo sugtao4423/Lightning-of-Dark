@@ -6,6 +6,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import sugtao4423.twitter4j.Status
 import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.body.CreateRetweetBody
 import sugtao4423.twitterweb4j.body.CreateTweetBody
@@ -25,7 +26,6 @@ import sugtao4423.twitterweb4j.parser.JsonParserV1
 import sugtao4423.twitterweb4j.url.UrlGraphQL
 import sugtao4423.twitterweb4j.url.UrlV1
 import twitter4j.Relationship
-import twitter4j.Status
 import twitter4j.User
 import twitter4j.UserList
 import java.io.IOException

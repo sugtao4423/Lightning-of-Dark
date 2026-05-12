@@ -1,7 +1,7 @@
 package sugtao4423.lod.ui.adapter.converter
 
+import sugtao4423.twitter4j.Status
 import twitter4j.MediaEntity
-import twitter4j.Status
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

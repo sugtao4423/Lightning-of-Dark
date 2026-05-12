@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Job
 import sugtao4423.lod.App
+import sugtao4423.twitter4j.Status
 import sugtao4423.twitterweb4j.model.CursorList
-import twitter4j.Status
 
 abstract class BaseTweetListViewModel(application: Application) : AndroidViewModel(application) {
 

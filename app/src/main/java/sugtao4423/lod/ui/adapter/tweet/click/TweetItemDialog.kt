@@ -11,7 +11,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.databinding.DialogTweetBinding
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.adapter.tweet.click.listener.TweetDialogClickListeners
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 
 class TweetItemDialog(context: Context, fontAwesomeTypeface: Typeface) {
 
@@ -76,7 +76,7 @@ class TweetItemDialog(context: Context, fontAwesomeTypeface: Typeface) {
             retweetButton.setOnLongClickListener(clickListeners.quoteRTListener)
             quoteButton.setOnClickListener(clickListeners.unOfficialRTListener)
             favoriteButton.setOnClickListener(clickListeners.favoriteListener)
-            talkButton.isEnabled = status.inReplyToStatusId > 0
+            talkButton.isEnabled = status.inReplyToStatusId != null
             talkButton.setOnClickListener(clickListeners.talkListener)
             deleteButton.isEnabled =
                 (status.user.id == (context.applicationContext as App).account.id)

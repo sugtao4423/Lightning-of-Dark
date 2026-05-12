@@ -7,8 +7,8 @@ import com.hadilq.liveevent.LiveEvent
 import sugtao4423.lod.App
 import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.service.AutoLoadTLService
+import sugtao4423.twitter4j.Status
 import sugtao4423.twitterweb4j.model.CursorList
-import twitter4j.Status
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 

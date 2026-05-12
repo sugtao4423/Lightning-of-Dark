@@ -1,11 +1,11 @@
 package sugtao4423.twitterweb4j.parser
 
 import org.json.JSONException
+import sugtao4423.twitter4j.Status
 import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.Json
-import sugtao4423.twitterweb4j.impl.StatusJSONImpl
 import sugtao4423.twitterweb4j.parseJson
-import twitter4j.Status
+import sugtao4423.twitterweb4j.parser.model.parseStatus
 
 object JsonParserGraphQL {
 
@@ -24,7 +24,7 @@ object JsonParserGraphQL {
     fun parseCreateTweet(response: String): Status {
         val statusJson = response.parse()["data"]["create_tweet"]["tweet_results"]["result"]
         try {
-            return StatusJSONImpl(statusJson)
+            return parseStatus(statusJson)
         } catch (e: JSONException) {
             throw TwitterException(e)
         }

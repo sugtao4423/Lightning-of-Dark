@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.View
 import sugtao4423.lod.ui.tweet.TweetActivity
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 
 class ReplyListener(
     private val status: Status,

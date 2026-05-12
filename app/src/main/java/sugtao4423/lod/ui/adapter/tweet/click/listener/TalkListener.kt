@@ -12,7 +12,7 @@ import sugtao4423.lod.R
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.utils.showToast
 import sugtao4423.lod.view.TweetListView
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 
 class TalkListener(
     private val status: Status,
@@ -38,7 +38,7 @@ class TalkListener(
     private fun loadConversation(toLoadTalkStatus: Status) {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                runCatching { twitter.tweetDetail(toLoadTalkStatus.inReplyToStatusId) }.getOrNull()
+                runCatching { twitter.tweetDetail(toLoadTalkStatus.inReplyToStatusId!!) }.getOrNull()
             }
             if (result == null) {
                 context.showToast(R.string.error_get_talk_list)
@@ -46,7 +46,7 @@ class TalkListener(
             }
 
             talkAdapter.add(result)
-            if (result.inReplyToStatusId > 0) {
+            if (result.inReplyToStatusId != null) {
                 loadConversation(result)
             } else {
                 context.showToast(R.string.success_get_talk_list)

@@ -1,12 +1,12 @@
 package sugtao4423.twitterweb4j.parser
 
 import org.json.JSONException
+import sugtao4423.twitter4j.Status
 import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.Json
-import sugtao4423.twitterweb4j.impl.StatusJSONImpl
 import sugtao4423.twitterweb4j.model.CursorList
 import sugtao4423.twitterweb4j.parseJson
-import twitter4j.Status
+import sugtao4423.twitterweb4j.parser.model.parseStatus
 
 object JsonParserGraphQLTimeline {
 
@@ -30,8 +30,7 @@ object JsonParserGraphQLTimeline {
             val entryId = entry["entryId"].string
 
             if (entryId.startsWith("tweet-") || entryId.startsWith("notification-")) {
-                val tweet =
-                    StatusJSONImpl(entry["content"]["itemContent"]["tweet_results"]["result"])
+                val tweet = parseStatus(entry["content"]["itemContent"]["tweet_results"]["result"])
                 if (!tweet.source.contains(ignoreSource)) {
                     result.add(tweet)
                 }
@@ -42,8 +41,7 @@ object JsonParserGraphQLTimeline {
                         continue
                     }
 
-                    val tweet =
-                        StatusJSONImpl(item["item"]["itemContent"]["tweet_results"]["result"])
+                    val tweet = parseStatus(item["item"]["itemContent"]["tweet_results"]["result"])
                     if (!tweet.source.contains(ignoreSource)) {
                         result.add(tweet)
                     }
