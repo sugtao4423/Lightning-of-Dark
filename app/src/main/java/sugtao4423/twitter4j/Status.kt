@@ -1,9 +1,7 @@
 package sugtao4423.twitter4j
 
-import twitter4j.GeoLocation
 import twitter4j.HashtagEntity
 import twitter4j.MediaEntity
-import twitter4j.Place
 import twitter4j.SymbolEntity
 import twitter4j.URLEntity
 import twitter4j.User

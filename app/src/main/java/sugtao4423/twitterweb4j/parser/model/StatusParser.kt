@@ -1,17 +1,16 @@
 package sugtao4423.twitterweb4j.parser.model
 
 import org.json.JSONException
+import sugtao4423.twitter4j.GeoLocation
 import sugtao4423.twitter4j.Status
 import sugtao4423.twitterweb4j.Json
 import sugtao4423.twitterweb4j.impl.HashtagEntityJSONImpl
 import sugtao4423.twitterweb4j.impl.MediaEntityJSONImpl
-import sugtao4423.twitterweb4j.impl.PlaceJSONImpl
 import sugtao4423.twitterweb4j.impl.QuotedStatusPermalinkJSONImpl
 import sugtao4423.twitterweb4j.impl.URLEntityJSONImpl
 import sugtao4423.twitterweb4j.impl.UserJSONImpl
 import sugtao4423.twitterweb4j.impl.UserMentionEntityJSONImpl
 import sugtao4423.twitterweb4j.parser.HtmlEntity
-import twitter4j.GeoLocation
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -44,7 +43,7 @@ fun parseStatus(result: Json): Status {
     val geoLocation = legacy["geo"]["coordinates"].orNull()?.let {
         GeoLocation(it[0].double, it[1].double)
     }
-    val place = legacy["place"].orNull()?.let { PlaceJSONImpl(it) }
+    val place = legacy["place"].orNull()?.let { parsePlace(it) }
 
     val isPossiblySensitive = legacy["possibly_sensitive"].boolOrFalse
     val isRetweeted = legacy["retweeted"].boolOrFalse

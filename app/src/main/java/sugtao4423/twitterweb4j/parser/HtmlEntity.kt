@@ -13,6 +13,11 @@ import twitter4j.UserMentionEntity
 
 object HtmlEntity {
 
+    fun unescape(text: String): String = text
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&amp;", "&")
+
     data class UnescapedTweet(
         val text: String,
         val userMentions: List<UserMentionEntity>,
@@ -28,11 +33,7 @@ object HtmlEntity {
         hashtagEntities: List<HashtagEntityJSONImpl>,
         mediaEntities: List<MediaEntityJSONImpl>,
     ): UnescapedTweet {
-        val unescapedText = text
-            .replace("&lt;", "<")
-            .replace("&gt;", ">")
-            .replace("&amp;", "&")
-
+        val unescapedText = unescape(text)
         val entities = Extractor().extractEntitiesWithIndices(unescapedText).associate {
             it.value to EntityIndex(it.start, it.end)
         }
