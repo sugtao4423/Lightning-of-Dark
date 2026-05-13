@@ -37,7 +37,7 @@ object UserConverter {
     private fun replaceUrlEntities(target: String?, entity: List<UrlEntity>): String {
         var result = target ?: ""
         entity.forEach {
-            result = replaceUrlEntities(target, it)
+            result = replaceUrlEntities(result, it)
         }
         return result
     }
