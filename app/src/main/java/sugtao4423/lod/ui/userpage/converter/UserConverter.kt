@@ -8,23 +8,26 @@ import java.util.Locale
 
 object UserConverter {
 
-    private const val NULL = "null"
-    private const val LOADING = "Loading…"
+    @JvmStatic
+    private val numberFormat = NumberFormat.getInstance()
 
     @JvmStatic
-    fun iconUrl(user: User?): String? = user?.profileImage?.originalUrl
+    private val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE)
 
     @JvmStatic
-    fun bannerUrl(user: User?): String? = user?.profileBanner?.retinaUrl
+    fun iconUrl(user: User): String? = user.profileImage?.originalUrl
 
     @JvmStatic
-    fun name(user: User?): String = user?.name ?: NULL
+    fun bannerUrl(user: User): String? = user.profileBanner?.retinaUrl
 
     @JvmStatic
-    fun screenName(user: User?): String = user?.let { "@${it.screenName}" } ?: NULL
+    fun name(user: User): String = user.name
 
     @JvmStatic
-    fun isShowProtected(user: User?): Boolean = user?.isProtected == true
+    fun screenName(user: User): String = "@${user.screenName}"
+
+    @JvmStatic
+    fun isShowProtected(user: User): Boolean = user.isProtected
 
     @JvmStatic
     private fun replaceUrlEntities(target: String?, entity: UrlEntity?): String = when {
@@ -43,41 +46,27 @@ object UserConverter {
     }
 
     @JvmStatic
-    fun bio(user: User?): String = user?.let {
-        replaceUrlEntities(it.description, it.descriptionUrlEntities)
-    } ?: LOADING
+    fun bio(user: User): String = replaceUrlEntities(user.description, user.descriptionUrlEntities)
 
     @JvmStatic
-    fun location(user: User?): String = user?.location ?: LOADING
+    fun location(user: User): String = user.location ?: ""
 
     @JvmStatic
-    fun link(user: User?): String = user?.let {
-        replaceUrlEntities(it.url, it.urlEntity)
-    } ?: LOADING
+    fun link(user: User): String = replaceUrlEntities(user.url, user.urlEntity)
 
     @JvmStatic
-    fun tweetCount(user: User?): String = user?.let {
-        NumberFormat.getInstance().format(it.statusesCount)
-    } ?: LOADING
+    fun tweetCount(user: User): String = numberFormat.format(user.statusesCount)
 
     @JvmStatic
-    fun favoriteCount(user: User?): String = user?.let {
-        NumberFormat.getInstance().format(it.favouritesCount)
-    } ?: LOADING
+    fun favoriteCount(user: User): String = numberFormat.format(user.favouritesCount)
 
     @JvmStatic
-    fun followCount(user: User?): String = user?.let {
-        NumberFormat.getInstance().format(it.friendsCount)
-    } ?: LOADING
+    fun followCount(user: User): String = numberFormat.format(user.friendsCount)
 
     @JvmStatic
-    fun followerCount(user: User?): String = user?.let {
-        NumberFormat.getInstance().format(it.followersCount)
-    } ?: LOADING
+    fun followerCount(user: User): String = numberFormat.format(user.followersCount)
 
     @JvmStatic
-    fun createDate(user: User?): String = user?.let {
-        SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE).format(it.createdAt)
-    } ?: LOADING
+    fun createDate(user: User): String = dateFormat.format(user.createdAt)
 
 }

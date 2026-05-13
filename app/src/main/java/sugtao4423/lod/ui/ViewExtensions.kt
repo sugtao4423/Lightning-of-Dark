@@ -52,12 +52,7 @@ fun ImageView.loadUrl(url: String?, imageListener: RequestListener<Drawable>) {
     Glide.with(this).load(url).listener(imageListener).into(this)
 }
 
-fun TextView.setLodLinkMovementString(string: String?) {
-    if (string.isNullOrEmpty()) {
-        text = ""
-        return
-    }
-
+fun TextView.setLodLinkMovementString(string: String) {
     fun startUserPage(screenName: String) {
         val intent = Intent(context, UserPageActivity::class.java)
         intent.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, screenName)

@@ -75,7 +75,7 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun bindUser(user: User?) = binding.apply {
+    private fun bindUser(user: User) = binding.apply {
         bannerImage.loadUrl(
             UserConverter.bannerUrl(user),
             ContextCompat.getDrawable(requireContext(), R.drawable.user_header_empty)
