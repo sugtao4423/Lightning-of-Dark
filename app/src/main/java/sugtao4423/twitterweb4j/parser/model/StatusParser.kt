@@ -5,8 +5,6 @@ import sugtao4423.twitter4j.GeoLocation
 import sugtao4423.twitter4j.Status
 import sugtao4423.twitterweb4j.Json
 import sugtao4423.twitterweb4j.parser.HtmlEntity
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @Throws(JSONException::class)
 fun parseStatus(result: Json): Status {
@@ -25,9 +23,7 @@ fun parseStatus(result: Json): Status {
     val displayTextRangeStart = legacy["display_text_range"][0].int
     val displayTextRangeEnd = legacy["display_text_range"][1].int
     val source = json["source"].string
-    val createdAt = SimpleDateFormat(
-        "EEE MMM dd HH:mm:ss Z yyyy", Locale.US
-    ).parse(legacy["created_at"].string)!!
+    val createdAt = parseTwitterDate(legacy["created_at"].string)
 
     val isTruncated = legacy["truncated"].boolOrFalse
     val inReplyToStatusId = legacy["in_reply_to_status_id_str"].stringOrNull?.toLong()

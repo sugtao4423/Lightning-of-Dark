@@ -6,8 +6,6 @@ import sugtao4423.twitter4j.ProfileImage
 import sugtao4423.twitter4j.UrlEntity
 import sugtao4423.twitter4j.User
 import sugtao4423.twitterweb4j.Json
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @Throws(JSONException::class)
 fun parseUser(json: Json): User {
@@ -27,7 +25,7 @@ fun parseUser(json: Json): User {
         ?: json["location"]["location"].stringOrNull
     val url = legacy["url"].stringOrNull
     val createdAt = (legacy["created_at"].stringOrNull ?: core["created_at"].stringOrNull)?.let {
-        SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.US).parse(it)
+        parseTwitterDate(it)
     } ?: throw JSONException("`created_at` not found")
 
     val descriptionUrlEntities = getUrlEntities(json, "description")

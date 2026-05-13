@@ -3,8 +3,6 @@ package sugtao4423.twitterweb4j.parser.model
 import org.json.JSONException
 import sugtao4423.twitter4j.UserList
 import sugtao4423.twitterweb4j.Json
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @Throws(JSONException::class)
 fun parseUserListV1(json: Json): UserList {
@@ -16,9 +14,7 @@ fun parseUserListV1(json: Json): UserList {
     val isPublic = json["mode"].string.lowercase() == "public"
     val isFollowing = json["following"].bool
     val user = parseUserV1(json["user"])
-    val createdAt = json["created_at"].string.let {
-        SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.US).parse(it)!!
-    }
+    val createdAt = parseTwitterDate(json["created_at"].string)
 
     return UserList(
         id,
