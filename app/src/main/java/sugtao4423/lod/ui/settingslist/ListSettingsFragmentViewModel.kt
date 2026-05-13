@@ -13,7 +13,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.utils.showToast
-import twitter4j.UserList
+import sugtao4423.twitter4j.UserList
 
 class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 

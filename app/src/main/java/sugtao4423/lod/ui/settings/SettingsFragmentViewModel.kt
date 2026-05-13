@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
-import twitter4j.UserList
+import sugtao4423.twitter4j.UserList
 import java.io.File
 import java.text.DecimalFormat
 

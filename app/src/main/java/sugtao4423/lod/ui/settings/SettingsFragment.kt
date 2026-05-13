@@ -10,7 +10,7 @@ import androidx.preference.PreferenceFragmentCompat
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.settingslist.ListSettingsActivity
 import sugtao4423.lod.view.IntegerEditTextPreference
-import twitter4j.UserList
+import sugtao4423.twitter4j.UserList
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
