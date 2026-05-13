@@ -21,14 +21,14 @@ class TweetListViewModel(app: App) {
 
     fun tweetMediaAdapter(status: Status) = TweetMediaListAdapter(this).apply {
         val original = TweetListConverter.originalStatus(status)
-        submitList(original!!.mediaEntities)
+        submitList(original.mediaEntities)
     }
 
     fun onClickUserIcon(view: View, status: Status) {
         val intent = Intent(view.context, UserPageActivity::class.java).apply {
             putExtra(
                 UserPageActivity.INTENT_EXTRA_KEY_USER_OBJECT,
-                TweetListConverter.originalStatus(status)!!.user
+                TweetListConverter.originalStatus(status).user
             )
         }
         view.context.startActivity(intent)

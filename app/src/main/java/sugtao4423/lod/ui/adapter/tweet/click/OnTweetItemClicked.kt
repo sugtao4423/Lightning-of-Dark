@@ -15,7 +15,7 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
 
     fun onItemClicked(position: Int) {
         val status = tweetListAdapter.data[position]
-        val originalStatus = TweetListConverter.originalStatus(status)!!
+        val originalStatus = TweetListConverter.originalStatus(status)
 
         val dialogList = arrayListOf<String>()
 

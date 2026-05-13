@@ -9,35 +9,33 @@ import java.util.Locale
 object TweetListConverter {
 
     @JvmStatic
-    fun originalStatus(status: Status?): Status? = status?.let {
-        if (it.isRetweet) it.retweetedStatus else it
+    fun originalStatus(status: Status): Status = status.let {
+        if (it.isRetweet) it.retweetedStatus!! else it
     }
 
     @JvmStatic
-    fun isShowProtected(status: Status?): Boolean =
-        originalStatus(status)?.user?.isProtected ?: false
+    fun isShowProtected(status: Status): Boolean = originalStatus(status).user.isProtected
 
     @JvmStatic
-    fun isShowRetweetUser(status: Status?): Boolean = status?.isRetweet ?: false
+    fun isShowRetweetUser(status: Status): Boolean = status.isRetweet
 
     @JvmStatic
-    fun userIconUrl(status: Status?): String? =
-        originalStatus(status)?.user?.profileImage?.biggerUrl
+    fun userIconUrl(status: Status): String? = originalStatus(status).user.profileImage?.biggerUrl
 
     @JvmStatic
-    fun userNameAndScreenName(status: Status?): String? = originalStatus(status)?.let {
+    fun userNameAndScreenName(status: Status): String = originalStatus(status).let {
         "${it.user.name} - @${it.user.screenName}"
     }
 
     @JvmStatic
-    fun date(status: Status?, isShowMilliSec: Boolean): String? = status?.let {
+    fun date(status: Status, isShowMilliSec: Boolean): String {
         val statusDateFormat = SimpleDateFormat(
             "yyyy/MM/dd HH:mm:ss" + (if (isShowMilliSec) ".SSS" else ""),
             Locale.getDefault()
         )
         val date =
-            statusDateFormat.format(Date((originalStatus(status)!!.id shr 22) + 1288834974657L))
-        if (status.isRetweet) {
+            statusDateFormat.format(Date((originalStatus(status).id shr 22) + 1288834974657L))
+        return if (status.isRetweet) {
             "$date  Retweeted by "
         } else {
             val via = status.source.replace(Regex("<.+?>"), "")
@@ -46,19 +44,18 @@ object TweetListConverter {
     }
 
     @JvmStatic
-    fun retweetedUserIconUrl(status: Status?): String? =
-        if (status?.isRetweet == true) status.user.profileImage?.biggerUrl else null
+    fun retweetedUserIconUrl(status: Status): String? =
+        if (status.isRetweet) status.user.profileImage?.biggerUrl else null
 
     @JvmStatic
-    fun retweetedUserScreenName(status: Status?): String? =
-        if (status?.isRetweet == true) "@${status.user.screenName}" else null
+    fun retweetedUserScreenName(status: Status): String? =
+        if (status.isRetweet) "@${status.user.screenName}" else null
 
     @JvmStatic
-    fun text(status: Status?): String? = originalStatus(status)?.text
+    fun text(status: Status): String = originalStatus(status).text
 
     @JvmStatic
-    fun isShowMediaList(status: Status?) =
-        originalStatus(status)?.mediaEntities?.isNotEmpty() ?: false
+    fun isShowMediaList(status: Status): Boolean = originalStatus(status).mediaEntities.isNotEmpty()
 
     @JvmStatic
     fun allImageUrls(mediaEntities: List<MediaEntity>): List<String> =
