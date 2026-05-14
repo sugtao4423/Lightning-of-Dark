@@ -4,7 +4,6 @@ import org.json.JSONObject
 
 object UrlGraphQLFeatures {
 
-    @JvmStatic
     private val defaultFeatures: Map<String, Boolean> = mapOf(
         "responsive_web_graphql_exclude_directive_enabled" to true,
         "verified_phone_label_enabled" to true,
@@ -12,7 +11,6 @@ object UrlGraphQLFeatures {
         "responsive_web_graphql_timeline_navigation_enabled" to true,
     )
 
-    @JvmStatic
     private val userDataFeatures: Map<String, Boolean> = mapOf(
         "hidden_profile_likes_enabled" to false,
         "hidden_profile_subscriptions_enabled" to true,
@@ -21,13 +19,11 @@ object UrlGraphQLFeatures {
         "creator_subscriptions_tweet_preview_api_enabled" to true,
     )
 
-    @JvmStatic
     private val userInfoFeatures: Map<String, Boolean> = mapOf(
         "subscriptions_verification_info_is_identity_verified_enabled" to true,
         "subscriptions_verification_info_verified_since_enabled" to true,
     )
 
-    @JvmStatic
     private val additionalFeatures: Map<String, Boolean> = mapOf(
         "rweb_lists_timeline_redesign_enabled" to true,
         "creator_subscriptions_tweet_preview_api_enabled" to true,
@@ -49,7 +45,6 @@ object UrlGraphQLFeatures {
         "responsive_web_enhance_cards_enabled" to false,
     )
 
-    @JvmStatic
     fun generateMap(
         default: Boolean = true,
         userData: Boolean = false,
@@ -72,7 +67,6 @@ object UrlGraphQLFeatures {
         return features.toMap()
     }
 
-    @JvmStatic
     fun generate(
         default: Boolean = true,
         userData: Boolean = false,

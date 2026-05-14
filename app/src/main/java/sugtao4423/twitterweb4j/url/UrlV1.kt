@@ -4,50 +4,38 @@ import java.net.URLEncoder
 
 object UrlV1 {
 
-    @JvmStatic
     private val apiBaseUrl = "https://api.twitter.com/1.1".replace("twitter", "x")
 
-    @JvmStatic
     val verifyCredentials = "$apiBaseUrl/account/verify_credentials.json"
 
-    @JvmStatic
     private val getUserLists = "$apiBaseUrl/lists/list.json"
-
-    @JvmStatic
     private val showUser = "$apiBaseUrl/users/show.json"
-
-    @JvmStatic
     private val showFriendship = "$apiBaseUrl/friendships/show.json"
 
-    @JvmStatic
     fun getUserLists(id: Long, reverse: Boolean): String {
         val query = mapOf("user_id" to id.toString(), "reverse" to reverse.toString())
         val params = buildQueryParams(query)
         return "$getUserLists?$params"
     }
 
-    @JvmStatic
     fun getUserLists(screenName: String, reverse: Boolean): String {
         val query = mapOf("screen_name" to screenName, "reverse" to reverse.toString())
         val params = buildQueryParams(query)
         return "$getUserLists?$params"
     }
 
-    @JvmStatic
     fun showUser(id: Long): String {
         val query = mapOf("user_id" to id.toString(), "include_entities" to "true")
         val params = buildQueryParams(query)
         return "$showUser?$params"
     }
 
-    @JvmStatic
     fun showUser(screenName: String): String {
         val query = mapOf("screen_name" to screenName, "include_entities" to "true")
         val params = buildQueryParams(query)
         return "$showUser?$params"
     }
 
-    @JvmStatic
     fun showFriendship(sourceId: Long, targetId: Long): String {
         val query = mapOf(
             "source_id" to sourceId.toString(),
@@ -57,7 +45,6 @@ object UrlV1 {
         return "$showFriendship?$params"
     }
 
-    @JvmStatic
     fun showFriendship(sourceScreenName: String, targetScreenName: String): String {
         val query = mapOf(
             "source_screen_name" to sourceScreenName,
@@ -67,7 +54,6 @@ object UrlV1 {
         return "$showFriendship?$params"
     }
 
-    @JvmStatic
     private fun buildQueryParams(params: Map<String, String>): String {
         val sb = StringBuilder()
         params.forEach { (key, value) ->

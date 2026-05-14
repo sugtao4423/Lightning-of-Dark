@@ -34,10 +34,8 @@ import java.net.URL
 class TwitterWeb4j {
 
     companion object {
-        @JvmStatic
-        val DEFAULT_COUNT = 40
+        const val DEFAULT_COUNT = 40
 
-        @JvmStatic
         val CONTENT_TYPE_JSON = "application/json".toMediaType()
     }
 

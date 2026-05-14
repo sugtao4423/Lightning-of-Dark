@@ -8,26 +8,19 @@ import java.util.Locale
 
 object TweetListConverter {
 
-    @JvmStatic
     fun originalStatus(status: Status): Status = status.let {
         if (it.isRetweet) it.retweetedStatus!! else it
     }
 
-    @JvmStatic
     fun isShowProtected(status: Status): Boolean = originalStatus(status).user.isProtected
-
-    @JvmStatic
     fun isShowRetweetUser(status: Status): Boolean = status.isRetweet
 
-    @JvmStatic
     fun userIconUrl(status: Status): String? = originalStatus(status).user.profileImage?.biggerUrl
 
-    @JvmStatic
     fun userNameAndScreenName(status: Status): String = originalStatus(status).let {
         "${it.user.name} - @${it.user.screenName}"
     }
 
-    @JvmStatic
     fun date(status: Status, isShowMilliSec: Boolean): String {
         val statusDateFormat = SimpleDateFormat(
             "yyyy/MM/dd HH:mm:ss" + (if (isShowMilliSec) ".SSS" else ""),
@@ -43,35 +36,26 @@ object TweetListConverter {
         }
     }
 
-    @JvmStatic
     fun retweetedUserIconUrl(status: Status): String? =
         if (status.isRetweet) status.user.profileImage?.biggerUrl else null
 
-    @JvmStatic
     fun retweetedUserScreenName(status: Status): String? =
         if (status.isRetweet) "@${status.user.screenName}" else null
 
-    @JvmStatic
     fun text(status: Status): String = originalStatus(status).text
 
-    @JvmStatic
     fun isShowMediaList(status: Status): Boolean = originalStatus(status).mediaEntities.isNotEmpty()
 
-    @JvmStatic
     fun allImageUrls(mediaEntities: List<MediaEntity>): List<String> =
         mediaEntities.filter { !mediaIsVideoOrGif(it) }.map { it.mediaUrl }
 
-    @JvmStatic
     fun mediaIsVideoOrGif(mediaEntity: MediaEntity): Boolean =
         mediaEntity.type == "video" || mediaEntity.type == "animated_gif"
 
-    @JvmStatic
     fun mediaIsGif(mediaEntity: MediaEntity): Boolean = mediaEntity.type == "animated_gif"
 
-    @JvmStatic
     fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = mediaEntity.mediaUrl + ":small"
 
-    @JvmStatic
     fun videoMediaUrl(mediaEntity: MediaEntity): String {
         if (!mediaIsVideoOrGif(mediaEntity)) {
             throw UnsupportedOperationException("Media is not video or gif.")

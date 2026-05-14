@@ -6,7 +6,6 @@ open class CursorList<T> : ArrayList<T>() {
     var cursorBottom: String? = null
 
     companion object {
-        @JvmStatic
         fun <T> newWithCursor(cursorList: CursorList<T>): CursorList<T> {
             val newCursorList = CursorList<T>()
             newCursorList.cursorTop = cursorList.cursorTop
