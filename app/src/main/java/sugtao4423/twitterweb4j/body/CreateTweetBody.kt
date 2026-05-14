@@ -10,10 +10,6 @@ class CreateTweetBody(requestUrl: String) : BaseBody(requestUrl) {
     override val variables = mapOf(
         "dark_request" to false,
         "semantic_annotation_ids" to emptyList<Any>(),
-        "media" to mapOf(
-            "media_entities" to emptyList<Any>(),
-            "possibly_sensitive" to false,
-        ),
     )
 
     fun get(tweet: CreateTweet): String {
@@ -27,6 +23,12 @@ class CreateTweetBody(requestUrl: String) : BaseBody(requestUrl) {
         tweet.attachmentUrl?.let {
             variables["attachment_url"] = it
         }
+        variables["media"] = mapOf(
+            "media_entities" to tweet.mediaIds.map {
+                mapOf("media_id" to it.toString(), "tagged_users" to emptyList<Any>())
+            },
+            "possibly_sensitive" to false,
+        )
         return buildJsonString(variables)
     }
 

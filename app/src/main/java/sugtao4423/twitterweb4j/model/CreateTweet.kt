@@ -4,4 +4,5 @@ data class CreateTweet(
     val text: String,
     var inReplyToStatusId: Long? = null,
     var attachmentUrl: String? = null,
+    var mediaIds: List<Long> = emptyList(),
 )

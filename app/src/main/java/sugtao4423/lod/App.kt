@@ -2,6 +2,7 @@ package sugtao4423.lod
 
 import android.app.Application
 import android.graphics.Typeface
+import android.net.Uri
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -81,14 +82,13 @@ class App : Application() {
         }
     }
 
-    fun updateStatus(tweet: CreateTweet) {
+    fun updateStatus(tweet: CreateTweet, imageUri: Uri? = null) {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                try {
+                runCatching {
+                    imageUri?.let { tweet.mediaIds = listOf(uploadMedia(it)) }
                     twitter.createTweet(tweet)
-                } catch (e: TwitterException) {
-                    null
-                }
+                }.getOrNull()
             }
             if (result != null) {
                 val exp = levelRepository.getRandomExp()
@@ -102,4 +102,13 @@ class App : Application() {
             }
         }
     }
+
+    private fun uploadMedia(uri: Uri): Long {
+        val mediaType = contentResolver.getType(uri)
+            ?: throw TwitterException("Failed to detect image MIME type.")
+        val bytes = contentResolver.openInputStream(uri)?.use { it.readBytes() }
+            ?: throw TwitterException("Failed to read selected image.")
+        return twitter.media.upload(bytes, mediaType)
+    }
+
 }

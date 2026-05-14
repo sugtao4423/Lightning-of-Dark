@@ -19,6 +19,7 @@ import sugtao4423.twitterweb4j.body.FavoriteTweetBody
 import sugtao4423.twitterweb4j.body.UnfavoriteTweetBody
 import sugtao4423.twitterweb4j.challenge.ClientTransaction
 import sugtao4423.twitterweb4j.challenge.ClientTransactionUtils
+import sugtao4423.twitterweb4j.media.MediaUpload
 import sugtao4423.twitterweb4j.model.CreateTweet
 import sugtao4423.twitterweb4j.model.CursorList
 import sugtao4423.twitterweb4j.model.PagableCursorList
@@ -56,6 +57,8 @@ class TwitterWeb4j {
 
     private val client = OkHttpClient()
     private var clientTransaction: ClientTransaction? = null
+
+    val media by lazy { MediaUpload(client, cookie, csrfToken) }
 
     @Throws(TwitterException::class)
     fun verifyCredentials(): User {

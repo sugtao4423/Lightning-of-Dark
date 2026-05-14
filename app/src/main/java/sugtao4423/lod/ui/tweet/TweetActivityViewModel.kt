@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import androidx.activity.result.ActivityResult
 import androidx.core.content.PermissionChecker
@@ -132,30 +131,11 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         val text = tweetText.value!!.substring(prefixLength.value!!)
         val createTweet = CreateTweet(text)
 
-        if (selectedImage.value != null) {
-            throw UnsupportedOperationException("Image upload is currently not supported.")
-            /*
-            val cursor = app.contentResolver.query(selectedImage.value!!, null, null, null, null)
-            if (cursor == null || !cursor.moveToFirst()) {
-                app.showToast(R.string.error_select_picture)
-                return
-            }
-            val fileName = cursor.let {
-                it.moveToFirst()
-                val idx = it.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME)
-                val fileName = it.getString(idx)
-                it.close()
-                fileName
-            }
-            val inputStream = app.contentResolver.openInputStream(selectedImage.value!!)
-            createTweet.media(fileName, inputStream!!)
-            */
-        }
         when (tweetType) {
             TweetActivity.TYPE_REPLY -> createTweet.inReplyToStatusId = toStatus!!.id
             TweetActivity.TYPE_QUOTERT -> createTweet.attachmentUrl = toStatus!!.toStatusUrl()
         }
-        app.updateStatus(createTweet)
+        app.updateStatus(createTweet, selectedImage.value)
 
         _onFinish.value = Unit
     }
@@ -173,7 +153,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
         val imageUri = result.data!!.data
         if (imageUri != null) {
-            imageUri.let { selectedImage.value = it }
+            selectedImage.value = imageUri
             app.showToast(R.string.success_select_picture)
         } else {
             app.showToast(R.string.error_select_picture)
