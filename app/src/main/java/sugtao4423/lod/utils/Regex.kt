@@ -9,7 +9,7 @@ object Regex {
     val mediaVideo: Pattern =
         Pattern.compile("https?://video\\.twimg\\.com/(ext_tw|amplify)_video/[0-9]+/(p[ur]/)?vid/.+/.+(.mp4|.webm)")
     val mediaGif: Pattern =
-        Pattern.compile("https?://pbs\\.twimg\\.com/tweet_video/")
+        Pattern.compile("https?://(pbs|video)\\.twimg\\.com/tweet_video/")
 
     val statusUrl: Pattern =
         Pattern.compile("https?://(mobile\\.)?(twitter|x)\\.com/(i/web|[0-9a-zA-Z_]+)/status/([0-9]+)")
