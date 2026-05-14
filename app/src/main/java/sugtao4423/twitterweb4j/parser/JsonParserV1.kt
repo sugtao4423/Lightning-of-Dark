@@ -1,13 +1,13 @@
 package sugtao4423.twitterweb4j.parser
 
+import sugtao4423.twitter4j.Relationship
 import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitter4j.User
 import sugtao4423.twitter4j.UserList
 import sugtao4423.twitterweb4j.parseJson
+import sugtao4423.twitterweb4j.parser.model.parseRelationshipV1
 import sugtao4423.twitterweb4j.parser.model.parseUserListV1
 import sugtao4423.twitterweb4j.parser.model.parseUserV1
-import twitter4j.Relationship
-import twitter4j.TwitterObjectFactory
 
 object JsonParserV1 {
 
@@ -27,8 +27,10 @@ object JsonParserV1 {
     }
 
     @Throws(TwitterException::class)
-    fun parseRelationship(response: String): Relationship {
-        return TwitterObjectFactory.createRelationship(response)
+    fun parseRelationship(response: String): Relationship = runCatching {
+        parseRelationshipV1(response.parseJson())
+    }.getOrElse {
+        throw TwitterException(it.message, it.cause)
     }
 
 }

@@ -47,7 +47,7 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
                 result.isSourceFollowingTarget && result.isSourceFollowedByTarget -> app.getString(R.string.icon_followEach)
                 result.isSourceFollowingTarget -> app.getString(R.string.icon_followFollow)
                 result.isSourceFollowedByTarget -> app.getString(R.string.icon_followFollower)
-                result.isSourceBlockingTarget -> app.getString(R.string.icon_followBlock)
+                result.isSourceBlockedByTarget || result.isSourceBlockingTarget -> app.getString(R.string.icon_followBlock)
                 else -> ""
             }
         }
