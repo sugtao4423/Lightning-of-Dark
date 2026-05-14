@@ -35,7 +35,7 @@ class TwitterWeb4j {
 
     companion object {
         @JvmStatic
-        val DEFAULT_PAGE_COUNT = 40
+        val DEFAULT_COUNT = 40
 
         @JvmStatic
         val CONTENT_TYPE_JSON = "application/json".toMediaType()
@@ -109,24 +109,24 @@ class TwitterWeb4j {
     }
 
     @Throws(TwitterException::class)
-    fun homeLatestTimeline(count: Int? = null, cursor: String? = null): CursorList<Status> {
-        val url = UrlGraphQL.homeLatestTimeline(count ?: DEFAULT_PAGE_COUNT, cursor)
+    fun homeLatestTimeline(count: Int = DEFAULT_COUNT, cursor: String? = null): CursorList<Status> {
+        val url = UrlGraphQL.homeLatestTimeline(count, cursor)
         val response = get(url)
         return JsonParserGraphQLTimeline.parseHomeLatestTimeline(response)
     }
 
     @Throws(TwitterException::class)
-    fun mentionsTimeline(count: Int? = null, cursor: String? = null): CursorList<Status> {
-        val url = UrlGraphQL.mentionsTimeline(count ?: DEFAULT_PAGE_COUNT, cursor)
+    fun mentionsTimeline(count: Int = DEFAULT_COUNT, cursor: String? = null): CursorList<Status> {
+        val url = UrlGraphQL.mentionsTimeline(count, cursor)
         val response = get(url)
         return JsonParserGraphQLTimeline.parseMentionsTimeline(response)
     }
 
     @Throws(TwitterException::class)
     fun listTweetsTimeline(
-        listId: Long, count: Int? = null, cursor: String? = null
+        listId: Long, count: Int = DEFAULT_COUNT, cursor: String? = null
     ): CursorList<Status> {
-        val url = UrlGraphQL.listTweetsTimeline(listId, count ?: DEFAULT_PAGE_COUNT, cursor)
+        val url = UrlGraphQL.listTweetsTimeline(listId, count, cursor)
         val response = get(url)
         return JsonParserGraphQLTimeline.parseListTweetsTimeline(response)
     }
@@ -140,34 +140,36 @@ class TwitterWeb4j {
 
     @Throws(TwitterException::class)
     fun userTweetsAndReplies(
-        userId: Long, count: Int? = null, cursor: String? = null
+        userId: Long, count: Int = DEFAULT_COUNT, cursor: String? = null
     ): CursorList<Status> {
-        val url = UrlGraphQL.userTweetsAndReplies(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
+        val url = UrlGraphQL.userTweetsAndReplies(userId, count, cursor)
         val response = get(url)
         return JsonParserGraphQLTimeline.parseUserTweetsAndReplies(response, userId)
     }
 
     @Throws(TwitterException::class)
-    fun favorites(userId: Long, count: Int? = null, cursor: String? = null): CursorList<Status> {
-        val url = UrlGraphQL.likes(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
+    fun favorites(
+        userId: Long, count: Int = DEFAULT_COUNT, cursor: String? = null
+    ): CursorList<Status> {
+        val url = UrlGraphQL.likes(userId, count, cursor)
         val response = get(url)
         return JsonParserGraphQLTimeline.parseLikes(response)
     }
 
     @Throws(TwitterException::class)
     fun following(
-        userId: Long, count: Int? = null, cursor: String? = null
+        userId: Long, count: Int = DEFAULT_COUNT, cursor: String? = null
     ): PagableCursorList<User> {
-        val url = UrlGraphQL.following(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
+        val url = UrlGraphQL.following(userId, count, cursor)
         val response = get(url)
         return JsonParserGraphQLUser.parseFollowing(response)
     }
 
     @Throws(TwitterException::class)
     fun followers(
-        userId: Long, count: Int? = null, cursor: String? = null
+        userId: Long, count: Int = DEFAULT_COUNT, cursor: String? = null
     ): PagableCursorList<User> {
-        val url = UrlGraphQL.followers(userId, count ?: DEFAULT_PAGE_COUNT, cursor)
+        val url = UrlGraphQL.followers(userId, count, cursor)
         val response = get(url)
         return JsonParserGraphQLUser.parseFollowers(response)
     }
