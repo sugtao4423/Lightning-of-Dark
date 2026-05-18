@@ -35,7 +35,7 @@
             </sugtao4423.lod.view.TweetEditText>
 
             <ImageView
-                android:id="@+id/selectedImageView"
+                android:id="@+id/selectedMediaImage"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="end|bottom"

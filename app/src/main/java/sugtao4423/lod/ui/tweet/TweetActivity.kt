@@ -111,9 +111,9 @@ class TweetActivity : LoDBaseActivity() {
         }
         viewModel.selectedMedia.observe(this) {
             if (it == null) {
-                binding.selectedImageView.setImageDrawable(null)
+                binding.selectedMediaImage.setImageDrawable(null)
             } else {
-                binding.selectedImageView.loadUri(it)
+                binding.selectedMediaImage.loadUri(it)
             }
         }
         viewModel.onSetTweetListAdapter.observe(this) {

@@ -83,11 +83,11 @@ class App : Application() {
         }
     }
 
-    fun updateStatus(tweet: CreateTweet, imageUri: Uri? = null) {
+    fun updateStatus(tweet: CreateTweet, mediaUri: Uri? = null) {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
                 runCatching {
-                    imageUri?.let { tweet.mediaIds = listOf(uploadMedia(it)) }
+                    mediaUri?.let { tweet.mediaIds = listOf(uploadMedia(it)) }
                     twitter.createTweet(tweet)
                 }.getOrNull()
             }
