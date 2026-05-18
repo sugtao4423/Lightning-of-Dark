@@ -1,5 +1,6 @@
 package sugtao4423.twitterweb4j.media
 
+import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -115,14 +116,14 @@ class MediaUpload internal constructor(
         MessageDigest.getInstance("MD5").digest(data).joinToString("") { "%02x".format(it) }
 
     @Throws(TwitterException::class)
-    private fun get(url: String): String = execute("GET", url)
+    private fun get(url: HttpUrl): String = execute("GET", url)
 
     @Throws(TwitterException::class)
-    private fun post(url: String, body: RequestBody = RequestBody.EMPTY): String =
+    private fun post(url: HttpUrl, body: RequestBody = RequestBody.EMPTY): String =
         execute("POST", url, body)
 
     @Throws(TwitterException::class)
-    private fun execute(method: String, url: String, body: RequestBody? = null): String {
+    private fun execute(method: String, url: HttpUrl, body: RequestBody? = null): String {
         val request = Request.Builder().apply {
             url(url)
             method(method, body)

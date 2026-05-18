@@ -1,10 +1,11 @@
 package sugtao4423.twitterweb4j.body
 
+import okhttp3.HttpUrl
 import org.json.JSONObject
 
-abstract class BaseBody(requestUrl: String) {
+abstract class BaseBody(requestUrl: HttpUrl) {
 
-    protected val queryId = requestUrl.split("/").takeLast(2).first()
+    protected val queryId = requestUrl.encodedPathSegments.takeLast(2).first()
 
     protected open val features: Map<String, Any>? = null
 

@@ -1,6 +1,7 @@
 package sugtao4423.twitterweb4j
 
 import okhttp3.Headers
+import okhttp3.HttpUrl
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -30,7 +31,6 @@ import sugtao4423.twitterweb4j.parser.JsonParserV1
 import sugtao4423.twitterweb4j.url.UrlGraphQL
 import sugtao4423.twitterweb4j.url.UrlV1
 import java.io.IOException
-import java.net.URL
 
 class TwitterWeb4j {
 
@@ -250,20 +250,20 @@ class TwitterWeb4j {
         }.build()
 
     @Throws(TwitterException::class)
-    private fun get(url: String): String = access("GET", url)
+    private fun get(url: HttpUrl): String = access("GET", url)
 
     @Throws(TwitterException::class)
     private fun post(
-        url: String, body: String, contentType: MediaType = CONTENT_TYPE_JSON
+        url: HttpUrl, body: String, contentType: MediaType = CONTENT_TYPE_JSON
     ): String = access("POST", url, body, contentType)
 
     @Throws(TwitterException::class)
     private fun access(
         method: String,
-        url: String,
+        url: HttpUrl,
         body: String? = null,
         contentType: MediaType? = null,
-        headers: Headers = buildRequestHeaders(method, URL(url).path)
+        headers: Headers = buildRequestHeaders(method, url.encodedPath),
     ): String {
         val requestBody = if (method == "POST" && body != null) {
             body.toRequestBody(contentType ?: CONTENT_TYPE_JSON)

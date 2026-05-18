@@ -1,66 +1,49 @@
 package sugtao4423.twitterweb4j.url
 
-import java.net.URLEncoder
+import okhttp3.HttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrl
 
 object UrlV1 {
 
     private val apiBaseUrl = "https://api.twitter.com/1.1".replace("twitter", "x")
 
-    val verifyCredentials = "$apiBaseUrl/account/verify_credentials.json"
+    val verifyCredentials = "$apiBaseUrl/account/verify_credentials.json".toHttpUrl()
 
-    private val getUserLists = "$apiBaseUrl/lists/list.json"
-    private val showUser = "$apiBaseUrl/users/show.json"
-    private val showFriendship = "$apiBaseUrl/friendships/show.json"
+    private val getUserLists = "$apiBaseUrl/lists/list.json".toHttpUrl()
+    private val showUser = "$apiBaseUrl/users/show.json".toHttpUrl()
+    private val showFriendship = "$apiBaseUrl/friendships/show.json".toHttpUrl()
 
-    fun getUserLists(id: Long, reverse: Boolean): String {
-        val query = mapOf("user_id" to id.toString(), "reverse" to reverse.toString())
-        val params = buildQueryParams(query)
-        return "$getUserLists?$params"
-    }
+    fun getUserLists(id: Long, reverse: Boolean): HttpUrl = getUserLists.newBuilder().apply {
+        addQueryParameter("user_id", id.toString())
+        addQueryParameter("reverse", reverse.toString())
+    }.build()
 
-    fun getUserLists(screenName: String, reverse: Boolean): String {
-        val query = mapOf("screen_name" to screenName, "reverse" to reverse.toString())
-        val params = buildQueryParams(query)
-        return "$getUserLists?$params"
-    }
+    fun getUserLists(screenName: String, reverse: Boolean): HttpUrl =
+        getUserLists.newBuilder().apply {
+            addQueryParameter("screen_name", screenName)
+            addQueryParameter("reverse", reverse.toString())
+        }.build()
 
-    fun showUser(id: Long): String {
-        val query = mapOf("user_id" to id.toString(), "include_entities" to "true")
-        val params = buildQueryParams(query)
-        return "$showUser?$params"
-    }
+    fun showUser(id: Long): HttpUrl = showUser.newBuilder().apply {
+        addQueryParameter("user_id", id.toString())
+        addQueryParameter("include_entities", "true")
+    }.build()
 
-    fun showUser(screenName: String): String {
-        val query = mapOf("screen_name" to screenName, "include_entities" to "true")
-        val params = buildQueryParams(query)
-        return "$showUser?$params"
-    }
+    fun showUser(screenName: String): HttpUrl = showUser.newBuilder().apply {
+        addQueryParameter("screen_name", screenName)
+        addQueryParameter("include_entities", "true")
+    }.build()
 
-    fun showFriendship(sourceId: Long, targetId: Long): String {
-        val query = mapOf(
-            "source_id" to sourceId.toString(),
-            "target_id" to targetId.toString(),
-        )
-        val params = buildQueryParams(query)
-        return "$showFriendship?$params"
-    }
+    fun showFriendship(sourceId: Long, targetId: Long): HttpUrl =
+        showFriendship.newBuilder().apply {
+            addQueryParameter("source_id", sourceId.toString())
+            addQueryParameter("target_id", targetId.toString())
+        }.build()
 
-    fun showFriendship(sourceScreenName: String, targetScreenName: String): String {
-        val query = mapOf(
-            "source_screen_name" to sourceScreenName,
-            "target_screen_name" to targetScreenName,
-        )
-        val params = buildQueryParams(query)
-        return "$showFriendship?$params"
-    }
-
-    private fun buildQueryParams(params: Map<String, String>): String {
-        val sb = StringBuilder()
-        params.forEach { (key, value) ->
-            val encodedValue = URLEncoder.encode(value, "UTF-8")
-            sb.append("&$key=$encodedValue")
-        }
-        return sb.toString().substring(1)
-    }
+    fun showFriendship(sourceScreenName: String, targetScreenName: String): HttpUrl =
+        showFriendship.newBuilder().apply {
+            addQueryParameter("source_screen_name", sourceScreenName)
+            addQueryParameter("target_screen_name", targetScreenName)
+        }.build()
 
 }

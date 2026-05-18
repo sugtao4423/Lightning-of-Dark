@@ -1,5 +1,6 @@
 package sugtao4423.twitterweb4j.media
 
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 
 internal object UploadUrl {
@@ -15,13 +16,13 @@ internal object UploadUrl {
         mediaType: String,
         mediaCategory: String,
         videoDurationMs: Long?,
-    ): String = baseHttpUrl(isVideo).newBuilder().apply {
+    ): HttpUrl = baseHttpUrl(isVideo).newBuilder().apply {
         addQueryParameter("command", "INIT")
         addQueryParameter("total_bytes", totalBytes.toString())
         addQueryParameter("media_type", mediaType)
         addQueryParameter("media_category", mediaCategory)
         videoDurationMs?.let { addQueryParameter("video_duration_ms", it.toString()) }
-    }.build().toString()
+    }.build()
 
     fun appendMulti(
         isVideo: Boolean,
@@ -29,28 +30,28 @@ internal object UploadUrl {
         segmentIndex: Int,
         maxSegmentSize: Long,
         mediaMd5: String,
-    ): String = baseHttpUrl(isVideo).newBuilder().apply {
+    ): HttpUrl = baseHttpUrl(isVideo).newBuilder().apply {
         addQueryParameter("command", "APPENDMULTI")
         addQueryParameter("media_id", mediaId.toString())
         addQueryParameter("segment_indexes", segmentIndex.toString())
         addQueryParameter("max_segment_size", maxSegmentSize.toString())
         addQueryParameter("media_md5", mediaMd5)
-    }.build().toString()
+    }.build()
 
     fun finalize(
         isVideo: Boolean,
         mediaId: Long,
         originalMd5: String?,
-    ): String = baseHttpUrl(isVideo).newBuilder().apply {
+    ): HttpUrl = baseHttpUrl(isVideo).newBuilder().apply {
         addQueryParameter("command", "FINALIZE")
         addQueryParameter("media_id", mediaId.toString())
         originalMd5?.let { addQueryParameter("original_md5", it) }
         if (isVideo) addQueryParameter("allow_async", "true")
-    }.build().toString()
+    }.build()
 
-    fun status(isVideo: Boolean, mediaId: Long): String = baseHttpUrl(isVideo).newBuilder().apply {
+    fun status(isVideo: Boolean, mediaId: Long): HttpUrl = baseHttpUrl(isVideo).newBuilder().apply {
         addQueryParameter("command", "STATUS")
         addQueryParameter("media_id", mediaId.toString())
-    }.build().toString()
+    }.build()
 
 }

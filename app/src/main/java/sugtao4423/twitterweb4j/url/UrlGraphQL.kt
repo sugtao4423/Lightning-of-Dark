@@ -1,5 +1,6 @@
 package sugtao4423.twitterweb4j.url
 
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.json.JSONObject
 
@@ -7,7 +8,7 @@ object UrlGraphQL {
 
     private val apiBaseUrl = "https://twitter.com/i/api/graphql".replace("twitter", "x")
 
-    fun homeLatestTimeline(count: Int, cursor: String? = null): String {
+    fun homeLatestTimeline(count: Int, cursor: String? = null): HttpUrl {
         val url = "$apiBaseUrl/cWF3cqWadLlIXA6KJWhcew/HomeLatestTimeline"
 
         val variables = JSONObject().also { json ->
@@ -20,10 +21,10 @@ object UrlGraphQL {
         return url.toHttpUrl().newBuilder().apply {
             addQueryParameter("variables", variables)
             addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build().toString()
+        }.build()
     }
 
-    fun mentionsTimeline(count: Int, cursor: String? = null): String {
+    fun mentionsTimeline(count: Int, cursor: String? = null): HttpUrl {
         val url = "$apiBaseUrl/8bj3MP0KXWKlpfC1yvGfbQ/NotificationsTimeline"
 
         val variables = JSONObject().also { json ->
@@ -35,10 +36,10 @@ object UrlGraphQL {
         return url.toHttpUrl().newBuilder().apply {
             addQueryParameter("variables", variables)
             addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build().toString()
+        }.build()
     }
 
-    fun listTweetsTimeline(listId: Long, count: Int, cursor: String? = null): String {
+    fun listTweetsTimeline(listId: Long, count: Int, cursor: String? = null): HttpUrl {
         val url = "$apiBaseUrl/l411pL-GRg-AKo_a2rmYjg/ListLatestTweetsTimeline"
 
         val variables = JSONObject().also { json ->
@@ -51,10 +52,10 @@ object UrlGraphQL {
         return url.toHttpUrl().newBuilder().apply {
             addQueryParameter("variables", variables)
             addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build().toString()
+        }.build()
     }
 
-    fun tweetDetail(tweetId: Long): String {
+    fun tweetDetail(tweetId: Long): HttpUrl {
         val url = "$apiBaseUrl/rU08O-YiXdr0IZfE7qaUMg/TweetDetail"
 
         val variables = JSONObject().also { json ->
@@ -70,10 +71,10 @@ object UrlGraphQL {
         return url.toHttpUrl().newBuilder().apply {
             addQueryParameter("variables", variables)
             addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build().toString()
+        }.build()
     }
 
-    fun userTweetsAndReplies(userId: Long, count: Int, cursor: String? = null): String {
+    fun userTweetsAndReplies(userId: Long, count: Int, cursor: String? = null): HttpUrl {
         val url = "$apiBaseUrl/wxoVeDnl0mP7VLhe6mTOdg/UserTweetsAndReplies"
 
         val variables = JSONObject().also { json ->
@@ -89,10 +90,10 @@ object UrlGraphQL {
         return url.toHttpUrl().newBuilder().apply {
             addQueryParameter("variables", variables)
             addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build().toString()
+        }.build()
     }
 
-    fun likes(userId: Long, count: Int, cursor: String? = null): String {
+    fun likes(userId: Long, count: Int, cursor: String? = null): HttpUrl {
         val url = "$apiBaseUrl/KPuet6dGbC8LB2sOLx7tZQ/Likes"
 
         val variables = JSONObject().also { json ->
@@ -108,10 +109,10 @@ object UrlGraphQL {
         return url.toHttpUrl().newBuilder().apply {
             addQueryParameter("variables", variables)
             addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build().toString()
+        }.build()
     }
 
-    fun following(userId: Long, count: Int, cursor: String? = null): String {
+    fun following(userId: Long, count: Int, cursor: String? = null): HttpUrl {
         val url = "$apiBaseUrl/vWCjN9gcTJiXzzMPR5Oxzw/Following"
 
         val variables = JSONObject().also { json ->
@@ -124,10 +125,10 @@ object UrlGraphQL {
         return url.toHttpUrl().newBuilder().apply {
             addQueryParameter("variables", variables)
             addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build().toString()
+        }.build()
     }
 
-    fun followers(userId: Long, count: Int, cursor: String? = null): String {
+    fun followers(userId: Long, count: Int, cursor: String? = null): HttpUrl {
         val url = "$apiBaseUrl/-WcGoRt8IQuPm-l1ymgy6g/Followers"
 
         val variables = JSONObject().also { json ->
@@ -140,14 +141,14 @@ object UrlGraphQL {
         return url.toHttpUrl().newBuilder().apply {
             addQueryParameter("variables", variables)
             addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build().toString()
+        }.build()
     }
 
-    val createTweet = "$apiBaseUrl/oB-5XsHNAbjvARJEc8CZFw/CreateTweet"
-    val deleteTweet = "$apiBaseUrl/VaenaVgh5q5ih7kvyVjgtg/DeleteTweet"
-    val createRetweet = "$apiBaseUrl/ojPdsZsimiJrUGLR1sjUtA/CreateRetweet"
-    val deleteRetweet = "$apiBaseUrl/iQtK4dl5hBmXewYZuEOKVw/DeleteRetweet"
-    val favoriteTweet = "$apiBaseUrl/lI07N6Otwv1PhnEgXILM7A/FavoriteTweet"
-    val unfavoriteTweet = "$apiBaseUrl/ZYKSe-w7KEslx3JhSIk5LA/UnfavoriteTweet"
+    val createTweet = "$apiBaseUrl/oB-5XsHNAbjvARJEc8CZFw/CreateTweet".toHttpUrl()
+    val deleteTweet = "$apiBaseUrl/VaenaVgh5q5ih7kvyVjgtg/DeleteTweet".toHttpUrl()
+    val createRetweet = "$apiBaseUrl/ojPdsZsimiJrUGLR1sjUtA/CreateRetweet".toHttpUrl()
+    val deleteRetweet = "$apiBaseUrl/iQtK4dl5hBmXewYZuEOKVw/DeleteRetweet".toHttpUrl()
+    val favoriteTweet = "$apiBaseUrl/lI07N6Otwv1PhnEgXILM7A/FavoriteTweet".toHttpUrl()
+    val unfavoriteTweet = "$apiBaseUrl/ZYKSe-w7KEslx3JhSIk5LA/UnfavoriteTweet".toHttpUrl()
 
 }

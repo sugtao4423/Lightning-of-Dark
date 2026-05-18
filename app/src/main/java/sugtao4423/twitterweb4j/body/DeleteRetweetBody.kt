@@ -1,6 +1,8 @@
 package sugtao4423.twitterweb4j.body
 
-class DeleteRetweetBody(requestUrl: String) : BaseBody(requestUrl) {
+import okhttp3.HttpUrl
+
+class DeleteRetweetBody(requestUrl: HttpUrl) : BaseBody(requestUrl) {
 
     override val variables = mapOf(
         "dark_request" to false,

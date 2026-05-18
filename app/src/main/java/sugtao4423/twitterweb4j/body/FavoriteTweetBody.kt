@@ -1,6 +1,8 @@
 package sugtao4423.twitterweb4j.body
 
-class FavoriteTweetBody(requestUrl: String) : BaseBody(requestUrl) {
+import okhttp3.HttpUrl
+
+class FavoriteTweetBody(requestUrl: HttpUrl) : BaseBody(requestUrl) {
 
     fun get(tweetId: Long): String {
         val variables = mapOf("tweet_id" to tweetId.toString())
