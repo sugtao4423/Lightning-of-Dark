@@ -1,6 +1,7 @@
 package sugtao4423.twitterweb4j.challenge
 
-import android.util.Base64
+import okio.ByteString.Companion.decodeBase64
+import okio.ByteString.Companion.toByteString
 import java.security.MessageDigest
 import kotlin.math.PI
 import kotlin.math.abs
@@ -38,9 +39,9 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         val metaContent = siteVerificationMatch?.groupValues?.get(1) ?: throw IllegalStateException(
             "Could not find meta tag with name=\"twitter-site-verification\" in homepage HTML."
         )
-        keyBytes = Base64.decode(metaContent, Base64.DEFAULT).map {
-            it.toInt() and 0xFF
-        }.toIntArray()
+        val decodedKey = metaContent.decodeBase64()?.toByteArray()
+            ?: throw IllegalStateException("twitter-site-verification meta tag is not valid Base64.")
+        keyBytes = decodedKey.map { it.toInt() and 0xFF }.toIntArray()
 
         val svgMatches = SVG_PATH_REGEX.findAll(homePageHtml).toList()
         if (svgMatches.isEmpty()) {
@@ -82,7 +83,7 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         val obfuscatedBytes =
             byteArrayOf(xorKey.toByte()) + plaintext.map { (it xor xorKey).toByte() }.toByteArray()
 
-        return Base64.encodeToString(obfuscatedBytes, Base64.NO_WRAP or Base64.NO_PADDING)
+        return obfuscatedBytes.toByteString().base64().trimEnd('=')
     }
 
     @Throws(IllegalStateException::class, IllegalArgumentException::class)

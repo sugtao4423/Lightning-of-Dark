@@ -1,6 +1,6 @@
 package sugtao4423.twitterweb4j.url
 
-import androidx.core.net.toUri
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.json.JSONObject
 
 object UrlGraphQL {
@@ -17,9 +17,9 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return url.toUri().buildUpon().apply {
-            appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        return url.toHttpUrl().newBuilder().apply {
+            addQueryParameter("variables", variables)
+            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -32,9 +32,9 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return url.toUri().buildUpon().apply {
-            appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        return url.toHttpUrl().newBuilder().apply {
+            addQueryParameter("variables", variables)
+            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -48,9 +48,9 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return url.toUri().buildUpon().apply {
-            appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        return url.toHttpUrl().newBuilder().apply {
+            addQueryParameter("variables", variables)
+            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -67,9 +67,9 @@ object UrlGraphQL {
             json.put("withVoice", true)
         }.toString()
 
-        return url.toUri().buildUpon().apply {
-            appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        return url.toHttpUrl().newBuilder().apply {
+            addQueryParameter("variables", variables)
+            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -86,9 +86,9 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return url.toUri().buildUpon().apply {
-            appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        return url.toHttpUrl().newBuilder().apply {
+            addQueryParameter("variables", variables)
+            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -105,9 +105,9 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return url.toUri().buildUpon().apply {
-            appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        return url.toHttpUrl().newBuilder().apply {
+            addQueryParameter("variables", variables)
+            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -121,9 +121,9 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return url.toUri().buildUpon().apply {
-            appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        return url.toHttpUrl().newBuilder().apply {
+            addQueryParameter("variables", variables)
+            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
@@ -137,9 +137,9 @@ object UrlGraphQL {
             cursor?.let { json.put("cursor", it) }
         }.toString()
 
-        return url.toUri().buildUpon().apply {
-            appendQueryParameter("variables", variables)
-            appendQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
+        return url.toHttpUrl().newBuilder().apply {
+            addQueryParameter("variables", variables)
+            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
         }.build().toString()
     }
 
