@@ -1,6 +1,5 @@
 package sugtao4423.lod.ui.tweet
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -9,7 +8,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
@@ -34,8 +32,6 @@ class TweetActivity : LoDBaseActivity() {
         const val TYPE_UNOFFICIALRT = 3
         const val TYPE_PAKUTSUI = 4
         const val TYPE_EXTERNALTEXT = 5
-
-        const val FILE_PERMISSION_REQUEST_CODE = 364364
     }
 
     private val startForResultMediaPick =
@@ -127,13 +123,6 @@ class TweetActivity : LoDBaseActivity() {
             }
         }
         viewModel.onFinish.observe(this) { finish() }
-        viewModel.onRequestReadExternalStoragePermission.observe(this) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                FILE_PERMISSION_REQUEST_CODE
-            )
-        }
         viewModel.onPickMedia.observe(this) {
             val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
                 addCategory(Intent.CATEGORY_OPENABLE)
@@ -176,15 +165,6 @@ class TweetActivity : LoDBaseActivity() {
             }
             show()
         }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        viewModel.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
 }

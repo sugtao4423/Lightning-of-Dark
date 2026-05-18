@@ -1,14 +1,11 @@
 package sugtao4423.lod.ui.tweet
 
-import android.Manifest
 import android.app.Activity
 import android.app.Application
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.speech.RecognizerIntent
 import androidx.activity.result.ActivityResult
-import androidx.core.content.PermissionChecker
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -62,10 +59,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
     private val _onFinish = LiveEvent<Unit>()
     val onFinish: LiveData<Unit> = _onFinish
-
-    private val _onRequestReadExternalStoragePermission = LiveEvent<Unit>()
-    val onRequestReadExternalStoragePermission: LiveData<Unit> =
-        _onRequestReadExternalStoragePermission
 
     private val _onPickMedia = LiveEvent<Unit>()
     val onPickMedia: LiveData<Unit> = _onPickMedia
@@ -142,10 +135,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun clickMediaSelect() {
-        if (!hasReadExternalStoragePermission()) {
-            _onRequestReadExternalStoragePermission.value = Unit
-            return
-        }
         _onPickMedia.value = Unit
     }
 
@@ -221,28 +210,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
         tweetText.value = dead
         textSelectionEnd.value = true
-    }
-
-    private fun hasReadExternalStoragePermission(): Boolean {
-        val writeExternalStorage = PermissionChecker.checkSelfPermission(
-            app, Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-        return writeExternalStorage == PackageManager.PERMISSION_GRANTED
-    }
-
-    fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == TweetActivity.FILE_PERMISSION_REQUEST_CODE &&
-            permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) {
-            clickMediaSelect()
-        } else {
-            app.showToast(R.string.permission_rejected)
-        }
     }
 
     private fun canUploadMedia(uri: Uri): Int? {
