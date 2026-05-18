@@ -66,7 +66,7 @@ class MediaUpload internal constructor(
             val url = UploadUrl.appendMulti(mediaId, segmentIndex, chunk.size.toLong(), md5(chunk))
             val multipart = MultipartBody.Builder().apply {
                 setType(MultipartBody.FORM)
-                addFormDataPart("media", "blob", data.toRequestBody(CONTENT_TYPE_OCTET_STREAM))
+                addFormDataPart("media", "blob", chunk.toRequestBody(CONTENT_TYPE_OCTET_STREAM))
             }.build()
             post(url, multipart)
 
