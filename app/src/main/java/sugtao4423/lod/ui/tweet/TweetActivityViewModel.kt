@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.OpenableColumns
 import android.speech.RecognizerIntent
 import androidx.activity.result.ActivityResult
 import androidx.core.content.PermissionChecker
@@ -153,6 +154,10 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
         val imageUri = result.data!!.data
         if (imageUri != null) {
+            canUploadMedia(imageUri)?.let {
+                app.showToast(it)
+                return
+            }
             selectedImage.value = imageUri
             app.showToast(R.string.success_select_picture)
         } else {
@@ -238,6 +243,23 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         } else {
             app.showToast(R.string.permission_rejected)
         }
+    }
+
+    private fun canUploadMedia(uri: Uri): Int? {
+        val mimeType = app.contentResolver.getType(uri)
+            ?: return R.string.error_select_picture
+        if (mimeType == "image/gif") return null
+
+        app.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            cursor.moveToFirst()
+            val size = cursor.getColumnIndex(OpenableColumns.SIZE).let {
+                cursor.getLong(it)
+            }
+            if (size > 5 * 1024 * 1024) {
+                return R.string.error_select_picture_large
+            }
+        }
+        return null
     }
 
 }
