@@ -19,6 +19,7 @@ class MediaUpload internal constructor(
     companion object {
         private const val MEDIA_CATEGORY_IMAGE = "tweet_image"
         private const val MEDIA_CATEGORY_GIF = "tweet_gif"
+        private const val MEDIA_CATEGORY_VIDEO = "amplify_video"
 
         private const val MAX_SEGMENT_SIZE = 8 * 1024 * 1024 // 8 MiB
 
@@ -31,39 +32,53 @@ class MediaUpload internal constructor(
     }.build()
 
     @Throws(TwitterException::class)
-    fun upload(data: ByteArray, mediaType: String): Long {
-        val mediaCategory = when (mediaType) {
-            "image/gif" -> MEDIA_CATEGORY_GIF
+    fun upload(data: ByteArray, mediaType: String, videoDurationMs: Long? = null): Long {
+        val isVideo = mediaType.startsWith("video/")
+        if (isVideo && videoDurationMs == null) {
+            throw TwitterException("videoDurationMs is required for video upload.")
+        }
+
+        val mediaCategory = when {
+            isVideo -> MEDIA_CATEGORY_VIDEO
+            mediaType == "image/gif" -> MEDIA_CATEGORY_GIF
             else -> MEDIA_CATEGORY_IMAGE
         }
 
-        val mediaId = init(data.size.toLong(), mediaType, mediaCategory)
-        appendMulti(mediaId, data)
+        val mediaId = init(isVideo, data.size.toLong(), mediaType, mediaCategory, videoDurationMs)
+        appendMulti(isVideo, mediaId, data)
 
         val originalMd5 = if (mediaCategory == MEDIA_CATEGORY_IMAGE) md5(data) else null
-        val finalizeResponse = finalize(mediaId, originalMd5)
+        val finalizeResponse = finalize(isVideo, mediaId, originalMd5)
         UploadJsonParser.parseProcessingInfo(finalizeResponse)?.let {
-            waitForProcessing(mediaId, it)
+            waitForProcessing(isVideo, mediaId, it)
         }
         return mediaId
     }
 
     @Throws(TwitterException::class)
-    private fun init(totalBytes: Long, mediaType: String, mediaCategory: String): Long {
-        val url = UploadUrl.init(totalBytes, mediaType, mediaCategory)
+    private fun init(
+        isVideo: Boolean,
+        totalBytes: Long,
+        mediaType: String,
+        mediaCategory: String,
+        videoDurationMs: Long?,
+    ): Long {
+        val url = UploadUrl.init(isVideo, totalBytes, mediaType, mediaCategory, videoDurationMs)
         val response = post(url)
         return UploadJsonParser.parseUploadMedia(response)
     }
 
     @Throws(TwitterException::class)
-    private fun appendMulti(mediaId: Long, data: ByteArray) {
+    private fun appendMulti(isVideo: Boolean, mediaId: Long, data: ByteArray) {
         var segmentIndex = 0
         var offset = 0
         while (offset < data.size) {
             val end = (offset + MAX_SEGMENT_SIZE).coerceAtMost(data.size)
             val chunk = data.copyOfRange(offset, end)
 
-            val url = UploadUrl.appendMulti(mediaId, segmentIndex, chunk.size.toLong(), md5(chunk))
+            val url = UploadUrl.appendMulti(
+                isVideo, mediaId, segmentIndex, chunk.size.toLong(), md5(chunk)
+            )
             val multipart = MultipartBody.Builder().apply {
                 setType(MultipartBody.FORM)
                 addFormDataPart("media", "blob", chunk.toRequestBody(CONTENT_TYPE_OCTET_STREAM))
@@ -76,17 +91,17 @@ class MediaUpload internal constructor(
     }
 
     @Throws(TwitterException::class)
-    private fun finalize(mediaId: Long, originalMd5: String?): String {
-        val url = UploadUrl.finalize(mediaId, originalMd5)
+    private fun finalize(isVideo: Boolean, mediaId: Long, originalMd5: String?): String {
+        val url = UploadUrl.finalize(isVideo, mediaId, originalMd5)
         return post(url)
     }
 
     @Throws(TwitterException::class)
-    private fun waitForProcessing(mediaId: Long, initial: ProcessingInfo) {
+    private fun waitForProcessing(isVideo: Boolean, mediaId: Long, initial: ProcessingInfo) {
         var info = initial
         while (info.state == ProcessingInfo.STATE_PENDING || info.state == ProcessingInfo.STATE_IN_PROGRESS) {
             Thread.sleep((info.checkAfterSecs ?: 1) * 1000L)
-            val url = UploadUrl.status(mediaId)
+            val url = UploadUrl.status(isVideo, mediaId)
             val response = get(url)
             info = UploadJsonParser.parseProcessingInfo(response)
                 ?: throw TwitterException("Missing processing_info in STATUS response.")
