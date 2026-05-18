@@ -3,7 +3,6 @@ package sugtao4423.lod.ui.tweet
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -19,6 +18,7 @@ import sugtao4423.lod.databinding.ActivityTweetBinding
 import sugtao4423.lod.playing_music_data.PlayingMusicData
 import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
+import sugtao4423.lod.ui.loadUri
 import sugtao4423.twitter4j.Status
 
 class TweetActivity : LoDBaseActivity() {
@@ -38,9 +38,9 @@ class TweetActivity : LoDBaseActivity() {
         const val FILE_PERMISSION_REQUEST_CODE = 364364
     }
 
-    private val startForResultImagePick =
+    private val startForResultMediaPick =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->
-            viewModel.onImagePicked(result)
+            viewModel.onMediaPicked(result)
         }
 
     private val startForResultSpeech =
@@ -72,7 +72,7 @@ class TweetActivity : LoDBaseActivity() {
             musicButton.setOnClickListener { appendPlayingMusicData() }
             textOptionButton.setOnClickListener { showTextOptionDialog() }
             tweetButton.setOnClickListener { viewModel.clickTweet() }
-            imageSelectButton.setOnClickListener { viewModel.clickImageSelect() }
+            imageSelectButton.setOnClickListener { viewModel.clickMediaSelect() }
             closeButton.setOnClickListener { viewModel.clickClose() }
 
             tweetEdit.doOnTextChanged { text, _, _, _ ->
@@ -113,8 +113,12 @@ class TweetActivity : LoDBaseActivity() {
                 )
             )
         }
-        viewModel.selectedImage.observe(this) {
-            binding.selectedImageView.setImageURI(it)
+        viewModel.selectedMedia.observe(this) {
+            if (it == null) {
+                binding.selectedImageView.setImageDrawable(null)
+            } else {
+                binding.selectedImageView.loadUri(it)
+            }
         }
         viewModel.onSetTweetListAdapter.observe(this) {
             TweetListAdapter(this).apply {
@@ -130,9 +134,13 @@ class TweetActivity : LoDBaseActivity() {
                 FILE_PERMISSION_REQUEST_CODE
             )
         }
-        viewModel.onPickImage.observe(this) {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startForResultImagePick.launch(intent)
+        viewModel.onPickMedia.observe(this) {
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "*/*"
+                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
+            }
+            startForResultMediaPick.launch(intent)
         }
 
         viewModel.externalText = intent.getStringExtra(INTENT_EXTRA_KEY_TEXT)

@@ -31,8 +31,8 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
         R.string.error_play_video,
         R.string.error_post_delete,
         R.string.error_retweet,
-        R.string.error_select_picture_large,
-        R.string.error_select_picture,
+        R.string.error_select_image_large,
+        R.string.error_select_media,
         R.string.error_tweet,
         R.string.error_unfavorite,
         R.string.error_unretweet,
@@ -43,7 +43,7 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
 
     private val showLongRes = arrayOf(
         R.string.error_get_image,
-        R.string.error_select_picture_large,
+        R.string.error_select_image_large,
         R.string.error_user_id_mismatch,
         R.string.invalid_pattern,
         R.string.param_account_already_exists,

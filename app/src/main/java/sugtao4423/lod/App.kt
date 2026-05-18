@@ -2,6 +2,7 @@ package sugtao4423.lod
 
 import android.app.Application
 import android.graphics.Typeface
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
@@ -105,10 +106,27 @@ class App : Application() {
 
     private fun uploadMedia(uri: Uri): Long {
         val mediaType = contentResolver.getType(uri)
-            ?: throw TwitterException("Failed to detect image MIME type.")
+            ?: throw TwitterException("Failed to detect media MIME type.")
         val bytes = contentResolver.openInputStream(uri)?.use { it.readBytes() }
-            ?: throw TwitterException("Failed to read selected image.")
-        return twitter.media.upload(bytes, mediaType)
+            ?: throw TwitterException("Failed to read selected media.")
+
+        val videoDurationMs = if (mediaType.startsWith("video/")) {
+            extractVideoDurationMs(uri)
+        } else {
+            null
+        }
+        return twitter.media.upload(bytes, mediaType, videoDurationMs)
+    }
+
+    private fun extractVideoDurationMs(uri: Uri): Long {
+        val retriever = MediaMetadataRetriever()
+        try {
+            retriever.setDataSource(this, uri)
+            return retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
+                ?: throw TwitterException("Failed to extract video duration.")
+        } finally {
+            retriever.release()
+        }
     }
 
 }

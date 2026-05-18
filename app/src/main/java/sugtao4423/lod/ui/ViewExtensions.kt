@@ -29,8 +29,8 @@ fun SwipeRefreshLayout.setup(onRefresh: () -> Unit) {
     setOnRefreshListener { onRefresh() }
 }
 
-fun ImageView.loadUrl(url: String?, placeholder: Drawable? = null) {
-    if (url.isNullOrEmpty()) {
+fun ImageView.loadUri(uri: Uri?, placeholder: Drawable? = null) {
+    if (uri == null) {
         if (placeholder == null) {
             setImageResource(R.drawable.icon_loading)
         } else {
@@ -39,7 +39,7 @@ fun ImageView.loadUrl(url: String?, placeholder: Drawable? = null) {
         return
     }
 
-    Glide.with(this).load(url).let {
+    Glide.with(this).load(uri).let {
         if (placeholder == null) {
             it.placeholder(R.drawable.icon_loading)
         } else {
@@ -48,9 +48,11 @@ fun ImageView.loadUrl(url: String?, placeholder: Drawable? = null) {
     }.into(this)
 }
 
-fun ImageView.loadUrl(url: String?, imageListener: RequestListener<Drawable>) {
+fun ImageView.loadUrl(url: String?, placeholder: Drawable? = null) =
+    loadUri(url?.toUri(), placeholder)
+
+fun ImageView.loadUrl(url: String?, imageListener: RequestListener<Drawable>) =
     Glide.with(this).load(url).listener(imageListener).into(this)
-}
 
 fun TextView.setLodLinkMovementString(string: String) {
     fun startUserPage(screenName: String) {

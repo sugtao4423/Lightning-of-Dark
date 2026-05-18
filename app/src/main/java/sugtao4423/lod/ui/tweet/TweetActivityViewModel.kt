@@ -55,7 +55,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     val remainingTextCount = MutableLiveData(140)
     val isValidTextCount = MutableLiveData(true)
 
-    val selectedImage = MutableLiveData<Uri?>()
+    val selectedMedia = MutableLiveData<Uri?>()
 
     private val _onSetTweetListAdapter = LiveEvent<Unit>()
     val onSetTweetListAdapter: LiveData<Unit> = _onSetTweetListAdapter
@@ -67,8 +67,8 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     val onRequestReadExternalStoragePermission: LiveData<Unit> =
         _onRequestReadExternalStoragePermission
 
-    private val _onPickImage = LiveEvent<Unit>()
-    val onPickImage: LiveData<Unit> = _onPickImage
+    private val _onPickMedia = LiveEvent<Unit>()
+    val onPickMedia: LiveData<Unit> = _onPickMedia
 
     private fun onSetTweetType() {
         _actionBarTitle.value = when (tweetType) {
@@ -136,32 +136,32 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             TweetActivity.TYPE_REPLY -> createTweet.inReplyToStatusId = toStatus!!.id
             TweetActivity.TYPE_QUOTERT -> createTweet.attachmentUrl = toStatus!!.toStatusUrl()
         }
-        app.updateStatus(createTweet, selectedImage.value)
+        app.updateStatus(createTweet, selectedMedia.value)
 
         _onFinish.value = Unit
     }
 
-    fun clickImageSelect() {
+    fun clickMediaSelect() {
         if (!hasReadExternalStoragePermission()) {
             _onRequestReadExternalStoragePermission.value = Unit
             return
         }
-        _onPickImage.value = Unit
+        _onPickMedia.value = Unit
     }
 
-    fun onImagePicked(result: ActivityResult?) {
+    fun onMediaPicked(result: ActivityResult?) {
         if (result?.resultCode != Activity.RESULT_OK || result.data == null) return
 
-        val imageUri = result.data!!.data
-        if (imageUri != null) {
-            canUploadMedia(imageUri)?.let {
+        val mediaUri = result.data!!.data
+        if (mediaUri != null) {
+            canUploadMedia(mediaUri)?.let {
                 app.showToast(it)
                 return
             }
-            selectedImage.value = imageUri
-            app.showToast(R.string.success_select_picture)
+            selectedMedia.value = mediaUri
+            app.showToast(R.string.success_select_media)
         } else {
-            app.showToast(R.string.error_select_picture)
+            app.showToast(R.string.error_select_media)
         }
     }
 
@@ -239,7 +239,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             permissions[0] == Manifest.permission.READ_EXTERNAL_STORAGE &&
             grantResults[0] == PackageManager.PERMISSION_GRANTED
         ) {
-            clickImageSelect()
+            clickMediaSelect()
         } else {
             app.showToast(R.string.permission_rejected)
         }
@@ -247,8 +247,8 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
     private fun canUploadMedia(uri: Uri): Int? {
         val mimeType = app.contentResolver.getType(uri)
-            ?: return R.string.error_select_picture
-        if (mimeType == "image/gif") return null
+            ?: return R.string.error_select_media
+        if (mimeType == "image/gif" || mimeType.startsWith("video/")) return null
 
         app.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
             cursor.moveToFirst()
@@ -256,7 +256,7 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
                 cursor.getLong(it)
             }
             if (size > 5 * 1024 * 1024) {
-                return R.string.error_select_picture_large
+                return R.string.error_select_image_large
             }
         }
         return null
