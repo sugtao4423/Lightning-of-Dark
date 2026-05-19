@@ -4,13 +4,12 @@ import org.json.JSONException
 import sugtao4423.twitter4j.GeoLocation
 import sugtao4423.twitter4j.Place
 import sugtao4423.twitterweb4j.Json
-import sugtao4423.twitterweb4j.parser.HtmlEntity
 
 @Throws(JSONException::class)
 fun parsePlace(json: Json): Place {
     val id = json["id"].string
-    val name = json["name"].stringOrNull?.let { HtmlEntity.unescape(it) }
-    val streetAddress = json["street_address"].stringOrNull?.let { HtmlEntity.unescape(it) }
+    val name = json["name"].stringOrNull
+    val streetAddress = json["street_address"].stringOrNull
     val countryCode = json["country_code"].stringOrNull
     val country = json["country"].stringOrNull
     val placeType = json["place_type"].stringOrNull ?: json["type"].stringOrNull
