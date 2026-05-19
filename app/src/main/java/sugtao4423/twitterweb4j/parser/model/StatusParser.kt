@@ -59,7 +59,7 @@ fun parseStatus(result: Json): Status {
 
     val user = parseUser(json["core"]["user_results"]["result"])
 
-    val unescaped = null.let {
+    val unescaped = run {
         val text = legacy["full_text"].string
         val userMentionEntities = legacy["entities"]["user_mentions"].let {
             List(it.size) { i -> parseUserMentionEntity(it[i]) }
