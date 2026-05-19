@@ -8,141 +8,102 @@ object UrlGraphQL {
 
     private val apiBaseUrl = "https://twitter.com/i/api/graphql".replace("twitter", "x")
 
-    fun homeLatestTimeline(count: Int, cursor: String? = null): HttpUrl {
-        val url = "$apiBaseUrl/cWF3cqWadLlIXA6KJWhcew/HomeLatestTimeline"
+    private fun build(
+        path: String,
+        variables: Map<String, Any>,
+        features: String = UrlGraphQLFeatures.generate(additional = true),
+    ): HttpUrl = "$apiBaseUrl/$path".toHttpUrl().newBuilder().apply {
+        addQueryParameter("variables", JSONObject(variables).toString())
+        addQueryParameter("features", features)
+    }.build()
 
-        val variables = JSONObject().also { json ->
-            json.put("count", count)
-            json.put("includePromotedContent", false)
-            json.put("latestControlAvailable", true)
-            cursor?.let { json.put("cursor", it) }
-        }.toString()
+    fun homeLatestTimeline(count: Int, cursor: String? = null): HttpUrl = build(
+        "cWF3cqWadLlIXA6KJWhcew/HomeLatestTimeline",
+        buildMap {
+            put("count", count)
+            put("includePromotedContent", false)
+            put("latestControlAvailable", true)
+            cursor?.let { put("cursor", it) }
+        },
+    )
 
-        return url.toHttpUrl().newBuilder().apply {
-            addQueryParameter("variables", variables)
-            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build()
-    }
+    fun mentionsTimeline(count: Int, cursor: String? = null): HttpUrl = build(
+        "8bj3MP0KXWKlpfC1yvGfbQ/NotificationsTimeline",
+        buildMap {
+            put("timeline_type", "Mentions")
+            put("count", count)
+            cursor?.let { put("cursor", it) }
+        },
+    )
 
-    fun mentionsTimeline(count: Int, cursor: String? = null): HttpUrl {
-        val url = "$apiBaseUrl/8bj3MP0KXWKlpfC1yvGfbQ/NotificationsTimeline"
+    fun listTweetsTimeline(listId: Long, count: Int, cursor: String? = null): HttpUrl = build(
+        "l411pL-GRg-AKo_a2rmYjg/ListLatestTweetsTimeline",
+        buildMap {
+            put("listId", listId.toString())
+            put("count", count)
+            put("includePromotedContent", false)
+            cursor?.let { put("cursor", it) }
+        },
+    )
 
-        val variables = JSONObject().also { json ->
-            json.put("timeline_type", "Mentions")
-            json.put("count", count)
-            cursor?.let { json.put("cursor", it) }
-        }.toString()
+    fun tweetDetail(tweetId: Long): HttpUrl = build(
+        "rU08O-YiXdr0IZfE7qaUMg/TweetDetail",
+        mapOf(
+            "focalTweetId" to tweetId.toString(),
+            "with_rux_injections" to false,
+            "includePromotedContent" to false,
+            "withCommunity" to true,
+            "withQuickPromoteEligibilityTweetFields" to true,
+            "withBirdwatchNotes" to true,
+            "withVoice" to true,
+        ),
+    )
 
-        return url.toHttpUrl().newBuilder().apply {
-            addQueryParameter("variables", variables)
-            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build()
-    }
+    fun userTweetsAndReplies(userId: Long, count: Int, cursor: String? = null): HttpUrl = build(
+        "wxoVeDnl0mP7VLhe6mTOdg/UserTweetsAndReplies",
+        buildMap {
+            put("userId", userId.toString())
+            put("count", count)
+            put("includePromotedContent", false)
+            put("withQuickPromoteEligibilityTweetFields", false)
+            put("withVoice", true)
+            put("withV2Timeline", true)
+            cursor?.let { put("cursor", it) }
+        },
+    )
 
-    fun listTweetsTimeline(listId: Long, count: Int, cursor: String? = null): HttpUrl {
-        val url = "$apiBaseUrl/l411pL-GRg-AKo_a2rmYjg/ListLatestTweetsTimeline"
+    fun likes(userId: Long, count: Int, cursor: String? = null): HttpUrl = build(
+        "KPuet6dGbC8LB2sOLx7tZQ/Likes",
+        buildMap {
+            put("userId", userId.toString())
+            put("count", count)
+            put("includePromotedContent", false)
+            put("withClientEventToken", false)
+            put("withBirdwatchNotes", false)
+            put("withVoice", true)
+            cursor?.let { put("cursor", it) }
+        },
+    )
 
-        val variables = JSONObject().also { json ->
-            json.put("listId", listId.toString())
-            json.put("count", count)
-            json.put("includePromotedContent", false)
-            cursor?.let { json.put("cursor", it) }
-        }.toString()
+    fun following(userId: Long, count: Int, cursor: String? = null): HttpUrl = build(
+        "vWCjN9gcTJiXzzMPR5Oxzw/Following",
+        buildMap {
+            put("userId", userId.toString())
+            put("count", count)
+            put("includePromotedContent", false)
+            cursor?.let { put("cursor", it) }
+        },
+    )
 
-        return url.toHttpUrl().newBuilder().apply {
-            addQueryParameter("variables", variables)
-            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build()
-    }
-
-    fun tweetDetail(tweetId: Long): HttpUrl {
-        val url = "$apiBaseUrl/rU08O-YiXdr0IZfE7qaUMg/TweetDetail"
-
-        val variables = JSONObject().also { json ->
-            json.put("focalTweetId", tweetId.toString())
-            json.put("with_rux_injections", false)
-            json.put("includePromotedContent", false)
-            json.put("withCommunity", true)
-            json.put("withQuickPromoteEligibilityTweetFields", true)
-            json.put("withBirdwatchNotes", true)
-            json.put("withVoice", true)
-        }.toString()
-
-        return url.toHttpUrl().newBuilder().apply {
-            addQueryParameter("variables", variables)
-            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build()
-    }
-
-    fun userTweetsAndReplies(userId: Long, count: Int, cursor: String? = null): HttpUrl {
-        val url = "$apiBaseUrl/wxoVeDnl0mP7VLhe6mTOdg/UserTweetsAndReplies"
-
-        val variables = JSONObject().also { json ->
-            json.put("userId", userId.toString())
-            json.put("count", count)
-            json.put("includePromotedContent", false)
-            json.put("withQuickPromoteEligibilityTweetFields", false)
-            json.put("withVoice", true)
-            json.put("withV2Timeline", true)
-            cursor?.let { json.put("cursor", it) }
-        }.toString()
-
-        return url.toHttpUrl().newBuilder().apply {
-            addQueryParameter("variables", variables)
-            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build()
-    }
-
-    fun likes(userId: Long, count: Int, cursor: String? = null): HttpUrl {
-        val url = "$apiBaseUrl/KPuet6dGbC8LB2sOLx7tZQ/Likes"
-
-        val variables = JSONObject().also { json ->
-            json.put("userId", userId.toString())
-            json.put("count", count)
-            json.put("includePromotedContent", false)
-            json.put("withClientEventToken", false)
-            json.put("withBirdwatchNotes", false)
-            json.put("withVoice", true)
-            cursor?.let { json.put("cursor", it) }
-        }.toString()
-
-        return url.toHttpUrl().newBuilder().apply {
-            addQueryParameter("variables", variables)
-            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build()
-    }
-
-    fun following(userId: Long, count: Int, cursor: String? = null): HttpUrl {
-        val url = "$apiBaseUrl/vWCjN9gcTJiXzzMPR5Oxzw/Following"
-
-        val variables = JSONObject().also { json ->
-            json.put("userId", userId.toString())
-            json.put("count", count)
-            json.put("includePromotedContent", false)
-            cursor?.let { json.put("cursor", it) }
-        }.toString()
-
-        return url.toHttpUrl().newBuilder().apply {
-            addQueryParameter("variables", variables)
-            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build()
-    }
-
-    fun followers(userId: Long, count: Int, cursor: String? = null): HttpUrl {
-        val url = "$apiBaseUrl/-WcGoRt8IQuPm-l1ymgy6g/Followers"
-
-        val variables = JSONObject().also { json ->
-            json.put("userId", userId.toString())
-            json.put("count", count)
-            json.put("includePromotedContent", false)
-            cursor?.let { json.put("cursor", it) }
-        }.toString()
-
-        return url.toHttpUrl().newBuilder().apply {
-            addQueryParameter("variables", variables)
-            addQueryParameter("features", UrlGraphQLFeatures.generate(additional = true))
-        }.build()
-    }
+    fun followers(userId: Long, count: Int, cursor: String? = null): HttpUrl = build(
+        "-WcGoRt8IQuPm-l1ymgy6g/Followers",
+        buildMap {
+            put("userId", userId.toString())
+            put("count", count)
+            put("includePromotedContent", false)
+            cursor?.let { put("cursor", it) }
+        },
+    )
 
     val createTweet = "$apiBaseUrl/oB-5XsHNAbjvARJEc8CZFw/CreateTweet".toHttpUrl()
     val deleteTweet = "$apiBaseUrl/VaenaVgh5q5ih7kvyVjgtg/DeleteTweet".toHttpUrl()
