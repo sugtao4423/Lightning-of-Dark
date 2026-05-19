@@ -32,37 +32,32 @@ object JsonParserGraphQL {
 
     @Throws(TwitterException::class)
     fun parseDeleteTweet(response: String) {
-        response.parse()["data"]["delete_tweet"]["tweet_results"]
+        response.parse()["data"]["delete_tweet"]["tweet_results"].orNull()
+            ?: throw TwitterException("Missing 'data.delete_tweet.tweet_results' in response.")
     }
 
     @Throws(TwitterException::class)
     fun parseCreateRetweet(response: String) {
-        response.parse()["data"]["create_retweet"]["retweet_results"]["result"]
+        response.parse()["data"]["create_retweet"]["retweet_results"]["result"].orNull()
+            ?: throw TwitterException("Missing 'data.create_retweet.retweet_results.result' in response.")
     }
 
     @Throws(TwitterException::class)
     fun parseDeleteRetweet(response: String) {
-        response.parse()["data"]["unretweet"]["source_tweet_results"]["result"]
+        response.parse()["data"]["unretweet"]["source_tweet_results"]["result"].orNull()
+            ?: throw TwitterException("Missing 'data.unretweet.source_tweet_results.result' in response.")
     }
 
     @Throws(TwitterException::class)
     fun parseFavoriteTweet(response: String) {
-        val data = response.parse()["data"]
-        try {
-            data["favorite_tweet"].string
-        } catch (e: JSONException) {
-            throw TwitterException(e)
-        }
+        response.parse()["data"]["favorite_tweet"].stringOrNull
+            ?: throw TwitterException("Missing 'data.favorite_tweet' in response.")
     }
 
     @Throws(TwitterException::class)
     fun parseUnfavoriteTweet(response: String) {
-        val data = response.parse()["data"]
-        try {
-            data["unfavorite_tweet"].string
-        } catch (e: JSONException) {
-            throw TwitterException(e)
-        }
+        response.parse()["data"]["unfavorite_tweet"].stringOrNull
+            ?: throw TwitterException("Missing 'data.unfavorite_tweet' in response.")
     }
 
 }
