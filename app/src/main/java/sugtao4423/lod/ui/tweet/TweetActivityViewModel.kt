@@ -138,20 +138,15 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         _onPickMedia.value = Unit
     }
 
-    fun onMediaPicked(result: ActivityResult?) {
-        if (result?.resultCode != Activity.RESULT_OK || result.data == null) return
+    fun onMediaPicked(uri: Uri?) {
+        if (uri == null) return
 
-        val mediaUri = result.data!!.data
-        if (mediaUri != null) {
-            canUploadMedia(mediaUri)?.let {
-                app.showToast(it)
-                return
-            }
-            selectedMedia.value = mediaUri
-            app.showToast(R.string.success_select_media)
-        } else {
-            app.showToast(R.string.error_select_media)
+        canUploadMedia(uri)?.let {
+            app.showToast(it)
+            return
         }
+        selectedMedia.value = uri
+        app.showToast(R.string.success_select_media)
     }
 
     fun onSpeeched(result: ActivityResult?) {

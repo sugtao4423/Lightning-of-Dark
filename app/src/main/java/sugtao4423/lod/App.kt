@@ -2,6 +2,7 @@ package sugtao4423.lod
 
 import android.app.Application
 import android.graphics.Typeface
+import android.media.MediaDataSource
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.widget.Toast
@@ -111,22 +112,35 @@ class App : Application() {
             ?: throw TwitterException("Failed to read selected media.")
 
         val videoDurationMs = if (mediaType.startsWith("video/")) {
-            extractVideoDurationMs(uri)
+            extractVideoDurationMs(bytes)
         } else {
             null
         }
         return twitter.media.upload(bytes, mediaType, videoDurationMs)
     }
 
-    private fun extractVideoDurationMs(uri: Uri): Long {
+    private fun extractVideoDurationMs(bytes: ByteArray): Long {
         val retriever = MediaMetadataRetriever()
         try {
-            retriever.setDataSource(this, uri)
+            retriever.setDataSource(ByteArrayMediaDataSource(bytes))
             return retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
                 ?: throw TwitterException("Failed to extract video duration.")
         } finally {
             retriever.release()
         }
+    }
+
+    private class ByteArrayMediaDataSource(private val data: ByteArray) : MediaDataSource() {
+        override fun readAt(position: Long, buffer: ByteArray, offset: Int, size: Int): Int {
+            if (position >= data.size) return -1
+            val available = (data.size - position).toInt()
+            val toRead = minOf(size, available)
+            System.arraycopy(data, position.toInt(), buffer, offset, toRead)
+            return toRead
+        }
+
+        override fun getSize(): Long = data.size.toLong()
+        override fun close() {}
     }
 
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -34,10 +35,9 @@ class TweetActivity : LoDBaseActivity() {
         const val TYPE_EXTERNALTEXT = 5
     }
 
-    private val startForResultMediaPick =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->
-            viewModel.onMediaPicked(result)
-        }
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+        viewModel.onMediaPicked(it)
+    }
 
     private val startForResultSpeech =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->
@@ -124,12 +124,7 @@ class TweetActivity : LoDBaseActivity() {
         }
         viewModel.onFinish.observe(this) { finish() }
         viewModel.onPickMedia.observe(this) {
-            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                addCategory(Intent.CATEGORY_OPENABLE)
-                type = "*/*"
-                putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
-            }
-            startForResultMediaPick.launch(intent)
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
 
         viewModel.externalText = intent.getStringExtra(INTENT_EXTRA_KEY_TEXT)
