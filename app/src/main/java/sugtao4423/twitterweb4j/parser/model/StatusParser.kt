@@ -2,9 +2,43 @@ package sugtao4423.twitterweb4j.parser.model
 
 import org.json.JSONException
 import sugtao4423.twitter4j.GeoLocation
+import sugtao4423.twitter4j.NoteTweet
 import sugtao4423.twitter4j.Status
 import sugtao4423.twitterweb4j.Json
 import sugtao4423.twitterweb4j.parser.HtmlEntity
+
+@Throws(JSONException::class)
+private fun parseNoteTweet(result: Json): NoteTweet {
+    val id = result["id"].string
+    val unescaped = run {
+        val text = result["text"].string
+        val userMentionEntities = result["entity_set"]["user_mentions"].let {
+            List(it.size) { i -> parseUserMentionEntity(it[i]) }
+        }
+        val urlEntities = result["entity_set"]["urls"].let {
+            List(it.size) { i -> parseUrlEntity(it[i]) }
+        }
+        val hashtagEntities = result["entity_set"]["hashtags"].let {
+            List(it.size) { i -> parseHashtagEntity(it[i]) }
+        }
+
+        HtmlEntity.unescapeAndSlideEntityIndices(
+            text, userMentionEntities, urlEntities, hashtagEntities
+        )
+    }
+    val symbolEntities = result["entity_set"]["symbols"].let {
+        List(it.size) { i -> parseSymbolEntity(it[i]) }
+    }
+
+    return NoteTweet(
+        id,
+        unescaped.text,
+        unescaped.userMentions,
+        unescaped.urls,
+        unescaped.hashtags,
+        symbolEntities,
+    )
+}
 
 @Throws(JSONException::class)
 fun parseStatus(result: Json): Status {
@@ -82,6 +116,10 @@ fun parseStatus(result: Json): Status {
         List(it.size) { i -> parseSymbolEntity(it[i]) }
     }
 
+    val noteTweet = json["note_tweet"]["note_tweet_results"]["result"].orNull()?.let {
+        parseNoteTweet(it)
+    }
+
     val lang = legacy["lang"].stringOrNull
     val withheldInCountries = legacy["withheld_in_countries"].let {
         List(it.size) { i -> it[i].string }
@@ -116,6 +154,7 @@ fun parseStatus(result: Json): Status {
         unescaped.hashtags,
         unescaped.media,
         symbolEntities,
+        noteTweet,
         lang,
         withheldInCountries,
     )

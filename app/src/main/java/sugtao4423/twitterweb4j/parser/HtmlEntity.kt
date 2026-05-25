@@ -26,7 +26,7 @@ object HtmlEntity {
         userMentionEntities: List<UserMentionEntity>,
         urlEntities: List<UrlEntity>,
         hashtagEntities: List<HashtagEntity>,
-        mediaEntities: List<MediaEntity>,
+        mediaEntities: List<MediaEntity> = listOf(),
     ): UnescapedTweet {
         val unescapedText = unescape(text)
         val entities = Extractor().extractEntitiesWithIndices(unescapedText).associate {

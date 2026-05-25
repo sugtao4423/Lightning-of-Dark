@@ -2,6 +2,15 @@ package sugtao4423.twitter4j
 
 import java.util.Date
 
+data class NoteTweet(
+    val id: String,
+    val text: String,
+    val userMentionEntities: List<UserMentionEntity>,
+    val urlEntities: List<UrlEntity>,
+    val hashtagEntities: List<HashtagEntity>,
+    val symbolEntities: List<SymbolEntity>,
+) : java.io.Serializable
+
 data class Status(
     val id: Long,
     val text: String,
@@ -38,6 +47,8 @@ data class Status(
     val hashtagEntities: List<HashtagEntity>,
     val mediaEntities: List<MediaEntity>,
     val symbolEntities: List<SymbolEntity>,
+
+    val noteTweet: NoteTweet?,
 
     val lang: String?,
     val withheldInCountries: List<String>?,
