@@ -110,7 +110,10 @@ object JsonParserGraphQLTimeline {
             val instructions =
                 response.parseJson()["data"]["threaded_conversation_with_injections_v2"]["instructions"]
             val conversations = parse(
-                instructions, convPrefix = "conversationthread-", ignoreMissingCursorTop = true
+                instructions,
+                convPrefix = "conversationthread-",
+                ignoreMissingCursorTop = true,
+                ignoreMissingCursorBottom = true,
             )
 
             return conversations.find { it.id == tweetId }
