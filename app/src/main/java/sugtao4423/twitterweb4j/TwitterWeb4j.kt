@@ -2,11 +2,9 @@ package sugtao4423.twitterweb4j
 
 import okhttp3.Headers
 import okhttp3.HttpUrl
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.RequestBody
 import sugtao4423.twitter4j.Relationship
 import sugtao4423.twitter4j.Status
 import sugtao4423.twitter4j.TwitterException
@@ -36,8 +34,6 @@ class TwitterWeb4j {
 
     companion object {
         const val DEFAULT_COUNT = 40
-
-        val CONTENT_TYPE_JSON = "application/json".toMediaType()
     }
 
     private val cookie: String
@@ -253,27 +249,18 @@ class TwitterWeb4j {
     private fun get(url: HttpUrl): String = access("GET", url)
 
     @Throws(TwitterException::class)
-    private fun post(
-        url: HttpUrl, body: String, contentType: MediaType = CONTENT_TYPE_JSON
-    ): String = access("POST", url, body, contentType)
+    private fun post(url: HttpUrl, body: RequestBody): String = access("POST", url, body)
 
     @Throws(TwitterException::class)
     private fun access(
         method: String,
         url: HttpUrl,
-        body: String? = null,
-        contentType: MediaType? = null,
+        body: RequestBody? = null,
         headers: Headers = buildRequestHeaders(method, url.encodedPath),
     ): String {
-        val requestBody = if (method == "POST" && body != null) {
-            body.toRequestBody(contentType ?: CONTENT_TYPE_JSON)
-        } else {
-            null
-        }
-
         val request = Request.Builder().apply {
             url(url)
-            method(method, requestBody)
+            method(method, body)
             headers(headers)
         }.build()
 

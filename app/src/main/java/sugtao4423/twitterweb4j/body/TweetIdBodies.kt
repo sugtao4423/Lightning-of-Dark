@@ -1,6 +1,7 @@
 package sugtao4423.twitterweb4j.body
 
 import okhttp3.HttpUrl
+import okhttp3.RequestBody
 
 abstract class SimpleTweetIdBody(
     url: HttpUrl,
@@ -8,7 +9,7 @@ abstract class SimpleTweetIdBody(
     private val includeDarkRequest: Boolean = true,
 ) : BaseBody(url) {
 
-    fun get(tweetId: Long): String = buildJsonString(buildMap {
+    fun get(tweetId: Long): RequestBody = buildJsonBody(buildMap {
         put(idKey, tweetId.toString())
         if (includeDarkRequest) put("dark_request", false)
     })

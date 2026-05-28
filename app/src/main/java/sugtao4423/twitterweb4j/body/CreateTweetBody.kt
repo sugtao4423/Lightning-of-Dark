@@ -1,6 +1,7 @@
 package sugtao4423.twitterweb4j.body
 
 import okhttp3.HttpUrl
+import okhttp3.RequestBody
 import sugtao4423.twitterweb4j.model.CreateTweet
 import sugtao4423.twitterweb4j.url.UrlGraphQLFeatures
 
@@ -13,7 +14,7 @@ class CreateTweetBody(url: HttpUrl) : BaseBody(url) {
         "semantic_annotation_ids" to emptyList<Any>(),
     )
 
-    fun get(tweet: CreateTweet): String {
+    fun get(tweet: CreateTweet): RequestBody {
         val variables = (this.variables + mapOf("tweet_text" to tweet.text)).toMutableMap()
         tweet.inReplyToStatusId?.let {
             variables["reply"] = mapOf(
@@ -30,7 +31,7 @@ class CreateTweetBody(url: HttpUrl) : BaseBody(url) {
             },
             "possibly_sensitive" to false,
         )
-        return buildJsonString(variables)
+        return buildJsonBody(variables)
     }
 
 }

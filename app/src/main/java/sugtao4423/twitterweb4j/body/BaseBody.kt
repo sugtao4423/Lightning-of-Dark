@@ -1,6 +1,9 @@
 package sugtao4423.twitterweb4j.body
 
 import okhttp3.HttpUrl
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
 abstract class BaseBody(url: HttpUrl) {
@@ -11,12 +14,11 @@ abstract class BaseBody(url: HttpUrl) {
 
     protected open val variables: Map<String, Any>? = null
 
-    protected fun buildJsonString(variables: Map<String, Any>): String {
-        return JSONObject().also { json ->
+    protected fun buildJsonBody(variables: Map<String, Any>): RequestBody =
+        JSONObject().also { json ->
             json.put("queryId", queryId)
             features?.let { json.put("features", JSONObject(it)) }
             json.put("variables", JSONObject(variables))
-        }.toString()
-    }
+        }.toString().toRequestBody("application/json".toMediaType())
 
 }
