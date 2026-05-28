@@ -37,16 +37,14 @@ object JsonParserGraphQL {
     }
 
     @Throws(TwitterException::class)
-    fun parseCreateRetweet(response: String) {
-        response.parse()["data"]["create_retweet"]["retweet_results"]["result"].orNull()
-            ?: throw TwitterException("Missing 'data.create_retweet.retweet_results.result' in response.")
-    }
+    fun parseCreateRetweet(response: String): Long =
+        response.parse()["data"]["create_retweet"]["retweet_results"]["result"]["rest_id"].stringOrNull?.toLong()
+            ?: throw TwitterException("Missing 'data.create_retweet.retweet_results.result.rest_id' in response.")
 
     @Throws(TwitterException::class)
-    fun parseDeleteRetweet(response: String) {
-        response.parse()["data"]["unretweet"]["source_tweet_results"]["result"].orNull()
-            ?: throw TwitterException("Missing 'data.unretweet.source_tweet_results.result' in response.")
-    }
+    fun parseDeleteRetweet(response: String): Long =
+        response.parse()["data"]["unretweet"]["source_tweet_results"]["result"]["rest_id"].stringOrNull?.toLong()
+            ?: throw TwitterException("Missing 'data.unretweet.source_tweet_results.result.rest_id' in response.")
 
     @Throws(TwitterException::class)
     fun parseFavoriteTweet(response: String) {

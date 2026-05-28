@@ -192,19 +192,19 @@ class TwitterWeb4j {
     }
 
     @Throws(TwitterException::class)
-    fun createRetweet(tweetId: Long) {
+    fun createRetweet(tweetId: Long): Long {
         val url = UrlGraphQL.createRetweet
         val body = CreateRetweetBody(url).get(tweetId)
         val response = post(url, body)
-        JsonParserGraphQL.parseCreateRetweet(response)
+        return JsonParserGraphQL.parseCreateRetweet(response)
     }
 
     @Throws(TwitterException::class)
-    fun deleteRetweet(tweetId: Long) {
+    fun deleteRetweet(tweetId: Long): Long {
         val url = UrlGraphQL.deleteRetweet
         val body = DeleteRetweetBody(url).get(tweetId)
         val response = post(url, body)
-        JsonParserGraphQL.parseDeleteRetweet(response)
+        return JsonParserGraphQL.parseDeleteRetweet(response)
     }
 
     @Throws(TwitterException::class)
