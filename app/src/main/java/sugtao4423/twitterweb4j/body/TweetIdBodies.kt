@@ -3,10 +3,10 @@ package sugtao4423.twitterweb4j.body
 import okhttp3.HttpUrl
 
 abstract class SimpleTweetIdBody(
-    requestUrl: HttpUrl,
+    url: HttpUrl,
     private val idKey: String,
     private val includeDarkRequest: Boolean = true,
-) : BaseBody(requestUrl) {
+) : BaseBody(url) {
 
     fun get(tweetId: Long): String = buildJsonString(buildMap {
         put(idKey, tweetId.toString())

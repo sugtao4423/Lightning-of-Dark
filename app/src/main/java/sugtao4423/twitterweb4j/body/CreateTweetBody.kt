@@ -4,7 +4,7 @@ import okhttp3.HttpUrl
 import sugtao4423.twitterweb4j.model.CreateTweet
 import sugtao4423.twitterweb4j.url.UrlGraphQLFeatures
 
-class CreateTweetBody(requestUrl: HttpUrl) : BaseBody(requestUrl) {
+class CreateTweetBody(url: HttpUrl) : BaseBody(url) {
 
     override val features = UrlGraphQLFeatures.generateMap(additional = true)
 
