@@ -223,9 +223,9 @@ class TwitterWeb4j {
     fun loadClientTransaction() {
         val h = Connection.defaultHeaders
         try {
-            val homePageHtml = access("GET", ClientTransactionUtils.homePageUrl, headers = h)
+            val homePageHtml = execute("GET", ClientTransactionUtils.homePageUrl, headers = h)
             val ondemandFileUrl = ClientTransactionUtils.getOndemandFileUrl(homePageHtml)
-            val ondemandFileContent = access("GET", ondemandFileUrl, headers = h)
+            val ondemandFileContent = execute("GET", ondemandFileUrl, headers = h)
 
             clientTransaction = ClientTransaction(homePageHtml, ondemandFileContent)
         } catch (e: Exception) {
@@ -246,13 +246,13 @@ class TwitterWeb4j {
         }.build()
 
     @Throws(TwitterException::class)
-    private fun get(url: HttpUrl): String = access("GET", url)
+    private fun get(url: HttpUrl): String = execute("GET", url)
 
     @Throws(TwitterException::class)
-    private fun post(url: HttpUrl, body: RequestBody): String = access("POST", url, body)
+    private fun post(url: HttpUrl, body: RequestBody): String = execute("POST", url, body)
 
     @Throws(TwitterException::class)
-    private fun access(
+    private fun execute(
         method: String,
         url: HttpUrl,
         body: RequestBody? = null,
