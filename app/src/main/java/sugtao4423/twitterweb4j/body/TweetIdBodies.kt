@@ -2,7 +2,7 @@ package sugtao4423.twitterweb4j.body
 
 import okhttp3.HttpUrl
 
-open class SimpleTweetIdBody(
+abstract class SimpleTweetIdBody(
     requestUrl: HttpUrl,
     private val idKey: String,
     private val includeDarkRequest: Boolean = true,
