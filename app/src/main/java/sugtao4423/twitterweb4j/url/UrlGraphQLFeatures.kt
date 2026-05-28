@@ -50,21 +50,11 @@ object UrlGraphQLFeatures {
         userData: Boolean = false,
         userInfo: Boolean = false,
         additional: Boolean = false,
-    ): Map<String, Boolean> {
-        val features = mutableMapOf<String, Boolean>()
-        if (default) {
-            features += defaultFeatures
-        }
-        if (userData || userInfo) {
-            features += userDataFeatures
-        }
-        if (userInfo) {
-            features += userInfoFeatures
-        }
-        if (additional) {
-            features += additionalFeatures
-        }
-        return features.toMap()
+    ): Map<String, Boolean> = buildMap {
+        if (default) putAll(defaultFeatures)
+        if (userData || userInfo) putAll(userDataFeatures)
+        if (userInfo) putAll(userInfoFeatures)
+        if (additional) putAll(additionalFeatures)
     }
 
     fun generate(
