@@ -9,13 +9,13 @@ class CreateTweetBody(url: HttpUrl) : BaseBody(url) {
 
     override val features = UrlGraphQLFeatures.generateMap(additional = true)
 
-    override val variables = mapOf(
-        "dark_request" to false,
-        "semantic_annotation_ids" to emptyList<Any>(),
-    )
-
     fun get(tweet: CreateTweet): RequestBody {
-        val variables = (this.variables + mapOf("tweet_text" to tweet.text)).toMutableMap()
+        val variables = mutableMapOf(
+            "dark_request" to false,
+            "semantic_annotation_ids" to emptyList<Any>(),
+            "tweet_text" to tweet.text,
+        )
+
         tweet.inReplyToStatusId?.let {
             variables["reply"] = mapOf(
                 "in_reply_to_tweet_id" to it.toString(),

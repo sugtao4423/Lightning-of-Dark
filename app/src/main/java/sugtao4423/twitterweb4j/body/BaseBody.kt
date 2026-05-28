@@ -12,8 +12,6 @@ abstract class BaseBody(url: HttpUrl) {
 
     protected open val features: Map<String, Any>? = null
 
-    protected open val variables: Map<String, Any>? = null
-
     protected fun buildJsonBody(variables: Map<String, Any>): RequestBody =
         JSONObject().also { json ->
             json.put("queryId", queryId)
