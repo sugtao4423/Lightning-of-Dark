@@ -4,13 +4,12 @@ import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.Connection
 import sugtao4423.twitterweb4j.media.UploadJsonParser.ProcessingInfo
-import java.io.IOException
+import sugtao4423.twitterweb4j.send
 import java.security.MessageDigest
 
 class MediaUpload internal constructor(
@@ -123,23 +122,7 @@ class MediaUpload internal constructor(
         execute("POST", url, body)
 
     @Throws(TwitterException::class)
-    private fun execute(method: String, url: HttpUrl, body: RequestBody? = null): String {
-        val request = Request.Builder().apply {
-            url(url)
-            method(method, body)
-            headers(headers)
-        }.build()
-
-        try {
-            val response = client.newCall(request).execute()
-            if (!response.isSuccessful) {
-                throw IOException("HTTP ${response.code}")
-            }
-            return response.body.string()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            throw TwitterException(e)
-        }
-    }
+    private fun execute(method: String, url: HttpUrl, body: RequestBody? = null): String =
+        client.send(method, url, body, headers)
 
 }

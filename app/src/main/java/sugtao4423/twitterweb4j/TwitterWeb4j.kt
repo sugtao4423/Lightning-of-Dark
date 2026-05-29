@@ -3,7 +3,6 @@ package sugtao4423.twitterweb4j
 import okhttp3.Headers
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.RequestBody
 import sugtao4423.twitter4j.Relationship
 import sugtao4423.twitter4j.Status
@@ -28,7 +27,6 @@ import sugtao4423.twitterweb4j.parser.JsonParserGraphQLUser
 import sugtao4423.twitterweb4j.parser.JsonParserV1
 import sugtao4423.twitterweb4j.url.UrlGraphQL
 import sugtao4423.twitterweb4j.url.UrlV1
-import java.io.IOException
 
 class TwitterWeb4j {
 
@@ -257,23 +255,6 @@ class TwitterWeb4j {
         url: HttpUrl,
         body: RequestBody? = null,
         headers: Headers = buildRequestHeaders(method, url.encodedPath),
-    ): String {
-        val request = Request.Builder().apply {
-            url(url)
-            method(method, body)
-            headers(headers)
-        }.build()
-
-        try {
-            val response = client.newCall(request).execute()
-            if (!response.isSuccessful) {
-                throw IOException("HTTP ${response.code}")
-            }
-            return response.body.string()
-        } catch (e: IOException) {
-            e.printStackTrace()
-            throw TwitterException(e)
-        }
-    }
+    ): String = client.send(method, url, body, headers)
 
 }

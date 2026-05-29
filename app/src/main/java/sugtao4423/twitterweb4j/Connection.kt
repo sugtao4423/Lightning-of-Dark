@@ -2,6 +2,12 @@ package sugtao4423.twitterweb4j
 
 import okhttp3.Headers
 import okhttp3.Headers.Companion.toHeaders
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import sugtao4423.twitter4j.TwitterException
+import java.io.IOException
 
 object Connection {
 
@@ -23,4 +29,29 @@ object Connection {
         add("X-Twitter-Auth-Type", "OAuth2Session")
     }.build()
 
+}
+
+@Throws(TwitterException::class)
+internal fun OkHttpClient.send(
+    method: String,
+    url: HttpUrl,
+    body: RequestBody?,
+    headers: Headers,
+): String {
+    val request = Request.Builder().apply {
+        url(url)
+        method(method, body)
+        headers(headers)
+    }.build()
+
+    try {
+        val response = newCall(request).execute()
+        if (!response.isSuccessful) {
+            throw IOException("HTTP ${response.code}")
+        }
+        return response.body.string()
+    } catch (e: IOException) {
+        e.printStackTrace()
+        throw TwitterException(e)
+    }
 }
