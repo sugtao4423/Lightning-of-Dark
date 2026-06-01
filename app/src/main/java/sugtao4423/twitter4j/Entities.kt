@@ -6,6 +6,7 @@ interface Indices {
 }
 
 data class SymbolEntity(
+    val text: String,
     override val start: Int,
     override val end: Int,
 ) : Indices, java.io.Serializable

@@ -16,10 +16,11 @@ import sugtao4423.twitterweb4j.Json
 
 @Throws(JSONException::class)
 fun parseSymbolEntity(json: Json): SymbolEntity {
+    val text = json["text"].string
     val start = json["indices"][0].int
     val end = json["indices"][1].int
 
-    return SymbolEntity(start, end)
+    return SymbolEntity(text, start, end)
 }
 
 @Throws(JSONException::class)

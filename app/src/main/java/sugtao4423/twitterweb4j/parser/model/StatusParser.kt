@@ -21,13 +21,13 @@ private fun parseNoteTweet(result: Json): NoteTweet {
         val hashtagEntities = result["entity_set"]["hashtags"].let {
             List(it.size) { i -> parseHashtagEntity(it[i]) }
         }
+        val symbolEntities = result["entity_set"]["symbols"].let {
+            List(it.size) { i -> parseSymbolEntity(it[i]) }
+        }
 
         HtmlEntity.unescapeAndSlideEntityIndices(
-            text, userMentionEntities, urlEntities, hashtagEntities
+            text, userMentionEntities, urlEntities, hashtagEntities, symbolEntities
         )
-    }
-    val symbolEntities = result["entity_set"]["symbols"].let {
-        List(it.size) { i -> parseSymbolEntity(it[i]) }
     }
 
     return NoteTweet(
@@ -36,7 +36,7 @@ private fun parseNoteTweet(result: Json): NoteTweet {
         unescaped.userMentions,
         unescaped.urls,
         unescaped.hashtags,
-        symbolEntities,
+        unescaped.symbols,
     )
 }
 
@@ -104,16 +104,16 @@ fun parseStatus(result: Json): Status {
         val hashtagEntities = legacy["entities"]["hashtags"].let {
             List(it.size) { i -> parseHashtagEntity(it[i]) }
         }
+        val symbolEntities = legacy["entities"]["symbols"].let {
+            List(it.size) { i -> parseSymbolEntity(it[i]) }
+        }
         val mediaEntities = extendedEntities.let {
             List(it.size) { i -> parseMediaEntity(it[i]) }
         }
 
         HtmlEntity.unescapeAndSlideEntityIndices(
-            text, userMentionEntities, urlEntities, hashtagEntities, mediaEntities
+            text, userMentionEntities, urlEntities, hashtagEntities, symbolEntities, mediaEntities
         )
-    }
-    val symbolEntities = legacy["entities"]["symbols"].let {
-        List(it.size) { i -> parseSymbolEntity(it[i]) }
     }
 
     val noteTweet = json["note_tweet"]["note_tweet_results"]["result"].orNull()?.let {
@@ -153,7 +153,7 @@ fun parseStatus(result: Json): Status {
         unescaped.urls,
         unescaped.hashtags,
         unescaped.media,
-        symbolEntities,
+        unescaped.symbols,
         noteTweet,
         lang,
         withheldInCountries,

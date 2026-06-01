@@ -3,6 +3,7 @@ package sugtao4423.twitterweb4j.parser
 import com.twitter.twittertext.Extractor
 import sugtao4423.twitter4j.HashtagEntity
 import sugtao4423.twitter4j.MediaEntity
+import sugtao4423.twitter4j.SymbolEntity
 import sugtao4423.twitter4j.UrlEntity
 import sugtao4423.twitter4j.UserMentionEntity
 
@@ -18,6 +19,7 @@ object HtmlEntity {
         val userMentions: List<UserMentionEntity>,
         val urls: List<UrlEntity>,
         val hashtags: List<HashtagEntity>,
+        val symbols: List<SymbolEntity>,
         val media: List<MediaEntity>,
     ) : java.io.Serializable
 
@@ -26,6 +28,7 @@ object HtmlEntity {
         userMentionEntities: List<UserMentionEntity>,
         urlEntities: List<UrlEntity>,
         hashtagEntities: List<HashtagEntity>,
+        symbolEntities: List<SymbolEntity>,
         mediaEntities: List<MediaEntity> = listOf(),
     ): UnescapedTweet {
         val unescapedText = unescape(text)
@@ -33,6 +36,7 @@ object HtmlEntity {
         val extractedMentions = extractor.extractMentionsOrListsWithIndices(unescapedText)
         val extractedUrls = extractor.extractURLsWithIndices(unescapedText)
         val extractedHashtags = extractor.extractHashtagsWithIndices(unescapedText)
+        val extractedCashtags = extractor.extractCashtagsWithIndices(unescapedText)
 
         val userMentions = userMentionEntities.slideIndices(
             extractedMentions, { it.screenName },
@@ -46,11 +50,15 @@ object HtmlEntity {
             extractedHashtags, { it.text },
         ) { entity, start, end -> entity.copy(start = start, end = end) }
 
+        val symbols = symbolEntities.slideIndices(
+            extractedCashtags, { it.text },
+        ) { entity, start, end -> entity.copy(start = start, end = end) }
+
         val media = mediaEntities.slideIndices(
             extractedUrls, { it.url },
         ) { entity, start, end -> entity.copy(start = start, end = end) }
 
-        return UnescapedTweet(unescapedText, userMentions, urls, hashtags, media)
+        return UnescapedTweet(unescapedText, userMentions, urls, hashtags, symbols, media)
     }
 
     private fun <E> List<E>.slideIndices(
