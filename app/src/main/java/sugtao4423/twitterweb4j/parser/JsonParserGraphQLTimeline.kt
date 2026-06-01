@@ -131,7 +131,7 @@ object JsonParserGraphQLTimeline {
             val userTimeline = parse(instructions, convPrefix = "profile-conversation-")
 
             return userTimeline.filterTo(CursorList.newWithCursor(userTimeline)) {
-                it.isRetweeted || it.user.id == userId
+                it.user.id == userId
             }
         } catch (e: JSONException) {
             throw TwitterException(e)
