@@ -5,13 +5,9 @@ open class CursorList<T> : ArrayList<T>() {
     var cursorTop: String? = null
     var cursorBottom: String? = null
 
-    companion object {
-        fun <T> newWithCursor(cursorList: CursorList<T>): CursorList<T> {
-            val newCursorList = CursorList<T>()
-            newCursorList.cursorTop = cursorList.cursorTop
-            newCursorList.cursorBottom = cursorList.cursorBottom
-            return newCursorList
-        }
+    fun newWithSameCursors(): CursorList<T> = CursorList<T>().also {
+        it.cursorTop = cursorTop
+        it.cursorBottom = cursorBottom
     }
 
 }

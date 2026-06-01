@@ -130,7 +130,7 @@ object JsonParserGraphQLTimeline {
                 response.parseJson()["data"]["user"]["result"]["timeline_v2"]["timeline"]["instructions"]
             val userTimeline = parse(instructions, convPrefix = "profile-conversation-")
 
-            return userTimeline.filterTo(CursorList.newWithCursor(userTimeline)) {
+            return userTimeline.filterTo(userTimeline.newWithSameCursors()) {
                 it.user.id == userId
             }
         } catch (e: JSONException) {
