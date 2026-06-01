@@ -29,36 +29,44 @@ object HtmlEntity {
         mediaEntities: List<MediaEntity> = listOf(),
     ): UnescapedTweet {
         val unescapedText = unescape(text)
-        val entities = Extractor().extractEntitiesWithIndices(unescapedText).associate {
-            it.value to Pair(it.start, it.end)
-        }
+        val extractor = Extractor()
+        val extractedMentions = extractor.extractMentionsOrListsWithIndices(unescapedText)
+        val extractedUrls = extractor.extractURLsWithIndices(unescapedText)
+        val extractedHashtags = extractor.extractHashtagsWithIndices(unescapedText)
 
-        val userMentions = userMentionEntities.map {
-            it.copy(
-                start = entities[it.screenName]?.first ?: it.start,
-                end = entities[it.screenName]?.second ?: it.end,
-            )
-        }
-        val urls = urlEntities.map {
-            it.copy(
-                start = entities[it.url]?.first ?: it.start,
-                end = entities[it.url]?.second ?: it.end,
-            )
-        }
-        val hashtags = hashtagEntities.map {
-            it.copy(
-                start = entities[it.text]?.first ?: it.start,
-                end = entities[it.text]?.second ?: it.end,
-            )
-        }
-        val media = mediaEntities.map {
-            it.copy(
-                start = entities[it.url]?.first ?: it.start,
-                end = entities[it.url]?.second ?: it.end,
-            )
-        }
+        val userMentions = userMentionEntities.slideIndices(
+            extractedMentions, { it.screenName },
+        ) { entity, start, end -> entity.copy(start = start, end = end) }
+
+        val urls = urlEntities.slideIndices(
+            extractedUrls, { it.url },
+        ) { entity, start, end -> entity.copy(start = start, end = end) }
+
+        val hashtags = hashtagEntities.slideIndices(
+            extractedHashtags, { it.text },
+        ) { entity, start, end -> entity.copy(start = start, end = end) }
+
+        val media = mediaEntities.slideIndices(
+            extractedUrls, { it.url },
+        ) { entity, start, end -> entity.copy(start = start, end = end) }
 
         return UnescapedTweet(unescapedText, userMentions, urls, hashtags, media)
+    }
+
+    private fun <E> List<E>.slideIndices(
+        extracted: List<Extractor.Entity>,
+        valueOf: (E) -> String,
+        withIndices: (entity: E, start: Int, end: Int) -> E,
+    ): List<E> {
+        val occurrences = HashMap<String, ArrayDeque<Pair<Int, Int>>>()
+        extracted.forEach {
+            occurrences.getOrPut(it.value) { ArrayDeque() }.add(it.start to it.end)
+        }
+        return map { entity ->
+            occurrences[valueOf(entity)]?.removeFirstOrNull()
+                ?.let { withIndices(entity, it.first, it.second) }
+                ?: entity
+        }
     }
 
 }
