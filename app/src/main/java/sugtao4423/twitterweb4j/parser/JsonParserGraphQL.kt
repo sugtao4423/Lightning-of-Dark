@@ -10,14 +10,14 @@ import sugtao4423.twitterweb4j.parser.model.parseStatus
 object JsonParserGraphQL {
 
     @Throws(TwitterException::class)
-    private fun String.parse(): Json = runCatching {
-        val json = this.parseJson()
+    private fun String.parse(): Json {
+        val json = runCatching { this.parseJson() }.getOrElse {
+            throw TwitterException(it.message, it.cause)
+        }
         if (!json["errors"].isNull) {
             throw TwitterException(this)
         }
-        json
-    }.getOrElse {
-        throw TwitterException(it.message, it.cause)
+        return json
     }
 
     @Throws(TwitterException::class)
