@@ -15,14 +15,14 @@ object JsonParserGraphQLTimeline {
     @Throws(JSONException::class, TwitterException::class)
     private fun parse(
         instructions: Json,
-        entry: String = "TimelineAddEntries",
+        entryType: String = "TimelineAddEntries",
         convPrefix: String? = null,
         ignoreMissingCursorTop: Boolean = false,
         ignoreMissingCursorBottom: Boolean = false,
     ): CursorList<Status> {
         val entries = instructions.iterator().asSequence().find {
-            it["type"].string == entry
-        }?.get("entries") ?: throw TwitterException("$entry instruction not found")
+            it["type"].string == entryType
+        }?.get("entries") ?: throw TwitterException("$entryType instruction not found")
 
         val result = CursorList<Status>()
 

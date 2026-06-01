@@ -12,11 +12,11 @@ object JsonParserGraphQLUser {
 
     @Throws(JSONException::class, TwitterException::class)
     private fun parse(
-        instructions: Json, entry: String = "TimelineAddEntries"
+        instructions: Json, entryType: String = "TimelineAddEntries"
     ): PagableCursorList<User> {
         val entries = instructions.iterator().asSequence().find {
-            it["type"].string == entry
-        }?.get("entries") ?: throw TwitterException("$entry instruction not found")
+            it["type"].string == entryType
+        }?.get("entries") ?: throw TwitterException("$entryType instruction not found")
 
         val result = PagableCursorList<User>()
 
