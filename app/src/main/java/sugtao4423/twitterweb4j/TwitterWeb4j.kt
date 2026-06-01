@@ -34,8 +34,7 @@ class TwitterWeb4j {
         const val DEFAULT_COUNT = 40
     }
 
-    private val cookie: String
-    private val csrfToken: String
+    private val authenticatedHeaders: Headers
 
     @Throws(TwitterException::class)
     constructor(cookie: String) {
@@ -45,14 +44,13 @@ class TwitterWeb4j {
         if (ct0.isNullOrEmpty()) {
             throw TwitterException("Invalid cookie: ct0 token not found.")
         }
-        this.cookie = cookie
-        this.csrfToken = ct0
+        authenticatedHeaders = Connection.authenticatedHeaders(cookie, ct0)
     }
 
     private val client = OkHttpClient()
     private var clientTransaction: ClientTransaction? = null
 
-    val media by lazy { MediaUpload(client, cookie, csrfToken) }
+    val media by lazy { MediaUpload(client, authenticatedHeaders) }
 
     @Throws(TwitterException::class)
     fun verifyCredentials(): User {
@@ -233,10 +231,7 @@ class TwitterWeb4j {
     }
 
     private fun buildRequestHeaders(method: String, urlPath: String): Headers =
-        Connection.authorizedHeaders.newBuilder().apply {
-            add("Cookie", cookie)
-            add("X-Csrf-Token", csrfToken)
-
+        authenticatedHeaders.newBuilder().apply {
             clientTransaction?.let {
                 val transactionId = it.generateTransactionId(method, urlPath)
                 add("X-Client-Transaction-Id", transactionId)

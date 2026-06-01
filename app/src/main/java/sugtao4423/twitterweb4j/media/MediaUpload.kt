@@ -1,5 +1,6 @@
 package sugtao4423.twitterweb4j.media
 
+import okhttp3.Headers
 import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -7,13 +8,13 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import sugtao4423.twitter4j.TwitterException
-import sugtao4423.twitterweb4j.Connection
 import sugtao4423.twitterweb4j.media.UploadJsonParser.ProcessingInfo
 import sugtao4423.twitterweb4j.send
 import java.security.MessageDigest
 
 class MediaUpload internal constructor(
-    private val client: OkHttpClient, cookie: String, csrfToken: String
+    private val client: OkHttpClient,
+    private val headers: Headers,
 ) {
 
     companion object {
@@ -25,11 +26,6 @@ class MediaUpload internal constructor(
 
         private val CONTENT_TYPE_OCTET_STREAM = "application/octet-stream".toMediaType()
     }
-
-    private val headers = Connection.authorizedHeaders.newBuilder().apply {
-        add("Cookie", cookie)
-        add("X-Csrf-Token", csrfToken)
-    }.build()
 
     @Throws(TwitterException::class)
     fun upload(data: ByteArray, mediaType: String, videoDurationMs: Long? = null): Long {

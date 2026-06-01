@@ -24,10 +24,13 @@ object Connection {
         "X-Twitter-Client-Language" to "en",
     ).toHeaders()
 
-    val authorizedHeaders: Headers = defaultHeaders.newBuilder().apply {
-        add("Authorization", "Bearer $twitterWebBearer")
-        add("X-Twitter-Auth-Type", "OAuth2Session")
-    }.build()
+    fun authenticatedHeaders(cookie: String, csrfToken: String): Headers =
+        defaultHeaders.newBuilder().apply {
+            add("Authorization", "Bearer $twitterWebBearer")
+            add("X-Twitter-Auth-Type", "OAuth2Session")
+            add("Cookie", cookie)
+            add("X-Csrf-Token", csrfToken)
+        }.build()
 
 }
 
