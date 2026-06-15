@@ -12,7 +12,7 @@ object JsonParserGraphQL {
     @Throws(TwitterException::class)
     private fun String.parse(): Json {
         val json = runCatching { this.parseJson() }.getOrElse {
-            throw TwitterException(it.message, it.cause)
+            throw TwitterException(it.message, it)
         }
         if (!json["errors"].isNull) {
             throw TwitterException(this)

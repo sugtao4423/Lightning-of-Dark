@@ -15,7 +15,7 @@ object JsonParserV1 {
     @Throws(TwitterException::class)
     private inline fun <T> parse(response: String, transform: (Json) -> T): T = runCatching {
         transform(response.parseJson())
-    }.getOrElse { throw TwitterException(it.message, it.cause) }
+    }.getOrElse { throw TwitterException(it.message, it) }
 
     @Throws(TwitterException::class)
     fun parseUserListsArray(response: String): List<UserList> = parse(response) { json ->

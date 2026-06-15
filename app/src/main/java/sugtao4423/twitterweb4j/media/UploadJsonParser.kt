@@ -20,9 +20,7 @@ internal object UploadJsonParser {
     @Throws(TwitterException::class)
     fun parseUploadMedia(response: String): Long = runCatching {
         response.parseJson()["media_id_string"].string.toLong()
-    }.getOrElse {
-        throw TwitterException(it.message, it.cause)
-    }
+    }.getOrElse { throw TwitterException(it.message, it) }
 
     @Throws(TwitterException::class)
     fun parseProcessingInfo(response: String): ProcessingInfo? = runCatching {
@@ -31,8 +29,6 @@ internal object UploadJsonParser {
         val state = info["state"].string
         val checkAfterSecs = info["check_after_secs"].intOrNull
         ProcessingInfo(state, checkAfterSecs)
-    }.getOrElse {
-        throw TwitterException(it.message, it.cause)
-    }
+    }.getOrElse { throw TwitterException(it.message, it) }
 
 }
