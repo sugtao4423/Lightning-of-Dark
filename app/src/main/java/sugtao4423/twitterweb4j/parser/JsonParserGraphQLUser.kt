@@ -50,14 +50,15 @@ object JsonParserGraphQLUser {
     }
 
     @Throws(TwitterException::class)
-    fun parseFollowing(response: String): PagableCursorList<User> {
-        try {
-            val instructions =
-                response.parseJson()["data"]["user"]["result"]["timeline"]["timeline"]["instructions"]
-            return parse(instructions)
-        } catch (e: JSONException) {
-            throw TwitterException(e)
-        }
+    private inline fun <T> parseResponse(response: String, block: (Json) -> T): T = try {
+        block(response.parseJson())
+    } catch (e: JSONException) {
+        throw TwitterException(e)
+    }
+
+    @Throws(TwitterException::class)
+    fun parseFollowing(response: String): PagableCursorList<User> = parseResponse(response) {
+        parse(it["data"]["user"]["result"]["timeline"]["timeline"]["instructions"])
     }
 
     @Throws(TwitterException::class)

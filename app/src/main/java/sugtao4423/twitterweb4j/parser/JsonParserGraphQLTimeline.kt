@@ -72,81 +72,61 @@ object JsonParserGraphQLTimeline {
     }
 
     @Throws(TwitterException::class)
-    fun parseHomeLatestTimeline(response: String): CursorList<Status> {
-        try {
-            val instructions =
-                response.parseJson()["data"]["home"]["home_timeline_urt"]["instructions"]
-            return parse(instructions, convPrefix = "home-conversation-")
-        } catch (e: JSONException) {
-            throw TwitterException(e)
-        }
+    private inline fun <T> parseResponse(response: String, block: (Json) -> T): T = try {
+        block(response.parseJson())
+    } catch (e: JSONException) {
+        throw TwitterException(e)
     }
 
     @Throws(TwitterException::class)
-    fun parseMentionsTimeline(response: String): CursorList<Status> {
-        try {
-            val instructions =
-                response.parseJson()["data"]["viewer_v2"]["user_results"]["result"]["notification_timeline"]["timeline"]["instructions"]
-            return parse(instructions, ignoreMissingCursorBottom = true)
-        } catch (e: JSONException) {
-            throw TwitterException(e)
-        }
+    fun parseHomeLatestTimeline(response: String): CursorList<Status> = parseResponse(response) {
+        val instructions = it["data"]["home"]["home_timeline_urt"]["instructions"]
+        parse(instructions, convPrefix = "home-conversation-")
     }
 
     @Throws(TwitterException::class)
-    fun parseListTweetsTimeline(response: String): CursorList<Status> {
-        try {
-            val instructions =
-                response.parseJson()["data"]["list"]["tweets_timeline"]["timeline"]["instructions"]
-            return parse(instructions, convPrefix = "list-conversation-")
-        } catch (e: JSONException) {
-            throw TwitterException(e)
-        }
+    fun parseMentionsTimeline(response: String): CursorList<Status> = parseResponse(response) {
+        val instructions =
+            it["data"]["viewer_v2"]["user_results"]["result"]["notification_timeline"]["timeline"]["instructions"]
+        parse(instructions, ignoreMissingCursorBottom = true)
     }
 
     @Throws(TwitterException::class)
-    fun parseTweetDetail(response: String, tweetId: Long): Status {
-        try {
-            val instructions =
-                response.parseJson()["data"]["threaded_conversation_with_injections_v2"]["instructions"]
-            val conversations = parse(
-                instructions,
-                convPrefix = "conversationthread-",
-                ignoreMissingCursorTop = true,
-                ignoreMissingCursorBottom = true,
-            )
-
-            return conversations.find { it.id == tweetId }
-                ?: throw TwitterException("Tweet with ID $tweetId not found in the conversation")
-        } catch (e: JSONException) {
-            throw TwitterException(e)
-        }
+    fun parseListTweetsTimeline(response: String): CursorList<Status> = parseResponse(response) {
+        val instructions = it["data"]["list"]["tweets_timeline"]["timeline"]["instructions"]
+        parse(instructions, convPrefix = "list-conversation-")
     }
 
     @Throws(TwitterException::class)
-    fun parseUserTweetsAndReplies(response: String, userId: Long): CursorList<Status> {
-        try {
+    fun parseTweetDetail(response: String, tweetId: Long): Status = parseResponse(response) {
+        val instructions = it["data"]["threaded_conversation_with_injections_v2"]["instructions"]
+        val conversations = parse(
+            instructions,
+            convPrefix = "conversationthread-",
+            ignoreMissingCursorTop = true,
+            ignoreMissingCursorBottom = true,
+        )
+
+        conversations.find { status -> status.id == tweetId }
+            ?: throw TwitterException("Tweet with ID $tweetId not found in the conversation")
+    }
+
+    @Throws(TwitterException::class)
+    fun parseUserTweetsAndReplies(response: String, userId: Long): CursorList<Status> =
+        parseResponse(response) {
             val instructions =
-                response.parseJson()["data"]["user"]["result"]["timeline_v2"]["timeline"]["instructions"]
+                it["data"]["user"]["result"]["timeline_v2"]["timeline"]["instructions"]
             val userTimeline = parse(instructions, convPrefix = "profile-conversation-")
 
-            return userTimeline.filterTo(userTimeline.newWithSameCursors()) {
-                it.user.id == userId
+            userTimeline.filterTo(userTimeline.newWithSameCursors()) { status ->
+                status.user.id == userId
             }
-        } catch (e: JSONException) {
-            throw TwitterException(e)
         }
-    }
 
     @Throws(TwitterException::class)
-    fun parseLikes(response: String): CursorList<Status> {
-        try {
-            val instructions =
-                response.parseJson()["data"]["user"]["result"]["timeline"]["timeline"]["instructions"]
-            return parse(instructions)
-        } catch (e: JSONException) {
-            throw TwitterException(e)
-        }
+    fun parseLikes(response: String): CursorList<Status> = parseResponse(response) {
+        val instructions = it["data"]["user"]["result"]["timeline"]["timeline"]["instructions"]
+        parse(instructions)
     }
 
 }
