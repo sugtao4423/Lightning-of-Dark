@@ -43,22 +43,19 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
             ?: throw IllegalStateException("twitter-site-verification meta tag is not valid Base64.")
         keyBytes = decodedKey.map { it.toInt() and 0xFF }.toIntArray()
 
-        val svgMatches = SVG_PATH_REGEX.findAll(homePageHtml).toList()
-        if (svgMatches.isEmpty()) {
+        svgPaths = SVG_PATH_REGEX.findAll(homePageHtml).map { it.groupValues[1] }.toList()
+        if (svgPaths.isEmpty()) {
             throw IllegalStateException("Could not find any matching SVG paths in homepage HTML.")
         }
-        svgPaths = svgMatches.map { it.groupValues[1] }
-        svgPaths.forEach {
-            if (it.length < 9) {
-                throw IllegalStateException("SVG path 'd' attribute is too short (length=${it.length}, need >= 9).")
-            }
+        svgPaths.firstOrNull { it.length < 9 }?.let {
+            throw IllegalStateException("SVG path 'd' attribute is too short (length=${it.length}, need >= 9).")
         }
 
-        val matches = INDICES_REGEX.findAll(ondemandFileContent).toList()
-        if (matches.isEmpty()) {
+        val allIndices =
+            INDICES_REGEX.findAll(ondemandFileContent).map { it.groupValues[1].toInt() }.toList()
+        if (allIndices.isEmpty()) {
             throw IllegalStateException("Couldn't find key byte indices in the ondemand.s file.")
         }
-        val allIndices = matches.map { it.groupValues[1].toInt() }
         rowIndexKey = allIndices.first()
         timeProductKeys = allIndices.drop(1)
 
