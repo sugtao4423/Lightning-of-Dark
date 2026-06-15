@@ -10,14 +10,12 @@ import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
 
-class ClientTransaction @Throws(IllegalStateException::class) constructor(
-    homePageHtml: String, ondemandFileContent: String
-) {
+class ClientTransaction @Throws(
+    IllegalStateException::class, IllegalArgumentException::class
+) constructor(homePageHtml: String, ondemandFileContent: String) {
 
     private val keyBytes: IntArray
-    private val svgPaths: List<String>
-    private val rowIndexKey: Int
-    private val timeProductKeys: List<Int>
+    private val animationKey: String
 
     companion object {
         private const val ADDITIONAL_RANDOM_NUMBER = 3
@@ -43,7 +41,7 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
             ?: throw IllegalStateException("twitter-site-verification meta tag is not valid Base64.")
         keyBytes = decodedKey.map { it.toInt() and 0xFF }.toIntArray()
 
-        svgPaths = SVG_PATH_REGEX.findAll(homePageHtml).map { it.groupValues[1] }.toList()
+        val svgPaths = SVG_PATH_REGEX.findAll(homePageHtml).map { it.groupValues[1] }.toList()
         if (svgPaths.isEmpty()) {
             throw IllegalStateException("Could not find any matching SVG paths in homepage HTML.")
         }
@@ -56,8 +54,8 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         if (allIndices.isEmpty()) {
             throw IllegalStateException("Couldn't find key byte indices in the ondemand.s file.")
         }
-        rowIndexKey = allIndices.first()
-        timeProductKeys = allIndices.drop(1)
+        val rowIndexKey = allIndices.first()
+        val timeProductKeys = allIndices.drop(1)
 
         val maxKeyByteIndex = maxOf(rowIndexKey, timeProductKeys.maxOrNull() ?: 0, 5)
         if (keyBytes.size <= maxKeyByteIndex) {
@@ -65,12 +63,11 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
                 "Decoded key is too short (size=${keyBytes.size}, need at least ${maxKeyByteIndex + 1})."
             )
         }
+
+        animationKey = computeAnimationKey(svgPaths, rowIndexKey, timeProductKeys)
     }
 
-    @Throws(IllegalStateException::class, IllegalArgumentException::class)
     fun generateTransactionId(method: String, path: String): String {
-        val animationKey = computeAnimationKey()
-
         val timeNow = ((System.currentTimeMillis() - EPOCH_OFFSET_MS) / 1_000L).toInt()
         val timeNowBytes = IntArray(4) { i -> (timeNow ushr (i * 8)) and 0xFF }
 
@@ -91,7 +88,9 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
     }
 
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
-    private fun computeAnimationKey(): String {
+    private fun computeAnimationKey(
+        svgPaths: List<String>, rowIndexKey: Int, timeProductKeys: List<Int>
+    ): String {
         val rowIndex = keyBytes[rowIndexKey] % 16
 
         val rawTimeProduct = timeProductKeys.fold(1) { acc, idx ->
@@ -100,7 +99,7 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         val curveTime = jsRound(rawTimeProduct / 10.0) * 10
 
         val svgPathIndex = keyBytes[5] % 4
-        val curveSegments = parseSvgCurveData(svgPathIndex)
+        val curveSegments = parseSvgCurveData(svgPaths, svgPathIndex)
 
         val curveParams = curveSegments.getOrNull(rowIndex) ?: throw IllegalStateException(
             "rowIndex=$rowIndex out of bounds for curveSegments (size=${curveSegments.size})."
@@ -111,7 +110,7 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
     }
 
     @Throws(IllegalStateException::class)
-    private fun parseSvgCurveData(pathIndex: Int): List<List<Int>> {
+    private fun parseSvgCurveData(svgPaths: List<String>, pathIndex: Int): List<List<Int>> {
         val d = svgPaths.getOrNull(pathIndex) ?: throw IllegalStateException(
             "No SVG path found for pathIndex=$pathIndex (size=${svgPaths.size})."
         )

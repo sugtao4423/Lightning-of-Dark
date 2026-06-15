@@ -232,14 +232,11 @@ class TwitterWeb4j {
         }
     }
 
-    @Throws(TwitterException::class)
     private fun buildRequestHeaders(method: String, urlPath: String): Headers {
         val builder = authenticatedHeaders.newBuilder()
         clientTransaction?.let {
-            val tid = runCatching { it.generateTransactionId(method, urlPath) }.getOrElse { e ->
-                throw TwitterException("Failed to generate X-Client-Transaction-Id.", e)
-            }
-            builder.add("X-Client-Transaction-Id", tid)
+            val transactionId = it.generateTransactionId(method, urlPath)
+            builder.add("X-Client-Transaction-Id", transactionId)
         }
         return builder.build()
     }
