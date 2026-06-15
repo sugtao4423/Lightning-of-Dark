@@ -13,6 +13,7 @@ import sugtao4423.twitter4j.UserMentionEntity
 import sugtao4423.twitter4j.VideoInfo
 import sugtao4423.twitter4j.VideoVariant
 import sugtao4423.twitterweb4j.Json
+import sugtao4423.twitterweb4j.mapList
 
 @Throws(JSONException::class)
 fun parseSymbolEntity(json: Json): SymbolEntity {
@@ -94,13 +95,11 @@ fun parseMediaEntity(json: Json): MediaEntity {
         val aspectRatioWidth = it["aspect_ratio"][0].int
         val aspectRatioHeight = it["aspect_ratio"][1].int
         val durationMillis = it["duration_millis"].longOrNull
-        val variants = it["variants"].let { v ->
-            List(v.size) { i ->
-                val bitrate = v[i]["bitrate"].intOrNull ?: 0
-                val contentType = v[i]["content_type"].string
-                val url = v[i]["url"].string
-                VideoVariant(bitrate, contentType, url)
-            }
+        val variants = it["variants"].mapList { variant ->
+            val bitrate = variant["bitrate"].intOrNull ?: 0
+            val contentType = variant["content_type"].string
+            val url = variant["url"].string
+            VideoVariant(bitrate, contentType, url)
         }
         VideoInfo(aspectRatioWidth, aspectRatioHeight, durationMillis, variants)
     }

@@ -5,6 +5,7 @@ import sugtao4423.twitter4j.GeoLocation
 import sugtao4423.twitter4j.NoteTweet
 import sugtao4423.twitter4j.Status
 import sugtao4423.twitterweb4j.Json
+import sugtao4423.twitterweb4j.mapList
 import sugtao4423.twitterweb4j.parser.HtmlEntity
 
 @Throws(JSONException::class)
@@ -12,18 +13,12 @@ private fun parseNoteTweet(result: Json): NoteTweet {
     val id = result["id"].string
     val unescaped = run {
         val text = result["text"].string
-        val userMentionEntities = result["entity_set"]["user_mentions"].let {
-            List(it.size) { i -> parseUserMentionEntity(it[i]) }
+        val userMentionEntities = result["entity_set"]["user_mentions"].mapList {
+            parseUserMentionEntity(it)
         }
-        val urlEntities = result["entity_set"]["urls"].let {
-            List(it.size) { i -> parseUrlEntity(it[i]) }
-        }
-        val hashtagEntities = result["entity_set"]["hashtags"].let {
-            List(it.size) { i -> parseHashtagEntity(it[i]) }
-        }
-        val symbolEntities = result["entity_set"]["symbols"].let {
-            List(it.size) { i -> parseSymbolEntity(it[i]) }
-        }
+        val urlEntities = result["entity_set"]["urls"].mapList { parseUrlEntity(it) }
+        val hashtagEntities = result["entity_set"]["hashtags"].mapList { parseHashtagEntity(it) }
+        val symbolEntities = result["entity_set"]["symbols"].mapList { parseSymbolEntity(it) }
 
         HtmlEntity.unescapeAndSlideEntityIndices(
             text, userMentionEntities, urlEntities, hashtagEntities, symbolEntities
@@ -95,21 +90,13 @@ fun parseStatus(result: Json): Status {
 
     val unescaped = run {
         val text = legacy["full_text"].string
-        val userMentionEntities = legacy["entities"]["user_mentions"].let {
-            List(it.size) { i -> parseUserMentionEntity(it[i]) }
+        val userMentionEntities = legacy["entities"]["user_mentions"].mapList {
+            parseUserMentionEntity(it)
         }
-        val urlEntities = legacy["entities"]["urls"].let {
-            List(it.size) { i -> parseUrlEntity(it[i]) }
-        }
-        val hashtagEntities = legacy["entities"]["hashtags"].let {
-            List(it.size) { i -> parseHashtagEntity(it[i]) }
-        }
-        val symbolEntities = legacy["entities"]["symbols"].let {
-            List(it.size) { i -> parseSymbolEntity(it[i]) }
-        }
-        val mediaEntities = extendedEntities.let {
-            List(it.size) { i -> parseMediaEntity(it[i]) }
-        }
+        val urlEntities = legacy["entities"]["urls"].mapList { parseUrlEntity(it) }
+        val hashtagEntities = legacy["entities"]["hashtags"].mapList { parseHashtagEntity(it) }
+        val symbolEntities = legacy["entities"]["symbols"].mapList { parseSymbolEntity(it) }
+        val mediaEntities = extendedEntities.mapList { parseMediaEntity(it) }
 
         HtmlEntity.unescapeAndSlideEntityIndices(
             text, userMentionEntities, urlEntities, hashtagEntities, symbolEntities, mediaEntities
@@ -121,9 +108,7 @@ fun parseStatus(result: Json): Status {
     }
 
     val lang = legacy["lang"].stringOrNull
-    val withheldInCountries = legacy["withheld_in_countries"].let {
-        List(it.size) { i -> it[i].string }
-    }
+    val withheldInCountries = legacy["withheld_in_countries"].mapList { it.string }
 
     return Status(
         id,

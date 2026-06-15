@@ -5,6 +5,7 @@ import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitter4j.User
 import sugtao4423.twitter4j.UserList
 import sugtao4423.twitterweb4j.Json
+import sugtao4423.twitterweb4j.mapList
 import sugtao4423.twitterweb4j.parseJson
 import sugtao4423.twitterweb4j.parser.model.parseRelationshipV1
 import sugtao4423.twitterweb4j.parser.model.parseUserListV1
@@ -19,7 +20,7 @@ object JsonParserV1 {
 
     @Throws(TwitterException::class)
     fun parseUserListsArray(response: String): List<UserList> = parse(response) { json ->
-        List(json.size) { parseUserListV1(json[it]) }
+        json.mapList { parseUserListV1(it) }
     }
 
     @Throws(TwitterException::class)

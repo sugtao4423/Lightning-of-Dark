@@ -57,3 +57,5 @@ value class Json(val raw: Any?) {
 }
 
 fun String.parseJson(): Json = Json(JSONTokener(this).nextValue())
+
+inline fun <T> Json.mapList(transform: (Json) -> T): List<T> = List(size) { transform(this[it]) }

@@ -6,6 +6,7 @@ import sugtao4423.twitter4j.ProfileImage
 import sugtao4423.twitter4j.UrlEntity
 import sugtao4423.twitter4j.User
 import sugtao4423.twitterweb4j.Json
+import sugtao4423.twitterweb4j.mapList
 
 @Throws(JSONException::class)
 fun parseUserV1(json: Json): User {
@@ -77,9 +78,7 @@ fun parseUserV1(json: Json): User {
     val isGeoEnabled = json["geo_enabled"].boolOrFalse
     val isTranslator = json["is_translator"].boolOrFalse
     val lang = json["lang"].stringOrNull
-    val withheldInCountries = json["withheld_in_countries"].let {
-        List(it.size) { i -> it[i].string }
-    }
+    val withheldInCountries = json["withheld_in_countries"].mapList { it.string }
 
     return User(
         id,
@@ -125,7 +124,7 @@ fun parseUserV1(json: Json): User {
 
 private fun getUrlEntities(json: Json, category: String): List<UrlEntity> {
     val urls = json["entities"][category]["urls"].orNull() ?: Json(emptyList<Any>())
-    return List(urls.size) { parseUrlEntity(urls[it]) }
+    return urls.mapList { parseUrlEntity(it) }
 }
 
 private fun toResizedUrl(originalURL: String, sizeSuffix: String): String {

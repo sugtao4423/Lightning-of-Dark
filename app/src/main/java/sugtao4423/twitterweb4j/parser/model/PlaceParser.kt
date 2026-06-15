@@ -4,6 +4,7 @@ import org.json.JSONException
 import sugtao4423.twitter4j.GeoLocation
 import sugtao4423.twitter4j.Place
 import sugtao4423.twitterweb4j.Json
+import sugtao4423.twitterweb4j.mapList
 
 @Throws(JSONException::class)
 fun parsePlace(json: Json): Place {
@@ -30,9 +31,7 @@ fun parsePlace(json: Json): Place {
         }
     }
 
-    val containedWithin = json["contained_within"].orNull()?.let {
-        List(it.size) { i -> parsePlace(it[i]) }
-    }
+    val containedWithin = json["contained_within"].orNull()?.mapList { parsePlace(it) }
 
     return Place(
         id,
@@ -52,8 +51,8 @@ fun parsePlace(json: Json): Place {
 }
 
 private fun coordinatesAsGeoLocationList(coordinates: Json): List<List<GeoLocation>> =
-    List(coordinates.size) { i ->
-        List(coordinates[i].size) { j ->
-            GeoLocation(coordinates[i][j][1].double, coordinates[i][j][0].double)
+    coordinates.mapList { ring ->
+        ring.mapList { point ->
+            GeoLocation(point[1].double, point[0].double)
         }
     }
