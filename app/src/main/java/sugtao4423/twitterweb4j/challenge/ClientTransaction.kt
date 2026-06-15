@@ -155,7 +155,7 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
             matrix.forEach { value ->
                 val absVal = abs(bankersRoundToTwo(value))
                 val hex = floatToHex(absVal)
-                val format = if (hex.startsWith(".")) "0$hex" else hex.ifEmpty { "0" }
+                val format = if (hex.startsWith(".")) "0$hex".lowercase() else hex.ifEmpty { "0" }
                 add(format)
             }
             add("0")
@@ -202,7 +202,7 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         val intPart = floor(input).toInt()
         val fraction = input - intPart
 
-        val intHex = if (intPart > 0) intPart.toString(16) else ""
+        val intHex = if (intPart > 0) intPart.toString(16).uppercase() else ""
 
         if (fraction == 0.0) return intHex
 
@@ -214,7 +214,7 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
                 frac *= 16.0
                 val digit = floor(frac).toInt()
                 frac -= digit
-                append(if (digit > 9) ('a' + (digit - 10)) else ('0' + digit))
+                append(if (digit > 9) ('A' + (digit - 10)) else ('0' + digit))
             }
         }
     }
