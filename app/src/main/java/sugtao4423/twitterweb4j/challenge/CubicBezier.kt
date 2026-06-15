@@ -7,7 +7,12 @@ object CubicBezier {
     private fun calculate(a: Double, b: Double, m: Double): Double =
         3.0 * a * (1 - m) * (1 - m) * m + 3.0 * b * (1 - m) * m * m + m * m * m
 
+    @Throws(IllegalArgumentException::class)
     fun getValue(curves: List<Double>, time: Double): Double {
+        if (curves.size < 4) {
+            throw IllegalArgumentException("CubicBezier requires at least 4 control values but got ${curves.size}.")
+        }
+
         if (time <= 0.0) {
             val startGradient = when {
                 curves[0] > 0.0 -> curves[1] / curves[0]

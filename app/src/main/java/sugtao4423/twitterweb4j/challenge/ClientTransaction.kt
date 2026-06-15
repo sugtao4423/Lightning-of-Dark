@@ -61,6 +61,13 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         val allIndices = matches.map { it.groupValues[1].toInt() }
         rowIndexKey = allIndices.first()
         timeProductKeys = allIndices.drop(1)
+
+        val maxKeyByteIndex = maxOf(rowIndexKey, timeProductKeys.maxOrNull() ?: 0, 5)
+        if (keyBytes.size <= maxKeyByteIndex) {
+            throw IllegalStateException(
+                "Decoded key is too short (size=${keyBytes.size}); requires index $maxKeyByteIndex."
+            )
+        }
     }
 
     @Throws(IllegalStateException::class, IllegalArgumentException::class)
@@ -122,8 +129,8 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
 
     @Throws(IllegalArgumentException::class)
     private fun animateCurve(curveParams: List<Int>, targetTime: Double): String {
-        if (curveParams.size < 7) {
-            throw IllegalArgumentException("Expected at least 7 parameters for the curve, but got ${curveParams.size}.")
+        if (curveParams.size < 11) {
+            throw IllegalArgumentException("Expected at least 11 parameters for the curve, but got ${curveParams.size}.")
         }
 
         val fromColor = curveParams.take(3).map { it.toDouble() } + 1.0
