@@ -63,7 +63,7 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.10.0")
     implementation("androidx.media3:media3-ui:1.10.0")
 
-    implementation("com.squareup.okhttp3:okhttp:5.3.2")
+    implementation("com.squareup.okhttp3:okhttp:5.4.0")
     implementation("com.twitter.twittertext:twitter-text:3.1.0")
 
     implementation("com.github.hadilq:live-event:1.3.0")
