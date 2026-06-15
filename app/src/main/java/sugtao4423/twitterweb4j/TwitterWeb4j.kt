@@ -48,6 +48,8 @@ class TwitterWeb4j {
     }
 
     private val client = OkHttpClient()
+
+    @Volatile
     private var clientTransaction: ClientTransaction? = null
 
     val media by lazy { MediaUpload(client, authenticatedHeaders) }
