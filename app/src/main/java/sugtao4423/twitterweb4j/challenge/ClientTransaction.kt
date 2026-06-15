@@ -50,13 +50,13 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         svgPaths = svgMatches.map { it.groupValues[1] }
         svgPaths.forEach {
             if (it.length < 9) {
-                throw IllegalStateException("SVG path 'd' attribute is unexpectedly short.")
+                throw IllegalStateException("SVG path 'd' attribute is too short (length=${it.length}, need >= 9).")
             }
         }
 
         val matches = INDICES_REGEX.findAll(ondemandFileContent).toList()
         if (matches.isEmpty()) {
-            throw IllegalStateException("Couldn't get KEY_BYTE indices from the ondemand.s file.")
+            throw IllegalStateException("Couldn't find key byte indices in the ondemand.s file.")
         }
         val allIndices = matches.map { it.groupValues[1].toInt() }
         rowIndexKey = allIndices.first()
@@ -65,7 +65,7 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         val maxKeyByteIndex = maxOf(rowIndexKey, timeProductKeys.maxOrNull() ?: 0, 5)
         if (keyBytes.size <= maxKeyByteIndex) {
             throw IllegalStateException(
-                "Decoded key is too short (size=${keyBytes.size}); requires index $maxKeyByteIndex."
+                "Decoded key is too short (size=${keyBytes.size}, need at least ${maxKeyByteIndex + 1})."
             )
         }
     }
@@ -105,8 +105,9 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
         val svgPathIndex = keyBytes[5] % 4
         val curveSegments = parseSvgCurveData(svgPathIndex)
 
-        val curveParams = curveSegments.getOrNull(rowIndex)
-            ?: throw IllegalStateException("rowIndex=$rowIndex out of bounds for curveSegments (size=${curveSegments.size}).")
+        val curveParams = curveSegments.getOrNull(rowIndex) ?: throw IllegalStateException(
+            "rowIndex=$rowIndex out of bounds for curveSegments (size=${curveSegments.size})."
+        )
 
         val targetTime = curveTime / MAX_CURVE_TIME
         return animateCurve(curveParams, targetTime)
@@ -114,8 +115,9 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
 
     @Throws(IllegalStateException::class)
     private fun parseSvgCurveData(pathIndex: Int): List<List<Int>> {
-        val d = svgPaths.getOrNull(pathIndex)
-            ?: throw IllegalStateException("No SVG path found for pathIndex=$pathIndex.")
+        val d = svgPaths.getOrNull(pathIndex) ?: throw IllegalStateException(
+            "No SVG path found for pathIndex=$pathIndex (size=${svgPaths.size})."
+        )
         return d.substring(9).split("C").filter { it.isNotBlank() }.map { segment ->
             segment.replace(Regex("\\D+"), " ").trim().split(Regex("\\s+"))
                 .filter { it.isNotEmpty() }.map { it.toInt() }
@@ -187,7 +189,7 @@ class ClientTransaction @Throws(IllegalStateException::class) constructor(
     @Throws(IllegalArgumentException::class)
     private fun interpolate(from: List<Double>, to: List<Double>, f: Double): List<Double> {
         if (from.size != to.size) {
-            throw IllegalArgumentException("interpolate: 'from' and 'to' lists must have the same size.")
+            throw IllegalArgumentException("interpolate requires equal-sized lists (from=${from.size}, to=${to.size}).")
         }
         return from.zip(to).map { (a, b) -> a * (1.0 - f) + b * f }
     }
