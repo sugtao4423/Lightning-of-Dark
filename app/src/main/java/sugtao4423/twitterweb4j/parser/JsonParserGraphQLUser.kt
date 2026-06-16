@@ -58,7 +58,8 @@ object JsonParserGraphQLUser {
 
     @Throws(TwitterException::class)
     fun parseFollowing(response: String): PagableCursorList<User> = parseResponse(response) {
-        parse(it["data"]["user"]["result"]["timeline"]["timeline"]["instructions"])
+        val instructions = it["data"]["user"]["result"]["timeline"]["timeline"]["instructions"]
+        parse(instructions)
     }
 
     @Throws(TwitterException::class)
