@@ -7,9 +7,12 @@ import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okio.buffer
+import okio.source
 import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.media.UploadJsonParser.ProcessingInfo
 import sugtao4423.twitterweb4j.send
+import java.io.InputStream
 import java.security.MessageDigest
 
 class MediaUpload internal constructor(
@@ -22,13 +25,18 @@ class MediaUpload internal constructor(
         private const val MEDIA_CATEGORY_GIF = "tweet_gif"
         private const val MEDIA_CATEGORY_VIDEO = "amplify_video"
 
-        private const val MAX_SEGMENT_SIZE = 8 * 1024 * 1024 // 8 MiB
+        private const val MAX_SEGMENT_SIZE = 8 * 1024 * 1024L // 8 MiB
 
         private val CONTENT_TYPE_OCTET_STREAM = "application/octet-stream".toMediaType()
     }
 
     @Throws(TwitterException::class)
-    fun upload(data: ByteArray, mediaType: String, videoDurationMs: Long? = null): Long {
+    fun upload(
+        totalBytes: Long,
+        inputStream: InputStream,
+        mediaType: String,
+        videoDurationMs: Long? = null,
+    ): Long {
         val isVideo = mediaType.startsWith("video/")
         if (isVideo && videoDurationMs == null) {
             throw TwitterException("videoDurationMs is required for video upload.")
@@ -40,10 +48,13 @@ class MediaUpload internal constructor(
             else -> MEDIA_CATEGORY_IMAGE
         }
 
-        val mediaId = init(isVideo, data.size.toLong(), mediaType, mediaCategory, videoDurationMs)
-        appendMulti(isVideo, mediaId, data)
+        val mediaId = init(isVideo, totalBytes, mediaType, mediaCategory, videoDurationMs)
 
-        val originalMd5 = if (mediaCategory == MEDIA_CATEGORY_IMAGE) md5(data) else null
+        val imageBytes =
+            if (mediaCategory == MEDIA_CATEGORY_IMAGE) inputStream.use { it.readBytes() } else null
+        appendMulti(isVideo, mediaId, totalBytes, imageBytes?.inputStream() ?: inputStream)
+
+        val originalMd5 = imageBytes?.let { md5(it) }
         val finalizeResponse = finalize(isVideo, mediaId, originalMd5)
         UploadJsonParser.parseProcessingInfo(finalizeResponse)?.let {
             waitForProcessing(isVideo, mediaId, it)
@@ -65,12 +76,18 @@ class MediaUpload internal constructor(
     }
 
     @Throws(TwitterException::class)
-    private fun appendMulti(isVideo: Boolean, mediaId: Long, data: ByteArray) {
+    private fun appendMulti(
+        isVideo: Boolean,
+        mediaId: Long,
+        totalBytes: Long,
+        inputStream: InputStream,
+    ) = inputStream.use { input ->
+        val source = input.source().buffer()
         var segmentIndex = 0
-        var offset = 0
-        while (offset < data.size) {
-            val end = (offset + MAX_SEGMENT_SIZE).coerceAtMost(data.size)
-            val chunk = data.copyOfRange(offset, end)
+        var offset = 0L
+        while (offset < totalBytes) {
+            val chunkSize = minOf(MAX_SEGMENT_SIZE, totalBytes - offset)
+            val chunk = source.readByteArray(chunkSize)
 
             val url = UploadUrl.appendMulti(
                 isVideo, mediaId, segmentIndex, chunk.size.toLong(), md5(chunk)
@@ -81,7 +98,7 @@ class MediaUpload internal constructor(
             }.build()
             post(url, multipart)
 
-            offset = end
+            offset += chunk.size
             segmentIndex++
         }
     }
