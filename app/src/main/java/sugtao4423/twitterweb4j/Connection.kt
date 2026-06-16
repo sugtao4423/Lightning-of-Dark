@@ -49,11 +49,11 @@ internal fun OkHttpClient.send(
 
     try {
         val response = newCall(request).execute()
-        val body = response.body.string()
+        val responseBody = response.body.string()
         if (!response.isSuccessful) {
-            throw TwitterException(body.ifBlank { "HTTP ${response.code}" })
+            throw TwitterException(responseBody.ifBlank { "HTTP ${response.code}" })
         }
-        return body
+        return responseBody
     } catch (e: IOException) {
         e.printStackTrace()
         throw TwitterException(e)
