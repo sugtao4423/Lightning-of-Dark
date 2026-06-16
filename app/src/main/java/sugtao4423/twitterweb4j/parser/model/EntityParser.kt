@@ -79,13 +79,14 @@ fun parseMediaEntity(json: Json): MediaEntity {
             Pair(MediaSize.SMALL, "small"),
             Pair(MediaSize.THUMB, "thumb"),
         )
-        keys.filter { (_, value) -> !sizes[value].isNull }.associate { (key, value) ->
-            val width = sizes[value]["w"].int
-            val height = sizes[value]["h"].int
-            val resize =
-                if (sizes[value]["resize"].string == "fit") MediaResize.FIT else MediaResize.CROP
-            key to Size(width, height, resize)
-        }
+        keys.mapNotNull { (key, value) ->
+            sizes[value].orNull()?.let { s ->
+                val width = s["w"].int
+                val height = s["h"].int
+                val resize = if (s["resize"].string == "fit") MediaResize.FIT else MediaResize.CROP
+                key to Size(width, height, resize)
+            }
+        }.toMap()
     }
 
     val type = json["type"].string
