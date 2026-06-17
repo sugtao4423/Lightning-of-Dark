@@ -2,25 +2,32 @@ package sugtao4423.twitter4j
 
 import java.util.Date
 
-data class ProfileImage(
-    val url: String,
-    val biggerUrl: String,
-    val miniUrl: String,
-    val originalUrl: String,
-    val size400x400Url: String,
-) : java.io.Serializable
+data class ProfileImage(val url: String) : java.io.Serializable {
+    val biggerUrl: String = toResizedUrl("_bigger")
+    val miniUrl: String = toResizedUrl("_mini")
+    val originalUrl: String = toResizedUrl("")
+    val size400x400Url: String = toResizedUrl("_400x400")
 
-data class ProfileBanner(
-    val url: String,
-    val retinaUrl: String,
-    val iPadUrl: String,
-    val iPadRetinaUrl: String,
-    val mobileUrl: String,
-    val mobileRetinaUrl: String,
-    val size300x100Url: String,
-    val size600x200Url: String,
-    val size1500x500Url: String,
-) : java.io.Serializable
+    private fun toResizedUrl(sizeSuffix: String): String {
+        val index = url.lastIndexOf("_")
+        val suffixIndex = url.lastIndexOf(".")
+        val slashIndex = url.lastIndexOf("/")
+        val resized = url.substring(0, index) + sizeSuffix
+        return if (suffixIndex > slashIndex) resized + url.substring(suffixIndex) else resized
+    }
+}
+
+data class ProfileBanner(val baseUrl: String) : java.io.Serializable {
+    val url: String = "$baseUrl/web"
+    val retinaUrl: String = "$baseUrl/web_retina"
+    val iPadUrl: String = "$baseUrl/ipad"
+    val iPadRetinaUrl: String = "$baseUrl/ipad_retina"
+    val mobileUrl: String = "$baseUrl/mobile"
+    val mobileRetinaUrl: String = "$baseUrl/mobile_retina"
+    val size300x100Url: String = "$baseUrl/300x100"
+    val size600x200Url: String = "$baseUrl/600x200"
+    val size1500x500Url: String = "$baseUrl/1500x500"
+}
 
 data class User(
     val id: Long,

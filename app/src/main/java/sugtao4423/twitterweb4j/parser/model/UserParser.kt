@@ -32,29 +32,13 @@ fun parseUser(json: Json): User {
     val descriptionUrlEntities = getUrlEntities(json, "description")
     val urlEntity = getUrlEntities(json, "url").firstOrNull()
 
-    val profileImage = (legacy["profile_image_url_https"].stringOrNull
-        ?: json["avatar"]["image_url"].stringOrNull)?.takeIf { it.isNotBlank() }?.let {
-        ProfileImage(
-            it,
-            toResizedUrl(it, "_bigger"),
-            toResizedUrl(it, "_mini"),
-            toResizedUrl(it, ""),
-            toResizedUrl(it, "_400x400"),
-        )
-    }
-    val profileBanner = legacy["profile_banner_url"].stringOrNull?.takeIf { it.isNotBlank() }?.let {
-        ProfileBanner(
-            "$it/web",
-            "$it/web_retina",
-            "$it/ipad",
-            "$it/ipad_retina",
-            "$it/mobile",
-            "$it/mobile_retina",
-            "$it/300x100",
-            "$it/600x200",
-            "$it/1500x500",
-        )
-    }
+    val profileImage =
+        (legacy["profile_image_url_https"].stringOrNull ?: json["avatar"]["image_url"].stringOrNull)
+            ?.takeIf { it.isNotBlank() }
+            ?.let { ProfileImage(it) }
+    val profileBanner = legacy["profile_banner_url"].stringOrNull
+        ?.takeIf { it.isNotBlank() }
+        ?.let { ProfileBanner(it) }
 
     val statusesCount = legacy["statuses_count"].int
     val mediaCount = legacy["media_count"].int
@@ -136,16 +120,4 @@ private fun getUrlEntities(json: Json, category: String): List<UrlEntity> {
         ?: json["legacy"]["entities"][category]["urls"].orNull()
         ?: Json.EMPTY_ARRAY
     return urls.mapList { parseUrlEntity(it) }
-}
-
-private fun toResizedUrl(originalURL: String, sizeSuffix: String): String {
-    val index = originalURL.lastIndexOf("_")
-    val suffixIndex = originalURL.lastIndexOf(".")
-    val slashIndex = originalURL.lastIndexOf("/")
-    val url = originalURL.substring(0, index) + sizeSuffix
-    return if (suffixIndex > slashIndex) {
-        url + originalURL.substring(suffixIndex)
-    } else {
-        url
-    }
 }
