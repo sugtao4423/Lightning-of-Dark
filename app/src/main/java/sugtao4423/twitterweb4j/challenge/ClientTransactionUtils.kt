@@ -6,7 +6,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 object ClientTransactionUtils {
 
     private val ON_DEMAND_FILE_REGEX = Regex(""",(\d+):["']ondemand\.s["']""")
-    private val ON_DEMAND_HASH_PATTERN = """,%s:"([0-9a-f]+)""""
+    private const val ON_DEMAND_HASH_PATTERN = """,%s:"([0-9a-f]+)""""
 
     val homePageUrl = "https://x.com".toHttpUrl()
 
