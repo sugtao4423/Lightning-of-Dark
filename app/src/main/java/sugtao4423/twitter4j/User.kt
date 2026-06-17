@@ -9,11 +9,9 @@ data class ProfileImage(val url: String) : java.io.Serializable {
     val size400x400Url: String = toResizedUrl("_400x400")
 
     private fun toResizedUrl(sizeSuffix: String): String {
-        val index = url.lastIndexOf("_")
-        val suffixIndex = url.lastIndexOf(".")
-        val slashIndex = url.lastIndexOf("/")
-        val resized = url.substring(0, index) + sizeSuffix
-        return if (suffixIndex > slashIndex) resized + url.substring(suffixIndex) else resized
+        val resized = url.substringBeforeLast("_") + sizeSuffix
+        val extension = url.substringAfterLast("/").substringAfterLast(".", "")
+        return if (extension.isEmpty()) resized else "$resized.$extension"
     }
 }
 
