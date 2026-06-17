@@ -46,7 +46,7 @@ fun parseStatus(result: Json): Status {
     val legacy = json["legacy"]
     val extendedEntities = legacy["extended_entities"]["media"].orNull()
         ?: legacy["entities"]["media"].orNull()
-        ?: Json(emptyArray<Any>())
+        ?: Json.EMPTY_ARRAY
 
     val id = json["rest_id"].string.toLong()
     val displayTextRangeStart = legacy["display_text_range"][0].int

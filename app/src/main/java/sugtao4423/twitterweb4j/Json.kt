@@ -8,6 +8,10 @@ import org.json.JSONTokener
 @JvmInline
 value class Json(val raw: Any?) {
 
+    companion object {
+        val EMPTY_ARRAY = Json(JSONArray())
+    }
+
     operator fun get(key: String): Json = Json((raw as? JSONObject)?.opt(key))
 
     operator fun get(index: Int): Json = Json((raw as? JSONArray)?.opt(index))

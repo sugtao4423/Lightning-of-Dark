@@ -123,7 +123,7 @@ fun parseUserV1(json: Json): User {
 }
 
 private fun getUrlEntities(json: Json, category: String): List<UrlEntity> {
-    val urls = json["entities"][category]["urls"].orNull() ?: Json(emptyList<Any>())
+    val urls = json["entities"][category]["urls"].orNull() ?: Json.EMPTY_ARRAY
     return urls.mapList { parseUrlEntity(it) }
 }
 
