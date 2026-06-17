@@ -38,12 +38,12 @@ object JsonParserGraphQL {
 
     @Throws(TwitterException::class)
     fun parseCreateRetweet(response: String): Long =
-        response.parse()["data"]["create_retweet"]["retweet_results"]["result"]["rest_id"].stringOrNull?.toLong()
+        response.parse()["data"]["create_retweet"]["retweet_results"]["result"]["rest_id"].stringOrNull?.toLongOrNull()
             ?: throw TwitterException("Missing 'data.create_retweet.retweet_results.result.rest_id' in response.")
 
     @Throws(TwitterException::class)
     fun parseDeleteRetweet(response: String): Long =
-        response.parse()["data"]["unretweet"]["source_tweet_results"]["result"]["rest_id"].stringOrNull?.toLong()
+        response.parse()["data"]["unretweet"]["source_tweet_results"]["result"]["rest_id"].stringOrNull?.toLongOrNull()
             ?: throw TwitterException("Missing 'data.unretweet.source_tweet_results.result.rest_id' in response.")
 
     @Throws(TwitterException::class)
