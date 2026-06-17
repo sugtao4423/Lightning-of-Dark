@@ -16,11 +16,11 @@ fun parseUser(json: Json): User {
     val id = json["rest_id"].string.toLong()
     val name = legacy["name"].stringOrNull
         ?: core["name"].stringOrNull
-        ?: "null"
+        ?: throw JSONException("`name` not found")
     val email = legacy["email"].stringOrNull
     val screenName = legacy["screen_name"].stringOrNull
         ?: core["screen_name"].stringOrNull
-        ?: "null"
+        ?: throw JSONException("`screen_name` not found")
     val description = legacy["description"].stringOrNull
     val location = legacy["location"].stringOrNull
         ?: json["location"]["location"].stringOrNull
