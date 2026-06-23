@@ -8,7 +8,7 @@ object ClientTransactionUtils {
     private val ON_DEMAND_FILE_REGEX = Regex(""",(\d+):["']ondemand\.s["']""")
     private const val ON_DEMAND_HASH_PATTERN = """,%s:"([0-9a-f]+)""""
 
-    val homePageUrl = "https://x.com".toHttpUrl()
+    val homePageUrl = "https://x.com/home".toHttpUrl()
 
     @Throws(IllegalStateException::class)
     fun getOndemandFileUrl(homePageHtml: String): HttpUrl {
