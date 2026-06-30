@@ -20,9 +20,8 @@ object JsonParserGraphQLTimeline {
         ignoreMissingCursorTop: Boolean = false,
         ignoreMissingCursorBottom: Boolean = false,
     ): CursorList<Status> {
-        val entries = instructions.iterator().asSequence().find {
-            it["type"].string == entryType
-        }?.get("entries") ?: throw TwitterException("$entryType instruction not found")
+        val entries = instructions.find { it["type"].string == entryType }?.get("entries")
+            ?: throw TwitterException("$entryType instruction not found")
 
         val result = CursorList<Status>()
 

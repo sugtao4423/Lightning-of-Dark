@@ -6,7 +6,7 @@ import org.json.JSONObject
 import org.json.JSONTokener
 
 @JvmInline
-value class Json(val raw: Any?) {
+value class Json(val raw: Any?) : Iterable<Json> {
 
     companion object {
         val EMPTY_ARRAY = Json(JSONArray())
@@ -39,7 +39,7 @@ value class Json(val raw: Any?) {
             else -> 0
         }
 
-    operator fun iterator(): Iterator<Json> {
+    override fun iterator(): Iterator<Json> {
         val arr = raw as? JSONArray ?: typeError("JSONArray")
         return object : Iterator<Json> {
             private var i = 0
