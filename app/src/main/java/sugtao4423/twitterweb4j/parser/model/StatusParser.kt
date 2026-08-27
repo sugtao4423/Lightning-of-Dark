@@ -36,9 +36,10 @@ private fun parseNoteTweet(result: Json): NoteTweet {
 }
 
 @Throws(JSONException::class)
-fun parseStatus(result: Json): Status {
+fun parseStatus(result: Json): Status? {
     val json = result["__typename"].stringOrNull.let { typename ->
         when (typename) {
+            "TweetTombstone", "TweetUnavailable" -> return null
             "TweetWithVisibilityResults" -> result["tweet"]
             else -> result
         }
@@ -77,10 +78,7 @@ fun parseStatus(result: Json): Status {
 
     val quotedStatusId = legacy["quoted_status_id_str"].stringOrNull?.toLong()
     val quotedStatus = json["quoted_status_result"]["result"].orNull()?.let {
-        when (it["__typename"].stringOrNull) {
-            "TweetTombstone" -> null
-            else -> parseStatus(it)
-        }
+        parseStatus(it)
     }
     val quotedStatusPermalink = legacy["quoted_status_permalink"].orNull()?.let {
         parseQuotedStatusPermalinkEntity(it)

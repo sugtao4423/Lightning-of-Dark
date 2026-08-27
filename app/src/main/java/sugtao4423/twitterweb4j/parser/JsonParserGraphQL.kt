@@ -25,6 +25,7 @@ object JsonParserGraphQL {
         val statusJson = response.parse()["data"]["create_tweet"]["tweet_results"]["result"]
         try {
             return parseStatus(statusJson)
+                ?: throw TwitterException("Failed to parse status from response: $response")
         } catch (e: JSONException) {
             throw TwitterException(e)
         }
