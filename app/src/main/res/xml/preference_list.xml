@@ -5,7 +5,7 @@
         android:key="selectList"
         android:title="リストを選択 (チェック順)" />
     <Preference
-        android:key="startAppLoadList"
+        android:key="loadOnAppStartList"
         android:title="起動時に取得するリストを選択" />
 
 </PreferenceScreen>

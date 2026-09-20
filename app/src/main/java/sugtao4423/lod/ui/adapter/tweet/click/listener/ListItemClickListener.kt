@@ -19,10 +19,11 @@ import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.showToast
+import sugtao4423.lod.utils.toStatusUrl
 import sugtao4423.lod.view.TweetListView
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 import java.util.regex.Pattern
-import java.util.regex.PatternSyntaxException
+import sugtao4423.lod.utils.Regex as LodRegex
 
 class ListItemClickListener(
     private val status: Status,
@@ -95,10 +96,7 @@ class ListItemClickListener(
     }
 
     private fun showRegexFilterResult(regexText: String, isIncludeRetweet: Boolean) {
-        val pattern: Pattern
-        try {
-            pattern = Pattern.compile(regexText, Pattern.DOTALL)
-        } catch (e: PatternSyntaxException) {
+        val pattern = runCatching { Pattern.compile(regexText, Pattern.DOTALL) }.getOrElse {
             context.showToast(R.string.invalid_pattern)
             return
         }
@@ -123,13 +121,13 @@ class ListItemClickListener(
     }
 
     private fun openUrl(urlText: String) {
-        val image = sugtao4423.lod.utils.Regex.mediaImage.matcher(urlText)
-        val video = sugtao4423.lod.utils.Regex.mediaVideo.matcher(urlText)
-        val gif = sugtao4423.lod.utils.Regex.mediaGif.matcher(urlText)
-        val state = sugtao4423.lod.utils.Regex.statusUrl.matcher(urlText)
+        val image = LodRegex.mediaImage.matcher(urlText)
+        val video = LodRegex.mediaVideo.matcher(urlText)
+        val gif = LodRegex.mediaGif.matcher(urlText)
+        val state = LodRegex.statusUrl.matcher(urlText)
         val intent = when {
             image.find() -> Intent(context, ShowImageActivity::class.java).apply {
-                val urls = TweetListConverter.allImageUrls(status.mediaEntities.toList())
+                val urls = TweetListConverter.allImageUrls(status.mediaEntities)
                 val pos = urls.indexOf(urlText)
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, urls.toTypedArray())
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, pos)
@@ -146,10 +144,12 @@ class ListItemClickListener(
             }
 
             state.find() -> Intent(context, IntentActivity::class.java).apply {
-                putExtra(
-                    IntentActivity.TWEET_ID,
-                    state.group(sugtao4423.lod.utils.Regex.statusUrlStatusIdGroup)!!.toLong()
-                )
+                val statusId = state.group(LodRegex.statusUrlStatusIdGroup)!!.toLong()
+                if (statusId == status.quotedStatus?.id) {
+                    putExtra(IntentActivity.INTENT_EXTRA_KEY_STATUS, status.quotedStatus)
+                } else {
+                    putExtra(IntentActivity.INTENT_EXTRA_KEY_STATUS_ID, statusId)
+                }
             }
 
             else -> {
@@ -161,10 +161,7 @@ class ListItemClickListener(
     }
 
     private fun openInBrowser() {
-        val tweetSn = status.user.screenName
-        val tweetId = status.id.toString()
-        val url = "https://twitter.com/$tweetSn/status/$tweetId"
-        context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
+        context.startActivity(Intent(Intent.ACTION_VIEW, status.toStatusUrl().toUri()))
     }
 
     private fun openUserPage(userScreenName: String) {

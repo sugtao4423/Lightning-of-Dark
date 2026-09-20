@@ -8,9 +8,9 @@ class PrefRepository(context: Context) {
 
     private val pref = PreferenceManager.getDefaultSharedPreferences(context)
 
-    var screenName: String
-        get() = pref.getString("screenName", "") ?: ""
-        set(value) = pref.edit { putString("screenName", value) }
+    var accountId: Long
+        get() = pref.getLong("accountId", -1L)
+        set(value) = pref.edit { putLong("accountId", value) }
 
     var regularExpression: String
         get() = pref.getString("regularExpression", "") ?: ""
@@ -19,10 +19,6 @@ class PrefRepository(context: Context) {
     var experience: Int
         get() = pref.getInt("experience", 0)
         set(value) = pref.edit { putInt("experience", value) }
-
-    var autoLoadTLInterval: Int
-        get() = pref.getInt("autoLoadTLInterval", 0)
-        set(value) = pref.edit { putInt("autoLoadTLInterval", value) }
 
     val isOpenBrowser: Boolean
         get() = pref.getBoolean("menu_openBrowser", false)

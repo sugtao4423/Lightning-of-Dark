@@ -4,6 +4,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
+import sugtao4423.lod.utils.toStatusUrl
 
 class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
 
@@ -14,7 +15,7 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
 
     fun onItemClicked(position: Int) {
         val status = tweetListAdapter.data[position]
-        val originalStatus = TweetListConverter.originalStatus(status)!!
+        val originalStatus = TweetListConverter.originalStatus(status)
 
         val dialogList = arrayListOf<String>()
 
@@ -25,21 +26,28 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
             dialogList.add(context.getString(R.string.open_in_browser))
         }
 
-        val users = (
-                listOf(status.user.screenName) + status.userMentionEntities.map { it.screenName }
-                ).distinct()
-        dialogList.addAll(users.map { "@${it}" })
+        val screenNames =
+            setOf(status.user.screenName) + status.userMentionEntities.map { it.screenName }.toSet()
+        screenNames.forEach {
+            dialogList.add("@${it}")
+        }
 
-        dialogList.addAll(originalStatus.urlEntities.map { it.expandedURL })
+        originalStatus.urlEntities.forEach {
+            dialogList.add(it.expandedUrl ?: it.url)
+        }
 
-        val mediaUrls = originalStatus.mediaEntities.map {
-            if (TweetListConverter.mediaIsVideoOrGif(it)) {
+        originalStatus.mediaEntities.forEach {
+            val url = if (TweetListConverter.mediaIsVideoOrGif(it)) {
                 TweetListConverter.videoMediaUrl(it)
             } else {
-                it.mediaURLHttps
+                it.mediaUrl
             }
+            dialogList.add(url)
         }
-        dialogList.addAll(mediaUrls)
+
+        originalStatus.quotedStatus?.let {
+            dialogList.add(it.toStatusUrl())
+        }
 
         tweetItemDialog.show(context, originalStatus, tweetListAdapter.data, dialogList)
     }

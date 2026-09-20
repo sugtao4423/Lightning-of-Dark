@@ -5,33 +5,23 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.hadilq.liveevent.LiveEvent
 import sugtao4423.lod.App
+import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.service.AutoLoadTLService
-import twitter4j.ResponseList
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
+import sugtao4423.twitterweb4j.model.CursorList
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
-    data class ListData(val id: Long, val name: String, val isAppStartLoad: Boolean)
-
     private val app = getApplication<App>()
     val hasAccount = app.hasAccount
-    val listData: List<ListData>
-        get() {
-            val result = arrayListOf<ListData>()
-            for (i in app.account.selectListNames.indices) {
-                val id = app.account.selectListIds[i]
-                val name = app.account.selectListNames[i]
-                val isAppStartLoad = app.account.startAppLoadLists.contains(name)
-                result.add(ListData(id, name, isAppStartLoad))
-            }
-            return result.toList()
-        }
+    val listSettings: List<ListSetting>
+        get() = app.account.listSettings
 
     private val _onStartAutoLoadTLService = LiveEvent<Unit>()
     val onStartAutoLoadTLService = _onStartAutoLoadTLService
 
-    private val _onNewStatuses = LiveEvent<ResponseList<Status>>()
-    val onNewStatuses: LiveData<ResponseList<Status>> = _onNewStatuses
+    private val _onNewStatuses = LiveEvent<CursorList<Status>>()
+    val onNewStatuses: LiveData<CursorList<Status>> = _onNewStatuses
 
     private val _onNewMention = LiveEvent<List<Status>>()
     val onNewMention: LiveData<List<Status>> = _onNewMention
@@ -43,9 +33,9 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         }
 
         app.autoLoadTLListener = object : AutoLoadTLService.AutoLoadTLListener {
-            override fun onStatus(statuses: ResponseList<Status>) {
+            override fun onStatus(statuses: CursorList<Status>) {
                 if (statuses.isEmpty()) return
-                app.latestTweetId = statuses.first().id
+                app.cursorTop = statuses.cursorTop
                 _onNewStatuses.postValue(statuses)
                 _onNewMention.postValue(statuses.filter {
                     app.mentionPattern.matcher(it.text).find() && !it.isRetweet

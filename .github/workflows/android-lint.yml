@@ -22,8 +22,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 1
-      - name: Create CKCS.xml
-        run: echo '<?xml version="1.0" encoding="utf-8"?><resources><string name="CK"></string><string name="CS"></string></resources>' > app/src/main/res/values/CKCS.xml
       - name: set up JDK
         uses: actions/setup-java@v5
         with:

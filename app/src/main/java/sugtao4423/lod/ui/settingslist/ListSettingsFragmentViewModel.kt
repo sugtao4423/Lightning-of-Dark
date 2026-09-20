@@ -11,28 +11,27 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
+import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.utils.showToast
-import twitter4j.ResponseList
-import twitter4j.UserList
+import sugtao4423.twitter4j.UserList
 
 class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app = getApplication<App>()
-    private val myScreenName = app.account.screenName
 
-    val selectedListNames: List<String>
-        get() = app.account.selectListNames
+    val listSettings: List<ListSetting>
+        get() = app.account.listSettings
 
     data class PreferenceSummaryData(
         val selectListSummary: String,
-        val startAppLoadListSummary: String
+        val loadOnAppStartListSummary: String,
     )
 
     private val _preferenceSummary = MutableLiveData<PreferenceSummaryData>()
     val preferenceSummary: LiveData<PreferenceSummaryData> = _preferenceSummary
 
-    private val _showChooseListDialog = LiveEvent<ResponseList<UserList>>()
-    val showChooseListDialog: LiveData<ResponseList<UserList>> = _showChooseListDialog
+    private val _showChooseListDialog = LiveEvent<List<UserList>>()
+    val showChooseListDialog: LiveData<List<UserList>> = _showChooseListDialog
 
     init {
         setPreferenceSummary()
@@ -40,7 +39,7 @@ class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel
 
     fun getChooseListDialogData() = viewModelScope.launch {
         val result = withContext(Dispatchers.IO) {
-            runCatching { app.twitter.getUserLists(myScreenName) }.getOrNull()
+            runCatching { app.twitter.getUserLists(app.account.id) }.getOrNull()
         }
         if (result == null) {
             app.showToast(R.string.error_get_list)
@@ -51,30 +50,32 @@ class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel
     }
 
     fun saveSelectedLists(lists: List<UserList>) = viewModelScope.launch {
-        val listNames = lists.map { it.name }
-        val listIds = lists.map { it.id }
-        app.accountRepository.also {
-            it.updateSelectListNames(listNames, myScreenName)
-            it.updateSelectListIds(listIds, myScreenName)
-        }
+        val settings = lists.map { ListSetting(it.id, it.name, false) }
+        app.accountRepository.updateListSettings(settings, app.account.id)
         app.reloadAccount()
         setPreferenceSummary()
     }
 
-    fun saveStartAppLoadLists(listNames: List<String>) = viewModelScope.launch {
-        app.accountRepository.updateStartAppLoadLists(listNames, myScreenName)
+    fun saveNewListSettings(newSettings: List<ListSetting>) = viewModelScope.launch {
+        app.accountRepository.updateListSettings(newSettings, app.account.id)
         app.reloadAccount()
         setPreferenceSummary()
     }
 
     private fun setPreferenceSummary() {
-        val sList = app.account.selectListNames.joinToString().let {
+        val settings = app.account.listSettings
+        val listNames = settings.joinToString { it.name }.let {
             app.getString(R.string.param_setting_value_str, it)
         }
-        val sAppLoad = app.account.startAppLoadLists.joinToString().let {
-            app.getString(R.string.param_setting_value_str, it)
-        }
-        _preferenceSummary.value = PreferenceSummaryData(sList, sAppLoad)
+        val loadOnAppStartListNames =
+            settings.filter { it.loadOnAppStart }.joinToString { it.name }.let {
+                app.getString(R.string.param_setting_value_str, it)
+            }
+
+        _preferenceSummary.value = PreferenceSummaryData(
+            listNames,
+            loadOnAppStartListNames
+        )
     }
 
 }

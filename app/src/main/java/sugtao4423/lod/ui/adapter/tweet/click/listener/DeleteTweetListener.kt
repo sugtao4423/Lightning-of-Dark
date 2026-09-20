@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 
 class DeleteTweetListener(
     private val status: Status,
@@ -33,7 +33,7 @@ class DeleteTweetListener(
         val twitter = (context.applicationContext as App).twitter
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                runCatching { twitter.destroyStatus(status.id) }.getOrNull()
+                runCatching { twitter.deleteTweet(status.id) }.getOrNull()
             }
             val message = if (result == null) {
                 R.string.error_post_delete

@@ -1,7 +1,7 @@
 package sugtao4423.lod.ui.adapter.tweet.click.listener
 
 import android.content.Context
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 
 class TweetDialogClickListeners(
     context: Context,

@@ -13,8 +13,7 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
-import twitter4j.ResponseList
-import twitter4j.UserList
+import sugtao4423.twitter4j.UserList
 import java.io.File
 import java.text.DecimalFormat
 
@@ -30,8 +29,8 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     private val _listAsTLData = MutableLiveData<ListAsTLData>()
     val listAsTLData: LiveData<ListAsTLData> = _listAsTLData
 
-    private val _onShowSelectListAsTLDialog = LiveEvent<ResponseList<UserList>>()
-    val onShowSelectListAsTLDialog: LiveData<ResponseList<UserList>> = _onShowSelectListAsTLDialog
+    private val _onShowSelectListAsTLDialog = LiveEvent<List<UserList>>()
+    val onShowSelectListAsTLDialog: LiveData<List<UserList>> = _onShowSelectListAsTLDialog
 
     private val _autoLoadTLInterval = MutableLiveData<Int>()
     val autoLoadTLInterval: LiveData<Int> = _autoLoadTLInterval
@@ -47,7 +46,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
 
     fun showSelectListAsTLDialog() = viewModelScope.launch {
         val result = withContext(Dispatchers.IO) {
-            runCatching { app.twitter.getUserLists(app.twitter.screenName) }.getOrNull()
+            runCatching { app.twitter.getUserLists(app.account.id) }.getOrNull()
         }
         if (result == null) {
             app.showToast(R.string.error_get_list)
@@ -58,15 +57,13 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun setListAsTL(userList: UserList) = viewModelScope.launch {
-        app.accountRepository.updateListAsTL(userList.id, app.account.screenName)
+        app.accountRepository.updateListAsTL(userList.id, app.account.id)
         app.reloadAccount()
         setListAsTLData()
     }
 
     fun cancelListAsTL() = viewModelScope.launch {
-        app.prefRepository.autoLoadTLInterval = 0
-        app.accountRepository.updateListAsTL(-1, app.account.screenName)
-        app.accountRepository.updateAutoLoadTLInterval(0, app.account.screenName)
+        app.accountRepository.updateListAsTL(-1, app.account.id)
         app.reloadAccount()
         setListAsTLData()
         setAutoLoadTLIntervalSummary()
@@ -75,14 +72,8 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
     fun cancelListAsTLCancel() = setListAsTLData()
 
     fun changeAutoLoadTLInterval(interval: Int): Boolean {
-        val isListAsTL = app.account.listAsTL > 0
-        if (!isListAsTL && interval > 0 && interval < 60) {
-            app.showToast(R.string.error_auto_load_tl_interval)
-            return false
-        }
-
         viewModelScope.launch {
-            app.accountRepository.updateAutoLoadTLInterval(interval, app.account.screenName)
+            app.accountRepository.updateAutoLoadTLInterval(interval, app.account.id)
             app.reloadAccount()
             setAutoLoadTLIntervalSummary()
         }

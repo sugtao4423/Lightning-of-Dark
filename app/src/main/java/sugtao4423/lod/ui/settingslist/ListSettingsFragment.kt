@@ -7,13 +7,12 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
-import twitter4j.ResponseList
-import twitter4j.UserList
+import sugtao4423.twitter4j.UserList
 
 class ListSettingsFragment : PreferenceFragmentCompat() {
 
     private val selectList: Preference by lazy { findPreference("selectList")!! }
-    private val startAppLoadList: Preference by lazy { findPreference("startAppLoadList")!! }
+    private val loadOnAppStartList: Preference by lazy { findPreference("loadOnAppStartList")!! }
 
     private val viewModel: ListSettingsFragmentViewModel by viewModels()
 
@@ -22,7 +21,7 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
 
         viewModel.preferenceSummary.observe(this) {
             selectList.summary = it.selectListSummary
-            startAppLoadList.summary = it.startAppLoadListSummary
+            loadOnAppStartList.summary = it.loadOnAppStartListSummary
         }
         viewModel.showChooseListDialog.observe(this) {
             showChooseListDialog(it)
@@ -32,19 +31,19 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
             viewModel.getChooseListDialogData()
             true
         }
-        startAppLoadList.setOnPreferenceClickListener {
-            showStartAppLoadChooseListDialog()
+        loadOnAppStartList.setOnPreferenceClickListener {
+            showLoadOnAppStartListDialog()
             true
         }
     }
 
-    private fun showChooseListDialog(lists: ResponseList<UserList>) {
+    private fun showChooseListDialog(lists: List<UserList>) {
         val listNames = lists.map { it.name }.toTypedArray()
         val selectedLists = arrayListOf<UserList>()
 
         AlertDialog.Builder(requireActivity()).apply {
             setTitle(R.string.choose_list)
-            setMultiChoiceItems(listNames, BooleanArray(lists.size)) { _, which, isChecked ->
+            setMultiChoiceItems(listNames, null) { _, which, isChecked ->
                 val thisList = lists[which]
                 if (isChecked) {
                     selectedLists.add(thisList)
@@ -59,30 +58,23 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun showStartAppLoadChooseListDialog() {
-        val selectedListNames = viewModel.selectedListNames.toTypedArray()
-        val selectedStartAppLoadLists = arrayListOf<String>()
+    private fun showLoadOnAppStartListDialog() {
+        val newListSettings = viewModel.listSettings.map { it.copy() }.toMutableList()
+        val currentStates = newListSettings.map { it.loadOnAppStart }.toBooleanArray()
+        val listNames = newListSettings.map { it.name }.toTypedArray()
 
         val builder = AlertDialog.Builder(requireActivity()).apply {
             setTitle(R.string.choose_app_start_load_list)
-            setMultiChoiceItems(
-                selectedListNames,
-                BooleanArray(selectedListNames.size)
-            ) { _, which, isChecked ->
-                val thisListName = selectedListNames[which]
-                if (isChecked) {
-                    selectedStartAppLoadLists.add(thisListName)
-                } else {
-                    selectedStartAppLoadLists.remove(thisListName)
-                }
+            setMultiChoiceItems(listNames, currentStates) { _, which, isChecked ->
+                newListSettings[which] = newListSettings[which].copy(loadOnAppStart = isChecked)
             }
             setPositiveButton(R.string.ok) { _, _ ->
-                viewModel.saveStartAppLoadLists(selectedStartAppLoadLists)
+                viewModel.saveNewListSettings(newListSettings)
             }
             setNegativeButton(R.string.cancel, null)
         }
 
-        if (selectedListNames.isNotEmpty()) {
+        if (listNames.isNotEmpty()) {
             builder.show()
         } else {
             requireContext().showToast(R.string.list_not_selected)

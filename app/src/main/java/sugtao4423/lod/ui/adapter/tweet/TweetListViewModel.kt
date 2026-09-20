@@ -7,8 +7,8 @@ import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.ui.showvideo.ShowVideoActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
-import twitter4j.MediaEntity
-import twitter4j.Status
+import sugtao4423.twitter4j.MediaEntity
+import sugtao4423.twitter4j.Status
 
 class TweetListViewModel(app: App) {
 
@@ -21,14 +21,14 @@ class TweetListViewModel(app: App) {
 
     fun tweetMediaAdapter(status: Status) = TweetMediaListAdapter(this).apply {
         val original = TweetListConverter.originalStatus(status)
-        submitList(original!!.mediaEntities.toList())
+        submitList(original.mediaEntities)
     }
 
     fun onClickUserIcon(view: View, status: Status) {
         val intent = Intent(view.context, UserPageActivity::class.java).apply {
             putExtra(
                 UserPageActivity.INTENT_EXTRA_KEY_USER_OBJECT,
-                TweetListConverter.originalStatus(status)!!.user
+                TweetListConverter.originalStatus(status).user
             )
         }
         view.context.startActivity(intent)

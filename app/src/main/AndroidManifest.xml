@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
@@ -29,20 +28,7 @@
         </activity>
         <activity
             android:name=".ui.addaccount.AddAccountActivity"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="localhost"
-                    android:pathPattern="/sugtao4423.lod/oauth.*"
-                    android:scheme="https" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity android:name="sugtao4423.lod.ui.userpage.UserPageActivity" />
         <activity
             android:name=".ui.tweet.TweetActivity"
@@ -51,7 +37,7 @@
             android:name=".ui.intent.IntentActivity"
             android:exported="true"
             android:theme="@style/Theme.TranslucentBackground">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -61,6 +47,8 @@
                 <data android:scheme="https" />
                 <data android:host="twitter.com" />
                 <data android:host="mobile.twitter.com" />
+                <data android:host="x.com" />
+                <data android:host="mobile.x.com" />
                 <data android:pathPattern="/..*" />
             </intent-filter>
             <intent-filter>

@@ -6,9 +6,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import sugtao4423.lod.databinding.ActivityAddAccountBinding
+import sugtao4423.lod.ui.loadUrl
 import sugtao4423.lod.ui.main.MainActivity
 
 class AddAccountActivity : AppCompatActivity() {
+
+    companion object {
+        const val INTENT_KEY_EDIT_ACCOUNT_ID = "edit_account_id"
+    }
 
     private val viewModel: AddAccountActivityViewModel by viewModels()
 
@@ -17,26 +22,48 @@ class AddAccountActivity : AppCompatActivity() {
         val binding = ActivityAddAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val editAccountId = intent.getLongExtra(INTENT_KEY_EDIT_ACCOUNT_ID, -1)
+        if (editAccountId != -1L) {
+            viewModel.setEditAccount(editAccountId)
+        }
+
         binding.apply {
-            consumerKeyEdit.setText(viewModel.consumerKey.value)
-            consumerSecretEdit.setText(viewModel.consumerSecret.value)
-            callbackDescription.text = viewModel.callbackDescription
-            callbackDescription.setOnClickListener { viewModel.copyCallbackURL() }
-            oauthButton.setOnClickListener { viewModel.startOAuth() }
-
-            consumerKeyEdit.doAfterTextChanged {
-                viewModel.consumerKey.value = it?.toString() ?: ""
+            cookieEdit.doAfterTextChanged {
+                viewModel.afterChangeCookie(it?.toString() ?: "")
             }
-            consumerSecretEdit.doAfterTextChanged {
-                viewModel.consumerSecret.value = it?.toString() ?: ""
+            getUserButton.setOnClickListener {
+                viewModel.getUserInfo()
+            }
+            saveButton.setOnClickListener {
+                viewModel.save()
             }
         }
 
-        viewModel.isOauthButtonEnable.observe(this) {
-            binding.oauthButton.isEnabled = it
+        viewModel.isLoading.observe(this) {
+            binding.getUserButton.isEnabled = !it
         }
-        viewModel.onActionViewUri.observe(this) {
-            startActivity(Intent(Intent.ACTION_VIEW, it))
+        viewModel.enableSaveButton.observe(this) {
+            binding.saveButton.isEnabled = it
+        }
+        viewModel.ct0Text.observe(this) {
+            binding.ct0Text.text = it
+        }
+        viewModel.authTokenText.observe(this) {
+            binding.authTokenText.text = it
+        }
+        viewModel.userIdText.observe(this) {
+            binding.userIdText.text = it
+        }
+        viewModel.screenNameText.observe(this) {
+            binding.screenNameText.text = it
+        }
+        viewModel.profileImageUrl.observe(this) {
+            binding.profileImageText.text = it ?: ""
+            if (it == null) {
+                binding.profileImageView.setImageDrawable(null)
+            } else {
+                binding.profileImageView.loadUrl(it)
+            }
         }
         viewModel.onFinishEvent.observe(this) {
             finish()
@@ -46,8 +73,4 @@ class AddAccountActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        viewModel.onNewIntent(intent)
-    }
 }

@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 
 class FavoriteListener(
     private val status: Status,
@@ -40,9 +40,9 @@ class FavoriteListener(
             val result = withContext(Dispatchers.IO) {
                 runCatching {
                     if (isUnFav) {
-                        twitter.destroyFavorite(status.id)
+                        twitter.unfavoriteTweet(status.id)
                     } else {
-                        twitter.createFavorite(status.id)
+                        twitter.favoriteTweet(status.id)
                     }
                 }.getOrNull()
             }

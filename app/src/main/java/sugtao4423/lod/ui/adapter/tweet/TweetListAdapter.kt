@@ -12,7 +12,7 @@ import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.adapter.tweet.click.OnTweetItemClicked
 import sugtao4423.lod.ui.adapter.tweet.click.OnTweetItemLongClicked
 import sugtao4423.lod.ui.loadUrl
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 
 class TweetListAdapter(val context: Context) : RecyclerView.Adapter<TweetListAdapter.ViewHolder>() {
 

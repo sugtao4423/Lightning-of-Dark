@@ -1,9 +1,9 @@
 package sugtao4423.lod.ui.main
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -30,6 +30,8 @@ class MainActivity : LoDBaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback { finish() }
+
         supportActionBar?.apply {
             hide()
             setDisplayShowHomeEnabled(false)
@@ -55,11 +57,12 @@ class MainActivity : LoDBaseActivity() {
             startAutoLoadTLService()
         }
 
-        val listData = viewModel.listData
         binding.viewPager.apply {
-            adapter = MainFragmentPagerAdapter(supportFragmentManager, this@MainActivity, listData)
+            val listSettings = viewModel.listSettings
+            adapter =
+                MainFragmentPagerAdapter(supportFragmentManager, this@MainActivity, listSettings)
             currentItem = 1
-            offscreenPageLimit = listData.size + 1
+            offscreenPageLimit = listSettings.size + 1
         }
 
         viewModel.viewInitialized()
@@ -100,11 +103,6 @@ class MainActivity : LoDBaseActivity() {
 
     fun restart() {
         resetFlag = true
-        finish()
-    }
-
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
         finish()
     }
 

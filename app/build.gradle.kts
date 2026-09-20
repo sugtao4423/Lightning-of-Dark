@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "sugtao4423.lod"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "sugtao4423.lod"
@@ -63,9 +63,8 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.10.0")
     implementation("androidx.media3:media3-ui:1.10.0")
 
-    implementation("org.twitter4j:twitter4j-core:4.0.7")
+    implementation("com.squareup.okhttp3:okhttp:5.5.0")
     implementation("com.twitter.twittertext:twitter-text:3.1.0")
 
     implementation("com.github.hadilq:live-event:1.3.0")
-    implementation("com.github.sugtao4423:android-ProgressDialog:1.0.0")
 }

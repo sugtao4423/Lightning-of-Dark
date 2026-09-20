@@ -12,6 +12,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.entity.Account
 import sugtao4423.lod.utils.showToast
+import sugtao4423.twitterweb4j.model.CreateTweet
 import java.text.NumberFormat
 
 class OptionViewModel(application: Application) : AndroidViewModel(application) {
@@ -41,7 +42,8 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
                 var loop = ""
                 for (i in 0 until loopCount.toInt()) {
                     loop += loopText
-                    runCatching { app.twitter.updateStatus(staticText + loop) }
+                    val createTweet = CreateTweet(staticText + loop)
+                    runCatching { app.twitter.createTweet(createTweet) }
                 }
             }
             app.showToast(R.string.param_success_tweet, 0)
@@ -61,14 +63,15 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
         _onGetAllAccounts.value = app.accountRepository.getAll()
     }
 
-    fun doChangeUser(changedUserScreenName: String) {
-        app.prefRepository.screenName = changedUserScreenName
+    fun doChangeUser(id: Long) {
+        if (app.account.id == id) return
+        app.prefRepository.accountId = id
         _onRestartMainActivity.value = Unit
     }
 
-    fun doDeleteUser(deleteUserScreenName: String) = viewModelScope.launch {
-        app.accountRepository.delete(deleteUserScreenName)
-        app.showToast(R.string.param_success_account_delete, deleteUserScreenName)
+    fun doDeleteUser(id: Long, screenName: String) = viewModelScope.launch {
+        app.accountRepository.delete(id)
+        app.showToast(R.string.param_success_account_delete, screenName)
     }
 
     fun showLevelInfo() {

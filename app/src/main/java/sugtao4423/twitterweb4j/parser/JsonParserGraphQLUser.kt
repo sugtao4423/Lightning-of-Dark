@@ -1,0 +1,67 @@
+package sugtao4423.twitterweb4j.parser
+
+import org.json.JSONException
+import sugtao4423.twitter4j.TwitterException
+import sugtao4423.twitter4j.User
+import sugtao4423.twitterweb4j.Json
+import sugtao4423.twitterweb4j.model.PagableCursorList
+import sugtao4423.twitterweb4j.parseJson
+import sugtao4423.twitterweb4j.parser.model.parseUser
+
+object JsonParserGraphQLUser {
+
+    @Throws(JSONException::class, TwitterException::class)
+    private fun parse(
+        instructions: Json, entryType: String = "TimelineAddEntries"
+    ): PagableCursorList<User> {
+        val entries = instructions.find { it["type"].string == entryType }?.get("entries")
+            ?: throw TwitterException("$entryType instruction not found")
+
+        val result = PagableCursorList<User>()
+
+        for (entry in entries) {
+            val entryId = entry["entryId"].string
+
+            if (entryId.startsWith("user-")) {
+                val user = parseUser(entry["content"]["itemContent"]["user_results"]["result"])
+                result.add(user)
+            } else if (entryId.startsWith("cursor-top-")) {
+                if (result.cursorTop != null) {
+                    throw TwitterException("cursor-top is already set")
+                }
+                result.cursorTop = entry["content"]["value"].string
+            } else if (entryId.startsWith("cursor-bottom-")) {
+                if (result.cursorBottom != null) {
+                    throw TwitterException("cursor-bottom is already set")
+                }
+                result.cursorBottom = entry["content"]["value"].string
+            }
+        }
+
+        if (result.cursorTop == null) {
+            throw TwitterException("cursor-top is not set")
+        }
+        if (result.cursorBottom == null) {
+            throw TwitterException("cursor-bottom is not set")
+        }
+
+        return result
+    }
+
+    @Throws(TwitterException::class)
+    private inline fun <T> parseResponse(response: String, block: (Json) -> T): T = try {
+        block(response.parseJson())
+    } catch (e: JSONException) {
+        throw TwitterException(e)
+    }
+
+    @Throws(TwitterException::class)
+    fun parseFollowing(response: String): PagableCursorList<User> = parseResponse(response) {
+        val instructions = it["data"]["user"]["result"]["timeline"]["timeline"]["instructions"]
+        parse(instructions)
+    }
+
+    @Throws(TwitterException::class)
+    fun parseFollowers(response: String): PagableCursorList<User> = parseFollowing(response)
+
+}

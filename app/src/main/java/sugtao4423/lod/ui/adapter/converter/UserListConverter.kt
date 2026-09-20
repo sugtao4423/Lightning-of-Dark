@@ -1,34 +1,28 @@
 package sugtao4423.lod.ui.adapter.converter
 
-import twitter4j.User
+import sugtao4423.twitter4j.User
 import java.text.NumberFormat
 
 object UserListConverter {
 
-    @JvmStatic
-    fun isShowProtected(user: User?): Boolean = user?.isProtected ?: false
+    private val numberFormat = NumberFormat.getInstance()
 
-    @JvmStatic
-    fun userIconUrl(user: User?): String? = user?.biggerProfileImageURLHttps
+    fun isShowProtected(user: User): Boolean = user.isProtected
 
-    @JvmStatic
-    fun userNameAndScreenName(user: User?): String? = user?.let {
+    fun userIconUrl(user: User): String? = user.profileImage?.biggerUrl
+
+    fun userNameAndScreenName(user: User): String = user.let {
         "${it.name} - @${it.screenName}"
     }
 
-    @JvmStatic
-    fun userDescription(user: User?): String? = user?.description
+    fun userDescription(user: User): String? = user.description
 
-    @JvmStatic
-    fun userCountDetail(user: User?): String? = user?.let {
-        fun num(n: Int): String = NumberFormat.getInstance().format(n)
-        String.format(
-            "Tweet: %s  Fav: %s  Follow: %s  Follower: %s",
-            num(it.statusesCount),
-            num(it.favouritesCount),
-            num(it.friendsCount),
-            num(it.followersCount)
-        )
-    }
+    fun userCountDetail(user: User): String = String.format(
+        "Tweet: %s  Fav: %s  Follow: %s  Follower: %s",
+        numberFormat.format(user.statusesCount),
+        numberFormat.format(user.favouritesCount),
+        numberFormat.format(user.friendsCount),
+        numberFormat.format(user.followersCount)
+    )
 
 }

@@ -1,0 +1,8 @@
+package sugtao4423.twitterweb4j.model
+
+data class CreateTweet(
+    val text: String,
+    var inReplyToStatusId: Long? = null,
+    var attachmentUrl: String? = null,
+    var mediaIds: List<Long> = emptyList(),
+)

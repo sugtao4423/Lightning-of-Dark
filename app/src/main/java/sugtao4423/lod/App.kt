@@ -2,6 +2,9 @@ package sugtao4423.lod
 
 import android.app.Application
 import android.graphics.Typeface
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,15 +20,17 @@ import sugtao4423.lod.model.PrefRepository
 import sugtao4423.lod.model.UseTimeRepository
 import sugtao4423.lod.service.AutoLoadTLService
 import sugtao4423.lod.utils.showToast
-import twitter4j.StatusUpdate
-import twitter4j.Twitter
-import twitter4j.TwitterException
-import twitter4j.TwitterFactory
-import twitter4j.auth.AccessToken
-import twitter4j.conf.ConfigurationBuilder
+import sugtao4423.twitter4j.TwitterException
+import sugtao4423.twitterweb4j.TwitterWeb4j
+import sugtao4423.twitterweb4j.model.CreateTweet
 import java.util.regex.Pattern
 
 class App : Application() {
+
+    companion object {
+        const val DEFAULT_TWEET_COUNT = 50
+        const val DEFAULT_USER_COUNT = 200
+    }
 
     private val accountDatabase by lazy { AccountRoomDatabase.getDatabase(this) }
     val accountRepository by lazy { AccountRepository(accountDatabase.accountDao()) }
@@ -45,13 +50,13 @@ class App : Application() {
         private set
     lateinit var account: Account
         private set
-    lateinit var twitter: Twitter
+    lateinit var twitter: TwitterWeb4j
         private set
     lateinit var mentionPattern: Pattern
         private set
 
     var autoLoadTLListener: AutoLoadTLService.AutoLoadTLListener? = null
-    var latestTweetId: Long = -1
+    var cursorTop: String? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -59,34 +64,32 @@ class App : Application() {
     }
 
     suspend fun reloadAccount() {
-        if (accountRepository.isExists(prefRepository.screenName)) {
-            account = accountRepository.findByScreenName(prefRepository.screenName)!!
-            twitter = run {
-                val ck = account.consumerKey.ifEmpty { getString(R.string.CK) }
-                val cs = account.consumerSecret.ifEmpty { getString(R.string.CS) }
-                val accessToken = AccessToken(account.accessToken, account.accessTokenSecret)
-
-                val conf = ConfigurationBuilder().let {
-                    it.setOAuthConsumerKey(ck)
-                    it.setOAuthConsumerSecret(cs)
-                    it.setTweetModeExtended(true)
-                    it.build()
-                }
-                TwitterFactory(conf).getInstance(accessToken)
-            }
+        if (accountRepository.isExists(prefRepository.accountId)) {
+            account = accountRepository.findById(prefRepository.accountId)!!
+            twitter = TwitterWeb4j(account.cookie)
+            loadClientTransaction()
             mentionPattern = Pattern.compile(".*@${account.screenName}.*", Pattern.DOTALL)
             hasAccount = true
         }
     }
 
-    fun updateStatus(status: StatusUpdate) {
+    private fun loadClientTransaction() = CoroutineScope(Dispatchers.Main).launch {
+        withContext(Dispatchers.IO) {
+            runCatching { twitter.loadClientTransaction() }
+        }.onFailure {
+            Toast.makeText(
+                applicationContext, "Failed to load client transaction data.", Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    fun updateStatus(tweet: CreateTweet, mediaUri: Uri? = null) {
         CoroutineScope(Dispatchers.Main).launch {
             val result = withContext(Dispatchers.IO) {
-                try {
-                    twitter.updateStatus(status)
-                } catch (e: TwitterException) {
-                    null
-                }
+                runCatching {
+                    mediaUri?.let { tweet.mediaIds = listOf(uploadMedia(it)) }
+                    twitter.createTweet(tweet)
+                }.getOrNull()
             }
             if (result != null) {
                 val exp = levelRepository.getRandomExp()
@@ -100,4 +103,31 @@ class App : Application() {
             }
         }
     }
+
+    private fun uploadMedia(uri: Uri): Long {
+        val totalBytes = contentResolver.openAssetFileDescriptor(uri, "r")
+            ?.use { it.length }
+            ?.takeIf { it >= 0 }
+            ?: throw TwitterException("Failed to determine media size.")
+        val inputStream = contentResolver.openInputStream(uri)
+            ?: throw TwitterException("Failed to open selected media.")
+        val mediaType = contentResolver.getType(uri)
+            ?: throw TwitterException("Failed to detect media MIME type.")
+        val videoDurationMs =
+            if (mediaType.startsWith("video/")) extractVideoDurationMs(uri) else null
+
+        return twitter.media.upload(totalBytes, inputStream, mediaType, videoDurationMs)
+    }
+
+    private fun extractVideoDurationMs(uri: Uri): Long {
+        val retriever = MediaMetadataRetriever()
+        try {
+            retriever.setDataSource(applicationContext, uri)
+            return retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong()
+                ?: throw TwitterException("Failed to extract video duration.")
+        } finally {
+            retriever.release()
+        }
+    }
+
 }

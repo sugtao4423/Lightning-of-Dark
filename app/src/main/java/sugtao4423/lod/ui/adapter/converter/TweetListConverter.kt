@@ -1,43 +1,34 @@
 package sugtao4423.lod.ui.adapter.converter
 
-import twitter4j.MediaEntity
-import twitter4j.Status
+import sugtao4423.twitter4j.MediaEntity
+import sugtao4423.twitter4j.Status
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 object TweetListConverter {
 
-    @JvmStatic
-    fun originalStatus(status: Status?): Status? = status?.let {
-        if (it.isRetweet) it.retweetedStatus else it
+    fun originalStatus(status: Status): Status = status.let {
+        if (it.isRetweet) it.retweetedStatus!! else it
     }
 
-    @JvmStatic
-    fun isShowProtected(status: Status?): Boolean =
-        originalStatus(status)?.user?.isProtected ?: false
+    fun isShowProtected(status: Status): Boolean = originalStatus(status).user.isProtected
+    fun isShowRetweetUser(status: Status): Boolean = status.isRetweet
 
-    @JvmStatic
-    fun isShowRetweetUser(status: Status?): Boolean = status?.isRetweet ?: false
+    fun userIconUrl(status: Status): String? = originalStatus(status).user.profileImage?.biggerUrl
 
-    @JvmStatic
-    fun userIconUrl(status: Status?): String? =
-        originalStatus(status)?.user?.biggerProfileImageURLHttps
-
-    @JvmStatic
-    fun userNameAndScreenName(status: Status?): String? = originalStatus(status)?.let {
+    fun userNameAndScreenName(status: Status): String = originalStatus(status).let {
         "${it.user.name} - @${it.user.screenName}"
     }
 
-    @JvmStatic
-    fun date(status: Status?, isShowMilliSec: Boolean): String? = status?.let {
+    fun date(status: Status, isShowMilliSec: Boolean): String {
         val statusDateFormat = SimpleDateFormat(
             "yyyy/MM/dd HH:mm:ss" + (if (isShowMilliSec) ".SSS" else ""),
             Locale.getDefault()
         )
         val date =
-            statusDateFormat.format(Date((originalStatus(status)!!.id shr 22) + 1288834974657L))
-        if (status.isRetweet) {
+            statusDateFormat.format(Date((originalStatus(status).id shr 22) + 1288834974657L))
+        return if (status.isRetweet) {
             "$date  Retweeted by "
         } else {
             val via = status.source.replace(Regex("<.+?>"), "")
@@ -45,47 +36,35 @@ object TweetListConverter {
         }
     }
 
-    @JvmStatic
-    fun retweetedUserIconUrl(status: Status?): String? =
-        if (status?.isRetweet == true) status.user.biggerProfileImageURLHttps else null
+    fun retweetedUserIconUrl(status: Status): String? =
+        if (status.isRetweet) status.user.profileImage?.biggerUrl else null
 
-    @JvmStatic
-    fun retweetedUserScreenName(status: Status?): String? =
-        if (status?.isRetweet == true) "@${status.user.screenName}" else null
+    fun retweetedUserScreenName(status: Status): String? =
+        if (status.isRetweet) "@${status.user.screenName}" else null
 
-    @JvmStatic
-    fun text(status: Status?): String? = originalStatus(status)?.text
+    fun text(status: Status): String = originalStatus(status).text
 
-    @JvmStatic
-    fun isShowMediaList(status: Status?) =
-        originalStatus(status)?.mediaEntities?.isNotEmpty() ?: false
+    fun isShowMediaList(status: Status): Boolean = originalStatus(status).mediaEntities.isNotEmpty()
 
-    @JvmStatic
     fun allImageUrls(mediaEntities: List<MediaEntity>): List<String> =
-        mediaEntities.filter { !mediaIsVideoOrGif(it) }.map { it.mediaURLHttps }
+        mediaEntities.filter { !mediaIsVideoOrGif(it) }.map { it.mediaUrl }
 
-    @JvmStatic
     fun mediaIsVideoOrGif(mediaEntity: MediaEntity): Boolean =
         mediaEntity.type == "video" || mediaEntity.type == "animated_gif"
 
-    @JvmStatic
     fun mediaIsGif(mediaEntity: MediaEntity): Boolean = mediaEntity.type == "animated_gif"
 
-    @JvmStatic
-    fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = mediaEntity.mediaURLHttps + ":small"
+    fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = mediaEntity.mediaUrl + ":small"
 
-    @JvmStatic
     fun videoMediaUrl(mediaEntity: MediaEntity): String {
         if (!mediaIsVideoOrGif(mediaEntity)) {
-            throw UnsupportedOperationException()
+            throw UnsupportedOperationException("Media is not video or gif.")
+        }
+        if (mediaEntity.videoInfo == null || mediaEntity.videoInfo.variants.isEmpty()) {
+            throw UnsupportedOperationException("Video info is not available.")
         }
 
-        val videoVariants = mediaEntity.videoVariants.map { Pair(it.bitrate, it.url) }
-        if (videoVariants.isEmpty()) {
-            throw Error()
-        }
-
-        return videoVariants.maxByOrNull { it.first }!!.second
+        return mediaEntity.videoInfo.variants.maxBy { it.bitrate }.url
     }
 
 }

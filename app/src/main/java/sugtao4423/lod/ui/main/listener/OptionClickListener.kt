@@ -84,33 +84,38 @@ class OptionClickListener(
     }
 
     private fun showAccountsDialog(accounts: List<Account>) {
-        val myScreenName = (activity.applicationContext as App).account.screenName
-        val screenNames = accounts.map {
-            if (it.screenName == myScreenName) "@${it.screenName} (now)" else "@${it.screenName}"
-        }.toMutableList()
-        screenNames.add(activity.getString(R.string.add_account))
+        val screenNames =
+            accounts.map { "@${it.screenName}" } + activity.getString(R.string.add_account)
+        val myId = (activity.applicationContext as App).account.id
+        val currentIndex = accounts.indexOfFirst { it.id == myId }
 
-        AlertDialog.Builder(activity).setItems(screenNames.toTypedArray()) { _, which ->
-            if (screenNames[which].endsWith("(now)")) return@setItems
-            if (which == screenNames.lastIndex) {
-                activity.startActivity(Intent(activity, AddAccountActivity::class.java))
-                return@setItems
-            }
+        AlertDialog.Builder(activity)
+            .setSingleChoiceItems(screenNames.toTypedArray(), currentIndex) { dialog, which ->
+                if (which == screenNames.lastIndex) {
+                    activity.startActivity(Intent(activity, AddAccountActivity::class.java))
+                    return@setSingleChoiceItems
+                }
 
-            showChangeAccountDialog(accounts[which].screenName)
-        }.show()
+                showChangeAccountDialog(accounts[which])
+                dialog.dismiss()
+            }.show()
     }
 
-    private fun showChangeAccountDialog(changeScreenName: String) {
+    private fun showChangeAccountDialog(account: Account) {
         AlertDialog.Builder(activity).apply {
-            setTitle("@${changeScreenName}")
+            setTitle("@${account.screenName}")
             setPositiveButton(R.string.change_account) { _, _ ->
-                viewModel.doChangeUser(changeScreenName)
+                viewModel.doChangeUser(account.id)
             }
-            setNegativeButton(R.string.delete) { _, _ ->
-                viewModel.doDeleteUser(changeScreenName)
+            setNegativeButton(R.string.edit) { _, _ ->
+                val intent = Intent(activity, AddAccountActivity::class.java).apply {
+                    putExtra(AddAccountActivity.INTENT_KEY_EDIT_ACCOUNT_ID, account.id)
+                }
+                activity.startActivity(intent)
             }
-            setNeutralButton(R.string.cancel, null)
+            setNeutralButton(R.string.delete) { _, _ ->
+                viewModel.doDeleteUser(account.id, account.screenName)
+            }
             show()
         }
     }

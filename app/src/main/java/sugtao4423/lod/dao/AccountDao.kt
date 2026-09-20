@@ -12,8 +12,8 @@ interface AccountDao {
     @Query("SELECT * FROM accounts")
     suspend fun getAccounts(): List<Account>
 
-    @Query("SELECT * FROM accounts WHERE screenName = :screenName")
-    suspend fun findAccountByScreenName(screenName: String): Account?
+    @Query("SELECT * FROM accounts WHERE id = :id")
+    suspend fun findAccountById(id: Long): Account?
 
     @Insert
     suspend fun insert(accountDB: Account)
@@ -21,7 +21,7 @@ interface AccountDao {
     @Update
     suspend fun update(accountDB: Account)
 
-    @Query("DELETE FROM accounts WHERE screenName = :screenName")
-    suspend fun delete(screenName: String)
+    @Query("DELETE FROM accounts WHERE id = :id")
+    suspend fun delete(id: Long)
 
 }

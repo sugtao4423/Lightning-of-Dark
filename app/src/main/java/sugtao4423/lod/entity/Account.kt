@@ -6,14 +6,11 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "accounts")
 data class Account(
-    @PrimaryKey @ColumnInfo(name = "screenName") val screenName: String,
-    @ColumnInfo(name = "ck") val consumerKey: String,
-    @ColumnInfo(name = "cs") val consumerSecret: String,
-    @ColumnInfo(name = "accessToken") val accessToken: String,
-    @ColumnInfo(name = "accessTokenSecret") val accessTokenSecret: String,
-    @ColumnInfo(name = "listAsTL") val listAsTL: Long = -1L,
-    @ColumnInfo(name = "autoLoadTLInterval") val autoLoadTLInterval: Int = 0,
-    @ColumnInfo(name = "selectListIds") val selectListIds: List<Long> = listOf(),
-    @ColumnInfo(name = "selectListNames") val selectListNames: List<String> = listOf(),
-    @ColumnInfo(name = "appStartLoadLists") val startAppLoadLists: List<String> = listOf()
+    @PrimaryKey val id: Long,
+    @ColumnInfo(name = "screen_name") val screenName: String,
+    @ColumnInfo(name = "profile_image_url") val profileImageUrl: String,
+    val cookie: String,
+    @ColumnInfo(name = "list_as_tl") val listAsTL: Long = -1L,
+    @ColumnInfo(name = "auto_load_tl_interval") val autoLoadTLInterval: Int = 0,
+    @ColumnInfo(name = "list_settings") val listSettings: List<ListSetting> = listOf(),
 )

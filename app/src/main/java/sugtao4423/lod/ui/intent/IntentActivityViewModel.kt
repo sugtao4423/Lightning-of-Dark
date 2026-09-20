@@ -15,7 +15,7 @@ import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.Regex
 import sugtao4423.lod.utils.showToast
-import twitter4j.Status
+import sugtao4423.twitter4j.Status
 
 class IntentActivityViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -94,9 +94,13 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
         _onStartTweetActivity.value = tweetText
     }
 
-    fun showStatus(tweetId: Long) = viewModelScope.launch {
+    fun showStatus(status: Status) {
+        _showStatusDialog.value = status
+    }
+
+    fun showStatus(statusId: Long) = viewModelScope.launch {
         val result = withContext(Dispatchers.IO) {
-            runCatching { app.twitter.showStatus(tweetId) }.getOrNull()
+            runCatching { app.twitter.tweetDetail(statusId) }.getOrNull()
         }
         if (result == null) {
             app.showToast(R.string.error_get_status)

@@ -1,16 +1,14 @@
 package sugtao4423.lod.ui.tweet
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import android.speech.RecognizerIntent
 import android.view.View
 import androidx.activity.result.ActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
@@ -19,7 +17,8 @@ import sugtao4423.lod.databinding.ActivityTweetBinding
 import sugtao4423.lod.playing_music_data.PlayingMusicData
 import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
-import twitter4j.Status
+import sugtao4423.lod.ui.loadUri
+import sugtao4423.twitter4j.Status
 
 class TweetActivity : LoDBaseActivity() {
 
@@ -30,19 +29,15 @@ class TweetActivity : LoDBaseActivity() {
 
         const val TYPE_NEWTWEET = 0
         const val TYPE_REPLY = 1
-        const val TYPE_REPLYALL = 2
-        const val TYPE_QUOTERT = 3
-        const val TYPE_UNOFFICIALRT = 4
-        const val TYPE_PAKUTSUI = 5
-        const val TYPE_EXTERNALTEXT = 6
-
-        const val FILE_PERMISSION_REQUEST_CODE = 364364
+        const val TYPE_QUOTERT = 2
+        const val TYPE_UNOFFICIALRT = 3
+        const val TYPE_PAKUTSUI = 4
+        const val TYPE_EXTERNALTEXT = 5
     }
 
-    private val startForResultImagePick =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->
-            viewModel.onImagePicked(result)
-        }
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+        viewModel.onMediaPicked(it)
+    }
 
     private val startForResultSpeech =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->
@@ -73,7 +68,7 @@ class TweetActivity : LoDBaseActivity() {
             musicButton.setOnClickListener { appendPlayingMusicData() }
             textOptionButton.setOnClickListener { showTextOptionDialog() }
             tweetButton.setOnClickListener { viewModel.clickTweet() }
-            imageSelectButton.setOnClickListener { viewModel.clickImageSelect() }
+            imageSelectButton.setOnClickListener { viewModel.clickMediaSelect() }
             closeButton.setOnClickListener { viewModel.clickClose() }
 
             tweetEdit.doOnTextChanged { text, _, _, _ ->
@@ -81,7 +76,6 @@ class TweetActivity : LoDBaseActivity() {
             }
             tweetEdit.doAfterTextChanged {
                 viewModel.tweetText.value = it?.toString() ?: ""
-                viewModel.afterChangeTweetText(it ?: return@doAfterTextChanged)
             }
         }
 
@@ -96,9 +90,12 @@ class TweetActivity : LoDBaseActivity() {
                 binding.tweetEdit.setText(it)
             }
         }
+        viewModel.prefixLength.observe(this) {
+            binding.tweetEdit.prefixLength = it
+        }
         viewModel.textSelectionEnd.observe(this) {
             if (it == true) {
-                binding.tweetEdit.setSelection(binding.tweetEdit.text.length)
+                binding.tweetEdit.setSelection(binding.tweetEdit.text!!.length)
             }
         }
         viewModel.remainingTextCount.observe(this) {
@@ -112,8 +109,12 @@ class TweetActivity : LoDBaseActivity() {
                 )
             )
         }
-        viewModel.selectedImage.observe(this) {
-            binding.selectedImageView.setImageURI(it)
+        viewModel.selectedMedia.observe(this) {
+            if (it == null) {
+                binding.selectedMediaImage.setImageDrawable(null)
+            } else {
+                binding.selectedMediaImage.loadUri(it)
+            }
         }
         viewModel.onSetTweetListAdapter.observe(this) {
             TweetListAdapter(this).apply {
@@ -122,16 +123,8 @@ class TweetActivity : LoDBaseActivity() {
             }
         }
         viewModel.onFinish.observe(this) { finish() }
-        viewModel.onRequestReadExternalStoragePermission.observe(this) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                FILE_PERMISSION_REQUEST_CODE
-            )
-        }
-        viewModel.onPickImage.observe(this) {
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startForResultImagePick.launch(intent)
+        viewModel.onPickMedia.observe(this) {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
 
         viewModel.externalText = intent.getStringExtra(INTENT_EXTRA_KEY_TEXT)
@@ -167,15 +160,6 @@ class TweetActivity : LoDBaseActivity() {
             }
             show()
         }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        viewModel.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
 }
