@@ -19,7 +19,7 @@ object Connection {
         "Cache-Control" to "no-cache",
         "Pragma" to "no-cache",
         "Referer" to "https://x.com/",
-        "User-Agent" to "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+        "User-Agent" to "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
         "X-Twitter-Active-User" to "yes",
         "X-Twitter-Client-Language" to "en",
     ).toHeaders()
