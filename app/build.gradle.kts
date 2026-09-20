@@ -67,5 +67,4 @@ dependencies {
     implementation("com.twitter.twittertext:twitter-text:3.1.0")
 
     implementation("com.github.hadilq:live-event:1.3.0")
-    implementation("com.github.sugtao4423:android-ProgressDialog:1.0.0")
 }
