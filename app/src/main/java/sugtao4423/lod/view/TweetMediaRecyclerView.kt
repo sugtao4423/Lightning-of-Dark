@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import sugtao4423.lod.R
 
 class TweetMediaRecyclerView @JvmOverloads constructor(
     context: Context,
@@ -15,14 +16,25 @@ class TweetMediaRecyclerView @JvmOverloads constructor(
 
     init {
         isHorizontalScrollBarEnabled = true
-        addItemDecoration(RightMarginDecoration())
+
+        val a = context.obtainStyledAttributes(
+            attrs, R.styleable.TweetMediaRecyclerView, defStyle, 0
+        )
+        val gapPx = try {
+            a.getDimensionPixelSize(R.styleable.TweetMediaRecyclerView_itemGap, 0)
+        } finally {
+            a.recycle()
+        }
+        addItemDecoration(ItemGapDecoration(gapPx))
+
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
     }
 
-    class RightMarginDecoration : ItemDecoration() {
+    class ItemGapDecoration(private val gapPx: Int) : ItemDecoration() {
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
-            super.getItemOffsets(outRect, view, parent, state)
-            outRect.right = 8
+            if (parent.getChildAdapterPosition(view) > 0) {
+                outRect.left = gapPx
+            }
         }
     }
 
