@@ -24,7 +24,7 @@ class MentionFragmentViewModel(application: Application) : BaseTweetListViewMode
             bottomCursor = result.cursorBottom
         }
         hasNextPage = result.isNotEmpty()
-        result.let { addStatuses.value = it }
+        addStatuses.value = result
     }
 
 }

@@ -40,7 +40,7 @@ class ListFragmentViewModel(application: Application) : BaseTweetListViewModel(a
             bottomCursor = result.cursorBottom
         }
         hasNextPage = result.isNotEmpty()
-        result.let { addStatuses.value = it }
+        addStatuses.value = result
     }
 
 }

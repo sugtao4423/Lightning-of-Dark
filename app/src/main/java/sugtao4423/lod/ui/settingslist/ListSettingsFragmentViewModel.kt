@@ -46,7 +46,7 @@ class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel
             return@launch
         }
 
-        result.let { _showChooseListDialog.value = it }
+        _showChooseListDialog.value = result
     }
 
     fun saveSelectedLists(lists: List<UserList>) = viewModelScope.launch {

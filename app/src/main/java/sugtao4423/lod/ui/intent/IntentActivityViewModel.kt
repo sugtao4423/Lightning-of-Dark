@@ -107,7 +107,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
             return@launch
         }
 
-        result.let { _showStatusDialog.value = it }
+        _showStatusDialog.value = result
     }
 
 }

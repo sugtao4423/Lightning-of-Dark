@@ -33,7 +33,7 @@ class HomeFragmentViewModel(application: Application) : BaseTweetListViewModel(a
             }
         }
         hasNextPage = result.isNotEmpty()
-        result.let { addStatuses.value = it }
+        addStatuses.value = result
     }
 
 }

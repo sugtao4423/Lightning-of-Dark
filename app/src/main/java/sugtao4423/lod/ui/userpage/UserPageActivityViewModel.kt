@@ -50,7 +50,7 @@ class UserPageActivityViewModel(application: Application) : AndroidViewModel(app
             return@launch
         }
 
-        result.let { _user.value = it }
+        _user.value = result
         _actionBarTitle.value = result.name
     }
 

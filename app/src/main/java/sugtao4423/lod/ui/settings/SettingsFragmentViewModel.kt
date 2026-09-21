@@ -53,7 +53,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
             return@launch
         }
 
-        result.let { _onShowSelectListAsTLDialog.value = it }
+        _onShowSelectListAsTLDialog.value = result
     }
 
     fun setListAsTL(userList: UserList) = viewModelScope.launch {
