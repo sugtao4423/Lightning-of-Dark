@@ -3,6 +3,10 @@ package sugtao4423.lod.ui.main.listener
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.OptionDialogSearchUserBinding
@@ -10,6 +14,7 @@ import sugtao4423.lod.databinding.OptionDialogTweetBombBinding
 import sugtao4423.lod.entity.Account
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.ui.main.MainActivity
+import sugtao4423.lod.ui.main.OptionEvent
 import sugtao4423.lod.ui.main.OptionViewModel
 import sugtao4423.lod.ui.settings.SettingsActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
@@ -20,28 +25,35 @@ class OptionClickListener(
 ) : DialogInterface.OnClickListener {
 
     init {
-        viewModel.onSearchUserScreenName.observe(activity) {
+        activity.lifecycleScope.launch {
+            activity.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect(::handleEvent)
+            }
+        }
+    }
+
+    private fun handleEvent(event: OptionEvent) = when (event) {
+        is OptionEvent.SearchUser -> {
             val intent = Intent(activity, UserPageActivity::class.java).apply {
-                putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, it)
+                putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, event.screenName)
             }
             activity.startActivity(intent)
         }
-        viewModel.onGetAllAccounts.observe(activity) {
-            showAccountsDialog(it)
+
+        is OptionEvent.GetAllAccounts -> showAccountsDialog(event.accounts)
+        is OptionEvent.RestartMainActivity -> activity.restart()
+
+        is OptionEvent.ShowLevelInfoDialog -> AlertDialog.Builder(activity).apply {
+            setMessage(event.message)
+            setPositiveButton(R.string.ok, null)
+            show()
         }
-        viewModel.onRestartMainActivity.observe(activity) {
-            activity.restart()
-        }
-        viewModel.onShowLevelInfoDialog.observe(activity) {
-            AlertDialog.Builder(activity).setMessage(it).setPositiveButton(R.string.ok, null).show()
-        }
-        viewModel.onShowUseInfoDialog.observe(activity) {
-            AlertDialog.Builder(activity).apply {
-                setTitle(R.string.use_info)
-                setMessage(it)
-                setPositiveButton(R.string.ok, null)
-                show()
-            }
+
+        is OptionEvent.ShowUseInfoDialog -> AlertDialog.Builder(activity).apply {
+            setTitle(R.string.use_info)
+            setMessage(event.message)
+            setPositiveButton(R.string.ok, null)
+            show()
         }
     }
 

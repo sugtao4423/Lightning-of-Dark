@@ -2,10 +2,10 @@ package sugtao4423.lod.ui.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
@@ -15,24 +15,20 @@ import sugtao4423.lod.utils.showToast
 import sugtao4423.twitterweb4j.model.CreateTweet
 import java.text.NumberFormat
 
+sealed interface OptionEvent {
+    data class SearchUser(val screenName: String) : OptionEvent
+    data class GetAllAccounts(val accounts: List<Account>) : OptionEvent
+    data object RestartMainActivity : OptionEvent
+    data class ShowLevelInfoDialog(val message: String) : OptionEvent
+    data class ShowUseInfoDialog(val message: String) : OptionEvent
+}
+
 class OptionViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app = getApplication<App>()
 
-    private val _onSearchUserScreenName = LiveEvent<String>()
-    val onSearchUserScreenName: LiveData<String> = _onSearchUserScreenName
-
-    private val _onGetAllAccounts = LiveEvent<List<Account>>()
-    val onGetAllAccounts: LiveEvent<List<Account>> = _onGetAllAccounts
-
-    private val _onRestartMainActivity = LiveEvent<Unit>()
-    val onRestartMainActivity: LiveData<Unit> = _onRestartMainActivity
-
-    private val _onShowLevelInfoDialog = LiveEvent<String>()
-    val onShowLevelInfoDialog: LiveData<String> = _onShowLevelInfoDialog
-
-    private val _onShowUseInfoDialog = LiveEvent<String>()
-    val onShowUseInfoDialog: LiveData<String> = _onShowUseInfoDialog
+    private val _events = Channel<OptionEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
 
     fun doBombTweet(staticText: String, loopText: String, loopCount: String) {
         if (loopCount.isEmpty()) return
@@ -56,17 +52,19 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
             return
         }
 
-        _onSearchUserScreenName.value = screenName.replace("@", "")
+        val sn = screenName.replace("@", "")
+        _events.trySend(OptionEvent.SearchUser(sn))
     }
 
     fun doGetAllAccounts() = viewModelScope.launch {
-        _onGetAllAccounts.value = app.accountRepository.getAll()
+        val accounts = app.accountRepository.getAll()
+        _events.trySend(OptionEvent.GetAllAccounts(accounts))
     }
 
     fun doChangeUser(id: Long) {
         if (app.account.id == id) return
         app.prefRepository.accountId = id
-        _onRestartMainActivity.value = Unit
+        _events.trySend(OptionEvent.RestartMainActivity)
     }
 
     fun doDeleteUser(id: Long, screenName: String) = viewModelScope.launch {
@@ -81,7 +79,7 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
         val nextExp = nf.format(lv.getNextExp())
         val totalExp = nf.format(lv.getTotalExp())
         val message = app.getString(R.string.param_next_level_total_exp, level, nextExp, totalExp)
-        _onShowLevelInfoDialog.value = message
+        _events.trySend(OptionEvent.ShowLevelInfoDialog(message))
     }
 
     fun showUseTimeInfo() = viewModelScope.launch {
@@ -99,7 +97,7 @@ class OptionViewModel(application: Application) : AndroidViewModel(application) 
             milliTime2Str(totalUse),
             startDate
         )
-        _onShowUseInfoDialog.value = message
+        _events.trySend(OptionEvent.ShowUseInfoDialog(message))
     }
 
     private fun milliTime2Str(time: Long): String {
