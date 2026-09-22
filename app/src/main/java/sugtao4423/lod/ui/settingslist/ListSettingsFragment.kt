@@ -3,8 +3,12 @@ package sugtao4423.lod.ui.settingslist
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import kotlinx.coroutines.launch
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.UserList
@@ -19,12 +23,11 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(bundle: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference_list, rootKey)
 
-        viewModel.preferenceSummary.observe(this) {
-            selectList.summary = it.selectListSummary
-            loadOnAppStartList.summary = it.loadOnAppStartListSummary
-        }
-        viewModel.showChooseListDialog.observe(this) {
-            showChooseListDialog(it)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch { viewModel.uiState.collect(::render) }
+                launch { viewModel.events.collect(::handleEvent) }
+            }
         }
 
         selectList.setOnPreferenceClickListener {
@@ -35,6 +38,15 @@ class ListSettingsFragment : PreferenceFragmentCompat() {
             showLoadOnAppStartListDialog()
             true
         }
+    }
+
+    private fun render(state: ListSettingsUiState) {
+        selectList.summary = state.selectListSummary
+        loadOnAppStartList.summary = state.loadOnAppStartListSummary
+    }
+
+    private fun handleEvent(event: ListSettingsEvent) = when (event) {
+        is ListSettingsEvent.ShowChooseListDialog -> showChooseListDialog(event.lists)
     }
 
     private fun showChooseListDialog(lists: List<UserList>) {
