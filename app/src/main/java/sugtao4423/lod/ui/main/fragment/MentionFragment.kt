@@ -7,7 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.databinding.SwipeTweetListBinding
+import sugtao4423.lod.ui.BaseTweetListEvent
+import sugtao4423.lod.ui.EndlessScrollListener
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.main.MainActivityViewModel
 import sugtao4423.lod.ui.setup
@@ -28,9 +34,6 @@ class MentionFragment : Fragment() {
         binding.swipeRefresh.setup {
             viewModel.pull2Refresh()
         }
-        viewModel.isRefreshing.observe(viewLifecycleOwner) {
-            binding.swipeRefresh.isRefreshing = it
-        }
         return binding.root
     }
 
@@ -50,14 +53,30 @@ class MentionFragment : Fragment() {
             }
         }
 
-        viewModel.addStatuses.observe(viewLifecycleOwner) {
-            adapter.addAll(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch { viewModel.isRefreshing.collect(::updateRefreshState) }
+                launch { viewModel.events.collect { handleEvent(it, adapter, scrollListener) } }
+            }
         }
-        viewModel.onResetList.observe(viewLifecycleOwner) {
+        viewModel.loadList()
+    }
+
+    private fun updateRefreshState(isRefreshing: Boolean) {
+        binding.swipeRefresh.isRefreshing = isRefreshing
+    }
+
+    private fun handleEvent(
+        event: BaseTweetListEvent,
+        adapter: TweetListAdapter,
+        scrollListener: EndlessScrollListener,
+    ) = when (event) {
+        is BaseTweetListEvent.ResetList -> {
             adapter.clear()
             scrollListener.resetState()
         }
-        viewModel.loadList()
+
+        is BaseTweetListEvent.AddStatuses -> adapter.addAll(event.statuses)
     }
 
 }
