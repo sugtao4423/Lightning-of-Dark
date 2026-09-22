@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.view.Window
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager.widget.ViewPager
+import kotlinx.coroutines.launch
 import sugtao4423.lod.databinding.ActivityShowImageBinding
 import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.utils.ChromeIntent
@@ -51,16 +55,22 @@ class ShowImageActivity : LoDBaseActivity() {
             it.addOnPageChangeListener(viewPagerOnPageChangeListener)
         }
 
-        viewModel.showImageOptionDialog.observe(this) {
-            AlertDialog.Builder(this).apply {
-                setItems(it.dialogItemRes) { _, which ->
-                    when (which) {
-                        0 -> ChromeIntent(this@ShowImageActivity, it.openImageUri)
-                        1 -> viewModel.saveCurrentImage()
-                    }
-                }
-                show()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect(::handleEvent)
             }
+        }
+    }
+
+    private fun handleEvent(event: ShowImageEvent) = when (event) {
+        is ShowImageEvent.ShowImageOptionDialog -> AlertDialog.Builder(this).also {
+            it.setItems(event.dialogItemRes) { _, which ->
+                when (which) {
+                    0 -> ChromeIntent(this, event.openImageUri)
+                    1 -> viewModel.saveCurrentImage()
+                }
+            }
+            it.show()
         }
     }
 
