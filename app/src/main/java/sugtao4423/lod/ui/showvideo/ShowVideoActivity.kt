@@ -3,6 +3,10 @@ package sugtao4423.lod.ui.showvideo
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.databinding.ActivityShowVideoBinding
 import sugtao4423.lod.ui.LoDBaseActivity
 
@@ -36,9 +40,15 @@ class ShowVideoActivity : LoDBaseActivity() {
             return
         }
 
-        viewModel.onFinish.observe(this) {
-            finish()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect(::handleEvent)
+            }
         }
+    }
+
+    private fun handleEvent(event: ShowVideoEvent) = when (event) {
+        ShowVideoEvent.Finish -> finish()
     }
 
     override fun onStop() {
