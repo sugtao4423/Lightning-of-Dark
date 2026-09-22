@@ -2,6 +2,10 @@ package sugtao4423.lod.ui.userpage
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.databinding.ActivityUserPageBinding
 import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.twitter4j.User
@@ -29,11 +33,11 @@ class UserPageActivity : LoDBaseActivity() {
             it.offscreenPageLimit = 5
         }
 
-        viewModel.actionBarTitle.observe(this) {
-            supportActionBar?.title = it
-        }
-        viewModel.onFinish.observe(this) {
-            finish()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch { viewModel.uiState.collect(::render) }
+                launch { viewModel.events.collect(::handleEvent) }
+            }
         }
 
         intent.getSerializableExtra(INTENT_EXTRA_KEY_USER_OBJECT)?.let {
@@ -42,6 +46,14 @@ class UserPageActivity : LoDBaseActivity() {
         intent.getStringExtra(INTENT_EXTRA_KEY_USER_SCREEN_NAME)?.let {
             viewModel.setUser(it)
         }
+    }
+
+    private fun render(state: UserPageUiState) {
+        supportActionBar?.title = state.actionBarTitle
+    }
+
+    private fun handleEvent(event: UserPageEvent) = when (event) {
+        UserPageEvent.Finish -> finish()
     }
 
 }
