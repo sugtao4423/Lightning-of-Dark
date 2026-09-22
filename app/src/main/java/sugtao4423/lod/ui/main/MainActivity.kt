@@ -7,7 +7,9 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import sugtao4423.lod.App
 import sugtao4423.lod.R
@@ -53,8 +55,10 @@ class MainActivity : LoDBaseActivity() {
             optionButton.setOnLongClickListener { startNewTweetActivity(); true }
         }
 
-        viewModel.onStartAutoLoadTLService.observe(this) {
-            startAutoLoadTLService()
+        lifecycleScope.launch {
+            viewModel.onStartAutoLoadTLService.collect {
+                startAutoLoadTLService()
+            }
         }
 
         binding.viewPager.apply {

@@ -2,8 +2,8 @@ package sugtao4423.lod.ui.main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import com.hadilq.liveevent.LiveEvent
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import sugtao4423.lod.App
 import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.service.AutoLoadTLService
@@ -17,14 +17,14 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     val listSettings: List<ListSetting>
         get() = app.account.listSettings
 
-    private val _onStartAutoLoadTLService = LiveEvent<Unit>()
-    val onStartAutoLoadTLService = _onStartAutoLoadTLService
+    private val _onStartAutoLoadTLService = Channel<Unit>(Channel.BUFFERED)
+    val onStartAutoLoadTLService = _onStartAutoLoadTLService.receiveAsFlow()
 
-    private val _onNewStatuses = LiveEvent<CursorList<Status>>()
-    val onNewStatuses: LiveData<CursorList<Status>> = _onNewStatuses
+    private val _onNewStatuses = Channel<CursorList<Status>>(Channel.BUFFERED)
+    val onNewStatuses = _onNewStatuses.receiveAsFlow()
 
-    private val _onNewMention = LiveEvent<List<Status>>()
-    val onNewMention: LiveData<List<Status>> = _onNewMention
+    private val _onNewMention = Channel<List<Status>>(Channel.BUFFERED)
+    val onNewMention = _onNewMention.receiveAsFlow()
 
     private var kickedInitialized = false
     fun viewInitialized() {
@@ -36,14 +36,15 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
             override fun onStatus(statuses: CursorList<Status>) {
                 if (statuses.isEmpty()) return
                 app.cursorTop = statuses.cursorTop
-                _onNewStatuses.postValue(statuses)
-                _onNewMention.postValue(statuses.filter {
+                _onNewStatuses.trySend(statuses)
+                statuses.filter {
                     app.mentionPattern.matcher(it.text).find() && !it.isRetweet
-                })
-
+                }.takeIf { it.isNotEmpty() }?.let {
+                    _onNewMention.trySend(it)
+                }
             }
         }
-        _onStartAutoLoadTLService.value = Unit
+        _onStartAutoLoadTLService.trySend(Unit)
         kickedInitialized = true
     }
 

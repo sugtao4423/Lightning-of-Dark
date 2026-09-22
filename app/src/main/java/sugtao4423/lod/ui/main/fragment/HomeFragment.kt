@@ -45,15 +45,16 @@ class HomeFragment : Fragment() {
         val scrollListener = viewModel.getLoadMoreListener(binding.listLine.linearLayoutManager)
         binding.listLine.addOnScrollListener(scrollListener)
 
-        mainViewModel.onNewStatuses.observeForever {
-            if (it.isEmpty()) return@observeForever
-            adapter.insertTop(it)
-            if (binding.listLine.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
-                binding.listLine.smoothScrollToPosition(0)
-            }
-        }
-
         viewLifecycleOwner.lifecycleScope.launch {
+            launch {
+                mainViewModel.onNewStatuses.collect {
+                    adapter.insertTop(it)
+                    if (binding.listLine.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
+                        binding.listLine.smoothScrollToPosition(0)
+                    }
+                }
+            }
+
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch { viewModel.isRefreshing.collect(::updateRefreshState) }
                 launch { viewModel.events.collect { handleEvent(it, adapter, scrollListener) } }
