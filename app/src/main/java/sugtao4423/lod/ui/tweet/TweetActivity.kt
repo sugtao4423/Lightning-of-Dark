@@ -11,7 +11,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.ActivityTweetBinding
 import sugtao4423.lod.playing_music_data.PlayingMusicData
@@ -45,12 +48,11 @@ class TweetActivity : LoDBaseActivity() {
         }
 
     private val viewModel: TweetActivityViewModel by viewModels()
+    private val binding by lazy { ActivityTweetBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayShowHomeEnabled(false)
-
-        val binding = ActivityTweetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.apply {
@@ -62,76 +64,66 @@ class TweetActivity : LoDBaseActivity() {
             imageSelectButton.typeface = fontAwesome
             closeButton.typeface = fontAwesome
 
-            accountScreenName.text = viewModel.accountScreenName
-
             micButton.setOnClickListener { requestSpeechInput() }
             musicButton.setOnClickListener { appendPlayingMusicData() }
             textOptionButton.setOnClickListener { showTextOptionDialog() }
             tweetButton.setOnClickListener { viewModel.clickTweet() }
-            imageSelectButton.setOnClickListener { viewModel.clickMediaSelect() }
+            imageSelectButton.setOnClickListener { pickMedia() }
             closeButton.setOnClickListener { viewModel.clickClose() }
 
-            tweetEdit.doOnTextChanged { text, _, _, _ ->
-                viewModel.onChangeTweetText(text ?: "")
-            }
             tweetEdit.doAfterTextChanged {
-                viewModel.tweetText.value = it?.toString() ?: ""
+                viewModel.onTweetTextChanged(it?.toString() ?: "")
             }
         }
 
-        viewModel.actionBarTitle.observe(this) {
-            if (it == null) supportActionBar?.hide() else supportActionBar?.title = getString(it)
-        }
-        viewModel.isShowOriginStatus.observe(this) {
-            binding.originStatus.visibility = if (it) View.VISIBLE else View.GONE
-        }
-        viewModel.tweetText.observe(this) {
-            if (it != binding.tweetEdit.text.toString()) {
-                binding.tweetEdit.setText(it)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch { viewModel.uiState.collect(::render) }
+                launch { viewModel.events.collect(::handleEvent) }
             }
-        }
-        viewModel.prefixLength.observe(this) {
-            binding.tweetEdit.prefixLength = it
-        }
-        viewModel.textSelectionEnd.observe(this) {
-            if (it == true) {
-                binding.tweetEdit.setSelection(binding.tweetEdit.text!!.length)
-            }
-        }
-        viewModel.remainingTextCount.observe(this) {
-            binding.remainingCount.text = it.toString()
-        }
-        viewModel.isValidTextCount.observe(this) {
-            binding.remainingCount.setTextColor(
-                ContextCompat.getColor(
-                    this,
-                    if (it) R.color.tweetTextRemainCount else R.color.tweetTextRemainCountError
-                )
-            )
-        }
-        viewModel.selectedMedia.observe(this) {
-            if (it == null) {
-                binding.selectedMediaImage.setImageDrawable(null)
-            } else {
-                binding.selectedMediaImage.loadUri(it)
-            }
-        }
-        viewModel.onSetTweetListAdapter.observe(this) {
-            TweetListAdapter(this).apply {
-                add(viewModel.toStatus!!)
-                binding.originStatus.adapter = this
-            }
-        }
-        viewModel.onFinish.observe(this) { finish() }
-        viewModel.onPickMedia.observe(this) {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
         }
 
         viewModel.externalText = intent.getStringExtra(INTENT_EXTRA_KEY_TEXT)
-        viewModel.toStatus = intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS).let {
-            if (it == null) null else (it as Status)
-        }
+        viewModel.toStatus = intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) as? Status
         viewModel.tweetType = intent.getIntExtra(INTENT_EXTRA_KEY_TYPE, TYPE_NEWTWEET)
+    }
+
+    private fun render(state: TweetUiState) {
+        state.actionBarTitle?.let {
+            supportActionBar?.title = getString(it)
+        } ?: supportActionBar?.hide()
+        binding.accountScreenName.text = state.accountScreenName
+
+        if (state.tweetText != binding.tweetEdit.text.toString()) {
+            binding.tweetEdit.setText(state.tweetText)
+        }
+        binding.tweetEdit.prefixLength = state.prefixLength
+        binding.remainingCount.text = state.remainingTextCount.toString()
+        binding.remainingCount.setTextColor(
+            ContextCompat.getColor(
+                this,
+                if (state.isValidTextCount) R.color.tweetTextRemainCount else R.color.tweetTextRemainCountError
+            )
+        )
+
+        if (state.selectedMedia == null) {
+            binding.selectedMediaImage.setImageDrawable(null)
+        } else {
+            binding.selectedMediaImage.loadUri(state.selectedMedia)
+        }
+    }
+
+    private fun handleEvent(event: TweetEvent) = when (event) {
+        is TweetEvent.Finish -> finish()
+        is TweetEvent.ShowOriginStatus -> {
+            TweetListAdapter(this).apply {
+                add(event.status)
+                binding.originStatus.adapter = this
+            }
+            binding.originStatus.visibility = View.VISIBLE
+        }
+
+        is TweetEvent.SetTextSelectionEnd -> binding.tweetEdit.setSelection(binding.tweetEdit.text!!.length)
     }
 
     private fun requestSpeechInput() {
@@ -160,6 +152,10 @@ class TweetActivity : LoDBaseActivity() {
             }
             show()
         }
+    }
+
+    private fun pickMedia() {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
     }
 
 }
