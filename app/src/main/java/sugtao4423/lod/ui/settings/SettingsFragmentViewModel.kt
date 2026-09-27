@@ -17,7 +17,6 @@ import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.UserList
 import java.io.File
-import java.text.DecimalFormat
 
 data class SettingsUiState(
     val listAsTLChecked: Boolean = false,
@@ -113,11 +112,7 @@ class SettingsFragmentViewModel(application: Application) : AndroidViewModel(app
         } ?: 0L
 
         val cacheDir = app.applicationContext.cacheDir
-        val cacheSize = DecimalFormat("#.# MiB").let {
-            it.minimumFractionDigits = 2
-            it.maximumFractionDigits = 2
-            it.format(getDirSize(cacheDir).toDouble() / 1024 / 1024)
-        }
+        val cacheSize = "%.2f MiB".format(getDirSize(cacheDir) / 1024.0 / 1024.0)
         _uiState.update { it.copy(cacheSize = cacheSize) }
     }
 
