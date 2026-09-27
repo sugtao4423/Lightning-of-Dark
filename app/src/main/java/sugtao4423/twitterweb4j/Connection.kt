@@ -9,12 +9,15 @@ import okhttp3.RequestBody
 import sugtao4423.twitter4j.TwitterException
 import java.io.IOException
 
-object Connection {
+class TwitterHeaders(
+    private val cookie: String,
+    private val csrfToken: String,
+) {
 
-    private const val twitterWebBearer =
+    private val twitterWebBearer =
         "AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA"
 
-    val defaultHeaders: Headers = mapOf(
+    private val defaultHeaders = mapOf(
         "Accept-Language" to "en-US,en;q=0.9",
         "Cache-Control" to "no-cache",
         "Pragma" to "no-cache",
@@ -24,13 +27,16 @@ object Connection {
         "X-Twitter-Client-Language" to "en",
     ).toHeaders()
 
-    fun authenticatedHeaders(cookie: String, csrfToken: String): Headers =
-        defaultHeaders.newBuilder().apply {
-            add("Authorization", "Bearer $twitterWebBearer")
-            add("X-Twitter-Auth-Type", "OAuth2Session")
-            add("Cookie", cookie)
-            add("X-Csrf-Token", csrfToken)
-        }.build()
+    val clientTransactionHeaders = defaultHeaders.newBuilder().apply {
+        add("Cookie", cookie)
+    }.build()
+
+    val authenticatedHeaders = defaultHeaders.newBuilder().apply {
+        add("Authorization", "Bearer $twitterWebBearer")
+        add("X-Twitter-Auth-Type", "OAuth2Session")
+        add("Cookie", cookie)
+        add("X-Csrf-Token", csrfToken)
+    }.build()
 
 }
 

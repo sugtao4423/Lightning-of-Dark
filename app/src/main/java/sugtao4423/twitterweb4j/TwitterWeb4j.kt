@@ -34,7 +34,7 @@ class TwitterWeb4j {
         const val DEFAULT_COUNT = 40
     }
 
-    private val authenticatedHeaders: Headers
+    private val twitterHeaders: TwitterHeaders
 
     @Throws(TwitterException::class)
     constructor(cookie: String) {
@@ -44,7 +44,7 @@ class TwitterWeb4j {
         if (ct0.isNullOrEmpty()) {
             throw TwitterException("Invalid cookie: ct0 token not found.")
         }
-        authenticatedHeaders = Connection.authenticatedHeaders(cookie, ct0)
+        twitterHeaders = TwitterHeaders(cookie, ct0)
     }
 
     private val client = OkHttpClient()
@@ -52,7 +52,7 @@ class TwitterWeb4j {
     @Volatile
     private var clientTransaction: ClientTransaction? = null
 
-    val media by lazy { MediaUpload(client, authenticatedHeaders) }
+    val media by lazy { MediaUpload(client, twitterHeaders.authenticatedHeaders) }
 
     @Throws(TwitterException::class)
     fun verifyCredentials(): User {
@@ -219,7 +219,7 @@ class TwitterWeb4j {
 
     @Throws(TwitterException::class)
     fun loadClientTransaction() {
-        val h = Connection.defaultHeaders
+        val h = twitterHeaders.clientTransactionHeaders
         try {
             val homePageHtml = execute("GET", ClientTransactionUtils.homePageUrl, headers = h)
             val ondemandFileUrl = ClientTransactionUtils.getOndemandFileUrl(homePageHtml)
@@ -233,7 +233,7 @@ class TwitterWeb4j {
     }
 
     private fun buildRequestHeaders(method: String, urlPath: String): Headers {
-        val builder = authenticatedHeaders.newBuilder()
+        val builder = twitterHeaders.authenticatedHeaders.newBuilder()
         clientTransaction?.let {
             val transactionId = it.generateTransactionId(method, urlPath)
             builder.add("X-Client-Transaction-Id", transactionId)
