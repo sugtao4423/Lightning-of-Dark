@@ -1,4 +1,4 @@
-package sugtao4423.lod.ui.main.fragment
+package sugtao4423.lod.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,13 +10,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
 import sugtao4423.lod.databinding.SwipeTweetListBinding
-import sugtao4423.lod.ui.BaseTweetListEvent
-import sugtao4423.lod.ui.BaseTweetListViewModel
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
-import sugtao4423.lod.ui.setup
 import sugtao4423.twitter4j.Status
 
-abstract class BaseFragment : Fragment() {
+abstract class BaseTweetListFragment : Fragment() {
 
     protected abstract val viewModel: BaseTweetListViewModel
 
@@ -49,18 +46,18 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    protected fun insertTop(statues: List<Status>) {
+    protected open fun insertTop(statues: List<Status>) {
         adapter.insertTop(statues)
         if (binding.listLine.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
             binding.listLine.smoothScrollToPosition(0)
         }
     }
 
-    protected fun updateRefreshState(isRefreshing: Boolean) {
+    protected open fun updateRefreshState(isRefreshing: Boolean) {
         binding.swipeRefresh.isRefreshing = isRefreshing
     }
 
-    protected fun handleEvent(event: BaseTweetListEvent) = when (event) {
+    protected open fun handleEvent(event: BaseTweetListEvent) = when (event) {
         is BaseTweetListEvent.ResetList -> {
             adapter.clear()
             scrollListener.resetState()

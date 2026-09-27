@@ -6,9 +6,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import sugtao4423.lod.ui.BaseTweetListFragment
 import sugtao4423.lod.ui.main.MainActivityViewModel
 
-class MentionFragment : BaseFragment() {
+class MentionFragment : BaseTweetListFragment() {
 
     override val viewModel: MentionFragmentViewModel by viewModels()
     private val mainViewModel: MainActivityViewModel by activityViewModels()
@@ -23,7 +24,7 @@ class MentionFragment : BaseFragment() {
 
 }
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseTweetListFragment() {
 
     override val viewModel: HomeFragmentViewModel by viewModels()
     private val mainViewModel: MainActivityViewModel by activityViewModels()
@@ -38,7 +39,7 @@ class HomeFragment : BaseFragment() {
 
 }
 
-class ListFragment : BaseFragment() {
+class ListFragment : BaseTweetListFragment() {
 
     companion object {
         const val LIST_INDEX = "listIndex"
