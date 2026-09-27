@@ -38,7 +38,6 @@ dependencies {
     val lifecycleVersion = "2.10.0"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
     ksp("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
@@ -65,6 +64,4 @@ dependencies {
 
     implementation("com.squareup.okhttp3:okhttp:5.5.0")
     implementation("com.twitter.twittertext:twitter-text:3.1.0")
-
-    implementation("com.github.hadilq:live-event:1.3.0")
 }
