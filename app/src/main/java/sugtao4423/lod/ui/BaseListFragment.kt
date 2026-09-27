@@ -1,5 +1,6 @@
 package sugtao4423.lod.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,18 +9,26 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import sugtao4423.lod.databinding.SwipeTweetListBinding
+import sugtao4423.lod.ui.adapter.ListUpdatable
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
+import sugtao4423.lod.ui.adapter.user.UserListAdapter
 import sugtao4423.twitter4j.Status
+import sugtao4423.twitter4j.User
+import sugtao4423.twitterweb4j.model.CursorList
+import sugtao4423.twitterweb4j.model.PagableCursorList
 
-abstract class BaseTweetListFragment : Fragment() {
+sealed class BaseListFragment<T, L : List<T>, A>(
+    adapterFactory: (context: Context) -> A,
+) : Fragment() where A : RecyclerView.Adapter<*>, A : ListUpdatable<T> {
 
-    protected abstract val viewModel: BaseTweetListViewModel
+    protected abstract val viewModel: BaseListViewModel<T, L>
 
     protected lateinit var binding: SwipeTweetListBinding
 
-    protected val adapter by lazy { TweetListAdapter(requireContext()) }
+    protected val adapter by lazy { adapterFactory(requireContext()) }
     protected val scrollListener by lazy {
         viewModel.getLoadMoreListener(binding.listLine.linearLayoutManager)
     }
@@ -46,8 +55,8 @@ abstract class BaseTweetListFragment : Fragment() {
         }
     }
 
-    protected open fun insertTop(statues: List<Status>) {
-        adapter.insertTop(statues)
+    protected open fun insertTop(items: List<T>) {
+        adapter.insertTop(items)
         if (binding.listLine.linearLayoutManager.findFirstVisibleItemPosition() <= 1) {
             binding.listLine.smoothScrollToPosition(0)
         }
@@ -57,13 +66,21 @@ abstract class BaseTweetListFragment : Fragment() {
         binding.swipeRefresh.isRefreshing = isRefreshing
     }
 
-    protected open fun handleEvent(event: BaseTweetListEvent) = when (event) {
-        is BaseTweetListEvent.ResetList -> {
+    protected open fun handleEvent(event: BaseListEvent<T, L>) = when (event) {
+        is BaseListEvent.ResetList -> {
             adapter.clear()
             scrollListener.resetState()
         }
 
-        is BaseTweetListEvent.AddStatuses -> adapter.addAll(event.statuses)
+        is BaseListEvent.AddItems<T, L> -> adapter.addAll(event.items)
     }
 
 }
+
+abstract class TweetListFragment : BaseListFragment<Status, CursorList<Status>, TweetListAdapter>({
+    TweetListAdapter(it)
+})
+
+abstract class UserListFragment : BaseListFragment<User, PagableCursorList<User>, UserListAdapter>({
+    UserListAdapter(it)
+})

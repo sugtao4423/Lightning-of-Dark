@@ -8,10 +8,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.launch
-import sugtao4423.lod.ui.BaseTweetListFragment
+import sugtao4423.lod.ui.TweetListFragment
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
 
-class StatusFragment : BaseTweetListFragment() {
+class StatusFragment : TweetListFragment() {
 
     companion object {
         const val KEY_FRAGMENT_TYPE = "fragmentType"

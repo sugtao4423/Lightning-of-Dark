@@ -3,26 +3,18 @@ package sugtao4423.lod.ui.userpage.fragment
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.BaseTweetListViewModel
+import sugtao4423.lod.ui.BaseListEvent
+import sugtao4423.lod.ui.UserListViewModel
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.User
-import sugtao4423.twitterweb4j.model.PagableCursorList
 
-class UserFragmentViewModel(application: Application) : BaseTweetListViewModel(application) {
-
-    private val userCount = App.DEFAULT_USER_COUNT
+class UserFragmentViewModel(application: Application) : UserListViewModel(application) {
 
     var user: User? = null
     var fragmentType: String = UserFragment.TYPE_FOLLOW
-
-    private val _addUsers = Channel<PagableCursorList<User>>(Channel.BUFFERED)
-    val addUsers = _addUsers.receiveAsFlow()
 
     override fun loadList(isRefresh: Boolean) = viewModelScope.launch {
         if (user == null) return@launch
@@ -37,7 +29,7 @@ class UserFragmentViewModel(application: Application) : BaseTweetListViewModel(a
 
         bottomCursor = result.cursorBottom
         hasNextPage = result.hasNext()
-        _addUsers.send(result)
+        _events.trySend(BaseListEvent.AddItems(result))
     }
 
     private fun getUsers() = when (fragmentType) {
