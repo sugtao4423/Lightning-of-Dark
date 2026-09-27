@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.databinding.FragmentShowImageBinding
 import sugtao4423.lod.ui.loadUrl
 
@@ -16,20 +20,31 @@ class ShowImageFragment : Fragment() {
     }
 
     private val viewModel: ShowImageFragmentViewModel by viewModels()
+    private lateinit var binding: FragmentShowImageBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.imageUrl = requireArguments().getString(BUNDLE_KEY_URL)!!
-
-        val binding = FragmentShowImageBinding.inflate(inflater, container, false)
-        binding.imageView.loadUrl(viewModel.imageUrl, viewModel.requestListener)
-        viewModel.isShowProgressBar.observe(viewLifecycleOwner) {
-            binding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
-        }
+        binding = FragmentShowImageBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect(::render)
+            }
+        }
+
+        val imageUrl = requireArguments().getString(BUNDLE_KEY_URL)!!
+        binding.imageView.loadUrl(imageUrl, viewModel.requestListener)
+    }
+
+    private fun render(state: ShowImageUiState) {
+        binding.progressBar.visibility = if (state.isShowProgressBar) View.VISIBLE else View.GONE
     }
 
 }

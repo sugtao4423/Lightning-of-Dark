@@ -3,21 +3,24 @@ package sugtao4423.lod.ui.showimage.fragment
 import android.app.Application
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import sugtao4423.lod.App
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
 
-class ShowImageFragmentViewModel(application: Application) : AndroidViewModel(application) {
+data class ShowImageUiState(
+    val isShowProgressBar: Boolean = true,
+)
 
-    private val app = getApplication<App>()
+class ShowImageFragmentViewModel(private val application: Application) :
+    AndroidViewModel(application) {
 
-    val isShowProgressBar = MutableLiveData(true)
-
-    var imageUrl: String? = null
+    private val _uiState = MutableStateFlow(ShowImageUiState())
+    val uiState = _uiState.asStateFlow()
 
     val requestListener = object : RequestListener<Drawable> {
 
@@ -27,8 +30,8 @@ class ShowImageFragmentViewModel(application: Application) : AndroidViewModel(ap
             target: com.bumptech.glide.request.target.Target<Drawable>?,
             isFirstResource: Boolean
         ): Boolean {
-            app.showToast(R.string.error_get_image)
-            isShowProgressBar.value = false
+            application.showToast(R.string.error_get_image)
+            _uiState.update { it.copy(isShowProgressBar = false) }
             return false
         }
 
@@ -39,7 +42,7 @@ class ShowImageFragmentViewModel(application: Application) : AndroidViewModel(ap
             dataSource: DataSource?,
             isFirstResource: Boolean
         ): Boolean {
-            isShowProgressBar.value = false
+            _uiState.update { it.copy(isShowProgressBar = false) }
             return false
         }
     }

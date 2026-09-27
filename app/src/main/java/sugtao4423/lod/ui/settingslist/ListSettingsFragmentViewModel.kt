@@ -2,11 +2,13 @@ package sugtao4423.lod.ui.settingslist
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
@@ -15,6 +17,15 @@ import sugtao4423.lod.entity.ListSetting
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.UserList
 
+data class ListSettingsUiState(
+    val selectListSummary: String = "",
+    val loadOnAppStartListSummary: String = "",
+)
+
+sealed interface ListSettingsEvent {
+    data class ShowChooseListDialog(val lists: List<UserList>) : ListSettingsEvent
+}
+
 class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app = getApplication<App>()
@@ -22,16 +33,11 @@ class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel
     val listSettings: List<ListSetting>
         get() = app.account.listSettings
 
-    data class PreferenceSummaryData(
-        val selectListSummary: String,
-        val loadOnAppStartListSummary: String,
-    )
+    private val _uiState = MutableStateFlow(ListSettingsUiState())
+    val uiState = _uiState.asStateFlow()
 
-    private val _preferenceSummary = MutableLiveData<PreferenceSummaryData>()
-    val preferenceSummary: LiveData<PreferenceSummaryData> = _preferenceSummary
-
-    private val _showChooseListDialog = LiveEvent<List<UserList>>()
-    val showChooseListDialog: LiveData<List<UserList>> = _showChooseListDialog
+    private val _events = Channel<ListSettingsEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
 
     init {
         setPreferenceSummary()
@@ -46,7 +52,7 @@ class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel
             return@launch
         }
 
-        _showChooseListDialog.value = result
+        _events.trySend(ListSettingsEvent.ShowChooseListDialog(result))
     }
 
     fun saveSelectedLists(lists: List<UserList>) = viewModelScope.launch {
@@ -72,10 +78,12 @@ class ListSettingsFragmentViewModel(application: Application) : AndroidViewModel
                 app.getString(R.string.param_setting_value_str, it)
             }
 
-        _preferenceSummary.value = PreferenceSummaryData(
-            listNames,
-            loadOnAppStartListNames
-        )
+        _uiState.update {
+            it.copy(
+                selectListSummary = listNames,
+                loadOnAppStartListSummary = loadOnAppStartListNames,
+            )
+        }
     }
 
 }

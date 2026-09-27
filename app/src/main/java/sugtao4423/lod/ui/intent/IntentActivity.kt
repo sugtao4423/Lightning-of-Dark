@@ -5,6 +5,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.addaccount.AddAccountActivity
 import sugtao4423.lod.ui.tweet.TweetActivity
@@ -30,22 +34,10 @@ class IntentActivity : AppCompatActivity() {
             return
         }
 
-        viewModel.onStartTweetActivity.observe(this) {
-            val i = Intent(this, TweetActivity::class.java).apply {
-                putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_EXTERNALTEXT)
-                putExtra(TweetActivity.INTENT_EXTRA_KEY_TEXT, it)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.events.collect(::handleEvent)
             }
-            startActivity(i)
-            finish()
-        }
-        viewModel.onStartUserPageActivity.observe(this) {
-            val i = Intent(this, UserPageActivity::class.java)
-            i.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, it)
-            startActivity(i)
-            finish()
-        }
-        viewModel.showStatusDialog.observe(this) {
-            showStatusDialog(it)
         }
 
         val status = intent.getSerializableExtra(INTENT_EXTRA_KEY_STATUS) as? Status
@@ -55,6 +47,26 @@ class IntentActivity : AppCompatActivity() {
             statusId != -1L -> viewModel.showStatus(statusId)
             else -> viewModel.doIntentAction(intent)
         }
+    }
+
+    private fun handleEvent(event: IntentEvent) = when (event) {
+        is IntentEvent.StartTweetActivity -> {
+            val i = Intent(this, TweetActivity::class.java).apply {
+                putExtra(TweetActivity.INTENT_EXTRA_KEY_TYPE, TweetActivity.TYPE_EXTERNALTEXT)
+                putExtra(TweetActivity.INTENT_EXTRA_KEY_TEXT, event.text)
+            }
+            startActivity(i)
+            finish()
+        }
+
+        is IntentEvent.StartUserPageActivity -> {
+            val i = Intent(this, UserPageActivity::class.java)
+            i.putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_SCREEN_NAME, event.screenName)
+            startActivity(i)
+            finish()
+        }
+
+        is IntentEvent.ShowStatusDialog -> showStatusDialog(event.status)
     }
 
     private fun showStatusDialog(status: Status) {

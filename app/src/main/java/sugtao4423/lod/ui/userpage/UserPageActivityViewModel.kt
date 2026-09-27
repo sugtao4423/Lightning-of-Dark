@@ -2,11 +2,13 @@ package sugtao4423.lod.ui.userpage
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
@@ -14,30 +16,35 @@ import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.User
 
+data class UserPageUiState(
+    val user: User? = null,
+    val actionBarTitle: String = "",
+)
+
+sealed interface UserPageEvent {
+    data object Finish : UserPageEvent
+}
+
 class UserPageActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app = getApplication<App>()
 
-    private val _actionBarTitle = MutableLiveData("")
-    val actionBarTitle: LiveData<String> = _actionBarTitle
+    private val _uiState = MutableStateFlow(UserPageUiState())
+    val uiState = _uiState.asStateFlow()
 
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User> = _user
-
-    private val _onFinish = LiveEvent<Unit>()
-    val onFinish: LiveData<Unit> = _onFinish
+    private val _events = Channel<UserPageEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
 
     fun setUser(user: User) {
-        if (_user.value == null) {
-            _user.value = user
-            _actionBarTitle.value = user.name
+        if (_uiState.value.user != null) return
+        _uiState.update {
+            it.copy(user = user, actionBarTitle = user.name)
         }
     }
 
     fun setUser(screenName: String) {
-        if (_user.value == null) {
-            loadUser(screenName)
-        }
+        if (_uiState.value.user != null) return
+        loadUser(screenName)
     }
 
     private fun loadUser(screenName: String) = viewModelScope.launch {
@@ -46,12 +53,13 @@ class UserPageActivityViewModel(application: Application) : AndroidViewModel(app
         }
         if (result == null) {
             app.showToast(R.string.error_get_user_detail)
-            _onFinish.value = Unit
+            _events.trySend(UserPageEvent.Finish)
             return@launch
         }
 
-        _user.value = result
-        _actionBarTitle.value = result.name
+        _uiState.update {
+            it.copy(user = result, actionBarTitle = result.name)
+        }
     }
 
 }

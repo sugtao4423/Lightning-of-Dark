@@ -2,15 +2,18 @@ package sugtao4423.lod.ui.showimage
 
 import android.app.Application
 import android.net.Uri
-import androidx.annotation.ArrayRes
 import androidx.core.net.toUri
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import com.hadilq.liveevent.LiveEvent
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.Regex
 import sugtao4423.lod.utils.showToast
+
+sealed interface ShowImageEvent {
+    data class ShowImageOptionDialog(val dialogItemRes: Int, val openImageUri: Uri) : ShowImageEvent
+}
 
 class ShowImageActivityViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -23,13 +26,8 @@ class ShowImageActivityViewModel(application: Application) : AndroidViewModel(ap
     var imageType = -1
     var currentPageIndex = 0
 
-    data class ImageOptionDialogData(
-        @ArrayRes val dialogItemRes: Int,
-        val openImageUri: Uri,
-    )
-
-    private val _showImageOptionDialog = LiveEvent<ImageOptionDialogData>()
-    val showImageOptionDialog: LiveData<ImageOptionDialogData> = _showImageOptionDialog
+    private val _events = Channel<ShowImageEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
 
     fun clickImageOptionButton() {
         val imageUrl = imageUrls[currentPageIndex]
@@ -37,8 +35,9 @@ class ShowImageActivityViewModel(application: Application) : AndroidViewModel(ap
             (imageType != ShowImageActivity.TYPE_BANNER && imageType != ShowImageActivity.TYPE_ICON)
         val listItemRes = if (existsOriginal) R.array.image_option_orig else R.array.image_option
         val openUrl = if (existsOriginal) "$imageUrl:orig" else imageUrl
-        val data = ImageOptionDialogData(listItemRes, openUrl.toUri())
-        _showImageOptionDialog.value = data
+        _events.trySend(
+            ShowImageEvent.ShowImageOptionDialog(listItemRes, openUrl.toUri())
+        )
     }
 
     fun saveCurrentImage() {

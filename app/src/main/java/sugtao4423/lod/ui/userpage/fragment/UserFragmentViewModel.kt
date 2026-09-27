@@ -2,8 +2,9 @@ package sugtao4423.lod.ui.userpage.fragment
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
@@ -20,7 +21,8 @@ class UserFragmentViewModel(application: Application) : BaseTweetListViewModel(a
     var user: User? = null
     var fragmentType: String = UserFragment.TYPE_FOLLOW
 
-    val addUsers = LiveEvent<PagableCursorList<User>>()
+    private val _addUsers = Channel<PagableCursorList<User>>(Channel.BUFFERED)
+    val addUsers = _addUsers.receiveAsFlow()
 
     override fun loadList(isRefresh: Boolean) = viewModelScope.launch {
         if (user == null) return@launch
@@ -35,7 +37,7 @@ class UserFragmentViewModel(application: Application) : BaseTweetListViewModel(a
 
         bottomCursor = result.cursorBottom
         hasNextPage = result.hasNext()
-        addUsers.value = result
+        _addUsers.send(result)
     }
 
     private fun getUsers() = when (fragmentType) {

@@ -10,15 +10,17 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.FragmentUserDetailBinding
 import sugtao4423.lod.ui.loadUrl
 import sugtao4423.lod.ui.setLodLinkMovementString
 import sugtao4423.lod.ui.showimage.ShowImageActivity
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
-import sugtao4423.lod.ui.userpage.converter.UserConverter
 import sugtao4423.lod.utils.ChromeIntent
-import sugtao4423.twitter4j.User
 
 class DetailFragment : Fragment() {
 
@@ -42,72 +44,73 @@ class DetailFragment : Fragment() {
             followCountIcon.typeface = fontAwesome
             followerCountIcon.typeface = fontAwesome
             createDateIcon.typeface = fontAwesome
+
+            bannerImage.setOnClickListener { viewModel.onClickBanner() }
+            bannerImage.setOnLongClickListener { viewModel.onLongClickBanner() }
+
+            iconImage.setOnClickListener { viewModel.onClickIcon() }
+            iconImage.setOnLongClickListener { viewModel.onLongClickIcon() }
         }.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        userPageViewModel.user.observe(viewLifecycleOwner) {
-            bindUser(it)
-            viewModel.checkRelationShip(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch { userPageViewModel.uiState.collect { it.user?.let(viewModel::setUser) } }
+                launch { viewModel.uiState.collect(::render) }
+                launch { viewModel.events.collect(::handleEvent) }
+            }
+        }
+    }
+
+    private fun render(state: DetailUiState) = binding.apply {
+        bannerImage.loadUrl(
+            state.bannerUrl,
+            ContextCompat.getDrawable(requireContext(), R.drawable.user_header_empty)
+        )
+        iconImage.loadUrl(state.iconUrl)
+        userName.text = state.name
+        screenName.text = state.screenName
+        protectIcon.visibility = if (state.isShowProtected) View.VISIBLE else View.GONE
+
+        relationshipLayout.visibility = if (state.isShowRelationship) View.VISIBLE else View.GONE
+        if (state.isShowRelationship) {
+            relationshipText.text = state.relationshipIcon
+            relationshipMeIcon.loadUrl(state.myIconUrl)
+            relationshipTargetIcon.loadUrl(state.iconUrl)
         }
 
-        viewModel.relationshipIcon.observe(viewLifecycleOwner) {
-            binding.relationshipText.text = it
-        }
-        viewModel.onStartIconImageUrl.observe(viewLifecycleOwner) {
+        bioText.setLodLinkMovementString(state.bio)
+        locationText.setLodLinkMovementString(state.location)
+        linkText.setLodLinkMovementString(state.link)
+
+        tweetCount.text = state.tweetCount
+        favCount.text = state.favoriteCount
+        followCount.text = state.followCount
+        followerCount.text = state.followerCount
+        createDate.text = state.createDate
+    }
+
+    private fun handleEvent(event: DetailEvent) = when (event) {
+        is DetailEvent.StartBannerImage -> {
             val image = Intent(context, ShowImageActivity::class.java).apply {
-                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, arrayOf(it))
-                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_TYPE, ShowImageActivity.TYPE_ICON)
-            }
-            startActivity(image)
-        }
-        viewModel.onStartBannerImageUrl.observe(viewLifecycleOwner) {
-            val image = Intent(context, ShowImageActivity::class.java).apply {
-                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, arrayOf(it))
+                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, arrayOf(event.url))
                 putExtra(ShowImageActivity.INTENT_EXTRA_KEY_TYPE, ShowImageActivity.TYPE_BANNER)
             }
             startActivity(image)
         }
-        viewModel.onStartChromeUrl.observe(viewLifecycleOwner) {
-            ChromeIntent(requireContext(), it.toUri())
-        }
-    }
 
-    private fun bindUser(user: User) = binding.apply {
-        bannerImage.loadUrl(
-            UserConverter.bannerUrl(user),
-            ContextCompat.getDrawable(requireContext(), R.drawable.user_header_empty)
-        )
-        bannerImage.setOnClickListener { viewModel.onClickBanner(user) }
-        bannerImage.setOnLongClickListener { viewModel.onLongClickBanner(user) }
-
-        iconImage.loadUrl(UserConverter.iconUrl(user))
-        iconImage.setOnClickListener { viewModel.onClickIcon(user) }
-        iconImage.setOnLongClickListener { viewModel.onLongClickIcon(user) }
-
-        userName.text = UserConverter.name(user)
-        protectIcon.visibility =
-            if (UserConverter.isShowProtected(user)) View.VISIBLE else View.GONE
-        screenName.text = UserConverter.screenName(user)
-
-        val isShowRelationship = viewModel.isShowRelationship(user)
-        relationshipLayout.visibility = if (isShowRelationship) View.VISIBLE else View.GONE
-        if (isShowRelationship) {
-            relationshipMeIcon.loadUrl(viewModel.myIconUrl)
-            relationshipTargetIcon.loadUrl(UserConverter.iconUrl(user))
+        is DetailEvent.StartIconImage -> {
+            val image = Intent(context, ShowImageActivity::class.java).apply {
+                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, arrayOf(event.url))
+                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_TYPE, ShowImageActivity.TYPE_ICON)
+            }
+            startActivity(image)
         }
 
-        bioText.setLodLinkMovementString(UserConverter.bio(user))
-        locationText.setLodLinkMovementString(UserConverter.location(user))
-        linkText.setLodLinkMovementString(UserConverter.link(user))
-
-        tweetCount.text = UserConverter.tweetCount(user)
-        favCount.text = UserConverter.favoriteCount(user)
-        followCount.text = UserConverter.followCount(user)
-        followerCount.text = UserConverter.followerCount(user)
-        createDate.text = UserConverter.createDate(user)
+        is DetailEvent.StartChrome -> ChromeIntent(requireContext(), event.url.toUri())
     }
 
 }

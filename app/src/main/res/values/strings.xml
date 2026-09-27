@@ -96,7 +96,7 @@
     <string name="choose_list_as_tl">TLとして読み込むリストを選択してください</string>
     <string name="input_auto_load_interval_second">自動で取得する間隔を秒で入力してください</string>
     <string name="param_setting_value_num_zero_is_disable">設定値: %d (0: 無効)</string>
-    <string name="param_cache_num_megabyte">キャッシュ: %sMB</string>
+    <string name="param_cache_size">キャッシュ: %s</string>
 
     <string name="choose_app_start_load_list">起動時に読み込むリストを選択してください</string>
     <string name="choose_list">リストを選択してください</string>

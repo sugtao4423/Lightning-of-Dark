@@ -5,10 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
@@ -17,19 +17,19 @@ import sugtao4423.lod.utils.Regex
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.Status
 
+sealed interface IntentEvent {
+    data class StartTweetActivity(val text: String) : IntentEvent
+    data class StartUserPageActivity(val screenName: String) : IntentEvent
+    data class ShowStatusDialog(val status: Status) : IntentEvent
+}
+
 class IntentActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app = getApplication<App>()
     val hasAccount = app.hasAccount
 
-    private val _onStartTweetActivity = LiveEvent<String>()
-    val onStartTweetActivity: LiveData<String> = _onStartTweetActivity
-
-    private val _onStartUserPageActivity = LiveEvent<String>()
-    val onStartUserPageActivity: LiveData<String> = _onStartUserPageActivity
-
-    private val _showStatusDialog = LiveEvent<Status>()
-    val showStatusDialog: LiveData<Status> = _showStatusDialog
+    private val _events = Channel<IntentEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
 
     fun doIntentAction(intent: Intent) {
         if (intent.action == Intent.ACTION_VIEW && intent.data != null) {
@@ -54,7 +54,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
             matchShare.find() -> onActionViewShare(intentData)
             matchUser.find() -> {
                 val screenName = matchUser.group(Regex.userUrlScreenNameGroup)!!
-                _onStartUserPageActivity.value = screenName
+                _events.trySend(IntentEvent.StartUserPageActivity(screenName))
             }
         }
     }
@@ -75,7 +75,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
                 add(str)
             }
         }.joinToString(" ")
-        _onStartTweetActivity.value = text
+        _events.trySend(IntentEvent.StartTweetActivity(text))
     }
 
     private fun onActionSend(intentExtra: Bundle) {
@@ -91,11 +91,11 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
             subject.isEmpty() -> text
             else -> "$subject $text"
         }
-        _onStartTweetActivity.value = tweetText
+        _events.trySend(IntentEvent.StartTweetActivity(tweetText))
     }
 
     fun showStatus(status: Status) {
-        _showStatusDialog.value = status
+        _events.trySend(IntentEvent.ShowStatusDialog(status))
     }
 
     fun showStatus(statusId: Long) = viewModelScope.launch {
@@ -107,7 +107,7 @@ class IntentActivityViewModel(application: Application) : AndroidViewModel(appli
             return@launch
         }
 
-        _showStatusDialog.value = result
+        _events.trySend(IntentEvent.ShowStatusDialog(result))
     }
 
 }

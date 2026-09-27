@@ -4,9 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import kotlinx.coroutines.launch
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.settingslist.ListSettingsActivity
 import sugtao4423.lod.view.IntegerEditTextPreference
@@ -23,25 +27,29 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference, rootKey)
-        initObservers()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch { viewModel.uiState.collect(::render) }
+                launch { viewModel.events.collect(::handleEvent) }
+            }
+        }
+
         initViews()
     }
 
-    private fun initObservers() {
-        viewModel.listAsTLData.observe(this) {
-            listAsTL.isChecked = it.isChecked
-            listAsTL.summary = it.summary
-        }
-        viewModel.onShowSelectListAsTLDialog.observe(this) {
-            showSelectListAsTLDialog(it)
-        }
-        viewModel.autoLoadTLInterval.observe(this) {
-            val str = getString(R.string.param_setting_value_num_zero_is_disable, it)
-            autoLoadTLInterval.summary = str
-        }
-        viewModel.cacheSizeMB.observe(this) {
-            clearCache.summary = getString(R.string.param_cache_num_megabyte, it)
-        }
+    private fun render(state: SettingsUiState) {
+        listAsTL.isChecked = state.listAsTLChecked
+        listAsTL.summary = state.listAsTLSummary
+
+        autoLoadTLInterval.summary =
+            getString(R.string.param_setting_value_num_zero_is_disable, state.autoLoadTLInterval)
+
+        clearCache.summary = getString(R.string.param_cache_size, state.cacheSize)
+    }
+
+    private fun handleEvent(event: SettingsEvent) = when (event) {
+        is SettingsEvent.ShowSelectListAsTLDialog -> showSelectListAsTLDialog(event.userLists)
     }
 
     private fun initViews() {

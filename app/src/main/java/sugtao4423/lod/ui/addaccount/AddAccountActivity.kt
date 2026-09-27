@@ -5,6 +5,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.databinding.ActivityAddAccountBinding
 import sugtao4423.lod.ui.loadUrl
 import sugtao4423.lod.ui.main.MainActivity
@@ -16,10 +20,10 @@ class AddAccountActivity : AppCompatActivity() {
     }
 
     private val viewModel: AddAccountActivityViewModel by viewModels()
+    private val binding by lazy { ActivityAddAccountBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityAddAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val editAccountId = intent.getLongExtra(INTENT_KEY_EDIT_ACCOUNT_ID, -1)
@@ -39,36 +43,34 @@ class AddAccountActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.isLoading.observe(this) {
-            binding.getUserButton.isEnabled = !it
-        }
-        viewModel.enableSaveButton.observe(this) {
-            binding.saveButton.isEnabled = it
-        }
-        viewModel.ct0Text.observe(this) {
-            binding.ct0Text.text = it
-        }
-        viewModel.authTokenText.observe(this) {
-            binding.authTokenText.text = it
-        }
-        viewModel.userIdText.observe(this) {
-            binding.userIdText.text = it
-        }
-        viewModel.screenNameText.observe(this) {
-            binding.screenNameText.text = it
-        }
-        viewModel.profileImageUrl.observe(this) {
-            binding.profileImageText.text = it ?: ""
-            if (it == null) {
-                binding.profileImageView.setImageDrawable(null)
-            } else {
-                binding.profileImageView.loadUrl(it)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch { viewModel.uiState.collect(::render) }
+                launch { viewModel.events.collect(::handleEvent) }
             }
         }
-        viewModel.onFinishEvent.observe(this) {
-            finish()
+    }
+
+    private fun render(state: AddAccountUiState) {
+        binding.getUserButton.isEnabled = !state.isLoading
+        binding.saveButton.isEnabled = state.enableSaveButton
+
+        binding.ct0Text.text = state.ct0Text
+        binding.authTokenText.text = state.authTokenText
+        binding.userIdText.text = state.userIdText
+        binding.screenNameText.text = state.screenNameText
+        state.profileImageUrl?.let {
+            binding.profileImageText.text = it
+            binding.profileImageView.loadUrl(it)
+        } ?: run {
+            binding.profileImageText.text = ""
+            binding.profileImageView.setImageDrawable(null)
         }
-        viewModel.onStartMainActivityEvent.observe(this) {
+    }
+
+    private fun handleEvent(event: AddAccountEvent) = when (event) {
+        AddAccountEvent.Finish -> finish()
+        AddAccountEvent.StartMainActivity -> {
             startActivity(Intent(applicationContext, MainActivity::class.java))
         }
     }

@@ -7,7 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import sugtao4423.lod.databinding.SwipeTweetListBinding
+import sugtao4423.lod.ui.BaseTweetListEvent
+import sugtao4423.lod.ui.EndlessScrollListener
 import sugtao4423.lod.ui.adapter.user.UserListAdapter
 import sugtao4423.lod.ui.setup
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
@@ -37,9 +43,6 @@ class UserFragment : Fragment() {
         binding.swipeRefresh.setup {
             viewModel.pull2Refresh()
         }
-        viewModel.isRefreshing.observe(viewLifecycleOwner) {
-            binding.swipeRefresh.isRefreshing = it
-        }
         return binding.root
     }
 
@@ -51,14 +54,31 @@ class UserFragment : Fragment() {
         val scrollListener = viewModel.getLoadMoreListener(binding.listLine.linearLayoutManager)
         binding.listLine.addOnScrollListener(scrollListener)
 
-        userPageViewModel.user.observe(viewLifecycleOwner) {
-            viewModel.user = it
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userPageViewModel.uiState.collect { it.user?.let { u -> viewModel.user = u } }
+            }
         }
 
-        viewModel.addUsers.observe(viewLifecycleOwner) {
-            adapter.addAll(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch { viewModel.isRefreshing.collect(::updateRefreshState) }
+                launch { viewModel.events.collect { handleEvent(it, adapter, scrollListener) } }
+                launch { viewModel.addUsers.collect(adapter::addAll) }
+            }
         }
-        viewModel.onResetList.observe(viewLifecycleOwner) {
+    }
+
+    private fun updateRefreshState(isRefreshing: Boolean) {
+        binding.swipeRefresh.isRefreshing = isRefreshing
+    }
+
+    private fun handleEvent(
+        event: BaseTweetListEvent,
+        adapter: UserListAdapter,
+        scrollListener: EndlessScrollListener,
+    ) {
+        if (event == BaseTweetListEvent.ResetList) {
             adapter.clear()
             scrollListener.resetState()
         }
