@@ -23,7 +23,7 @@ class MentionFragmentViewModel(application: Application) : TweetListViewModel(ap
         if (result.isNotEmpty()) {
             bottomCursor = result.cursorBottom
         }
-        hasNextPage = result.isNotEmpty()
+        setHasNextPage(result.isNotEmpty())
         addItems(result)
     }
 

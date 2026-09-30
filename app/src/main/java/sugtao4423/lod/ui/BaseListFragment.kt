@@ -29,9 +29,7 @@ sealed class BaseListFragment<T, L : List<T>, A>(
     protected lateinit var binding: SwipeTweetListBinding
 
     protected val adapter by lazy { adapterFactory(requireContext()) }
-    protected val scrollListener by lazy {
-        viewModel.getLoadMoreListener(binding.listLine.linearLayoutManager)
-    }
+    protected val scrollListener by lazy { viewModel.loadMoreListener }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

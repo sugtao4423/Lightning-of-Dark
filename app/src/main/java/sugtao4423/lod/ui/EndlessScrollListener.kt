@@ -2,43 +2,31 @@ package sugtao4423.lod.ui
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Job
 
-abstract class EndlessScrollListener(
-    private val linearLayoutManager: LinearLayoutManager
-) : RecyclerView.OnScrollListener() {
+abstract class EndlessScrollListener : RecyclerView.OnScrollListener() {
 
     var visibleThreshold = 5
-    var visibleItemCount = -1
-    var totalItemCount = -1
-    private var previousTotal = 0
-    private var loading = true
-    private var currentPage = 0
+    var hasMore = true
+    private var loading = false
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-        super.onScrolled(recyclerView, dx, dy)
+        if (!hasMore || loading) return
 
-        visibleItemCount = recyclerView.childCount
-        totalItemCount = linearLayoutManager.itemCount
-        val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
+        val lm = recyclerView.layoutManager as LinearLayoutManager
+        val lastVisible = lm.findLastVisibleItemPosition()
+        if (lastVisible == RecyclerView.NO_POSITION) return
 
-        if (loading && totalItemCount > previousTotal) {
-            loading = false
-            previousTotal = totalItemCount
-        }
-
-        if (!loading && (lastVisibleItem + visibleThreshold) > totalItemCount) {
-            currentPage++
-            onLoadMore(currentPage)
+        if (lastVisible >= lm.itemCount - 1 - visibleThreshold) {
             loading = true
+            onLoadMore().invokeOnCompletion { loading = false }
         }
     }
 
     fun resetState() {
-        this.currentPage = 0
-        this.previousTotal = 0
-        this.loading = true
+        this.loading = false
     }
 
-    abstract fun onLoadMore(currentPage: Int)
+    abstract fun onLoadMore(): Job
 
 }

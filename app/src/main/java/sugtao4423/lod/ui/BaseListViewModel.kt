@@ -2,7 +2,6 @@ package sugtao4423.lod.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ChannelResult
@@ -37,19 +36,20 @@ sealed class BaseListViewModel<T, L : List<T>>(application: Application) :
     protected fun addItems(items: L): ChannelResult<Unit> =
         _events.trySend(BaseListEvent.AddItems(items))
 
-    protected var hasNextPage = true
     protected var bottomCursor: String? = null
 
-    fun getLoadMoreListener(llm: LinearLayoutManager) = object : EndlessScrollListener(llm) {
-        override fun onLoadMore(currentPage: Int) {
-            if (hasNextPage) loadList(false)
-        }
+    val loadMoreListener = object : EndlessScrollListener() {
+        override fun onLoadMore(): Job = loadList(false)
+    }
+
+    fun setHasNextPage(hasNextPage: Boolean) {
+        loadMoreListener.hasMore = hasNextPage
     }
 
     open fun pull2Refresh() {
         _isRefreshing.update { true }
         _events.trySend(BaseListEvent.ResetList)
-        hasNextPage = true
+        setHasNextPage(true)
         bottomCursor = null
         loadList(true).invokeOnCompletion {
             _isRefreshing.update { false }

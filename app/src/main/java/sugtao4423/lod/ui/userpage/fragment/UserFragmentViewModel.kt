@@ -27,7 +27,7 @@ class UserFragmentViewModel(application: Application) : UserListViewModel(applic
         }
 
         bottomCursor = result.cursorBottom
-        hasNextPage = result.hasNext()
+        setHasNextPage(result.hasNext())
         addItems(result)
     }
 

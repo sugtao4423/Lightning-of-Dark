@@ -39,7 +39,7 @@ class ListFragmentViewModel(application: Application) : TweetListViewModel(appli
         if (result.isNotEmpty()) {
             bottomCursor = result.cursorBottom
         }
-        hasNextPage = result.isNotEmpty()
+        setHasNextPage(result.isNotEmpty())
         addItems(result)
     }
 
