@@ -32,7 +32,7 @@ class HomeFragmentViewModel(application: Application) : TweetListViewModel(appli
                 app.cursorTop = result.cursorTop
             }
         }
-        hasNextPage = result.isNotEmpty()
+        setHasNextPage(result.isNotEmpty())
         addItems(result)
     }
 
