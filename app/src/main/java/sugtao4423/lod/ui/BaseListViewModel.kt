@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ChannelResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -27,11 +28,14 @@ sealed class BaseListViewModel<T, L : List<T>>(application: Application) :
     protected val tweetCount = App.DEFAULT_TWEET_COUNT
     protected val userCount = App.DEFAULT_USER_COUNT
 
-    protected val _isRefreshing = MutableStateFlow(false)
+    private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
-    protected val _events = Channel<BaseListEvent<T, L>>(Channel.BUFFERED)
+    private val _events = Channel<BaseListEvent<T, L>>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
+
+    protected fun addItems(items: L): ChannelResult<Unit> =
+        _events.trySend(BaseListEvent.AddItems(items))
 
     protected var hasNextPage = true
     protected var bottomCursor: String? = null

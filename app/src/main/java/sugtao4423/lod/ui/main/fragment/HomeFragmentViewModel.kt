@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.BaseListEvent
 import sugtao4423.lod.ui.TweetListViewModel
 import sugtao4423.lod.utils.showToast
 
@@ -34,7 +33,7 @@ class HomeFragmentViewModel(application: Application) : TweetListViewModel(appli
             }
         }
         hasNextPage = result.isNotEmpty()
-        _events.trySend(BaseListEvent.AddItems(result))
+        addItems(result)
     }
 
 }

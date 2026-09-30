@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.BaseListEvent
 import sugtao4423.lod.ui.UserListViewModel
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.User
@@ -29,7 +28,7 @@ class UserFragmentViewModel(application: Application) : UserListViewModel(applic
 
         bottomCursor = result.cursorBottom
         hasNextPage = result.hasNext()
-        _events.trySend(BaseListEvent.AddItems(result))
+        addItems(result)
     }
 
     private fun getUsers() = when (fragmentType) {

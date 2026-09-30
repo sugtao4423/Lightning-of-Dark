@@ -6,7 +6,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.BaseListEvent
 import sugtao4423.lod.ui.TweetListViewModel
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.Status
@@ -33,7 +32,7 @@ class StatusFragmentViewModel(application: Application) : TweetListViewModel(app
             bottomCursor = result.cursorBottom
         }
         hasNextPage = result.isNotEmpty()
-        _events.trySend(BaseListEvent.AddItems(result))
+        addItems(result)
     }
 
     private fun getStatuses(): CursorList<Status> = when (fragmentType) {
