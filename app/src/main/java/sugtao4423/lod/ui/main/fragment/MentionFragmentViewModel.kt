@@ -6,11 +6,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.BaseTweetListEvent
-import sugtao4423.lod.ui.BaseTweetListViewModel
+import sugtao4423.lod.ui.TweetListViewModel
 import sugtao4423.lod.utils.showToast
 
-class MentionFragmentViewModel(application: Application) : BaseTweetListViewModel(application) {
+class MentionFragmentViewModel(application: Application) : TweetListViewModel(application) {
 
     override fun loadList(isRefresh: Boolean) = viewModelScope.launch {
         val result = withContext(Dispatchers.IO) {
@@ -25,7 +24,7 @@ class MentionFragmentViewModel(application: Application) : BaseTweetListViewMode
             bottomCursor = result.cursorBottom
         }
         hasNextPage = result.isNotEmpty()
-        _events.trySend(BaseTweetListEvent.AddStatuses(result))
+        addItems(result)
     }
 
 }

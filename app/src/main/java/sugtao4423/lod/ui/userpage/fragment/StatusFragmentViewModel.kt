@@ -6,14 +6,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.BaseTweetListEvent
-import sugtao4423.lod.ui.BaseTweetListViewModel
+import sugtao4423.lod.ui.TweetListViewModel
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.Status
 import sugtao4423.twitter4j.User
 import sugtao4423.twitterweb4j.model.CursorList
 
-class StatusFragmentViewModel(application: Application) : BaseTweetListViewModel(application) {
+class StatusFragmentViewModel(application: Application) : TweetListViewModel(application) {
 
     var user: User? = null
     var fragmentType: String = StatusFragment.TYPE_TWEET
@@ -33,7 +32,7 @@ class StatusFragmentViewModel(application: Application) : BaseTweetListViewModel
             bottomCursor = result.cursorBottom
         }
         hasNextPage = result.isNotEmpty()
-        _events.trySend(BaseTweetListEvent.AddStatuses(result))
+        addItems(result)
     }
 
     private fun getStatuses(): CursorList<Status> = when (fragmentType) {

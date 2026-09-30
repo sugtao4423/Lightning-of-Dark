@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
 import sugtao4423.lod.databinding.ListItemUserBinding
+import sugtao4423.lod.ui.adapter.UpdatableListAdapter
 import sugtao4423.lod.ui.adapter.converter.UserListConverter
 import sugtao4423.lod.ui.loadUrl
 import sugtao4423.twitter4j.User
 
 class UserListAdapter(private val context: Context) :
-    RecyclerView.Adapter<UserListAdapter.ViewHolder>() {
+    UpdatableListAdapter<User, UserListAdapter.ViewHolder>() {
 
     private val userListViewModel = UserListViewModel(context.applicationContext as App)
-    private val data = ArrayList<User>()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
@@ -29,20 +29,6 @@ class UserListAdapter(private val context: Context) :
             return
         }
         holder.bind(data[position])
-    }
-
-    override fun getItemCount(): Int = data.size
-
-    fun addAll(users: List<User>) {
-        val pos = data.size
-        data.addAll(users)
-        notifyItemRangeInserted(pos, users.size)
-    }
-
-    fun clear() {
-        val size = data.size
-        data.clear()
-        notifyItemRangeRemoved(0, size)
     }
 
     inner class ViewHolder(private val binding: ListItemUserBinding) :
