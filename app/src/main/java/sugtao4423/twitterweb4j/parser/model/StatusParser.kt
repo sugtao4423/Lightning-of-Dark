@@ -52,7 +52,7 @@ fun parseStatus(result: Json): Status? {
     val id = json["rest_id"].string.toLong()
     val displayTextRangeStart = legacy["display_text_range"][0].int
     val displayTextRangeEnd = legacy["display_text_range"][1].int
-    val source = json["source"].string
+    val source = json["source"].stringOrNull
     val createdAt = parseTwitterDate(legacy["created_at"].string)
 
     val isTruncated = legacy["truncated"].boolOrFalse
