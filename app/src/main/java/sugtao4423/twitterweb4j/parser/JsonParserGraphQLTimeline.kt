@@ -15,6 +15,9 @@ object JsonParserGraphQLTimeline {
     private fun isValidTweet(tweet: Status): Boolean =
         tweet.source == null || !tweet.source.contains(ignoreSource)
 
+    private fun isValidConvEntryId(entryId: String): Boolean =
+        (entryId.startsWith("tweet-") || entryId.contains("-tweet-")) && !entryId.contains("promoted")
+
     @Throws(JSONException::class, TwitterException::class)
     private fun parse(
         instructions: Json,
@@ -39,7 +42,7 @@ object JsonParserGraphQLTimeline {
             } else if (convPrefix != null && entryId.startsWith(convPrefix)) {
                 for (item in entry["content"]["items"]) {
                     val itemEntryId = item["entryId"].string
-                    if (!itemEntryId.contains("-tweet-") || itemEntryId.contains("promoted")) {
+                    if (!isValidConvEntryId(itemEntryId)) {
                         continue
                     }
 
