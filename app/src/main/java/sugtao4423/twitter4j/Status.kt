@@ -16,7 +16,7 @@ data class Status(
     val text: String,
     val displayTextRangeStart: Int,
     val displayTextRangeEnd: Int,
-    val source: String,
+    val source: String?,
     val createdAt: Date,
 
     val isTruncated: Boolean,

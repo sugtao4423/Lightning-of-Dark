@@ -28,11 +28,13 @@ object TweetListConverter {
         )
         val date =
             statusDateFormat.format(Date((originalStatus(status).id shr 22) + 1288834974657L))
-        return if (status.isRetweet) {
-            "$date  Retweeted by "
-        } else {
-            val via = status.source.replace(Regex("<.+?>"), "")
-            "$date  via $via"
+        return when {
+            status.isRetweet -> "$date  Retweeted by "
+            status.source == null -> date
+            else -> {
+                val via = status.source.replace(Regex("<.+?>"), "")
+                "$date  via $via"
+            }
         }
     }
 

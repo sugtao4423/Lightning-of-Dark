@@ -12,6 +12,9 @@ object JsonParserGraphQLTimeline {
 
     private val ignoreSource = Regex("Twitter for Advertisers|advertiser-interface")
 
+    private fun isValidTweet(tweet: Status): Boolean =
+        tweet.source == null || !tweet.source.contains(ignoreSource)
+
     @Throws(JSONException::class, TwitterException::class)
     private fun parse(
         instructions: Json,
@@ -30,7 +33,7 @@ object JsonParserGraphQLTimeline {
 
             if (entryId.startsWith("tweet-") || entryId.startsWith("notification-")) {
                 val tweet = parseStatus(entry["content"]["itemContent"]["tweet_results"]["result"])
-                if (tweet != null && !tweet.source.contains(ignoreSource)) {
+                if (tweet != null && isValidTweet(tweet)) {
                     result.add(tweet)
                 }
             } else if (convPrefix != null && entryId.startsWith(convPrefix)) {
@@ -41,7 +44,7 @@ object JsonParserGraphQLTimeline {
                     }
 
                     val tweet = parseStatus(item["item"]["itemContent"]["tweet_results"]["result"])
-                    if (tweet != null && !tweet.source.contains(ignoreSource)) {
+                    if (tweet != null && isValidTweet(tweet)) {
                         result.add(tweet)
                     }
                 }
