@@ -20,8 +20,8 @@ object UserListConverter {
     fun userCountDetail(user: User): String = String.format(
         "Tweet: %s  Fav: %s  Follow: %s  Follower: %s",
         numberFormat.format(user.statusesCount),
-        numberFormat.format(user.favouritesCount),
-        numberFormat.format(user.friendsCount),
+        numberFormat.format(user.favoritesCount),
+        numberFormat.format(user.followingCount),
         numberFormat.format(user.followersCount)
     )
 

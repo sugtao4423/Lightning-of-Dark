@@ -37,8 +37,8 @@ data class DetailUiState(
 
     val tweetCount: String = "",
     val favoriteCount: String = "",
-    val followCount: String = "",
-    val followerCount: String = "",
+    val followingCount: String = "",
+    val followersCount: String = "",
     val createDate: String = "",
 )
 
@@ -82,9 +82,9 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
                 link = replaceUrlEntities(user.url, user.urlEntity),
 
                 tweetCount = numberFormat.format(user.statusesCount),
-                favoriteCount = numberFormat.format(user.favouritesCount),
-                followCount = numberFormat.format(user.friendsCount),
-                followerCount = numberFormat.format(user.followersCount),
+                favoriteCount = numberFormat.format(user.favoritesCount),
+                followingCount = numberFormat.format(user.followingCount),
+                followersCount = numberFormat.format(user.followersCount),
                 createDate = dateFormat.format(user.createdAt),
             )
         }

@@ -45,8 +45,8 @@ data class User(
 
     val statusesCount: Int,
     val mediaCount: Int,
-    val favouritesCount: Int,
-    val friendsCount: Int,
+    val favoritesCount: Int,
+    val followingCount: Int,
     val followersCount: Int,
     val listedCount: Int,
 

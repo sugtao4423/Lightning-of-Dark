@@ -88,8 +88,8 @@ class DetailFragment : Fragment() {
 
         tweetCount.text = state.tweetCount
         favCount.text = state.favoriteCount
-        followCount.text = state.followCount
-        followerCount.text = state.followerCount
+        followCount.text = state.followingCount
+        followerCount.text = state.followersCount
         createDate.text = state.createDate
     }
 

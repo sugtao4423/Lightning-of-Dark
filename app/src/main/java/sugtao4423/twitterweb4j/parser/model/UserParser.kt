@@ -42,8 +42,8 @@ fun parseUser(json: Json): User {
 
     val statusesCount = legacy["statuses_count"].int
     val mediaCount = legacy["media_count"].int
-    val favouritesCount = legacy["favourites_count"].int
-    val friendsCount = legacy["friends_count"].int
+    val favoritesCount = legacy["favourites_count"].int
+    val followingCount = legacy["friends_count"].int
     val followersCount = legacy["followers_count"].int
     val listedCount = legacy["listed_count"].int
 
@@ -88,8 +88,8 @@ fun parseUser(json: Json): User {
         profileBanner,
         statusesCount,
         mediaCount,
-        favouritesCount,
-        friendsCount,
+        favoritesCount,
+        followingCount,
         followersCount,
         listedCount,
         profileBackgroundColor,
