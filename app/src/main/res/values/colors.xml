@@ -31,6 +31,8 @@
     <color name="tweetDate">#999999</color>
     <color name="tweetRetweetedUserName">#999999</color>
 
+    <color name="selectedMediaText">#ddcccccc</color>
+    <color name="selectedMediaTextBackground">#dd333333</color>
     <color name="tweetTextRemainCount">#8a000000</color>
     <color name="tweetTextRemainCountError">#d0ff0000</color>
     <color name="userPageTextBackground">#f0f0f0f0</color>
