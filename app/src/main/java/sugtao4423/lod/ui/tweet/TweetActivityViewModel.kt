@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import sugtao4423.lod.App
 import sugtao4423.lod.R
+import sugtao4423.lod.entity.NewTweetMedia
+import sugtao4423.lod.entity.NewTweetMediaStatus
+import sugtao4423.lod.entity.NewTweetMediaType
 import sugtao4423.lod.playing_music_data.MusicDataKey
 import sugtao4423.lod.utils.showToast
 import sugtao4423.lod.utils.toStatusUrl
@@ -46,6 +49,10 @@ sealed interface TweetEvent {
 
 class TweetActivityViewModel(application: Application) : AndroidViewModel(application) {
 
+    companion object {
+        const val MAX_MEDIA_COUNT = 4
+    }
+
     private val app = getApplication<App>()
     val fontAwesomeTypeface = app.fontAwesomeTypeface
 
@@ -68,6 +75,10 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         TweetUiState(accountScreenName = "@${app.account.screenName}")
     )
     val uiState = _uiState.asStateFlow()
+
+    private var selectedMediaId = 0L
+    private val _selectedMedias = MutableStateFlow<List<NewTweetMedia>>(listOf())
+    val selectedMedias = _selectedMedias.asStateFlow()
 
     private val _events = Channel<TweetEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
@@ -131,19 +142,31 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             TweetActivity.TYPE_REPLY -> createTweet.inReplyToStatusId = toStatus!!.id
             TweetActivity.TYPE_QUOTERT -> createTweet.attachmentUrl = toStatus!!.toStatusUrl()
         }
-        app.updateStatus(createTweet, _uiState.value.selectedMedia)
+        val mediaUris = _selectedMedias.value.map { it.uri }
+        app.updateStatus(createTweet, mediaUris)
 
         _events.trySend(TweetEvent.Finish)
     }
 
-    fun onMediaPicked(uri: Uri?) {
-        if (uri == null) return
+    fun onMediaChanged(medias: List<NewTweetMedia>) = _selectedMedias.update { medias }
+    fun onMediaPicked(uris: List<Uri>) {
+        if (uris.isEmpty()) return
 
+        val uri = uris[0]
         canUploadMedia(uri)?.let {
             app.showToast(it)
-            return
+//            return
         }
         _uiState.update { it.copy(selectedMedia = uri) }
+
+        val medias = uris.take(MAX_MEDIA_COUNT).map(::getMediaData)
+        if (medias.any { it.status == NewTweetMediaStatus.UNKNOWN_TYPE }) {
+            app.showToast(R.string.error_select_media)
+        }
+        if (medias.any { it.status == NewTweetMediaStatus.TOO_LARGE }) {
+            app.showToast(R.string.error_select_image_large)
+        }
+        _selectedMedias.update { medias }
         app.showToast(R.string.success_select_media)
     }
 
@@ -203,6 +226,32 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
         _uiState.update { it.copy(tweetText = dead) }
         _events.trySend(TweetEvent.SetTextSelectionEnd)
+    }
+
+    private fun getMediaData(uri: Uri): NewTweetMedia {
+        val mimeType = app.contentResolver.getType(uri)
+        val type = when {
+            mimeType == null -> NewTweetMediaType.UNKNOWN
+            mimeType == "image/gif" -> NewTweetMediaType.GIF
+            mimeType.startsWith("image/") -> NewTweetMediaType.IMAGE
+            mimeType.startsWith("video/") -> NewTweetMediaType.VIDEO
+            else -> NewTweetMediaType.UNKNOWN
+        }
+
+        val size = app.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            cursor.moveToFirst()
+            cursor.getColumnIndex(OpenableColumns.SIZE).let {
+                cursor.getLong(it)
+            }
+        } ?: 0L
+
+        val status = when (type) {
+            NewTweetMediaType.UNKNOWN -> NewTweetMediaStatus.UNKNOWN_TYPE
+            NewTweetMediaType.IMAGE if size > 5 * 1024 * 1024 -> NewTweetMediaStatus.TOO_LARGE
+            else -> NewTweetMediaStatus.OK
+        }
+
+        return NewTweetMedia(selectedMediaId++, uri, type, size, status)
     }
 
     private fun canUploadMedia(uri: Uri): Int? {
