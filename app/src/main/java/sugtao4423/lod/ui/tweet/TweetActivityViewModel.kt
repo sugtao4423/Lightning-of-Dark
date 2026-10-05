@@ -2,6 +2,7 @@ package sugtao4423.lod.ui.tweet
 
 import android.app.Activity
 import android.app.Application
+import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.speech.RecognizerIntent
@@ -151,6 +152,14 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     fun onMediaChanged(medias: List<NewTweetMedia>) = _selectedMedias.update { medias }
     fun onMediaPicked(uris: List<Uri>) {
         if (uris.isEmpty()) return
+        uris.forEach {
+            try {
+                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                app.contentResolver.takePersistableUriPermission(it, flag)
+            } catch (e: SecurityException) {
+                e.printStackTrace()
+            }
+        }
 
         val uri = uris[0]
         canUploadMedia(uri)?.let {
