@@ -21,7 +21,6 @@ import sugtao4423.lod.playing_music_data.PlayingMusicData
 import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.ui.adapter.SelectedMediaAdapter
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
-import sugtao4423.lod.ui.loadUri
 import sugtao4423.twitter4j.Status
 
 class TweetActivity : LoDBaseActivity() {
@@ -110,12 +109,6 @@ class TweetActivity : LoDBaseActivity() {
                 if (state.isValidTextCount) R.color.tweetTextRemainCount else R.color.tweetTextRemainCountError
             )
         )
-
-        if (state.selectedMedia == null) {
-            binding.selectedMediaImage.setImageDrawable(null)
-        } else {
-            binding.selectedMediaImage.loadUri(state.selectedMedia)
-        }
     }
 
     private fun handleEvent(event: TweetEvent) = when (event) {

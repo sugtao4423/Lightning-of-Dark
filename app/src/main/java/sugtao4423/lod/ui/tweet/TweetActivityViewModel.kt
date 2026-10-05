@@ -32,8 +32,6 @@ data class TweetUiState(
 
     val tweetText: String = "",
     val prefixLength: Int = 0,
-
-    val selectedMedia: Uri? = null,
 ) {
     private val parsed = TwitterTextParser.parseTweet(tweetText)
     val remainingTextCount: Int = 140 - parsed.weightedLength.let {
@@ -161,13 +159,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             }
         }
 
-        val uri = uris[0]
-        canUploadMedia(uri)?.let {
-            app.showToast(it)
-//            return
-        }
-        _uiState.update { it.copy(selectedMedia = uri) }
-
         val medias = uris.take(MAX_MEDIA_COUNT).map(::getMediaData)
         if (medias.any { it.status == NewTweetMediaStatus.UNKNOWN_TYPE }) {
             app.showToast(R.string.error_select_media)
@@ -261,23 +252,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         }
 
         return NewTweetMedia(selectedMediaId++, uri, type, size, status)
-    }
-
-    private fun canUploadMedia(uri: Uri): Int? {
-        val mimeType = app.contentResolver.getType(uri)
-            ?: return R.string.error_select_media
-        if (mimeType == "image/gif" || mimeType.startsWith("video/")) return null
-
-        app.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-            cursor.moveToFirst()
-            val size = cursor.getColumnIndex(OpenableColumns.SIZE).let {
-                cursor.getLong(it)
-            }
-            if (size > 5 * 1024 * 1024) {
-                return R.string.error_select_image_large
-            }
-        }
-        return null
     }
 
 }

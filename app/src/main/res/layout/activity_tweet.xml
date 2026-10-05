@@ -19,31 +19,17 @@
             android:scrollbars="vertical"
             android:visibility="gone" />
 
-        <FrameLayout
+        <sugtao4423.lod.view.TweetEditText
+            android:id="@+id/tweetEdit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="top|start"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            tools:ignore="LabelFor">
 
-            <sugtao4423.lod.view.TweetEditText
-                android:id="@+id/tweetEdit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top|start"
-                android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                tools:ignore="LabelFor">
-
-                <requestFocus />
-            </sugtao4423.lod.view.TweetEditText>
-
-            <ImageView
-                android:id="@+id/selectedMediaImage"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="end|bottom"
-                android:layout_marginBottom="11dp"
-                android:contentDescription="@string/content_desc_upload_image" />
-
-        </FrameLayout>
+            <requestFocus />
+        </sugtao4423.lod.view.TweetEditText>
     </LinearLayout>
 
     <sugtao4423.lod.view.TweetMediaRecyclerView
