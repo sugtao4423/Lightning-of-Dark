@@ -9,10 +9,19 @@ enum class NewTweetMediaType {
     UNKNOWN,
 }
 
+data class Resolution(val width: Int, val height: Int)
+
 enum class NewTweetMediaStatus {
     OK,
     UNKNOWN_TYPE,
-    TOO_LARGE,
+    ALL_TOO_LARGE,
+    FILE_TOO_LARGE,
+    RESOLUTION_TOO_LARGE;
+
+    val isFileTooLarge: Boolean
+        get() = this == ALL_TOO_LARGE || this == FILE_TOO_LARGE
+    val isResolutionTooLarge: Boolean
+        get() = this == ALL_TOO_LARGE || this == RESOLUTION_TOO_LARGE
 }
 
 data class NewTweetMedia(
@@ -20,5 +29,6 @@ data class NewTweetMedia(
     val uri: Uri,
     val type: NewTweetMediaType,
     val size: Long,
+    val resolution: Resolution?,
     val status: NewTweetMediaStatus,
 )

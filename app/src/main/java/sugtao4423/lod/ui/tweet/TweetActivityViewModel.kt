@@ -2,10 +2,12 @@ package sugtao4423.lod.ui.tweet
 
 import android.app.Activity
 import android.app.Application
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.speech.RecognizerIntent
 import androidx.activity.result.ActivityResult
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.twitter.twittertext.TwitterTextParser
@@ -23,11 +25,13 @@ import sugtao4423.lod.R
 import sugtao4423.lod.entity.NewTweetMedia
 import sugtao4423.lod.entity.NewTweetMediaStatus
 import sugtao4423.lod.entity.NewTweetMediaType
+import sugtao4423.lod.entity.Resolution
 import sugtao4423.lod.playing_music_data.MusicDataKey
 import sugtao4423.lod.utils.showToast
 import sugtao4423.lod.utils.toStatusUrl
 import sugtao4423.twitter4j.Status
 import sugtao4423.twitterweb4j.model.CreateTweet
+import kotlin.math.max
 import kotlin.math.round
 
 data class TweetUiState(
@@ -57,6 +61,8 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
 
     companion object {
         const val MAX_MEDIA_COUNT = 4
+        const val MAX_IMAGE_SIZE = 5 * 1024 * 1024L
+        const val MAX_IMAGE_RESOLUTION = 8192
     }
 
     private val app = getApplication<App>()
@@ -211,8 +217,11 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         if (medias.any { it.status == NewTweetMediaStatus.UNKNOWN_TYPE }) {
             app.showToast(R.string.error_select_media)
         }
-        if (medias.any { it.status == NewTweetMediaStatus.TOO_LARGE }) {
-            app.showToast(R.string.error_select_image_large)
+        if (medias.any { it.status.isFileTooLarge }) {
+            app.showToast(R.string.error_select_image_size_too_large)
+        }
+        if (medias.any { it.status.isResolutionTooLarge }) {
+            app.showToast(R.string.error_select_image_resolution_too_large)
         }
         onMediaChanged(medias, true)
     }
@@ -292,13 +301,56 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             }
         } ?: 0L
 
+        val resolution = if (type == NewTweetMediaType.IMAGE) {
+            getImageResolution(uri) ?: Resolution(0, 0)
+        } else null
+
         val status = when (type) {
             NewTweetMediaType.UNKNOWN -> NewTweetMediaStatus.UNKNOWN_TYPE
-            NewTweetMediaType.IMAGE if size > 5 * 1024 * 1024 -> NewTweetMediaStatus.TOO_LARGE
+            NewTweetMediaType.IMAGE -> {
+                val isSizeTooLarge = size > MAX_IMAGE_SIZE
+                val isResolutionTooLarge =
+                    max(resolution!!.width, resolution.height) > MAX_IMAGE_RESOLUTION
+
+                when {
+                    isSizeTooLarge && isResolutionTooLarge -> NewTweetMediaStatus.ALL_TOO_LARGE
+                    isSizeTooLarge -> NewTweetMediaStatus.FILE_TOO_LARGE
+                    isResolutionTooLarge -> NewTweetMediaStatus.RESOLUTION_TOO_LARGE
+                    else -> NewTweetMediaStatus.OK
+                }
+            }
+
             else -> NewTweetMediaStatus.OK
         }
 
-        return NewTweetMedia(selectedMediaId++, uri, type, size, status)
+        return NewTweetMedia(selectedMediaId++, uri, type, size, resolution, status)
+    }
+
+    private fun getImageResolution(uri: Uri): Resolution? {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        app.contentResolver.openInputStream(uri)?.use {
+            BitmapFactory.decodeStream(it, null, options)
+        }
+        if (options.outWidth <= 0 || options.outHeight <= 0) return null
+
+        val rotation = app.contentResolver.openInputStream(uri)?.use {
+            val orientation = ExifInterface(it).getAttributeInt(
+                ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL
+            )
+            when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90,
+                ExifInterface.ORIENTATION_ROTATE_270,
+                ExifInterface.ORIENTATION_TRANSPOSE,
+                ExifInterface.ORIENTATION_TRANSVERSE -> true
+
+                else -> false
+            }
+        } ?: false
+
+        return Resolution(
+            if (rotation) options.outHeight else options.outWidth,
+            if (rotation) options.outWidth else options.outHeight,
+        )
     }
 
 }

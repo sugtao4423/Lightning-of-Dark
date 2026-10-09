@@ -4,14 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.ListItemNewtweetMediaBinding
 import sugtao4423.lod.entity.NewTweetMedia
-import sugtao4423.lod.entity.NewTweetMediaStatus
 import sugtao4423.lod.entity.NewTweetMediaType
 import sugtao4423.lod.ui.loadUri
 import kotlin.math.abs
@@ -106,8 +107,25 @@ class SelectedMediaAdapter(private val onChanged: (List<NewTweetMedia>) -> Unit)
         private val context: Context = binding.root.context,
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        private val app = context.applicationContext as App
+
+        @SuppressLint("SetTextI18n")
         fun bind(media: NewTweetMedia) = binding.also {
             it.media.loadUri(media.uri)
+
+            val isImage = media.type == NewTweetMediaType.IMAGE
+            it.mediaResolution.visibility = if (isImage) View.VISIBLE else View.GONE
+            if (isImage) {
+                val (w, h) = media.resolution!!
+                val isLandscape = w >= h
+                val iconRes = if (isLandscape) R.string.icon_arrows_h else R.string.icon_arrows_v
+                val icon = context.getString(iconRes)
+                val px = if (isLandscape) w else h
+                it.mediaResolution.typeface = app.fontAwesomeTypeface
+                it.mediaResolution.text = "$icon $px px"
+                it.mediaResolution.setErrorBackground(media.status.isResolutionTooLarge)
+            }
+
             it.mediaType.text = when (media.type) {
                 NewTweetMediaType.IMAGE -> "IMG"
                 NewTweetMediaType.GIF -> "GIF"
@@ -115,15 +133,19 @@ class SelectedMediaAdapter(private val onChanged: (List<NewTweetMedia>) -> Unit)
                 NewTweetMediaType.UNKNOWN -> "?"
             }
 
-            @SuppressLint("SetTextI18n")
             it.mediaSize.text = "%.2f MiB".format(media.size / 1024.0 / 1024.0)
-            val bgColor = if (media.status == NewTweetMediaStatus.TOO_LARGE) {
+            it.mediaSize.setErrorBackground(media.status.isFileTooLarge)
+        }
+
+        private fun View.setErrorBackground(isError: Boolean) {
+            val bgColor = if (isError) {
                 R.color.selectedMediaTextBackgroundError
             } else {
                 R.color.selectedMediaTextBackground
             }
-            it.mediaSize.setBackgroundColor(context.getColor(bgColor))
+            setBackgroundColor(context.getColor(bgColor))
         }
+
     }
 
 }
