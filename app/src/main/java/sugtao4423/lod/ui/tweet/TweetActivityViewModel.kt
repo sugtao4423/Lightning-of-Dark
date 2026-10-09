@@ -2,18 +2,22 @@ package sugtao4423.lod.ui.tweet
 
 import android.app.Activity
 import android.app.Application
-import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.speech.RecognizerIntent
 import androidx.activity.result.ActivityResult
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.twitter.twittertext.TwitterTextParser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.entity.NewTweetMedia
@@ -32,6 +36,8 @@ data class TweetUiState(
 
     val tweetText: String = "",
     val prefixLength: Int = 0,
+
+    val isTweetButtonEnabled: Boolean = true,
 ) {
     private val parsed = TwitterTextParser.parseTweet(tweetText)
     val remainingTextCount: Int = 140 - parsed.weightedLength.let {
@@ -44,6 +50,7 @@ sealed interface TweetEvent {
     data object Finish : TweetEvent
     data class ShowOriginStatus(val status: Status) : TweetEvent
     data object SetTextSelectionEnd : TweetEvent
+    data object ShowProgressDialog : TweetEvent
 }
 
 class TweetActivityViewModel(application: Application) : AndroidViewModel(application) {
@@ -78,6 +85,9 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     private var selectedMediaId = 0L
     private val _selectedMedias = MutableStateFlow<List<NewTweetMedia>>(listOf())
     val selectedMedias = _selectedMedias.asStateFlow()
+
+    private val _tweetProgress = MutableStateFlow(0)
+    val tweetProgress = _tweetProgress.asStateFlow()
 
     private val _events = Channel<TweetEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
@@ -141,23 +151,53 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             TweetActivity.TYPE_REPLY -> createTweet.inReplyToStatusId = toStatus!!.id
             TweetActivity.TYPE_QUOTERT -> createTweet.attachmentUrl = toStatus!!.toStatusUrl()
         }
-        val mediaUris = _selectedMedias.value.map { it.uri }
-        app.updateStatus(createTweet, mediaUris)
 
+        _uiState.update { it.copy(isTweetButtonEnabled = false) }
+        if (_selectedMedias.value.isEmpty()) {
+            tweetOnlyText(createTweet)
+        } else {
+            tweetWithMedias(createTweet)
+        }.invokeOnCompletion {
+            _uiState.update { it.copy(isTweetButtonEnabled = true) }
+        }
+    }
+
+    private fun tweetOnlyText(tweet: CreateTweet): Job = Job().apply {
+        app.updateStatus(tweet)
         _events.trySend(TweetEvent.Finish)
+    }
+
+    private fun tweetWithMedias(tweet: CreateTweet): Job = viewModelScope.launch {
+        _tweetProgress.update { 0 }
+        _events.trySend(TweetEvent.ShowProgressDialog)
+
+        val mediaUris = _selectedMedias.value.map { it.uri }
+        val totalMedias = mediaUris.size
+
+        tweet.mediaIds = runCatching {
+            withContext(Dispatchers.IO) {
+                mediaUris.mapIndexed { index, uri ->
+                    val mediaId = app.uploadMedia(uri)
+                    _tweetProgress.update { ((index + 1) * 99 / totalMedias) }
+                    mediaId
+                }
+            }
+        }.getOrElse {
+            _tweetProgress.update { 100 }
+            app.showToast(R.string.error_upload_media)
+            return@launch
+        }
+
+        val result = withContext(Dispatchers.IO) { app.updateStatus(tweet).await() }
+        _tweetProgress.update { 100 }
+        if (result != null) {
+            _events.trySend(TweetEvent.Finish)
+        }
     }
 
     fun onMediaChanged(medias: List<NewTweetMedia>) = _selectedMedias.update { medias }
     fun onMediaPicked(uris: List<Uri>) {
         if (uris.isEmpty()) return
-        uris.forEach {
-            try {
-                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                app.contentResolver.takePersistableUriPermission(it, flag)
-            } catch (e: SecurityException) {
-                e.printStackTrace()
-            }
-        }
 
         val medias = uris.take(MAX_MEDIA_COUNT).map(::getMediaData)
         if (medias.any { it.status == NewTweetMediaStatus.UNKNOWN_TYPE }) {

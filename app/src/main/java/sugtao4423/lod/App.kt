@@ -6,7 +6,9 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -20,6 +22,7 @@ import sugtao4423.lod.model.PrefRepository
 import sugtao4423.lod.model.UseTimeRepository
 import sugtao4423.lod.service.AutoLoadTLService
 import sugtao4423.lod.utils.showToast
+import sugtao4423.twitter4j.Status
 import sugtao4423.twitter4j.TwitterException
 import sugtao4423.twitterweb4j.TwitterWeb4j
 import sugtao4423.twitterweb4j.model.CreateTweet
@@ -83,13 +86,10 @@ class App : Application() {
         }
     }
 
-    fun updateStatus(tweet: CreateTweet, mediaUris: List<Uri> = listOf()) {
-        CoroutineScope(Dispatchers.Main).launch {
+    fun updateStatus(tweet: CreateTweet): Deferred<Status?> =
+        CoroutineScope(Dispatchers.Main).async {
             val result = withContext(Dispatchers.IO) {
-                runCatching {
-                    tweet.mediaIds = mediaUris.map(::uploadMedia)
-                    twitter.createTweet(tweet)
-                }.getOrNull()
+                runCatching { twitter.createTweet(tweet) }.getOrNull()
             }
             if (result != null) {
                 val exp = levelRepository.getRandomExp()
@@ -101,10 +101,10 @@ class App : Application() {
             } else {
                 showToast(R.string.error_tweet)
             }
+            result
         }
-    }
 
-    private fun uploadMedia(uri: Uri): Long {
+    fun uploadMedia(uri: Uri): Long {
         val totalBytes = contentResolver.openAssetFileDescriptor(uri, "r")
             ?.use { it.length }
             ?.takeIf { it >= 0 }

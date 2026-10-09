@@ -45,6 +45,8 @@
     <string name="success_select_media">メディアを選択しました</string>
     <string name="error_select_image_large">5MiB以上の画像は選択できません</string>
     <string name="error_select_media">メディアを選択できませんでした</string>
+    <string name="tweeting">ツイート中…</string>
+    <string name="error_upload_media">メディアのアップロードに失敗しました</string>
 
     <string name="nothing">ありませんでした</string>
     <string name="param_regex_result_count">%1$d件中 %2$d件見つかりました</string>

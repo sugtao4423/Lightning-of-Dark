@@ -102,6 +102,7 @@ class TweetActivity : LoDBaseActivity() {
             binding.tweetEdit.setText(state.tweetText)
         }
         binding.tweetEdit.prefixLength = state.prefixLength
+        binding.tweetButton.isEnabled = state.isTweetButtonEnabled
         binding.remainingCount.text = state.remainingTextCount.toString()
         binding.remainingCount.setTextColor(
             ContextCompat.getColor(
@@ -122,6 +123,7 @@ class TweetActivity : LoDBaseActivity() {
         }
 
         is TweetEvent.SetTextSelectionEnd -> binding.tweetEdit.setSelection(binding.tweetEdit.text!!.length)
+        is TweetEvent.ShowProgressDialog -> TweetProgressDialog().show(supportFragmentManager, null)
     }
 
     private fun requestSpeechInput() {
