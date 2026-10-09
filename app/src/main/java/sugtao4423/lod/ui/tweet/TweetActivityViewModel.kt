@@ -207,7 +207,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
             app.showToast(R.string.error_select_image_large)
         }
         _selectedMedias.update { medias }
-        app.showToast(R.string.success_select_media)
     }
 
     fun onSpeeched(result: ActivityResult?) {

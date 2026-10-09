@@ -42,7 +42,6 @@
     <string name="success_get_talk_list">会話取得完了</string>
     <string name="error_get_talk_list">会話取得エラー</string>
 
-    <string name="success_select_media">メディアを選択しました</string>
     <string name="error_select_image_large">5MiB以上の画像は選択できません</string>
     <string name="error_select_media">メディアを選択できませんでした</string>
     <string name="tweeting">ツイート中…</string>
