@@ -19,8 +19,8 @@ import sugtao4423.lod.R
 import sugtao4423.lod.databinding.ActivityTweetBinding
 import sugtao4423.lod.playing_music_data.PlayingMusicData
 import sugtao4423.lod.ui.LoDBaseActivity
+import sugtao4423.lod.ui.adapter.SelectedMediaAdapter
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
-import sugtao4423.lod.ui.loadUri
 import sugtao4423.twitter4j.Status
 
 class TweetActivity : LoDBaseActivity() {
@@ -38,9 +38,10 @@ class TweetActivity : LoDBaseActivity() {
         const val TYPE_EXTERNALTEXT = 5
     }
 
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
-        viewModel.onMediaPicked(it)
-    }
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
+            viewModel.onMediaPicked(it)
+        }
 
     private val startForResultSpeech =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->
@@ -49,6 +50,7 @@ class TweetActivity : LoDBaseActivity() {
 
     private val viewModel: TweetActivityViewModel by viewModels()
     private val binding by lazy { ActivityTweetBinding.inflate(layoutInflater) }
+    private val selectedMediaAdapter by lazy { SelectedMediaAdapter(viewModel::onMediaChanged) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +65,8 @@ class TweetActivity : LoDBaseActivity() {
             tweetButton.typeface = fontAwesome
             imageSelectButton.typeface = fontAwesome
             closeButton.typeface = fontAwesome
+
+            selectedMedias.adapter = selectedMediaAdapter
 
             micButton.setOnClickListener { requestSpeechInput() }
             musicButton.setOnClickListener { appendPlayingMusicData() }
@@ -79,6 +83,7 @@ class TweetActivity : LoDBaseActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch { viewModel.uiState.collect(::render) }
+                launch { viewModel.selectedMedias.collect(selectedMediaAdapter::submit) }
                 launch { viewModel.events.collect(::handleEvent) }
             }
         }
@@ -98,6 +103,7 @@ class TweetActivity : LoDBaseActivity() {
             binding.tweetEdit.setText(state.tweetText)
         }
         binding.tweetEdit.prefixLength = state.prefixLength
+        binding.tweetButton.isEnabled = state.isTweetButtonEnabled
         binding.remainingCount.text = state.remainingTextCount.toString()
         binding.remainingCount.setTextColor(
             ContextCompat.getColor(
@@ -105,12 +111,6 @@ class TweetActivity : LoDBaseActivity() {
                 if (state.isValidTextCount) R.color.tweetTextRemainCount else R.color.tweetTextRemainCountError
             )
         )
-
-        if (state.selectedMedia == null) {
-            binding.selectedMediaImage.setImageDrawable(null)
-        } else {
-            binding.selectedMediaImage.loadUri(state.selectedMedia)
-        }
     }
 
     private fun handleEvent(event: TweetEvent) = when (event) {
@@ -124,6 +124,7 @@ class TweetActivity : LoDBaseActivity() {
         }
 
         is TweetEvent.SetTextSelectionEnd -> binding.tweetEdit.setSelection(binding.tweetEdit.text!!.length)
+        is TweetEvent.ShowProgressDialog -> TweetProgressDialog().show(supportFragmentManager, null)
     }
 
     private fun requestSpeechInput() {
@@ -155,7 +156,11 @@ class TweetActivity : LoDBaseActivity() {
     }
 
     private fun pickMedia() {
-        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+        val request = PickVisualMediaRequest.Builder()
+            .setMediaType(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
+            .setOrderedSelection(true)
+            .build()
+        pickMedia.launch(request)
     }
 
 }

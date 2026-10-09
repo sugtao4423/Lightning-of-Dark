@@ -10,6 +10,7 @@
 
     <color name="icon">#757575</color>
     <color name="iconPress">#424242</color>
+    <color name="iconDisable">#bdbdbd</color>
 
     <color name="retweetedByMe">#c8f69a</color>
     <color name="retweet">#c9d8f8</color>
@@ -31,6 +32,9 @@
     <color name="tweetDate">#999999</color>
     <color name="tweetRetweetedUserName">#999999</color>
 
+    <color name="selectedMediaText">#ddcccccc</color>
+    <color name="selectedMediaTextBackground">#dd333333</color>
+    <color name="selectedMediaTextBackgroundError">#ddcc6666</color>
     <color name="tweetTextRemainCount">#8a000000</color>
     <color name="tweetTextRemainCountError">#d0ff0000</color>
     <color name="userPageTextBackground">#f0f0f0f0</color>

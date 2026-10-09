@@ -42,9 +42,11 @@
     <string name="success_get_talk_list">会話取得完了</string>
     <string name="error_get_talk_list">会話取得エラー</string>
 
-    <string name="success_select_media">メディアを選択しました</string>
-    <string name="error_select_image_large">5MiB以上の画像は選択できません</string>
+    <string name="error_select_image_size_too_large">5MiBを超える画像は選択できません</string>
+    <string name="error_select_image_resolution_too_large">長辺が8192pxを超える画像は選択できません</string>
     <string name="error_select_media">メディアを選択できませんでした</string>
+    <string name="tweeting">ツイート中…</string>
+    <string name="error_upload_media">メディアのアップロードに失敗しました</string>
 
     <string name="nothing">ありませんでした</string>
     <string name="param_regex_result_count">%1$d件中 %2$d件見つかりました</string>
@@ -162,6 +164,8 @@
     <string name="icon_comment">&#xf086;</string>
     <string name="icon_trash">&#xf2ed;</string>
 
+    <string name="icon_arrows_h">&#xf337;</string>
+    <string name="icon_arrows_v">&#xf338;</string>
     <string name="icon_tweet">&#xf044;</string>
     <string name="icon_image">&#xf03e;</string>
     <string name="icon_close">&#xf00d;</string>

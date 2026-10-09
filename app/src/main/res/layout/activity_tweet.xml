@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,36 +19,32 @@
             android:scrollbars="vertical"
             android:visibility="gone" />
 
-        <FrameLayout
+        <sugtao4423.lod.view.TweetEditText
+            android:id="@+id/tweetEdit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="top|start"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            tools:ignore="LabelFor">
 
-            <sugtao4423.lod.view.TweetEditText
-                android:id="@+id/tweetEdit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top|start"
-                android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                tools:ignore="LabelFor">
-
-                <requestFocus />
-            </sugtao4423.lod.view.TweetEditText>
-
-            <ImageView
-                android:id="@+id/selectedMediaImage"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="end|bottom"
-                android:layout_marginBottom="11dp"
-                android:contentDescription="@string/content_desc_upload_image" />
-
-        </FrameLayout>
+            <requestFocus />
+        </sugtao4423.lod.view.TweetEditText>
     </LinearLayout>
+
+    <sugtao4423.lod.view.TweetMediaRecyclerView
+        android:id="@+id/selectedMedias"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:paddingHorizontal="4dp"
+        android:scrollbars="horizontal"
+        app:itemGap="4dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:gravity="bottom"
         android:orientation="horizontal">
 
