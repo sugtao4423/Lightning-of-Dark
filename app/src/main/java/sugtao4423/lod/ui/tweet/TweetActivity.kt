@@ -38,9 +38,10 @@ class TweetActivity : LoDBaseActivity() {
         const val TYPE_EXTERNALTEXT = 5
     }
 
-    private val pickMedia = registerForActivityResult(
-        ActivityResultContracts.PickMultipleVisualMedia(TweetActivityViewModel.MAX_MEDIA_COUNT)
-    ) { viewModel.onMediaPicked(it) }
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
+            viewModel.onMediaPicked(it)
+        }
 
     private val startForResultSpeech =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult? ->

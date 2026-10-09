@@ -195,24 +195,26 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 
-    fun onMediaChanged(medias: List<NewTweetMedia>) {
-        _selectedMedias.update { medias }
+    fun onMediaChanged(medias: List<NewTweetMedia>, isAdd: Boolean = false) {
+        val newMedias = if (isAdd) _selectedMedias.value + medias else medias
+        _selectedMedias.update { newMedias }
 
-        val allOk = medias.all { it.status == NewTweetMediaStatus.OK }
-        _uiState.update { it.copy(isTweetButtonEnabled = allOk) }
+        val isValidCount = newMedias.size <= MAX_MEDIA_COUNT
+        val allOk = newMedias.all { it.status == NewTweetMediaStatus.OK }
+        _uiState.update { it.copy(isTweetButtonEnabled = isValidCount && allOk) }
     }
 
     fun onMediaPicked(uris: List<Uri>) {
         if (uris.isEmpty()) return
 
-        val medias = uris.take(MAX_MEDIA_COUNT).map(::getMediaData)
+        val medias = uris.map(::getMediaData)
         if (medias.any { it.status == NewTweetMediaStatus.UNKNOWN_TYPE }) {
             app.showToast(R.string.error_select_media)
         }
         if (medias.any { it.status == NewTweetMediaStatus.TOO_LARGE }) {
             app.showToast(R.string.error_select_image_large)
         }
-        onMediaChanged(medias)
+        onMediaChanged(medias, true)
     }
 
     fun onSpeeched(result: ActivityResult?) {
