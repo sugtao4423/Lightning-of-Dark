@@ -8,7 +8,6 @@ import sugtao4423.twitter4j.User
 
 class UserListViewModel(app: App) {
 
-    val fontAwesomeTypeface = app.fontAwesomeTypeface
     val protectIconSize = app.prefRepository.userNameFontSize - 3
     val nameTextSize = app.prefRepository.userNameFontSize
     val textSize = app.prefRepository.contentFontSize
