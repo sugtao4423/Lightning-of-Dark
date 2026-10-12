@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <sugtao4423.lod.view.TypefacedButton
             android:id="@+id/replyButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <Button
+        <sugtao4423.lod.view.TypefacedButton
             android:id="@+id/retweetButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <Button
+        <sugtao4423.lod.view.TypefacedButton
             android:id="@+id/quoteButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <Button
+        <sugtao4423.lod.view.TypefacedButton
             android:id="@+id/favoriteButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
@@ -71,7 +71,7 @@
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <Button
+        <sugtao4423.lod.view.TypefacedButton
             android:id="@+id/talkButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"
@@ -85,7 +85,7 @@
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <Button
+        <sugtao4423.lod.view.TypefacedButton
             android:id="@+id/deleteButton"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="match_parent"

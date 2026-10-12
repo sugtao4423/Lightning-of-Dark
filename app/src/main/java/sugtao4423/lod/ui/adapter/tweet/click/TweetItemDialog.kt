@@ -1,7 +1,6 @@
 package sugtao4423.lod.ui.adapter.tweet.click
 
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
@@ -13,7 +12,7 @@ import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.adapter.tweet.click.listener.TweetDialogClickListeners
 import sugtao4423.twitter4j.Status
 
-class TweetItemDialog(context: Context, fontAwesomeTypeface: Typeface) {
+class TweetItemDialog(context: Context) {
 
     private val dialog: AlertDialog
 
@@ -32,15 +31,7 @@ class TweetItemDialog(context: Context, fontAwesomeTypeface: Typeface) {
         listAdapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1)
 
         binding = DialogTweetBinding.inflate(LayoutInflater.from(context))
-        binding.apply {
-            listView.adapter = listAdapter
-            replyButton.typeface = fontAwesomeTypeface
-            retweetButton.typeface = fontAwesomeTypeface
-            quoteButton.typeface = fontAwesomeTypeface
-            favoriteButton.typeface = fontAwesomeTypeface
-            talkButton.typeface = fontAwesomeTypeface
-            deleteButton.typeface = fontAwesomeTypeface
-        }
+        binding.listView.adapter = listAdapter
 
         dialog = AlertDialog.Builder(context).run {
             setCustomTitle(tweetListView)
