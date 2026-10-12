@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -25,7 +24,7 @@ import sugtao4423.lod.ui.tweet.TweetActivity
 class MainActivity : LoDBaseActivity() {
 
     private var resetFlag = false
-    private var iconDialog: AlertDialog.Builder? = null
+    private var iconDialog: IconDialog? = null
 
     private val viewModel: MainActivityViewModel by viewModels()
     private val optionViewModel: OptionViewModel by viewModels()

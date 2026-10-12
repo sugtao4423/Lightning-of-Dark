@@ -8,25 +8,23 @@ import sugtao4423.lod.databinding.DialogIconBinding
 
 class IconDialogAdapter(private val items: List<IconItem>) : BaseAdapter() {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val binding = if (convertView == null) {
-            val inflater = LayoutInflater.from(parent!!.context)
-            val tBinding = DialogIconBinding.inflate(inflater, parent, false)
-            tBinding.root.tag = tBinding
-            tBinding
+            DialogIconBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                .also { it.root.tag = it }
         } else {
             convertView.tag as DialogIconBinding
         }
 
         return binding.apply {
-            val iconItem = getItem(position) as IconItem
+            val iconItem = getItem(position)
             iconText.text = iconItem.icon.toString()
             iconText.setTextColor(iconItem.iconColor)
             titleText.text = iconItem.title
         }.root
     }
 
-    override fun getItem(position: Int): Any = items[position]
+    override fun getItem(position: Int): IconItem = items[position]
 
     override fun getItemId(position: Int): Long = position.toLong()
 

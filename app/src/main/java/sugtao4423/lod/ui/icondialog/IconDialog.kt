@@ -8,12 +8,12 @@ class IconDialog(context: Context) {
 
     private val builder = AlertDialog.Builder(context)
 
-    fun setTitle(title: String): AlertDialog.Builder = builder.setTitle(title)
+    fun setTitle(title: String): IconDialog = apply { builder.setTitle(title) }
 
     fun setItems(
         items: List<IconItem>,
         listener: DialogInterface.OnClickListener
-    ): AlertDialog.Builder = builder.setAdapter(IconDialogAdapter(items), listener)
+    ): IconDialog = apply { builder.setAdapter(IconDialogAdapter(items), listener) }
 
     fun show(): AlertDialog = builder.show()
 
