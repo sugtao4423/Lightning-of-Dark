@@ -58,7 +58,6 @@ class TweetListAdapter(val context: Context) :
 
             val isShowProtected = TweetListConverter.isShowProtected(status)
             protectIcon.visibility = if (isShowProtected) View.VISIBLE else View.GONE
-            protectIcon.typeface = vm.fontAwesomeTypeface
             protectIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.protectIconSize)
 
             tweetText.text = TweetListConverter.text(status)

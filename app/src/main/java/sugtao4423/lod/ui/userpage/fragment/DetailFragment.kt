@@ -36,15 +36,6 @@ class DetailFragment : Fragment() {
     ): View {
         binding = FragmentUserDetailBinding.inflate(inflater, container, false)
         return binding.apply {
-            val fontAwesome = viewModel.fontAwesomeTypeface()
-            protectIcon.typeface = fontAwesome
-            relationshipText.typeface = fontAwesome
-            tweetCountIcon.typeface = fontAwesome
-            favCountIcon.typeface = fontAwesome
-            followCountIcon.typeface = fontAwesome
-            followerCountIcon.typeface = fontAwesome
-            createDateIcon.typeface = fontAwesome
-
             bannerImage.setOnClickListener { viewModel.onClickBanner() }
             bannerImage.setOnLongClickListener { viewModel.onLongClickBanner() }
 

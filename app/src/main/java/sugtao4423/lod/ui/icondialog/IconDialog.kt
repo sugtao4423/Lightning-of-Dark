@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
 
-class IconDialog(private val context: Context) {
+class IconDialog(context: Context) {
 
     private val builder = AlertDialog.Builder(context)
 
@@ -13,7 +13,7 @@ class IconDialog(private val context: Context) {
     fun setItems(
         items: List<IconItem>,
         listener: DialogInterface.OnClickListener
-    ): AlertDialog.Builder = builder.setAdapter(IconDialogAdapter(context, items), listener)
+    ): AlertDialog.Builder = builder.setAdapter(IconDialogAdapter(items), listener)
 
     fun show(): AlertDialog = builder.show()
 

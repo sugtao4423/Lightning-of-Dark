@@ -66,7 +66,6 @@ class TweetActivityViewModel(application: Application) : AndroidViewModel(applic
     }
 
     private val app = getApplication<App>()
-    val fontAwesomeTypeface = app.fontAwesomeTypeface
 
     var tweetType: Int = 0
         set(value) {

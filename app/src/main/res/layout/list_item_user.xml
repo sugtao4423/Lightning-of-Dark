@@ -27,7 +27,7 @@
                 android:textColor="@color/tweetName"
                 android:textStyle="bold" />
 
-            <TextView
+            <sugtao4423.lod.view.TypefacedTextView
                 android:id="@+id/protectIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

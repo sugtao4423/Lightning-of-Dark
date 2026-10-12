@@ -46,7 +46,6 @@ class UserListAdapter(private val context: Context) :
 
             val isShowProtected = UserListConverter.isShowProtected(user)
             protectIcon.visibility = if (isShowProtected) View.VISIBLE else View.GONE
-            protectIcon.typeface = vm.fontAwesomeTypeface
             protectIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.protectIconSize)
 
             userDescription.text = UserListConverter.userDescription(user)

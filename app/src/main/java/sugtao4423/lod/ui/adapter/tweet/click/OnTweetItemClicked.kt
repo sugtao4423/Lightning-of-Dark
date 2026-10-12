@@ -11,7 +11,7 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
     private val context = tweetListAdapter.context
     private val app = context.applicationContext as App
 
-    private val tweetItemDialog by lazy { TweetItemDialog(context, app.fontAwesomeTypeface) }
+    private val tweetItemDialog by lazy { TweetItemDialog(context) }
 
     fun onItemClicked(position: Int) {
         val status = tweetListAdapter.data[position]

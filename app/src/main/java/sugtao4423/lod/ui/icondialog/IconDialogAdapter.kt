@@ -1,23 +1,16 @@
 package sugtao4423.lod.ui.icondialog
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import sugtao4423.lod.App
 import sugtao4423.lod.databinding.DialogIconBinding
 
-class IconDialogAdapter(
-    private val context: Context,
-    private val items: List<IconItem>
-) : BaseAdapter() {
-
-    private val typeface = (context.applicationContext as App).fontAwesomeTypeface
+class IconDialogAdapter(private val items: List<IconItem>) : BaseAdapter() {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val binding = if (convertView == null) {
-            val inflater = LayoutInflater.from(context)
+            val inflater = LayoutInflater.from(parent!!.context)
             val tBinding = DialogIconBinding.inflate(inflater, parent, false)
             tBinding.root.tag = tBinding
             tBinding
@@ -29,7 +22,6 @@ class IconDialogAdapter(
             val iconItem = getItem(position) as IconItem
             iconText.text = iconItem.icon.toString()
             iconText.setTextColor(iconItem.iconColor)
-            iconText.typeface = typeface
             titleText.text = iconItem.title
         }.root
     }
