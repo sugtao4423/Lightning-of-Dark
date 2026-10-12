@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <TextView
+    <sugtao4423.lod.view.TypefacedTextView
         android:id="@+id/iconText"
         android:layout_width="32dp"
         android:layout_height="32dp"
