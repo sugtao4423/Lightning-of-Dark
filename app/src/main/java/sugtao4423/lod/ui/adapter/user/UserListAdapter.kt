@@ -20,12 +20,20 @@ class UserListAdapter(context: Context) : UpdatableListAdapter<User, UserListAda
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemUserBinding.inflate(inflater, parent, false)
-        return ViewHolder(binding)
+        val holder = ViewHolder(binding)
+
+        holder.itemView.setOnClickListener {
+            val pos = holder.bindingAdapterPosition
+            if (pos == RecyclerView.NO_POSITION) return@setOnClickListener
+            userListViewModel.onClickUser(it, getItem(pos))
+        }
+
+        return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (data.size <= position) return
-        holder.bind(data[position])
+        if (itemCount <= position) return
+        holder.bind(getItem(position))
     }
 
     inner class ViewHolder(private val binding: ListItemUserBinding) :
@@ -33,8 +41,6 @@ class UserListAdapter(context: Context) : UpdatableListAdapter<User, UserListAda
 
         fun bind(user: User) = binding.apply {
             val vm = userListViewModel
-
-            root.setOnClickListener { vm.onClickUser(it, user) }
 
             userIcon.loadUrl(UserListConverter.userIconUrl(user))
 

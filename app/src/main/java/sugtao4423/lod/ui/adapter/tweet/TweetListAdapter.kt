@@ -24,20 +24,26 @@ class TweetListAdapter(context: Context) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ListItemTweetBinding.inflate(inflater, parent, false)
-        return ViewHolder(binding)
+        val holder = ViewHolder(binding)
+
+        holder.itemView.setOnClickListener {
+            val pos = holder.bindingAdapterPosition
+            if (pos == RecyclerView.NO_POSITION) return@setOnClickListener
+            OnTweetItemClicked.onItemClicked(it, data, pos)
+        }
+        holder.itemView.setOnLongClickListener {
+            val pos = holder.bindingAdapterPosition
+            if (pos == RecyclerView.NO_POSITION) return@setOnLongClickListener false
+            OnTweetItemLongClicked.onItemLongClicked(it, getItem(pos))
+            true
+        }
+
+        return holder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (data.size <= position) return
-        holder.bind(data[position])
-
-        holder.itemView.setOnClickListener {
-            OnTweetItemClicked.onItemClicked(it, data, holder.layoutPosition)
-        }
-        holder.itemView.setOnLongClickListener {
-            OnTweetItemLongClicked.onItemLongClicked(it, data[holder.layoutPosition])
-            true
-        }
+        if (itemCount <= position) return
+        holder.bind(getItem(position))
     }
 
     inner class ViewHolder(private val binding: ListItemTweetBinding) :
