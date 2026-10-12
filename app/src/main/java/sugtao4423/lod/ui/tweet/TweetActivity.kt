@@ -58,14 +58,6 @@ class TweetActivity : LoDBaseActivity() {
         setContentView(binding.root)
 
         binding.apply {
-            val fontAwesome = viewModel.fontAwesomeTypeface
-            micButton.typeface = fontAwesome
-            musicButton.typeface = fontAwesome
-            textOptionButton.typeface = fontAwesome
-            tweetButton.typeface = fontAwesome
-            imageSelectButton.typeface = fontAwesome
-            closeButton.typeface = fontAwesome
-
             selectedMedias.adapter = selectedMediaAdapter
 
             micButton.setOnClickListener { requestSpeechInput() }

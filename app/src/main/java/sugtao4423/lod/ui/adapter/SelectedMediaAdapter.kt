@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.ListItemNewtweetMediaBinding
 import sugtao4423.lod.entity.NewTweetMedia
@@ -107,8 +106,6 @@ class SelectedMediaAdapter(private val onChanged: (List<NewTweetMedia>) -> Unit)
         private val context: Context = binding.root.context,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private val app = context.applicationContext as App
-
         @SuppressLint("SetTextI18n")
         fun bind(media: NewTweetMedia) = binding.also {
             it.media.loadUri(media.uri)
@@ -121,7 +118,6 @@ class SelectedMediaAdapter(private val onChanged: (List<NewTweetMedia>) -> Unit)
                 val iconRes = if (isLandscape) R.string.icon_arrows_h else R.string.icon_arrows_v
                 val icon = context.getString(iconRes)
                 val px = if (isLandscape) w else h
-                it.mediaResolution.typeface = app.fontAwesomeTypeface
                 it.mediaResolution.text = "$icon $px px"
                 it.mediaResolution.setErrorBackground(media.status.isResolutionTooLarge)
             }
