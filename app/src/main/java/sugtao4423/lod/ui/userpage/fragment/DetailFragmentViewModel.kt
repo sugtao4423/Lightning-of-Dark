@@ -1,7 +1,6 @@
 package sugtao4423.lod.ui.userpage.fragment
 
 import android.app.Application
-import android.graphics.Typeface
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -55,8 +54,6 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
     private val dateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.JAPANESE)
 
     private var user: User? = null
-
-    fun fontAwesomeTypeface(): Typeface = app.fontAwesomeTypeface
 
     private val _uiState = MutableStateFlow(DetailUiState(myIconUrl = app.account.profileImageUrl))
     val uiState = _uiState.asStateFlow()

@@ -49,7 +49,7 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <TextView
+                    <sugtao4423.lod.view.TypefacedTextView
                         android:id="@+id/protectIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                 android:layout_height="40dp"
                 android:contentDescription="@string/content_desc_friendship_source_icon" />
 
-            <TextView
+            <sugtao4423.lod.view.TypefacedTextView
                 android:id="@+id/relationshipText"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -162,8 +162,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tweetCountIcon"
+                <sugtao4423.lod.view.TypefacedTextView
                     android:layout_width="34sp"
                     android:layout_height="wrap_content"
                     android:text="@string/icon_tweetCount" />
@@ -180,8 +179,7 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/favCountIcon"
+                <sugtao4423.lod.view.TypefacedTextView
                     android:layout_width="34sp"
                     android:layout_height="wrap_content"
                     android:text="@string/icon_favCount" />
@@ -198,8 +196,7 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/followCountIcon"
+                <sugtao4423.lod.view.TypefacedTextView
                     android:layout_width="34sp"
                     android:layout_height="wrap_content"
                     android:text="@string/icon_followCount" />
@@ -216,8 +213,7 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/followerCountIcon"
+                <sugtao4423.lod.view.TypefacedTextView
                     android:layout_width="34sp"
                     android:layout_height="wrap_content"
                     android:text="@string/icon_followerCount" />
@@ -234,8 +230,7 @@
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/createDateIcon"
+                <sugtao4423.lod.view.TypefacedTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/icon_userCreate" />
