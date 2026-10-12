@@ -27,7 +27,7 @@ import sugtao4423.lod.utils.Regex as LodRegex
 
 class ListItemClickListener(
     private val status: Status,
-    private val allStatusData: ArrayList<Status>,
+    private val allStatuses: List<Status>,
     private val onClicked: () -> Unit,
 ) : AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
@@ -100,7 +100,7 @@ class ListItemClickListener(
             context.showToast(R.string.invalid_pattern)
             return
         }
-        val filtered = allStatusData.filter {
+        val filtered = allStatuses.filter {
             pattern.matcher(it.text).find() &&
                     (isIncludeRetweet || (!isIncludeRetweet && !it.isRetweet))
         }
@@ -115,7 +115,7 @@ class ListItemClickListener(
         AlertDialog.Builder(context).setView(l).show()
         context.showToast(
             R.string.param_regex_result_count,
-            allStatusData.size,
+            allStatuses.size,
             filtered.size
         )
     }

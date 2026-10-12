@@ -13,21 +13,18 @@ import sugtao4423.lod.ui.adapter.converter.UserListConverter
 import sugtao4423.lod.ui.loadUrl
 import sugtao4423.twitter4j.User
 
-class UserListAdapter(private val context: Context) :
-    UpdatableListAdapter<User, UserListAdapter.ViewHolder>() {
+class UserListAdapter(context: Context) : UpdatableListAdapter<User, UserListAdapter.ViewHolder>() {
 
     private val userListViewModel = UserListViewModel(context.applicationContext as App)
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
-        val inflater = LayoutInflater.from(context)
-        val binding = ListItemUserBinding.inflate(inflater, viewGroup, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ListItemUserBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (data.size <= position) {
-            return
-        }
+        if (data.size <= position) return
         holder.bind(data[position])
     }
 

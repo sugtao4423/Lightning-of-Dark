@@ -3,6 +3,7 @@ package sugtao4423.lod.ui.adapter
 import androidx.recyclerview.widget.RecyclerView
 
 interface ListUpdatable<T> {
+    fun getItem(position: Int): T
     fun add(item: T)
     fun addAll(items: List<T>)
     fun insertTop(items: List<T>)
@@ -12,9 +13,11 @@ interface ListUpdatable<T> {
 abstract class UpdatableListAdapter<T, VH : RecyclerView.ViewHolder> :
     RecyclerView.Adapter<VH>(), ListUpdatable<T> {
 
-    val data = arrayListOf<T>()
+    protected val data = arrayListOf<T>()
 
     override fun getItemCount(): Int = data.size
+
+    override fun getItem(position: Int): T = data[position]
 
     override fun add(item: T) {
         data.add(item)

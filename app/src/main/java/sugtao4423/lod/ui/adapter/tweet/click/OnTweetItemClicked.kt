@@ -1,28 +1,27 @@
 package sugtao4423.lod.ui.adapter.tweet.click
 
+import android.view.View
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.adapter.converter.TweetListConverter
-import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.utils.toStatusUrl
+import sugtao4423.twitter4j.Status
 
-class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
+object OnTweetItemClicked {
 
-    private val context = tweetListAdapter.context
-    private val app = context.applicationContext as App
+    fun onItemClicked(view: View, allStatuses: List<Status>, position: Int) {
+        val context = view.context
 
-    private val tweetItemDialog by lazy { TweetItemDialog(context) }
-
-    fun onItemClicked(position: Int) {
-        val status = tweetListAdapter.data[position]
+        val status = allStatuses[position]
         val originalStatus = TweetListConverter.originalStatus(status)
 
         val dialogList = arrayListOf<String>()
 
-        if (app.prefRepository.isRegex) {
+        val prefRepository = (context.applicationContext as App).prefRepository
+        if (prefRepository.isRegex) {
             dialogList.add(context.getString(R.string.extract_with_regex))
         }
-        if (app.prefRepository.isOpenBrowser) {
+        if (prefRepository.isOpenBrowser) {
             dialogList.add(context.getString(R.string.open_in_browser))
         }
 
@@ -49,6 +48,7 @@ class OnTweetItemClicked(private val tweetListAdapter: TweetListAdapter) {
             dialogList.add(it.toStatusUrl())
         }
 
-        tweetItemDialog.show(context, originalStatus, tweetListAdapter.data, dialogList)
+        TweetItemDialog(context).show(originalStatus, allStatuses, dialogList)
     }
+
 }

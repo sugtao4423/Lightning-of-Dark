@@ -16,14 +16,15 @@ import sugtao4423.twitter4j.Status
 
 class TalkListener(
     private val status: Status,
-    private val context: Context,
     private val onClicked: () -> Unit,
 ) : View.OnClickListener {
 
-    private val twitter = (context.applicationContext as App).twitter
-    private val talkAdapter = TweetListAdapter(context)
+    private lateinit var context: Context
+    private val twitter by lazy { (context.applicationContext as App).twitter }
+    private val talkAdapter by lazy { TweetListAdapter(context) }
 
-    override fun onClick(v: View?) {
+    override fun onClick(view: View) {
+        context = view.context
         onClicked()
 
         val tweetListView = TweetListView(context).apply {

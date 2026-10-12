@@ -34,12 +34,11 @@ class TweetListView @JvmOverloads constructor(
         override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: State) {
             super.getItemOffsets(outRect, view, parent, state)
             val pos = parent.getChildAdapterPosition(view)
-            if (pos < 0) {
-                return
-            }
+            if (pos < 0) return
+
             val adapter = parent.adapter
             val backgroundResource = if (adapter is TweetListAdapter) {
-                val item = adapter.data[pos]
+                val item = adapter.getItem(pos)
                 when {
                     item.isRetweet -> R.drawable.selector_list_retweet_bg
                     item.isRetweeted -> R.drawable.selector_list_retweeted_bg

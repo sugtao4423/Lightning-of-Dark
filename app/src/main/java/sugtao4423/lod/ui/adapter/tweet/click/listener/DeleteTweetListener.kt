@@ -14,11 +14,13 @@ import sugtao4423.twitter4j.Status
 
 class DeleteTweetListener(
     private val status: Status,
-    private val context: Context,
     private val onClicked: () -> Unit,
 ) : View.OnClickListener {
 
-    override fun onClick(v: View?) {
+    private lateinit var context: Context
+
+    override fun onClick(view: View) {
+        context = view.context
         onClicked()
 
         AlertDialog.Builder(context).apply {

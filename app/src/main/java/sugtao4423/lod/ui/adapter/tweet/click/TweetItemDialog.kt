@@ -20,6 +20,8 @@ class TweetItemDialog(context: Context) {
     private val listAdapter: ArrayAdapter<String>
     private val binding: DialogTweetBinding
 
+    private val myAccountId = (context.applicationContext as App).account.id
+
     init {
         val tweetListView = RecyclerView(context).apply {
             layoutManager = LinearLayoutManager(context)
@@ -40,12 +42,7 @@ class TweetItemDialog(context: Context) {
         }
     }
 
-    fun show(
-        context: Context,
-        status: Status,
-        allStatusData: ArrayList<Status>,
-        listStrings: List<String>
-    ) {
+    fun show(status: Status, allStatuses: List<Status>, listStrings: List<String>) {
         titleAdapter.apply {
             clear()
             add(status)
@@ -56,7 +53,7 @@ class TweetItemDialog(context: Context) {
         }
 
         binding.apply {
-            val clickListeners = TweetDialogClickListeners(context, status, allStatusData) {
+            val clickListeners = TweetDialogClickListeners(status, allStatuses) {
                 dialog.dismiss()
             }
 
@@ -69,8 +66,7 @@ class TweetItemDialog(context: Context) {
             favoriteButton.setOnClickListener(clickListeners.favoriteListener)
             talkButton.isEnabled = status.inReplyToStatusId != null
             talkButton.setOnClickListener(clickListeners.talkListener)
-            deleteButton.isEnabled =
-                (status.user.id == (context.applicationContext as App).account.id)
+            deleteButton.isEnabled = (status.user.id == myAccountId)
             deleteButton.setOnClickListener(clickListeners.deleteTweetListener)
         }
 

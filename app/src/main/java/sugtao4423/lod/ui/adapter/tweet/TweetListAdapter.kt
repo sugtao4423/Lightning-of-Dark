@@ -15,31 +15,27 @@ import sugtao4423.lod.ui.adapter.tweet.click.OnTweetItemLongClicked
 import sugtao4423.lod.ui.loadUrl
 import sugtao4423.twitter4j.Status
 
-class TweetListAdapter(val context: Context) :
+class TweetListAdapter(context: Context) :
     UpdatableListAdapter<Status, TweetListAdapter.ViewHolder>() {
 
     private val tweetListViewModel = TweetListViewModel(context.applicationContext as App)
-    private val onTweetItemClicked = OnTweetItemClicked(this)
-    private val onTweetItemLongClicked = OnTweetItemLongClicked(this)
     var hideImages = false
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): ViewHolder {
-        val inflater = LayoutInflater.from(context)
-        val binding = ListItemTweetBinding.inflate(inflater, viewGroup, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ListItemTweetBinding.inflate(inflater, parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (data.size <= position) {
-            return
-        }
+        if (data.size <= position) return
         holder.bind(data[position])
 
         holder.itemView.setOnClickListener {
-            onTweetItemClicked.onItemClicked(holder.layoutPosition)
+            OnTweetItemClicked.onItemClicked(it, data, holder.layoutPosition)
         }
         holder.itemView.setOnLongClickListener {
-            onTweetItemLongClicked.onItemLongClicked(holder.layoutPosition)
+            OnTweetItemLongClicked.onItemLongClicked(it, data[holder.layoutPosition])
             true
         }
     }
