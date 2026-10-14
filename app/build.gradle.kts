@@ -33,34 +33,37 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 
-    val lifecycleVersion = "2.10.0"
+    val lifecycleVersion = "2.11.0"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
-    ksp("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
 
-    implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("androidx.appcompat:appcompat:1.8.0")
     implementation("androidx.activity:activity-ktx:1.13.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.9")
+    implementation("androidx.fragment:fragment-ktx:1.9.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.recyclerview:recyclerview:1.4.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
     implementation("androidx.browser:browser:1.10.0")
-    implementation("com.google.android.material:material:1.13.0")
+    implementation("com.google.android.material:material:1.14.0")
 
-    val roomVersion = "2.8.4"
-    implementation("androidx.room:room-ktx:$roomVersion")
+    val roomVersion = "2.8.5"
+    implementation("androidx.room:room-runtime:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
 
-    val glideVersion = "5.0.5"
+    val glideVersion = "5.0.9"
     implementation("com.github.bumptech.glide:glide:$glideVersion")
-    ksp("com.github.bumptech.glide:compiler:$glideVersion")
+    ksp("com.github.bumptech.glide:ksp:$glideVersion")
+
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
-    implementation("androidx.media3:media3-exoplayer:1.10.0")
-    implementation("androidx.media3:media3-ui:1.10.0")
+
+    val media3Version = "1.11.1"
+    implementation("androidx.media3:media3-exoplayer:$media3Version")
+    implementation("androidx.media3:media3-ui:$media3Version")
 
     implementation("com.squareup.okhttp3:okhttp:5.5.0")
     implementation("com.twitter.twittertext:twitter-text:3.1.0")
