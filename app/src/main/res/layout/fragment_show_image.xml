@@ -10,12 +10,11 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:paddingHorizontal="64dp"
+        android:scaleX="1.5"
         android:scaleY="1.5" />
 
 </FrameLayout>
