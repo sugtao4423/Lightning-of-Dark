@@ -60,7 +60,7 @@
     <string name="param_account_already_exists">\@%1$s はすでに登録されています</string>
     <string name="success_add_account">アカウントを追加しました</string>
     <string name="success_edit_account">アカウントを編集しました</string>
-    <string name="error_get_image">画像の取得失敗</string>
+    <string name="error_get_image">画像の取得に失敗しました</string>
     <string name="error_play_video">動画の再生に失敗しました</string>
     <string name="error_get_user_detail">ユーザー情報を取得できませんでした</string>
     <string name="save">保存</string>

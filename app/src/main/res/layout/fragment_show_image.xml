@@ -17,4 +17,14 @@
         android:scaleX="1.5"
         android:scaleY="1.5" />
 
+    <TextView
+        android:id="@+id/errorTextView"
+        style="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/error_get_image"
+        android:textColor="@color/loadingError"
+        android:visibility="gone" />
+
 </FrameLayout>

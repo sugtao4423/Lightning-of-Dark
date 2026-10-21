@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
-import sugtao4423.lod.R
 import sugtao4423.lod.databinding.FragmentShowVideoBinding
-import sugtao4423.lod.utils.showToast
 
 class ShowVideoFragment : Fragment() {
 
@@ -46,7 +45,7 @@ class ShowVideoFragment : Fragment() {
         }.also {
             it.addListener(object : Player.Listener {
                 override fun onPlayerError(error: PlaybackException) {
-                    requireContext().showToast(R.string.error_play_video)
+                    binding.errorTextView.isVisible = true
                 }
             })
 
