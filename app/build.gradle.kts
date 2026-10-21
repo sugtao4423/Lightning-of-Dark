@@ -62,6 +62,7 @@ dependencies {
     ksp("com.github.bumptech.glide:ksp:$glideVersion")
 
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
+    implementation("io.github.panpf.zoomimage:zoomimage-view-glide:1.7.0")
 
     val media3Version = "1.11.1"
     implementation("androidx.media3:media3-exoplayer:$media3Version")
