@@ -69,6 +69,7 @@
     <string name="param_saved_original">オリジナルを保存しました\n%s</string>
     <string-array name="image_option">
         <item>@string/open_in_browser</item>
+        <item>URLをコピー</item>
         <item>@string/save</item>
     </string-array>
     <string-array name="image_option_orig">
@@ -176,6 +177,8 @@
         <item>お　ま　た　せ</item>
         <item>突然の死</item>
     </string-array>
+
+    <string name="icon_ellipsis_v">&#xf142;</string>
 
     <string name="icon_tweetCount">&#xf007;&#xf075;</string>
     <string name="icon_favCount">&#xf007;&#xf005;</string>

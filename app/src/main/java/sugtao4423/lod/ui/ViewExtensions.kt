@@ -1,5 +1,8 @@
 package sugtao4423.lod.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -10,6 +13,7 @@ import android.text.style.URLSpan
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
@@ -18,6 +22,12 @@ import sugtao4423.lod.R
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.Regex
+
+fun Context.copyToClipboard(text: String, label: String = "text") {
+    val clipboard = getSystemService<ClipboardManager>()
+    val clip = ClipData.newPlainText(label, text)
+    @Suppress("UsePropertyAccessSyntax") clipboard?.setPrimaryClip(clip)
+}
 
 fun SwipeRefreshLayout.setup(onRefresh: () -> Unit) {
     val color = resources.getIntArray(R.array.pull2RefreshScheme)
@@ -53,6 +63,17 @@ fun ImageView.loadUrl(url: String?, placeholder: Drawable? = null) =
 
 fun ImageView.loadUrl(url: String?, imageListener: RequestListener<Drawable>) =
     Glide.with(this).load(url).listener(imageListener).into(this)
+
+fun ImageView.loadWithThumbnail(
+    originalUrl: String, thumbnailUrl: String?, imageListener: RequestListener<Drawable>
+) {
+    if (thumbnailUrl == null) {
+        loadUrl(originalUrl, imageListener)
+        return
+    }
+    val glide = Glide.with(this)
+    glide.load(originalUrl).thumbnail(glide.load(thumbnailUrl)).listener(imageListener).into(this)
+}
 
 fun TextView.setLodLinkMovementString(string: String) {
     fun startUserPage(screenName: String) {

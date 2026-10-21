@@ -66,6 +66,9 @@
             android:name=".ui.settingslist.ListSettingsActivity"
             android:label="@string/settings_list" />
         <activity
+            android:name=".ui.showmedia.ShowMediaActivity"
+            android:theme="@style/Theme.TranslucentBackground" />
+        <activity
             android:name="sugtao4423.lod.ui.showimage.ShowImageActivity"
             android:theme="@style/Theme.TranslucentBackground" />
         <activity
