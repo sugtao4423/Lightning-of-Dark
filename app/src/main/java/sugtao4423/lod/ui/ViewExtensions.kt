@@ -61,18 +61,13 @@ fun ImageView.loadUri(uri: Uri?, placeholder: Drawable? = null) {
 fun ImageView.loadUrl(url: String?, placeholder: Drawable? = null) =
     loadUri(url?.toUri(), placeholder)
 
-fun ImageView.loadUrl(url: String?, imageListener: RequestListener<Drawable>) =
-    Glide.with(this).load(url).listener(imageListener).into(this)
-
 fun ImageView.loadWithThumbnail(
-    originalUrl: String, thumbnailUrl: String?, imageListener: RequestListener<Drawable>
+    originalUrl: String, thumbnailUrl: String?, requestListener: RequestListener<Drawable>
 ) {
-    if (thumbnailUrl == null) {
-        loadUrl(originalUrl, imageListener)
-        return
-    }
     val glide = Glide.with(this)
-    glide.load(originalUrl).thumbnail(glide.load(thumbnailUrl)).listener(imageListener).into(this)
+    glide.load(originalUrl).let {
+        if (thumbnailUrl != null) it.thumbnail(glide.load(thumbnailUrl)) else it
+    }.listener(requestListener).into(this)
 }
 
 fun TextView.setLodLinkMovementString(string: String) {
