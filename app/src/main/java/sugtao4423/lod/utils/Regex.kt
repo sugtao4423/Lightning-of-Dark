@@ -22,11 +22,6 @@ object Regex {
         Pattern.compile("https?://(mobile\\.)?(twitter|x)\\.com/([0-9a-zA-Z_]+)")
     const val userUrlScreenNameGroup = 3
 
-    val twimgUrl: Pattern =
-        Pattern.compile("^https?://pbs\\.twimg\\.com/.+/+(.+)(\\..+)$")
-    const val twimgUrlFileNameGroup = 1
-    const val twimgUrlDotExtGroup = 2
-
     val userBannerUrl: Pattern =
         Pattern.compile("^https?://pbs\\.twimg\\.com/profile_banners/[0-9]+/([0-9]+)/")
     const val userBannerUrlFileNameGroup = 1
