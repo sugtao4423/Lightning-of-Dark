@@ -18,7 +18,7 @@ import sugtao4423.lod.R
 import sugtao4423.lod.databinding.FragmentUserDetailBinding
 import sugtao4423.lod.ui.loadUrl
 import sugtao4423.lod.ui.setLodLinkMovementString
-import sugtao4423.lod.ui.showimage.ShowImageActivity
+import sugtao4423.lod.ui.showmedia.ShowMediaActivity
 import sugtao4423.lod.ui.userpage.UserPageActivityViewModel
 import sugtao4423.lod.utils.ChromeIntent
 
@@ -85,20 +85,11 @@ class DetailFragment : Fragment() {
     }
 
     private fun handleEvent(event: DetailEvent) = when (event) {
-        is DetailEvent.StartBannerImage -> {
-            val image = Intent(context, ShowImageActivity::class.java).apply {
-                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, arrayOf(event.url))
-                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_TYPE, ShowImageActivity.TYPE_BANNER)
+        is DetailEvent.StartImage -> {
+            val intent = Intent(context, ShowMediaActivity::class.java).apply {
+                putExtra(ShowMediaActivity.INTENT_EXTRA_KEY_URLS, arrayOf(event.url))
             }
-            startActivity(image)
-        }
-
-        is DetailEvent.StartIconImage -> {
-            val image = Intent(context, ShowImageActivity::class.java).apply {
-                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, arrayOf(event.url))
-                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_TYPE, ShowImageActivity.TYPE_ICON)
-            }
-            startActivity(image)
+            startActivity(intent)
         }
 
         is DetailEvent.StartChrome -> ChromeIntent(requireContext(), event.url.toUri())

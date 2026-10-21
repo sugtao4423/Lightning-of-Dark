@@ -11,11 +11,9 @@ import androidx.core.net.toUri
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.databinding.DialogRegexBinding
-import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
 import sugtao4423.lod.ui.intent.IntentActivity
-import sugtao4423.lod.ui.showimage.ShowImageActivity
-import sugtao4423.lod.ui.showvideo.ShowVideoActivity
+import sugtao4423.lod.ui.showmedia.ShowMediaActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.ChromeIntent
 import sugtao4423.lod.utils.showToast
@@ -126,21 +124,21 @@ class ListItemClickListener(
         val gif = LodRegex.mediaGif.matcher(urlText)
         val state = LodRegex.statusUrl.matcher(urlText)
         val intent = when {
-            image.find() -> Intent(context, ShowImageActivity::class.java).apply {
-                val urls = TweetListConverter.allImageUrls(status.mediaEntities)
-                val pos = urls.indexOf(urlText)
-                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, urls.toTypedArray())
-                putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, pos)
-            }
+            image.find() || video.find() || gif.find() -> {
+                val mediaUrls = status.mediaEntities.map { entity ->
+                    when (entity.type) {
+                        "photo" -> entity.mediaUrl
+                        "video", "animated_gif" -> entity.videoInfo?.variants?.maxByOrNull { it.bitrate }?.url
+                        else -> null
+                    }
+                }
+                val pos = mediaUrls.indexOf(urlText)
 
-            video.find() -> Intent(context, ShowVideoActivity::class.java).apply {
-                putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, urlText)
-                putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, ShowVideoActivity.TYPE_VIDEO)
-            }
-
-            gif.find() -> Intent(context, ShowVideoActivity::class.java).apply {
-                putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, urlText)
-                putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, ShowVideoActivity.TYPE_GIF)
+                val mediaArrayList = ArrayList(status.mediaEntities)
+                Intent(context, ShowMediaActivity::class.java).apply {
+                    putExtra(ShowMediaActivity.INTENT_EXTRA_KEY_MEDIA_ENTITIES, mediaArrayList)
+                    putExtra(ShowMediaActivity.INTENT_EXTRA_KEY_POSITION, pos)
+                }
             }
 
             state.find() -> Intent(context, IntentActivity::class.java).apply {

@@ -12,12 +12,8 @@ import sugtao4423.lod.ui.loadUrl
 import sugtao4423.twitter4j.MediaEntity
 
 private object MediaEntityDiffCallback : DiffUtil.ItemCallback<MediaEntity>() {
-
-    override fun areItemsTheSame(oldItem: MediaEntity, newItem: MediaEntity): Boolean =
-        oldItem.id == newItem.id
-
-    override fun areContentsTheSame(oldItem: MediaEntity, newItem: MediaEntity): Boolean =
-        areItemsTheSame(oldItem, newItem)
+    override fun areItemsTheSame(o: MediaEntity, n: MediaEntity): Boolean = o.id == n.id
+    override fun areContentsTheSame(o: MediaEntity, n: MediaEntity): Boolean = o == n
 }
 
 class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) :
@@ -47,7 +43,7 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
         val item = getItem(position)
         when (getItemViewType(position)) {
             VIEW_TYPE_IMAGE -> (holder as ImageViewHolder).bind(item, position)
-            VIEW_TYPE_VIDEO -> (holder as VideoViewHolder).bind(item)
+            VIEW_TYPE_VIDEO -> (holder as VideoViewHolder).bind(item, position)
         }
     }
 
@@ -67,7 +63,7 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
             binding.thumbnailImage.apply {
                 loadUrl(thumbnailUrl)
                 setOnClickListener {
-                    tweetListViewModel.onClickMediaImage(it, currentList, position)
+                    tweetListViewModel.onClickMedia(it, currentList, position)
                 }
             }
         }
@@ -75,13 +71,13 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
 
     inner class VideoViewHolder(private val binding: ListItemTweetMediaVideoBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(mediaEntity: MediaEntity) {
+        fun bind(mediaEntity: MediaEntity, position: Int) {
             val thumbnailUrl = TweetListConverter.mediaThumbnailUrl(mediaEntity)
 
             binding.apply {
                 thumbnailImage.loadUrl(thumbnailUrl)
-                videoContainer.setOnClickListener {
-                    tweetListViewModel.onClickMediaVideo(it, mediaEntity)
+                root.setOnClickListener {
+                    tweetListViewModel.onClickMedia(it, currentList, position)
                 }
             }
         }

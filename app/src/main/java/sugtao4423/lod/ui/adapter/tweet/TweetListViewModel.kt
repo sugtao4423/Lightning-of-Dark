@@ -4,8 +4,7 @@ import android.content.Intent
 import android.view.View
 import sugtao4423.lod.App
 import sugtao4423.lod.ui.adapter.converter.TweetListConverter
-import sugtao4423.lod.ui.showimage.ShowImageActivity
-import sugtao4423.lod.ui.showvideo.ShowVideoActivity
+import sugtao4423.lod.ui.showmedia.ShowMediaActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.twitter4j.MediaEntity
 import sugtao4423.twitter4j.Status
@@ -33,24 +32,11 @@ class TweetListViewModel(app: App) {
         view.context.startActivity(intent)
     }
 
-    fun onClickMediaImage(view: View, mediaEntities: List<MediaEntity>, tappedIndex: Int) {
-        val allImages = TweetListConverter.allImageUrls(mediaEntities)
-
-        val intent = Intent(view.context, ShowImageActivity::class.java).apply {
-            putExtra(ShowImageActivity.INTENT_EXTRA_KEY_URLS, allImages.toTypedArray())
-            putExtra(ShowImageActivity.INTENT_EXTRA_KEY_POSITION, tappedIndex)
-        }
-        view.context.startActivity(intent)
-    }
-
-    fun onClickMediaVideo(view: View, mediaEntity: MediaEntity) {
-        val videoUrl = TweetListConverter.videoMediaUrl(mediaEntity)
-        val isGif = TweetListConverter.mediaIsGif(mediaEntity)
-
-        val intent = Intent(view.context, ShowVideoActivity::class.java).apply {
-            val videoType = if (isGif) ShowVideoActivity.TYPE_GIF else ShowVideoActivity.TYPE_VIDEO
-            putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_URL, videoUrl)
-            putExtra(ShowVideoActivity.INTENT_EXTRA_KEY_TYPE, videoType)
+    fun onClickMedia(view: View, mediaEntities: List<MediaEntity>, tappedIndex: Int) {
+        val mediaArrayList = ArrayList(mediaEntities)
+        val intent = Intent(view.context, ShowMediaActivity::class.java).apply {
+            putExtra(ShowMediaActivity.INTENT_EXTRA_KEY_MEDIA_ENTITIES, mediaArrayList)
+            putExtra(ShowMediaActivity.INTENT_EXTRA_KEY_POSITION, tappedIndex)
         }
         view.context.startActivity(intent)
     }
