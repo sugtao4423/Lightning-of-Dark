@@ -31,6 +31,7 @@
     <string name="include_retweet">リツイートを含める</string>
     <string name="invalid_pattern">正規表現が不正です</string>
     <string name="open_in_browser">ブラウザで開く</string>
+    <string name="copy_url">URLをコピー</string>
 
     <string name="error_get_timeline">タイムライン取得エラー</string>
     <string name="error_get_mention">メンション取得エラー</string>
@@ -61,13 +62,6 @@
     <string name="success_add_account">アカウントを追加しました</string>
     <string name="success_edit_account">アカウントを編集しました</string>
     <string name="error_get_user_detail">ユーザー情報を取得できませんでした</string>
-    <string name="save">保存</string>
-    <string name="param_saved">保存しました\n%s</string>
-    <string-array name="image_option">
-        <item>@string/open_in_browser</item>
-        <item>URLをコピー</item>
-        <item>@string/save</item>
-    </string-array>
 
     <string name="tweet_bomb">ツイート爆撃</string>
     <string name="search_user">ユーザー検索</string>
@@ -100,6 +94,9 @@
     <string name="new_tweet">New Tweet</string>
     <string name="unofficial_rt">UnOfficialRT</string>
     <string name="voice_input">音声入力</string>
+
+    <string name="save">保存</string>
+    <string name="param_saved">保存しました\n%s</string>
 
     <string name="permission_notification_access_message">楽曲情報を取得するため通知へのアクセスを許可してください。</string>
     <string name="permission_rejected">(๑•﹏•๑*)</string>
@@ -176,6 +173,9 @@
     </string-array>
 
     <string name="icon_ellipsis_v">&#xf142;</string>
+    <string name="icon_external_link">&#xf35d;</string>
+    <string name="icon_copy">&#xf0c5;</string>
+    <string name="icon_download">&#xf019;</string>
 
     <string name="icon_tweetCount">&#xf007;&#xf075;</string>
     <string name="icon_favCount">&#xf007;&#xf005;</string>

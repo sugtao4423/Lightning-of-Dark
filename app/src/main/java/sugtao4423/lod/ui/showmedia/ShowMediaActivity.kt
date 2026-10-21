@@ -7,7 +7,7 @@ import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.view.Window
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -20,6 +20,8 @@ import sugtao4423.lod.R
 import sugtao4423.lod.databinding.ActivityShowMediaBinding
 import sugtao4423.lod.ui.LoDBaseActivity
 import sugtao4423.lod.ui.copyToClipboard
+import sugtao4423.lod.ui.icondialog.IconDialog
+import sugtao4423.lod.ui.icondialog.IconItem
 import sugtao4423.lod.ui.showmedia.fragment.ShowImageFragment
 import sugtao4423.lod.ui.showmedia.fragment.ShowVideoFragment
 import sugtao4423.lod.utils.ChromeIntent
@@ -88,16 +90,25 @@ class ShowMediaActivity : LoDBaseActivity() {
         }
     }
 
-    private fun showOptions() = AlertDialog.Builder(this).also {
-        it.setItems(R.array.image_option) { _, which ->
+    private fun showOptions() {
+        val black = ContextCompat.getColor(applicationContext, R.color.icon)
+        val items = listOf(
+            IconItem(
+                getString(R.string.icon_external_link)[0],
+                black,
+                getString(R.string.open_in_browser)
+            ),
+            IconItem(getString(R.string.icon_copy)[0], black, getString(R.string.copy_url)),
+            IconItem(getString(R.string.icon_download)[0], black, getString(R.string.save)),
+        )
+        IconDialog(this).setItems(items) { _, which ->
             val url = viewModel.showMedia[viewModel.currentPageIndex].url
             when (which) {
                 0 -> ChromeIntent(this, url.toUri())
                 1 -> copyToClipboard(url)
                 2 -> viewModel.saveCurrentMedia()
             }
-        }
-        it.show()
+        }.show()
     }
 
     private val hideInfoRunnable = Runnable {
