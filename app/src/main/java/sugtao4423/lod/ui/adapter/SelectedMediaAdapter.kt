@@ -82,7 +82,6 @@ class SelectedMediaAdapter(private val onChanged: (List<NewTweetMedia>) -> Unit)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (items.size <= position) return
         holder.bind(items[position])
     }
 

@@ -32,7 +32,6 @@ class UserListAdapter(context: Context) : UpdatableListAdapter<User, UserListAda
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (itemCount <= position) return
         holder.bind(getItem(position))
     }
 
