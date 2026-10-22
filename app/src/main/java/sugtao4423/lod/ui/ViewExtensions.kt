@@ -15,7 +15,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestListener
 import sugtao4423.lod.R
@@ -27,16 +26,6 @@ fun Context.copyToClipboard(text: String, label: String = "text") {
     val clipboard = getSystemService<ClipboardManager>()
     val clip = ClipData.newPlainText(label, text)
     @Suppress("UsePropertyAccessSyntax") clipboard?.setPrimaryClip(clip)
-}
-
-fun SwipeRefreshLayout.setup(onRefresh: () -> Unit) {
-    val color = resources.getIntArray(R.array.pull2RefreshScheme)
-    setColorSchemeColors(*color)
-
-    val backgroundColor = context.getColor(R.color.pull2RefreshBackground)
-    setProgressBackgroundColorSchemeColor(backgroundColor)
-
-    setOnRefreshListener { onRefresh() }
 }
 
 fun ImageView.loadUri(uri: Uri?, placeholder: Drawable? = null) {

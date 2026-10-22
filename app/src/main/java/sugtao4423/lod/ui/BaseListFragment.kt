@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
+import sugtao4423.lod.R
 import sugtao4423.lod.databinding.SwipeTweetListBinding
 import sugtao4423.lod.ui.adapter.ListUpdatable
 import sugtao4423.lod.ui.adapter.tweet.TweetListAdapter
@@ -35,7 +36,11 @@ sealed class BaseListFragment<T, L : List<T>, A>(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = SwipeTweetListBinding.inflate(inflater, container, false)
-        binding.swipeRefresh.setup { viewModel.pull2Refresh() }
+        binding.swipeRefresh.apply {
+            setColorSchemeColors(*resources.getIntArray(R.array.pull2RefreshScheme))
+            setProgressBackgroundColorSchemeColor(context.getColor(R.color.pull2RefreshBackground))
+            setOnRefreshListener { viewModel.pull2Refresh() }
+        }
         return binding.root
     }
 
