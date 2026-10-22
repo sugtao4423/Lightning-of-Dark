@@ -1,8 +1,10 @@
 package sugtao4423.lod.ui.showmedia
 
 import android.content.pm.ActivityInfo
+import android.graphics.PointF
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.ViewConfiguration
 import android.view.Window
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -44,6 +46,9 @@ class ShowMediaActivity : LoDBaseActivity() {
         }
     }
 
+    private val touchSlop by lazy { ViewConfiguration.get(this).scaledTouchSlop }
+    private val lastResetPoint = PointF()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -65,7 +70,7 @@ class ShowMediaActivity : LoDBaseActivity() {
             it.registerOnPageChangeCallback(viewPagerCallback)
         }
         binding.optionButton.setOnClickListener { showOptions() }
-        showInfo(true)
+        restartInfoTimer()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -99,17 +104,34 @@ class ShowMediaActivity : LoDBaseActivity() {
         binding.info.animate().alpha(0f).setDuration(INFO_HIDE_DURATION).start()
     }
 
-    private fun showInfo(autoHide: Boolean) = binding.info.also {
+    private fun restartInfoTimer() = binding.info.also {
         it.removeCallbacks(hideInfoRunnable)
+        it.postDelayed(hideInfoRunnable, INFO_AUTO_HIDE_DELAY)
+    }
+
+    private fun showInfoAndRestartTimer() = binding.info.also {
         it.animate().cancel()
         it.animate().alpha(1f).setDuration(INFO_SHOW_DURATION).start()
-        if (autoHide) it.postDelayed(hideInfoRunnable, INFO_AUTO_HIDE_DELAY)
+        restartInfoTimer()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         when (ev.actionMasked) {
-            MotionEvent.ACTION_DOWN -> showInfo(false)
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> showInfo(true)
+            MotionEvent.ACTION_DOWN -> {
+                lastResetPoint.set(ev.x, ev.y)
+                showInfoAndRestartTimer()
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val dx = ev.x - lastResetPoint.x
+                val dy = ev.y - lastResetPoint.y
+                if (dx * dx + dy * dy > touchSlop * touchSlop) {
+                    lastResetPoint.set(ev.x, ev.y)
+                    showInfoAndRestartTimer()
+                }
+            }
+
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> restartInfoTimer()
         }
         return super.dispatchTouchEvent(ev)
     }
