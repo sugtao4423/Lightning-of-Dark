@@ -3,19 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.github.chrisbanes.photoview.PhotoView
+    <com.github.panpf.zoomimage.GlideZoomImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:indeterminate="true" />
+
+    <TextView
+        android:id="@+id/errorTextView"
+        style="?android:attr/textAppearanceMedium"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:indeterminate="true"
-        android:paddingHorizontal="64dp"
-        android:scaleY="1.5" />
+        android:text="@string/layout_error_image"
+        android:textColor="@color/loadingError"
+        android:visibility="gone" />
 
 </FrameLayout>

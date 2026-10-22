@@ -48,15 +48,10 @@ object TweetListConverter {
 
     fun isShowMediaList(status: Status): Boolean = originalStatus(status).mediaEntities.isNotEmpty()
 
-    fun allImageUrls(mediaEntities: List<MediaEntity>): List<String> =
-        mediaEntities.filter { !mediaIsVideoOrGif(it) }.map { it.mediaUrl }
-
     fun mediaIsVideoOrGif(mediaEntity: MediaEntity): Boolean =
         mediaEntity.type == "video" || mediaEntity.type == "animated_gif"
 
-    fun mediaIsGif(mediaEntity: MediaEntity): Boolean = mediaEntity.type == "animated_gif"
-
-    fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = mediaEntity.mediaUrl + ":small"
+    fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = "${mediaEntity.mediaUrl}?name=small"
 
     fun videoMediaUrl(mediaEntity: MediaEntity): String {
         if (!mediaIsVideoOrGif(mediaEntity)) {

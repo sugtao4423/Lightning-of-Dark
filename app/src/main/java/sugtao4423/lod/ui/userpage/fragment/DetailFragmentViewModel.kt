@@ -42,8 +42,7 @@ data class DetailUiState(
 )
 
 sealed interface DetailEvent {
-    data class StartBannerImage(val url: String) : DetailEvent
-    data class StartIconImage(val url: String) : DetailEvent
+    data class StartImage(val url: String) : DetailEvent
     data class StartChrome(val url: String) : DetailEvent
 }
 
@@ -120,7 +119,7 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun onClickBanner(): Boolean {
-        user?.profileBanner?.size1500x500Url?.let { _events.trySend(DetailEvent.StartBannerImage(it)) }
+        user?.profileBanner?.size1500x500Url?.let { _events.trySend(DetailEvent.StartImage(it)) }
         return true
     }
 
@@ -130,7 +129,7 @@ class DetailFragmentViewModel(application: Application) : AndroidViewModel(appli
     }
 
     fun onClickIcon(): Boolean {
-        user?.profileImage?.originalUrl?.let { _events.trySend(DetailEvent.StartIconImage(it)) }
+        user?.profileImage?.originalUrl?.let { _events.trySend(DetailEvent.StartImage(it)) }
         return true
     }
 

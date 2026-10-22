@@ -39,6 +39,8 @@
     <color name="tweetTextRemainCountError">#d0ff0000</color>
     <color name="userPageTextBackground">#f0f0f0f0</color>
 
+    <color name="loadingError">@color/tweetTextRemainCountError</color>
+
     <integer-array name="pull2RefreshScheme">
         <item>@android:color/holo_blue_bright</item>
         <item>@android:color/holo_green_light</item>

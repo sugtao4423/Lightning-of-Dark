@@ -20,6 +20,7 @@
     <style name="Theme.TranslucentBackground" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBarOverlay">true</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textColorTertiary">@color/tweetText</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowBackground">@color/thinTransparent</item>

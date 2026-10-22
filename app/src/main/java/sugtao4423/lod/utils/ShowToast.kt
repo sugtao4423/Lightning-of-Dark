@@ -20,7 +20,6 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
         R.string.error_get_favorite,
         R.string.error_get_follow,
         R.string.error_get_follower,
-        R.string.error_get_image,
         R.string.error_get_list,
         R.string.error_get_mention,
         R.string.error_get_status,
@@ -28,7 +27,6 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
         R.string.error_get_timeline,
         R.string.error_get_user_detail,
         R.string.error_get_user_info,
-        R.string.error_play_video,
         R.string.error_post_delete,
         R.string.error_retweet,
         R.string.error_select_image_resolution_too_large,
@@ -44,7 +42,6 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
     )
 
     private val showLongRes = arrayOf(
-        R.string.error_get_image,
         R.string.error_select_image_resolution_too_large,
         R.string.error_select_image_size_too_large,
         R.string.error_upload_media,
@@ -54,7 +51,6 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
         R.string.param_level_up,
         R.string.param_regex_result_count,
         R.string.param_saved,
-        R.string.param_saved_original
     )
 
     private val v: View = View.inflate(context, R.layout.custom_toast, null)

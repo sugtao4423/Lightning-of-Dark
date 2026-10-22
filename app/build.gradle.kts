@@ -24,6 +24,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -33,6 +34,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 
     val lifecycleVersion = "2.11.0"
@@ -59,7 +61,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:$glideVersion")
     ksp("com.github.bumptech.glide:ksp:$glideVersion")
 
-    implementation("com.github.chrisbanes:PhotoView:2.3.0")
+    implementation("io.github.panpf.zoomimage:zoomimage-view-glide:1.7.0")
 
     val media3Version = "1.11.1"
     implementation("androidx.media3:media3-exoplayer:$media3Version")
