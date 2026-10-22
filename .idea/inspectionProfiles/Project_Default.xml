@@ -1,0 +1,22 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="098f6bcd-4621-3373-8ade-4e832627b4f6" enabled="true" level="ERROR" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
+    <inspection_tool class="SSBasedInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <searchConfiguration name="Direct use of View.visibility is prohibited" uuid="098f6bcd-4621-3373-8ade-4e832627b4f6" description="Do not assign to View.visibility directly, either via the property&#10;(view.visibility = ..., visibility = ...) or via setVisibility(...).&#10;Use the extension properties from androidx.core.view instead:&#10;isVisible, isGone, isInvisible.&#10;&#10;Example:&#10;  // Bad&#10;  binding.progress.visibility = if (isLoading) View.VISIBLE else View.GONE&#10;&#10;  // Good&#10;  binding.progress.isVisible = isLoading&#10;&#10;If a direct assignment is truly necessary, suppress this inspection&#10;with @Suppress(&quot;DirectViewVisibility&quot;) and leave a comment explaining why." suppressId="DirectViewVisibility" problemDescriptor="Don't set View.visibility directly. Use isVisible / isGone / isInvisible instead." text="$view$.visibility = $value$" recursive="true" caseInsensitive="false" type="Kotlin" pattern_context="default">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="value" within="" contains="" />
+        <constraint name="view" within="" contains="" />
+      </searchConfiguration>
+      <searchConfiguration name="Direct use of View.visibility is prohibited" uuid="098f6bcd-4621-3373-8ade-4e832627b4f6" text="visibility = $value$" recursive="true" caseInsensitive="false" type="Kotlin" pattern_context="default">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="value" within="" contains="" />
+      </searchConfiguration>
+      <searchConfiguration name="Direct use of View.visibility is prohibited" uuid="098f6bcd-4621-3373-8ade-4e832627b4f6" text="$view$.setVisibility($value$)" recursive="true" caseInsensitive="false" type="Kotlin" pattern_context="default">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="value" within="" contains="" />
+        <constraint name="view" within="" contains="" />
+      </searchConfiguration>
+    </inspection_tool>
+  </profile>
+</component>
