@@ -3,8 +3,8 @@ package sugtao4423.lod.ui.adapter.tweet
 import android.content.Context
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
 import sugtao4423.lod.databinding.ListItemTweetBinding
@@ -57,8 +57,7 @@ class TweetListAdapter(context: Context) :
             userName.text = TweetListConverter.userNameAndScreenName(status)
             userName.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.nameTextSize)
 
-            val isShowProtected = TweetListConverter.isShowProtected(status)
-            protectIcon.visibility = if (isShowProtected) View.VISIBLE else View.GONE
+            protectIcon.isVisible = TweetListConverter.isShowProtected(status)
             protectIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.protectIconSize)
 
             tweetText.text = TweetListConverter.text(status)
@@ -68,8 +67,8 @@ class TweetListAdapter(context: Context) :
             tweetDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.dateTextSize)
 
             val isShowRetweet = TweetListConverter.isShowRetweetUser(status)
-            retweetUserIcon.visibility = if (isShowRetweet) View.VISIBLE else View.GONE
-            retweetUserName.visibility = if (isShowRetweet) View.VISIBLE else View.GONE
+            retweetUserIcon.isVisible = isShowRetweet
+            retweetUserName.isVisible = isShowRetweet
             if (isShowRetweet) {
                 retweetUserIcon.loadUrl(TweetListConverter.retweetedUserIconUrl(status))
                 retweetUserName.text = TweetListConverter.retweetedUserScreenName(status)
@@ -77,7 +76,7 @@ class TweetListAdapter(context: Context) :
             }
 
             val isShowMedias = !hideImages && TweetListConverter.isShowMediaList(status)
-            mediaRecyclerView.visibility = if (isShowMedias) View.VISIBLE else View.GONE
+            mediaRecyclerView.isVisible = isShowMedias
             if (isShowMedias) {
                 mediaRecyclerView.adapter = vm.tweetMediaAdapter(status)
             }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -64,9 +65,9 @@ class DetailFragment : Fragment() {
         iconImage.loadUrl(state.iconUrl)
         userName.text = state.name
         screenName.text = state.screenName
-        protectIcon.visibility = if (state.isShowProtected) View.VISIBLE else View.GONE
+        protectIcon.isVisible = state.isShowProtected
 
-        relationshipLayout.visibility = if (state.isShowRelationship) View.VISIBLE else View.GONE
+        relationshipLayout.isVisible = state.isShowRelationship
         if (state.isShowRelationship) {
             relationshipText.text = state.relationshipIcon
             relationshipMeIcon.loadUrl(state.myIconUrl)

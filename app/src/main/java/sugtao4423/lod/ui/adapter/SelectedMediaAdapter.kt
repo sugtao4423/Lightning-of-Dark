@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -110,7 +111,7 @@ class SelectedMediaAdapter(private val onChanged: (List<NewTweetMedia>) -> Unit)
             it.media.loadUri(media.uri)
 
             val isImage = media.type == NewTweetMediaType.IMAGE
-            it.mediaResolution.visibility = if (isImage) View.VISIBLE else View.GONE
+            it.mediaResolution.isVisible = isImage
             if (isImage) {
                 val (w, h) = media.resolution!!
                 val isLandscape = w >= h

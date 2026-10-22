@@ -3,8 +3,8 @@ package sugtao4423.lod.ui.adapter.user
 import android.content.Context
 import android.util.TypedValue
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
 import sugtao4423.lod.databinding.ListItemUserBinding
@@ -47,7 +47,7 @@ class UserListAdapter(context: Context) : UpdatableListAdapter<User, UserListAda
             userName.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.nameTextSize)
 
             val isShowProtected = UserListConverter.isShowProtected(user)
-            protectIcon.visibility = if (isShowProtected) View.VISIBLE else View.GONE
+            protectIcon.isVisible = isShowProtected
             protectIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.protectIconSize)
 
             userDescription.text = UserListConverter.userDescription(user)

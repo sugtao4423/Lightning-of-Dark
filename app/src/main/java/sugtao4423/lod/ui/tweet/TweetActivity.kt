@@ -3,13 +3,13 @@ package sugtao4423.lod.ui.tweet
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -112,7 +112,7 @@ class TweetActivity : LoDBaseActivity() {
                 add(event.status)
                 binding.originStatus.adapter = this
             }
-            binding.originStatus.visibility = View.VISIBLE
+            binding.originStatus.isVisible = true
         }
 
         is TweetEvent.SetTextSelectionEnd -> binding.tweetEdit.setSelection(binding.tweetEdit.text!!.length)
