@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
@@ -85,14 +84,13 @@ class MainActivity : LoDBaseActivity() {
     }
 
     private fun createOptionDialog() {
-        val black = ContextCompat.getColor(applicationContext, R.color.icon)
         val items = listOf(
-            IconItem(getString(R.string.icon_bomb)[0], black, getString(R.string.tweet_bomb)),
-            IconItem(getString(R.string.icon_search)[0], black, getString(R.string.search_user)),
-            IconItem(getString(R.string.icon_user)[0], black, getString(R.string.account)),
-            IconItem(getString(R.string.icon_experience)[0], black, getString(R.string.level_info)),
-            IconItem(getString(R.string.icon_clock)[0], black, getString(R.string.use_info)),
-            IconItem(getString(R.string.icon_cog)[0], black, getString(R.string.settings))
+            IconItem(R.string.icon_bomb, title = R.string.tweet_bomb),
+            IconItem(R.string.icon_search, title = R.string.search_user),
+            IconItem(R.string.icon_user, title = R.string.account),
+            IconItem(R.string.icon_experience, title = R.string.level_info),
+            IconItem(R.string.icon_clock, title = R.string.use_info),
+            IconItem(R.string.icon_cog, title = R.string.settings),
         )
         iconDialog = IconDialog(this).setItems(items, OptionClickListener(this, optionViewModel))
     }

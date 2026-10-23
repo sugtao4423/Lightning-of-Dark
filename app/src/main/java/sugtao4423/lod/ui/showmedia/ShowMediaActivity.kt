@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.view.Window
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -91,15 +90,10 @@ class ShowMediaActivity : LoDBaseActivity() {
     }
 
     private fun showOptions() {
-        val black = ContextCompat.getColor(applicationContext, R.color.icon)
         val items = listOf(
-            IconItem(
-                getString(R.string.icon_external_link)[0],
-                black,
-                getString(R.string.open_in_browser)
-            ),
-            IconItem(getString(R.string.icon_copy)[0], black, getString(R.string.copy_url)),
-            IconItem(getString(R.string.icon_download)[0], black, getString(R.string.save)),
+            IconItem(R.string.icon_external_link, title = R.string.open_in_browser),
+            IconItem(R.string.icon_copy, title = R.string.copy_url),
+            IconItem(R.string.icon_download, title = R.string.save),
         )
         IconDialog(this).setItems(items) { _, which ->
             val url = viewModel.showMedia[viewModel.currentPageIndex].url

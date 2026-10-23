@@ -1,9 +1,11 @@
 package sugtao4423.lod.ui.icondialog
 
-import android.graphics.Color
+import androidx.annotation.ColorRes
+import androidx.annotation.StringRes
+import sugtao4423.lod.R
 
 data class IconItem(
-    val icon: Char,
-    val iconColor: Int = Color.BLACK,
-    val title: String
+    @StringRes val icon: Int,
+    @ColorRes val iconColor: Int = R.color.icon,
+    @StringRes val title: Int,
 )
