@@ -7,7 +7,6 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.twitter.twittertext.Extractor
 import sugtao4423.lod.R
@@ -19,7 +18,7 @@ class TweetEditText @JvmOverloads constructor(
 ) : AppCompatEditText(context, attrs, defStyleAttr) {
 
     private val extractor = Extractor()
-    private val entityColor = ContextCompat.getColor(context, R.color.twitterBrand)
+    private val entityColor = context.getColor(R.color.twitterBrand)
 
     var prefixLength: Int = 0
         set(value) {

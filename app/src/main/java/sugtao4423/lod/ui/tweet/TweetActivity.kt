@@ -8,7 +8,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
@@ -98,10 +97,7 @@ class TweetActivity : LoDBaseActivity() {
         binding.tweetButton.isEnabled = state.isTweetButtonEnabled
         binding.remainingCount.text = state.remainingTextCount.toString()
         binding.remainingCount.setTextColor(
-            ContextCompat.getColor(
-                this,
-                if (state.isValidTextCount) R.color.tweetTextRemainCount else R.color.tweetTextRemainCountError
-            )
+            getColor(if (state.isValidTextCount) R.color.tweetTextRemainCount else R.color.tweetTextRemainCountError)
         )
     }
 
