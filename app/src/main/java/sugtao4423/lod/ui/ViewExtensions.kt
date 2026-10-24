@@ -30,22 +30,13 @@ fun Context.copyToClipboard(text: String, label: String = "text") {
 }
 
 fun ImageView.loadUri(uri: Uri?, @DrawableRes placeholder: Int? = null) {
+    val placeholderRes = placeholder ?: R.drawable.icon_loading
+
     if (uri == null) {
-        if (placeholder == null) {
-            setImageResource(R.drawable.icon_loading)
-        } else {
-            setImageResource(placeholder)
-        }
+        setImageResource(placeholderRes)
         return
     }
-
-    Glide.with(this).load(uri).let {
-        if (placeholder == null) {
-            it.placeholder(R.drawable.icon_loading)
-        } else {
-            it.placeholder(placeholder)
-        }
-    }.into(this)
+    Glide.with(this).load(uri).placeholder(placeholderRes).into(this)
 }
 
 fun ImageView.loadUrl(url: String?, @DrawableRes placeholder: Int? = null) =
