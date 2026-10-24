@@ -13,6 +13,7 @@ import android.text.style.URLSpan
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import com.bumptech.glide.Glide
@@ -28,12 +29,12 @@ fun Context.copyToClipboard(text: String, label: String = "text") {
     @Suppress("UsePropertyAccessSyntax") clipboard?.setPrimaryClip(clip)
 }
 
-fun ImageView.loadUri(uri: Uri?, placeholder: Drawable? = null) {
+fun ImageView.loadUri(uri: Uri?, @DrawableRes placeholder: Int? = null) {
     if (uri == null) {
         if (placeholder == null) {
             setImageResource(R.drawable.icon_loading)
         } else {
-            setImageDrawable(placeholder)
+            setImageResource(placeholder)
         }
         return
     }
@@ -47,7 +48,7 @@ fun ImageView.loadUri(uri: Uri?, placeholder: Drawable? = null) {
     }.into(this)
 }
 
-fun ImageView.loadUrl(url: String?, placeholder: Drawable? = null) =
+fun ImageView.loadUrl(url: String?, @DrawableRes placeholder: Int? = null) =
     loadUri(url?.toUri(), placeholder)
 
 fun ImageView.loadWithThumbnail(
