@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
+import androidx.core.content.ContextCompat
 
 class FileDownloader(private val application: Application) {
 
@@ -19,9 +20,11 @@ class FileDownloader(private val application: Application) {
                 application.unregisterReceiver(this)
             }
         }
-        application.registerReceiver(
+        ContextCompat.registerReceiver(
+            application,
             receiver,
-            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+            IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+            ContextCompat.RECEIVER_EXPORTED
         )
 
         val dlRequest = DownloadManager.Request(uri).apply {
