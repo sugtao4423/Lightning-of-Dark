@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
+import androidx.core.content.getSystemService
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.main.MainActivity
@@ -48,10 +49,8 @@ class AutoLoadTLService : Service() {
 
         val channelId = "default"
         val title = "Running AutoLoadTL Service"
-        NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT).let {
-            val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(it)
-        }
+        val channel = NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT)
+        getSystemService<NotificationManager>()!!.createNotificationChannel(channel)
 
         val pendingIntent = PendingIntent.getActivity(
             applicationContext,

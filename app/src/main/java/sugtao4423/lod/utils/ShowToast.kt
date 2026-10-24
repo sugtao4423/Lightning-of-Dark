@@ -7,6 +7,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.getSystemService
 import sugtao4423.lod.R
 
 fun Context.showToast(resId: Int, vararg formatArgs: Any?) {
@@ -61,7 +62,7 @@ private class ShowToast(context: Context, resId: Int, vararg formatArgs: Any?) :
             v.setBackgroundResource(R.drawable.toast_error_bg)
 
             val appSize = Point()
-            (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).also {
+            context.getSystemService<WindowManager>()!!.also {
                 it.defaultDisplay.getSize(appSize)
             }
             setGravity(Gravity.TOP, 0, appSize.y / 6)

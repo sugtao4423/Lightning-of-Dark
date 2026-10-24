@@ -2,7 +2,6 @@ package sugtao4423.lod.playing_music_data
 
 import android.app.Activity
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.media.MediaMetadata
 import android.media.session.MediaSessionManager
@@ -10,13 +9,13 @@ import android.media.session.PlaybackState
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.getSystemService
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.showToast
 
 class PlayingMusicData(private val activity: Activity) {
 
-    private val mediaSessionManager =
-        activity.getSystemService(Context.MEDIA_SESSION_SERVICE) as MediaSessionManager
+    private val mediaSessionManager = activity.getSystemService<MediaSessionManager>()!!
 
     fun getPlayingMusicData(): HashMap<MusicDataKey, String>? {
         if (!hasNotificationAccessPermission()) {

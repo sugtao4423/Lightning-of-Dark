@@ -7,6 +7,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import sugtao4423.lod.App
 import sugtao4423.lod.R
@@ -63,8 +64,7 @@ class ListItemClickListener(
     }
 
     private fun closeKeyboard(v: View) {
-        (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-            .hideSoftInputFromWindow(v.windowToken, 0)
+        context.getSystemService<InputMethodManager>()!!.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
     private fun extractTweetsWithRegex() {
