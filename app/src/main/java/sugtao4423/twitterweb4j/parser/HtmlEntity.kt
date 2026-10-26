@@ -56,7 +56,13 @@ object HtmlEntity {
 
         val media = mediaEntities.slideIndices(
             extractedUrls, { it.url },
-        ) { entity, start, end -> entity.copy(start = start, end = end) }
+        ) { entity, start, end ->
+            when (entity) {
+                is MediaEntity.Image -> entity.copy(start = start, end = end)
+                is MediaEntity.Gif -> entity.copy(start = start, end = end)
+                is MediaEntity.Video -> entity.copy(start = start, end = end)
+            }
+        }
 
         return UnescapedTweet(unescapedText, userMentions, urls, hashtags, symbols, media)
     }

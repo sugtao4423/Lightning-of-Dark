@@ -20,31 +20,82 @@ data class VideoVariant(
     val url: String,
 ) : java.io.Serializable
 
-data class VideoInfo(
-    val aspectRatioWidth: Int,
-    val aspectRatioHeight: Int,
-    val durationMillis: Long?,
-    val variants: List<VideoVariant>,
-) : java.io.Serializable
+sealed interface VideoInfo : java.io.Serializable {
+    val aspectRatioWidth: Int
+    val aspectRatioHeight: Int
+    val variants: List<VideoVariant>
 
-data class MediaEntity(
-    val id: Long,
-    val url: String,
-    val mediaUrl: String,
-    val expandedUrl: String,
-    val displayUrl: String,
-    val sizes: Map<MediaSize, Size>,
-    val type: String,
-    val extAltText: String?,
-    val videoInfo: VideoInfo?,
-    override val start: Int,
-    override val end: Int,
-) : Indices, java.io.Serializable {
+    data class Gif(
+        override val aspectRatioWidth: Int,
+        override val aspectRatioHeight: Int,
+        override val variants: List<VideoVariant>,
+    ) : VideoInfo
 
-    val mediaThumbnailUrl: String = "${mediaUrl}?name=thumb"
-    val mediaSmallUrl: String = "${mediaUrl}?name=small"
-    val mediaMediumUrl: String = "${mediaUrl}?name=medium"
-    val mediaLargeUrl: String = "${mediaUrl}?name=large"
-    val mediaOriginalUrl: String = "${mediaUrl}?name=orig"
+    data class Video(
+        override val aspectRatioWidth: Int,
+        override val aspectRatioHeight: Int,
+        val durationMillis: Long,
+        override val variants: List<VideoVariant>,
+    ) : VideoInfo
+}
+
+sealed interface MediaEntity : Indices, java.io.Serializable {
+    val id: Long
+    val url: String
+    val mediaUrl: String
+    val expandedUrl: String
+    val displayUrl: String
+    val sizes: Map<MediaSize, Size>
+    val extAltText: String?
+    override val start: Int
+    override val end: Int
+
+    val mediaThumbnailUrl: String get() = "${mediaUrl}?name=thumb"
+    val mediaSmallUrl: String get() = "${mediaUrl}?name=small"
+    val mediaMediumUrl: String get() = "${mediaUrl}?name=medium"
+    val mediaLargeUrl: String get() = "${mediaUrl}?name=large"
+    val mediaOriginalUrl: String get() = "${mediaUrl}?name=orig"
+
+    sealed interface HasVideo : MediaEntity {
+        val videoInfo: VideoInfo
+    }
+
+    data class Image(
+        override val id: Long,
+        override val url: String,
+        override val mediaUrl: String,
+        override val expandedUrl: String,
+        override val displayUrl: String,
+        override val sizes: Map<MediaSize, Size>,
+        override val extAltText: String?,
+        override val start: Int,
+        override val end: Int,
+    ) : MediaEntity
+
+    data class Gif(
+        override val id: Long,
+        override val url: String,
+        override val mediaUrl: String,
+        override val expandedUrl: String,
+        override val displayUrl: String,
+        override val sizes: Map<MediaSize, Size>,
+        override val extAltText: String?,
+        override val videoInfo: VideoInfo.Gif,
+        override val start: Int,
+        override val end: Int,
+    ) : MediaEntity, HasVideo
+
+    data class Video(
+        override val id: Long,
+        override val url: String,
+        override val mediaUrl: String,
+        override val expandedUrl: String,
+        override val displayUrl: String,
+        override val sizes: Map<MediaSize, Size>,
+        override val extAltText: String?,
+        override val videoInfo: VideoInfo.Video,
+        override val start: Int,
+        override val end: Int,
+    ) : MediaEntity, HasVideo
 
 }

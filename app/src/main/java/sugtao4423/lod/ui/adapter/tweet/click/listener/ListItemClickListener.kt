@@ -17,9 +17,11 @@ import sugtao4423.lod.ui.intent.IntentActivity
 import sugtao4423.lod.ui.showmedia.ShowMediaActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
 import sugtao4423.lod.utils.ChromeIntent
+import sugtao4423.lod.utils.getHighestBitrateUrl
 import sugtao4423.lod.utils.showToast
 import sugtao4423.lod.utils.toStatusUrl
 import sugtao4423.lod.view.TweetListView
+import sugtao4423.twitter4j.MediaEntity
 import sugtao4423.twitter4j.Status
 import java.util.regex.Pattern
 import sugtao4423.lod.utils.Regex as LodRegex
@@ -126,10 +128,9 @@ class ListItemClickListener(
         val intent = when {
             image.find() || video.find() || gif.find() -> {
                 val mediaUrls = status.mediaEntities.map { entity ->
-                    when (entity.type) {
-                        "photo" -> entity.mediaUrl
-                        "video", "animated_gif" -> entity.videoInfo?.variants?.maxByOrNull { it.bitrate }?.url
-                        else -> null
+                    when (entity) {
+                        is MediaEntity.Image -> entity.mediaUrl
+                        is MediaEntity.Gif, is MediaEntity.Video -> entity.videoInfo.getHighestBitrateUrl()
                     }
                 }
                 val pos = mediaUrls.indexOf(urlText)

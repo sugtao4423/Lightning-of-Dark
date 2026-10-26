@@ -48,20 +48,6 @@ object TweetListConverter {
 
     fun isShowMediaList(status: Status): Boolean = originalStatus(status).mediaEntities.isNotEmpty()
 
-    fun mediaIsVideoOrGif(mediaEntity: MediaEntity): Boolean =
-        mediaEntity.type == "video" || mediaEntity.type == "animated_gif"
-
     fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = mediaEntity.mediaSmallUrl
-
-    fun videoMediaUrl(mediaEntity: MediaEntity): String {
-        if (!mediaIsVideoOrGif(mediaEntity)) {
-            throw UnsupportedOperationException("Media is not video or gif.")
-        }
-        if (mediaEntity.videoInfo == null || mediaEntity.videoInfo.variants.isEmpty()) {
-            throw UnsupportedOperationException("Video info is not available.")
-        }
-
-        return mediaEntity.videoInfo.variants.maxBy { it.bitrate }.url
-    }
 
 }

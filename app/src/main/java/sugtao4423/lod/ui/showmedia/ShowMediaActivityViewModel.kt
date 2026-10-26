@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.update
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.utils.Regex
+import sugtao4423.lod.utils.getHighestBitrateUrl
 import sugtao4423.lod.utils.showToast
 import sugtao4423.twitter4j.MediaEntity
 
@@ -50,21 +51,14 @@ class ShowMediaActivityViewModel(application: Application) : AndroidViewModel(ap
 
     fun setIntentData(mediaEntities: ArrayList<MediaEntity>?, urls: Array<String>?, position: Int) {
         showMedia.clear()
-        mediaEntities?.forEach { mediaEntity ->
-            when (mediaEntity.type) {
-                "photo" -> {
-                    val url = mediaEntity.mediaOriginalUrl
-                    val thumbnailUrl = mediaEntity.mediaSmallUrl
-                    showMedia.add(ShowMedia.Image(url, thumbnailUrl))
-                }
-
-                "video", "animated_gif" -> {
-                    val info = mediaEntity.videoInfo ?: return@forEach
-                    val url = info.variants.maxByOrNull { it.bitrate }?.url ?: return@forEach
-                    val repeat = mediaEntity.type == "animated_gif"
-                    showMedia.add(ShowMedia.Video(url, repeat))
-                }
+        mediaEntities?.forEach {
+            val item = when (it) {
+                is MediaEntity.Image -> ShowMedia.Image(it.mediaOriginalUrl, it.mediaSmallUrl)
+                is MediaEntity.Gif, is MediaEntity.Video -> ShowMedia.Video(
+                    it.videoInfo.getHighestBitrateUrl(), it is MediaEntity.Gif
+                )
             }
+            showMedia.add(item)
         }
         urls?.forEach { url ->
             showMedia.add(ShowMedia.Image(url, null))

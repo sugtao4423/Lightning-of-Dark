@@ -89,36 +89,53 @@ fun parseMediaEntity(json: Json): MediaEntity {
         }.toMap()
     }
 
-    val type = json["type"].string
     val extAltText = json["ext_alt_text"].stringOrNull
-
-    val videoInfo = json["video_info"].orNull()?.let {
-        val aspectRatioWidth = it["aspect_ratio"][0].int
-        val aspectRatioHeight = it["aspect_ratio"][1].int
-        val durationMillis = it["duration_millis"].longOrNull
-        val variants = it["variants"].mapList { variant ->
-            val bitrate = variant["bitrate"].intOrNull ?: 0
-            val contentType = variant["content_type"].string
-            val url = variant["url"].string
-            VideoVariant(bitrate, contentType, url)
-        }
-        VideoInfo(aspectRatioWidth, aspectRatioHeight, durationMillis, variants)
-    }
 
     val start = json["indices"][0].int
     val end = json["indices"][1].int
 
-    return MediaEntity(
-        id,
-        url,
-        mediaUrl,
-        expandedUrl,
-        displayUrl,
-        sizes,
-        type,
-        extAltText,
-        videoInfo,
-        start,
-        end,
+    val imageMediaEntity = MediaEntity.Image(
+        id, url, mediaUrl, expandedUrl, displayUrl, sizes, extAltText, start, end
     )
+
+    return when (val type = json["type"].string) {
+        "photo" -> imageMediaEntity
+        "animated_gif", "video" -> {
+            val isGif = type == "animated_gif"
+
+            val gifVideoInfo = json["video_info"].let {
+                val aspectRatioWidth = it["aspect_ratio"][0].int
+                val aspectRatioHeight = it["aspect_ratio"][1].int
+                val variants = it["variants"].mapList { variant ->
+                    val bitrate = variant["bitrate"].intOrNull ?: 0
+                    val contentType = variant["content_type"].string
+                    val url = variant["url"].string
+                    VideoVariant(bitrate, contentType, url)
+                }
+                VideoInfo.Gif(aspectRatioWidth, aspectRatioHeight, variants)
+            }
+
+            if (isGif) {
+                imageMediaEntity.toGif(gifVideoInfo)
+            } else {
+                val durationMillis = json["video_info"]["duration_millis"].long
+                val videoInfo = gifVideoInfo.toVideo(durationMillis)
+                imageMediaEntity.toVideo(videoInfo)
+            }
+        }
+
+        else -> throw JSONException("Unsupported media type: $type")
+    }
 }
+
+private fun VideoInfo.Gif.toVideo(durationMillis: Long) = VideoInfo.Video(
+    aspectRatioWidth, aspectRatioHeight, durationMillis, variants
+)
+
+private fun MediaEntity.Image.toGif(videoInfo: VideoInfo.Gif) = MediaEntity.Gif(
+    id, url, mediaUrl, expandedUrl, displayUrl, sizes, extAltText, videoInfo, start, end
+)
+
+private fun MediaEntity.Image.toVideo(videoInfo: VideoInfo.Video) = MediaEntity.Video(
+    id, url, mediaUrl, expandedUrl, displayUrl, sizes, extAltText, videoInfo, start, end
+)

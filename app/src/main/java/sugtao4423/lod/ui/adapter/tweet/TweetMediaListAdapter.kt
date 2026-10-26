@@ -49,10 +49,10 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
 
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
-        if (TweetListConverter.mediaIsVideoOrGif(item)) {
-            return VIEW_TYPE_VIDEO
+        if (item is MediaEntity.Image) {
+            return VIEW_TYPE_IMAGE
         }
-        return VIEW_TYPE_IMAGE
+        return VIEW_TYPE_VIDEO
     }
 
     inner class ImageViewHolder(private val binding: ListItemTweetMediaImageBinding) :

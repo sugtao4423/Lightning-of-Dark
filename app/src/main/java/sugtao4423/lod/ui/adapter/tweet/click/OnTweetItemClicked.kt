@@ -4,7 +4,9 @@ import android.view.View
 import sugtao4423.lod.App
 import sugtao4423.lod.R
 import sugtao4423.lod.ui.adapter.converter.TweetListConverter
+import sugtao4423.lod.utils.getHighestBitrateUrl
 import sugtao4423.lod.utils.toStatusUrl
+import sugtao4423.twitter4j.MediaEntity
 import sugtao4423.twitter4j.Status
 
 object OnTweetItemClicked {
@@ -36,10 +38,9 @@ object OnTweetItemClicked {
         }
 
         originalStatus.mediaEntities.forEach {
-            val url = if (TweetListConverter.mediaIsVideoOrGif(it)) {
-                TweetListConverter.videoMediaUrl(it)
-            } else {
-                it.mediaUrl
+            val url = when (it) {
+                is MediaEntity.Image -> it.mediaUrl
+                is MediaEntity.Gif, is MediaEntity.Video -> it.videoInfo.getHighestBitrateUrl()
             }
             dialogList.add(url)
         }
