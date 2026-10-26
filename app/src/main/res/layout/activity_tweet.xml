@@ -64,42 +64,33 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <sugtao4423.lod.view.TypefacedButton
+                <Button
                     android:id="@+id/micButton"
-                    style="?android:attr/buttonBarButtonStyle"
+                    style="@style/Widget.App.Button.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
                     android:padding="8dp"
                     android:text="@string/icon_mic"
                     android:textColor="@drawable/selector_activity_tweet_button"
                     android:textSize="18sp" />
 
-                <sugtao4423.lod.view.TypefacedButton
+                <Button
                     android:id="@+id/musicButton"
-                    style="?android:attr/buttonBarButtonStyle"
+                    style="@style/Widget.App.Button.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:background="@color/transparent"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
                     android:padding="8dp"
                     android:text="@string/icon_music"
                     android:textColor="@drawable/selector_activity_tweet_button"
                     android:textSize="18sp" />
 
-                <sugtao4423.lod.view.TypefacedButton
+                <Button
                     android:id="@+id/textOptionButton"
-                    style="?android:attr/buttonBarButtonStyle"
+                    style="@style/Widget.App.Button.Icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:background="@color/transparent"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
                     android:padding="8dp"
                     android:text="@string/icon_text"
                     android:textColor="@drawable/selector_activity_tweet_button"
@@ -113,22 +104,22 @@
             android:gravity="end"
             android:orientation="horizontal">
 
-            <sugtao4423.lod.view.TypefacedButton
+            <Button
                 android:id="@+id/tweetButton"
+                style="@style/Widget.App.Button.Icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@color/transparent"
                 android:padding="10dp"
                 android:text="@string/icon_tweet"
                 android:textColor="@drawable/selector_activity_tweet_button"
                 android:textSize="22sp" />
 
-            <sugtao4423.lod.view.TypefacedButton
+            <Button
                 android:id="@+id/imageSelectButton"
+                style="@style/Widget.App.Button.Icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="10dp"
-                android:background="@color/transparent"
                 android:padding="10dp"
                 android:text="@string/icon_image"
                 android:textColor="@drawable/selector_activity_tweet_button"
@@ -141,11 +132,11 @@
                 android:layout_gravity="bottom"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <sugtao4423.lod.view.TypefacedButton
+            <Button
                 android:id="@+id/closeButton"
+                style="@style/Widget.App.Button.Icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@color/transparent"
                 android:padding="10dp"
                 android:text="@string/icon_close"
                 android:textColor="@drawable/selector_activity_tweet_button"

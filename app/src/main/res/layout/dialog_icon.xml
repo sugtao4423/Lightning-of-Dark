@@ -5,12 +5,13 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <sugtao4423.lod.view.TypefacedTextView
+    <TextView
         android:id="@+id/iconText"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_margin="8dp"
         android:gravity="center"
+        android:textAppearance="@style/TextAppearance.App.Icon"
         android:textSize="24dp"
         tools:ignore="SpUsage" />
 

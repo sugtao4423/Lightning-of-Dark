@@ -13,13 +13,14 @@
         android:contentDescription="@string/content_desc_upload_image"
         android:src="@drawable/icon_loading" />
 
-    <sugtao4423.lod.view.TypefacedTextView
+    <TextView
         android:id="@+id/mediaResolution"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|start"
         android:background="@color/selectedMediaTextBackground"
         android:paddingHorizontal="2dp"
+        android:textAppearance="@style/TextAppearance.App.Icon"
         android:textColor="@color/selectedMediaText"
         android:textSize="12sp" />
 

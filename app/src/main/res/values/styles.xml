@@ -26,4 +26,16 @@
         <item name="android:windowBackground">@color/thinTransparent</item>
     </style>
 
+    <style name="TextAppearance.App.Icon" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/fontawesome_free_solid_v5</item>
+    </style>
+
+    <style name="Widget.App.Button.Icon" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textAppearance">@style/TextAppearance.App.Icon</item>
+        <item name="android:background">@null</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:padding">0dp</item>
+    </style>
+
 </resources>

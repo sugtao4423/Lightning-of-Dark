@@ -27,7 +27,7 @@
                 android:textColor="@color/tweetName"
                 android:textStyle="bold" />
 
-            <sugtao4423.lod.view.TypefacedTextView
+            <TextView
                 android:id="@+id/protectIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,6 +35,7 @@
                 android:layout_marginStart="5dp"
                 android:gravity="center"
                 android:text="@string/icon_protect"
+                android:textAppearance="@style/TextAppearance.App.Icon"
                 android:textColor="@color/icon"
                 android:visibility="gone" />
         </LinearLayout>

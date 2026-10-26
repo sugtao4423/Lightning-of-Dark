@@ -1,7 +1,6 @@
 package sugtao4423.lod
 
 import android.app.Application
-import android.graphics.Typeface
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.widget.Toast
@@ -44,10 +43,6 @@ class App : Application() {
     val levelRepository by lazy { LevelRepository(prefRepository) }
 
     val fileDownloader by lazy { FileDownloader(this) }
-
-    val fontAwesomeTypeface: Typeface by lazy {
-        Typeface.createFromAsset(assets, "fontawesome.ttf")
-    }
 
     var hasAccount = false
         private set

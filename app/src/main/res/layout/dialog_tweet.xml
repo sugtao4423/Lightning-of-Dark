@@ -11,89 +11,76 @@
         android:layout_weight="1" />
 
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <sugtao4423.lod.view.TypefacedButton
+        <Button
             android:id="@+id/replyButton"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.App.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_tweet_dialog_button_bg"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_reply"
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <sugtao4423.lod.view.TypefacedButton
+        <Button
             android:id="@+id/retweetButton"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.App.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_tweet_dialog_button_bg"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_retweet"
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <sugtao4423.lod.view.TypefacedButton
+        <Button
             android:id="@+id/quoteButton"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.App.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_tweet_dialog_button_bg"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_quote"
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <sugtao4423.lod.view.TypefacedButton
+        <Button
             android:id="@+id/favoriteButton"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.App.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_tweet_dialog_button_bg"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_star"
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <sugtao4423.lod.view.TypefacedButton
+        <Button
             android:id="@+id/talkButton"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.App.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_tweet_dialog_button_bg"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_comment"
             android:textColor="@color/icon"
             android:textSize="24sp" />
 
-        <sugtao4423.lod.view.TypefacedButton
+        <Button
             android:id="@+id/deleteButton"
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.App.Button.Icon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_tweet_dialog_button_bg"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
             android:padding="2dp"
             android:text="@string/icon_trash"
             android:textColor="@color/icon"
