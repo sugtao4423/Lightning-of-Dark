@@ -49,13 +49,14 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-                    <sugtao4423.lod.view.TypefacedTextView
+                    <TextView
                         android:id="@+id/protectIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/userPageTextBackground"
                         android:padding="4dp"
                         android:text="@string/icon_protect"
+                        android:textAppearance="@style/TextAppearance.App.Icon"
                         android:textColor="@color/icon"
                         android:textSize="20sp"
                         android:visibility="gone" />
@@ -86,12 +87,13 @@
                 android:layout_height="40dp"
                 android:contentDescription="@string/content_desc_friendship_source_icon" />
 
-            <sugtao4423.lod.view.TypefacedTextView
+            <TextView
                 android:id="@+id/relationshipText"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="5dp"
                 android:gravity="center"
+                android:textAppearance="@style/TextAppearance.App.Icon"
                 android:textColor="@color/icon"
                 android:textSize="34sp" />
 
@@ -162,10 +164,11 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <sugtao4423.lod.view.TypefacedTextView
+                <TextView
                     android:layout_width="34sp"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_tweetCount" />
+                    android:text="@string/icon_tweetCount"
+                    android:textAppearance="@style/TextAppearance.App.Icon" />
 
                 <TextView
                     android:id="@+id/tweetCount"
@@ -179,10 +182,11 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <sugtao4423.lod.view.TypefacedTextView
+                <TextView
                     android:layout_width="34sp"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_favCount" />
+                    android:text="@string/icon_favCount"
+                    android:textAppearance="@style/TextAppearance.App.Icon" />
 
                 <TextView
                     android:id="@+id/favCount"
@@ -196,10 +200,11 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <sugtao4423.lod.view.TypefacedTextView
+                <TextView
                     android:layout_width="34sp"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_followCount" />
+                    android:text="@string/icon_followCount"
+                    android:textAppearance="@style/TextAppearance.App.Icon" />
 
                 <TextView
                     android:id="@+id/followCount"
@@ -213,10 +218,11 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <sugtao4423.lod.view.TypefacedTextView
+                <TextView
                     android:layout_width="34sp"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_followerCount" />
+                    android:text="@string/icon_followerCount"
+                    android:textAppearance="@style/TextAppearance.App.Icon" />
 
                 <TextView
                     android:id="@+id/followerCount"
@@ -230,10 +236,11 @@
                 android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
-                <sugtao4423.lod.view.TypefacedTextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/icon_userCreate" />
+                    android:text="@string/icon_userCreate"
+                    android:textAppearance="@style/TextAppearance.App.Icon" />
 
                 <TextView
                     android:id="@+id/createDate"
