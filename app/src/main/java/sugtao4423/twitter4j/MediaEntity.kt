@@ -39,4 +39,12 @@ data class MediaEntity(
     val videoInfo: VideoInfo?,
     override val start: Int,
     override val end: Int,
-) : Indices, java.io.Serializable
+) : Indices, java.io.Serializable {
+
+    val mediaThumbnailUrl: String = "${mediaUrl}?name=thumb"
+    val mediaSmallUrl: String = "${mediaUrl}?name=small"
+    val mediaMediumUrl: String = "${mediaUrl}?name=medium"
+    val mediaLargeUrl: String = "${mediaUrl}?name=large"
+    val mediaOriginalUrl: String = "${mediaUrl}?name=orig"
+
+}

@@ -53,8 +53,8 @@ class ShowMediaActivityViewModel(application: Application) : AndroidViewModel(ap
         mediaEntities?.forEach { mediaEntity ->
             when (mediaEntity.type) {
                 "photo" -> {
-                    val url = mediaEntity.mediaUrl + "?name=orig"
-                    val thumbnailUrl = mediaEntity.mediaUrl + "?name=small"
+                    val url = mediaEntity.mediaOriginalUrl
+                    val thumbnailUrl = mediaEntity.mediaSmallUrl
                     showMedia.add(ShowMedia.Image(url, thumbnailUrl))
                 }
 

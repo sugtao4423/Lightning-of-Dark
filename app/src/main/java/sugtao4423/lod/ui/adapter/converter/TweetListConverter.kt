@@ -51,7 +51,7 @@ object TweetListConverter {
     fun mediaIsVideoOrGif(mediaEntity: MediaEntity): Boolean =
         mediaEntity.type == "video" || mediaEntity.type == "animated_gif"
 
-    fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = "${mediaEntity.mediaUrl}?name=small"
+    fun mediaThumbnailUrl(mediaEntity: MediaEntity): String = mediaEntity.mediaSmallUrl
 
     fun videoMediaUrl(mediaEntity: MediaEntity): String {
         if (!mediaIsVideoOrGif(mediaEntity)) {
