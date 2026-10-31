@@ -3,8 +3,8 @@ package sugtao4423.lod.ui.adapter.tweet.click
 import android.view.View
 import sugtao4423.lod.App
 import sugtao4423.lod.R
-import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.utils.getHighestBitrateUrl
+import sugtao4423.lod.utils.original
 import sugtao4423.lod.utils.toStatusUrl
 import sugtao4423.twitter4j.MediaEntity
 import sugtao4423.twitter4j.Status
@@ -15,7 +15,7 @@ object OnTweetItemClicked {
         val context = view.context
 
         val status = allStatuses[position]
-        val originalStatus = TweetListConverter.originalStatus(status)
+        val originalStatus = status.original()
 
         val dialogList = arrayListOf<String>()
 

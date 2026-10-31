@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.databinding.ListItemTweetMediaImageBinding
 import sugtao4423.lod.databinding.ListItemTweetMediaVideoBinding
-import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.loadUrl
 import sugtao4423.twitter4j.MediaEntity
 
@@ -57,28 +56,20 @@ class TweetMediaListAdapter(private val tweetListViewModel: TweetListViewModel) 
 
     inner class ImageViewHolder(private val binding: ListItemTweetMediaImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(mediaEntity: MediaEntity, position: Int) {
-            val thumbnailUrl = TweetListConverter.mediaThumbnailUrl(mediaEntity)
-
-            binding.thumbnailImage.apply {
-                loadUrl(thumbnailUrl)
-                setOnClickListener {
-                    tweetListViewModel.onClickMedia(it, currentList, position)
-                }
+        fun bind(mediaEntity: MediaEntity, position: Int) = binding.thumbnailImage.apply {
+            loadUrl(mediaEntity.mediaSmallUrl)
+            setOnClickListener {
+                tweetListViewModel.onClickMedia(it, currentList, position)
             }
         }
     }
 
     inner class VideoViewHolder(private val binding: ListItemTweetMediaVideoBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(mediaEntity: MediaEntity, position: Int) {
-            val thumbnailUrl = TweetListConverter.mediaThumbnailUrl(mediaEntity)
-
-            binding.apply {
-                thumbnailImage.loadUrl(thumbnailUrl)
-                root.setOnClickListener {
-                    tweetListViewModel.onClickMedia(it, currentList, position)
-                }
+        fun bind(mediaEntity: MediaEntity, position: Int) = binding.apply {
+            thumbnailImage.loadUrl(mediaEntity.mediaSmallUrl)
+            root.setOnClickListener {
+                tweetListViewModel.onClickMedia(it, currentList, position)
             }
         }
     }

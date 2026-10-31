@@ -3,9 +3,9 @@ package sugtao4423.lod.ui.adapter.tweet
 import android.content.Intent
 import android.view.View
 import sugtao4423.lod.App
-import sugtao4423.lod.ui.adapter.converter.TweetListConverter
 import sugtao4423.lod.ui.showmedia.ShowMediaActivity
 import sugtao4423.lod.ui.userpage.UserPageActivity
+import sugtao4423.lod.utils.original
 import sugtao4423.twitter4j.MediaEntity
 import sugtao4423.twitter4j.Status
 
@@ -18,16 +18,12 @@ class TweetListViewModel(app: App) {
     val isShowMilliSeconds = app.prefRepository.isMillisecond
 
     fun tweetMediaAdapter(status: Status) = TweetMediaListAdapter(this).apply {
-        val original = TweetListConverter.originalStatus(status)
-        submitList(original.mediaEntities)
+        submitList(status.original().mediaEntities)
     }
 
     fun onClickUserIcon(view: View, status: Status) {
         val intent = Intent(view.context, UserPageActivity::class.java).apply {
-            putExtra(
-                UserPageActivity.INTENT_EXTRA_KEY_USER_OBJECT,
-                TweetListConverter.originalStatus(status).user
-            )
+            putExtra(UserPageActivity.INTENT_EXTRA_KEY_USER_OBJECT, status.original().user)
         }
         view.context.startActivity(intent)
     }
