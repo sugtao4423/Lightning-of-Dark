@@ -1,5 +1,6 @@
 package sugtao4423.lod.ui.adapter.user
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -9,13 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import sugtao4423.lod.App
 import sugtao4423.lod.databinding.ListItemUserBinding
 import sugtao4423.lod.ui.adapter.UpdatableListAdapter
-import sugtao4423.lod.ui.adapter.converter.UserListConverter
 import sugtao4423.lod.ui.loadUrl
 import sugtao4423.twitter4j.User
+import java.text.NumberFormat
 
 class UserListAdapter(context: Context) : UpdatableListAdapter<User, UserListAdapter.ViewHolder>() {
 
     private val userListViewModel = UserListViewModel(context.applicationContext as App)
+    private val numberFormat = NumberFormat.getInstance()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -38,22 +40,27 @@ class UserListAdapter(context: Context) : UpdatableListAdapter<User, UserListAda
     inner class ViewHolder(private val binding: ListItemUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        @SuppressLint("SetTextI18n")
         fun bind(user: User) = binding.apply {
             val vm = userListViewModel
 
-            userIcon.loadUrl(UserListConverter.userIconUrl(user))
+            userIcon.loadUrl(user.profileImage?.biggerUrl)
 
-            userName.text = UserListConverter.userNameAndScreenName(user)
+            userName.text = "${user.name} - @${user.screenName}"
             userName.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.nameTextSize)
 
-            val isShowProtected = UserListConverter.isShowProtected(user)
-            protectIcon.isVisible = isShowProtected
+            protectIcon.isVisible = user.isProtected
             protectIcon.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.protectIconSize)
 
-            userDescription.text = UserListConverter.userDescription(user)
+            userDescription.text = user.description
             userDescription.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.textSize)
 
-            userCountDetail.text = UserListConverter.userCountDetail(user)
+            userCountDetail.text = "Tweet: %s  Fav: %s  Follow: %s  Follower: %s".format(
+                numberFormat.format(user.statusesCount),
+                numberFormat.format(user.favoritesCount),
+                numberFormat.format(user.followingCount),
+                numberFormat.format(user.followersCount),
+            )
             userCountDetail.setTextSize(TypedValue.COMPLEX_UNIT_SP, vm.dateTextSize)
         }
     }
